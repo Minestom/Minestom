@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AncientDebris {
-  public static final BlockState ANCIENT_DEBRIS_0 = new BlockState(NamespaceID.from("minecraft:ancient_debris:0"), (short) 15835, Block.ANCIENT_DEBRIS);
+  public static final BlockState ANCIENT_DEBRIS_0 = new BlockState(NamespaceID.from("minecraft:ancient_debris_0"), (short) 15835, Block.ANCIENT_DEBRIS);
 
   static {
     Registries.registerBlockState(ANCIENT_DEBRIS_0);

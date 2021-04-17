@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MagentaConcrete {
-  public static final BlockState MAGENTA_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:magenta_concrete:0"), (short) 9444, Block.MAGENTA_CONCRETE);
+  public static final BlockState MAGENTA_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:magenta_concrete_0"), (short) 9444, Block.MAGENTA_CONCRETE);
 
   static {
     Registries.registerBlockState(MAGENTA_CONCRETE_0);

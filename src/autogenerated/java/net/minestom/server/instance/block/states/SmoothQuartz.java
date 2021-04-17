@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SmoothQuartz {
-  public static final BlockState SMOOTH_QUARTZ_0 = new BlockState(NamespaceID.from("minecraft:smooth_quartz:0"), (short) 8420, Block.SMOOTH_QUARTZ);
+  public static final BlockState SMOOTH_QUARTZ_0 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_0"), (short) 8420, Block.SMOOTH_QUARTZ);
 
   static {
     Registries.registerBlockState(SMOOTH_QUARTZ_0);

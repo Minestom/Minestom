@@ -14,653 +14,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PrismarineWall {
-  public static final BlockState PRISMARINE_WALL_0 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:0"), (short) 11195, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_0 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_0"), (short) 11195, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_1 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:1"), (short) 11196, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_1 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_1"), (short) 11196, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_2 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:2"), (short) 11197, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_2 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_2"), (short) 11197, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_3 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:3"), (short) 11198, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_3 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_3"), (short) 11198, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_4 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:4"), (short) 11199, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_4 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_4"), (short) 11199, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_5 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:5"), (short) 11200, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_5 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_5"), (short) 11200, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_6 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:6"), (short) 11201, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_6 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_6"), (short) 11201, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_7 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:7"), (short) 11202, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_7 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_7"), (short) 11202, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_8 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:8"), (short) 11203, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_8 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_8"), (short) 11203, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_9 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:9"), (short) 11204, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_9 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_9"), (short) 11204, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_10 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:10"), (short) 11205, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_10 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_10"), (short) 11205, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_11 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:11"), (short) 11206, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_11 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_11"), (short) 11206, Block.PRISMARINE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_12 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:12"), (short) 11207, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_12 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_12"), (short) 11207, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_13 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:13"), (short) 11208, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_13 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_13"), (short) 11208, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_14 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:14"), (short) 11209, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_14 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_14"), (short) 11209, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_15 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:15"), (short) 11210, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_15 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_15"), (short) 11210, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_16 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:16"), (short) 11211, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_16 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_16"), (short) 11211, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_17 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:17"), (short) 11212, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_17 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_17"), (short) 11212, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_18 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:18"), (short) 11213, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_18 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_18"), (short) 11213, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_19 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:19"), (short) 11214, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_19 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_19"), (short) 11214, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_20 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:20"), (short) 11215, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_20 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_20"), (short) 11215, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_21 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:21"), (short) 11216, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_21 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_21"), (short) 11216, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_22 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:22"), (short) 11217, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_22 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_22"), (short) 11217, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_23 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:23"), (short) 11218, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_23 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_23"), (short) 11218, Block.PRISMARINE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_24 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:24"), (short) 11219, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_24 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_24"), (short) 11219, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_25 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:25"), (short) 11220, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_25 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_25"), (short) 11220, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_26 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:26"), (short) 11221, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_26 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_26"), (short) 11221, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_27 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:27"), (short) 11222, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_27 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_27"), (short) 11222, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_28 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:28"), (short) 11223, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_28 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_28"), (short) 11223, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_29 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:29"), (short) 11224, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_29 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_29"), (short) 11224, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_30 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:30"), (short) 11225, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_30 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_30"), (short) 11225, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_31 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:31"), (short) 11226, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_31 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_31"), (short) 11226, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_32 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:32"), (short) 11227, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_32 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_32"), (short) 11227, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_33 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:33"), (short) 11228, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_33 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_33"), (short) 11228, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_34 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:34"), (short) 11229, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_34 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_34"), (short) 11229, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_35 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:35"), (short) 11230, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_35 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_35"), (short) 11230, Block.PRISMARINE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_36 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:36"), (short) 11231, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_36 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_36"), (short) 11231, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_37 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:37"), (short) 11232, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_37 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_37"), (short) 11232, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_38 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:38"), (short) 11233, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_38 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_38"), (short) 11233, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_39 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:39"), (short) 11234, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_39 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_39"), (short) 11234, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_40 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:40"), (short) 11235, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_40 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_40"), (short) 11235, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_41 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:41"), (short) 11236, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_41 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_41"), (short) 11236, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_42 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:42"), (short) 11237, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_42 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_42"), (short) 11237, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_43 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:43"), (short) 11238, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_43 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_43"), (short) 11238, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_44 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:44"), (short) 11239, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_44 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_44"), (short) 11239, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_45 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:45"), (short) 11240, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_45 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_45"), (short) 11240, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_46 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:46"), (short) 11241, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_46 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_46"), (short) 11241, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_47 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:47"), (short) 11242, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_47 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_47"), (short) 11242, Block.PRISMARINE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_48 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:48"), (short) 11243, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_48 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_48"), (short) 11243, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_49 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:49"), (short) 11244, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_49 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_49"), (short) 11244, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_50 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:50"), (short) 11245, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_50 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_50"), (short) 11245, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_51 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:51"), (short) 11246, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_51 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_51"), (short) 11246, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_52 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:52"), (short) 11247, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_52 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_52"), (short) 11247, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_53 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:53"), (short) 11248, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_53 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_53"), (short) 11248, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_54 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:54"), (short) 11249, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_54 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_54"), (short) 11249, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_55 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:55"), (short) 11250, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_55 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_55"), (short) 11250, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_56 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:56"), (short) 11251, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_56 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_56"), (short) 11251, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_57 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:57"), (short) 11252, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_57 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_57"), (short) 11252, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_58 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:58"), (short) 11253, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_58 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_58"), (short) 11253, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_59 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:59"), (short) 11254, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_59 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_59"), (short) 11254, Block.PRISMARINE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_60 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:60"), (short) 11255, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_60 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_60"), (short) 11255, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_61 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:61"), (short) 11256, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_61 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_61"), (short) 11256, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_62 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:62"), (short) 11257, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_62 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_62"), (short) 11257, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_63 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:63"), (short) 11258, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_63 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_63"), (short) 11258, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_64 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:64"), (short) 11259, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_64 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_64"), (short) 11259, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_65 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:65"), (short) 11260, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_65 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_65"), (short) 11260, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_66 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:66"), (short) 11261, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_66 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_66"), (short) 11261, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_67 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:67"), (short) 11262, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_67 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_67"), (short) 11262, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_68 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:68"), (short) 11263, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_68 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_68"), (short) 11263, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_69 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:69"), (short) 11264, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_69 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_69"), (short) 11264, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_70 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:70"), (short) 11265, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_70 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_70"), (short) 11265, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_71 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:71"), (short) 11266, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_71 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_71"), (short) 11266, Block.PRISMARINE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_72 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:72"), (short) 11267, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_72 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_72"), (short) 11267, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_73 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:73"), (short) 11268, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_73 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_73"), (short) 11268, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_74 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:74"), (short) 11269, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_74 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_74"), (short) 11269, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_75 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:75"), (short) 11270, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_75 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_75"), (short) 11270, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_76 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:76"), (short) 11271, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_76 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_76"), (short) 11271, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_77 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:77"), (short) 11272, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_77 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_77"), (short) 11272, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_78 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:78"), (short) 11273, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_78 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_78"), (short) 11273, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_79 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:79"), (short) 11274, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_79 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_79"), (short) 11274, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_80 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:80"), (short) 11275, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_80 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_80"), (short) 11275, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_81 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:81"), (short) 11276, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_81 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_81"), (short) 11276, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_82 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:82"), (short) 11277, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_82 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_82"), (short) 11277, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_83 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:83"), (short) 11278, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_83 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_83"), (short) 11278, Block.PRISMARINE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_84 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:84"), (short) 11279, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_84 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_84"), (short) 11279, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_85 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:85"), (short) 11280, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_85 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_85"), (short) 11280, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_86 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:86"), (short) 11281, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_86 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_86"), (short) 11281, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_87 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:87"), (short) 11282, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_87 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_87"), (short) 11282, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_88 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:88"), (short) 11283, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_88 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_88"), (short) 11283, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_89 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:89"), (short) 11284, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_89 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_89"), (short) 11284, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_90 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:90"), (short) 11285, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_90 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_90"), (short) 11285, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_91 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:91"), (short) 11286, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_91 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_91"), (short) 11286, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_92 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:92"), (short) 11287, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_92 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_92"), (short) 11287, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_93 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:93"), (short) 11288, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_93 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_93"), (short) 11288, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_94 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:94"), (short) 11289, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_94 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_94"), (short) 11289, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_95 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:95"), (short) 11290, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_95 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_95"), (short) 11290, Block.PRISMARINE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_96 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:96"), (short) 11291, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_96 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_96"), (short) 11291, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_97 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:97"), (short) 11292, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_97 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_97"), (short) 11292, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_98 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:98"), (short) 11293, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_98 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_98"), (short) 11293, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_99 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:99"), (short) 11294, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_99 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_99"), (short) 11294, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_100 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:100"), (short) 11295, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_100 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_100"), (short) 11295, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_101 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:101"), (short) 11296, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_101 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_101"), (short) 11296, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_102 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:102"), (short) 11297, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_102 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_102"), (short) 11297, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_103 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:103"), (short) 11298, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_103 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_103"), (short) 11298, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_104 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:104"), (short) 11299, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_104 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_104"), (short) 11299, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_105 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:105"), (short) 11300, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_105 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_105"), (short) 11300, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_106 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:106"), (short) 11301, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_106 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_106"), (short) 11301, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_107 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:107"), (short) 11302, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_107 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_107"), (short) 11302, Block.PRISMARINE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_108 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:108"), (short) 11303, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_108 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_108"), (short) 11303, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_109 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:109"), (short) 11304, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_109 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_109"), (short) 11304, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_110 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:110"), (short) 11305, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_110 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_110"), (short) 11305, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_111 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:111"), (short) 11306, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_111 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_111"), (short) 11306, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_112 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:112"), (short) 11307, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_112 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_112"), (short) 11307, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_113 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:113"), (short) 11308, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_113 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_113"), (short) 11308, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_114 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:114"), (short) 11309, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_114 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_114"), (short) 11309, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_115 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:115"), (short) 11310, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_115 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_115"), (short) 11310, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_116 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:116"), (short) 11311, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_116 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_116"), (short) 11311, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_117 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:117"), (short) 11312, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_117 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_117"), (short) 11312, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_118 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:118"), (short) 11313, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_118 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_118"), (short) 11313, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_119 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:119"), (short) 11314, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_119 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_119"), (short) 11314, Block.PRISMARINE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_120 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:120"), (short) 11315, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_120 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_120"), (short) 11315, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_121 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:121"), (short) 11316, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_121 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_121"), (short) 11316, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_122 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:122"), (short) 11317, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_122 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_122"), (short) 11317, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_123 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:123"), (short) 11318, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_123 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_123"), (short) 11318, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_124 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:124"), (short) 11319, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_124 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_124"), (short) 11319, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_125 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:125"), (short) 11320, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_125 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_125"), (short) 11320, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_126 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:126"), (short) 11321, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_126 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_126"), (short) 11321, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_127 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:127"), (short) 11322, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_127 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_127"), (short) 11322, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_128 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:128"), (short) 11323, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_128 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_128"), (short) 11323, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_129 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:129"), (short) 11324, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_129 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_129"), (short) 11324, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_130 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:130"), (short) 11325, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_130 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_130"), (short) 11325, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_131 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:131"), (short) 11326, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_131 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_131"), (short) 11326, Block.PRISMARINE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_132 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:132"), (short) 11327, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_132 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_132"), (short) 11327, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_133 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:133"), (short) 11328, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_133 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_133"), (short) 11328, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_134 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:134"), (short) 11329, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_134 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_134"), (short) 11329, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_135 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:135"), (short) 11330, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_135 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_135"), (short) 11330, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_136 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:136"), (short) 11331, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_136 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_136"), (short) 11331, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_137 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:137"), (short) 11332, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_137 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_137"), (short) 11332, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_138 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:138"), (short) 11333, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_138 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_138"), (short) 11333, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_139 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:139"), (short) 11334, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_139 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_139"), (short) 11334, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_140 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:140"), (short) 11335, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_140 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_140"), (short) 11335, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_141 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:141"), (short) 11336, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_141 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_141"), (short) 11336, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_142 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:142"), (short) 11337, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_142 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_142"), (short) 11337, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_143 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:143"), (short) 11338, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_143 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_143"), (short) 11338, Block.PRISMARINE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_144 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:144"), (short) 11339, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_144 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_144"), (short) 11339, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_145 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:145"), (short) 11340, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_145 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_145"), (short) 11340, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_146 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:146"), (short) 11341, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_146 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_146"), (short) 11341, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_147 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:147"), (short) 11342, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_147 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_147"), (short) 11342, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_148 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:148"), (short) 11343, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_148 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_148"), (short) 11343, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_149 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:149"), (short) 11344, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_149 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_149"), (short) 11344, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_150 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:150"), (short) 11345, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_150 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_150"), (short) 11345, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_151 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:151"), (short) 11346, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_151 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_151"), (short) 11346, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_152 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:152"), (short) 11347, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_152 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_152"), (short) 11347, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_153 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:153"), (short) 11348, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_153 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_153"), (short) 11348, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_154 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:154"), (short) 11349, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_154 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_154"), (short) 11349, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_155 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:155"), (short) 11350, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_155 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_155"), (short) 11350, Block.PRISMARINE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_156 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:156"), (short) 11351, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_156 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_156"), (short) 11351, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_157 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:157"), (short) 11352, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_157 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_157"), (short) 11352, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_158 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:158"), (short) 11353, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_158 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_158"), (short) 11353, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_159 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:159"), (short) 11354, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_159 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_159"), (short) 11354, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_160 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:160"), (short) 11355, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_160 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_160"), (short) 11355, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_161 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:161"), (short) 11356, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_161 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_161"), (short) 11356, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_162 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:162"), (short) 11357, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_162 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_162"), (short) 11357, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_163 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:163"), (short) 11358, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_163 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_163"), (short) 11358, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_164 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:164"), (short) 11359, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_164 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_164"), (short) 11359, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_165 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:165"), (short) 11360, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_165 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_165"), (short) 11360, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_166 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:166"), (short) 11361, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_166 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_166"), (short) 11361, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_167 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:167"), (short) 11362, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_167 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_167"), (short) 11362, Block.PRISMARINE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_168 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:168"), (short) 11363, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_168 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_168"), (short) 11363, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_169 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:169"), (short) 11364, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_169 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_169"), (short) 11364, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_170 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:170"), (short) 11365, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_170 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_170"), (short) 11365, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_171 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:171"), (short) 11366, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_171 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_171"), (short) 11366, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_172 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:172"), (short) 11367, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_172 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_172"), (short) 11367, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_173 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:173"), (short) 11368, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_173 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_173"), (short) 11368, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_174 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:174"), (short) 11369, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_174 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_174"), (short) 11369, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_175 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:175"), (short) 11370, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_175 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_175"), (short) 11370, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_176 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:176"), (short) 11371, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_176 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_176"), (short) 11371, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_177 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:177"), (short) 11372, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_177 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_177"), (short) 11372, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_178 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:178"), (short) 11373, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_178 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_178"), (short) 11373, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_179 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:179"), (short) 11374, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_179 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_179"), (short) 11374, Block.PRISMARINE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_180 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:180"), (short) 11375, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_180 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_180"), (short) 11375, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_181 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:181"), (short) 11376, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_181 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_181"), (short) 11376, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_182 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:182"), (short) 11377, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_182 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_182"), (short) 11377, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_183 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:183"), (short) 11378, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_183 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_183"), (short) 11378, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_184 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:184"), (short) 11379, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_184 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_184"), (short) 11379, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_185 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:185"), (short) 11380, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_185 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_185"), (short) 11380, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_186 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:186"), (short) 11381, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_186 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_186"), (short) 11381, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_187 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:187"), (short) 11382, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_187 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_187"), (short) 11382, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_188 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:188"), (short) 11383, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_188 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_188"), (short) 11383, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_189 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:189"), (short) 11384, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_189 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_189"), (short) 11384, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_190 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:190"), (short) 11385, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_190 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_190"), (short) 11385, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_191 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:191"), (short) 11386, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_191 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_191"), (short) 11386, Block.PRISMARINE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_192 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:192"), (short) 11387, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_192 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_192"), (short) 11387, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_193 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:193"), (short) 11388, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_193 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_193"), (short) 11388, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_194 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:194"), (short) 11389, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_194 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_194"), (short) 11389, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_195 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:195"), (short) 11390, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_195 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_195"), (short) 11390, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_196 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:196"), (short) 11391, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_196 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_196"), (short) 11391, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_197 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:197"), (short) 11392, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_197 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_197"), (short) 11392, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_198 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:198"), (short) 11393, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_198 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_198"), (short) 11393, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_199 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:199"), (short) 11394, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_199 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_199"), (short) 11394, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_200 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:200"), (short) 11395, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_200 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_200"), (short) 11395, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_201 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:201"), (short) 11396, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_201 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_201"), (short) 11396, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_202 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:202"), (short) 11397, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_202 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_202"), (short) 11397, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_203 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:203"), (short) 11398, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_203 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_203"), (short) 11398, Block.PRISMARINE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_204 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:204"), (short) 11399, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_204 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_204"), (short) 11399, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_205 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:205"), (short) 11400, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_205 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_205"), (short) 11400, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_206 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:206"), (short) 11401, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_206 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_206"), (short) 11401, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_207 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:207"), (short) 11402, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_207 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_207"), (short) 11402, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_208 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:208"), (short) 11403, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_208 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_208"), (short) 11403, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_209 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:209"), (short) 11404, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_209 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_209"), (short) 11404, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_210 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:210"), (short) 11405, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_210 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_210"), (short) 11405, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_211 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:211"), (short) 11406, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_211 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_211"), (short) 11406, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_212 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:212"), (short) 11407, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_212 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_212"), (short) 11407, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_213 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:213"), (short) 11408, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_213 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_213"), (short) 11408, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_214 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:214"), (short) 11409, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_214 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_214"), (short) 11409, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_215 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:215"), (short) 11410, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_215 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_215"), (short) 11410, Block.PRISMARINE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_216 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:216"), (short) 11411, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_216 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_216"), (short) 11411, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_217 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:217"), (short) 11412, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_217 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_217"), (short) 11412, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_218 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:218"), (short) 11413, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_218 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_218"), (short) 11413, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_219 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:219"), (short) 11414, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_219 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_219"), (short) 11414, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_220 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:220"), (short) 11415, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_220 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_220"), (short) 11415, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_221 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:221"), (short) 11416, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_221 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_221"), (short) 11416, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_222 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:222"), (short) 11417, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_222 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_222"), (short) 11417, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_223 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:223"), (short) 11418, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_223 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_223"), (short) 11418, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_224 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:224"), (short) 11419, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_224 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_224"), (short) 11419, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_225 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:225"), (short) 11420, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_225 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_225"), (short) 11420, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_226 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:226"), (short) 11421, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_226 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_226"), (short) 11421, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_227 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:227"), (short) 11422, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_227 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_227"), (short) 11422, Block.PRISMARINE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_228 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:228"), (short) 11423, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_228 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_228"), (short) 11423, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_229 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:229"), (short) 11424, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_229 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_229"), (short) 11424, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_230 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:230"), (short) 11425, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_230 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_230"), (short) 11425, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_231 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:231"), (short) 11426, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_231 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_231"), (short) 11426, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_232 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:232"), (short) 11427, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_232 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_232"), (short) 11427, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_233 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:233"), (short) 11428, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_233 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_233"), (short) 11428, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_234 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:234"), (short) 11429, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_234 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_234"), (short) 11429, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_235 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:235"), (short) 11430, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_235 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_235"), (short) 11430, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_236 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:236"), (short) 11431, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_236 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_236"), (short) 11431, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_237 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:237"), (short) 11432, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_237 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_237"), (short) 11432, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_238 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:238"), (short) 11433, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_238 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_238"), (short) 11433, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_239 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:239"), (short) 11434, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_239 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_239"), (short) 11434, Block.PRISMARINE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_240 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:240"), (short) 11435, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_240 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_240"), (short) 11435, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_241 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:241"), (short) 11436, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_241 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_241"), (short) 11436, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_242 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:242"), (short) 11437, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_242 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_242"), (short) 11437, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_243 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:243"), (short) 11438, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_243 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_243"), (short) 11438, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_244 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:244"), (short) 11439, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_244 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_244"), (short) 11439, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_245 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:245"), (short) 11440, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_245 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_245"), (short) 11440, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_246 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:246"), (short) 11441, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_246 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_246"), (short) 11441, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_247 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:247"), (short) 11442, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_247 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_247"), (short) 11442, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_248 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:248"), (short) 11443, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_248 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_248"), (short) 11443, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_249 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:249"), (short) 11444, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_249 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_249"), (short) 11444, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_250 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:250"), (short) 11445, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_250 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_250"), (short) 11445, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_251 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:251"), (short) 11446, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_251 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_251"), (short) 11446, Block.PRISMARINE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_252 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:252"), (short) 11447, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_252 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_252"), (short) 11447, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_253 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:253"), (short) 11448, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_253 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_253"), (short) 11448, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_254 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:254"), (short) 11449, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_254 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_254"), (short) 11449, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_255 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:255"), (short) 11450, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_255 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_255"), (short) 11450, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_256 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:256"), (short) 11451, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_256 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_256"), (short) 11451, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_257 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:257"), (short) 11452, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_257 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_257"), (short) 11452, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_258 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:258"), (short) 11453, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_258 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_258"), (short) 11453, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_259 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:259"), (short) 11454, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_259 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_259"), (short) 11454, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_260 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:260"), (short) 11455, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_260 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_260"), (short) 11455, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_261 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:261"), (short) 11456, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_261 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_261"), (short) 11456, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_262 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:262"), (short) 11457, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_262 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_262"), (short) 11457, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_263 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:263"), (short) 11458, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_263 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_263"), (short) 11458, Block.PRISMARINE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_264 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:264"), (short) 11459, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_264 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_264"), (short) 11459, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_265 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:265"), (short) 11460, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_265 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_265"), (short) 11460, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_266 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:266"), (short) 11461, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_266 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_266"), (short) 11461, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_267 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:267"), (short) 11462, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_267 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_267"), (short) 11462, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_268 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:268"), (short) 11463, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_268 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_268"), (short) 11463, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_269 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:269"), (short) 11464, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_269 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_269"), (short) 11464, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_270 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:270"), (short) 11465, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_270 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_270"), (short) 11465, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_271 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:271"), (short) 11466, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_271 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_271"), (short) 11466, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_272 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:272"), (short) 11467, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_272 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_272"), (short) 11467, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_273 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:273"), (short) 11468, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_273 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_273"), (short) 11468, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_274 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:274"), (short) 11469, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_274 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_274"), (short) 11469, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_275 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:275"), (short) 11470, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_275 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_275"), (short) 11470, Block.PRISMARINE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_276 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:276"), (short) 11471, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_276 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_276"), (short) 11471, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_277 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:277"), (short) 11472, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_277 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_277"), (short) 11472, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_278 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:278"), (short) 11473, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_278 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_278"), (short) 11473, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_279 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:279"), (short) 11474, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_279 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_279"), (short) 11474, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_280 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:280"), (short) 11475, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_280 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_280"), (short) 11475, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_281 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:281"), (short) 11476, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_281 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_281"), (short) 11476, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_282 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:282"), (short) 11477, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_282 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_282"), (short) 11477, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_283 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:283"), (short) 11478, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_283 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_283"), (short) 11478, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_284 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:284"), (short) 11479, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_284 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_284"), (short) 11479, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_285 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:285"), (short) 11480, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_285 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_285"), (short) 11480, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_286 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:286"), (short) 11481, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_286 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_286"), (short) 11481, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_287 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:287"), (short) 11482, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_287 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_287"), (short) 11482, Block.PRISMARINE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_288 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:288"), (short) 11483, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_288 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_288"), (short) 11483, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_289 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:289"), (short) 11484, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_289 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_289"), (short) 11484, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_290 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:290"), (short) 11485, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_290 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_290"), (short) 11485, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_291 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:291"), (short) 11486, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_291 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_291"), (short) 11486, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_292 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:292"), (short) 11487, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_292 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_292"), (short) 11487, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_293 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:293"), (short) 11488, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_293 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_293"), (short) 11488, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_294 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:294"), (short) 11489, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_294 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_294"), (short) 11489, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_295 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:295"), (short) 11490, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_295 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_295"), (short) 11490, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_296 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:296"), (short) 11491, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_296 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_296"), (short) 11491, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_297 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:297"), (short) 11492, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_297 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_297"), (short) 11492, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_298 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:298"), (short) 11493, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_298 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_298"), (short) 11493, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_299 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:299"), (short) 11494, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_299 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_299"), (short) 11494, Block.PRISMARINE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_300 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:300"), (short) 11495, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_300 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_300"), (short) 11495, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_301 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:301"), (short) 11496, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_301 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_301"), (short) 11496, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_302 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:302"), (short) 11497, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_302 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_302"), (short) 11497, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_303 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:303"), (short) 11498, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_303 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_303"), (short) 11498, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_304 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:304"), (short) 11499, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_304 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_304"), (short) 11499, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_305 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:305"), (short) 11500, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_305 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_305"), (short) 11500, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_306 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:306"), (short) 11501, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_306 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_306"), (short) 11501, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_307 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:307"), (short) 11502, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_307 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_307"), (short) 11502, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_308 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:308"), (short) 11503, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_308 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_308"), (short) 11503, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_309 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:309"), (short) 11504, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_309 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_309"), (short) 11504, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_310 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:310"), (short) 11505, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_310 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_310"), (short) 11505, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_311 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:311"), (short) 11506, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_311 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_311"), (short) 11506, Block.PRISMARINE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_312 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:312"), (short) 11507, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_312 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_312"), (short) 11507, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_313 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:313"), (short) 11508, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_313 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_313"), (short) 11508, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_314 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:314"), (short) 11509, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_314 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_314"), (short) 11509, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_315 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:315"), (short) 11510, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_315 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_315"), (short) 11510, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_316 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:316"), (short) 11511, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_316 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_316"), (short) 11511, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_317 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:317"), (short) 11512, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_317 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_317"), (short) 11512, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_318 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:318"), (short) 11513, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState PRISMARINE_WALL_318 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_318"), (short) 11513, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState PRISMARINE_WALL_319 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:319"), (short) 11514, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState PRISMARINE_WALL_319 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_319"), (short) 11514, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState PRISMARINE_WALL_320 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:320"), (short) 11515, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState PRISMARINE_WALL_320 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_320"), (short) 11515, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState PRISMARINE_WALL_321 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:321"), (short) 11516, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState PRISMARINE_WALL_321 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_321"), (short) 11516, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState PRISMARINE_WALL_322 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:322"), (short) 11517, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState PRISMARINE_WALL_322 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_322"), (short) 11517, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState PRISMARINE_WALL_323 = new BlockState(NamespaceID.from("minecraft:prismarine_wall:323"), (short) 11518, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState PRISMARINE_WALL_323 = new BlockState(NamespaceID.from("minecraft:prismarine_wall_323"), (short) 11518, Block.PRISMARINE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   static {
     Registries.registerBlockState(PRISMARINE_WALL_0);

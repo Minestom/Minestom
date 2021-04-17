@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BubbleColumn {
-  public static final BlockState BUBBLE_COLUMN_0 = new BlockState(NamespaceID.from("minecraft:bubble_column:0"), (short) 9671, Block.BUBBLE_COLUMN, "drag=true");
+  public static final BlockState BUBBLE_COLUMN_0 = new BlockState(NamespaceID.from("minecraft:bubble_column_0"), (short) 9671, Block.BUBBLE_COLUMN, "drag=true");
 
-  public static final BlockState BUBBLE_COLUMN_1 = new BlockState(NamespaceID.from("minecraft:bubble_column:1"), (short) 9672, Block.BUBBLE_COLUMN, "drag=false");
+  public static final BlockState BUBBLE_COLUMN_1 = new BlockState(NamespaceID.from("minecraft:bubble_column_1"), (short) 9672, Block.BUBBLE_COLUMN, "drag=false");
 
   static {
     Registries.registerBlockState(BUBBLE_COLUMN_0);

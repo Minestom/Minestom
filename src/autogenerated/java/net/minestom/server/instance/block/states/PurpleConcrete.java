@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PurpleConcrete {
-  public static final BlockState PURPLE_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:purple_concrete:0"), (short) 9452, Block.PURPLE_CONCRETE);
+  public static final BlockState PURPLE_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:purple_concrete_0"), (short) 9452, Block.PURPLE_CONCRETE);
 
   static {
     Registries.registerBlockState(PURPLE_CONCRETE_0);

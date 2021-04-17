@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Barrier {
-  public static final BlockState BARRIER_0 = new BlockState(NamespaceID.from("minecraft:barrier:0"), (short) 7540, Block.BARRIER);
+  public static final BlockState BARRIER_0 = new BlockState(NamespaceID.from("minecraft:barrier_0"), (short) 7540, Block.BARRIER);
 
   static {
     Registries.registerBlockState(BARRIER_0);

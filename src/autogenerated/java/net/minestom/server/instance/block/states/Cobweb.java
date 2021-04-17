@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Cobweb {
-  public static final BlockState COBWEB_0 = new BlockState(NamespaceID.from("minecraft:cobweb:0"), (short) 1341, Block.COBWEB);
+  public static final BlockState COBWEB_0 = new BlockState(NamespaceID.from("minecraft:cobweb_0"), (short) 1341, Block.COBWEB);
 
   static {
     Registries.registerBlockState(COBWEB_0);

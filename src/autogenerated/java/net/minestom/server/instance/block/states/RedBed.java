@@ -14,37 +14,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedBed {
-  public static final BlockState RED_BED_0 = new BlockState(NamespaceID.from("minecraft:red_bed:0"), (short) 1273, Block.RED_BED, "facing=north","occupied=true","part=head");
+  public static final BlockState RED_BED_0 = new BlockState(NamespaceID.from("minecraft:red_bed_0"), (short) 1273, Block.RED_BED, "facing=north","occupied=true","part=head");
 
-  public static final BlockState RED_BED_1 = new BlockState(NamespaceID.from("minecraft:red_bed:1"), (short) 1274, Block.RED_BED, "facing=north","occupied=true","part=foot");
+  public static final BlockState RED_BED_1 = new BlockState(NamespaceID.from("minecraft:red_bed_1"), (short) 1274, Block.RED_BED, "facing=north","occupied=true","part=foot");
 
-  public static final BlockState RED_BED_2 = new BlockState(NamespaceID.from("minecraft:red_bed:2"), (short) 1275, Block.RED_BED, "facing=north","occupied=false","part=head");
+  public static final BlockState RED_BED_2 = new BlockState(NamespaceID.from("minecraft:red_bed_2"), (short) 1275, Block.RED_BED, "facing=north","occupied=false","part=head");
 
-  public static final BlockState RED_BED_3 = new BlockState(NamespaceID.from("minecraft:red_bed:3"), (short) 1276, Block.RED_BED, "facing=north","occupied=false","part=foot");
+  public static final BlockState RED_BED_3 = new BlockState(NamespaceID.from("minecraft:red_bed_3"), (short) 1276, Block.RED_BED, "facing=north","occupied=false","part=foot");
 
-  public static final BlockState RED_BED_4 = new BlockState(NamespaceID.from("minecraft:red_bed:4"), (short) 1277, Block.RED_BED, "facing=south","occupied=true","part=head");
+  public static final BlockState RED_BED_4 = new BlockState(NamespaceID.from("minecraft:red_bed_4"), (short) 1277, Block.RED_BED, "facing=south","occupied=true","part=head");
 
-  public static final BlockState RED_BED_5 = new BlockState(NamespaceID.from("minecraft:red_bed:5"), (short) 1278, Block.RED_BED, "facing=south","occupied=true","part=foot");
+  public static final BlockState RED_BED_5 = new BlockState(NamespaceID.from("minecraft:red_bed_5"), (short) 1278, Block.RED_BED, "facing=south","occupied=true","part=foot");
 
-  public static final BlockState RED_BED_6 = new BlockState(NamespaceID.from("minecraft:red_bed:6"), (short) 1279, Block.RED_BED, "facing=south","occupied=false","part=head");
+  public static final BlockState RED_BED_6 = new BlockState(NamespaceID.from("minecraft:red_bed_6"), (short) 1279, Block.RED_BED, "facing=south","occupied=false","part=head");
 
-  public static final BlockState RED_BED_7 = new BlockState(NamespaceID.from("minecraft:red_bed:7"), (short) 1280, Block.RED_BED, "facing=south","occupied=false","part=foot");
+  public static final BlockState RED_BED_7 = new BlockState(NamespaceID.from("minecraft:red_bed_7"), (short) 1280, Block.RED_BED, "facing=south","occupied=false","part=foot");
 
-  public static final BlockState RED_BED_8 = new BlockState(NamespaceID.from("minecraft:red_bed:8"), (short) 1281, Block.RED_BED, "facing=west","occupied=true","part=head");
+  public static final BlockState RED_BED_8 = new BlockState(NamespaceID.from("minecraft:red_bed_8"), (short) 1281, Block.RED_BED, "facing=west","occupied=true","part=head");
 
-  public static final BlockState RED_BED_9 = new BlockState(NamespaceID.from("minecraft:red_bed:9"), (short) 1282, Block.RED_BED, "facing=west","occupied=true","part=foot");
+  public static final BlockState RED_BED_9 = new BlockState(NamespaceID.from("minecraft:red_bed_9"), (short) 1282, Block.RED_BED, "facing=west","occupied=true","part=foot");
 
-  public static final BlockState RED_BED_10 = new BlockState(NamespaceID.from("minecraft:red_bed:10"), (short) 1283, Block.RED_BED, "facing=west","occupied=false","part=head");
+  public static final BlockState RED_BED_10 = new BlockState(NamespaceID.from("minecraft:red_bed_10"), (short) 1283, Block.RED_BED, "facing=west","occupied=false","part=head");
 
-  public static final BlockState RED_BED_11 = new BlockState(NamespaceID.from("minecraft:red_bed:11"), (short) 1284, Block.RED_BED, "facing=west","occupied=false","part=foot");
+  public static final BlockState RED_BED_11 = new BlockState(NamespaceID.from("minecraft:red_bed_11"), (short) 1284, Block.RED_BED, "facing=west","occupied=false","part=foot");
 
-  public static final BlockState RED_BED_12 = new BlockState(NamespaceID.from("minecraft:red_bed:12"), (short) 1285, Block.RED_BED, "facing=east","occupied=true","part=head");
+  public static final BlockState RED_BED_12 = new BlockState(NamespaceID.from("minecraft:red_bed_12"), (short) 1285, Block.RED_BED, "facing=east","occupied=true","part=head");
 
-  public static final BlockState RED_BED_13 = new BlockState(NamespaceID.from("minecraft:red_bed:13"), (short) 1286, Block.RED_BED, "facing=east","occupied=true","part=foot");
+  public static final BlockState RED_BED_13 = new BlockState(NamespaceID.from("minecraft:red_bed_13"), (short) 1286, Block.RED_BED, "facing=east","occupied=true","part=foot");
 
-  public static final BlockState RED_BED_14 = new BlockState(NamespaceID.from("minecraft:red_bed:14"), (short) 1287, Block.RED_BED, "facing=east","occupied=false","part=head");
+  public static final BlockState RED_BED_14 = new BlockState(NamespaceID.from("minecraft:red_bed_14"), (short) 1287, Block.RED_BED, "facing=east","occupied=false","part=head");
 
-  public static final BlockState RED_BED_15 = new BlockState(NamespaceID.from("minecraft:red_bed:15"), (short) 1288, Block.RED_BED, "facing=east","occupied=false","part=foot");
+  public static final BlockState RED_BED_15 = new BlockState(NamespaceID.from("minecraft:red_bed_15"), (short) 1288, Block.RED_BED, "facing=east","occupied=false","part=foot");
 
   static {
     Registries.registerBlockState(RED_BED_0);

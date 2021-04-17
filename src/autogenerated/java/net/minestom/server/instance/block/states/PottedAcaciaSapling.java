@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedAcaciaSapling {
-  public static final BlockState POTTED_ACACIA_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:potted_acacia_sapling:0"), (short) 6314, Block.POTTED_ACACIA_SAPLING);
+  public static final BlockState POTTED_ACACIA_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:potted_acacia_sapling_0"), (short) 6314, Block.POTTED_ACACIA_SAPLING);
 
   static {
     Registries.registerBlockState(POTTED_ACACIA_SAPLING_0);

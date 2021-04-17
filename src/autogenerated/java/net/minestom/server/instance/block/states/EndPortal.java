@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EndPortal {
-  public static final BlockState END_PORTAL_0 = new BlockState(NamespaceID.from("minecraft:end_portal:0"), (short) 5149, Block.END_PORTAL);
+  public static final BlockState END_PORTAL_0 = new BlockState(NamespaceID.from("minecraft:end_portal_0"), (short) 5149, Block.END_PORTAL);
 
   static {
     Registries.registerBlockState(END_PORTAL_0);

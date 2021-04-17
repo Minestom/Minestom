@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Piston {
-  public static final BlockState PISTON_0 = new BlockState(NamespaceID.from("minecraft:piston:0"), (short) 1348, Block.PISTON, "extended=true","facing=north");
+  public static final BlockState PISTON_0 = new BlockState(NamespaceID.from("minecraft:piston_0"), (short) 1348, Block.PISTON, "extended=true","facing=north");
 
-  public static final BlockState PISTON_1 = new BlockState(NamespaceID.from("minecraft:piston:1"), (short) 1349, Block.PISTON, "extended=true","facing=east");
+  public static final BlockState PISTON_1 = new BlockState(NamespaceID.from("minecraft:piston_1"), (short) 1349, Block.PISTON, "extended=true","facing=east");
 
-  public static final BlockState PISTON_2 = new BlockState(NamespaceID.from("minecraft:piston:2"), (short) 1350, Block.PISTON, "extended=true","facing=south");
+  public static final BlockState PISTON_2 = new BlockState(NamespaceID.from("minecraft:piston_2"), (short) 1350, Block.PISTON, "extended=true","facing=south");
 
-  public static final BlockState PISTON_3 = new BlockState(NamespaceID.from("minecraft:piston:3"), (short) 1351, Block.PISTON, "extended=true","facing=west");
+  public static final BlockState PISTON_3 = new BlockState(NamespaceID.from("minecraft:piston_3"), (short) 1351, Block.PISTON, "extended=true","facing=west");
 
-  public static final BlockState PISTON_4 = new BlockState(NamespaceID.from("minecraft:piston:4"), (short) 1352, Block.PISTON, "extended=true","facing=up");
+  public static final BlockState PISTON_4 = new BlockState(NamespaceID.from("minecraft:piston_4"), (short) 1352, Block.PISTON, "extended=true","facing=up");
 
-  public static final BlockState PISTON_5 = new BlockState(NamespaceID.from("minecraft:piston:5"), (short) 1353, Block.PISTON, "extended=true","facing=down");
+  public static final BlockState PISTON_5 = new BlockState(NamespaceID.from("minecraft:piston_5"), (short) 1353, Block.PISTON, "extended=true","facing=down");
 
-  public static final BlockState PISTON_6 = new BlockState(NamespaceID.from("minecraft:piston:6"), (short) 1354, Block.PISTON, "extended=false","facing=north");
+  public static final BlockState PISTON_6 = new BlockState(NamespaceID.from("minecraft:piston_6"), (short) 1354, Block.PISTON, "extended=false","facing=north");
 
-  public static final BlockState PISTON_7 = new BlockState(NamespaceID.from("minecraft:piston:7"), (short) 1355, Block.PISTON, "extended=false","facing=east");
+  public static final BlockState PISTON_7 = new BlockState(NamespaceID.from("minecraft:piston_7"), (short) 1355, Block.PISTON, "extended=false","facing=east");
 
-  public static final BlockState PISTON_8 = new BlockState(NamespaceID.from("minecraft:piston:8"), (short) 1356, Block.PISTON, "extended=false","facing=south");
+  public static final BlockState PISTON_8 = new BlockState(NamespaceID.from("minecraft:piston_8"), (short) 1356, Block.PISTON, "extended=false","facing=south");
 
-  public static final BlockState PISTON_9 = new BlockState(NamespaceID.from("minecraft:piston:9"), (short) 1357, Block.PISTON, "extended=false","facing=west");
+  public static final BlockState PISTON_9 = new BlockState(NamespaceID.from("minecraft:piston_9"), (short) 1357, Block.PISTON, "extended=false","facing=west");
 
-  public static final BlockState PISTON_10 = new BlockState(NamespaceID.from("minecraft:piston:10"), (short) 1358, Block.PISTON, "extended=false","facing=up");
+  public static final BlockState PISTON_10 = new BlockState(NamespaceID.from("minecraft:piston_10"), (short) 1358, Block.PISTON, "extended=false","facing=up");
 
-  public static final BlockState PISTON_11 = new BlockState(NamespaceID.from("minecraft:piston:11"), (short) 1359, Block.PISTON, "extended=false","facing=down");
+  public static final BlockState PISTON_11 = new BlockState(NamespaceID.from("minecraft:piston_11"), (short) 1359, Block.PISTON, "extended=false","facing=down");
 
   static {
     Registries.registerBlockState(PISTON_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WetSponge {
-  public static final BlockState WET_SPONGE_0 = new BlockState(NamespaceID.from("minecraft:wet_sponge:0"), (short) 230, Block.WET_SPONGE);
+  public static final BlockState WET_SPONGE_0 = new BlockState(NamespaceID.from("minecraft:wet_sponge_0"), (short) 230, Block.WET_SPONGE);
 
   static {
     Registries.registerBlockState(WET_SPONGE_0);

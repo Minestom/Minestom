@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LimeTerracotta {
-  public static final BlockState LIME_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:lime_terracotta:0"), (short) 6856, Block.LIME_TERRACOTTA);
+  public static final BlockState LIME_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:lime_terracotta_0"), (short) 6856, Block.LIME_TERRACOTTA);
 
   static {
     Registries.registerBlockState(LIME_TERRACOTTA_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class InfestedCrackedStoneBricks {
-  public static final BlockState INFESTED_CRACKED_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:infested_cracked_stone_bricks:0"), (short) 4503, Block.INFESTED_CRACKED_STONE_BRICKS);
+  public static final BlockState INFESTED_CRACKED_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:infested_cracked_stone_bricks_0"), (short) 4503, Block.INFESTED_CRACKED_STONE_BRICKS);
 
   static {
     Registries.registerBlockState(INFESTED_CRACKED_STONE_BRICKS_0);

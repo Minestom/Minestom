@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrewingStand {
-  public static final BlockState BREWING_STAND_0 = new BlockState(NamespaceID.from("minecraft:brewing_stand:0"), (short) 5137, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=true","has_bottle_2=true");
+  public static final BlockState BREWING_STAND_0 = new BlockState(NamespaceID.from("minecraft:brewing_stand_0"), (short) 5137, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=true","has_bottle_2=true");
 
-  public static final BlockState BREWING_STAND_1 = new BlockState(NamespaceID.from("minecraft:brewing_stand:1"), (short) 5138, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=true","has_bottle_2=false");
+  public static final BlockState BREWING_STAND_1 = new BlockState(NamespaceID.from("minecraft:brewing_stand_1"), (short) 5138, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=true","has_bottle_2=false");
 
-  public static final BlockState BREWING_STAND_2 = new BlockState(NamespaceID.from("minecraft:brewing_stand:2"), (short) 5139, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=false","has_bottle_2=true");
+  public static final BlockState BREWING_STAND_2 = new BlockState(NamespaceID.from("minecraft:brewing_stand_2"), (short) 5139, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=false","has_bottle_2=true");
 
-  public static final BlockState BREWING_STAND_3 = new BlockState(NamespaceID.from("minecraft:brewing_stand:3"), (short) 5140, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=false","has_bottle_2=false");
+  public static final BlockState BREWING_STAND_3 = new BlockState(NamespaceID.from("minecraft:brewing_stand_3"), (short) 5140, Block.BREWING_STAND, "has_bottle_0=true","has_bottle_1=false","has_bottle_2=false");
 
-  public static final BlockState BREWING_STAND_4 = new BlockState(NamespaceID.from("minecraft:brewing_stand:4"), (short) 5141, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=true","has_bottle_2=true");
+  public static final BlockState BREWING_STAND_4 = new BlockState(NamespaceID.from("minecraft:brewing_stand_4"), (short) 5141, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=true","has_bottle_2=true");
 
-  public static final BlockState BREWING_STAND_5 = new BlockState(NamespaceID.from("minecraft:brewing_stand:5"), (short) 5142, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=true","has_bottle_2=false");
+  public static final BlockState BREWING_STAND_5 = new BlockState(NamespaceID.from("minecraft:brewing_stand_5"), (short) 5142, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=true","has_bottle_2=false");
 
-  public static final BlockState BREWING_STAND_6 = new BlockState(NamespaceID.from("minecraft:brewing_stand:6"), (short) 5143, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=true");
+  public static final BlockState BREWING_STAND_6 = new BlockState(NamespaceID.from("minecraft:brewing_stand_6"), (short) 5143, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=true");
 
-  public static final BlockState BREWING_STAND_7 = new BlockState(NamespaceID.from("minecraft:brewing_stand:7"), (short) 5144, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=false");
+  public static final BlockState BREWING_STAND_7 = new BlockState(NamespaceID.from("minecraft:brewing_stand_7"), (short) 5144, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=false");
 
   static {
     Registries.registerBlockState(BREWING_STAND_0);

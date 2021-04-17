@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SnowBlock {
-  public static final BlockState SNOW_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:snow_block:0"), (short) 3930, Block.SNOW_BLOCK);
+  public static final BlockState SNOW_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:snow_block_0"), (short) 3930, Block.SNOW_BLOCK);
 
   static {
     Registries.registerBlockState(SNOW_BLOCK_0);

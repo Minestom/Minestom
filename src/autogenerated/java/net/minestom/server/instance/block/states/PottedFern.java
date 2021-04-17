@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedFern {
-  public static final BlockState POTTED_FERN_0 = new BlockState(NamespaceID.from("minecraft:potted_fern:0"), (short) 6316, Block.POTTED_FERN);
+  public static final BlockState POTTED_FERN_0 = new BlockState(NamespaceID.from("minecraft:potted_fern_0"), (short) 6316, Block.POTTED_FERN);
 
   static {
     Registries.registerBlockState(POTTED_FERN_0);

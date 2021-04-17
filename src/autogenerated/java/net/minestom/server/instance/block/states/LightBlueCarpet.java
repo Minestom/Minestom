@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LightBlueCarpet {
-  public static final BlockState LIGHT_BLUE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:light_blue_carpet:0"), (short) 7873, Block.LIGHT_BLUE_CARPET);
+  public static final BlockState LIGHT_BLUE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:light_blue_carpet_0"), (short) 7873, Block.LIGHT_BLUE_CARPET);
 
   static {
     Registries.registerBlockState(LIGHT_BLUE_CARPET_0);

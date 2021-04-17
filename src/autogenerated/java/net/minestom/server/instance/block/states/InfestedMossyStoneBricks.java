@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class InfestedMossyStoneBricks {
-  public static final BlockState INFESTED_MOSSY_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:infested_mossy_stone_bricks:0"), (short) 4502, Block.INFESTED_MOSSY_STONE_BRICKS);
+  public static final BlockState INFESTED_MOSSY_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:infested_mossy_stone_bricks_0"), (short) 4502, Block.INFESTED_MOSSY_STONE_BRICKS);
 
   static {
     Registries.registerBlockState(INFESTED_MOSSY_STONE_BRICKS_0);

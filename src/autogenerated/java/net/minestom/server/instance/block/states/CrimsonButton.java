@@ -14,53 +14,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonButton {
-  public static final BlockState CRIMSON_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:crimson_button:0"), (short) 15487, Block.CRIMSON_BUTTON, "face=FLOOR","facing=north","powered=true");
+  public static final BlockState CRIMSON_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:crimson_button_0"), (short) 15487, Block.CRIMSON_BUTTON, "face=FLOOR","facing=north","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:crimson_button:1"), (short) 15488, Block.CRIMSON_BUTTON, "face=FLOOR","facing=north","powered=false");
+  public static final BlockState CRIMSON_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:crimson_button_1"), (short) 15488, Block.CRIMSON_BUTTON, "face=FLOOR","facing=north","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:crimson_button:2"), (short) 15489, Block.CRIMSON_BUTTON, "face=FLOOR","facing=south","powered=true");
+  public static final BlockState CRIMSON_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:crimson_button_2"), (short) 15489, Block.CRIMSON_BUTTON, "face=FLOOR","facing=south","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:crimson_button:3"), (short) 15490, Block.CRIMSON_BUTTON, "face=FLOOR","facing=south","powered=false");
+  public static final BlockState CRIMSON_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:crimson_button_3"), (short) 15490, Block.CRIMSON_BUTTON, "face=FLOOR","facing=south","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:crimson_button:4"), (short) 15491, Block.CRIMSON_BUTTON, "face=FLOOR","facing=west","powered=true");
+  public static final BlockState CRIMSON_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:crimson_button_4"), (short) 15491, Block.CRIMSON_BUTTON, "face=FLOOR","facing=west","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:crimson_button:5"), (short) 15492, Block.CRIMSON_BUTTON, "face=FLOOR","facing=west","powered=false");
+  public static final BlockState CRIMSON_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:crimson_button_5"), (short) 15492, Block.CRIMSON_BUTTON, "face=FLOOR","facing=west","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:crimson_button:6"), (short) 15493, Block.CRIMSON_BUTTON, "face=FLOOR","facing=east","powered=true");
+  public static final BlockState CRIMSON_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:crimson_button_6"), (short) 15493, Block.CRIMSON_BUTTON, "face=FLOOR","facing=east","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:crimson_button:7"), (short) 15494, Block.CRIMSON_BUTTON, "face=FLOOR","facing=east","powered=false");
+  public static final BlockState CRIMSON_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:crimson_button_7"), (short) 15494, Block.CRIMSON_BUTTON, "face=FLOOR","facing=east","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:crimson_button:8"), (short) 15495, Block.CRIMSON_BUTTON, "face=WALL","facing=north","powered=true");
+  public static final BlockState CRIMSON_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:crimson_button_8"), (short) 15495, Block.CRIMSON_BUTTON, "face=WALL","facing=north","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:crimson_button:9"), (short) 15496, Block.CRIMSON_BUTTON, "face=WALL","facing=north","powered=false");
+  public static final BlockState CRIMSON_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:crimson_button_9"), (short) 15496, Block.CRIMSON_BUTTON, "face=WALL","facing=north","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:crimson_button:10"), (short) 15497, Block.CRIMSON_BUTTON, "face=WALL","facing=south","powered=true");
+  public static final BlockState CRIMSON_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:crimson_button_10"), (short) 15497, Block.CRIMSON_BUTTON, "face=WALL","facing=south","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:crimson_button:11"), (short) 15498, Block.CRIMSON_BUTTON, "face=WALL","facing=south","powered=false");
+  public static final BlockState CRIMSON_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:crimson_button_11"), (short) 15498, Block.CRIMSON_BUTTON, "face=WALL","facing=south","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:crimson_button:12"), (short) 15499, Block.CRIMSON_BUTTON, "face=WALL","facing=west","powered=true");
+  public static final BlockState CRIMSON_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:crimson_button_12"), (short) 15499, Block.CRIMSON_BUTTON, "face=WALL","facing=west","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:crimson_button:13"), (short) 15500, Block.CRIMSON_BUTTON, "face=WALL","facing=west","powered=false");
+  public static final BlockState CRIMSON_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:crimson_button_13"), (short) 15500, Block.CRIMSON_BUTTON, "face=WALL","facing=west","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:crimson_button:14"), (short) 15501, Block.CRIMSON_BUTTON, "face=WALL","facing=east","powered=true");
+  public static final BlockState CRIMSON_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:crimson_button_14"), (short) 15501, Block.CRIMSON_BUTTON, "face=WALL","facing=east","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:crimson_button:15"), (short) 15502, Block.CRIMSON_BUTTON, "face=WALL","facing=east","powered=false");
+  public static final BlockState CRIMSON_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:crimson_button_15"), (short) 15502, Block.CRIMSON_BUTTON, "face=WALL","facing=east","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:crimson_button:16"), (short) 15503, Block.CRIMSON_BUTTON, "face=CEILING","facing=north","powered=true");
+  public static final BlockState CRIMSON_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:crimson_button_16"), (short) 15503, Block.CRIMSON_BUTTON, "face=CEILING","facing=north","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:crimson_button:17"), (short) 15504, Block.CRIMSON_BUTTON, "face=CEILING","facing=north","powered=false");
+  public static final BlockState CRIMSON_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:crimson_button_17"), (short) 15504, Block.CRIMSON_BUTTON, "face=CEILING","facing=north","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:crimson_button:18"), (short) 15505, Block.CRIMSON_BUTTON, "face=CEILING","facing=south","powered=true");
+  public static final BlockState CRIMSON_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:crimson_button_18"), (short) 15505, Block.CRIMSON_BUTTON, "face=CEILING","facing=south","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:crimson_button:19"), (short) 15506, Block.CRIMSON_BUTTON, "face=CEILING","facing=south","powered=false");
+  public static final BlockState CRIMSON_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:crimson_button_19"), (short) 15506, Block.CRIMSON_BUTTON, "face=CEILING","facing=south","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:crimson_button:20"), (short) 15507, Block.CRIMSON_BUTTON, "face=CEILING","facing=west","powered=true");
+  public static final BlockState CRIMSON_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:crimson_button_20"), (short) 15507, Block.CRIMSON_BUTTON, "face=CEILING","facing=west","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:crimson_button:21"), (short) 15508, Block.CRIMSON_BUTTON, "face=CEILING","facing=west","powered=false");
+  public static final BlockState CRIMSON_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:crimson_button_21"), (short) 15508, Block.CRIMSON_BUTTON, "face=CEILING","facing=west","powered=false");
 
-  public static final BlockState CRIMSON_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:crimson_button:22"), (short) 15509, Block.CRIMSON_BUTTON, "face=CEILING","facing=east","powered=true");
+  public static final BlockState CRIMSON_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:crimson_button_22"), (short) 15509, Block.CRIMSON_BUTTON, "face=CEILING","facing=east","powered=true");
 
-  public static final BlockState CRIMSON_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:crimson_button:23"), (short) 15510, Block.CRIMSON_BUTTON, "face=CEILING","facing=east","powered=false");
+  public static final BlockState CRIMSON_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:crimson_button_23"), (short) 15510, Block.CRIMSON_BUTTON, "face=CEILING","facing=east","powered=false");
 
   static {
     Registries.registerBlockState(CRIMSON_BUTTON_0);

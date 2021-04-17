@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BirchPressurePlate {
-  public static final BlockState BIRCH_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:birch_pressure_plate:0"), (short) 3877, Block.BIRCH_PRESSURE_PLATE, "powered=true");
+  public static final BlockState BIRCH_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:birch_pressure_plate_0"), (short) 3877, Block.BIRCH_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState BIRCH_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:birch_pressure_plate:1"), (short) 3878, Block.BIRCH_PRESSURE_PLATE, "powered=false");
+  public static final BlockState BIRCH_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:birch_pressure_plate_1"), (short) 3878, Block.BIRCH_PRESSURE_PLATE, "powered=false");
 
   static {
     Registries.registerBlockState(BIRCH_PRESSURE_PLATE_0);

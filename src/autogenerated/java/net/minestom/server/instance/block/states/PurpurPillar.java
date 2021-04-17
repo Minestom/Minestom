@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PurpurPillar {
-  public static final BlockState PURPUR_PILLAR_0 = new BlockState(NamespaceID.from("minecraft:purpur_pillar:0"), (short) 9139, Block.PURPUR_PILLAR, "axis=x");
+  public static final BlockState PURPUR_PILLAR_0 = new BlockState(NamespaceID.from("minecraft:purpur_pillar_0"), (short) 9139, Block.PURPUR_PILLAR, "axis=x");
 
-  public static final BlockState PURPUR_PILLAR_1 = new BlockState(NamespaceID.from("minecraft:purpur_pillar:1"), (short) 9140, Block.PURPUR_PILLAR, "axis=y");
+  public static final BlockState PURPUR_PILLAR_1 = new BlockState(NamespaceID.from("minecraft:purpur_pillar_1"), (short) 9140, Block.PURPUR_PILLAR, "axis=y");
 
-  public static final BlockState PURPUR_PILLAR_2 = new BlockState(NamespaceID.from("minecraft:purpur_pillar:2"), (short) 9141, Block.PURPUR_PILLAR, "axis=z");
+  public static final BlockState PURPUR_PILLAR_2 = new BlockState(NamespaceID.from("minecraft:purpur_pillar_2"), (short) 9141, Block.PURPUR_PILLAR, "axis=z");
 
   static {
     Registries.registerBlockState(PURPUR_PILLAR_0);

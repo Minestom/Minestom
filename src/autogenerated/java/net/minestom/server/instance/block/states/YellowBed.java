@@ -14,37 +14,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class YellowBed {
-  public static final BlockState YELLOW_BED_0 = new BlockState(NamespaceID.from("minecraft:yellow_bed:0"), (short) 1113, Block.YELLOW_BED, "facing=north","occupied=true","part=head");
+  public static final BlockState YELLOW_BED_0 = new BlockState(NamespaceID.from("minecraft:yellow_bed_0"), (short) 1113, Block.YELLOW_BED, "facing=north","occupied=true","part=head");
 
-  public static final BlockState YELLOW_BED_1 = new BlockState(NamespaceID.from("minecraft:yellow_bed:1"), (short) 1114, Block.YELLOW_BED, "facing=north","occupied=true","part=foot");
+  public static final BlockState YELLOW_BED_1 = new BlockState(NamespaceID.from("minecraft:yellow_bed_1"), (short) 1114, Block.YELLOW_BED, "facing=north","occupied=true","part=foot");
 
-  public static final BlockState YELLOW_BED_2 = new BlockState(NamespaceID.from("minecraft:yellow_bed:2"), (short) 1115, Block.YELLOW_BED, "facing=north","occupied=false","part=head");
+  public static final BlockState YELLOW_BED_2 = new BlockState(NamespaceID.from("minecraft:yellow_bed_2"), (short) 1115, Block.YELLOW_BED, "facing=north","occupied=false","part=head");
 
-  public static final BlockState YELLOW_BED_3 = new BlockState(NamespaceID.from("minecraft:yellow_bed:3"), (short) 1116, Block.YELLOW_BED, "facing=north","occupied=false","part=foot");
+  public static final BlockState YELLOW_BED_3 = new BlockState(NamespaceID.from("minecraft:yellow_bed_3"), (short) 1116, Block.YELLOW_BED, "facing=north","occupied=false","part=foot");
 
-  public static final BlockState YELLOW_BED_4 = new BlockState(NamespaceID.from("minecraft:yellow_bed:4"), (short) 1117, Block.YELLOW_BED, "facing=south","occupied=true","part=head");
+  public static final BlockState YELLOW_BED_4 = new BlockState(NamespaceID.from("minecraft:yellow_bed_4"), (short) 1117, Block.YELLOW_BED, "facing=south","occupied=true","part=head");
 
-  public static final BlockState YELLOW_BED_5 = new BlockState(NamespaceID.from("minecraft:yellow_bed:5"), (short) 1118, Block.YELLOW_BED, "facing=south","occupied=true","part=foot");
+  public static final BlockState YELLOW_BED_5 = new BlockState(NamespaceID.from("minecraft:yellow_bed_5"), (short) 1118, Block.YELLOW_BED, "facing=south","occupied=true","part=foot");
 
-  public static final BlockState YELLOW_BED_6 = new BlockState(NamespaceID.from("minecraft:yellow_bed:6"), (short) 1119, Block.YELLOW_BED, "facing=south","occupied=false","part=head");
+  public static final BlockState YELLOW_BED_6 = new BlockState(NamespaceID.from("minecraft:yellow_bed_6"), (short) 1119, Block.YELLOW_BED, "facing=south","occupied=false","part=head");
 
-  public static final BlockState YELLOW_BED_7 = new BlockState(NamespaceID.from("minecraft:yellow_bed:7"), (short) 1120, Block.YELLOW_BED, "facing=south","occupied=false","part=foot");
+  public static final BlockState YELLOW_BED_7 = new BlockState(NamespaceID.from("minecraft:yellow_bed_7"), (short) 1120, Block.YELLOW_BED, "facing=south","occupied=false","part=foot");
 
-  public static final BlockState YELLOW_BED_8 = new BlockState(NamespaceID.from("minecraft:yellow_bed:8"), (short) 1121, Block.YELLOW_BED, "facing=west","occupied=true","part=head");
+  public static final BlockState YELLOW_BED_8 = new BlockState(NamespaceID.from("minecraft:yellow_bed_8"), (short) 1121, Block.YELLOW_BED, "facing=west","occupied=true","part=head");
 
-  public static final BlockState YELLOW_BED_9 = new BlockState(NamespaceID.from("minecraft:yellow_bed:9"), (short) 1122, Block.YELLOW_BED, "facing=west","occupied=true","part=foot");
+  public static final BlockState YELLOW_BED_9 = new BlockState(NamespaceID.from("minecraft:yellow_bed_9"), (short) 1122, Block.YELLOW_BED, "facing=west","occupied=true","part=foot");
 
-  public static final BlockState YELLOW_BED_10 = new BlockState(NamespaceID.from("minecraft:yellow_bed:10"), (short) 1123, Block.YELLOW_BED, "facing=west","occupied=false","part=head");
+  public static final BlockState YELLOW_BED_10 = new BlockState(NamespaceID.from("minecraft:yellow_bed_10"), (short) 1123, Block.YELLOW_BED, "facing=west","occupied=false","part=head");
 
-  public static final BlockState YELLOW_BED_11 = new BlockState(NamespaceID.from("minecraft:yellow_bed:11"), (short) 1124, Block.YELLOW_BED, "facing=west","occupied=false","part=foot");
+  public static final BlockState YELLOW_BED_11 = new BlockState(NamespaceID.from("minecraft:yellow_bed_11"), (short) 1124, Block.YELLOW_BED, "facing=west","occupied=false","part=foot");
 
-  public static final BlockState YELLOW_BED_12 = new BlockState(NamespaceID.from("minecraft:yellow_bed:12"), (short) 1125, Block.YELLOW_BED, "facing=east","occupied=true","part=head");
+  public static final BlockState YELLOW_BED_12 = new BlockState(NamespaceID.from("minecraft:yellow_bed_12"), (short) 1125, Block.YELLOW_BED, "facing=east","occupied=true","part=head");
 
-  public static final BlockState YELLOW_BED_13 = new BlockState(NamespaceID.from("minecraft:yellow_bed:13"), (short) 1126, Block.YELLOW_BED, "facing=east","occupied=true","part=foot");
+  public static final BlockState YELLOW_BED_13 = new BlockState(NamespaceID.from("minecraft:yellow_bed_13"), (short) 1126, Block.YELLOW_BED, "facing=east","occupied=true","part=foot");
 
-  public static final BlockState YELLOW_BED_14 = new BlockState(NamespaceID.from("minecraft:yellow_bed:14"), (short) 1127, Block.YELLOW_BED, "facing=east","occupied=false","part=head");
+  public static final BlockState YELLOW_BED_14 = new BlockState(NamespaceID.from("minecraft:yellow_bed_14"), (short) 1127, Block.YELLOW_BED, "facing=east","occupied=false","part=head");
 
-  public static final BlockState YELLOW_BED_15 = new BlockState(NamespaceID.from("minecraft:yellow_bed:15"), (short) 1128, Block.YELLOW_BED, "facing=east","occupied=false","part=foot");
+  public static final BlockState YELLOW_BED_15 = new BlockState(NamespaceID.from("minecraft:yellow_bed_15"), (short) 1128, Block.YELLOW_BED, "facing=east","occupied=false","part=foot");
 
   static {
     Registries.registerBlockState(YELLOW_BED_0);

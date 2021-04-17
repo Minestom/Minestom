@@ -14,69 +14,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonFenceGate {
-  public static final BlockState CRIMSON_FENCE_GATE_0 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:0"), (short) 15263, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_0 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_0"), (short) 15263, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_1 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:1"), (short) 15264, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_1 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_1"), (short) 15264, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_2 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:2"), (short) 15265, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_2 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_2"), (short) 15265, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_3 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:3"), (short) 15266, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_3 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_3"), (short) 15266, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=true","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_4 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:4"), (short) 15267, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_4 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_4"), (short) 15267, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_5 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:5"), (short) 15268, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_5 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_5"), (short) 15268, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_6 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:6"), (short) 15269, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_6 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_6"), (short) 15269, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_7 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:7"), (short) 15270, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_7 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_7"), (short) 15270, Block.CRIMSON_FENCE_GATE, "facing=north","in_wall=false","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_8 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:8"), (short) 15271, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_8 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_8"), (short) 15271, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_9 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:9"), (short) 15272, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_9 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_9"), (short) 15272, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_10 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:10"), (short) 15273, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_10 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_10"), (short) 15273, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_11 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:11"), (short) 15274, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_11 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_11"), (short) 15274, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=true","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_12 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:12"), (short) 15275, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_12 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_12"), (short) 15275, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_13 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:13"), (short) 15276, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_13 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_13"), (short) 15276, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_14 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:14"), (short) 15277, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_14 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_14"), (short) 15277, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_15 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:15"), (short) 15278, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_15 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_15"), (short) 15278, Block.CRIMSON_FENCE_GATE, "facing=south","in_wall=false","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_16 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:16"), (short) 15279, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_16 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_16"), (short) 15279, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_17 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:17"), (short) 15280, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_17 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_17"), (short) 15280, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_18 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:18"), (short) 15281, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_18 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_18"), (short) 15281, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_19 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:19"), (short) 15282, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_19 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_19"), (short) 15282, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=true","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_20 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:20"), (short) 15283, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_20 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_20"), (short) 15283, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_21 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:21"), (short) 15284, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_21 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_21"), (short) 15284, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_22 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:22"), (short) 15285, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_22 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_22"), (short) 15285, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_23 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:23"), (short) 15286, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_23 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_23"), (short) 15286, Block.CRIMSON_FENCE_GATE, "facing=west","in_wall=false","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_24 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:24"), (short) 15287, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_24 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_24"), (short) 15287, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_25 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:25"), (short) 15288, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_25 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_25"), (short) 15288, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_26 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:26"), (short) 15289, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_26 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_26"), (short) 15289, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_27 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:27"), (short) 15290, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_27 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_27"), (short) 15290, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=true","open=false","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_28 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:28"), (short) 15291, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_28 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_28"), (short) 15291, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_29 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:29"), (short) 15292, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_29 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_29"), (short) 15292, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=true","powered=false");
 
-  public static final BlockState CRIMSON_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:30"), (short) 15293, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=true");
+  public static final BlockState CRIMSON_FENCE_GATE_30 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_30"), (short) 15293, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=true");
 
-  public static final BlockState CRIMSON_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate:31"), (short) 15294, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=false");
+  public static final BlockState CRIMSON_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:crimson_fence_gate_31"), (short) 15294, Block.CRIMSON_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=false");
 
   static {
     Registries.registerBlockState(CRIMSON_FENCE_GATE_0);

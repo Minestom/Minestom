@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LightBlueConcrete {
-  public static final BlockState LIGHT_BLUE_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:light_blue_concrete:0"), (short) 9445, Block.LIGHT_BLUE_CONCRETE);
+  public static final BlockState LIGHT_BLUE_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:light_blue_concrete_0"), (short) 9445, Block.LIGHT_BLUE_CONCRETE);
 
   static {
     Registries.registerBlockState(LIGHT_BLUE_CONCRETE_0);

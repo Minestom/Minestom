@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BirchWood {
-  public static final BlockState BIRCH_WOOD_0 = new BlockState(NamespaceID.from("minecraft:birch_wood:0"), (short) 115, Block.BIRCH_WOOD, "axis=x");
+  public static final BlockState BIRCH_WOOD_0 = new BlockState(NamespaceID.from("minecraft:birch_wood_0"), (short) 115, Block.BIRCH_WOOD, "axis=x");
 
-  public static final BlockState BIRCH_WOOD_1 = new BlockState(NamespaceID.from("minecraft:birch_wood:1"), (short) 116, Block.BIRCH_WOOD, "axis=y");
+  public static final BlockState BIRCH_WOOD_1 = new BlockState(NamespaceID.from("minecraft:birch_wood_1"), (short) 116, Block.BIRCH_WOOD, "axis=y");
 
-  public static final BlockState BIRCH_WOOD_2 = new BlockState(NamespaceID.from("minecraft:birch_wood:2"), (short) 117, Block.BIRCH_WOOD, "axis=z");
+  public static final BlockState BIRCH_WOOD_2 = new BlockState(NamespaceID.from("minecraft:birch_wood_2"), (short) 117, Block.BIRCH_WOOD, "axis=z");
 
   static {
     Registries.registerBlockState(BIRCH_WOOD_0);

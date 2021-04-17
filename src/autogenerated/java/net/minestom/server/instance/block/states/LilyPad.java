@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LilyPad {
-  public static final BlockState LILY_PAD_0 = new BlockState(NamespaceID.from("minecraft:lily_pad:0"), (short) 5018, Block.LILY_PAD);
+  public static final BlockState LILY_PAD_0 = new BlockState(NamespaceID.from("minecraft:lily_pad_0"), (short) 5018, Block.LILY_PAD);
 
   static {
     Registries.registerBlockState(LILY_PAD_0);

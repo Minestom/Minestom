@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedAllium {
-  public static final BlockState POTTED_ALLIUM_0 = new BlockState(NamespaceID.from("minecraft:potted_allium:0"), (short) 6320, Block.POTTED_ALLIUM);
+  public static final BlockState POTTED_ALLIUM_0 = new BlockState(NamespaceID.from("minecraft:potted_allium_0"), (short) 6320, Block.POTTED_ALLIUM);
 
   static {
     Registries.registerBlockState(POTTED_ALLIUM_0);

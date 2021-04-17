@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class VoidAir {
-  public static final BlockState VOID_AIR_0 = new BlockState(NamespaceID.from("minecraft:void_air:0"), (short) 9669, Block.VOID_AIR);
+  public static final BlockState VOID_AIR_0 = new BlockState(NamespaceID.from("minecraft:void_air_0"), (short) 9669, Block.VOID_AIR);
 
   static {
     Registries.registerBlockState(VOID_AIR_0);

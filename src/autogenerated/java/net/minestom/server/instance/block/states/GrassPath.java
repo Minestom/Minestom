@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GrassPath {
-  public static final BlockState GRASS_PATH_0 = new BlockState(NamespaceID.from("minecraft:grass_path:0"), (short) 9227, Block.GRASS_PATH);
+  public static final BlockState GRASS_PATH_0 = new BlockState(NamespaceID.from("minecraft:grass_path_0"), (short) 9227, Block.GRASS_PATH);
 
   static {
     Registries.registerBlockState(GRASS_PATH_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CoarseDirt {
-  public static final BlockState COARSE_DIRT_0 = new BlockState(NamespaceID.from("minecraft:coarse_dirt:0"), (short) 11, Block.COARSE_DIRT);
+  public static final BlockState COARSE_DIRT_0 = new BlockState(NamespaceID.from("minecraft:coarse_dirt_0"), (short) 11, Block.COARSE_DIRT);
 
   static {
     Registries.registerBlockState(COARSE_DIRT_0);

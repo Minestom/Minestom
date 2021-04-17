@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Grindstone {
-  public static final BlockState GRINDSTONE_0 = new BlockState(NamespaceID.from("minecraft:grindstone:0"), (short) 14825, Block.GRINDSTONE, "face=FLOOR","facing=north");
+  public static final BlockState GRINDSTONE_0 = new BlockState(NamespaceID.from("minecraft:grindstone_0"), (short) 14825, Block.GRINDSTONE, "face=FLOOR","facing=north");
 
-  public static final BlockState GRINDSTONE_1 = new BlockState(NamespaceID.from("minecraft:grindstone:1"), (short) 14826, Block.GRINDSTONE, "face=FLOOR","facing=south");
+  public static final BlockState GRINDSTONE_1 = new BlockState(NamespaceID.from("minecraft:grindstone_1"), (short) 14826, Block.GRINDSTONE, "face=FLOOR","facing=south");
 
-  public static final BlockState GRINDSTONE_2 = new BlockState(NamespaceID.from("minecraft:grindstone:2"), (short) 14827, Block.GRINDSTONE, "face=FLOOR","facing=west");
+  public static final BlockState GRINDSTONE_2 = new BlockState(NamespaceID.from("minecraft:grindstone_2"), (short) 14827, Block.GRINDSTONE, "face=FLOOR","facing=west");
 
-  public static final BlockState GRINDSTONE_3 = new BlockState(NamespaceID.from("minecraft:grindstone:3"), (short) 14828, Block.GRINDSTONE, "face=FLOOR","facing=east");
+  public static final BlockState GRINDSTONE_3 = new BlockState(NamespaceID.from("minecraft:grindstone_3"), (short) 14828, Block.GRINDSTONE, "face=FLOOR","facing=east");
 
-  public static final BlockState GRINDSTONE_4 = new BlockState(NamespaceID.from("minecraft:grindstone:4"), (short) 14829, Block.GRINDSTONE, "face=WALL","facing=north");
+  public static final BlockState GRINDSTONE_4 = new BlockState(NamespaceID.from("minecraft:grindstone_4"), (short) 14829, Block.GRINDSTONE, "face=WALL","facing=north");
 
-  public static final BlockState GRINDSTONE_5 = new BlockState(NamespaceID.from("minecraft:grindstone:5"), (short) 14830, Block.GRINDSTONE, "face=WALL","facing=south");
+  public static final BlockState GRINDSTONE_5 = new BlockState(NamespaceID.from("minecraft:grindstone_5"), (short) 14830, Block.GRINDSTONE, "face=WALL","facing=south");
 
-  public static final BlockState GRINDSTONE_6 = new BlockState(NamespaceID.from("minecraft:grindstone:6"), (short) 14831, Block.GRINDSTONE, "face=WALL","facing=west");
+  public static final BlockState GRINDSTONE_6 = new BlockState(NamespaceID.from("minecraft:grindstone_6"), (short) 14831, Block.GRINDSTONE, "face=WALL","facing=west");
 
-  public static final BlockState GRINDSTONE_7 = new BlockState(NamespaceID.from("minecraft:grindstone:7"), (short) 14832, Block.GRINDSTONE, "face=WALL","facing=east");
+  public static final BlockState GRINDSTONE_7 = new BlockState(NamespaceID.from("minecraft:grindstone_7"), (short) 14832, Block.GRINDSTONE, "face=WALL","facing=east");
 
-  public static final BlockState GRINDSTONE_8 = new BlockState(NamespaceID.from("minecraft:grindstone:8"), (short) 14833, Block.GRINDSTONE, "face=CEILING","facing=north");
+  public static final BlockState GRINDSTONE_8 = new BlockState(NamespaceID.from("minecraft:grindstone_8"), (short) 14833, Block.GRINDSTONE, "face=CEILING","facing=north");
 
-  public static final BlockState GRINDSTONE_9 = new BlockState(NamespaceID.from("minecraft:grindstone:9"), (short) 14834, Block.GRINDSTONE, "face=CEILING","facing=south");
+  public static final BlockState GRINDSTONE_9 = new BlockState(NamespaceID.from("minecraft:grindstone_9"), (short) 14834, Block.GRINDSTONE, "face=CEILING","facing=south");
 
-  public static final BlockState GRINDSTONE_10 = new BlockState(NamespaceID.from("minecraft:grindstone:10"), (short) 14835, Block.GRINDSTONE, "face=CEILING","facing=west");
+  public static final BlockState GRINDSTONE_10 = new BlockState(NamespaceID.from("minecraft:grindstone_10"), (short) 14835, Block.GRINDSTONE, "face=CEILING","facing=west");
 
-  public static final BlockState GRINDSTONE_11 = new BlockState(NamespaceID.from("minecraft:grindstone:11"), (short) 14836, Block.GRINDSTONE, "face=CEILING","facing=east");
+  public static final BlockState GRINDSTONE_11 = new BlockState(NamespaceID.from("minecraft:grindstone_11"), (short) 14836, Block.GRINDSTONE, "face=CEILING","facing=east");
 
   static {
     Registries.registerBlockState(GRINDSTONE_0);

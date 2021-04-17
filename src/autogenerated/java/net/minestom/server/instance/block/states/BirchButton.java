@@ -14,53 +14,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BirchButton {
-  public static final BlockState BIRCH_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:birch_button:0"), (short) 6398, Block.BIRCH_BUTTON, "face=FLOOR","facing=north","powered=true");
+  public static final BlockState BIRCH_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:birch_button_0"), (short) 6398, Block.BIRCH_BUTTON, "face=FLOOR","facing=north","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:birch_button:1"), (short) 6399, Block.BIRCH_BUTTON, "face=FLOOR","facing=north","powered=false");
+  public static final BlockState BIRCH_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:birch_button_1"), (short) 6399, Block.BIRCH_BUTTON, "face=FLOOR","facing=north","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:birch_button:2"), (short) 6400, Block.BIRCH_BUTTON, "face=FLOOR","facing=south","powered=true");
+  public static final BlockState BIRCH_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:birch_button_2"), (short) 6400, Block.BIRCH_BUTTON, "face=FLOOR","facing=south","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:birch_button:3"), (short) 6401, Block.BIRCH_BUTTON, "face=FLOOR","facing=south","powered=false");
+  public static final BlockState BIRCH_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:birch_button_3"), (short) 6401, Block.BIRCH_BUTTON, "face=FLOOR","facing=south","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:birch_button:4"), (short) 6402, Block.BIRCH_BUTTON, "face=FLOOR","facing=west","powered=true");
+  public static final BlockState BIRCH_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:birch_button_4"), (short) 6402, Block.BIRCH_BUTTON, "face=FLOOR","facing=west","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:birch_button:5"), (short) 6403, Block.BIRCH_BUTTON, "face=FLOOR","facing=west","powered=false");
+  public static final BlockState BIRCH_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:birch_button_5"), (short) 6403, Block.BIRCH_BUTTON, "face=FLOOR","facing=west","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:birch_button:6"), (short) 6404, Block.BIRCH_BUTTON, "face=FLOOR","facing=east","powered=true");
+  public static final BlockState BIRCH_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:birch_button_6"), (short) 6404, Block.BIRCH_BUTTON, "face=FLOOR","facing=east","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:birch_button:7"), (short) 6405, Block.BIRCH_BUTTON, "face=FLOOR","facing=east","powered=false");
+  public static final BlockState BIRCH_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:birch_button_7"), (short) 6405, Block.BIRCH_BUTTON, "face=FLOOR","facing=east","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:birch_button:8"), (short) 6406, Block.BIRCH_BUTTON, "face=WALL","facing=north","powered=true");
+  public static final BlockState BIRCH_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:birch_button_8"), (short) 6406, Block.BIRCH_BUTTON, "face=WALL","facing=north","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:birch_button:9"), (short) 6407, Block.BIRCH_BUTTON, "face=WALL","facing=north","powered=false");
+  public static final BlockState BIRCH_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:birch_button_9"), (short) 6407, Block.BIRCH_BUTTON, "face=WALL","facing=north","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:birch_button:10"), (short) 6408, Block.BIRCH_BUTTON, "face=WALL","facing=south","powered=true");
+  public static final BlockState BIRCH_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:birch_button_10"), (short) 6408, Block.BIRCH_BUTTON, "face=WALL","facing=south","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:birch_button:11"), (short) 6409, Block.BIRCH_BUTTON, "face=WALL","facing=south","powered=false");
+  public static final BlockState BIRCH_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:birch_button_11"), (short) 6409, Block.BIRCH_BUTTON, "face=WALL","facing=south","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:birch_button:12"), (short) 6410, Block.BIRCH_BUTTON, "face=WALL","facing=west","powered=true");
+  public static final BlockState BIRCH_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:birch_button_12"), (short) 6410, Block.BIRCH_BUTTON, "face=WALL","facing=west","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:birch_button:13"), (short) 6411, Block.BIRCH_BUTTON, "face=WALL","facing=west","powered=false");
+  public static final BlockState BIRCH_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:birch_button_13"), (short) 6411, Block.BIRCH_BUTTON, "face=WALL","facing=west","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:birch_button:14"), (short) 6412, Block.BIRCH_BUTTON, "face=WALL","facing=east","powered=true");
+  public static final BlockState BIRCH_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:birch_button_14"), (short) 6412, Block.BIRCH_BUTTON, "face=WALL","facing=east","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:birch_button:15"), (short) 6413, Block.BIRCH_BUTTON, "face=WALL","facing=east","powered=false");
+  public static final BlockState BIRCH_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:birch_button_15"), (short) 6413, Block.BIRCH_BUTTON, "face=WALL","facing=east","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:birch_button:16"), (short) 6414, Block.BIRCH_BUTTON, "face=CEILING","facing=north","powered=true");
+  public static final BlockState BIRCH_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:birch_button_16"), (short) 6414, Block.BIRCH_BUTTON, "face=CEILING","facing=north","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:birch_button:17"), (short) 6415, Block.BIRCH_BUTTON, "face=CEILING","facing=north","powered=false");
+  public static final BlockState BIRCH_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:birch_button_17"), (short) 6415, Block.BIRCH_BUTTON, "face=CEILING","facing=north","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:birch_button:18"), (short) 6416, Block.BIRCH_BUTTON, "face=CEILING","facing=south","powered=true");
+  public static final BlockState BIRCH_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:birch_button_18"), (short) 6416, Block.BIRCH_BUTTON, "face=CEILING","facing=south","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:birch_button:19"), (short) 6417, Block.BIRCH_BUTTON, "face=CEILING","facing=south","powered=false");
+  public static final BlockState BIRCH_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:birch_button_19"), (short) 6417, Block.BIRCH_BUTTON, "face=CEILING","facing=south","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:birch_button:20"), (short) 6418, Block.BIRCH_BUTTON, "face=CEILING","facing=west","powered=true");
+  public static final BlockState BIRCH_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:birch_button_20"), (short) 6418, Block.BIRCH_BUTTON, "face=CEILING","facing=west","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:birch_button:21"), (short) 6419, Block.BIRCH_BUTTON, "face=CEILING","facing=west","powered=false");
+  public static final BlockState BIRCH_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:birch_button_21"), (short) 6419, Block.BIRCH_BUTTON, "face=CEILING","facing=west","powered=false");
 
-  public static final BlockState BIRCH_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:birch_button:22"), (short) 6420, Block.BIRCH_BUTTON, "face=CEILING","facing=east","powered=true");
+  public static final BlockState BIRCH_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:birch_button_22"), (short) 6420, Block.BIRCH_BUTTON, "face=CEILING","facing=east","powered=true");
 
-  public static final BlockState BIRCH_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:birch_button:23"), (short) 6421, Block.BIRCH_BUTTON, "face=CEILING","facing=east","powered=false");
+  public static final BlockState BIRCH_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:birch_button_23"), (short) 6421, Block.BIRCH_BUTTON, "face=CEILING","facing=east","powered=false");
 
   static {
     Registries.registerBlockState(BIRCH_BUTTON_0);

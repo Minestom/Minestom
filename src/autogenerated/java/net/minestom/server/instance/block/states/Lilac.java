@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Lilac {
-  public static final BlockState LILAC_0 = new BlockState(NamespaceID.from("minecraft:lilac:0"), (short) 7891, Block.LILAC, "half=upper");
+  public static final BlockState LILAC_0 = new BlockState(NamespaceID.from("minecraft:lilac_0"), (short) 7891, Block.LILAC, "half=upper");
 
-  public static final BlockState LILAC_1 = new BlockState(NamespaceID.from("minecraft:lilac:1"), (short) 7892, Block.LILAC, "half=lower");
+  public static final BlockState LILAC_1 = new BlockState(NamespaceID.from("minecraft:lilac_1"), (short) 7892, Block.LILAC, "half=lower");
 
   static {
     Registries.registerBlockState(LILAC_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkOakPlanks {
-  public static final BlockState DARK_OAK_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_planks:0"), (short) 20, Block.DARK_OAK_PLANKS);
+  public static final BlockState DARK_OAK_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_planks_0"), (short) 20, Block.DARK_OAK_PLANKS);
 
   static {
     Registries.registerBlockState(DARK_OAK_PLANKS_0);

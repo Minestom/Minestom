@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Lodestone {
-  public static final BlockState LODESTONE_0 = new BlockState(NamespaceID.from("minecraft:lodestone:0"), (short) 15846, Block.LODESTONE);
+  public static final BlockState LODESTONE_0 = new BlockState(NamespaceID.from("minecraft:lodestone_0"), (short) 15846, Block.LODESTONE);
 
   static {
     Registries.registerBlockState(LODESTONE_0);

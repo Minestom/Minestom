@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Blackstone {
-  public static final BlockState BLACKSTONE_0 = new BlockState(NamespaceID.from("minecraft:blackstone:0"), (short) 15847, Block.BLACKSTONE);
+  public static final BlockState BLACKSTONE_0 = new BlockState(NamespaceID.from("minecraft:blackstone_0"), (short) 15847, Block.BLACKSTONE);
 
   static {
     Registries.registerBlockState(BLACKSTONE_0);

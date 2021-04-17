@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SeaLantern {
-  public static final BlockState SEA_LANTERN_0 = new BlockState(NamespaceID.from("minecraft:sea_lantern:0"), (short) 7866, Block.SEA_LANTERN);
+  public static final BlockState SEA_LANTERN_0 = new BlockState(NamespaceID.from("minecraft:sea_lantern_0"), (short) 7866, Block.SEA_LANTERN);
 
   static {
     Registries.registerBlockState(SEA_LANTERN_0);

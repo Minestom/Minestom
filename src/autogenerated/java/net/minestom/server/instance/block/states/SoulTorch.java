@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SoulTorch {
-  public static final BlockState SOUL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:soul_torch:0"), (short) 4008, Block.SOUL_TORCH);
+  public static final BlockState SOUL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:soul_torch_0"), (short) 4008, Block.SOUL_TORCH);
 
   static {
     Registries.registerBlockState(SOUL_TORCH_0);

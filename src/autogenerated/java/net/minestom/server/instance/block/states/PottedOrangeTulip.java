@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedOrangeTulip {
-  public static final BlockState POTTED_ORANGE_TULIP_0 = new BlockState(NamespaceID.from("minecraft:potted_orange_tulip:0"), (short) 6323, Block.POTTED_ORANGE_TULIP);
+  public static final BlockState POTTED_ORANGE_TULIP_0 = new BlockState(NamespaceID.from("minecraft:potted_orange_tulip_0"), (short) 6323, Block.POTTED_ORANGE_TULIP);
 
   static {
     Registries.registerBlockState(POTTED_ORANGE_TULIP_0);

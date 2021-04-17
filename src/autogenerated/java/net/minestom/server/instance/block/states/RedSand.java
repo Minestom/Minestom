@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedSand {
-  public static final BlockState RED_SAND_0 = new BlockState(NamespaceID.from("minecraft:red_sand:0"), (short) 67, Block.RED_SAND);
+  public static final BlockState RED_SAND_0 = new BlockState(NamespaceID.from("minecraft:red_sand_0"), (short) 67, Block.RED_SAND);
 
   static {
     Registries.registerBlockState(RED_SAND_0);

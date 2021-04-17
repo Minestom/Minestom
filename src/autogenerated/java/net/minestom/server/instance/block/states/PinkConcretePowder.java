@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PinkConcretePowder {
-  public static final BlockState PINK_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:pink_concrete_powder:0"), (short) 9464, Block.PINK_CONCRETE_POWDER);
+  public static final BlockState PINK_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:pink_concrete_powder_0"), (short) 9464, Block.PINK_CONCRETE_POWDER);
 
   static {
     Registries.registerBlockState(PINK_CONCRETE_POWDER_0);

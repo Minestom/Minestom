@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Dirt {
-  public static final BlockState DIRT_0 = new BlockState(NamespaceID.from("minecraft:dirt:0"), (short) 10, Block.DIRT);
+  public static final BlockState DIRT_0 = new BlockState(NamespaceID.from("minecraft:dirt_0"), (short) 10, Block.DIRT);
 
   static {
     Registries.registerBlockState(DIRT_0);

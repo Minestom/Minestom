@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CreeperWallHead {
-  public static final BlockState CREEPER_WALL_HEAD_0 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head:0"), (short) 6590, Block.CREEPER_WALL_HEAD, "facing=north");
+  public static final BlockState CREEPER_WALL_HEAD_0 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head_0"), (short) 6590, Block.CREEPER_WALL_HEAD, "facing=north");
 
-  public static final BlockState CREEPER_WALL_HEAD_1 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head:1"), (short) 6591, Block.CREEPER_WALL_HEAD, "facing=south");
+  public static final BlockState CREEPER_WALL_HEAD_1 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head_1"), (short) 6591, Block.CREEPER_WALL_HEAD, "facing=south");
 
-  public static final BlockState CREEPER_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head:2"), (short) 6592, Block.CREEPER_WALL_HEAD, "facing=west");
+  public static final BlockState CREEPER_WALL_HEAD_2 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head_2"), (short) 6592, Block.CREEPER_WALL_HEAD, "facing=west");
 
-  public static final BlockState CREEPER_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head:3"), (short) 6593, Block.CREEPER_WALL_HEAD, "facing=east");
+  public static final BlockState CREEPER_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head_3"), (short) 6593, Block.CREEPER_WALL_HEAD, "facing=east");
 
   static {
     Registries.registerBlockState(CREEPER_WALL_HEAD_0);

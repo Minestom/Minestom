@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class HoneyBlock {
-  public static final BlockState HONEY_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:honey_block:0"), (short) 15832, Block.HONEY_BLOCK);
+  public static final BlockState HONEY_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:honey_block_0"), (short) 15832, Block.HONEY_BLOCK);
 
   static {
     Registries.registerBlockState(HONEY_BLOCK_0);

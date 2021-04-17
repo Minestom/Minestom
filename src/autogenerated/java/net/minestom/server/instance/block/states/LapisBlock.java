@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LapisBlock {
-  public static final BlockState LAPIS_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:lapis_block:0"), (short) 233, Block.LAPIS_BLOCK);
+  public static final BlockState LAPIS_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:lapis_block_0"), (short) 233, Block.LAPIS_BLOCK);
 
   static {
     Registries.registerBlockState(LAPIS_BLOCK_0);

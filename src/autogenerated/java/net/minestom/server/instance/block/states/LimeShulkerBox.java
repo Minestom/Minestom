@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LimeShulkerBox {
-  public static final BlockState LIME_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:0"), (short) 9312, Block.LIME_SHULKER_BOX, "facing=north");
+  public static final BlockState LIME_SHULKER_BOX_0 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box_0"), (short) 9312, Block.LIME_SHULKER_BOX, "facing=north");
 
-  public static final BlockState LIME_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:1"), (short) 9313, Block.LIME_SHULKER_BOX, "facing=east");
+  public static final BlockState LIME_SHULKER_BOX_1 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box_1"), (short) 9313, Block.LIME_SHULKER_BOX, "facing=east");
 
-  public static final BlockState LIME_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:2"), (short) 9314, Block.LIME_SHULKER_BOX, "facing=south");
+  public static final BlockState LIME_SHULKER_BOX_2 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box_2"), (short) 9314, Block.LIME_SHULKER_BOX, "facing=south");
 
-  public static final BlockState LIME_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:3"), (short) 9315, Block.LIME_SHULKER_BOX, "facing=west");
+  public static final BlockState LIME_SHULKER_BOX_3 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box_3"), (short) 9315, Block.LIME_SHULKER_BOX, "facing=west");
 
-  public static final BlockState LIME_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:4"), (short) 9316, Block.LIME_SHULKER_BOX, "facing=up");
+  public static final BlockState LIME_SHULKER_BOX_4 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box_4"), (short) 9316, Block.LIME_SHULKER_BOX, "facing=up");
 
-  public static final BlockState LIME_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box:5"), (short) 9317, Block.LIME_SHULKER_BOX, "facing=down");
+  public static final BlockState LIME_SHULKER_BOX_5 = new BlockState(NamespaceID.from("minecraft:lime_shulker_box_5"), (short) 9317, Block.LIME_SHULKER_BOX, "facing=down");
 
   static {
     Registries.registerBlockState(LIME_SHULKER_BOX_0);

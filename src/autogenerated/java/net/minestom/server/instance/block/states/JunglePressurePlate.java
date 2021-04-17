@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JunglePressurePlate {
-  public static final BlockState JUNGLE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:jungle_pressure_plate:0"), (short) 3879, Block.JUNGLE_PRESSURE_PLATE, "powered=true");
+  public static final BlockState JUNGLE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:jungle_pressure_plate_0"), (short) 3879, Block.JUNGLE_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState JUNGLE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:jungle_pressure_plate:1"), (short) 3880, Block.JUNGLE_PRESSURE_PLATE, "powered=false");
+  public static final BlockState JUNGLE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:jungle_pressure_plate_1"), (short) 3880, Block.JUNGLE_PRESSURE_PLATE, "powered=false");
 
   static {
     Registries.registerBlockState(JUNGLE_PRESSURE_PLATE_0);

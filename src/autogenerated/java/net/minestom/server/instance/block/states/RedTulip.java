@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedTulip {
-  public static final BlockState RED_TULIP_0 = new BlockState(NamespaceID.from("minecraft:red_tulip:0"), (short) 1417, Block.RED_TULIP);
+  public static final BlockState RED_TULIP_0 = new BlockState(NamespaceID.from("minecraft:red_tulip_0"), (short) 1417, Block.RED_TULIP);
 
   static {
     Registries.registerBlockState(RED_TULIP_0);

@@ -14,33 +14,33 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceLeaves {
-  public static final BlockState SPRUCE_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:0"), (short) 159, Block.SPRUCE_LEAVES, "distance=1","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_0"), (short) 159, Block.SPRUCE_LEAVES, "distance=1","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:1"), (short) 160, Block.SPRUCE_LEAVES, "distance=1","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_1"), (short) 160, Block.SPRUCE_LEAVES, "distance=1","persistent=false");
 
-  public static final BlockState SPRUCE_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:2"), (short) 161, Block.SPRUCE_LEAVES, "distance=2","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_2"), (short) 161, Block.SPRUCE_LEAVES, "distance=2","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:3"), (short) 162, Block.SPRUCE_LEAVES, "distance=2","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_3"), (short) 162, Block.SPRUCE_LEAVES, "distance=2","persistent=false");
 
-  public static final BlockState SPRUCE_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:4"), (short) 163, Block.SPRUCE_LEAVES, "distance=3","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_4"), (short) 163, Block.SPRUCE_LEAVES, "distance=3","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:5"), (short) 164, Block.SPRUCE_LEAVES, "distance=3","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_5"), (short) 164, Block.SPRUCE_LEAVES, "distance=3","persistent=false");
 
-  public static final BlockState SPRUCE_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:6"), (short) 165, Block.SPRUCE_LEAVES, "distance=4","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_6"), (short) 165, Block.SPRUCE_LEAVES, "distance=4","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:7"), (short) 166, Block.SPRUCE_LEAVES, "distance=4","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_7"), (short) 166, Block.SPRUCE_LEAVES, "distance=4","persistent=false");
 
-  public static final BlockState SPRUCE_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:8"), (short) 167, Block.SPRUCE_LEAVES, "distance=5","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_8"), (short) 167, Block.SPRUCE_LEAVES, "distance=5","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:9"), (short) 168, Block.SPRUCE_LEAVES, "distance=5","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_9"), (short) 168, Block.SPRUCE_LEAVES, "distance=5","persistent=false");
 
-  public static final BlockState SPRUCE_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:10"), (short) 169, Block.SPRUCE_LEAVES, "distance=6","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_10"), (short) 169, Block.SPRUCE_LEAVES, "distance=6","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:11"), (short) 170, Block.SPRUCE_LEAVES, "distance=6","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_11"), (short) 170, Block.SPRUCE_LEAVES, "distance=6","persistent=false");
 
-  public static final BlockState SPRUCE_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:12"), (short) 171, Block.SPRUCE_LEAVES, "distance=7","persistent=true");
+  public static final BlockState SPRUCE_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_12"), (short) 171, Block.SPRUCE_LEAVES, "distance=7","persistent=true");
 
-  public static final BlockState SPRUCE_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:spruce_leaves:13"), (short) 172, Block.SPRUCE_LEAVES, "distance=7","persistent=false");
+  public static final BlockState SPRUCE_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:spruce_leaves_13"), (short) 172, Block.SPRUCE_LEAVES, "distance=7","persistent=false");
 
   static {
     Registries.registerBlockState(SPRUCE_LEAVES_0);

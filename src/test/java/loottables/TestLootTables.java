@@ -28,6 +28,12 @@ public class TestLootTables {
 
     @BeforeEach
     public void init() {
+        // Init material correctly.
+        try {
+            Class.forName(Material.class.getName(), true, MinecraftServer.class.getClassLoader());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         try {
             ResourceGatherer.ensureResourcesArePresent(MinecraftServer.VERSION_NAME);
         } catch (IOException e) {

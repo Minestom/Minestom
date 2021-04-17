@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DeadBush {
-  public static final BlockState DEAD_BUSH_0 = new BlockState(NamespaceID.from("minecraft:dead_bush:0"), (short) 1344, Block.DEAD_BUSH);
+  public static final BlockState DEAD_BUSH_0 = new BlockState(NamespaceID.from("minecraft:dead_bush_0"), (short) 1344, Block.DEAD_BUSH);
 
   static {
     Registries.registerBlockState(DEAD_BUSH_0);

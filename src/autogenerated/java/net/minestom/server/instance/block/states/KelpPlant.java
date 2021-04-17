@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class KelpPlant {
-  public static final BlockState KELP_PLANT_0 = new BlockState(NamespaceID.from("minecraft:kelp_plant:0"), (short) 9500, Block.KELP_PLANT);
+  public static final BlockState KELP_PLANT_0 = new BlockState(NamespaceID.from("minecraft:kelp_plant_0"), (short) 9500, Block.KELP_PLANT);
 
   static {
     Registries.registerBlockState(KELP_PLANT_0);

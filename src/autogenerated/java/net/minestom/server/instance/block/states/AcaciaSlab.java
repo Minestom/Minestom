@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaSlab {
-  public static final BlockState ACACIA_SLAB_0 = new BlockState(NamespaceID.from("minecraft:acacia_slab:0"), (short) 8328, Block.ACACIA_SLAB, "type=top","waterlogged=true");
+  public static final BlockState ACACIA_SLAB_0 = new BlockState(NamespaceID.from("minecraft:acacia_slab_0"), (short) 8328, Block.ACACIA_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState ACACIA_SLAB_1 = new BlockState(NamespaceID.from("minecraft:acacia_slab:1"), (short) 8329, Block.ACACIA_SLAB, "type=top","waterlogged=false");
+  public static final BlockState ACACIA_SLAB_1 = new BlockState(NamespaceID.from("minecraft:acacia_slab_1"), (short) 8329, Block.ACACIA_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState ACACIA_SLAB_2 = new BlockState(NamespaceID.from("minecraft:acacia_slab:2"), (short) 8330, Block.ACACIA_SLAB, "type=bottom","waterlogged=true");
+  public static final BlockState ACACIA_SLAB_2 = new BlockState(NamespaceID.from("minecraft:acacia_slab_2"), (short) 8330, Block.ACACIA_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState ACACIA_SLAB_3 = new BlockState(NamespaceID.from("minecraft:acacia_slab:3"), (short) 8331, Block.ACACIA_SLAB, "type=bottom","waterlogged=false");
+  public static final BlockState ACACIA_SLAB_3 = new BlockState(NamespaceID.from("minecraft:acacia_slab_3"), (short) 8331, Block.ACACIA_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState ACACIA_SLAB_4 = new BlockState(NamespaceID.from("minecraft:acacia_slab:4"), (short) 8332, Block.ACACIA_SLAB, "type=double","waterlogged=true");
+  public static final BlockState ACACIA_SLAB_4 = new BlockState(NamespaceID.from("minecraft:acacia_slab_4"), (short) 8332, Block.ACACIA_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState ACACIA_SLAB_5 = new BlockState(NamespaceID.from("minecraft:acacia_slab:5"), (short) 8333, Block.ACACIA_SLAB, "type=double","waterlogged=false");
+  public static final BlockState ACACIA_SLAB_5 = new BlockState(NamespaceID.from("minecraft:acacia_slab_5"), (short) 8333, Block.ACACIA_SLAB, "type=double","waterlogged=false");
 
   static {
     Registries.registerBlockState(ACACIA_SLAB_0);

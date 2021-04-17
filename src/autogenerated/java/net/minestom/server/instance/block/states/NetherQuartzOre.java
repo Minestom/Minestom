@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class NetherQuartzOre {
-  public static final BlockState NETHER_QUARTZ_ORE_0 = new BlockState(NamespaceID.from("minecraft:nether_quartz_ore:0"), (short) 6731, Block.NETHER_QUARTZ_ORE);
+  public static final BlockState NETHER_QUARTZ_ORE_0 = new BlockState(NamespaceID.from("minecraft:nether_quartz_ore_0"), (short) 6731, Block.NETHER_QUARTZ_ORE);
 
   static {
     Registries.registerBlockState(NETHER_QUARTZ_ORE_0);

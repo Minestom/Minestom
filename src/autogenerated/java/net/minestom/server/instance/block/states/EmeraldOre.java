@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EmeraldOre {
-  public static final BlockState EMERALD_ORE_0 = new BlockState(NamespaceID.from("minecraft:emerald_ore:0"), (short) 5254, Block.EMERALD_ORE);
+  public static final BlockState EMERALD_ORE_0 = new BlockState(NamespaceID.from("minecraft:emerald_ore_0"), (short) 5254, Block.EMERALD_ORE);
 
   static {
     Registries.registerBlockState(EMERALD_ORE_0);

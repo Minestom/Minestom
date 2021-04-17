@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StructureVoid {
-  public static final BlockState STRUCTURE_VOID_0 = new BlockState(NamespaceID.from("minecraft:structure_void:0"), (short) 9263, Block.STRUCTURE_VOID);
+  public static final BlockState STRUCTURE_VOID_0 = new BlockState(NamespaceID.from("minecraft:structure_void_0"), (short) 9263, Block.STRUCTURE_VOID);
 
   static {
     Registries.registerBlockState(STRUCTURE_VOID_0);

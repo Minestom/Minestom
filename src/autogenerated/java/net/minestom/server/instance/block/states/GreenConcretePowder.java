@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GreenConcretePowder {
-  public static final BlockState GREEN_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:green_concrete_powder:0"), (short) 9471, Block.GREEN_CONCRETE_POWDER);
+  public static final BlockState GREEN_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:green_concrete_powder_0"), (short) 9471, Block.GREEN_CONCRETE_POWDER);
 
   static {
     Registries.registerBlockState(GREEN_CONCRETE_POWDER_0);

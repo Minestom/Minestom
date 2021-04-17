@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonPlanks {
-  public static final BlockState CRIMSON_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:crimson_planks:0"), (short) 15053, Block.CRIMSON_PLANKS);
+  public static final BlockState CRIMSON_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:crimson_planks_0"), (short) 15053, Block.CRIMSON_PLANKS);
 
   static {
     Registries.registerBlockState(CRIMSON_PLANKS_0);

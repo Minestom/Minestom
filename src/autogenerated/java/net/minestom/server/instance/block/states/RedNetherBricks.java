@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedNetherBricks {
-  public static final BlockState RED_NETHER_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:red_nether_bricks:0"), (short) 9259, Block.RED_NETHER_BRICKS);
+  public static final BlockState RED_NETHER_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:red_nether_bricks_0"), (short) 9259, Block.RED_NETHER_BRICKS);
 
   static {
     Registries.registerBlockState(RED_NETHER_BRICKS_0);

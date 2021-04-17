@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Seagrass {
-  public static final BlockState SEAGRASS_0 = new BlockState(NamespaceID.from("minecraft:seagrass:0"), (short) 1345, Block.SEAGRASS);
+  public static final BlockState SEAGRASS_0 = new BlockState(NamespaceID.from("minecraft:seagrass_0"), (short) 1345, Block.SEAGRASS);
 
   static {
     Registries.registerBlockState(SEAGRASS_0);

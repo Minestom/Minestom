@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class TurtleEgg {
-  public static final BlockState TURTLE_EGG_0 = new BlockState(NamespaceID.from("minecraft:turtle_egg:0"), (short) 9502, Block.TURTLE_EGG, "eggs=1","hatch=0");
+  public static final BlockState TURTLE_EGG_0 = new BlockState(NamespaceID.from("minecraft:turtle_egg_0"), (short) 9502, Block.TURTLE_EGG, "eggs=1","hatch=0");
 
-  public static final BlockState TURTLE_EGG_1 = new BlockState(NamespaceID.from("minecraft:turtle_egg:1"), (short) 9503, Block.TURTLE_EGG, "eggs=1","hatch=1");
+  public static final BlockState TURTLE_EGG_1 = new BlockState(NamespaceID.from("minecraft:turtle_egg_1"), (short) 9503, Block.TURTLE_EGG, "eggs=1","hatch=1");
 
-  public static final BlockState TURTLE_EGG_2 = new BlockState(NamespaceID.from("minecraft:turtle_egg:2"), (short) 9504, Block.TURTLE_EGG, "eggs=1","hatch=2");
+  public static final BlockState TURTLE_EGG_2 = new BlockState(NamespaceID.from("minecraft:turtle_egg_2"), (short) 9504, Block.TURTLE_EGG, "eggs=1","hatch=2");
 
-  public static final BlockState TURTLE_EGG_3 = new BlockState(NamespaceID.from("minecraft:turtle_egg:3"), (short) 9505, Block.TURTLE_EGG, "eggs=2","hatch=0");
+  public static final BlockState TURTLE_EGG_3 = new BlockState(NamespaceID.from("minecraft:turtle_egg_3"), (short) 9505, Block.TURTLE_EGG, "eggs=2","hatch=0");
 
-  public static final BlockState TURTLE_EGG_4 = new BlockState(NamespaceID.from("minecraft:turtle_egg:4"), (short) 9506, Block.TURTLE_EGG, "eggs=2","hatch=1");
+  public static final BlockState TURTLE_EGG_4 = new BlockState(NamespaceID.from("minecraft:turtle_egg_4"), (short) 9506, Block.TURTLE_EGG, "eggs=2","hatch=1");
 
-  public static final BlockState TURTLE_EGG_5 = new BlockState(NamespaceID.from("minecraft:turtle_egg:5"), (short) 9507, Block.TURTLE_EGG, "eggs=2","hatch=2");
+  public static final BlockState TURTLE_EGG_5 = new BlockState(NamespaceID.from("minecraft:turtle_egg_5"), (short) 9507, Block.TURTLE_EGG, "eggs=2","hatch=2");
 
-  public static final BlockState TURTLE_EGG_6 = new BlockState(NamespaceID.from("minecraft:turtle_egg:6"), (short) 9508, Block.TURTLE_EGG, "eggs=3","hatch=0");
+  public static final BlockState TURTLE_EGG_6 = new BlockState(NamespaceID.from("minecraft:turtle_egg_6"), (short) 9508, Block.TURTLE_EGG, "eggs=3","hatch=0");
 
-  public static final BlockState TURTLE_EGG_7 = new BlockState(NamespaceID.from("minecraft:turtle_egg:7"), (short) 9509, Block.TURTLE_EGG, "eggs=3","hatch=1");
+  public static final BlockState TURTLE_EGG_7 = new BlockState(NamespaceID.from("minecraft:turtle_egg_7"), (short) 9509, Block.TURTLE_EGG, "eggs=3","hatch=1");
 
-  public static final BlockState TURTLE_EGG_8 = new BlockState(NamespaceID.from("minecraft:turtle_egg:8"), (short) 9510, Block.TURTLE_EGG, "eggs=3","hatch=2");
+  public static final BlockState TURTLE_EGG_8 = new BlockState(NamespaceID.from("minecraft:turtle_egg_8"), (short) 9510, Block.TURTLE_EGG, "eggs=3","hatch=2");
 
-  public static final BlockState TURTLE_EGG_9 = new BlockState(NamespaceID.from("minecraft:turtle_egg:9"), (short) 9511, Block.TURTLE_EGG, "eggs=4","hatch=0");
+  public static final BlockState TURTLE_EGG_9 = new BlockState(NamespaceID.from("minecraft:turtle_egg_9"), (short) 9511, Block.TURTLE_EGG, "eggs=4","hatch=0");
 
-  public static final BlockState TURTLE_EGG_10 = new BlockState(NamespaceID.from("minecraft:turtle_egg:10"), (short) 9512, Block.TURTLE_EGG, "eggs=4","hatch=1");
+  public static final BlockState TURTLE_EGG_10 = new BlockState(NamespaceID.from("minecraft:turtle_egg_10"), (short) 9512, Block.TURTLE_EGG, "eggs=4","hatch=1");
 
-  public static final BlockState TURTLE_EGG_11 = new BlockState(NamespaceID.from("minecraft:turtle_egg:11"), (short) 9513, Block.TURTLE_EGG, "eggs=4","hatch=2");
+  public static final BlockState TURTLE_EGG_11 = new BlockState(NamespaceID.from("minecraft:turtle_egg_11"), (short) 9513, Block.TURTLE_EGG, "eggs=4","hatch=2");
 
   static {
     Registries.registerBlockState(TURTLE_EGG_0);

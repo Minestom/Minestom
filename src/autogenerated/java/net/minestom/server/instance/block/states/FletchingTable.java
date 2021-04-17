@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class FletchingTable {
-  public static final BlockState FLETCHING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:fletching_table:0"), (short) 14824, Block.FLETCHING_TABLE);
+  public static final BlockState FLETCHING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:fletching_table_0"), (short) 14824, Block.FLETCHING_TABLE);
 
   static {
     Registries.registerBlockState(FLETCHING_TABLE_0);

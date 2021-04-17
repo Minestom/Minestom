@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Anvil {
-  public static final BlockState ANVIL_0 = new BlockState(NamespaceID.from("minecraft:anvil:0"), (short) 6614, Block.ANVIL, "facing=north");
+  public static final BlockState ANVIL_0 = new BlockState(NamespaceID.from("minecraft:anvil_0"), (short) 6614, Block.ANVIL, "facing=north");
 
-  public static final BlockState ANVIL_1 = new BlockState(NamespaceID.from("minecraft:anvil:1"), (short) 6615, Block.ANVIL, "facing=south");
+  public static final BlockState ANVIL_1 = new BlockState(NamespaceID.from("minecraft:anvil_1"), (short) 6615, Block.ANVIL, "facing=south");
 
-  public static final BlockState ANVIL_2 = new BlockState(NamespaceID.from("minecraft:anvil:2"), (short) 6616, Block.ANVIL, "facing=west");
+  public static final BlockState ANVIL_2 = new BlockState(NamespaceID.from("minecraft:anvil_2"), (short) 6616, Block.ANVIL, "facing=west");
 
-  public static final BlockState ANVIL_3 = new BlockState(NamespaceID.from("minecraft:anvil:3"), (short) 6617, Block.ANVIL, "facing=east");
+  public static final BlockState ANVIL_3 = new BlockState(NamespaceID.from("minecraft:anvil_3"), (short) 6617, Block.ANVIL, "facing=east");
 
   static {
     Registries.registerBlockState(ANVIL_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SlimeBlock {
-  public static final BlockState SLIME_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:slime_block:0"), (short) 7539, Block.SLIME_BLOCK);
+  public static final BlockState SLIME_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:slime_block_0"), (short) 7539, Block.SLIME_BLOCK);
 
   static {
     Registries.registerBlockState(SLIME_BLOCK_0);

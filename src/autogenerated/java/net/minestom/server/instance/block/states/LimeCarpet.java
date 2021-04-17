@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LimeCarpet {
-  public static final BlockState LIME_CARPET_0 = new BlockState(NamespaceID.from("minecraft:lime_carpet:0"), (short) 7875, Block.LIME_CARPET);
+  public static final BlockState LIME_CARPET_0 = new BlockState(NamespaceID.from("minecraft:lime_carpet_0"), (short) 7875, Block.LIME_CARPET);
 
   static {
     Registries.registerBlockState(LIME_CARPET_0);

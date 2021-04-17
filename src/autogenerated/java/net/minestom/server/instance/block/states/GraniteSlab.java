@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GraniteSlab {
-  public static final BlockState GRANITE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:granite_slab:0"), (short) 10841, Block.GRANITE_SLAB, "type=top","waterlogged=true");
+  public static final BlockState GRANITE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:granite_slab_0"), (short) 10841, Block.GRANITE_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState GRANITE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:granite_slab:1"), (short) 10842, Block.GRANITE_SLAB, "type=top","waterlogged=false");
+  public static final BlockState GRANITE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:granite_slab_1"), (short) 10842, Block.GRANITE_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState GRANITE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:granite_slab:2"), (short) 10843, Block.GRANITE_SLAB, "type=bottom","waterlogged=true");
+  public static final BlockState GRANITE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:granite_slab_2"), (short) 10843, Block.GRANITE_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState GRANITE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:granite_slab:3"), (short) 10844, Block.GRANITE_SLAB, "type=bottom","waterlogged=false");
+  public static final BlockState GRANITE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:granite_slab_3"), (short) 10844, Block.GRANITE_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState GRANITE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:granite_slab:4"), (short) 10845, Block.GRANITE_SLAB, "type=double","waterlogged=true");
+  public static final BlockState GRANITE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:granite_slab_4"), (short) 10845, Block.GRANITE_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState GRANITE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:granite_slab:5"), (short) 10846, Block.GRANITE_SLAB, "type=double","waterlogged=false");
+  public static final BlockState GRANITE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:granite_slab_5"), (short) 10846, Block.GRANITE_SLAB, "type=double","waterlogged=false");
 
   static {
     Registries.registerBlockState(GRANITE_SLAB_0);

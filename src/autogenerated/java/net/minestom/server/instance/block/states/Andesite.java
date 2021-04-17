@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Andesite {
-  public static final BlockState ANDESITE_0 = new BlockState(NamespaceID.from("minecraft:andesite:0"), (short) 6, Block.ANDESITE);
+  public static final BlockState ANDESITE_0 = new BlockState(NamespaceID.from("minecraft:andesite_0"), (short) 6, Block.ANDESITE);
 
   static {
     Registries.registerBlockState(ANDESITE_0);

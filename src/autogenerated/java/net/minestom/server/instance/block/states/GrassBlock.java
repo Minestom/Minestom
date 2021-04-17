@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GrassBlock {
-  public static final BlockState GRASS_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:grass_block:0"), (short) 8, Block.GRASS_BLOCK, "snowy=true");
+  public static final BlockState GRASS_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:grass_block_0"), (short) 8, Block.GRASS_BLOCK, "snowy=true");
 
-  public static final BlockState GRASS_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:grass_block:1"), (short) 9, Block.GRASS_BLOCK, "snowy=false");
+  public static final BlockState GRASS_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:grass_block_1"), (short) 9, Block.GRASS_BLOCK, "snowy=false");
 
   static {
     Registries.registerBlockState(GRASS_BLOCK_0);

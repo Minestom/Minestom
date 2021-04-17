@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OrangeWool {
-  public static final BlockState ORANGE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:orange_wool:0"), (short) 1385, Block.ORANGE_WOOL);
+  public static final BlockState ORANGE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:orange_wool_0"), (short) 1385, Block.ORANGE_WOOL);
 
   static {
     Registries.registerBlockState(ORANGE_WOOL_0);

@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonWallSign {
-  public static final BlockState CRIMSON_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:0"), (short) 15727, Block.CRIMSON_WALL_SIGN, "facing=north","waterlogged=true");
+  public static final BlockState CRIMSON_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_0"), (short) 15727, Block.CRIMSON_WALL_SIGN, "facing=north","waterlogged=true");
 
-  public static final BlockState CRIMSON_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:1"), (short) 15728, Block.CRIMSON_WALL_SIGN, "facing=north","waterlogged=false");
+  public static final BlockState CRIMSON_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_1"), (short) 15728, Block.CRIMSON_WALL_SIGN, "facing=north","waterlogged=false");
 
-  public static final BlockState CRIMSON_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:2"), (short) 15729, Block.CRIMSON_WALL_SIGN, "facing=south","waterlogged=true");
+  public static final BlockState CRIMSON_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_2"), (short) 15729, Block.CRIMSON_WALL_SIGN, "facing=south","waterlogged=true");
 
-  public static final BlockState CRIMSON_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:3"), (short) 15730, Block.CRIMSON_WALL_SIGN, "facing=south","waterlogged=false");
+  public static final BlockState CRIMSON_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_3"), (short) 15730, Block.CRIMSON_WALL_SIGN, "facing=south","waterlogged=false");
 
-  public static final BlockState CRIMSON_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:4"), (short) 15731, Block.CRIMSON_WALL_SIGN, "facing=west","waterlogged=true");
+  public static final BlockState CRIMSON_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_4"), (short) 15731, Block.CRIMSON_WALL_SIGN, "facing=west","waterlogged=true");
 
-  public static final BlockState CRIMSON_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:5"), (short) 15732, Block.CRIMSON_WALL_SIGN, "facing=west","waterlogged=false");
+  public static final BlockState CRIMSON_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_5"), (short) 15732, Block.CRIMSON_WALL_SIGN, "facing=west","waterlogged=false");
 
-  public static final BlockState CRIMSON_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:6"), (short) 15733, Block.CRIMSON_WALL_SIGN, "facing=east","waterlogged=true");
+  public static final BlockState CRIMSON_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_6"), (short) 15733, Block.CRIMSON_WALL_SIGN, "facing=east","waterlogged=true");
 
-  public static final BlockState CRIMSON_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign:7"), (short) 15734, Block.CRIMSON_WALL_SIGN, "facing=east","waterlogged=false");
+  public static final BlockState CRIMSON_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:crimson_wall_sign_7"), (short) 15734, Block.CRIMSON_WALL_SIGN, "facing=east","waterlogged=false");
 
   static {
     Registries.registerBlockState(CRIMSON_WALL_SIGN_0);

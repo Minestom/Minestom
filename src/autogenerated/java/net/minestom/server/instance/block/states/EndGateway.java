@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EndGateway {
-  public static final BlockState END_GATEWAY_0 = new BlockState(NamespaceID.from("minecraft:end_gateway:0"), (short) 9228, Block.END_GATEWAY);
+  public static final BlockState END_GATEWAY_0 = new BlockState(NamespaceID.from("minecraft:end_gateway_0"), (short) 9228, Block.END_GATEWAY);
 
   static {
     Registries.registerBlockState(END_GATEWAY_0);

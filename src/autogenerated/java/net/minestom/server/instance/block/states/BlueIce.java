@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BlueIce {
-  public static final BlockState BLUE_ICE_0 = new BlockState(NamespaceID.from("minecraft:blue_ice:0"), (short) 9652, Block.BLUE_ICE);
+  public static final BlockState BLUE_ICE_0 = new BlockState(NamespaceID.from("minecraft:blue_ice_0"), (short) 9652, Block.BLUE_ICE);
 
   static {
     Registries.registerBlockState(BLUE_ICE_0);

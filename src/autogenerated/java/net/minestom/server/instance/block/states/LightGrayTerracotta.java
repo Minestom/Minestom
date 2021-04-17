@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LightGrayTerracotta {
-  public static final BlockState LIGHT_GRAY_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:light_gray_terracotta:0"), (short) 6859, Block.LIGHT_GRAY_TERRACOTTA);
+  public static final BlockState LIGHT_GRAY_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:light_gray_terracotta_0"), (short) 6859, Block.LIGHT_GRAY_TERRACOTTA);
 
   static {
     Registries.registerBlockState(LIGHT_GRAY_TERRACOTTA_0);

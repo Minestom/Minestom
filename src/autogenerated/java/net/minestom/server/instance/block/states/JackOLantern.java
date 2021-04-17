@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JackOLantern {
-  public static final BlockState JACK_O_LANTERN_0 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern:0"), (short) 4020, Block.JACK_O_LANTERN, "facing=north");
+  public static final BlockState JACK_O_LANTERN_0 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern_0"), (short) 4020, Block.JACK_O_LANTERN, "facing=north");
 
-  public static final BlockState JACK_O_LANTERN_1 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern:1"), (short) 4021, Block.JACK_O_LANTERN, "facing=south");
+  public static final BlockState JACK_O_LANTERN_1 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern_1"), (short) 4021, Block.JACK_O_LANTERN, "facing=south");
 
-  public static final BlockState JACK_O_LANTERN_2 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern:2"), (short) 4022, Block.JACK_O_LANTERN, "facing=west");
+  public static final BlockState JACK_O_LANTERN_2 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern_2"), (short) 4022, Block.JACK_O_LANTERN, "facing=west");
 
-  public static final BlockState JACK_O_LANTERN_3 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern:3"), (short) 4023, Block.JACK_O_LANTERN, "facing=east");
+  public static final BlockState JACK_O_LANTERN_3 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern_3"), (short) 4023, Block.JACK_O_LANTERN, "facing=east");
 
   static {
     Registries.registerBlockState(JACK_O_LANTERN_0);

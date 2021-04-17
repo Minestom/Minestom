@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SmoothRedSandstone {
-  public static final BlockState SMOOTH_RED_SANDSTONE_0 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone:0"), (short) 8421, Block.SMOOTH_RED_SANDSTONE);
+  public static final BlockState SMOOTH_RED_SANDSTONE_0 = new BlockState(NamespaceID.from("minecraft:smooth_red_sandstone_0"), (short) 8421, Block.SMOOTH_RED_SANDSTONE);
 
   static {
     Registries.registerBlockState(SMOOTH_RED_SANDSTONE_0);

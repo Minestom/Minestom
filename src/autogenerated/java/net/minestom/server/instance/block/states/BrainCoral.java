@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrainCoral {
-  public static final BlockState BRAIN_CORAL_0 = new BlockState(NamespaceID.from("minecraft:brain_coral:0"), (short) 9536, Block.BRAIN_CORAL, "waterlogged=true");
+  public static final BlockState BRAIN_CORAL_0 = new BlockState(NamespaceID.from("minecraft:brain_coral_0"), (short) 9536, Block.BRAIN_CORAL, "waterlogged=true");
 
-  public static final BlockState BRAIN_CORAL_1 = new BlockState(NamespaceID.from("minecraft:brain_coral:1"), (short) 9537, Block.BRAIN_CORAL, "waterlogged=false");
+  public static final BlockState BRAIN_CORAL_1 = new BlockState(NamespaceID.from("minecraft:brain_coral_1"), (short) 9537, Block.BRAIN_CORAL, "waterlogged=false");
 
   static {
     Registries.registerBlockState(BRAIN_CORAL_0);

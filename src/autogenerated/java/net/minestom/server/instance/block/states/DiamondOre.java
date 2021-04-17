@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DiamondOre {
-  public static final BlockState DIAMOND_ORE_0 = new BlockState(NamespaceID.from("minecraft:diamond_ore:0"), (short) 3354, Block.DIAMOND_ORE);
+  public static final BlockState DIAMOND_ORE_0 = new BlockState(NamespaceID.from("minecraft:diamond_ore_0"), (short) 3354, Block.DIAMOND_ORE);
 
   static {
     Registries.registerBlockState(DIAMOND_ORE_0);

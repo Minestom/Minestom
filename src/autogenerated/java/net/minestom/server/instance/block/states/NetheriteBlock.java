@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class NetheriteBlock {
-  public static final BlockState NETHERITE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:netherite_block:0"), (short) 15834, Block.NETHERITE_BLOCK);
+  public static final BlockState NETHERITE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:netherite_block_0"), (short) 15834, Block.NETHERITE_BLOCK);
 
   static {
     Registries.registerBlockState(NETHERITE_BLOCK_0);

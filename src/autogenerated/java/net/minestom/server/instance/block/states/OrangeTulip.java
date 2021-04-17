@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OrangeTulip {
-  public static final BlockState ORANGE_TULIP_0 = new BlockState(NamespaceID.from("minecraft:orange_tulip:0"), (short) 1418, Block.ORANGE_TULIP);
+  public static final BlockState ORANGE_TULIP_0 = new BlockState(NamespaceID.from("minecraft:orange_tulip_0"), (short) 1418, Block.ORANGE_TULIP);
 
   static {
     Registries.registerBlockState(ORANGE_TULIP_0);

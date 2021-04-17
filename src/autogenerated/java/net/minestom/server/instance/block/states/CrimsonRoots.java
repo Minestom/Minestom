@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonRoots {
-  public static final BlockState CRIMSON_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:crimson_roots:0"), (short) 15052, Block.CRIMSON_ROOTS);
+  public static final BlockState CRIMSON_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:crimson_roots_0"), (short) 15052, Block.CRIMSON_ROOTS);
 
   static {
     Registries.registerBlockState(CRIMSON_ROOTS_0);

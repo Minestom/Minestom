@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CyanWool {
-  public static final BlockState CYAN_WOOL_0 = new BlockState(NamespaceID.from("minecraft:cyan_wool:0"), (short) 1393, Block.CYAN_WOOL);
+  public static final BlockState CYAN_WOOL_0 = new BlockState(NamespaceID.from("minecraft:cyan_wool_0"), (short) 1393, Block.CYAN_WOOL);
 
   static {
     Registries.registerBlockState(CYAN_WOOL_0);

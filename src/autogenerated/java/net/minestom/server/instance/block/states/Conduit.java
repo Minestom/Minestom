@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Conduit {
-  public static final BlockState CONDUIT_0 = new BlockState(NamespaceID.from("minecraft:conduit:0"), (short) 9653, Block.CONDUIT, "waterlogged=true");
+  public static final BlockState CONDUIT_0 = new BlockState(NamespaceID.from("minecraft:conduit_0"), (short) 9653, Block.CONDUIT, "waterlogged=true");
 
-  public static final BlockState CONDUIT_1 = new BlockState(NamespaceID.from("minecraft:conduit:1"), (short) 9654, Block.CONDUIT, "waterlogged=false");
+  public static final BlockState CONDUIT_1 = new BlockState(NamespaceID.from("minecraft:conduit_1"), (short) 9654, Block.CONDUIT, "waterlogged=false");
 
   static {
     Registries.registerBlockState(CONDUIT_0);

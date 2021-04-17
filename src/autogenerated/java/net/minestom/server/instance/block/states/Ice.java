@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Ice {
-  public static final BlockState ICE_0 = new BlockState(NamespaceID.from("minecraft:ice:0"), (short) 3929, Block.ICE);
+  public static final BlockState ICE_0 = new BlockState(NamespaceID.from("minecraft:ice_0"), (short) 3929, Block.ICE);
 
   static {
     Registries.registerBlockState(ICE_0);

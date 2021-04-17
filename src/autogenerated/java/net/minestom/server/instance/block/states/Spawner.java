@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Spawner {
-  public static final BlockState SPAWNER_0 = new BlockState(NamespaceID.from("minecraft:spawner:0"), (short) 1953, Block.SPAWNER);
+  public static final BlockState SPAWNER_0 = new BlockState(NamespaceID.from("minecraft:spawner_0"), (short) 1953, Block.SPAWNER);
 
   static {
     Registries.registerBlockState(SPAWNER_0);

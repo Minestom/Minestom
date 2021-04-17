@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class NetherGoldOre {
-  public static final BlockState NETHER_GOLD_ORE_0 = new BlockState(NamespaceID.from("minecraft:nether_gold_ore:0"), (short) 72, Block.NETHER_GOLD_ORE);
+  public static final BlockState NETHER_GOLD_ORE_0 = new BlockState(NamespaceID.from("minecraft:nether_gold_ore_0"), (short) 72, Block.NETHER_GOLD_ORE);
 
   static {
     Registries.registerBlockState(NETHER_GOLD_ORE_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CoalBlock {
-  public static final BlockState COAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:coal_block:0"), (short) 7887, Block.COAL_BLOCK);
+  public static final BlockState COAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:coal_block_0"), (short) 7887, Block.COAL_BLOCK);
 
   static {
     Registries.registerBlockState(COAL_BLOCK_0);

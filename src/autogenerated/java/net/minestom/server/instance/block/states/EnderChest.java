@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EnderChest {
-  public static final BlockState ENDER_CHEST_0 = new BlockState(NamespaceID.from("minecraft:ender_chest:0"), (short) 5255, Block.ENDER_CHEST, "facing=north","waterlogged=true");
+  public static final BlockState ENDER_CHEST_0 = new BlockState(NamespaceID.from("minecraft:ender_chest_0"), (short) 5255, Block.ENDER_CHEST, "facing=north","waterlogged=true");
 
-  public static final BlockState ENDER_CHEST_1 = new BlockState(NamespaceID.from("minecraft:ender_chest:1"), (short) 5256, Block.ENDER_CHEST, "facing=north","waterlogged=false");
+  public static final BlockState ENDER_CHEST_1 = new BlockState(NamespaceID.from("minecraft:ender_chest_1"), (short) 5256, Block.ENDER_CHEST, "facing=north","waterlogged=false");
 
-  public static final BlockState ENDER_CHEST_2 = new BlockState(NamespaceID.from("minecraft:ender_chest:2"), (short) 5257, Block.ENDER_CHEST, "facing=south","waterlogged=true");
+  public static final BlockState ENDER_CHEST_2 = new BlockState(NamespaceID.from("minecraft:ender_chest_2"), (short) 5257, Block.ENDER_CHEST, "facing=south","waterlogged=true");
 
-  public static final BlockState ENDER_CHEST_3 = new BlockState(NamespaceID.from("minecraft:ender_chest:3"), (short) 5258, Block.ENDER_CHEST, "facing=south","waterlogged=false");
+  public static final BlockState ENDER_CHEST_3 = new BlockState(NamespaceID.from("minecraft:ender_chest_3"), (short) 5258, Block.ENDER_CHEST, "facing=south","waterlogged=false");
 
-  public static final BlockState ENDER_CHEST_4 = new BlockState(NamespaceID.from("minecraft:ender_chest:4"), (short) 5259, Block.ENDER_CHEST, "facing=west","waterlogged=true");
+  public static final BlockState ENDER_CHEST_4 = new BlockState(NamespaceID.from("minecraft:ender_chest_4"), (short) 5259, Block.ENDER_CHEST, "facing=west","waterlogged=true");
 
-  public static final BlockState ENDER_CHEST_5 = new BlockState(NamespaceID.from("minecraft:ender_chest:5"), (short) 5260, Block.ENDER_CHEST, "facing=west","waterlogged=false");
+  public static final BlockState ENDER_CHEST_5 = new BlockState(NamespaceID.from("minecraft:ender_chest_5"), (short) 5260, Block.ENDER_CHEST, "facing=west","waterlogged=false");
 
-  public static final BlockState ENDER_CHEST_6 = new BlockState(NamespaceID.from("minecraft:ender_chest:6"), (short) 5261, Block.ENDER_CHEST, "facing=east","waterlogged=true");
+  public static final BlockState ENDER_CHEST_6 = new BlockState(NamespaceID.from("minecraft:ender_chest_6"), (short) 5261, Block.ENDER_CHEST, "facing=east","waterlogged=true");
 
-  public static final BlockState ENDER_CHEST_7 = new BlockState(NamespaceID.from("minecraft:ender_chest:7"), (short) 5262, Block.ENDER_CHEST, "facing=east","waterlogged=false");
+  public static final BlockState ENDER_CHEST_7 = new BlockState(NamespaceID.from("minecraft:ender_chest_7"), (short) 5262, Block.ENDER_CHEST, "facing=east","waterlogged=false");
 
   static {
     Registries.registerBlockState(ENDER_CHEST_0);

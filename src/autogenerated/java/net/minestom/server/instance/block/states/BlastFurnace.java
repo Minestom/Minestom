@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BlastFurnace {
-  public static final BlockState BLAST_FURNACE_0 = new BlockState(NamespaceID.from("minecraft:blast_furnace:0"), (short) 14815, Block.BLAST_FURNACE, "facing=north","lit=true");
+  public static final BlockState BLAST_FURNACE_0 = new BlockState(NamespaceID.from("minecraft:blast_furnace_0"), (short) 14815, Block.BLAST_FURNACE, "facing=north","lit=true");
 
-  public static final BlockState BLAST_FURNACE_1 = new BlockState(NamespaceID.from("minecraft:blast_furnace:1"), (short) 14816, Block.BLAST_FURNACE, "facing=north","lit=false");
+  public static final BlockState BLAST_FURNACE_1 = new BlockState(NamespaceID.from("minecraft:blast_furnace_1"), (short) 14816, Block.BLAST_FURNACE, "facing=north","lit=false");
 
-  public static final BlockState BLAST_FURNACE_2 = new BlockState(NamespaceID.from("minecraft:blast_furnace:2"), (short) 14817, Block.BLAST_FURNACE, "facing=south","lit=true");
+  public static final BlockState BLAST_FURNACE_2 = new BlockState(NamespaceID.from("minecraft:blast_furnace_2"), (short) 14817, Block.BLAST_FURNACE, "facing=south","lit=true");
 
-  public static final BlockState BLAST_FURNACE_3 = new BlockState(NamespaceID.from("minecraft:blast_furnace:3"), (short) 14818, Block.BLAST_FURNACE, "facing=south","lit=false");
+  public static final BlockState BLAST_FURNACE_3 = new BlockState(NamespaceID.from("minecraft:blast_furnace_3"), (short) 14818, Block.BLAST_FURNACE, "facing=south","lit=false");
 
-  public static final BlockState BLAST_FURNACE_4 = new BlockState(NamespaceID.from("minecraft:blast_furnace:4"), (short) 14819, Block.BLAST_FURNACE, "facing=west","lit=true");
+  public static final BlockState BLAST_FURNACE_4 = new BlockState(NamespaceID.from("minecraft:blast_furnace_4"), (short) 14819, Block.BLAST_FURNACE, "facing=west","lit=true");
 
-  public static final BlockState BLAST_FURNACE_5 = new BlockState(NamespaceID.from("minecraft:blast_furnace:5"), (short) 14820, Block.BLAST_FURNACE, "facing=west","lit=false");
+  public static final BlockState BLAST_FURNACE_5 = new BlockState(NamespaceID.from("minecraft:blast_furnace_5"), (short) 14820, Block.BLAST_FURNACE, "facing=west","lit=false");
 
-  public static final BlockState BLAST_FURNACE_6 = new BlockState(NamespaceID.from("minecraft:blast_furnace:6"), (short) 14821, Block.BLAST_FURNACE, "facing=east","lit=true");
+  public static final BlockState BLAST_FURNACE_6 = new BlockState(NamespaceID.from("minecraft:blast_furnace_6"), (short) 14821, Block.BLAST_FURNACE, "facing=east","lit=true");
 
-  public static final BlockState BLAST_FURNACE_7 = new BlockState(NamespaceID.from("minecraft:blast_furnace:7"), (short) 14822, Block.BLAST_FURNACE, "facing=east","lit=false");
+  public static final BlockState BLAST_FURNACE_7 = new BlockState(NamespaceID.from("minecraft:blast_furnace_7"), (short) 14822, Block.BLAST_FURNACE, "facing=east","lit=false");
 
   static {
     Registries.registerBlockState(BLAST_FURNACE_0);

@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaLog {
-  public static final BlockState ACACIA_LOG_0 = new BlockState(NamespaceID.from("minecraft:acacia_log:0"), (short) 85, Block.ACACIA_LOG, "axis=x");
+  public static final BlockState ACACIA_LOG_0 = new BlockState(NamespaceID.from("minecraft:acacia_log_0"), (short) 85, Block.ACACIA_LOG, "axis=x");
 
-  public static final BlockState ACACIA_LOG_1 = new BlockState(NamespaceID.from("minecraft:acacia_log:1"), (short) 86, Block.ACACIA_LOG, "axis=y");
+  public static final BlockState ACACIA_LOG_1 = new BlockState(NamespaceID.from("minecraft:acacia_log_1"), (short) 86, Block.ACACIA_LOG, "axis=y");
 
-  public static final BlockState ACACIA_LOG_2 = new BlockState(NamespaceID.from("minecraft:acacia_log:2"), (short) 87, Block.ACACIA_LOG, "axis=z");
+  public static final BlockState ACACIA_LOG_2 = new BlockState(NamespaceID.from("minecraft:acacia_log_2"), (short) 87, Block.ACACIA_LOG, "axis=z");
 
   static {
     Registries.registerBlockState(ACACIA_LOG_0);

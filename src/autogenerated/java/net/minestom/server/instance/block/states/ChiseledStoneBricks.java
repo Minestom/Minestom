@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class ChiseledStoneBricks {
-  public static final BlockState CHISELED_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:chiseled_stone_bricks:0"), (short) 4498, Block.CHISELED_STONE_BRICKS);
+  public static final BlockState CHISELED_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:chiseled_stone_bricks_0"), (short) 4498, Block.CHISELED_STONE_BRICKS);
 
   static {
     Registries.registerBlockState(CHISELED_STONE_BRICKS_0);

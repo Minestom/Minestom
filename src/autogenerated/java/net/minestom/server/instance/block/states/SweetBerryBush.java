@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SweetBerryBush {
-  public static final BlockState SWEET_BERRY_BUSH_0 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush:0"), (short) 14962, Block.SWEET_BERRY_BUSH, "age=0");
+  public static final BlockState SWEET_BERRY_BUSH_0 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush_0"), (short) 14962, Block.SWEET_BERRY_BUSH, "age=0");
 
-  public static final BlockState SWEET_BERRY_BUSH_1 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush:1"), (short) 14963, Block.SWEET_BERRY_BUSH, "age=1");
+  public static final BlockState SWEET_BERRY_BUSH_1 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush_1"), (short) 14963, Block.SWEET_BERRY_BUSH, "age=1");
 
-  public static final BlockState SWEET_BERRY_BUSH_2 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush:2"), (short) 14964, Block.SWEET_BERRY_BUSH, "age=2");
+  public static final BlockState SWEET_BERRY_BUSH_2 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush_2"), (short) 14964, Block.SWEET_BERRY_BUSH, "age=2");
 
-  public static final BlockState SWEET_BERRY_BUSH_3 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush:3"), (short) 14965, Block.SWEET_BERRY_BUSH, "age=3");
+  public static final BlockState SWEET_BERRY_BUSH_3 = new BlockState(NamespaceID.from("minecraft:sweet_berry_bush_3"), (short) 14965, Block.SWEET_BERRY_BUSH, "age=3");
 
   static {
     Registries.registerBlockState(SWEET_BERRY_BUSH_0);

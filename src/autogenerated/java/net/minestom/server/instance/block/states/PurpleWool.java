@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PurpleWool {
-  public static final BlockState PURPLE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:purple_wool:0"), (short) 1394, Block.PURPLE_WOOL);
+  public static final BlockState PURPLE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:purple_wool_0"), (short) 1394, Block.PURPLE_WOOL);
 
   static {
     Registries.registerBlockState(PURPLE_WOOL_0);

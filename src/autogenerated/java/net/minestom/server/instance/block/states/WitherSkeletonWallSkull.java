@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WitherSkeletonWallSkull {
-  public static final BlockState WITHER_SKELETON_WALL_SKULL_0 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull:0"), (short) 6530, Block.WITHER_SKELETON_WALL_SKULL, "facing=north");
+  public static final BlockState WITHER_SKELETON_WALL_SKULL_0 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull_0"), (short) 6530, Block.WITHER_SKELETON_WALL_SKULL, "facing=north");
 
-  public static final BlockState WITHER_SKELETON_WALL_SKULL_1 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull:1"), (short) 6531, Block.WITHER_SKELETON_WALL_SKULL, "facing=south");
+  public static final BlockState WITHER_SKELETON_WALL_SKULL_1 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull_1"), (short) 6531, Block.WITHER_SKELETON_WALL_SKULL, "facing=south");
 
-  public static final BlockState WITHER_SKELETON_WALL_SKULL_2 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull:2"), (short) 6532, Block.WITHER_SKELETON_WALL_SKULL, "facing=west");
+  public static final BlockState WITHER_SKELETON_WALL_SKULL_2 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull_2"), (short) 6532, Block.WITHER_SKELETON_WALL_SKULL, "facing=west");
 
-  public static final BlockState WITHER_SKELETON_WALL_SKULL_3 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull:3"), (short) 6533, Block.WITHER_SKELETON_WALL_SKULL, "facing=east");
+  public static final BlockState WITHER_SKELETON_WALL_SKULL_3 = new BlockState(NamespaceID.from("minecraft:wither_skeleton_wall_skull_3"), (short) 6533, Block.WITHER_SKELETON_WALL_SKULL, "facing=east");
 
   static {
     Registries.registerBlockState(WITHER_SKELETON_WALL_SKULL_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SoulFire {
-  public static final BlockState SOUL_FIRE_0 = new BlockState(NamespaceID.from("minecraft:soul_fire:0"), (short) 1952, Block.SOUL_FIRE);
+  public static final BlockState SOUL_FIRE_0 = new BlockState(NamespaceID.from("minecraft:soul_fire_0"), (short) 1952, Block.SOUL_FIRE);
 
   static {
     Registries.registerBlockState(SOUL_FIRE_0);

@@ -14,37 +14,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GreenBanner {
-  public static final BlockState GREEN_BANNER_0 = new BlockState(NamespaceID.from("minecraft:green_banner:0"), (short) 8109, Block.GREEN_BANNER, "rotation=0");
+  public static final BlockState GREEN_BANNER_0 = new BlockState(NamespaceID.from("minecraft:green_banner_0"), (short) 8109, Block.GREEN_BANNER, "rotation=0");
 
-  public static final BlockState GREEN_BANNER_1 = new BlockState(NamespaceID.from("minecraft:green_banner:1"), (short) 8110, Block.GREEN_BANNER, "rotation=1");
+  public static final BlockState GREEN_BANNER_1 = new BlockState(NamespaceID.from("minecraft:green_banner_1"), (short) 8110, Block.GREEN_BANNER, "rotation=1");
 
-  public static final BlockState GREEN_BANNER_2 = new BlockState(NamespaceID.from("minecraft:green_banner:2"), (short) 8111, Block.GREEN_BANNER, "rotation=2");
+  public static final BlockState GREEN_BANNER_2 = new BlockState(NamespaceID.from("minecraft:green_banner_2"), (short) 8111, Block.GREEN_BANNER, "rotation=2");
 
-  public static final BlockState GREEN_BANNER_3 = new BlockState(NamespaceID.from("minecraft:green_banner:3"), (short) 8112, Block.GREEN_BANNER, "rotation=3");
+  public static final BlockState GREEN_BANNER_3 = new BlockState(NamespaceID.from("minecraft:green_banner_3"), (short) 8112, Block.GREEN_BANNER, "rotation=3");
 
-  public static final BlockState GREEN_BANNER_4 = new BlockState(NamespaceID.from("minecraft:green_banner:4"), (short) 8113, Block.GREEN_BANNER, "rotation=4");
+  public static final BlockState GREEN_BANNER_4 = new BlockState(NamespaceID.from("minecraft:green_banner_4"), (short) 8113, Block.GREEN_BANNER, "rotation=4");
 
-  public static final BlockState GREEN_BANNER_5 = new BlockState(NamespaceID.from("minecraft:green_banner:5"), (short) 8114, Block.GREEN_BANNER, "rotation=5");
+  public static final BlockState GREEN_BANNER_5 = new BlockState(NamespaceID.from("minecraft:green_banner_5"), (short) 8114, Block.GREEN_BANNER, "rotation=5");
 
-  public static final BlockState GREEN_BANNER_6 = new BlockState(NamespaceID.from("minecraft:green_banner:6"), (short) 8115, Block.GREEN_BANNER, "rotation=6");
+  public static final BlockState GREEN_BANNER_6 = new BlockState(NamespaceID.from("minecraft:green_banner_6"), (short) 8115, Block.GREEN_BANNER, "rotation=6");
 
-  public static final BlockState GREEN_BANNER_7 = new BlockState(NamespaceID.from("minecraft:green_banner:7"), (short) 8116, Block.GREEN_BANNER, "rotation=7");
+  public static final BlockState GREEN_BANNER_7 = new BlockState(NamespaceID.from("minecraft:green_banner_7"), (short) 8116, Block.GREEN_BANNER, "rotation=7");
 
-  public static final BlockState GREEN_BANNER_8 = new BlockState(NamespaceID.from("minecraft:green_banner:8"), (short) 8117, Block.GREEN_BANNER, "rotation=8");
+  public static final BlockState GREEN_BANNER_8 = new BlockState(NamespaceID.from("minecraft:green_banner_8"), (short) 8117, Block.GREEN_BANNER, "rotation=8");
 
-  public static final BlockState GREEN_BANNER_9 = new BlockState(NamespaceID.from("minecraft:green_banner:9"), (short) 8118, Block.GREEN_BANNER, "rotation=9");
+  public static final BlockState GREEN_BANNER_9 = new BlockState(NamespaceID.from("minecraft:green_banner_9"), (short) 8118, Block.GREEN_BANNER, "rotation=9");
 
-  public static final BlockState GREEN_BANNER_10 = new BlockState(NamespaceID.from("minecraft:green_banner:10"), (short) 8119, Block.GREEN_BANNER, "rotation=10");
+  public static final BlockState GREEN_BANNER_10 = new BlockState(NamespaceID.from("minecraft:green_banner_10"), (short) 8119, Block.GREEN_BANNER, "rotation=10");
 
-  public static final BlockState GREEN_BANNER_11 = new BlockState(NamespaceID.from("minecraft:green_banner:11"), (short) 8120, Block.GREEN_BANNER, "rotation=11");
+  public static final BlockState GREEN_BANNER_11 = new BlockState(NamespaceID.from("minecraft:green_banner_11"), (short) 8120, Block.GREEN_BANNER, "rotation=11");
 
-  public static final BlockState GREEN_BANNER_12 = new BlockState(NamespaceID.from("minecraft:green_banner:12"), (short) 8121, Block.GREEN_BANNER, "rotation=12");
+  public static final BlockState GREEN_BANNER_12 = new BlockState(NamespaceID.from("minecraft:green_banner_12"), (short) 8121, Block.GREEN_BANNER, "rotation=12");
 
-  public static final BlockState GREEN_BANNER_13 = new BlockState(NamespaceID.from("minecraft:green_banner:13"), (short) 8122, Block.GREEN_BANNER, "rotation=13");
+  public static final BlockState GREEN_BANNER_13 = new BlockState(NamespaceID.from("minecraft:green_banner_13"), (short) 8122, Block.GREEN_BANNER, "rotation=13");
 
-  public static final BlockState GREEN_BANNER_14 = new BlockState(NamespaceID.from("minecraft:green_banner:14"), (short) 8123, Block.GREEN_BANNER, "rotation=14");
+  public static final BlockState GREEN_BANNER_14 = new BlockState(NamespaceID.from("minecraft:green_banner_14"), (short) 8123, Block.GREEN_BANNER, "rotation=14");
 
-  public static final BlockState GREEN_BANNER_15 = new BlockState(NamespaceID.from("minecraft:green_banner:15"), (short) 8124, Block.GREEN_BANNER, "rotation=15");
+  public static final BlockState GREEN_BANNER_15 = new BlockState(NamespaceID.from("minecraft:green_banner_15"), (short) 8124, Block.GREEN_BANNER, "rotation=15");
 
   static {
     Registries.registerBlockState(GREEN_BANNER_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedBlueOrchid {
-  public static final BlockState POTTED_BLUE_ORCHID_0 = new BlockState(NamespaceID.from("minecraft:potted_blue_orchid:0"), (short) 6319, Block.POTTED_BLUE_ORCHID);
+  public static final BlockState POTTED_BLUE_ORCHID_0 = new BlockState(NamespaceID.from("minecraft:potted_blue_orchid_0"), (short) 6319, Block.POTTED_BLUE_ORCHID);
 
   static {
     Registries.registerBlockState(POTTED_BLUE_ORCHID_0);

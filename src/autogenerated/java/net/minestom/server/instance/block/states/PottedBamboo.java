@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedBamboo {
-  public static final BlockState POTTED_BAMBOO_0 = new BlockState(NamespaceID.from("minecraft:potted_bamboo:0"), (short) 9668, Block.POTTED_BAMBOO);
+  public static final BlockState POTTED_BAMBOO_0 = new BlockState(NamespaceID.from("minecraft:potted_bamboo_0"), (short) 9668, Block.POTTED_BAMBOO);
 
   static {
     Registries.registerBlockState(POTTED_BAMBOO_0);

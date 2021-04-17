@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Shroomlight {
-  public static final BlockState SHROOMLIGHT_0 = new BlockState(NamespaceID.from("minecraft:shroomlight:0"), (short) 14997, Block.SHROOMLIGHT);
+  public static final BlockState SHROOMLIGHT_0 = new BlockState(NamespaceID.from("minecraft:shroomlight_0"), (short) 14997, Block.SHROOMLIGHT);
 
   static {
     Registries.registerBlockState(SHROOMLIGHT_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MagentaCarpet {
-  public static final BlockState MAGENTA_CARPET_0 = new BlockState(NamespaceID.from("minecraft:magenta_carpet:0"), (short) 7872, Block.MAGENTA_CARPET);
+  public static final BlockState MAGENTA_CARPET_0 = new BlockState(NamespaceID.from("minecraft:magenta_carpet_0"), (short) 7872, Block.MAGENTA_CARPET);
 
   static {
     Registries.registerBlockState(MAGENTA_CARPET_0);

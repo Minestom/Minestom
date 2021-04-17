@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CyanWallBanner {
-  public static final BlockState CYAN_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner:0"), (short) 8193, Block.CYAN_WALL_BANNER, "facing=north");
+  public static final BlockState CYAN_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner_0"), (short) 8193, Block.CYAN_WALL_BANNER, "facing=north");
 
-  public static final BlockState CYAN_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner:1"), (short) 8194, Block.CYAN_WALL_BANNER, "facing=south");
+  public static final BlockState CYAN_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner_1"), (short) 8194, Block.CYAN_WALL_BANNER, "facing=south");
 
-  public static final BlockState CYAN_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner:2"), (short) 8195, Block.CYAN_WALL_BANNER, "facing=west");
+  public static final BlockState CYAN_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner_2"), (short) 8195, Block.CYAN_WALL_BANNER, "facing=west");
 
-  public static final BlockState CYAN_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner:3"), (short) 8196, Block.CYAN_WALL_BANNER, "facing=east");
+  public static final BlockState CYAN_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:cyan_wall_banner_3"), (short) 8196, Block.CYAN_WALL_BANNER, "facing=east");
 
   static {
     Registries.registerBlockState(CYAN_WALL_BANNER_0);

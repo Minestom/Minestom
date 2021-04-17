@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedJungleSapling {
-  public static final BlockState POTTED_JUNGLE_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:potted_jungle_sapling:0"), (short) 6313, Block.POTTED_JUNGLE_SAPLING);
+  public static final BlockState POTTED_JUNGLE_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:potted_jungle_sapling_0"), (short) 6313, Block.POTTED_JUNGLE_SAPLING);
 
   static {
     Registries.registerBlockState(POTTED_JUNGLE_SAPLING_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LilyOfTheValley {
-  public static final BlockState LILY_OF_THE_VALLEY_0 = new BlockState(NamespaceID.from("minecraft:lily_of_the_valley:0"), (short) 1424, Block.LILY_OF_THE_VALLEY);
+  public static final BlockState LILY_OF_THE_VALLEY_0 = new BlockState(NamespaceID.from("minecraft:lily_of_the_valley_0"), (short) 1424, Block.LILY_OF_THE_VALLEY);
 
   static {
     Registries.registerBlockState(LILY_OF_THE_VALLEY_0);

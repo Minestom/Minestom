@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Mycelium {
-  public static final BlockState MYCELIUM_0 = new BlockState(NamespaceID.from("minecraft:mycelium:0"), (short) 5016, Block.MYCELIUM, "snowy=true");
+  public static final BlockState MYCELIUM_0 = new BlockState(NamespaceID.from("minecraft:mycelium_0"), (short) 5016, Block.MYCELIUM, "snowy=true");
 
-  public static final BlockState MYCELIUM_1 = new BlockState(NamespaceID.from("minecraft:mycelium:1"), (short) 5017, Block.MYCELIUM, "snowy=false");
+  public static final BlockState MYCELIUM_1 = new BlockState(NamespaceID.from("minecraft:mycelium_1"), (short) 5017, Block.MYCELIUM, "snowy=false");
 
   static {
     Registries.registerBlockState(MYCELIUM_0);

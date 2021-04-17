@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneBlock {
-  public static final BlockState REDSTONE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:redstone_block:0"), (short) 6730, Block.REDSTONE_BLOCK);
+  public static final BlockState REDSTONE_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:redstone_block_0"), (short) 6730, Block.REDSTONE_BLOCK);
 
   static {
     Registries.registerBlockState(REDSTONE_BLOCK_0);

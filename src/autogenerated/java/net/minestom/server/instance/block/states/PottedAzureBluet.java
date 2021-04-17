@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedAzureBluet {
-  public static final BlockState POTTED_AZURE_BLUET_0 = new BlockState(NamespaceID.from("minecraft:potted_azure_bluet:0"), (short) 6321, Block.POTTED_AZURE_BLUET);
+  public static final BlockState POTTED_AZURE_BLUET_0 = new BlockState(NamespaceID.from("minecraft:potted_azure_bluet_0"), (short) 6321, Block.POTTED_AZURE_BLUET);
 
   static {
     Registries.registerBlockState(POTTED_AZURE_BLUET_0);

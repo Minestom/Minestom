@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class InfestedStone {
-  public static final BlockState INFESTED_STONE_0 = new BlockState(NamespaceID.from("minecraft:infested_stone:0"), (short) 4499, Block.INFESTED_STONE);
+  public static final BlockState INFESTED_STONE_0 = new BlockState(NamespaceID.from("minecraft:infested_stone_0"), (short) 4499, Block.INFESTED_STONE);
 
   static {
     Registries.registerBlockState(INFESTED_STONE_0);

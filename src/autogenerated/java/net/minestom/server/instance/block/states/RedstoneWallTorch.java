@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneWallTorch {
-  public static final BlockState REDSTONE_WALL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:0"), (short) 3889, Block.REDSTONE_WALL_TORCH, "facing=north","lit=true");
+  public static final BlockState REDSTONE_WALL_TORCH_0 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_0"), (short) 3889, Block.REDSTONE_WALL_TORCH, "facing=north","lit=true");
 
-  public static final BlockState REDSTONE_WALL_TORCH_1 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:1"), (short) 3890, Block.REDSTONE_WALL_TORCH, "facing=north","lit=false");
+  public static final BlockState REDSTONE_WALL_TORCH_1 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_1"), (short) 3890, Block.REDSTONE_WALL_TORCH, "facing=north","lit=false");
 
-  public static final BlockState REDSTONE_WALL_TORCH_2 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:2"), (short) 3891, Block.REDSTONE_WALL_TORCH, "facing=south","lit=true");
+  public static final BlockState REDSTONE_WALL_TORCH_2 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_2"), (short) 3891, Block.REDSTONE_WALL_TORCH, "facing=south","lit=true");
 
-  public static final BlockState REDSTONE_WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:3"), (short) 3892, Block.REDSTONE_WALL_TORCH, "facing=south","lit=false");
+  public static final BlockState REDSTONE_WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_3"), (short) 3892, Block.REDSTONE_WALL_TORCH, "facing=south","lit=false");
 
-  public static final BlockState REDSTONE_WALL_TORCH_4 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:4"), (short) 3893, Block.REDSTONE_WALL_TORCH, "facing=west","lit=true");
+  public static final BlockState REDSTONE_WALL_TORCH_4 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_4"), (short) 3893, Block.REDSTONE_WALL_TORCH, "facing=west","lit=true");
 
-  public static final BlockState REDSTONE_WALL_TORCH_5 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:5"), (short) 3894, Block.REDSTONE_WALL_TORCH, "facing=west","lit=false");
+  public static final BlockState REDSTONE_WALL_TORCH_5 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_5"), (short) 3894, Block.REDSTONE_WALL_TORCH, "facing=west","lit=false");
 
-  public static final BlockState REDSTONE_WALL_TORCH_6 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:6"), (short) 3895, Block.REDSTONE_WALL_TORCH, "facing=east","lit=true");
+  public static final BlockState REDSTONE_WALL_TORCH_6 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_6"), (short) 3895, Block.REDSTONE_WALL_TORCH, "facing=east","lit=true");
 
-  public static final BlockState REDSTONE_WALL_TORCH_7 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch:7"), (short) 3896, Block.REDSTONE_WALL_TORCH, "facing=east","lit=false");
+  public static final BlockState REDSTONE_WALL_TORCH_7 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_7"), (short) 3896, Block.REDSTONE_WALL_TORCH, "facing=east","lit=false");
 
   static {
     Registries.registerBlockState(REDSTONE_WALL_TORCH_0);

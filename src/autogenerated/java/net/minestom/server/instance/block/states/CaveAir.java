@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CaveAir {
-  public static final BlockState CAVE_AIR_0 = new BlockState(NamespaceID.from("minecraft:cave_air:0"), (short) 9670, Block.CAVE_AIR);
+  public static final BlockState CAVE_AIR_0 = new BlockState(NamespaceID.from("minecraft:cave_air_0"), (short) 9670, Block.CAVE_AIR);
 
   static {
     Registries.registerBlockState(CAVE_AIR_0);

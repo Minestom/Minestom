@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DamagedAnvil {
-  public static final BlockState DAMAGED_ANVIL_0 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:0"), (short) 6622, Block.DAMAGED_ANVIL, "facing=north");
+  public static final BlockState DAMAGED_ANVIL_0 = new BlockState(NamespaceID.from("minecraft:damaged_anvil_0"), (short) 6622, Block.DAMAGED_ANVIL, "facing=north");
 
-  public static final BlockState DAMAGED_ANVIL_1 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:1"), (short) 6623, Block.DAMAGED_ANVIL, "facing=south");
+  public static final BlockState DAMAGED_ANVIL_1 = new BlockState(NamespaceID.from("minecraft:damaged_anvil_1"), (short) 6623, Block.DAMAGED_ANVIL, "facing=south");
 
-  public static final BlockState DAMAGED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:2"), (short) 6624, Block.DAMAGED_ANVIL, "facing=west");
+  public static final BlockState DAMAGED_ANVIL_2 = new BlockState(NamespaceID.from("minecraft:damaged_anvil_2"), (short) 6624, Block.DAMAGED_ANVIL, "facing=west");
 
-  public static final BlockState DAMAGED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:damaged_anvil:3"), (short) 6625, Block.DAMAGED_ANVIL, "facing=east");
+  public static final BlockState DAMAGED_ANVIL_3 = new BlockState(NamespaceID.from("minecraft:damaged_anvil_3"), (short) 6625, Block.DAMAGED_ANVIL, "facing=east");
 
   static {
     Registries.registerBlockState(DAMAGED_ANVIL_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GrayConcrete {
-  public static final BlockState GRAY_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:gray_concrete:0"), (short) 9449, Block.GRAY_CONCRETE);
+  public static final BlockState GRAY_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:gray_concrete_0"), (short) 9449, Block.GRAY_CONCRETE);
 
   static {
     Registries.registerBlockState(GRAY_CONCRETE_0);

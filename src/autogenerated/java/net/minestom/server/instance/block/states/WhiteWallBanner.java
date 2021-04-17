@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WhiteWallBanner {
-  public static final BlockState WHITE_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:white_wall_banner:0"), (short) 8157, Block.WHITE_WALL_BANNER, "facing=north");
+  public static final BlockState WHITE_WALL_BANNER_0 = new BlockState(NamespaceID.from("minecraft:white_wall_banner_0"), (short) 8157, Block.WHITE_WALL_BANNER, "facing=north");
 
-  public static final BlockState WHITE_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:white_wall_banner:1"), (short) 8158, Block.WHITE_WALL_BANNER, "facing=south");
+  public static final BlockState WHITE_WALL_BANNER_1 = new BlockState(NamespaceID.from("minecraft:white_wall_banner_1"), (short) 8158, Block.WHITE_WALL_BANNER, "facing=south");
 
-  public static final BlockState WHITE_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:white_wall_banner:2"), (short) 8159, Block.WHITE_WALL_BANNER, "facing=west");
+  public static final BlockState WHITE_WALL_BANNER_2 = new BlockState(NamespaceID.from("minecraft:white_wall_banner_2"), (short) 8159, Block.WHITE_WALL_BANNER, "facing=west");
 
-  public static final BlockState WHITE_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:white_wall_banner:3"), (short) 8160, Block.WHITE_WALL_BANNER, "facing=east");
+  public static final BlockState WHITE_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:white_wall_banner_3"), (short) 8160, Block.WHITE_WALL_BANNER, "facing=east");
 
   static {
     Registries.registerBlockState(WHITE_WALL_BANNER_0);

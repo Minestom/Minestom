@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PinkCarpet {
-  public static final BlockState PINK_CARPET_0 = new BlockState(NamespaceID.from("minecraft:pink_carpet:0"), (short) 7876, Block.PINK_CARPET);
+  public static final BlockState PINK_CARPET_0 = new BlockState(NamespaceID.from("minecraft:pink_carpet_0"), (short) 7876, Block.PINK_CARPET);
 
   static {
     Registries.registerBlockState(PINK_CARPET_0);

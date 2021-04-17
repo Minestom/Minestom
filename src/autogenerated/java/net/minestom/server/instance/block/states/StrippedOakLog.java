@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedOakLog {
-  public static final BlockState STRIPPED_OAK_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_oak_log:0"), (short) 106, Block.STRIPPED_OAK_LOG, "axis=x");
+  public static final BlockState STRIPPED_OAK_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_oak_log_0"), (short) 106, Block.STRIPPED_OAK_LOG, "axis=x");
 
-  public static final BlockState STRIPPED_OAK_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_oak_log:1"), (short) 107, Block.STRIPPED_OAK_LOG, "axis=y");
+  public static final BlockState STRIPPED_OAK_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_oak_log_1"), (short) 107, Block.STRIPPED_OAK_LOG, "axis=y");
 
-  public static final BlockState STRIPPED_OAK_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_oak_log:2"), (short) 108, Block.STRIPPED_OAK_LOG, "axis=z");
+  public static final BlockState STRIPPED_OAK_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_oak_log_2"), (short) 108, Block.STRIPPED_OAK_LOG, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_OAK_LOG_0);

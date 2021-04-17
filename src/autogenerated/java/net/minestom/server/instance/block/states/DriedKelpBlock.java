@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DriedKelpBlock {
-  public static final BlockState DRIED_KELP_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:dried_kelp_block:0"), (short) 9501, Block.DRIED_KELP_BLOCK);
+  public static final BlockState DRIED_KELP_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:dried_kelp_block_0"), (short) 9501, Block.DRIED_KELP_BLOCK);
 
   static {
     Registries.registerBlockState(DRIED_KELP_BLOCK_0);

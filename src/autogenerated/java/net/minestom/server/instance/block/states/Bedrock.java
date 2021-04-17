@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Bedrock {
-  public static final BlockState BEDROCK_0 = new BlockState(NamespaceID.from("minecraft:bedrock:0"), (short) 33, Block.BEDROCK);
+  public static final BlockState BEDROCK_0 = new BlockState(NamespaceID.from("minecraft:bedrock_0"), (short) 33, Block.BEDROCK);
 
   static {
     Registries.registerBlockState(BEDROCK_0);

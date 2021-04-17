@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedWartBlock {
-  public static final BlockState WARPED_WART_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:warped_wart_block:0"), (short) 14980, Block.WARPED_WART_BLOCK);
+  public static final BlockState WARPED_WART_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:warped_wart_block_0"), (short) 14980, Block.WARPED_WART_BLOCK);
 
   static {
     Registries.registerBlockState(WARPED_WART_BLOCK_0);

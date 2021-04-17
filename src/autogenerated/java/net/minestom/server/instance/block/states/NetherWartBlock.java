@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class NetherWartBlock {
-  public static final BlockState NETHER_WART_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:nether_wart_block:0"), (short) 9258, Block.NETHER_WART_BLOCK);
+  public static final BlockState NETHER_WART_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:nether_wart_block_0"), (short) 9258, Block.NETHER_WART_BLOCK);
 
   static {
     Registries.registerBlockState(NETHER_WART_BLOCK_0);

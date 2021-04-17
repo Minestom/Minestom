@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedWool {
-  public static final BlockState RED_WOOL_0 = new BlockState(NamespaceID.from("minecraft:red_wool:0"), (short) 1398, Block.RED_WOOL);
+  public static final BlockState RED_WOOL_0 = new BlockState(NamespaceID.from("minecraft:red_wool_0"), (short) 1398, Block.RED_WOOL);
 
   static {
     Registries.registerBlockState(RED_WOOL_0);

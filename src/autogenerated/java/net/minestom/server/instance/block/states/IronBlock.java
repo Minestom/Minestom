@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class IronBlock {
-  public static final BlockState IRON_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:iron_block:0"), (short) 1428, Block.IRON_BLOCK);
+  public static final BlockState IRON_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:iron_block_0"), (short) 1428, Block.IRON_BLOCK);
 
   static {
     Registries.registerBlockState(IRON_BLOCK_0);

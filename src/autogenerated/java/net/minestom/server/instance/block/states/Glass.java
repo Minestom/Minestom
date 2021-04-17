@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Glass {
-  public static final BlockState GLASS_0 = new BlockState(NamespaceID.from("minecraft:glass:0"), (short) 231, Block.GLASS);
+  public static final BlockState GLASS_0 = new BlockState(NamespaceID.from("minecraft:glass_0"), (short) 231, Block.GLASS);
 
   static {
     Registries.registerBlockState(GLASS_0);

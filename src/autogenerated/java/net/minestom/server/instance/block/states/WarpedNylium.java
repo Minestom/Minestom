@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedNylium {
-  public static final BlockState WARPED_NYLIUM_0 = new BlockState(NamespaceID.from("minecraft:warped_nylium:0"), (short) 14978, Block.WARPED_NYLIUM);
+  public static final BlockState WARPED_NYLIUM_0 = new BlockState(NamespaceID.from("minecraft:warped_nylium_0"), (short) 14978, Block.WARPED_NYLIUM);
 
   static {
     Registries.registerBlockState(WARPED_NYLIUM_0);

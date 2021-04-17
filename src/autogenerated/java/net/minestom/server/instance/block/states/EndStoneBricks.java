@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EndStoneBricks {
-  public static final BlockState END_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:end_stone_bricks:0"), (short) 9222, Block.END_STONE_BRICKS);
+  public static final BlockState END_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:end_stone_bricks_0"), (short) 9222, Block.END_STONE_BRICKS);
 
   static {
     Registries.registerBlockState(END_STONE_BRICKS_0);

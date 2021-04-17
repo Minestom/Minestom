@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedBirchLog {
-  public static final BlockState STRIPPED_BIRCH_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_birch_log:0"), (short) 94, Block.STRIPPED_BIRCH_LOG, "axis=x");
+  public static final BlockState STRIPPED_BIRCH_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_birch_log_0"), (short) 94, Block.STRIPPED_BIRCH_LOG, "axis=x");
 
-  public static final BlockState STRIPPED_BIRCH_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_birch_log:1"), (short) 95, Block.STRIPPED_BIRCH_LOG, "axis=y");
+  public static final BlockState STRIPPED_BIRCH_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_birch_log_1"), (short) 95, Block.STRIPPED_BIRCH_LOG, "axis=y");
 
-  public static final BlockState STRIPPED_BIRCH_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_birch_log:2"), (short) 96, Block.STRIPPED_BIRCH_LOG, "axis=z");
+  public static final BlockState STRIPPED_BIRCH_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_birch_log_2"), (short) 96, Block.STRIPPED_BIRCH_LOG, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_BIRCH_LOG_0);

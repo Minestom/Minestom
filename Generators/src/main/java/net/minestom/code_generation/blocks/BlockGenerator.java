@@ -617,7 +617,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                                                         .replace("**REPLACE**", propertiesStr.toString()),
                                                 blockStateClassName,
                                                 namespaceIDClassName,
-                                                block.get("id").getAsString() + ":" + j, // minecraft:stone:0
+                                                block.get("id").getAsString() + "_" + j, // minecraft:stone_0
                                                 state.get("id").getAsString(),
                                                 blockClassName,
                                                 blockName
@@ -633,7 +633,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                                                 "new $T($T.from($S), (short) $L, $T.$N)",
                                                 blockStateClassName,
                                                 namespaceIDClassName,
-                                                block.get("id").getAsString() + ":" + j, // minecraft:stone:0
+                                                block.get("id").getAsString() + "_" + j, // minecraft:stone_0
                                                 state.get("id").getAsString(),
                                                 blockClassName,
                                                 blockName

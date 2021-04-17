@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Barrel {
-  public static final BlockState BARREL_0 = new BlockState(NamespaceID.from("minecraft:barrel:0"), (short) 14795, Block.BARREL, "facing=north","open=true");
+  public static final BlockState BARREL_0 = new BlockState(NamespaceID.from("minecraft:barrel_0"), (short) 14795, Block.BARREL, "facing=north","open=true");
 
-  public static final BlockState BARREL_1 = new BlockState(NamespaceID.from("minecraft:barrel:1"), (short) 14796, Block.BARREL, "facing=north","open=false");
+  public static final BlockState BARREL_1 = new BlockState(NamespaceID.from("minecraft:barrel_1"), (short) 14796, Block.BARREL, "facing=north","open=false");
 
-  public static final BlockState BARREL_2 = new BlockState(NamespaceID.from("minecraft:barrel:2"), (short) 14797, Block.BARREL, "facing=east","open=true");
+  public static final BlockState BARREL_2 = new BlockState(NamespaceID.from("minecraft:barrel_2"), (short) 14797, Block.BARREL, "facing=east","open=true");
 
-  public static final BlockState BARREL_3 = new BlockState(NamespaceID.from("minecraft:barrel:3"), (short) 14798, Block.BARREL, "facing=east","open=false");
+  public static final BlockState BARREL_3 = new BlockState(NamespaceID.from("minecraft:barrel_3"), (short) 14798, Block.BARREL, "facing=east","open=false");
 
-  public static final BlockState BARREL_4 = new BlockState(NamespaceID.from("minecraft:barrel:4"), (short) 14799, Block.BARREL, "facing=south","open=true");
+  public static final BlockState BARREL_4 = new BlockState(NamespaceID.from("minecraft:barrel_4"), (short) 14799, Block.BARREL, "facing=south","open=true");
 
-  public static final BlockState BARREL_5 = new BlockState(NamespaceID.from("minecraft:barrel:5"), (short) 14800, Block.BARREL, "facing=south","open=false");
+  public static final BlockState BARREL_5 = new BlockState(NamespaceID.from("minecraft:barrel_5"), (short) 14800, Block.BARREL, "facing=south","open=false");
 
-  public static final BlockState BARREL_6 = new BlockState(NamespaceID.from("minecraft:barrel:6"), (short) 14801, Block.BARREL, "facing=west","open=true");
+  public static final BlockState BARREL_6 = new BlockState(NamespaceID.from("minecraft:barrel_6"), (short) 14801, Block.BARREL, "facing=west","open=true");
 
-  public static final BlockState BARREL_7 = new BlockState(NamespaceID.from("minecraft:barrel:7"), (short) 14802, Block.BARREL, "facing=west","open=false");
+  public static final BlockState BARREL_7 = new BlockState(NamespaceID.from("minecraft:barrel_7"), (short) 14802, Block.BARREL, "facing=west","open=false");
 
-  public static final BlockState BARREL_8 = new BlockState(NamespaceID.from("minecraft:barrel:8"), (short) 14803, Block.BARREL, "facing=up","open=true");
+  public static final BlockState BARREL_8 = new BlockState(NamespaceID.from("minecraft:barrel_8"), (short) 14803, Block.BARREL, "facing=up","open=true");
 
-  public static final BlockState BARREL_9 = new BlockState(NamespaceID.from("minecraft:barrel:9"), (short) 14804, Block.BARREL, "facing=up","open=false");
+  public static final BlockState BARREL_9 = new BlockState(NamespaceID.from("minecraft:barrel_9"), (short) 14804, Block.BARREL, "facing=up","open=false");
 
-  public static final BlockState BARREL_10 = new BlockState(NamespaceID.from("minecraft:barrel:10"), (short) 14805, Block.BARREL, "facing=down","open=true");
+  public static final BlockState BARREL_10 = new BlockState(NamespaceID.from("minecraft:barrel_10"), (short) 14805, Block.BARREL, "facing=down","open=true");
 
-  public static final BlockState BARREL_11 = new BlockState(NamespaceID.from("minecraft:barrel:11"), (short) 14806, Block.BARREL, "facing=down","open=false");
+  public static final BlockState BARREL_11 = new BlockState(NamespaceID.from("minecraft:barrel_11"), (short) 14806, Block.BARREL, "facing=down","open=false");
 
   static {
     Registries.registerBlockState(BARREL_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedCornflower {
-  public static final BlockState POTTED_CORNFLOWER_0 = new BlockState(NamespaceID.from("minecraft:potted_cornflower:0"), (short) 6327, Block.POTTED_CORNFLOWER);
+  public static final BlockState POTTED_CORNFLOWER_0 = new BlockState(NamespaceID.from("minecraft:potted_cornflower_0"), (short) 6327, Block.POTTED_CORNFLOWER);
 
   static {
     Registries.registerBlockState(POTTED_CORNFLOWER_0);

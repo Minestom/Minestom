@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrainCoralBlock {
-  public static final BlockState BRAIN_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:brain_coral_block:0"), (short) 9520, Block.BRAIN_CORAL_BLOCK);
+  public static final BlockState BRAIN_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:brain_coral_block_0"), (short) 9520, Block.BRAIN_CORAL_BLOCK);
 
   static {
     Registries.registerBlockState(BRAIN_CORAL_BLOCK_0);

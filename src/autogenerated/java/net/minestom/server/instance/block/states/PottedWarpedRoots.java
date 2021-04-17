@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedWarpedRoots {
-  public static final BlockState POTTED_WARPED_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:potted_warped_roots:0"), (short) 15845, Block.POTTED_WARPED_ROOTS);
+  public static final BlockState POTTED_WARPED_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:potted_warped_roots_0"), (short) 15845, Block.POTTED_WARPED_ROOTS);
 
   static {
     Registries.registerBlockState(POTTED_WARPED_ROOTS_0);

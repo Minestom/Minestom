@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedFungus {
-  public static final BlockState WARPED_FUNGUS_0 = new BlockState(NamespaceID.from("minecraft:warped_fungus:0"), (short) 14979, Block.WARPED_FUNGUS);
+  public static final BlockState WARPED_FUNGUS_0 = new BlockState(NamespaceID.from("minecraft:warped_fungus_0"), (short) 14979, Block.WARPED_FUNGUS);
 
   static {
     Registries.registerBlockState(WARPED_FUNGUS_0);

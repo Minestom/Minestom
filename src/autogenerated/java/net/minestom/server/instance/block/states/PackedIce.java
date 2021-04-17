@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PackedIce {
-  public static final BlockState PACKED_ICE_0 = new BlockState(NamespaceID.from("minecraft:packed_ice:0"), (short) 7888, Block.PACKED_ICE);
+  public static final BlockState PACKED_ICE_0 = new BlockState(NamespaceID.from("minecraft:packed_ice_0"), (short) 7888, Block.PACKED_ICE);
 
   static {
     Registries.registerBlockState(PACKED_ICE_0);

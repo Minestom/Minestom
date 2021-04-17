@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OrangeCarpet {
-  public static final BlockState ORANGE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:orange_carpet:0"), (short) 7871, Block.ORANGE_CARPET);
+  public static final BlockState ORANGE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:orange_carpet_0"), (short) 7871, Block.ORANGE_CARPET);
 
   static {
     Registries.registerBlockState(ORANGE_CARPET_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SmithingTable {
-  public static final BlockState SMITHING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:smithing_table:0"), (short) 14853, Block.SMITHING_TABLE);
+  public static final BlockState SMITHING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:smithing_table_0"), (short) 14853, Block.SMITHING_TABLE);
 
   static {
     Registries.registerBlockState(SMITHING_TABLE_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SprucePlanks {
-  public static final BlockState SPRUCE_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:spruce_planks:0"), (short) 16, Block.SPRUCE_PLANKS);
+  public static final BlockState SPRUCE_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:spruce_planks_0"), (short) 16, Block.SPRUCE_PLANKS);
 
   static {
     Registries.registerBlockState(SPRUCE_PLANKS_0);

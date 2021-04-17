@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class TwistingVinesPlant {
-  public static final BlockState TWISTING_VINES_PLANT_0 = new BlockState(NamespaceID.from("minecraft:twisting_vines_plant:0"), (short) 15051, Block.TWISTING_VINES_PLANT);
+  public static final BlockState TWISTING_VINES_PLANT_0 = new BlockState(NamespaceID.from("minecraft:twisting_vines_plant_0"), (short) 15051, Block.TWISTING_VINES_PLANT);
 
   static {
     Registries.registerBlockState(TWISTING_VINES_PLANT_0);

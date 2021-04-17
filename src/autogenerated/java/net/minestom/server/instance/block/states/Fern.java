@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Fern {
-  public static final BlockState FERN_0 = new BlockState(NamespaceID.from("minecraft:fern:0"), (short) 1343, Block.FERN);
+  public static final BlockState FERN_0 = new BlockState(NamespaceID.from("minecraft:fern_0"), (short) 1343, Block.FERN);
 
   static {
     Registries.registerBlockState(FERN_0);

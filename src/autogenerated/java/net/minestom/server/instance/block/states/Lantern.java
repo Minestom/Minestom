@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Lantern {
-  public static final BlockState LANTERN_0 = new BlockState(NamespaceID.from("minecraft:lantern:0"), (short) 14890, Block.LANTERN, "hanging=true","waterlogged=true");
+  public static final BlockState LANTERN_0 = new BlockState(NamespaceID.from("minecraft:lantern_0"), (short) 14890, Block.LANTERN, "hanging=true","waterlogged=true");
 
-  public static final BlockState LANTERN_1 = new BlockState(NamespaceID.from("minecraft:lantern:1"), (short) 14891, Block.LANTERN, "hanging=true","waterlogged=false");
+  public static final BlockState LANTERN_1 = new BlockState(NamespaceID.from("minecraft:lantern_1"), (short) 14891, Block.LANTERN, "hanging=true","waterlogged=false");
 
-  public static final BlockState LANTERN_2 = new BlockState(NamespaceID.from("minecraft:lantern:2"), (short) 14892, Block.LANTERN, "hanging=false","waterlogged=true");
+  public static final BlockState LANTERN_2 = new BlockState(NamespaceID.from("minecraft:lantern_2"), (short) 14892, Block.LANTERN, "hanging=false","waterlogged=true");
 
-  public static final BlockState LANTERN_3 = new BlockState(NamespaceID.from("minecraft:lantern:3"), (short) 14893, Block.LANTERN, "hanging=false","waterlogged=false");
+  public static final BlockState LANTERN_3 = new BlockState(NamespaceID.from("minecraft:lantern_3"), (short) 14893, Block.LANTERN, "hanging=false","waterlogged=false");
 
   static {
     Registries.registerBlockState(LANTERN_0);

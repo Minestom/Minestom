@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Observer {
-  public static final BlockState OBSERVER_0 = new BlockState(NamespaceID.from("minecraft:observer:0"), (short) 9264, Block.OBSERVER, "facing=north","powered=true");
+  public static final BlockState OBSERVER_0 = new BlockState(NamespaceID.from("minecraft:observer_0"), (short) 9264, Block.OBSERVER, "facing=north","powered=true");
 
-  public static final BlockState OBSERVER_1 = new BlockState(NamespaceID.from("minecraft:observer:1"), (short) 9265, Block.OBSERVER, "facing=north","powered=false");
+  public static final BlockState OBSERVER_1 = new BlockState(NamespaceID.from("minecraft:observer_1"), (short) 9265, Block.OBSERVER, "facing=north","powered=false");
 
-  public static final BlockState OBSERVER_2 = new BlockState(NamespaceID.from("minecraft:observer:2"), (short) 9266, Block.OBSERVER, "facing=east","powered=true");
+  public static final BlockState OBSERVER_2 = new BlockState(NamespaceID.from("minecraft:observer_2"), (short) 9266, Block.OBSERVER, "facing=east","powered=true");
 
-  public static final BlockState OBSERVER_3 = new BlockState(NamespaceID.from("minecraft:observer:3"), (short) 9267, Block.OBSERVER, "facing=east","powered=false");
+  public static final BlockState OBSERVER_3 = new BlockState(NamespaceID.from("minecraft:observer_3"), (short) 9267, Block.OBSERVER, "facing=east","powered=false");
 
-  public static final BlockState OBSERVER_4 = new BlockState(NamespaceID.from("minecraft:observer:4"), (short) 9268, Block.OBSERVER, "facing=south","powered=true");
+  public static final BlockState OBSERVER_4 = new BlockState(NamespaceID.from("minecraft:observer_4"), (short) 9268, Block.OBSERVER, "facing=south","powered=true");
 
-  public static final BlockState OBSERVER_5 = new BlockState(NamespaceID.from("minecraft:observer:5"), (short) 9269, Block.OBSERVER, "facing=south","powered=false");
+  public static final BlockState OBSERVER_5 = new BlockState(NamespaceID.from("minecraft:observer_5"), (short) 9269, Block.OBSERVER, "facing=south","powered=false");
 
-  public static final BlockState OBSERVER_6 = new BlockState(NamespaceID.from("minecraft:observer:6"), (short) 9270, Block.OBSERVER, "facing=west","powered=true");
+  public static final BlockState OBSERVER_6 = new BlockState(NamespaceID.from("minecraft:observer_6"), (short) 9270, Block.OBSERVER, "facing=west","powered=true");
 
-  public static final BlockState OBSERVER_7 = new BlockState(NamespaceID.from("minecraft:observer:7"), (short) 9271, Block.OBSERVER, "facing=west","powered=false");
+  public static final BlockState OBSERVER_7 = new BlockState(NamespaceID.from("minecraft:observer_7"), (short) 9271, Block.OBSERVER, "facing=west","powered=false");
 
-  public static final BlockState OBSERVER_8 = new BlockState(NamespaceID.from("minecraft:observer:8"), (short) 9272, Block.OBSERVER, "facing=up","powered=true");
+  public static final BlockState OBSERVER_8 = new BlockState(NamespaceID.from("minecraft:observer_8"), (short) 9272, Block.OBSERVER, "facing=up","powered=true");
 
-  public static final BlockState OBSERVER_9 = new BlockState(NamespaceID.from("minecraft:observer:9"), (short) 9273, Block.OBSERVER, "facing=up","powered=false");
+  public static final BlockState OBSERVER_9 = new BlockState(NamespaceID.from("minecraft:observer_9"), (short) 9273, Block.OBSERVER, "facing=up","powered=false");
 
-  public static final BlockState OBSERVER_10 = new BlockState(NamespaceID.from("minecraft:observer:10"), (short) 9274, Block.OBSERVER, "facing=down","powered=true");
+  public static final BlockState OBSERVER_10 = new BlockState(NamespaceID.from("minecraft:observer_10"), (short) 9274, Block.OBSERVER, "facing=down","powered=true");
 
-  public static final BlockState OBSERVER_11 = new BlockState(NamespaceID.from("minecraft:observer:11"), (short) 9275, Block.OBSERVER, "facing=down","powered=false");
+  public static final BlockState OBSERVER_11 = new BlockState(NamespaceID.from("minecraft:observer_11"), (short) 9275, Block.OBSERVER, "facing=down","powered=false");
 
   static {
     Registries.registerBlockState(OBSERVER_0);

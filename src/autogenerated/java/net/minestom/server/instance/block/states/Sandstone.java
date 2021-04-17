@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Sandstone {
-  public static final BlockState SANDSTONE_0 = new BlockState(NamespaceID.from("minecraft:sandstone:0"), (short) 246, Block.SANDSTONE);
+  public static final BlockState SANDSTONE_0 = new BlockState(NamespaceID.from("minecraft:sandstone_0"), (short) 246, Block.SANDSTONE);
 
   static {
     Registries.registerBlockState(SANDSTONE_0);

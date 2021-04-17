@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LimeConcretePowder {
-  public static final BlockState LIME_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:lime_concrete_powder:0"), (short) 9463, Block.LIME_CONCRETE_POWDER);
+  public static final BlockState LIME_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:lime_concrete_powder_0"), (short) 9463, Block.LIME_CONCRETE_POWDER);
 
   static {
     Registries.registerBlockState(LIME_CONCRETE_POWDER_0);

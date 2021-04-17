@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Glowstone {
-  public static final BlockState GLOWSTONE_0 = new BlockState(NamespaceID.from("minecraft:glowstone:0"), (short) 4013, Block.GLOWSTONE);
+  public static final BlockState GLOWSTONE_0 = new BlockState(NamespaceID.from("minecraft:glowstone_0"), (short) 4013, Block.GLOWSTONE);
 
   static {
     Registries.registerBlockState(GLOWSTONE_0);

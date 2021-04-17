@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class FireCoralBlock {
-  public static final BlockState FIRE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:fire_coral_block:0"), (short) 9522, Block.FIRE_CORAL_BLOCK);
+  public static final BlockState FIRE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:fire_coral_block_0"), (short) 9522, Block.FIRE_CORAL_BLOCK);
 
   static {
     Registries.registerBlockState(FIRE_CORAL_BLOCK_0);

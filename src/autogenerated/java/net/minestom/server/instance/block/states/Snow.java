@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Snow {
-  public static final BlockState SNOW_0 = new BlockState(NamespaceID.from("minecraft:snow:0"), (short) 3921, Block.SNOW, "layers=1");
+  public static final BlockState SNOW_0 = new BlockState(NamespaceID.from("minecraft:snow_0"), (short) 3921, Block.SNOW, "layers=1");
 
-  public static final BlockState SNOW_1 = new BlockState(NamespaceID.from("minecraft:snow:1"), (short) 3922, Block.SNOW, "layers=2");
+  public static final BlockState SNOW_1 = new BlockState(NamespaceID.from("minecraft:snow_1"), (short) 3922, Block.SNOW, "layers=2");
 
-  public static final BlockState SNOW_2 = new BlockState(NamespaceID.from("minecraft:snow:2"), (short) 3923, Block.SNOW, "layers=3");
+  public static final BlockState SNOW_2 = new BlockState(NamespaceID.from("minecraft:snow_2"), (short) 3923, Block.SNOW, "layers=3");
 
-  public static final BlockState SNOW_3 = new BlockState(NamespaceID.from("minecraft:snow:3"), (short) 3924, Block.SNOW, "layers=4");
+  public static final BlockState SNOW_3 = new BlockState(NamespaceID.from("minecraft:snow_3"), (short) 3924, Block.SNOW, "layers=4");
 
-  public static final BlockState SNOW_4 = new BlockState(NamespaceID.from("minecraft:snow:4"), (short) 3925, Block.SNOW, "layers=5");
+  public static final BlockState SNOW_4 = new BlockState(NamespaceID.from("minecraft:snow_4"), (short) 3925, Block.SNOW, "layers=5");
 
-  public static final BlockState SNOW_5 = new BlockState(NamespaceID.from("minecraft:snow:5"), (short) 3926, Block.SNOW, "layers=6");
+  public static final BlockState SNOW_5 = new BlockState(NamespaceID.from("minecraft:snow_5"), (short) 3926, Block.SNOW, "layers=6");
 
-  public static final BlockState SNOW_6 = new BlockState(NamespaceID.from("minecraft:snow:6"), (short) 3927, Block.SNOW, "layers=7");
+  public static final BlockState SNOW_6 = new BlockState(NamespaceID.from("minecraft:snow_6"), (short) 3927, Block.SNOW, "layers=7");
 
-  public static final BlockState SNOW_7 = new BlockState(NamespaceID.from("minecraft:snow:7"), (short) 3928, Block.SNOW, "layers=8");
+  public static final BlockState SNOW_7 = new BlockState(NamespaceID.from("minecraft:snow_7"), (short) 3928, Block.SNOW, "layers=8");
 
   static {
     Registries.registerBlockState(SNOW_0);

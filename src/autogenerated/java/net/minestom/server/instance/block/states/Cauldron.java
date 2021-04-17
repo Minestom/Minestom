@@ -14,13 +14,13 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Cauldron {
-  public static final BlockState CAULDRON_0 = new BlockState(NamespaceID.from("minecraft:cauldron:0"), (short) 5145, Block.CAULDRON, "level=0");
+  public static final BlockState CAULDRON_0 = new BlockState(NamespaceID.from("minecraft:cauldron_0"), (short) 5145, Block.CAULDRON, "level=0");
 
-  public static final BlockState CAULDRON_1 = new BlockState(NamespaceID.from("minecraft:cauldron:1"), (short) 5146, Block.CAULDRON, "level=1");
+  public static final BlockState CAULDRON_1 = new BlockState(NamespaceID.from("minecraft:cauldron_1"), (short) 5146, Block.CAULDRON, "level=1");
 
-  public static final BlockState CAULDRON_2 = new BlockState(NamespaceID.from("minecraft:cauldron:2"), (short) 5147, Block.CAULDRON, "level=2");
+  public static final BlockState CAULDRON_2 = new BlockState(NamespaceID.from("minecraft:cauldron_2"), (short) 5147, Block.CAULDRON, "level=2");
 
-  public static final BlockState CAULDRON_3 = new BlockState(NamespaceID.from("minecraft:cauldron:3"), (short) 5148, Block.CAULDRON, "level=3");
+  public static final BlockState CAULDRON_3 = new BlockState(NamespaceID.from("minecraft:cauldron_3"), (short) 5148, Block.CAULDRON, "level=3");
 
   static {
     Registries.registerBlockState(CAULDRON_0);

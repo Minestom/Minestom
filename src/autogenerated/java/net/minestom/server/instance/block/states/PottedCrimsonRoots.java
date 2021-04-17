@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedCrimsonRoots {
-  public static final BlockState POTTED_CRIMSON_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:potted_crimson_roots:0"), (short) 15844, Block.POTTED_CRIMSON_ROOTS);
+  public static final BlockState POTTED_CRIMSON_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:potted_crimson_roots_0"), (short) 15844, Block.POTTED_CRIMSON_ROOTS);
 
   static {
     Registries.registerBlockState(POTTED_CRIMSON_ROOTS_0);

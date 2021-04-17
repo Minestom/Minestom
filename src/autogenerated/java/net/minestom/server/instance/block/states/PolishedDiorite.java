@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedDiorite {
-  public static final BlockState POLISHED_DIORITE_0 = new BlockState(NamespaceID.from("minecraft:polished_diorite:0"), (short) 5, Block.POLISHED_DIORITE);
+  public static final BlockState POLISHED_DIORITE_0 = new BlockState(NamespaceID.from("minecraft:polished_diorite_0"), (short) 5, Block.POLISHED_DIORITE);
 
   static {
     Registries.registerBlockState(POLISHED_DIORITE_0);

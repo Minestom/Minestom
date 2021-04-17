@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedPoppy {
-  public static final BlockState POTTED_POPPY_0 = new BlockState(NamespaceID.from("minecraft:potted_poppy:0"), (short) 6318, Block.POTTED_POPPY);
+  public static final BlockState POTTED_POPPY_0 = new BlockState(NamespaceID.from("minecraft:potted_poppy_0"), (short) 6318, Block.POTTED_POPPY);
 
   static {
     Registries.registerBlockState(POTTED_POPPY_0);

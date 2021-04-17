@@ -14,37 +14,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CreeperHead {
-  public static final BlockState CREEPER_HEAD_0 = new BlockState(NamespaceID.from("minecraft:creeper_head:0"), (short) 6574, Block.CREEPER_HEAD, "rotation=0");
+  public static final BlockState CREEPER_HEAD_0 = new BlockState(NamespaceID.from("minecraft:creeper_head_0"), (short) 6574, Block.CREEPER_HEAD, "rotation=0");
 
-  public static final BlockState CREEPER_HEAD_1 = new BlockState(NamespaceID.from("minecraft:creeper_head:1"), (short) 6575, Block.CREEPER_HEAD, "rotation=1");
+  public static final BlockState CREEPER_HEAD_1 = new BlockState(NamespaceID.from("minecraft:creeper_head_1"), (short) 6575, Block.CREEPER_HEAD, "rotation=1");
 
-  public static final BlockState CREEPER_HEAD_2 = new BlockState(NamespaceID.from("minecraft:creeper_head:2"), (short) 6576, Block.CREEPER_HEAD, "rotation=2");
+  public static final BlockState CREEPER_HEAD_2 = new BlockState(NamespaceID.from("minecraft:creeper_head_2"), (short) 6576, Block.CREEPER_HEAD, "rotation=2");
 
-  public static final BlockState CREEPER_HEAD_3 = new BlockState(NamespaceID.from("minecraft:creeper_head:3"), (short) 6577, Block.CREEPER_HEAD, "rotation=3");
+  public static final BlockState CREEPER_HEAD_3 = new BlockState(NamespaceID.from("minecraft:creeper_head_3"), (short) 6577, Block.CREEPER_HEAD, "rotation=3");
 
-  public static final BlockState CREEPER_HEAD_4 = new BlockState(NamespaceID.from("minecraft:creeper_head:4"), (short) 6578, Block.CREEPER_HEAD, "rotation=4");
+  public static final BlockState CREEPER_HEAD_4 = new BlockState(NamespaceID.from("minecraft:creeper_head_4"), (short) 6578, Block.CREEPER_HEAD, "rotation=4");
 
-  public static final BlockState CREEPER_HEAD_5 = new BlockState(NamespaceID.from("minecraft:creeper_head:5"), (short) 6579, Block.CREEPER_HEAD, "rotation=5");
+  public static final BlockState CREEPER_HEAD_5 = new BlockState(NamespaceID.from("minecraft:creeper_head_5"), (short) 6579, Block.CREEPER_HEAD, "rotation=5");
 
-  public static final BlockState CREEPER_HEAD_6 = new BlockState(NamespaceID.from("minecraft:creeper_head:6"), (short) 6580, Block.CREEPER_HEAD, "rotation=6");
+  public static final BlockState CREEPER_HEAD_6 = new BlockState(NamespaceID.from("minecraft:creeper_head_6"), (short) 6580, Block.CREEPER_HEAD, "rotation=6");
 
-  public static final BlockState CREEPER_HEAD_7 = new BlockState(NamespaceID.from("minecraft:creeper_head:7"), (short) 6581, Block.CREEPER_HEAD, "rotation=7");
+  public static final BlockState CREEPER_HEAD_7 = new BlockState(NamespaceID.from("minecraft:creeper_head_7"), (short) 6581, Block.CREEPER_HEAD, "rotation=7");
 
-  public static final BlockState CREEPER_HEAD_8 = new BlockState(NamespaceID.from("minecraft:creeper_head:8"), (short) 6582, Block.CREEPER_HEAD, "rotation=8");
+  public static final BlockState CREEPER_HEAD_8 = new BlockState(NamespaceID.from("minecraft:creeper_head_8"), (short) 6582, Block.CREEPER_HEAD, "rotation=8");
 
-  public static final BlockState CREEPER_HEAD_9 = new BlockState(NamespaceID.from("minecraft:creeper_head:9"), (short) 6583, Block.CREEPER_HEAD, "rotation=9");
+  public static final BlockState CREEPER_HEAD_9 = new BlockState(NamespaceID.from("minecraft:creeper_head_9"), (short) 6583, Block.CREEPER_HEAD, "rotation=9");
 
-  public static final BlockState CREEPER_HEAD_10 = new BlockState(NamespaceID.from("minecraft:creeper_head:10"), (short) 6584, Block.CREEPER_HEAD, "rotation=10");
+  public static final BlockState CREEPER_HEAD_10 = new BlockState(NamespaceID.from("minecraft:creeper_head_10"), (short) 6584, Block.CREEPER_HEAD, "rotation=10");
 
-  public static final BlockState CREEPER_HEAD_11 = new BlockState(NamespaceID.from("minecraft:creeper_head:11"), (short) 6585, Block.CREEPER_HEAD, "rotation=11");
+  public static final BlockState CREEPER_HEAD_11 = new BlockState(NamespaceID.from("minecraft:creeper_head_11"), (short) 6585, Block.CREEPER_HEAD, "rotation=11");
 
-  public static final BlockState CREEPER_HEAD_12 = new BlockState(NamespaceID.from("minecraft:creeper_head:12"), (short) 6586, Block.CREEPER_HEAD, "rotation=12");
+  public static final BlockState CREEPER_HEAD_12 = new BlockState(NamespaceID.from("minecraft:creeper_head_12"), (short) 6586, Block.CREEPER_HEAD, "rotation=12");
 
-  public static final BlockState CREEPER_HEAD_13 = new BlockState(NamespaceID.from("minecraft:creeper_head:13"), (short) 6587, Block.CREEPER_HEAD, "rotation=13");
+  public static final BlockState CREEPER_HEAD_13 = new BlockState(NamespaceID.from("minecraft:creeper_head_13"), (short) 6587, Block.CREEPER_HEAD, "rotation=13");
 
-  public static final BlockState CREEPER_HEAD_14 = new BlockState(NamespaceID.from("minecraft:creeper_head:14"), (short) 6588, Block.CREEPER_HEAD, "rotation=14");
+  public static final BlockState CREEPER_HEAD_14 = new BlockState(NamespaceID.from("minecraft:creeper_head_14"), (short) 6588, Block.CREEPER_HEAD, "rotation=14");
 
-  public static final BlockState CREEPER_HEAD_15 = new BlockState(NamespaceID.from("minecraft:creeper_head:15"), (short) 6589, Block.CREEPER_HEAD, "rotation=15");
+  public static final BlockState CREEPER_HEAD_15 = new BlockState(NamespaceID.from("minecraft:creeper_head_15"), (short) 6589, Block.CREEPER_HEAD, "rotation=15");
 
   static {
     Registries.registerBlockState(CREEPER_HEAD_0);

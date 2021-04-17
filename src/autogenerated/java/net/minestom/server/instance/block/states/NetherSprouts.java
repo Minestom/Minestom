@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class NetherSprouts {
-  public static final BlockState NETHER_SPROUTS_0 = new BlockState(NamespaceID.from("minecraft:nether_sprouts:0"), (short) 14982, Block.NETHER_SPROUTS);
+  public static final BlockState NETHER_SPROUTS_0 = new BlockState(NamespaceID.from("minecraft:nether_sprouts_0"), (short) 14982, Block.NETHER_SPROUTS);
 
   static {
     Registries.registerBlockState(NETHER_SPROUTS_0);

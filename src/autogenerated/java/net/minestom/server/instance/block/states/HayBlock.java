@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class HayBlock {
-  public static final BlockState HAY_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:hay_block:0"), (short) 7867, Block.HAY_BLOCK, "axis=x");
+  public static final BlockState HAY_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:hay_block_0"), (short) 7867, Block.HAY_BLOCK, "axis=x");
 
-  public static final BlockState HAY_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:hay_block:1"), (short) 7868, Block.HAY_BLOCK, "axis=y");
+  public static final BlockState HAY_BLOCK_1 = new BlockState(NamespaceID.from("minecraft:hay_block_1"), (short) 7868, Block.HAY_BLOCK, "axis=y");
 
-  public static final BlockState HAY_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:hay_block:2"), (short) 7869, Block.HAY_BLOCK, "axis=z");
+  public static final BlockState HAY_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:hay_block_2"), (short) 7869, Block.HAY_BLOCK, "axis=z");
 
   static {
     Registries.registerBlockState(HAY_BLOCK_0);

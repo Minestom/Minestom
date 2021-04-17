@@ -14,653 +14,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MossyStoneBrickWall {
-  public static final BlockState MOSSY_STONE_BRICK_WALL_0 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:0"), (short) 11843, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_0 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_0"), (short) 11843, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_1 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:1"), (short) 11844, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_1 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_1"), (short) 11844, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_2 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:2"), (short) 11845, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_2 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_2"), (short) 11845, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_3 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:3"), (short) 11846, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_3 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_3"), (short) 11846, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_4 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:4"), (short) 11847, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_4 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_4"), (short) 11847, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_5 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:5"), (short) 11848, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_5 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_5"), (short) 11848, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_6 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:6"), (short) 11849, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_6 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_6"), (short) 11849, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_7 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:7"), (short) 11850, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_7 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_7"), (short) 11850, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_8 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:8"), (short) 11851, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_8 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_8"), (short) 11851, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_9 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:9"), (short) 11852, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_9 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_9"), (short) 11852, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_10 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:10"), (short) 11853, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_10 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_10"), (short) 11853, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_11 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:11"), (short) 11854, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_11 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_11"), (short) 11854, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_12 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:12"), (short) 11855, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_12 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_12"), (short) 11855, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_13 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:13"), (short) 11856, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_13 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_13"), (short) 11856, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_14 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:14"), (short) 11857, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_14 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_14"), (short) 11857, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_15 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:15"), (short) 11858, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_15 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_15"), (short) 11858, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_16 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:16"), (short) 11859, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_16 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_16"), (short) 11859, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_17 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:17"), (short) 11860, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_17 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_17"), (short) 11860, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_18 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:18"), (short) 11861, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_18 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_18"), (short) 11861, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_19 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:19"), (short) 11862, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_19 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_19"), (short) 11862, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_20 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:20"), (short) 11863, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_20 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_20"), (short) 11863, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_21 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:21"), (short) 11864, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_21 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_21"), (short) 11864, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_22 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:22"), (short) 11865, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_22 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_22"), (short) 11865, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_23 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:23"), (short) 11866, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_23 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_23"), (short) 11866, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_24 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:24"), (short) 11867, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_24 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_24"), (short) 11867, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_25 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:25"), (short) 11868, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_25 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_25"), (short) 11868, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_26 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:26"), (short) 11869, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_26 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_26"), (short) 11869, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_27 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:27"), (short) 11870, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_27 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_27"), (short) 11870, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_28 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:28"), (short) 11871, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_28 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_28"), (short) 11871, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_29 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:29"), (short) 11872, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_29 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_29"), (short) 11872, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_30 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:30"), (short) 11873, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_30 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_30"), (short) 11873, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_31 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:31"), (short) 11874, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_31 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_31"), (short) 11874, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_32 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:32"), (short) 11875, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_32 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_32"), (short) 11875, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_33 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:33"), (short) 11876, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_33 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_33"), (short) 11876, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_34 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:34"), (short) 11877, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_34 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_34"), (short) 11877, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_35 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:35"), (short) 11878, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_35 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_35"), (short) 11878, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_36 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:36"), (short) 11879, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_36 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_36"), (short) 11879, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_37 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:37"), (short) 11880, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_37 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_37"), (short) 11880, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_38 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:38"), (short) 11881, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_38 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_38"), (short) 11881, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_39 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:39"), (short) 11882, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_39 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_39"), (short) 11882, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_40 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:40"), (short) 11883, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_40 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_40"), (short) 11883, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_41 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:41"), (short) 11884, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_41 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_41"), (short) 11884, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_42 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:42"), (short) 11885, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_42 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_42"), (short) 11885, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_43 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:43"), (short) 11886, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_43 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_43"), (short) 11886, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_44 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:44"), (short) 11887, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_44 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_44"), (short) 11887, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_45 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:45"), (short) 11888, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_45 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_45"), (short) 11888, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_46 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:46"), (short) 11889, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_46 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_46"), (short) 11889, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_47 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:47"), (short) 11890, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_47 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_47"), (short) 11890, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_48 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:48"), (short) 11891, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_48 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_48"), (short) 11891, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_49 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:49"), (short) 11892, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_49 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_49"), (short) 11892, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_50 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:50"), (short) 11893, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_50 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_50"), (short) 11893, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_51 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:51"), (short) 11894, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_51 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_51"), (short) 11894, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_52 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:52"), (short) 11895, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_52 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_52"), (short) 11895, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_53 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:53"), (short) 11896, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_53 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_53"), (short) 11896, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_54 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:54"), (short) 11897, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_54 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_54"), (short) 11897, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_55 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:55"), (short) 11898, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_55 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_55"), (short) 11898, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_56 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:56"), (short) 11899, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_56 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_56"), (short) 11899, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_57 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:57"), (short) 11900, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_57 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_57"), (short) 11900, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_58 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:58"), (short) 11901, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_58 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_58"), (short) 11901, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_59 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:59"), (short) 11902, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_59 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_59"), (short) 11902, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_60 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:60"), (short) 11903, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_60 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_60"), (short) 11903, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_61 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:61"), (short) 11904, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_61 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_61"), (short) 11904, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_62 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:62"), (short) 11905, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_62 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_62"), (short) 11905, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_63 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:63"), (short) 11906, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_63 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_63"), (short) 11906, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_64 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:64"), (short) 11907, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_64 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_64"), (short) 11907, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_65 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:65"), (short) 11908, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_65 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_65"), (short) 11908, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_66 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:66"), (short) 11909, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_66 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_66"), (short) 11909, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_67 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:67"), (short) 11910, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_67 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_67"), (short) 11910, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_68 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:68"), (short) 11911, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_68 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_68"), (short) 11911, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_69 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:69"), (short) 11912, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_69 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_69"), (short) 11912, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_70 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:70"), (short) 11913, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_70 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_70"), (short) 11913, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_71 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:71"), (short) 11914, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_71 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_71"), (short) 11914, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_72 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:72"), (short) 11915, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_72 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_72"), (short) 11915, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_73 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:73"), (short) 11916, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_73 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_73"), (short) 11916, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_74 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:74"), (short) 11917, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_74 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_74"), (short) 11917, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_75 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:75"), (short) 11918, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_75 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_75"), (short) 11918, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_76 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:76"), (short) 11919, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_76 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_76"), (short) 11919, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_77 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:77"), (short) 11920, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_77 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_77"), (short) 11920, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_78 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:78"), (short) 11921, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_78 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_78"), (short) 11921, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_79 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:79"), (short) 11922, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_79 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_79"), (short) 11922, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_80 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:80"), (short) 11923, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_80 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_80"), (short) 11923, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_81 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:81"), (short) 11924, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_81 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_81"), (short) 11924, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_82 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:82"), (short) 11925, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_82 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_82"), (short) 11925, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_83 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:83"), (short) 11926, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_83 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_83"), (short) 11926, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_84 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:84"), (short) 11927, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_84 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_84"), (short) 11927, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_85 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:85"), (short) 11928, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_85 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_85"), (short) 11928, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_86 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:86"), (short) 11929, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_86 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_86"), (short) 11929, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_87 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:87"), (short) 11930, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_87 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_87"), (short) 11930, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_88 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:88"), (short) 11931, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_88 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_88"), (short) 11931, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_89 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:89"), (short) 11932, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_89 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_89"), (short) 11932, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_90 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:90"), (short) 11933, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_90 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_90"), (short) 11933, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_91 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:91"), (short) 11934, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_91 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_91"), (short) 11934, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_92 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:92"), (short) 11935, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_92 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_92"), (short) 11935, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_93 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:93"), (short) 11936, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_93 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_93"), (short) 11936, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_94 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:94"), (short) 11937, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_94 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_94"), (short) 11937, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_95 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:95"), (short) 11938, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_95 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_95"), (short) 11938, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_96 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:96"), (short) 11939, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_96 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_96"), (short) 11939, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_97 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:97"), (short) 11940, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_97 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_97"), (short) 11940, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_98 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:98"), (short) 11941, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_98 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_98"), (short) 11941, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_99 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:99"), (short) 11942, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_99 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_99"), (short) 11942, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_100 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:100"), (short) 11943, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_100 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_100"), (short) 11943, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_101 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:101"), (short) 11944, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_101 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_101"), (short) 11944, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_102 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:102"), (short) 11945, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_102 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_102"), (short) 11945, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_103 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:103"), (short) 11946, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_103 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_103"), (short) 11946, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_104 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:104"), (short) 11947, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_104 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_104"), (short) 11947, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_105 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:105"), (short) 11948, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_105 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_105"), (short) 11948, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_106 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:106"), (short) 11949, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_106 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_106"), (short) 11949, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_107 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:107"), (short) 11950, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_107 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_107"), (short) 11950, Block.MOSSY_STONE_BRICK_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_108 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:108"), (short) 11951, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_108 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_108"), (short) 11951, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_109 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:109"), (short) 11952, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_109 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_109"), (short) 11952, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_110 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:110"), (short) 11953, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_110 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_110"), (short) 11953, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_111 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:111"), (short) 11954, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_111 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_111"), (short) 11954, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_112 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:112"), (short) 11955, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_112 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_112"), (short) 11955, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_113 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:113"), (short) 11956, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_113 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_113"), (short) 11956, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_114 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:114"), (short) 11957, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_114 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_114"), (short) 11957, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_115 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:115"), (short) 11958, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_115 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_115"), (short) 11958, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_116 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:116"), (short) 11959, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_116 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_116"), (short) 11959, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_117 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:117"), (short) 11960, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_117 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_117"), (short) 11960, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_118 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:118"), (short) 11961, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_118 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_118"), (short) 11961, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_119 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:119"), (short) 11962, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_119 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_119"), (short) 11962, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_120 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:120"), (short) 11963, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_120 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_120"), (short) 11963, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_121 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:121"), (short) 11964, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_121 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_121"), (short) 11964, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_122 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:122"), (short) 11965, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_122 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_122"), (short) 11965, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_123 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:123"), (short) 11966, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_123 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_123"), (short) 11966, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_124 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:124"), (short) 11967, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_124 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_124"), (short) 11967, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_125 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:125"), (short) 11968, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_125 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_125"), (short) 11968, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_126 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:126"), (short) 11969, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_126 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_126"), (short) 11969, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_127 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:127"), (short) 11970, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_127 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_127"), (short) 11970, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_128 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:128"), (short) 11971, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_128 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_128"), (short) 11971, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_129 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:129"), (short) 11972, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_129 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_129"), (short) 11972, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_130 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:130"), (short) 11973, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_130 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_130"), (short) 11973, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_131 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:131"), (short) 11974, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_131 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_131"), (short) 11974, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_132 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:132"), (short) 11975, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_132 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_132"), (short) 11975, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_133 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:133"), (short) 11976, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_133 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_133"), (short) 11976, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_134 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:134"), (short) 11977, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_134 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_134"), (short) 11977, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_135 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:135"), (short) 11978, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_135 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_135"), (short) 11978, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_136 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:136"), (short) 11979, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_136 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_136"), (short) 11979, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_137 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:137"), (short) 11980, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_137 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_137"), (short) 11980, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_138 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:138"), (short) 11981, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_138 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_138"), (short) 11981, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_139 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:139"), (short) 11982, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_139 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_139"), (short) 11982, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_140 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:140"), (short) 11983, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_140 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_140"), (short) 11983, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_141 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:141"), (short) 11984, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_141 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_141"), (short) 11984, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_142 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:142"), (short) 11985, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_142 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_142"), (short) 11985, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_143 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:143"), (short) 11986, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_143 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_143"), (short) 11986, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_144 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:144"), (short) 11987, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_144 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_144"), (short) 11987, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_145 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:145"), (short) 11988, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_145 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_145"), (short) 11988, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_146 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:146"), (short) 11989, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_146 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_146"), (short) 11989, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_147 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:147"), (short) 11990, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_147 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_147"), (short) 11990, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_148 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:148"), (short) 11991, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_148 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_148"), (short) 11991, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_149 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:149"), (short) 11992, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_149 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_149"), (short) 11992, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_150 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:150"), (short) 11993, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_150 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_150"), (short) 11993, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_151 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:151"), (short) 11994, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_151 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_151"), (short) 11994, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_152 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:152"), (short) 11995, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_152 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_152"), (short) 11995, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_153 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:153"), (short) 11996, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_153 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_153"), (short) 11996, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_154 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:154"), (short) 11997, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_154 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_154"), (short) 11997, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_155 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:155"), (short) 11998, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_155 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_155"), (short) 11998, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_156 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:156"), (short) 11999, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_156 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_156"), (short) 11999, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_157 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:157"), (short) 12000, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_157 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_157"), (short) 12000, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_158 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:158"), (short) 12001, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_158 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_158"), (short) 12001, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_159 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:159"), (short) 12002, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_159 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_159"), (short) 12002, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_160 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:160"), (short) 12003, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_160 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_160"), (short) 12003, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_161 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:161"), (short) 12004, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_161 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_161"), (short) 12004, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_162 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:162"), (short) 12005, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_162 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_162"), (short) 12005, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_163 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:163"), (short) 12006, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_163 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_163"), (short) 12006, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_164 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:164"), (short) 12007, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_164 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_164"), (short) 12007, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_165 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:165"), (short) 12008, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_165 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_165"), (short) 12008, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_166 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:166"), (short) 12009, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_166 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_166"), (short) 12009, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_167 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:167"), (short) 12010, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_167 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_167"), (short) 12010, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_168 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:168"), (short) 12011, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_168 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_168"), (short) 12011, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_169 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:169"), (short) 12012, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_169 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_169"), (short) 12012, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_170 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:170"), (short) 12013, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_170 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_170"), (short) 12013, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_171 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:171"), (short) 12014, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_171 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_171"), (short) 12014, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_172 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:172"), (short) 12015, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_172 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_172"), (short) 12015, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_173 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:173"), (short) 12016, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_173 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_173"), (short) 12016, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_174 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:174"), (short) 12017, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_174 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_174"), (short) 12017, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_175 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:175"), (short) 12018, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_175 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_175"), (short) 12018, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_176 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:176"), (short) 12019, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_176 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_176"), (short) 12019, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_177 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:177"), (short) 12020, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_177 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_177"), (short) 12020, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_178 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:178"), (short) 12021, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_178 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_178"), (short) 12021, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_179 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:179"), (short) 12022, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_179 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_179"), (short) 12022, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_180 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:180"), (short) 12023, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_180 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_180"), (short) 12023, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_181 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:181"), (short) 12024, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_181 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_181"), (short) 12024, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_182 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:182"), (short) 12025, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_182 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_182"), (short) 12025, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_183 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:183"), (short) 12026, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_183 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_183"), (short) 12026, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_184 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:184"), (short) 12027, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_184 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_184"), (short) 12027, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_185 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:185"), (short) 12028, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_185 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_185"), (short) 12028, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_186 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:186"), (short) 12029, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_186 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_186"), (short) 12029, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_187 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:187"), (short) 12030, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_187 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_187"), (short) 12030, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_188 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:188"), (short) 12031, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_188 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_188"), (short) 12031, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_189 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:189"), (short) 12032, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_189 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_189"), (short) 12032, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_190 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:190"), (short) 12033, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_190 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_190"), (short) 12033, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_191 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:191"), (short) 12034, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_191 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_191"), (short) 12034, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_192 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:192"), (short) 12035, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_192 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_192"), (short) 12035, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_193 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:193"), (short) 12036, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_193 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_193"), (short) 12036, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_194 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:194"), (short) 12037, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_194 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_194"), (short) 12037, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_195 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:195"), (short) 12038, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_195 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_195"), (short) 12038, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_196 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:196"), (short) 12039, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_196 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_196"), (short) 12039, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_197 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:197"), (short) 12040, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_197 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_197"), (short) 12040, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_198 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:198"), (short) 12041, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_198 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_198"), (short) 12041, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_199 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:199"), (short) 12042, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_199 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_199"), (short) 12042, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_200 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:200"), (short) 12043, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_200 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_200"), (short) 12043, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_201 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:201"), (short) 12044, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_201 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_201"), (short) 12044, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_202 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:202"), (short) 12045, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_202 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_202"), (short) 12045, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_203 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:203"), (short) 12046, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_203 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_203"), (short) 12046, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_204 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:204"), (short) 12047, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_204 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_204"), (short) 12047, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_205 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:205"), (short) 12048, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_205 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_205"), (short) 12048, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_206 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:206"), (short) 12049, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_206 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_206"), (short) 12049, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_207 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:207"), (short) 12050, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_207 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_207"), (short) 12050, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_208 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:208"), (short) 12051, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_208 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_208"), (short) 12051, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_209 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:209"), (short) 12052, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_209 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_209"), (short) 12052, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_210 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:210"), (short) 12053, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_210 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_210"), (short) 12053, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_211 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:211"), (short) 12054, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_211 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_211"), (short) 12054, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_212 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:212"), (short) 12055, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_212 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_212"), (short) 12055, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_213 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:213"), (short) 12056, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_213 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_213"), (short) 12056, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_214 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:214"), (short) 12057, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_214 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_214"), (short) 12057, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_215 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:215"), (short) 12058, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_215 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_215"), (short) 12058, Block.MOSSY_STONE_BRICK_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_216 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:216"), (short) 12059, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_216 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_216"), (short) 12059, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_217 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:217"), (short) 12060, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_217 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_217"), (short) 12060, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_218 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:218"), (short) 12061, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_218 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_218"), (short) 12061, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_219 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:219"), (short) 12062, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_219 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_219"), (short) 12062, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_220 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:220"), (short) 12063, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_220 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_220"), (short) 12063, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_221 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:221"), (short) 12064, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_221 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_221"), (short) 12064, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_222 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:222"), (short) 12065, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_222 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_222"), (short) 12065, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_223 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:223"), (short) 12066, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_223 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_223"), (short) 12066, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_224 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:224"), (short) 12067, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_224 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_224"), (short) 12067, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_225 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:225"), (short) 12068, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_225 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_225"), (short) 12068, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_226 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:226"), (short) 12069, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_226 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_226"), (short) 12069, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_227 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:227"), (short) 12070, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_227 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_227"), (short) 12070, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_228 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:228"), (short) 12071, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_228 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_228"), (short) 12071, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_229 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:229"), (short) 12072, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_229 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_229"), (short) 12072, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_230 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:230"), (short) 12073, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_230 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_230"), (short) 12073, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_231 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:231"), (short) 12074, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_231 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_231"), (short) 12074, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_232 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:232"), (short) 12075, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_232 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_232"), (short) 12075, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_233 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:233"), (short) 12076, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_233 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_233"), (short) 12076, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_234 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:234"), (short) 12077, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_234 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_234"), (short) 12077, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_235 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:235"), (short) 12078, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_235 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_235"), (short) 12078, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_236 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:236"), (short) 12079, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_236 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_236"), (short) 12079, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_237 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:237"), (short) 12080, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_237 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_237"), (short) 12080, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_238 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:238"), (short) 12081, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_238 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_238"), (short) 12081, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_239 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:239"), (short) 12082, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_239 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_239"), (short) 12082, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_240 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:240"), (short) 12083, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_240 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_240"), (short) 12083, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_241 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:241"), (short) 12084, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_241 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_241"), (short) 12084, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_242 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:242"), (short) 12085, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_242 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_242"), (short) 12085, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_243 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:243"), (short) 12086, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_243 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_243"), (short) 12086, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_244 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:244"), (short) 12087, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_244 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_244"), (short) 12087, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_245 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:245"), (short) 12088, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_245 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_245"), (short) 12088, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_246 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:246"), (short) 12089, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_246 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_246"), (short) 12089, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_247 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:247"), (short) 12090, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_247 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_247"), (short) 12090, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_248 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:248"), (short) 12091, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_248 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_248"), (short) 12091, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_249 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:249"), (short) 12092, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_249 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_249"), (short) 12092, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_250 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:250"), (short) 12093, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_250 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_250"), (short) 12093, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_251 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:251"), (short) 12094, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_251 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_251"), (short) 12094, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_252 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:252"), (short) 12095, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_252 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_252"), (short) 12095, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_253 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:253"), (short) 12096, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_253 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_253"), (short) 12096, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_254 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:254"), (short) 12097, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_254 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_254"), (short) 12097, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_255 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:255"), (short) 12098, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_255 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_255"), (short) 12098, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_256 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:256"), (short) 12099, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_256 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_256"), (short) 12099, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_257 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:257"), (short) 12100, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_257 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_257"), (short) 12100, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_258 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:258"), (short) 12101, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_258 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_258"), (short) 12101, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_259 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:259"), (short) 12102, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_259 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_259"), (short) 12102, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_260 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:260"), (short) 12103, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_260 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_260"), (short) 12103, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_261 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:261"), (short) 12104, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_261 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_261"), (short) 12104, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_262 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:262"), (short) 12105, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_262 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_262"), (short) 12105, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_263 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:263"), (short) 12106, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_263 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_263"), (short) 12106, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_264 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:264"), (short) 12107, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_264 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_264"), (short) 12107, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_265 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:265"), (short) 12108, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_265 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_265"), (short) 12108, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_266 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:266"), (short) 12109, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_266 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_266"), (short) 12109, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_267 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:267"), (short) 12110, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_267 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_267"), (short) 12110, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_268 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:268"), (short) 12111, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_268 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_268"), (short) 12111, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_269 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:269"), (short) 12112, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_269 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_269"), (short) 12112, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_270 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:270"), (short) 12113, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_270 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_270"), (short) 12113, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_271 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:271"), (short) 12114, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_271 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_271"), (short) 12114, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_272 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:272"), (short) 12115, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_272 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_272"), (short) 12115, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_273 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:273"), (short) 12116, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_273 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_273"), (short) 12116, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_274 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:274"), (short) 12117, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_274 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_274"), (short) 12117, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_275 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:275"), (short) 12118, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_275 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_275"), (short) 12118, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_276 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:276"), (short) 12119, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_276 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_276"), (short) 12119, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_277 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:277"), (short) 12120, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_277 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_277"), (short) 12120, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_278 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:278"), (short) 12121, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_278 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_278"), (short) 12121, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_279 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:279"), (short) 12122, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_279 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_279"), (short) 12122, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_280 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:280"), (short) 12123, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_280 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_280"), (short) 12123, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_281 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:281"), (short) 12124, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_281 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_281"), (short) 12124, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_282 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:282"), (short) 12125, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_282 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_282"), (short) 12125, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_283 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:283"), (short) 12126, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_283 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_283"), (short) 12126, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_284 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:284"), (short) 12127, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_284 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_284"), (short) 12127, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_285 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:285"), (short) 12128, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_285 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_285"), (short) 12128, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_286 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:286"), (short) 12129, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_286 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_286"), (short) 12129, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_287 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:287"), (short) 12130, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_287 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_287"), (short) 12130, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_288 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:288"), (short) 12131, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_288 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_288"), (short) 12131, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_289 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:289"), (short) 12132, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_289 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_289"), (short) 12132, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_290 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:290"), (short) 12133, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_290 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_290"), (short) 12133, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_291 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:291"), (short) 12134, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_291 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_291"), (short) 12134, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_292 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:292"), (short) 12135, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_292 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_292"), (short) 12135, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_293 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:293"), (short) 12136, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_293 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_293"), (short) 12136, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_294 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:294"), (short) 12137, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_294 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_294"), (short) 12137, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_295 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:295"), (short) 12138, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_295 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_295"), (short) 12138, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_296 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:296"), (short) 12139, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_296 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_296"), (short) 12139, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_297 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:297"), (short) 12140, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_297 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_297"), (short) 12140, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_298 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:298"), (short) 12141, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_298 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_298"), (short) 12141, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_299 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:299"), (short) 12142, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_299 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_299"), (short) 12142, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_300 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:300"), (short) 12143, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_300 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_300"), (short) 12143, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_301 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:301"), (short) 12144, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_301 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_301"), (short) 12144, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_302 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:302"), (short) 12145, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_302 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_302"), (short) 12145, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_303 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:303"), (short) 12146, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_303 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_303"), (short) 12146, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_304 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:304"), (short) 12147, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_304 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_304"), (short) 12147, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_305 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:305"), (short) 12148, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_305 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_305"), (short) 12148, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_306 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:306"), (short) 12149, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_306 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_306"), (short) 12149, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_307 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:307"), (short) 12150, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_307 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_307"), (short) 12150, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_308 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:308"), (short) 12151, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_308 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_308"), (short) 12151, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_309 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:309"), (short) 12152, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_309 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_309"), (short) 12152, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_310 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:310"), (short) 12153, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_310 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_310"), (short) 12153, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_311 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:311"), (short) 12154, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_311 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_311"), (short) 12154, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_312 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:312"), (short) 12155, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_312 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_312"), (short) 12155, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_313 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:313"), (short) 12156, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_313 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_313"), (short) 12156, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_314 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:314"), (short) 12157, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_314 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_314"), (short) 12157, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_315 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:315"), (short) 12158, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_315 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_315"), (short) 12158, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_316 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:316"), (short) 12159, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_316 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_316"), (short) 12159, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_317 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:317"), (short) 12160, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_317 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_317"), (short) 12160, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_318 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:318"), (short) 12161, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_318 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_318"), (short) 12161, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_319 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:319"), (short) 12162, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_319 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_319"), (short) 12162, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_320 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:320"), (short) 12163, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_320 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_320"), (short) 12163, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_321 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:321"), (short) 12164, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_321 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_321"), (short) 12164, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_322 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:322"), (short) 12165, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_322 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_322"), (short) 12165, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState MOSSY_STONE_BRICK_WALL_323 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall:323"), (short) 12166, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState MOSSY_STONE_BRICK_WALL_323 = new BlockState(NamespaceID.from("minecraft:mossy_stone_brick_wall_323"), (short) 12166, Block.MOSSY_STONE_BRICK_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   static {
     Registries.registerBlockState(MOSSY_STONE_BRICK_WALL_0);

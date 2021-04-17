@@ -14,69 +14,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LightGrayStainedGlassPane {
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_0 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:0"), (short) 7123, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_0 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_0"), (short) 7123, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_1 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:1"), (short) 7124, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_1 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_1"), (short) 7124, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_2 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:2"), (short) 7125, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_2 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_2"), (short) 7125, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_3 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:3"), (short) 7126, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_3 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_3"), (short) 7126, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_4 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:4"), (short) 7127, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_4 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_4"), (short) 7127, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_5 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:5"), (short) 7128, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_5 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_5"), (short) 7128, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_6 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:6"), (short) 7129, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_6 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_6"), (short) 7129, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_7 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:7"), (short) 7130, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_7 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_7"), (short) 7130, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_8 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:8"), (short) 7131, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_8 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_8"), (short) 7131, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_9 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:9"), (short) 7132, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_9 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_9"), (short) 7132, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_10 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:10"), (short) 7133, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_10 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_10"), (short) 7133, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_11 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:11"), (short) 7134, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_11 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_11"), (short) 7134, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_12 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:12"), (short) 7135, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_12 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_12"), (short) 7135, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_13 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:13"), (short) 7136, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_13 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_13"), (short) 7136, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_14 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:14"), (short) 7137, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_14 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_14"), (short) 7137, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_15 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:15"), (short) 7138, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_15 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_15"), (short) 7138, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_16 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:16"), (short) 7139, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_16 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_16"), (short) 7139, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_17 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:17"), (short) 7140, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_17 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_17"), (short) 7140, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_18 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:18"), (short) 7141, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_18 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_18"), (short) 7141, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_19 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:19"), (short) 7142, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_19 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_19"), (short) 7142, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_20 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:20"), (short) 7143, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_20 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_20"), (short) 7143, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_21 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:21"), (short) 7144, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_21 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_21"), (short) 7144, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_22 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:22"), (short) 7145, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_22 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_22"), (short) 7145, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_23 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:23"), (short) 7146, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_23 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_23"), (short) 7146, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_24 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:24"), (short) 7147, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_24 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_24"), (short) 7147, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_25 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:25"), (short) 7148, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_25 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_25"), (short) 7148, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_26 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:26"), (short) 7149, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_26 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_26"), (short) 7149, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_27 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:27"), (short) 7150, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_27 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_27"), (short) 7150, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_28 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:28"), (short) 7151, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_28 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_28"), (short) 7151, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_29 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:29"), (short) 7152, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_29 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_29"), (short) 7152, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:30"), (short) 7153, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=true");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_30 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_30"), (short) 7153, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane:31"), (short) 7154, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=false");
+  public static final BlockState LIGHT_GRAY_STAINED_GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:light_gray_stained_glass_pane_31"), (short) 7154, Block.LIGHT_GRAY_STAINED_GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   static {
     Registries.registerBlockState(LIGHT_GRAY_STAINED_GLASS_PANE_0);

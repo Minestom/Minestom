@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaPlanks {
-  public static final BlockState ACACIA_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:acacia_planks:0"), (short) 19, Block.ACACIA_PLANKS);
+  public static final BlockState ACACIA_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:acacia_planks_0"), (short) 19, Block.ACACIA_PLANKS);
 
   static {
     Registries.registerBlockState(ACACIA_PLANKS_0);

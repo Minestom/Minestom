@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StoneBrickSlab {
-  public static final BlockState STONE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab:0"), (short) 8382, Block.STONE_BRICK_SLAB, "type=top","waterlogged=true");
+  public static final BlockState STONE_BRICK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab_0"), (short) 8382, Block.STONE_BRICK_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState STONE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab:1"), (short) 8383, Block.STONE_BRICK_SLAB, "type=top","waterlogged=false");
+  public static final BlockState STONE_BRICK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab_1"), (short) 8383, Block.STONE_BRICK_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState STONE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab:2"), (short) 8384, Block.STONE_BRICK_SLAB, "type=bottom","waterlogged=true");
+  public static final BlockState STONE_BRICK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab_2"), (short) 8384, Block.STONE_BRICK_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState STONE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab:3"), (short) 8385, Block.STONE_BRICK_SLAB, "type=bottom","waterlogged=false");
+  public static final BlockState STONE_BRICK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab_3"), (short) 8385, Block.STONE_BRICK_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState STONE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab:4"), (short) 8386, Block.STONE_BRICK_SLAB, "type=double","waterlogged=true");
+  public static final BlockState STONE_BRICK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab_4"), (short) 8386, Block.STONE_BRICK_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState STONE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab:5"), (short) 8387, Block.STONE_BRICK_SLAB, "type=double","waterlogged=false");
+  public static final BlockState STONE_BRICK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:stone_brick_slab_5"), (short) 8387, Block.STONE_BRICK_SLAB, "type=double","waterlogged=false");
 
   static {
     Registries.registerBlockState(STONE_BRICK_SLAB_0);

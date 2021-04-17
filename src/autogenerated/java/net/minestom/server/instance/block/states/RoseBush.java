@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RoseBush {
-  public static final BlockState ROSE_BUSH_0 = new BlockState(NamespaceID.from("minecraft:rose_bush:0"), (short) 7893, Block.ROSE_BUSH, "half=upper");
+  public static final BlockState ROSE_BUSH_0 = new BlockState(NamespaceID.from("minecraft:rose_bush_0"), (short) 7893, Block.ROSE_BUSH, "half=upper");
 
-  public static final BlockState ROSE_BUSH_1 = new BlockState(NamespaceID.from("minecraft:rose_bush:1"), (short) 7894, Block.ROSE_BUSH, "half=lower");
+  public static final BlockState ROSE_BUSH_1 = new BlockState(NamespaceID.from("minecraft:rose_bush_1"), (short) 7894, Block.ROSE_BUSH, "half=lower");
 
   static {
     Registries.registerBlockState(ROSE_BUSH_0);

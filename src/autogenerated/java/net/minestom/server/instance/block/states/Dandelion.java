@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Dandelion {
-  public static final BlockState DANDELION_0 = new BlockState(NamespaceID.from("minecraft:dandelion:0"), (short) 1412, Block.DANDELION);
+  public static final BlockState DANDELION_0 = new BlockState(NamespaceID.from("minecraft:dandelion_0"), (short) 1412, Block.DANDELION);
 
   static {
     Registries.registerBlockState(DANDELION_0);

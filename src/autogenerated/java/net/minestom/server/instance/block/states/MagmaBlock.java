@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MagmaBlock {
-  public static final BlockState MAGMA_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:magma_block:0"), (short) 9257, Block.MAGMA_BLOCK);
+  public static final BlockState MAGMA_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:magma_block_0"), (short) 9257, Block.MAGMA_BLOCK);
 
   static {
     Registries.registerBlockState(MAGMA_BLOCK_0);

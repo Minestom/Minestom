@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Ladder {
-  public static final BlockState LADDER_0 = new BlockState(NamespaceID.from("minecraft:ladder:0"), (short) 3637, Block.LADDER, "facing=north","waterlogged=true");
+  public static final BlockState LADDER_0 = new BlockState(NamespaceID.from("minecraft:ladder_0"), (short) 3637, Block.LADDER, "facing=north","waterlogged=true");
 
-  public static final BlockState LADDER_1 = new BlockState(NamespaceID.from("minecraft:ladder:1"), (short) 3638, Block.LADDER, "facing=north","waterlogged=false");
+  public static final BlockState LADDER_1 = new BlockState(NamespaceID.from("minecraft:ladder_1"), (short) 3638, Block.LADDER, "facing=north","waterlogged=false");
 
-  public static final BlockState LADDER_2 = new BlockState(NamespaceID.from("minecraft:ladder:2"), (short) 3639, Block.LADDER, "facing=south","waterlogged=true");
+  public static final BlockState LADDER_2 = new BlockState(NamespaceID.from("minecraft:ladder_2"), (short) 3639, Block.LADDER, "facing=south","waterlogged=true");
 
-  public static final BlockState LADDER_3 = new BlockState(NamespaceID.from("minecraft:ladder:3"), (short) 3640, Block.LADDER, "facing=south","waterlogged=false");
+  public static final BlockState LADDER_3 = new BlockState(NamespaceID.from("minecraft:ladder_3"), (short) 3640, Block.LADDER, "facing=south","waterlogged=false");
 
-  public static final BlockState LADDER_4 = new BlockState(NamespaceID.from("minecraft:ladder:4"), (short) 3641, Block.LADDER, "facing=west","waterlogged=true");
+  public static final BlockState LADDER_4 = new BlockState(NamespaceID.from("minecraft:ladder_4"), (short) 3641, Block.LADDER, "facing=west","waterlogged=true");
 
-  public static final BlockState LADDER_5 = new BlockState(NamespaceID.from("minecraft:ladder:5"), (short) 3642, Block.LADDER, "facing=west","waterlogged=false");
+  public static final BlockState LADDER_5 = new BlockState(NamespaceID.from("minecraft:ladder_5"), (short) 3642, Block.LADDER, "facing=west","waterlogged=false");
 
-  public static final BlockState LADDER_6 = new BlockState(NamespaceID.from("minecraft:ladder:6"), (short) 3643, Block.LADDER, "facing=east","waterlogged=true");
+  public static final BlockState LADDER_6 = new BlockState(NamespaceID.from("minecraft:ladder_6"), (short) 3643, Block.LADDER, "facing=east","waterlogged=true");
 
-  public static final BlockState LADDER_7 = new BlockState(NamespaceID.from("minecraft:ladder:7"), (short) 3644, Block.LADDER, "facing=east","waterlogged=false");
+  public static final BlockState LADDER_7 = new BlockState(NamespaceID.from("minecraft:ladder_7"), (short) 3644, Block.LADDER, "facing=east","waterlogged=false");
 
   static {
     Registries.registerBlockState(LADDER_0);

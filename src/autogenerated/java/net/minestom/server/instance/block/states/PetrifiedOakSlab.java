@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PetrifiedOakSlab {
-  public static final BlockState PETRIFIED_OAK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:0"), (short) 8364, Block.PETRIFIED_OAK_SLAB, "type=top","waterlogged=true");
+  public static final BlockState PETRIFIED_OAK_SLAB_0 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab_0"), (short) 8364, Block.PETRIFIED_OAK_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState PETRIFIED_OAK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:1"), (short) 8365, Block.PETRIFIED_OAK_SLAB, "type=top","waterlogged=false");
+  public static final BlockState PETRIFIED_OAK_SLAB_1 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab_1"), (short) 8365, Block.PETRIFIED_OAK_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState PETRIFIED_OAK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:2"), (short) 8366, Block.PETRIFIED_OAK_SLAB, "type=bottom","waterlogged=true");
+  public static final BlockState PETRIFIED_OAK_SLAB_2 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab_2"), (short) 8366, Block.PETRIFIED_OAK_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState PETRIFIED_OAK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:3"), (short) 8367, Block.PETRIFIED_OAK_SLAB, "type=bottom","waterlogged=false");
+  public static final BlockState PETRIFIED_OAK_SLAB_3 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab_3"), (short) 8367, Block.PETRIFIED_OAK_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState PETRIFIED_OAK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:4"), (short) 8368, Block.PETRIFIED_OAK_SLAB, "type=double","waterlogged=true");
+  public static final BlockState PETRIFIED_OAK_SLAB_4 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab_4"), (short) 8368, Block.PETRIFIED_OAK_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState PETRIFIED_OAK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab:5"), (short) 8369, Block.PETRIFIED_OAK_SLAB, "type=double","waterlogged=false");
+  public static final BlockState PETRIFIED_OAK_SLAB_5 = new BlockState(NamespaceID.from("minecraft:petrified_oak_slab_5"), (short) 8369, Block.PETRIFIED_OAK_SLAB, "type=double","waterlogged=false");
 
   static {
     Registries.registerBlockState(PETRIFIED_OAK_SLAB_0);

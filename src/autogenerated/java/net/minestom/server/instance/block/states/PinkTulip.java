@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PinkTulip {
-  public static final BlockState PINK_TULIP_0 = new BlockState(NamespaceID.from("minecraft:pink_tulip:0"), (short) 1420, Block.PINK_TULIP);
+  public static final BlockState PINK_TULIP_0 = new BlockState(NamespaceID.from("minecraft:pink_tulip_0"), (short) 1420, Block.PINK_TULIP);
 
   static {
     Registries.registerBlockState(PINK_TULIP_0);

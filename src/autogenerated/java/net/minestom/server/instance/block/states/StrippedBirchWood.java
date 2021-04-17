@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedBirchWood {
-  public static final BlockState STRIPPED_BIRCH_WOOD_0 = new BlockState(NamespaceID.from("minecraft:stripped_birch_wood:0"), (short) 133, Block.STRIPPED_BIRCH_WOOD, "axis=x");
+  public static final BlockState STRIPPED_BIRCH_WOOD_0 = new BlockState(NamespaceID.from("minecraft:stripped_birch_wood_0"), (short) 133, Block.STRIPPED_BIRCH_WOOD, "axis=x");
 
-  public static final BlockState STRIPPED_BIRCH_WOOD_1 = new BlockState(NamespaceID.from("minecraft:stripped_birch_wood:1"), (short) 134, Block.STRIPPED_BIRCH_WOOD, "axis=y");
+  public static final BlockState STRIPPED_BIRCH_WOOD_1 = new BlockState(NamespaceID.from("minecraft:stripped_birch_wood_1"), (short) 134, Block.STRIPPED_BIRCH_WOOD, "axis=y");
 
-  public static final BlockState STRIPPED_BIRCH_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_birch_wood:2"), (short) 135, Block.STRIPPED_BIRCH_WOOD, "axis=z");
+  public static final BlockState STRIPPED_BIRCH_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_birch_wood_2"), (short) 135, Block.STRIPPED_BIRCH_WOOD, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_BIRCH_WOOD_0);

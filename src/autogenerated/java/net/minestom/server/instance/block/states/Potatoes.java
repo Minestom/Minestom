@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Potatoes {
-  public static final BlockState POTATOES_0 = new BlockState(NamespaceID.from("minecraft:potatoes:0"), (short) 6342, Block.POTATOES, "age=0");
+  public static final BlockState POTATOES_0 = new BlockState(NamespaceID.from("minecraft:potatoes_0"), (short) 6342, Block.POTATOES, "age=0");
 
-  public static final BlockState POTATOES_1 = new BlockState(NamespaceID.from("minecraft:potatoes:1"), (short) 6343, Block.POTATOES, "age=1");
+  public static final BlockState POTATOES_1 = new BlockState(NamespaceID.from("minecraft:potatoes_1"), (short) 6343, Block.POTATOES, "age=1");
 
-  public static final BlockState POTATOES_2 = new BlockState(NamespaceID.from("minecraft:potatoes:2"), (short) 6344, Block.POTATOES, "age=2");
+  public static final BlockState POTATOES_2 = new BlockState(NamespaceID.from("minecraft:potatoes_2"), (short) 6344, Block.POTATOES, "age=2");
 
-  public static final BlockState POTATOES_3 = new BlockState(NamespaceID.from("minecraft:potatoes:3"), (short) 6345, Block.POTATOES, "age=3");
+  public static final BlockState POTATOES_3 = new BlockState(NamespaceID.from("minecraft:potatoes_3"), (short) 6345, Block.POTATOES, "age=3");
 
-  public static final BlockState POTATOES_4 = new BlockState(NamespaceID.from("minecraft:potatoes:4"), (short) 6346, Block.POTATOES, "age=4");
+  public static final BlockState POTATOES_4 = new BlockState(NamespaceID.from("minecraft:potatoes_4"), (short) 6346, Block.POTATOES, "age=4");
 
-  public static final BlockState POTATOES_5 = new BlockState(NamespaceID.from("minecraft:potatoes:5"), (short) 6347, Block.POTATOES, "age=5");
+  public static final BlockState POTATOES_5 = new BlockState(NamespaceID.from("minecraft:potatoes_5"), (short) 6347, Block.POTATOES, "age=5");
 
-  public static final BlockState POTATOES_6 = new BlockState(NamespaceID.from("minecraft:potatoes:6"), (short) 6348, Block.POTATOES, "age=6");
+  public static final BlockState POTATOES_6 = new BlockState(NamespaceID.from("minecraft:potatoes_6"), (short) 6348, Block.POTATOES, "age=6");
 
-  public static final BlockState POTATOES_7 = new BlockState(NamespaceID.from("minecraft:potatoes:7"), (short) 6349, Block.POTATOES, "age=7");
+  public static final BlockState POTATOES_7 = new BlockState(NamespaceID.from("minecraft:potatoes_7"), (short) 6349, Block.POTATOES, "age=7");
 
   static {
     Registries.registerBlockState(POTATOES_0);

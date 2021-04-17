@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DragonEgg {
-  public static final BlockState DRAGON_EGG_0 = new BlockState(NamespaceID.from("minecraft:dragon_egg:0"), (short) 5159, Block.DRAGON_EGG);
+  public static final BlockState DRAGON_EGG_0 = new BlockState(NamespaceID.from("minecraft:dragon_egg_0"), (short) 5159, Block.DRAGON_EGG);
 
   static {
     Registries.registerBlockState(DRAGON_EGG_0);

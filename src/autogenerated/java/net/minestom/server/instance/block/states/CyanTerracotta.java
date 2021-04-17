@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CyanTerracotta {
-  public static final BlockState CYAN_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:cyan_terracotta:0"), (short) 6860, Block.CYAN_TERRACOTTA);
+  public static final BlockState CYAN_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:cyan_terracotta_0"), (short) 6860, Block.CYAN_TERRACOTTA);
 
   static {
     Registries.registerBlockState(CYAN_TERRACOTTA_0);

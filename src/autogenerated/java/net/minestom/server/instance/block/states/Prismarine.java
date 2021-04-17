@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Prismarine {
-  public static final BlockState PRISMARINE_0 = new BlockState(NamespaceID.from("minecraft:prismarine:0"), (short) 7605, Block.PRISMARINE);
+  public static final BlockState PRISMARINE_0 = new BlockState(NamespaceID.from("minecraft:prismarine_0"), (short) 7605, Block.PRISMARINE);
 
   static {
     Registries.registerBlockState(PRISMARINE_0);

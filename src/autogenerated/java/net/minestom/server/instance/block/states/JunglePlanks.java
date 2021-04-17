@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JunglePlanks {
-  public static final BlockState JUNGLE_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:jungle_planks:0"), (short) 18, Block.JUNGLE_PLANKS);
+  public static final BlockState JUNGLE_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:jungle_planks_0"), (short) 18, Block.JUNGLE_PLANKS);
 
   static {
     Registries.registerBlockState(JUNGLE_PLANKS_0);

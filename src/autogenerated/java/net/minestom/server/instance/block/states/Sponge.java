@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Sponge {
-  public static final BlockState SPONGE_0 = new BlockState(NamespaceID.from("minecraft:sponge:0"), (short) 229, Block.SPONGE);
+  public static final BlockState SPONGE_0 = new BlockState(NamespaceID.from("minecraft:sponge_0"), (short) 229, Block.SPONGE);
 
   static {
     Registries.registerBlockState(SPONGE_0);

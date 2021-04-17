@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedOxeyeDaisy {
-  public static final BlockState POTTED_OXEYE_DAISY_0 = new BlockState(NamespaceID.from("minecraft:potted_oxeye_daisy:0"), (short) 6326, Block.POTTED_OXEYE_DAISY);
+  public static final BlockState POTTED_OXEYE_DAISY_0 = new BlockState(NamespaceID.from("minecraft:potted_oxeye_daisy_0"), (short) 6326, Block.POTTED_OXEYE_DAISY);
 
   static {
     Registries.registerBlockState(POTTED_OXEYE_DAISY_0);

@@ -14,53 +14,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BeeNest {
-  public static final BlockState BEE_NEST_0 = new BlockState(NamespaceID.from("minecraft:bee_nest:0"), (short) 15784, Block.BEE_NEST, "facing=north","honey_level=0");
+  public static final BlockState BEE_NEST_0 = new BlockState(NamespaceID.from("minecraft:bee_nest_0"), (short) 15784, Block.BEE_NEST, "facing=north","honey_level=0");
 
-  public static final BlockState BEE_NEST_1 = new BlockState(NamespaceID.from("minecraft:bee_nest:1"), (short) 15785, Block.BEE_NEST, "facing=north","honey_level=1");
+  public static final BlockState BEE_NEST_1 = new BlockState(NamespaceID.from("minecraft:bee_nest_1"), (short) 15785, Block.BEE_NEST, "facing=north","honey_level=1");
 
-  public static final BlockState BEE_NEST_2 = new BlockState(NamespaceID.from("minecraft:bee_nest:2"), (short) 15786, Block.BEE_NEST, "facing=north","honey_level=2");
+  public static final BlockState BEE_NEST_2 = new BlockState(NamespaceID.from("minecraft:bee_nest_2"), (short) 15786, Block.BEE_NEST, "facing=north","honey_level=2");
 
-  public static final BlockState BEE_NEST_3 = new BlockState(NamespaceID.from("minecraft:bee_nest:3"), (short) 15787, Block.BEE_NEST, "facing=north","honey_level=3");
+  public static final BlockState BEE_NEST_3 = new BlockState(NamespaceID.from("minecraft:bee_nest_3"), (short) 15787, Block.BEE_NEST, "facing=north","honey_level=3");
 
-  public static final BlockState BEE_NEST_4 = new BlockState(NamespaceID.from("minecraft:bee_nest:4"), (short) 15788, Block.BEE_NEST, "facing=north","honey_level=4");
+  public static final BlockState BEE_NEST_4 = new BlockState(NamespaceID.from("minecraft:bee_nest_4"), (short) 15788, Block.BEE_NEST, "facing=north","honey_level=4");
 
-  public static final BlockState BEE_NEST_5 = new BlockState(NamespaceID.from("minecraft:bee_nest:5"), (short) 15789, Block.BEE_NEST, "facing=north","honey_level=5");
+  public static final BlockState BEE_NEST_5 = new BlockState(NamespaceID.from("minecraft:bee_nest_5"), (short) 15789, Block.BEE_NEST, "facing=north","honey_level=5");
 
-  public static final BlockState BEE_NEST_6 = new BlockState(NamespaceID.from("minecraft:bee_nest:6"), (short) 15790, Block.BEE_NEST, "facing=south","honey_level=0");
+  public static final BlockState BEE_NEST_6 = new BlockState(NamespaceID.from("minecraft:bee_nest_6"), (short) 15790, Block.BEE_NEST, "facing=south","honey_level=0");
 
-  public static final BlockState BEE_NEST_7 = new BlockState(NamespaceID.from("minecraft:bee_nest:7"), (short) 15791, Block.BEE_NEST, "facing=south","honey_level=1");
+  public static final BlockState BEE_NEST_7 = new BlockState(NamespaceID.from("minecraft:bee_nest_7"), (short) 15791, Block.BEE_NEST, "facing=south","honey_level=1");
 
-  public static final BlockState BEE_NEST_8 = new BlockState(NamespaceID.from("minecraft:bee_nest:8"), (short) 15792, Block.BEE_NEST, "facing=south","honey_level=2");
+  public static final BlockState BEE_NEST_8 = new BlockState(NamespaceID.from("minecraft:bee_nest_8"), (short) 15792, Block.BEE_NEST, "facing=south","honey_level=2");
 
-  public static final BlockState BEE_NEST_9 = new BlockState(NamespaceID.from("minecraft:bee_nest:9"), (short) 15793, Block.BEE_NEST, "facing=south","honey_level=3");
+  public static final BlockState BEE_NEST_9 = new BlockState(NamespaceID.from("minecraft:bee_nest_9"), (short) 15793, Block.BEE_NEST, "facing=south","honey_level=3");
 
-  public static final BlockState BEE_NEST_10 = new BlockState(NamespaceID.from("minecraft:bee_nest:10"), (short) 15794, Block.BEE_NEST, "facing=south","honey_level=4");
+  public static final BlockState BEE_NEST_10 = new BlockState(NamespaceID.from("minecraft:bee_nest_10"), (short) 15794, Block.BEE_NEST, "facing=south","honey_level=4");
 
-  public static final BlockState BEE_NEST_11 = new BlockState(NamespaceID.from("minecraft:bee_nest:11"), (short) 15795, Block.BEE_NEST, "facing=south","honey_level=5");
+  public static final BlockState BEE_NEST_11 = new BlockState(NamespaceID.from("minecraft:bee_nest_11"), (short) 15795, Block.BEE_NEST, "facing=south","honey_level=5");
 
-  public static final BlockState BEE_NEST_12 = new BlockState(NamespaceID.from("minecraft:bee_nest:12"), (short) 15796, Block.BEE_NEST, "facing=west","honey_level=0");
+  public static final BlockState BEE_NEST_12 = new BlockState(NamespaceID.from("minecraft:bee_nest_12"), (short) 15796, Block.BEE_NEST, "facing=west","honey_level=0");
 
-  public static final BlockState BEE_NEST_13 = new BlockState(NamespaceID.from("minecraft:bee_nest:13"), (short) 15797, Block.BEE_NEST, "facing=west","honey_level=1");
+  public static final BlockState BEE_NEST_13 = new BlockState(NamespaceID.from("minecraft:bee_nest_13"), (short) 15797, Block.BEE_NEST, "facing=west","honey_level=1");
 
-  public static final BlockState BEE_NEST_14 = new BlockState(NamespaceID.from("minecraft:bee_nest:14"), (short) 15798, Block.BEE_NEST, "facing=west","honey_level=2");
+  public static final BlockState BEE_NEST_14 = new BlockState(NamespaceID.from("minecraft:bee_nest_14"), (short) 15798, Block.BEE_NEST, "facing=west","honey_level=2");
 
-  public static final BlockState BEE_NEST_15 = new BlockState(NamespaceID.from("minecraft:bee_nest:15"), (short) 15799, Block.BEE_NEST, "facing=west","honey_level=3");
+  public static final BlockState BEE_NEST_15 = new BlockState(NamespaceID.from("minecraft:bee_nest_15"), (short) 15799, Block.BEE_NEST, "facing=west","honey_level=3");
 
-  public static final BlockState BEE_NEST_16 = new BlockState(NamespaceID.from("minecraft:bee_nest:16"), (short) 15800, Block.BEE_NEST, "facing=west","honey_level=4");
+  public static final BlockState BEE_NEST_16 = new BlockState(NamespaceID.from("minecraft:bee_nest_16"), (short) 15800, Block.BEE_NEST, "facing=west","honey_level=4");
 
-  public static final BlockState BEE_NEST_17 = new BlockState(NamespaceID.from("minecraft:bee_nest:17"), (short) 15801, Block.BEE_NEST, "facing=west","honey_level=5");
+  public static final BlockState BEE_NEST_17 = new BlockState(NamespaceID.from("minecraft:bee_nest_17"), (short) 15801, Block.BEE_NEST, "facing=west","honey_level=5");
 
-  public static final BlockState BEE_NEST_18 = new BlockState(NamespaceID.from("minecraft:bee_nest:18"), (short) 15802, Block.BEE_NEST, "facing=east","honey_level=0");
+  public static final BlockState BEE_NEST_18 = new BlockState(NamespaceID.from("minecraft:bee_nest_18"), (short) 15802, Block.BEE_NEST, "facing=east","honey_level=0");
 
-  public static final BlockState BEE_NEST_19 = new BlockState(NamespaceID.from("minecraft:bee_nest:19"), (short) 15803, Block.BEE_NEST, "facing=east","honey_level=1");
+  public static final BlockState BEE_NEST_19 = new BlockState(NamespaceID.from("minecraft:bee_nest_19"), (short) 15803, Block.BEE_NEST, "facing=east","honey_level=1");
 
-  public static final BlockState BEE_NEST_20 = new BlockState(NamespaceID.from("minecraft:bee_nest:20"), (short) 15804, Block.BEE_NEST, "facing=east","honey_level=2");
+  public static final BlockState BEE_NEST_20 = new BlockState(NamespaceID.from("minecraft:bee_nest_20"), (short) 15804, Block.BEE_NEST, "facing=east","honey_level=2");
 
-  public static final BlockState BEE_NEST_21 = new BlockState(NamespaceID.from("minecraft:bee_nest:21"), (short) 15805, Block.BEE_NEST, "facing=east","honey_level=3");
+  public static final BlockState BEE_NEST_21 = new BlockState(NamespaceID.from("minecraft:bee_nest_21"), (short) 15805, Block.BEE_NEST, "facing=east","honey_level=3");
 
-  public static final BlockState BEE_NEST_22 = new BlockState(NamespaceID.from("minecraft:bee_nest:22"), (short) 15806, Block.BEE_NEST, "facing=east","honey_level=4");
+  public static final BlockState BEE_NEST_22 = new BlockState(NamespaceID.from("minecraft:bee_nest_22"), (short) 15806, Block.BEE_NEST, "facing=east","honey_level=4");
 
-  public static final BlockState BEE_NEST_23 = new BlockState(NamespaceID.from("minecraft:bee_nest:23"), (short) 15807, Block.BEE_NEST, "facing=east","honey_level=5");
+  public static final BlockState BEE_NEST_23 = new BlockState(NamespaceID.from("minecraft:bee_nest_23"), (short) 15807, Block.BEE_NEST, "facing=east","honey_level=5");
 
   static {
     Registries.registerBlockState(BEE_NEST_0);

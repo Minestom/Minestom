@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DiamondBlock {
-  public static final BlockState DIAMOND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:diamond_block:0"), (short) 3355, Block.DIAMOND_BLOCK);
+  public static final BlockState DIAMOND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:diamond_block_0"), (short) 3355, Block.DIAMOND_BLOCK);
 
   static {
     Registries.registerBlockState(DIAMOND_BLOCK_0);

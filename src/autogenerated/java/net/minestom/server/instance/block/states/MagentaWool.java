@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MagentaWool {
-  public static final BlockState MAGENTA_WOOL_0 = new BlockState(NamespaceID.from("minecraft:magenta_wool:0"), (short) 1386, Block.MAGENTA_WOOL);
+  public static final BlockState MAGENTA_WOOL_0 = new BlockState(NamespaceID.from("minecraft:magenta_wool_0"), (short) 1386, Block.MAGENTA_WOOL);
 
   static {
     Registries.registerBlockState(MAGENTA_WOOL_0);

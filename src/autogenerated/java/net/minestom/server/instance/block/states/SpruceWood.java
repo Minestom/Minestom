@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceWood {
-  public static final BlockState SPRUCE_WOOD_0 = new BlockState(NamespaceID.from("minecraft:spruce_wood:0"), (short) 112, Block.SPRUCE_WOOD, "axis=x");
+  public static final BlockState SPRUCE_WOOD_0 = new BlockState(NamespaceID.from("minecraft:spruce_wood_0"), (short) 112, Block.SPRUCE_WOOD, "axis=x");
 
-  public static final BlockState SPRUCE_WOOD_1 = new BlockState(NamespaceID.from("minecraft:spruce_wood:1"), (short) 113, Block.SPRUCE_WOOD, "axis=y");
+  public static final BlockState SPRUCE_WOOD_1 = new BlockState(NamespaceID.from("minecraft:spruce_wood_1"), (short) 113, Block.SPRUCE_WOOD, "axis=y");
 
-  public static final BlockState SPRUCE_WOOD_2 = new BlockState(NamespaceID.from("minecraft:spruce_wood:2"), (short) 114, Block.SPRUCE_WOOD, "axis=z");
+  public static final BlockState SPRUCE_WOOD_2 = new BlockState(NamespaceID.from("minecraft:spruce_wood_2"), (short) 114, Block.SPRUCE_WOOD, "axis=z");
 
   static {
     Registries.registerBlockState(SPRUCE_WOOD_0);

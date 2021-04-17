@@ -14,133 +14,133 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AcaciaDoor {
-  public static final BlockState ACACIA_DOOR_0 = new BlockState(NamespaceID.from("minecraft:acacia_door:0"), (short) 8934, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_0 = new BlockState(NamespaceID.from("minecraft:acacia_door_0"), (short) 8934, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_1 = new BlockState(NamespaceID.from("minecraft:acacia_door:1"), (short) 8935, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_1 = new BlockState(NamespaceID.from("minecraft:acacia_door_1"), (short) 8935, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_2 = new BlockState(NamespaceID.from("minecraft:acacia_door:2"), (short) 8936, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_2 = new BlockState(NamespaceID.from("minecraft:acacia_door_2"), (short) 8936, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_3 = new BlockState(NamespaceID.from("minecraft:acacia_door:3"), (short) 8937, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_3 = new BlockState(NamespaceID.from("minecraft:acacia_door_3"), (short) 8937, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_4 = new BlockState(NamespaceID.from("minecraft:acacia_door:4"), (short) 8938, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_4 = new BlockState(NamespaceID.from("minecraft:acacia_door_4"), (short) 8938, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_5 = new BlockState(NamespaceID.from("minecraft:acacia_door:5"), (short) 8939, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_5 = new BlockState(NamespaceID.from("minecraft:acacia_door_5"), (short) 8939, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_6 = new BlockState(NamespaceID.from("minecraft:acacia_door:6"), (short) 8940, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_6 = new BlockState(NamespaceID.from("minecraft:acacia_door_6"), (short) 8940, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_7 = new BlockState(NamespaceID.from("minecraft:acacia_door:7"), (short) 8941, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_7 = new BlockState(NamespaceID.from("minecraft:acacia_door_7"), (short) 8941, Block.ACACIA_DOOR, "facing=north","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_8 = new BlockState(NamespaceID.from("minecraft:acacia_door:8"), (short) 8942, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_8 = new BlockState(NamespaceID.from("minecraft:acacia_door_8"), (short) 8942, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_9 = new BlockState(NamespaceID.from("minecraft:acacia_door:9"), (short) 8943, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_9 = new BlockState(NamespaceID.from("minecraft:acacia_door_9"), (short) 8943, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_10 = new BlockState(NamespaceID.from("minecraft:acacia_door:10"), (short) 8944, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_10 = new BlockState(NamespaceID.from("minecraft:acacia_door_10"), (short) 8944, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_11 = new BlockState(NamespaceID.from("minecraft:acacia_door:11"), (short) 8945, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_11 = new BlockState(NamespaceID.from("minecraft:acacia_door_11"), (short) 8945, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_12 = new BlockState(NamespaceID.from("minecraft:acacia_door:12"), (short) 8946, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_12 = new BlockState(NamespaceID.from("minecraft:acacia_door_12"), (short) 8946, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_13 = new BlockState(NamespaceID.from("minecraft:acacia_door:13"), (short) 8947, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_13 = new BlockState(NamespaceID.from("minecraft:acacia_door_13"), (short) 8947, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_14 = new BlockState(NamespaceID.from("minecraft:acacia_door:14"), (short) 8948, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_14 = new BlockState(NamespaceID.from("minecraft:acacia_door_14"), (short) 8948, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_15 = new BlockState(NamespaceID.from("minecraft:acacia_door:15"), (short) 8949, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_15 = new BlockState(NamespaceID.from("minecraft:acacia_door_15"), (short) 8949, Block.ACACIA_DOOR, "facing=north","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_16 = new BlockState(NamespaceID.from("minecraft:acacia_door:16"), (short) 8950, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_16 = new BlockState(NamespaceID.from("minecraft:acacia_door_16"), (short) 8950, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_17 = new BlockState(NamespaceID.from("minecraft:acacia_door:17"), (short) 8951, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_17 = new BlockState(NamespaceID.from("minecraft:acacia_door_17"), (short) 8951, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_18 = new BlockState(NamespaceID.from("minecraft:acacia_door:18"), (short) 8952, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_18 = new BlockState(NamespaceID.from("minecraft:acacia_door_18"), (short) 8952, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_19 = new BlockState(NamespaceID.from("minecraft:acacia_door:19"), (short) 8953, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_19 = new BlockState(NamespaceID.from("minecraft:acacia_door_19"), (short) 8953, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_20 = new BlockState(NamespaceID.from("minecraft:acacia_door:20"), (short) 8954, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_20 = new BlockState(NamespaceID.from("minecraft:acacia_door_20"), (short) 8954, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_21 = new BlockState(NamespaceID.from("minecraft:acacia_door:21"), (short) 8955, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_21 = new BlockState(NamespaceID.from("minecraft:acacia_door_21"), (short) 8955, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_22 = new BlockState(NamespaceID.from("minecraft:acacia_door:22"), (short) 8956, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_22 = new BlockState(NamespaceID.from("minecraft:acacia_door_22"), (short) 8956, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_23 = new BlockState(NamespaceID.from("minecraft:acacia_door:23"), (short) 8957, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_23 = new BlockState(NamespaceID.from("minecraft:acacia_door_23"), (short) 8957, Block.ACACIA_DOOR, "facing=south","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_24 = new BlockState(NamespaceID.from("minecraft:acacia_door:24"), (short) 8958, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_24 = new BlockState(NamespaceID.from("minecraft:acacia_door_24"), (short) 8958, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_25 = new BlockState(NamespaceID.from("minecraft:acacia_door:25"), (short) 8959, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_25 = new BlockState(NamespaceID.from("minecraft:acacia_door_25"), (short) 8959, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_26 = new BlockState(NamespaceID.from("minecraft:acacia_door:26"), (short) 8960, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_26 = new BlockState(NamespaceID.from("minecraft:acacia_door_26"), (short) 8960, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_27 = new BlockState(NamespaceID.from("minecraft:acacia_door:27"), (short) 8961, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_27 = new BlockState(NamespaceID.from("minecraft:acacia_door_27"), (short) 8961, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_28 = new BlockState(NamespaceID.from("minecraft:acacia_door:28"), (short) 8962, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_28 = new BlockState(NamespaceID.from("minecraft:acacia_door_28"), (short) 8962, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_29 = new BlockState(NamespaceID.from("minecraft:acacia_door:29"), (short) 8963, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_29 = new BlockState(NamespaceID.from("minecraft:acacia_door_29"), (short) 8963, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_30 = new BlockState(NamespaceID.from("minecraft:acacia_door:30"), (short) 8964, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_30 = new BlockState(NamespaceID.from("minecraft:acacia_door_30"), (short) 8964, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_31 = new BlockState(NamespaceID.from("minecraft:acacia_door:31"), (short) 8965, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_31 = new BlockState(NamespaceID.from("minecraft:acacia_door_31"), (short) 8965, Block.ACACIA_DOOR, "facing=south","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_32 = new BlockState(NamespaceID.from("minecraft:acacia_door:32"), (short) 8966, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_32 = new BlockState(NamespaceID.from("minecraft:acacia_door_32"), (short) 8966, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_33 = new BlockState(NamespaceID.from("minecraft:acacia_door:33"), (short) 8967, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_33 = new BlockState(NamespaceID.from("minecraft:acacia_door_33"), (short) 8967, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_34 = new BlockState(NamespaceID.from("minecraft:acacia_door:34"), (short) 8968, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_34 = new BlockState(NamespaceID.from("minecraft:acacia_door_34"), (short) 8968, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_35 = new BlockState(NamespaceID.from("minecraft:acacia_door:35"), (short) 8969, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_35 = new BlockState(NamespaceID.from("minecraft:acacia_door_35"), (short) 8969, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_36 = new BlockState(NamespaceID.from("minecraft:acacia_door:36"), (short) 8970, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_36 = new BlockState(NamespaceID.from("minecraft:acacia_door_36"), (short) 8970, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_37 = new BlockState(NamespaceID.from("minecraft:acacia_door:37"), (short) 8971, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_37 = new BlockState(NamespaceID.from("minecraft:acacia_door_37"), (short) 8971, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_38 = new BlockState(NamespaceID.from("minecraft:acacia_door:38"), (short) 8972, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_38 = new BlockState(NamespaceID.from("minecraft:acacia_door_38"), (short) 8972, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_39 = new BlockState(NamespaceID.from("minecraft:acacia_door:39"), (short) 8973, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_39 = new BlockState(NamespaceID.from("minecraft:acacia_door_39"), (short) 8973, Block.ACACIA_DOOR, "facing=west","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_40 = new BlockState(NamespaceID.from("minecraft:acacia_door:40"), (short) 8974, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_40 = new BlockState(NamespaceID.from("minecraft:acacia_door_40"), (short) 8974, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_41 = new BlockState(NamespaceID.from("minecraft:acacia_door:41"), (short) 8975, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_41 = new BlockState(NamespaceID.from("minecraft:acacia_door_41"), (short) 8975, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_42 = new BlockState(NamespaceID.from("minecraft:acacia_door:42"), (short) 8976, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_42 = new BlockState(NamespaceID.from("minecraft:acacia_door_42"), (short) 8976, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_43 = new BlockState(NamespaceID.from("minecraft:acacia_door:43"), (short) 8977, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_43 = new BlockState(NamespaceID.from("minecraft:acacia_door_43"), (short) 8977, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_44 = new BlockState(NamespaceID.from("minecraft:acacia_door:44"), (short) 8978, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_44 = new BlockState(NamespaceID.from("minecraft:acacia_door_44"), (short) 8978, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_45 = new BlockState(NamespaceID.from("minecraft:acacia_door:45"), (short) 8979, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_45 = new BlockState(NamespaceID.from("minecraft:acacia_door_45"), (short) 8979, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_46 = new BlockState(NamespaceID.from("minecraft:acacia_door:46"), (short) 8980, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_46 = new BlockState(NamespaceID.from("minecraft:acacia_door_46"), (short) 8980, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_47 = new BlockState(NamespaceID.from("minecraft:acacia_door:47"), (short) 8981, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_47 = new BlockState(NamespaceID.from("minecraft:acacia_door_47"), (short) 8981, Block.ACACIA_DOOR, "facing=west","half=lower","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_48 = new BlockState(NamespaceID.from("minecraft:acacia_door:48"), (short) 8982, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_48 = new BlockState(NamespaceID.from("minecraft:acacia_door_48"), (short) 8982, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_49 = new BlockState(NamespaceID.from("minecraft:acacia_door:49"), (short) 8983, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_49 = new BlockState(NamespaceID.from("minecraft:acacia_door_49"), (short) 8983, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_50 = new BlockState(NamespaceID.from("minecraft:acacia_door:50"), (short) 8984, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_50 = new BlockState(NamespaceID.from("minecraft:acacia_door_50"), (short) 8984, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_51 = new BlockState(NamespaceID.from("minecraft:acacia_door:51"), (short) 8985, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_51 = new BlockState(NamespaceID.from("minecraft:acacia_door_51"), (short) 8985, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_52 = new BlockState(NamespaceID.from("minecraft:acacia_door:52"), (short) 8986, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_52 = new BlockState(NamespaceID.from("minecraft:acacia_door_52"), (short) 8986, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_53 = new BlockState(NamespaceID.from("minecraft:acacia_door:53"), (short) 8987, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_53 = new BlockState(NamespaceID.from("minecraft:acacia_door_53"), (short) 8987, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_54 = new BlockState(NamespaceID.from("minecraft:acacia_door:54"), (short) 8988, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_54 = new BlockState(NamespaceID.from("minecraft:acacia_door_54"), (short) 8988, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_55 = new BlockState(NamespaceID.from("minecraft:acacia_door:55"), (short) 8989, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_55 = new BlockState(NamespaceID.from("minecraft:acacia_door_55"), (short) 8989, Block.ACACIA_DOOR, "facing=east","half=upper","hinge=right","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_56 = new BlockState(NamespaceID.from("minecraft:acacia_door:56"), (short) 8990, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_56 = new BlockState(NamespaceID.from("minecraft:acacia_door_56"), (short) 8990, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_57 = new BlockState(NamespaceID.from("minecraft:acacia_door:57"), (short) 8991, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_57 = new BlockState(NamespaceID.from("minecraft:acacia_door_57"), (short) 8991, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_58 = new BlockState(NamespaceID.from("minecraft:acacia_door:58"), (short) 8992, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_58 = new BlockState(NamespaceID.from("minecraft:acacia_door_58"), (short) 8992, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_59 = new BlockState(NamespaceID.from("minecraft:acacia_door:59"), (short) 8993, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_59 = new BlockState(NamespaceID.from("minecraft:acacia_door_59"), (short) 8993, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=left","open=false","powered=false");
 
-  public static final BlockState ACACIA_DOOR_60 = new BlockState(NamespaceID.from("minecraft:acacia_door:60"), (short) 8994, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=true");
+  public static final BlockState ACACIA_DOOR_60 = new BlockState(NamespaceID.from("minecraft:acacia_door_60"), (short) 8994, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=true");
 
-  public static final BlockState ACACIA_DOOR_61 = new BlockState(NamespaceID.from("minecraft:acacia_door:61"), (short) 8995, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=false");
+  public static final BlockState ACACIA_DOOR_61 = new BlockState(NamespaceID.from("minecraft:acacia_door_61"), (short) 8995, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=true","powered=false");
 
-  public static final BlockState ACACIA_DOOR_62 = new BlockState(NamespaceID.from("minecraft:acacia_door:62"), (short) 8996, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
+  public static final BlockState ACACIA_DOOR_62 = new BlockState(NamespaceID.from("minecraft:acacia_door_62"), (short) 8996, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=true");
 
-  public static final BlockState ACACIA_DOOR_63 = new BlockState(NamespaceID.from("minecraft:acacia_door:63"), (short) 8997, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
+  public static final BlockState ACACIA_DOOR_63 = new BlockState(NamespaceID.from("minecraft:acacia_door_63"), (short) 8997, Block.ACACIA_DOOR, "facing=east","half=lower","hinge=right","open=false","powered=false");
 
   static {
     Registries.registerBlockState(ACACIA_DOOR_0);

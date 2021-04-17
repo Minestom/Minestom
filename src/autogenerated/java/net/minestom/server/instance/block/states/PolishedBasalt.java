@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedBasalt {
-  public static final BlockState POLISHED_BASALT_0 = new BlockState(NamespaceID.from("minecraft:polished_basalt:0"), (short) 4005, Block.POLISHED_BASALT, "axis=x");
+  public static final BlockState POLISHED_BASALT_0 = new BlockState(NamespaceID.from("minecraft:polished_basalt_0"), (short) 4005, Block.POLISHED_BASALT, "axis=x");
 
-  public static final BlockState POLISHED_BASALT_1 = new BlockState(NamespaceID.from("minecraft:polished_basalt:1"), (short) 4006, Block.POLISHED_BASALT, "axis=y");
+  public static final BlockState POLISHED_BASALT_1 = new BlockState(NamespaceID.from("minecraft:polished_basalt_1"), (short) 4006, Block.POLISHED_BASALT, "axis=y");
 
-  public static final BlockState POLISHED_BASALT_2 = new BlockState(NamespaceID.from("minecraft:polished_basalt:2"), (short) 4007, Block.POLISHED_BASALT, "axis=z");
+  public static final BlockState POLISHED_BASALT_2 = new BlockState(NamespaceID.from("minecraft:polished_basalt_2"), (short) 4007, Block.POLISHED_BASALT, "axis=z");
 
   static {
     Registries.registerBlockState(POLISHED_BASALT_0);

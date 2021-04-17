@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Torch {
-  public static final BlockState TORCH_0 = new BlockState(NamespaceID.from("minecraft:torch:0"), (short) 1435, Block.TORCH);
+  public static final BlockState TORCH_0 = new BlockState(NamespaceID.from("minecraft:torch_0"), (short) 1435, Block.TORCH);
 
   static {
     Registries.registerBlockState(TORCH_0);

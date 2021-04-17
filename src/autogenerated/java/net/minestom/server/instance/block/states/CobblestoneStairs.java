@@ -14,165 +14,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CobblestoneStairs {
-  public static final BlockState COBBLESTONE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:0"), (short) 3655, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_0"), (short) 3655, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:1"), (short) 3656, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_1"), (short) 3656, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:2"), (short) 3657, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_2"), (short) 3657, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:3"), (short) 3658, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_3"), (short) 3658, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:4"), (short) 3659, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_4"), (short) 3659, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:5"), (short) 3660, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_5"), (short) 3660, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:6"), (short) 3661, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_6"), (short) 3661, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:7"), (short) 3662, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_7"), (short) 3662, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:8"), (short) 3663, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_8"), (short) 3663, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:9"), (short) 3664, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_9"), (short) 3664, Block.COBBLESTONE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:10"), (short) 3665, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_10"), (short) 3665, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:11"), (short) 3666, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_11"), (short) 3666, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:12"), (short) 3667, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_12"), (short) 3667, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:13"), (short) 3668, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_13"), (short) 3668, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:14"), (short) 3669, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_14"), (short) 3669, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:15"), (short) 3670, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_15"), (short) 3670, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:16"), (short) 3671, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_16"), (short) 3671, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:17"), (short) 3672, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_17"), (short) 3672, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:18"), (short) 3673, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_18"), (short) 3673, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:19"), (short) 3674, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_19"), (short) 3674, Block.COBBLESTONE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:20"), (short) 3675, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_20"), (short) 3675, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:21"), (short) 3676, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_21"), (short) 3676, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:22"), (short) 3677, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_22"), (short) 3677, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:23"), (short) 3678, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_23"), (short) 3678, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:24"), (short) 3679, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_24"), (short) 3679, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:25"), (short) 3680, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_25"), (short) 3680, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:26"), (short) 3681, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_26"), (short) 3681, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:27"), (short) 3682, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_27"), (short) 3682, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:28"), (short) 3683, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_28"), (short) 3683, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:29"), (short) 3684, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_29"), (short) 3684, Block.COBBLESTONE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:30"), (short) 3685, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_30"), (short) 3685, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:31"), (short) 3686, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_31"), (short) 3686, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:32"), (short) 3687, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_32"), (short) 3687, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:33"), (short) 3688, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_33"), (short) 3688, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:34"), (short) 3689, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_34"), (short) 3689, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:35"), (short) 3690, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_35"), (short) 3690, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:36"), (short) 3691, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_36"), (short) 3691, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:37"), (short) 3692, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_37"), (short) 3692, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:38"), (short) 3693, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_38"), (short) 3693, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:39"), (short) 3694, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_39"), (short) 3694, Block.COBBLESTONE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:40"), (short) 3695, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_40"), (short) 3695, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:41"), (short) 3696, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_41"), (short) 3696, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:42"), (short) 3697, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_42"), (short) 3697, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:43"), (short) 3698, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_43"), (short) 3698, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:44"), (short) 3699, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_44"), (short) 3699, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:45"), (short) 3700, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_45"), (short) 3700, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:46"), (short) 3701, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_46"), (short) 3701, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:47"), (short) 3702, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_47"), (short) 3702, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:48"), (short) 3703, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_48"), (short) 3703, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:49"), (short) 3704, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_49"), (short) 3704, Block.COBBLESTONE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:50"), (short) 3705, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_50"), (short) 3705, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:51"), (short) 3706, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_51"), (short) 3706, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:52"), (short) 3707, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_52"), (short) 3707, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:53"), (short) 3708, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_53"), (short) 3708, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:54"), (short) 3709, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_54"), (short) 3709, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:55"), (short) 3710, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_55"), (short) 3710, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:56"), (short) 3711, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_56"), (short) 3711, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:57"), (short) 3712, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_57"), (short) 3712, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:58"), (short) 3713, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_58"), (short) 3713, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:59"), (short) 3714, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_59"), (short) 3714, Block.COBBLESTONE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:60"), (short) 3715, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_60"), (short) 3715, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:61"), (short) 3716, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_61"), (short) 3716, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:62"), (short) 3717, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_62"), (short) 3717, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:63"), (short) 3718, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_63"), (short) 3718, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:64"), (short) 3719, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_64"), (short) 3719, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:65"), (short) 3720, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_65"), (short) 3720, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:66"), (short) 3721, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_66"), (short) 3721, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:67"), (short) 3722, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_67"), (short) 3722, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:68"), (short) 3723, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_68"), (short) 3723, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:69"), (short) 3724, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_69"), (short) 3724, Block.COBBLESTONE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:70"), (short) 3725, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_70"), (short) 3725, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:71"), (short) 3726, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_71"), (short) 3726, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:72"), (short) 3727, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_72"), (short) 3727, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:73"), (short) 3728, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_73"), (short) 3728, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:74"), (short) 3729, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_74"), (short) 3729, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:75"), (short) 3730, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_75"), (short) 3730, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:76"), (short) 3731, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_76"), (short) 3731, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:77"), (short) 3732, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_77"), (short) 3732, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState COBBLESTONE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:78"), (short) 3733, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState COBBLESTONE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_78"), (short) 3733, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState COBBLESTONE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs:79"), (short) 3734, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState COBBLESTONE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:cobblestone_stairs_79"), (short) 3734, Block.COBBLESTONE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   static {
     Registries.registerBlockState(COBBLESTONE_STAIRS_0);

@@ -14,37 +14,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Water {
-  public static final BlockState WATER_0 = new BlockState(NamespaceID.from("minecraft:water:0"), (short) 34, Block.WATER, "level=0");
+  public static final BlockState WATER_0 = new BlockState(NamespaceID.from("minecraft:water_0"), (short) 34, Block.WATER, "level=0");
 
-  public static final BlockState WATER_1 = new BlockState(NamespaceID.from("minecraft:water:1"), (short) 35, Block.WATER, "level=1");
+  public static final BlockState WATER_1 = new BlockState(NamespaceID.from("minecraft:water_1"), (short) 35, Block.WATER, "level=1");
 
-  public static final BlockState WATER_2 = new BlockState(NamespaceID.from("minecraft:water:2"), (short) 36, Block.WATER, "level=2");
+  public static final BlockState WATER_2 = new BlockState(NamespaceID.from("minecraft:water_2"), (short) 36, Block.WATER, "level=2");
 
-  public static final BlockState WATER_3 = new BlockState(NamespaceID.from("minecraft:water:3"), (short) 37, Block.WATER, "level=3");
+  public static final BlockState WATER_3 = new BlockState(NamespaceID.from("minecraft:water_3"), (short) 37, Block.WATER, "level=3");
 
-  public static final BlockState WATER_4 = new BlockState(NamespaceID.from("minecraft:water:4"), (short) 38, Block.WATER, "level=4");
+  public static final BlockState WATER_4 = new BlockState(NamespaceID.from("minecraft:water_4"), (short) 38, Block.WATER, "level=4");
 
-  public static final BlockState WATER_5 = new BlockState(NamespaceID.from("minecraft:water:5"), (short) 39, Block.WATER, "level=5");
+  public static final BlockState WATER_5 = new BlockState(NamespaceID.from("minecraft:water_5"), (short) 39, Block.WATER, "level=5");
 
-  public static final BlockState WATER_6 = new BlockState(NamespaceID.from("minecraft:water:6"), (short) 40, Block.WATER, "level=6");
+  public static final BlockState WATER_6 = new BlockState(NamespaceID.from("minecraft:water_6"), (short) 40, Block.WATER, "level=6");
 
-  public static final BlockState WATER_7 = new BlockState(NamespaceID.from("minecraft:water:7"), (short) 41, Block.WATER, "level=7");
+  public static final BlockState WATER_7 = new BlockState(NamespaceID.from("minecraft:water_7"), (short) 41, Block.WATER, "level=7");
 
-  public static final BlockState WATER_8 = new BlockState(NamespaceID.from("minecraft:water:8"), (short) 42, Block.WATER, "level=8");
+  public static final BlockState WATER_8 = new BlockState(NamespaceID.from("minecraft:water_8"), (short) 42, Block.WATER, "level=8");
 
-  public static final BlockState WATER_9 = new BlockState(NamespaceID.from("minecraft:water:9"), (short) 43, Block.WATER, "level=9");
+  public static final BlockState WATER_9 = new BlockState(NamespaceID.from("minecraft:water_9"), (short) 43, Block.WATER, "level=9");
 
-  public static final BlockState WATER_10 = new BlockState(NamespaceID.from("minecraft:water:10"), (short) 44, Block.WATER, "level=10");
+  public static final BlockState WATER_10 = new BlockState(NamespaceID.from("minecraft:water_10"), (short) 44, Block.WATER, "level=10");
 
-  public static final BlockState WATER_11 = new BlockState(NamespaceID.from("minecraft:water:11"), (short) 45, Block.WATER, "level=11");
+  public static final BlockState WATER_11 = new BlockState(NamespaceID.from("minecraft:water_11"), (short) 45, Block.WATER, "level=11");
 
-  public static final BlockState WATER_12 = new BlockState(NamespaceID.from("minecraft:water:12"), (short) 46, Block.WATER, "level=12");
+  public static final BlockState WATER_12 = new BlockState(NamespaceID.from("minecraft:water_12"), (short) 46, Block.WATER, "level=12");
 
-  public static final BlockState WATER_13 = new BlockState(NamespaceID.from("minecraft:water:13"), (short) 47, Block.WATER, "level=13");
+  public static final BlockState WATER_13 = new BlockState(NamespaceID.from("minecraft:water_13"), (short) 47, Block.WATER, "level=13");
 
-  public static final BlockState WATER_14 = new BlockState(NamespaceID.from("minecraft:water:14"), (short) 48, Block.WATER, "level=14");
+  public static final BlockState WATER_14 = new BlockState(NamespaceID.from("minecraft:water_14"), (short) 48, Block.WATER, "level=14");
 
-  public static final BlockState WATER_15 = new BlockState(NamespaceID.from("minecraft:water:15"), (short) 49, Block.WATER, "level=15");
+  public static final BlockState WATER_15 = new BlockState(NamespaceID.from("minecraft:water_15"), (short) 49, Block.WATER, "level=15");
 
   static {
     Registries.registerBlockState(WATER_0);

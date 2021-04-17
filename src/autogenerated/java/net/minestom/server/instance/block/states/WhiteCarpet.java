@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WhiteCarpet {
-  public static final BlockState WHITE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:white_carpet:0"), (short) 7870, Block.WHITE_CARPET);
+  public static final BlockState WHITE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:white_carpet_0"), (short) 7870, Block.WHITE_CARPET);
 
   static {
     Registries.registerBlockState(WHITE_CARPET_0);

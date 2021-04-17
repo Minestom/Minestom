@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class MossyCobblestone {
-  public static final BlockState MOSSY_COBBLESTONE_0 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone:0"), (short) 1433, Block.MOSSY_COBBLESTONE);
+  public static final BlockState MOSSY_COBBLESTONE_0 = new BlockState(NamespaceID.from("minecraft:mossy_cobblestone_0"), (short) 1433, Block.MOSSY_COBBLESTONE);
 
   static {
     Registries.registerBlockState(MOSSY_COBBLESTONE_0);

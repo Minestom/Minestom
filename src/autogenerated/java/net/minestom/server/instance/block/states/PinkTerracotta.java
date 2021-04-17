@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PinkTerracotta {
-  public static final BlockState PINK_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:pink_terracotta:0"), (short) 6857, Block.PINK_TERRACOTTA);
+  public static final BlockState PINK_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:pink_terracotta_0"), (short) 6857, Block.PINK_TERRACOTTA);
 
   static {
     Registries.registerBlockState(PINK_TERRACOTTA_0);

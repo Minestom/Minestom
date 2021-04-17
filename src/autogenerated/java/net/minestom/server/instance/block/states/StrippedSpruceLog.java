@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedSpruceLog {
-  public static final BlockState STRIPPED_SPRUCE_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log:0"), (short) 91, Block.STRIPPED_SPRUCE_LOG, "axis=x");
+  public static final BlockState STRIPPED_SPRUCE_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log_0"), (short) 91, Block.STRIPPED_SPRUCE_LOG, "axis=x");
 
-  public static final BlockState STRIPPED_SPRUCE_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log:1"), (short) 92, Block.STRIPPED_SPRUCE_LOG, "axis=y");
+  public static final BlockState STRIPPED_SPRUCE_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log_1"), (short) 92, Block.STRIPPED_SPRUCE_LOG, "axis=y");
 
-  public static final BlockState STRIPPED_SPRUCE_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log:2"), (short) 93, Block.STRIPPED_SPRUCE_LOG, "axis=z");
+  public static final BlockState STRIPPED_SPRUCE_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_spruce_log_2"), (short) 93, Block.STRIPPED_SPRUCE_LOG, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_SPRUCE_LOG_0);

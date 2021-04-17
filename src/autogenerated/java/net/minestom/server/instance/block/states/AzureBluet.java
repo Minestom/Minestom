@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class AzureBluet {
-  public static final BlockState AZURE_BLUET_0 = new BlockState(NamespaceID.from("minecraft:azure_bluet:0"), (short) 1416, Block.AZURE_BLUET);
+  public static final BlockState AZURE_BLUET_0 = new BlockState(NamespaceID.from("minecraft:azure_bluet_0"), (short) 1416, Block.AZURE_BLUET);
 
   static {
     Registries.registerBlockState(AZURE_BLUET_0);

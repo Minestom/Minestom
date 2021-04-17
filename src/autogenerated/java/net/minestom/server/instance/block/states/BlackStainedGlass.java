@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BlackStainedGlass {
-  public static final BlockState BLACK_STAINED_GLASS_0 = new BlockState(NamespaceID.from("minecraft:black_stained_glass:0"), (short) 4110, Block.BLACK_STAINED_GLASS);
+  public static final BlockState BLACK_STAINED_GLASS_0 = new BlockState(NamespaceID.from("minecraft:black_stained_glass_0"), (short) 4110, Block.BLACK_STAINED_GLASS);
 
   static {
     Registries.registerBlockState(BLACK_STAINED_GLASS_0);

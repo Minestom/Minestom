@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GrayCarpet {
-  public static final BlockState GRAY_CARPET_0 = new BlockState(NamespaceID.from("minecraft:gray_carpet:0"), (short) 7877, Block.GRAY_CARPET);
+  public static final BlockState GRAY_CARPET_0 = new BlockState(NamespaceID.from("minecraft:gray_carpet_0"), (short) 7877, Block.GRAY_CARPET);
 
   static {
     Registries.registerBlockState(GRAY_CARPET_0);

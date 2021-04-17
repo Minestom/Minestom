@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class TubeCoralBlock {
-  public static final BlockState TUBE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:tube_coral_block:0"), (short) 9519, Block.TUBE_CORAL_BLOCK);
+  public static final BlockState TUBE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:tube_coral_block_0"), (short) 9519, Block.TUBE_CORAL_BLOCK);
 
   static {
     Registries.registerBlockState(TUBE_CORAL_BLOCK_0);

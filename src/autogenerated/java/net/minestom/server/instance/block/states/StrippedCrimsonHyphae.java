@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedCrimsonHyphae {
-  public static final BlockState STRIPPED_CRIMSON_HYPHAE_0 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae:0"), (short) 14992, Block.STRIPPED_CRIMSON_HYPHAE, "axis=x");
+  public static final BlockState STRIPPED_CRIMSON_HYPHAE_0 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae_0"), (short) 14992, Block.STRIPPED_CRIMSON_HYPHAE, "axis=x");
 
-  public static final BlockState STRIPPED_CRIMSON_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae:1"), (short) 14993, Block.STRIPPED_CRIMSON_HYPHAE, "axis=y");
+  public static final BlockState STRIPPED_CRIMSON_HYPHAE_1 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae_1"), (short) 14993, Block.STRIPPED_CRIMSON_HYPHAE, "axis=y");
 
-  public static final BlockState STRIPPED_CRIMSON_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae:2"), (short) 14994, Block.STRIPPED_CRIMSON_HYPHAE, "axis=z");
+  public static final BlockState STRIPPED_CRIMSON_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:stripped_crimson_hyphae_2"), (short) 14994, Block.STRIPPED_CRIMSON_HYPHAE, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_CRIMSON_HYPHAE_0);

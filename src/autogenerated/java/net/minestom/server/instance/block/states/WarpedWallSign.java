@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WarpedWallSign {
-  public static final BlockState WARPED_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:0"), (short) 15735, Block.WARPED_WALL_SIGN, "facing=north","waterlogged=true");
+  public static final BlockState WARPED_WALL_SIGN_0 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_0"), (short) 15735, Block.WARPED_WALL_SIGN, "facing=north","waterlogged=true");
 
-  public static final BlockState WARPED_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:1"), (short) 15736, Block.WARPED_WALL_SIGN, "facing=north","waterlogged=false");
+  public static final BlockState WARPED_WALL_SIGN_1 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_1"), (short) 15736, Block.WARPED_WALL_SIGN, "facing=north","waterlogged=false");
 
-  public static final BlockState WARPED_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:2"), (short) 15737, Block.WARPED_WALL_SIGN, "facing=south","waterlogged=true");
+  public static final BlockState WARPED_WALL_SIGN_2 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_2"), (short) 15737, Block.WARPED_WALL_SIGN, "facing=south","waterlogged=true");
 
-  public static final BlockState WARPED_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:3"), (short) 15738, Block.WARPED_WALL_SIGN, "facing=south","waterlogged=false");
+  public static final BlockState WARPED_WALL_SIGN_3 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_3"), (short) 15738, Block.WARPED_WALL_SIGN, "facing=south","waterlogged=false");
 
-  public static final BlockState WARPED_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:4"), (short) 15739, Block.WARPED_WALL_SIGN, "facing=west","waterlogged=true");
+  public static final BlockState WARPED_WALL_SIGN_4 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_4"), (short) 15739, Block.WARPED_WALL_SIGN, "facing=west","waterlogged=true");
 
-  public static final BlockState WARPED_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:5"), (short) 15740, Block.WARPED_WALL_SIGN, "facing=west","waterlogged=false");
+  public static final BlockState WARPED_WALL_SIGN_5 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_5"), (short) 15740, Block.WARPED_WALL_SIGN, "facing=west","waterlogged=false");
 
-  public static final BlockState WARPED_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:6"), (short) 15741, Block.WARPED_WALL_SIGN, "facing=east","waterlogged=true");
+  public static final BlockState WARPED_WALL_SIGN_6 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_6"), (short) 15741, Block.WARPED_WALL_SIGN, "facing=east","waterlogged=true");
 
-  public static final BlockState WARPED_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign:7"), (short) 15742, Block.WARPED_WALL_SIGN, "facing=east","waterlogged=false");
+  public static final BlockState WARPED_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:warped_wall_sign_7"), (short) 15742, Block.WARPED_WALL_SIGN, "facing=east","waterlogged=false");
 
   static {
     Registries.registerBlockState(WARPED_WALL_SIGN_0);

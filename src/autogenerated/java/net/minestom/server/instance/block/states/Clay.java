@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Clay {
-  public static final BlockState CLAY_0 = new BlockState(NamespaceID.from("minecraft:clay:0"), (short) 3947, Block.CLAY);
+  public static final BlockState CLAY_0 = new BlockState(NamespaceID.from("minecraft:clay_0"), (short) 3947, Block.CLAY);
 
   static {
     Registries.registerBlockState(CLAY_0);

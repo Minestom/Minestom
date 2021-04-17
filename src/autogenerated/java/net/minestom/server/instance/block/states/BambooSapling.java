@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BambooSapling {
-  public static final BlockState BAMBOO_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:bamboo_sapling:0"), (short) 9655, Block.BAMBOO_SAPLING);
+  public static final BlockState BAMBOO_SAPLING_0 = new BlockState(NamespaceID.from("minecraft:bamboo_sapling_0"), (short) 9655, Block.BAMBOO_SAPLING);
 
   static {
     Registries.registerBlockState(BAMBOO_SAPLING_0);

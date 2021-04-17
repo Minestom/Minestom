@@ -14,69 +14,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SpruceFence {
-  public static final BlockState SPRUCE_FENCE_0 = new BlockState(NamespaceID.from("minecraft:spruce_fence:0"), (short) 8582, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_0 = new BlockState(NamespaceID.from("minecraft:spruce_fence_0"), (short) 8582, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_1 = new BlockState(NamespaceID.from("minecraft:spruce_fence:1"), (short) 8583, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_1 = new BlockState(NamespaceID.from("minecraft:spruce_fence_1"), (short) 8583, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_2 = new BlockState(NamespaceID.from("minecraft:spruce_fence:2"), (short) 8584, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_2 = new BlockState(NamespaceID.from("minecraft:spruce_fence_2"), (short) 8584, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_3 = new BlockState(NamespaceID.from("minecraft:spruce_fence:3"), (short) 8585, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_3 = new BlockState(NamespaceID.from("minecraft:spruce_fence_3"), (short) 8585, Block.SPRUCE_FENCE, "east=true","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_4 = new BlockState(NamespaceID.from("minecraft:spruce_fence:4"), (short) 8586, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_4 = new BlockState(NamespaceID.from("minecraft:spruce_fence_4"), (short) 8586, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_5 = new BlockState(NamespaceID.from("minecraft:spruce_fence:5"), (short) 8587, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_5 = new BlockState(NamespaceID.from("minecraft:spruce_fence_5"), (short) 8587, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_6 = new BlockState(NamespaceID.from("minecraft:spruce_fence:6"), (short) 8588, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_6 = new BlockState(NamespaceID.from("minecraft:spruce_fence_6"), (short) 8588, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_7 = new BlockState(NamespaceID.from("minecraft:spruce_fence:7"), (short) 8589, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_7 = new BlockState(NamespaceID.from("minecraft:spruce_fence_7"), (short) 8589, Block.SPRUCE_FENCE, "east=true","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_8 = new BlockState(NamespaceID.from("minecraft:spruce_fence:8"), (short) 8590, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_8 = new BlockState(NamespaceID.from("minecraft:spruce_fence_8"), (short) 8590, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_9 = new BlockState(NamespaceID.from("minecraft:spruce_fence:9"), (short) 8591, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_9 = new BlockState(NamespaceID.from("minecraft:spruce_fence_9"), (short) 8591, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_10 = new BlockState(NamespaceID.from("minecraft:spruce_fence:10"), (short) 8592, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_10 = new BlockState(NamespaceID.from("minecraft:spruce_fence_10"), (short) 8592, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_11 = new BlockState(NamespaceID.from("minecraft:spruce_fence:11"), (short) 8593, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_11 = new BlockState(NamespaceID.from("minecraft:spruce_fence_11"), (short) 8593, Block.SPRUCE_FENCE, "east=true","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_12 = new BlockState(NamespaceID.from("minecraft:spruce_fence:12"), (short) 8594, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_12 = new BlockState(NamespaceID.from("minecraft:spruce_fence_12"), (short) 8594, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_13 = new BlockState(NamespaceID.from("minecraft:spruce_fence:13"), (short) 8595, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_13 = new BlockState(NamespaceID.from("minecraft:spruce_fence_13"), (short) 8595, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_14 = new BlockState(NamespaceID.from("minecraft:spruce_fence:14"), (short) 8596, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_14 = new BlockState(NamespaceID.from("minecraft:spruce_fence_14"), (short) 8596, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_15 = new BlockState(NamespaceID.from("minecraft:spruce_fence:15"), (short) 8597, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_15 = new BlockState(NamespaceID.from("minecraft:spruce_fence_15"), (short) 8597, Block.SPRUCE_FENCE, "east=true","north=false","south=false","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_16 = new BlockState(NamespaceID.from("minecraft:spruce_fence:16"), (short) 8598, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_16 = new BlockState(NamespaceID.from("minecraft:spruce_fence_16"), (short) 8598, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_17 = new BlockState(NamespaceID.from("minecraft:spruce_fence:17"), (short) 8599, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_17 = new BlockState(NamespaceID.from("minecraft:spruce_fence_17"), (short) 8599, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_18 = new BlockState(NamespaceID.from("minecraft:spruce_fence:18"), (short) 8600, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_18 = new BlockState(NamespaceID.from("minecraft:spruce_fence_18"), (short) 8600, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_19 = new BlockState(NamespaceID.from("minecraft:spruce_fence:19"), (short) 8601, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_19 = new BlockState(NamespaceID.from("minecraft:spruce_fence_19"), (short) 8601, Block.SPRUCE_FENCE, "east=false","north=true","south=true","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_20 = new BlockState(NamespaceID.from("minecraft:spruce_fence:20"), (short) 8602, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_20 = new BlockState(NamespaceID.from("minecraft:spruce_fence_20"), (short) 8602, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_21 = new BlockState(NamespaceID.from("minecraft:spruce_fence:21"), (short) 8603, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_21 = new BlockState(NamespaceID.from("minecraft:spruce_fence_21"), (short) 8603, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_22 = new BlockState(NamespaceID.from("minecraft:spruce_fence:22"), (short) 8604, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_22 = new BlockState(NamespaceID.from("minecraft:spruce_fence_22"), (short) 8604, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_23 = new BlockState(NamespaceID.from("minecraft:spruce_fence:23"), (short) 8605, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_23 = new BlockState(NamespaceID.from("minecraft:spruce_fence_23"), (short) 8605, Block.SPRUCE_FENCE, "east=false","north=true","south=false","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_24 = new BlockState(NamespaceID.from("minecraft:spruce_fence:24"), (short) 8606, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_24 = new BlockState(NamespaceID.from("minecraft:spruce_fence_24"), (short) 8606, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_25 = new BlockState(NamespaceID.from("minecraft:spruce_fence:25"), (short) 8607, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_25 = new BlockState(NamespaceID.from("minecraft:spruce_fence_25"), (short) 8607, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_26 = new BlockState(NamespaceID.from("minecraft:spruce_fence:26"), (short) 8608, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_26 = new BlockState(NamespaceID.from("minecraft:spruce_fence_26"), (short) 8608, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_27 = new BlockState(NamespaceID.from("minecraft:spruce_fence:27"), (short) 8609, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_27 = new BlockState(NamespaceID.from("minecraft:spruce_fence_27"), (short) 8609, Block.SPRUCE_FENCE, "east=false","north=false","south=true","waterlogged=false","west=false");
 
-  public static final BlockState SPRUCE_FENCE_28 = new BlockState(NamespaceID.from("minecraft:spruce_fence:28"), (short) 8610, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=true","west=true");
+  public static final BlockState SPRUCE_FENCE_28 = new BlockState(NamespaceID.from("minecraft:spruce_fence_28"), (short) 8610, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=true","west=true");
 
-  public static final BlockState SPRUCE_FENCE_29 = new BlockState(NamespaceID.from("minecraft:spruce_fence:29"), (short) 8611, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=true","west=false");
+  public static final BlockState SPRUCE_FENCE_29 = new BlockState(NamespaceID.from("minecraft:spruce_fence_29"), (short) 8611, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=true","west=false");
 
-  public static final BlockState SPRUCE_FENCE_30 = new BlockState(NamespaceID.from("minecraft:spruce_fence:30"), (short) 8612, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
+  public static final BlockState SPRUCE_FENCE_30 = new BlockState(NamespaceID.from("minecraft:spruce_fence_30"), (short) 8612, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=true");
 
-  public static final BlockState SPRUCE_FENCE_31 = new BlockState(NamespaceID.from("minecraft:spruce_fence:31"), (short) 8613, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
+  public static final BlockState SPRUCE_FENCE_31 = new BlockState(NamespaceID.from("minecraft:spruce_fence_31"), (short) 8613, Block.SPRUCE_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   static {
     Registries.registerBlockState(SPRUCE_FENCE_0);

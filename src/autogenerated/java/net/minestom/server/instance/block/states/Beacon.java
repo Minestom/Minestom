@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Beacon {
-  public static final BlockState BEACON_0 = new BlockState(NamespaceID.from("minecraft:beacon:0"), (short) 5660, Block.BEACON);
+  public static final BlockState BEACON_0 = new BlockState(NamespaceID.from("minecraft:beacon_0"), (short) 5660, Block.BEACON);
 
   static {
     Registries.registerBlockState(BEACON_0);

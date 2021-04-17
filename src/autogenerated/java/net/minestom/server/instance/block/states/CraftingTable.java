@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CraftingTable {
-  public static final BlockState CRAFTING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:crafting_table:0"), (short) 3356, Block.CRAFTING_TABLE);
+  public static final BlockState CRAFTING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:crafting_table_0"), (short) 3356, Block.CRAFTING_TABLE);
 
   static {
     Registries.registerBlockState(CRAFTING_TABLE_0);

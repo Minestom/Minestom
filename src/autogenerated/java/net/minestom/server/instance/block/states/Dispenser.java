@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Dispenser {
-  public static final BlockState DISPENSER_0 = new BlockState(NamespaceID.from("minecraft:dispenser:0"), (short) 234, Block.DISPENSER, "facing=north","triggered=true");
+  public static final BlockState DISPENSER_0 = new BlockState(NamespaceID.from("minecraft:dispenser_0"), (short) 234, Block.DISPENSER, "facing=north","triggered=true");
 
-  public static final BlockState DISPENSER_1 = new BlockState(NamespaceID.from("minecraft:dispenser:1"), (short) 235, Block.DISPENSER, "facing=north","triggered=false");
+  public static final BlockState DISPENSER_1 = new BlockState(NamespaceID.from("minecraft:dispenser_1"), (short) 235, Block.DISPENSER, "facing=north","triggered=false");
 
-  public static final BlockState DISPENSER_2 = new BlockState(NamespaceID.from("minecraft:dispenser:2"), (short) 236, Block.DISPENSER, "facing=east","triggered=true");
+  public static final BlockState DISPENSER_2 = new BlockState(NamespaceID.from("minecraft:dispenser_2"), (short) 236, Block.DISPENSER, "facing=east","triggered=true");
 
-  public static final BlockState DISPENSER_3 = new BlockState(NamespaceID.from("minecraft:dispenser:3"), (short) 237, Block.DISPENSER, "facing=east","triggered=false");
+  public static final BlockState DISPENSER_3 = new BlockState(NamespaceID.from("minecraft:dispenser_3"), (short) 237, Block.DISPENSER, "facing=east","triggered=false");
 
-  public static final BlockState DISPENSER_4 = new BlockState(NamespaceID.from("minecraft:dispenser:4"), (short) 238, Block.DISPENSER, "facing=south","triggered=true");
+  public static final BlockState DISPENSER_4 = new BlockState(NamespaceID.from("minecraft:dispenser_4"), (short) 238, Block.DISPENSER, "facing=south","triggered=true");
 
-  public static final BlockState DISPENSER_5 = new BlockState(NamespaceID.from("minecraft:dispenser:5"), (short) 239, Block.DISPENSER, "facing=south","triggered=false");
+  public static final BlockState DISPENSER_5 = new BlockState(NamespaceID.from("minecraft:dispenser_5"), (short) 239, Block.DISPENSER, "facing=south","triggered=false");
 
-  public static final BlockState DISPENSER_6 = new BlockState(NamespaceID.from("minecraft:dispenser:6"), (short) 240, Block.DISPENSER, "facing=west","triggered=true");
+  public static final BlockState DISPENSER_6 = new BlockState(NamespaceID.from("minecraft:dispenser_6"), (short) 240, Block.DISPENSER, "facing=west","triggered=true");
 
-  public static final BlockState DISPENSER_7 = new BlockState(NamespaceID.from("minecraft:dispenser:7"), (short) 241, Block.DISPENSER, "facing=west","triggered=false");
+  public static final BlockState DISPENSER_7 = new BlockState(NamespaceID.from("minecraft:dispenser_7"), (short) 241, Block.DISPENSER, "facing=west","triggered=false");
 
-  public static final BlockState DISPENSER_8 = new BlockState(NamespaceID.from("minecraft:dispenser:8"), (short) 242, Block.DISPENSER, "facing=up","triggered=true");
+  public static final BlockState DISPENSER_8 = new BlockState(NamespaceID.from("minecraft:dispenser_8"), (short) 242, Block.DISPENSER, "facing=up","triggered=true");
 
-  public static final BlockState DISPENSER_9 = new BlockState(NamespaceID.from("minecraft:dispenser:9"), (short) 243, Block.DISPENSER, "facing=up","triggered=false");
+  public static final BlockState DISPENSER_9 = new BlockState(NamespaceID.from("minecraft:dispenser_9"), (short) 243, Block.DISPENSER, "facing=up","triggered=false");
 
-  public static final BlockState DISPENSER_10 = new BlockState(NamespaceID.from("minecraft:dispenser:10"), (short) 244, Block.DISPENSER, "facing=down","triggered=true");
+  public static final BlockState DISPENSER_10 = new BlockState(NamespaceID.from("minecraft:dispenser_10"), (short) 244, Block.DISPENSER, "facing=down","triggered=true");
 
-  public static final BlockState DISPENSER_11 = new BlockState(NamespaceID.from("minecraft:dispenser:11"), (short) 245, Block.DISPENSER, "facing=down","triggered=false");
+  public static final BlockState DISPENSER_11 = new BlockState(NamespaceID.from("minecraft:dispenser_11"), (short) 245, Block.DISPENSER, "facing=down","triggered=false");
 
   static {
     Registries.registerBlockState(DISPENSER_0);

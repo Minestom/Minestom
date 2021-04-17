@@ -14,165 +14,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleStairs {
-  public static final BlockState JUNGLE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:0"), (short) 5568, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_0"), (short) 5568, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:1"), (short) 5569, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_1"), (short) 5569, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:2"), (short) 5570, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_2"), (short) 5570, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:3"), (short) 5571, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_3"), (short) 5571, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:4"), (short) 5572, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_4"), (short) 5572, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:5"), (short) 5573, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_5"), (short) 5573, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:6"), (short) 5574, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_6"), (short) 5574, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:7"), (short) 5575, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_7"), (short) 5575, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:8"), (short) 5576, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_8"), (short) 5576, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:9"), (short) 5577, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_9"), (short) 5577, Block.JUNGLE_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:10"), (short) 5578, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_10"), (short) 5578, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:11"), (short) 5579, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_11"), (short) 5579, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:12"), (short) 5580, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_12"), (short) 5580, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:13"), (short) 5581, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_13"), (short) 5581, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:14"), (short) 5582, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_14"), (short) 5582, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:15"), (short) 5583, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_15"), (short) 5583, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:16"), (short) 5584, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_16"), (short) 5584, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:17"), (short) 5585, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_17"), (short) 5585, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:18"), (short) 5586, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_18"), (short) 5586, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:19"), (short) 5587, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_19"), (short) 5587, Block.JUNGLE_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:20"), (short) 5588, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_20"), (short) 5588, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:21"), (short) 5589, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_21"), (short) 5589, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:22"), (short) 5590, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_22"), (short) 5590, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:23"), (short) 5591, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_23"), (short) 5591, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:24"), (short) 5592, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_24"), (short) 5592, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:25"), (short) 5593, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_25"), (short) 5593, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:26"), (short) 5594, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_26"), (short) 5594, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:27"), (short) 5595, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_27"), (short) 5595, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:28"), (short) 5596, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_28"), (short) 5596, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:29"), (short) 5597, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_29"), (short) 5597, Block.JUNGLE_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:30"), (short) 5598, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_30"), (short) 5598, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:31"), (short) 5599, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_31"), (short) 5599, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:32"), (short) 5600, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_32"), (short) 5600, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:33"), (short) 5601, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_33"), (short) 5601, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:34"), (short) 5602, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_34"), (short) 5602, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:35"), (short) 5603, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_35"), (short) 5603, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:36"), (short) 5604, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_36"), (short) 5604, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:37"), (short) 5605, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_37"), (short) 5605, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:38"), (short) 5606, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_38"), (short) 5606, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:39"), (short) 5607, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_39"), (short) 5607, Block.JUNGLE_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:40"), (short) 5608, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_40"), (short) 5608, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:41"), (short) 5609, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_41"), (short) 5609, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:42"), (short) 5610, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_42"), (short) 5610, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:43"), (short) 5611, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_43"), (short) 5611, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:44"), (short) 5612, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_44"), (short) 5612, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:45"), (short) 5613, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_45"), (short) 5613, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:46"), (short) 5614, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_46"), (short) 5614, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:47"), (short) 5615, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_47"), (short) 5615, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:48"), (short) 5616, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_48"), (short) 5616, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:49"), (short) 5617, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_49"), (short) 5617, Block.JUNGLE_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:50"), (short) 5618, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_50"), (short) 5618, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:51"), (short) 5619, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_51"), (short) 5619, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:52"), (short) 5620, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_52"), (short) 5620, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:53"), (short) 5621, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_53"), (short) 5621, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:54"), (short) 5622, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_54"), (short) 5622, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:55"), (short) 5623, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_55"), (short) 5623, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:56"), (short) 5624, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_56"), (short) 5624, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:57"), (short) 5625, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_57"), (short) 5625, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:58"), (short) 5626, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_58"), (short) 5626, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:59"), (short) 5627, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_59"), (short) 5627, Block.JUNGLE_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:60"), (short) 5628, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_60"), (short) 5628, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:61"), (short) 5629, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_61"), (short) 5629, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:62"), (short) 5630, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_62"), (short) 5630, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:63"), (short) 5631, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_63"), (short) 5631, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:64"), (short) 5632, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_64"), (short) 5632, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:65"), (short) 5633, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_65"), (short) 5633, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:66"), (short) 5634, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_66"), (short) 5634, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:67"), (short) 5635, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_67"), (short) 5635, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:68"), (short) 5636, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_68"), (short) 5636, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:69"), (short) 5637, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_69"), (short) 5637, Block.JUNGLE_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:70"), (short) 5638, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_70"), (short) 5638, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:71"), (short) 5639, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_71"), (short) 5639, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:72"), (short) 5640, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_72"), (short) 5640, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:73"), (short) 5641, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_73"), (short) 5641, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:74"), (short) 5642, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_74"), (short) 5642, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:75"), (short) 5643, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_75"), (short) 5643, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:76"), (short) 5644, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_76"), (short) 5644, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:77"), (short) 5645, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_77"), (short) 5645, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState JUNGLE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:78"), (short) 5646, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState JUNGLE_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_78"), (short) 5646, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState JUNGLE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:jungle_stairs:79"), (short) 5647, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState JUNGLE_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:jungle_stairs_79"), (short) 5647, Block.JUNGLE_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   static {
     Registries.registerBlockState(JUNGLE_STAIRS_0);

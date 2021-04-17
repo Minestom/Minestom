@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedWarpedStem {
-  public static final BlockState STRIPPED_WARPED_STEM_0 = new BlockState(NamespaceID.from("minecraft:stripped_warped_stem:0"), (short) 14969, Block.STRIPPED_WARPED_STEM, "axis=x");
+  public static final BlockState STRIPPED_WARPED_STEM_0 = new BlockState(NamespaceID.from("minecraft:stripped_warped_stem_0"), (short) 14969, Block.STRIPPED_WARPED_STEM, "axis=x");
 
-  public static final BlockState STRIPPED_WARPED_STEM_1 = new BlockState(NamespaceID.from("minecraft:stripped_warped_stem:1"), (short) 14970, Block.STRIPPED_WARPED_STEM, "axis=y");
+  public static final BlockState STRIPPED_WARPED_STEM_1 = new BlockState(NamespaceID.from("minecraft:stripped_warped_stem_1"), (short) 14970, Block.STRIPPED_WARPED_STEM, "axis=y");
 
-  public static final BlockState STRIPPED_WARPED_STEM_2 = new BlockState(NamespaceID.from("minecraft:stripped_warped_stem:2"), (short) 14971, Block.STRIPPED_WARPED_STEM, "axis=z");
+  public static final BlockState STRIPPED_WARPED_STEM_2 = new BlockState(NamespaceID.from("minecraft:stripped_warped_stem_2"), (short) 14971, Block.STRIPPED_WARPED_STEM, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_WARPED_STEM_0);

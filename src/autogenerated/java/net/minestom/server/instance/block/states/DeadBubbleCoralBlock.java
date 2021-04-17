@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DeadBubbleCoralBlock {
-  public static final BlockState DEAD_BUBBLE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_block:0"), (short) 9516, Block.DEAD_BUBBLE_CORAL_BLOCK);
+  public static final BlockState DEAD_BUBBLE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:dead_bubble_coral_block_0"), (short) 9516, Block.DEAD_BUBBLE_CORAL_BLOCK);
 
   static {
     Registries.registerBlockState(DEAD_BUBBLE_CORAL_BLOCK_0);

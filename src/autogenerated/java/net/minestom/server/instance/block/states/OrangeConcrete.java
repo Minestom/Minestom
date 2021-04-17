@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OrangeConcrete {
-  public static final BlockState ORANGE_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:orange_concrete:0"), (short) 9443, Block.ORANGE_CONCRETE);
+  public static final BlockState ORANGE_CONCRETE_0 = new BlockState(NamespaceID.from("minecraft:orange_concrete_0"), (short) 9443, Block.ORANGE_CONCRETE);
 
   static {
     Registries.registerBlockState(ORANGE_CONCRETE_0);

@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class QuartzPillar {
-  public static final BlockState QUARTZ_PILLAR_0 = new BlockState(NamespaceID.from("minecraft:quartz_pillar:0"), (short) 6744, Block.QUARTZ_PILLAR, "axis=x");
+  public static final BlockState QUARTZ_PILLAR_0 = new BlockState(NamespaceID.from("minecraft:quartz_pillar_0"), (short) 6744, Block.QUARTZ_PILLAR, "axis=x");
 
-  public static final BlockState QUARTZ_PILLAR_1 = new BlockState(NamespaceID.from("minecraft:quartz_pillar:1"), (short) 6745, Block.QUARTZ_PILLAR, "axis=y");
+  public static final BlockState QUARTZ_PILLAR_1 = new BlockState(NamespaceID.from("minecraft:quartz_pillar_1"), (short) 6745, Block.QUARTZ_PILLAR, "axis=y");
 
-  public static final BlockState QUARTZ_PILLAR_2 = new BlockState(NamespaceID.from("minecraft:quartz_pillar:2"), (short) 6746, Block.QUARTZ_PILLAR, "axis=z");
+  public static final BlockState QUARTZ_PILLAR_2 = new BlockState(NamespaceID.from("minecraft:quartz_pillar_2"), (short) 6746, Block.QUARTZ_PILLAR, "axis=z");
 
   static {
     Registries.registerBlockState(QUARTZ_PILLAR_0);

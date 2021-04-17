@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonNylium {
-  public static final BlockState CRIMSON_NYLIUM_0 = new BlockState(NamespaceID.from("minecraft:crimson_nylium:0"), (short) 14995, Block.CRIMSON_NYLIUM);
+  public static final BlockState CRIMSON_NYLIUM_0 = new BlockState(NamespaceID.from("minecraft:crimson_nylium_0"), (short) 14995, Block.CRIMSON_NYLIUM);
 
   static {
     Registries.registerBlockState(CRIMSON_NYLIUM_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CyanCarpet {
-  public static final BlockState CYAN_CARPET_0 = new BlockState(NamespaceID.from("minecraft:cyan_carpet:0"), (short) 7879, Block.CYAN_CARPET);
+  public static final BlockState CYAN_CARPET_0 = new BlockState(NamespaceID.from("minecraft:cyan_carpet_0"), (short) 7879, Block.CYAN_CARPET);
 
   static {
     Registries.registerBlockState(CYAN_CARPET_0);

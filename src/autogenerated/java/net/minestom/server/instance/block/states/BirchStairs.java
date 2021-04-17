@@ -14,165 +14,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BirchStairs {
-  public static final BlockState BIRCH_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:birch_stairs:0"), (short) 5488, Block.BIRCH_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:birch_stairs_0"), (short) 5488, Block.BIRCH_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:birch_stairs:1"), (short) 5489, Block.BIRCH_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:birch_stairs_1"), (short) 5489, Block.BIRCH_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:birch_stairs:2"), (short) 5490, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:birch_stairs_2"), (short) 5490, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:birch_stairs:3"), (short) 5491, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:birch_stairs_3"), (short) 5491, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:birch_stairs:4"), (short) 5492, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:birch_stairs_4"), (short) 5492, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:birch_stairs:5"), (short) 5493, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:birch_stairs_5"), (short) 5493, Block.BIRCH_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:birch_stairs:6"), (short) 5494, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:birch_stairs_6"), (short) 5494, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:birch_stairs:7"), (short) 5495, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:birch_stairs_7"), (short) 5495, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:birch_stairs:8"), (short) 5496, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:birch_stairs_8"), (short) 5496, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:birch_stairs:9"), (short) 5497, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:birch_stairs_9"), (short) 5497, Block.BIRCH_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:birch_stairs:10"), (short) 5498, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:birch_stairs_10"), (short) 5498, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:birch_stairs:11"), (short) 5499, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:birch_stairs_11"), (short) 5499, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:birch_stairs:12"), (short) 5500, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:birch_stairs_12"), (short) 5500, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:birch_stairs:13"), (short) 5501, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:birch_stairs_13"), (short) 5501, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:birch_stairs:14"), (short) 5502, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:birch_stairs_14"), (short) 5502, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:birch_stairs:15"), (short) 5503, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:birch_stairs_15"), (short) 5503, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:birch_stairs:16"), (short) 5504, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:birch_stairs_16"), (short) 5504, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:birch_stairs:17"), (short) 5505, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:birch_stairs_17"), (short) 5505, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:birch_stairs:18"), (short) 5506, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:birch_stairs_18"), (short) 5506, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:birch_stairs:19"), (short) 5507, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:birch_stairs_19"), (short) 5507, Block.BIRCH_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:birch_stairs:20"), (short) 5508, Block.BIRCH_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:birch_stairs_20"), (short) 5508, Block.BIRCH_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:birch_stairs:21"), (short) 5509, Block.BIRCH_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:birch_stairs_21"), (short) 5509, Block.BIRCH_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:birch_stairs:22"), (short) 5510, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:birch_stairs_22"), (short) 5510, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:birch_stairs:23"), (short) 5511, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:birch_stairs_23"), (short) 5511, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:birch_stairs:24"), (short) 5512, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:birch_stairs_24"), (short) 5512, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:birch_stairs:25"), (short) 5513, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:birch_stairs_25"), (short) 5513, Block.BIRCH_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:birch_stairs:26"), (short) 5514, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:birch_stairs_26"), (short) 5514, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:birch_stairs:27"), (short) 5515, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:birch_stairs_27"), (short) 5515, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:birch_stairs:28"), (short) 5516, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:birch_stairs_28"), (short) 5516, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:birch_stairs:29"), (short) 5517, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:birch_stairs_29"), (short) 5517, Block.BIRCH_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:birch_stairs:30"), (short) 5518, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:birch_stairs_30"), (short) 5518, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:birch_stairs:31"), (short) 5519, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:birch_stairs_31"), (short) 5519, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:birch_stairs:32"), (short) 5520, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:birch_stairs_32"), (short) 5520, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:birch_stairs:33"), (short) 5521, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:birch_stairs_33"), (short) 5521, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:birch_stairs:34"), (short) 5522, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:birch_stairs_34"), (short) 5522, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:birch_stairs:35"), (short) 5523, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:birch_stairs_35"), (short) 5523, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:birch_stairs:36"), (short) 5524, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:birch_stairs_36"), (short) 5524, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:birch_stairs:37"), (short) 5525, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:birch_stairs_37"), (short) 5525, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:birch_stairs:38"), (short) 5526, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:birch_stairs_38"), (short) 5526, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:birch_stairs:39"), (short) 5527, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:birch_stairs_39"), (short) 5527, Block.BIRCH_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:birch_stairs:40"), (short) 5528, Block.BIRCH_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:birch_stairs_40"), (short) 5528, Block.BIRCH_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:birch_stairs:41"), (short) 5529, Block.BIRCH_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:birch_stairs_41"), (short) 5529, Block.BIRCH_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:birch_stairs:42"), (short) 5530, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:birch_stairs_42"), (short) 5530, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:birch_stairs:43"), (short) 5531, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:birch_stairs_43"), (short) 5531, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:birch_stairs:44"), (short) 5532, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:birch_stairs_44"), (short) 5532, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:birch_stairs:45"), (short) 5533, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:birch_stairs_45"), (short) 5533, Block.BIRCH_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:birch_stairs:46"), (short) 5534, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:birch_stairs_46"), (short) 5534, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:birch_stairs:47"), (short) 5535, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:birch_stairs_47"), (short) 5535, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:birch_stairs:48"), (short) 5536, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:birch_stairs_48"), (short) 5536, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:birch_stairs:49"), (short) 5537, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:birch_stairs_49"), (short) 5537, Block.BIRCH_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:birch_stairs:50"), (short) 5538, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:birch_stairs_50"), (short) 5538, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:birch_stairs:51"), (short) 5539, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:birch_stairs_51"), (short) 5539, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:birch_stairs:52"), (short) 5540, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:birch_stairs_52"), (short) 5540, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:birch_stairs:53"), (short) 5541, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:birch_stairs_53"), (short) 5541, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:birch_stairs:54"), (short) 5542, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:birch_stairs_54"), (short) 5542, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:birch_stairs:55"), (short) 5543, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:birch_stairs_55"), (short) 5543, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:birch_stairs:56"), (short) 5544, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:birch_stairs_56"), (short) 5544, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:birch_stairs:57"), (short) 5545, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:birch_stairs_57"), (short) 5545, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:birch_stairs:58"), (short) 5546, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:birch_stairs_58"), (short) 5546, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:birch_stairs:59"), (short) 5547, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:birch_stairs_59"), (short) 5547, Block.BIRCH_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:birch_stairs:60"), (short) 5548, Block.BIRCH_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:birch_stairs_60"), (short) 5548, Block.BIRCH_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:birch_stairs:61"), (short) 5549, Block.BIRCH_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:birch_stairs_61"), (short) 5549, Block.BIRCH_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:birch_stairs:62"), (short) 5550, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:birch_stairs_62"), (short) 5550, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:birch_stairs:63"), (short) 5551, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:birch_stairs_63"), (short) 5551, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:birch_stairs:64"), (short) 5552, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:birch_stairs_64"), (short) 5552, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:birch_stairs:65"), (short) 5553, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:birch_stairs_65"), (short) 5553, Block.BIRCH_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:birch_stairs:66"), (short) 5554, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:birch_stairs_66"), (short) 5554, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:birch_stairs:67"), (short) 5555, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:birch_stairs_67"), (short) 5555, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:birch_stairs:68"), (short) 5556, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:birch_stairs_68"), (short) 5556, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:birch_stairs:69"), (short) 5557, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:birch_stairs_69"), (short) 5557, Block.BIRCH_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:birch_stairs:70"), (short) 5558, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:birch_stairs_70"), (short) 5558, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:birch_stairs:71"), (short) 5559, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:birch_stairs_71"), (short) 5559, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:birch_stairs:72"), (short) 5560, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:birch_stairs_72"), (short) 5560, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:birch_stairs:73"), (short) 5561, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:birch_stairs_73"), (short) 5561, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:birch_stairs:74"), (short) 5562, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:birch_stairs_74"), (short) 5562, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:birch_stairs:75"), (short) 5563, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:birch_stairs_75"), (short) 5563, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:birch_stairs:76"), (short) 5564, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:birch_stairs_76"), (short) 5564, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:birch_stairs:77"), (short) 5565, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:birch_stairs_77"), (short) 5565, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState BIRCH_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:birch_stairs:78"), (short) 5566, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState BIRCH_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:birch_stairs_78"), (short) 5566, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState BIRCH_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:birch_stairs:79"), (short) 5567, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState BIRCH_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:birch_stairs_79"), (short) 5567, Block.BIRCH_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   static {
     Registries.registerBlockState(BIRCH_STAIRS_0);

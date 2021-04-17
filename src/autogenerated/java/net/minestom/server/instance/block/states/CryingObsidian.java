@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CryingObsidian {
-  public static final BlockState CRYING_OBSIDIAN_0 = new BlockState(NamespaceID.from("minecraft:crying_obsidian:0"), (short) 15836, Block.CRYING_OBSIDIAN);
+  public static final BlockState CRYING_OBSIDIAN_0 = new BlockState(NamespaceID.from("minecraft:crying_obsidian_0"), (short) 15836, Block.CRYING_OBSIDIAN);
 
   static {
     Registries.registerBlockState(CRYING_OBSIDIAN_0);

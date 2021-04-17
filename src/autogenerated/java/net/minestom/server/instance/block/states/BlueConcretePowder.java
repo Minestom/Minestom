@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BlueConcretePowder {
-  public static final BlockState BLUE_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:blue_concrete_powder:0"), (short) 9469, Block.BLUE_CONCRETE_POWDER);
+  public static final BlockState BLUE_CONCRETE_POWDER_0 = new BlockState(NamespaceID.from("minecraft:blue_concrete_powder_0"), (short) 9469, Block.BLUE_CONCRETE_POWDER);
 
   static {
     Registries.registerBlockState(BLUE_CONCRETE_POWDER_0);

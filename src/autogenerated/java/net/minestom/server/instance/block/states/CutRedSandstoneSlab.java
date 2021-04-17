@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CutRedSandstoneSlab {
-  public static final BlockState CUT_RED_SANDSTONE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab:0"), (short) 8406, Block.CUT_RED_SANDSTONE_SLAB, "type=top","waterlogged=true");
+  public static final BlockState CUT_RED_SANDSTONE_SLAB_0 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab_0"), (short) 8406, Block.CUT_RED_SANDSTONE_SLAB, "type=top","waterlogged=true");
 
-  public static final BlockState CUT_RED_SANDSTONE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab:1"), (short) 8407, Block.CUT_RED_SANDSTONE_SLAB, "type=top","waterlogged=false");
+  public static final BlockState CUT_RED_SANDSTONE_SLAB_1 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab_1"), (short) 8407, Block.CUT_RED_SANDSTONE_SLAB, "type=top","waterlogged=false");
 
-  public static final BlockState CUT_RED_SANDSTONE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab:2"), (short) 8408, Block.CUT_RED_SANDSTONE_SLAB, "type=bottom","waterlogged=true");
+  public static final BlockState CUT_RED_SANDSTONE_SLAB_2 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab_2"), (short) 8408, Block.CUT_RED_SANDSTONE_SLAB, "type=bottom","waterlogged=true");
 
-  public static final BlockState CUT_RED_SANDSTONE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab:3"), (short) 8409, Block.CUT_RED_SANDSTONE_SLAB, "type=bottom","waterlogged=false");
+  public static final BlockState CUT_RED_SANDSTONE_SLAB_3 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab_3"), (short) 8409, Block.CUT_RED_SANDSTONE_SLAB, "type=bottom","waterlogged=false");
 
-  public static final BlockState CUT_RED_SANDSTONE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab:4"), (short) 8410, Block.CUT_RED_SANDSTONE_SLAB, "type=double","waterlogged=true");
+  public static final BlockState CUT_RED_SANDSTONE_SLAB_4 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab_4"), (short) 8410, Block.CUT_RED_SANDSTONE_SLAB, "type=double","waterlogged=true");
 
-  public static final BlockState CUT_RED_SANDSTONE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab:5"), (short) 8411, Block.CUT_RED_SANDSTONE_SLAB, "type=double","waterlogged=false");
+  public static final BlockState CUT_RED_SANDSTONE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:cut_red_sandstone_slab_5"), (short) 8411, Block.CUT_RED_SANDSTONE_SLAB, "type=double","waterlogged=false");
 
   static {
     Registries.registerBlockState(CUT_RED_SANDSTONE_SLAB_0);

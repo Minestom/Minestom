@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BrownMushroom {
-  public static final BlockState BROWN_MUSHROOM_0 = new BlockState(NamespaceID.from("minecraft:brown_mushroom:0"), (short) 1425, Block.BROWN_MUSHROOM);
+  public static final BlockState BROWN_MUSHROOM_0 = new BlockState(NamespaceID.from("minecraft:brown_mushroom_0"), (short) 1425, Block.BROWN_MUSHROOM);
 
   static {
     Registries.registerBlockState(BROWN_MUSHROOM_0);

@@ -14,69 +14,69 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Bell {
-  public static final BlockState BELL_0 = new BlockState(NamespaceID.from("minecraft:bell:0"), (short) 14858, Block.BELL, "attachment=FLOOR","facing=north","powered=true");
+  public static final BlockState BELL_0 = new BlockState(NamespaceID.from("minecraft:bell_0"), (short) 14858, Block.BELL, "attachment=FLOOR","facing=north","powered=true");
 
-  public static final BlockState BELL_1 = new BlockState(NamespaceID.from("minecraft:bell:1"), (short) 14859, Block.BELL, "attachment=FLOOR","facing=north","powered=false");
+  public static final BlockState BELL_1 = new BlockState(NamespaceID.from("minecraft:bell_1"), (short) 14859, Block.BELL, "attachment=FLOOR","facing=north","powered=false");
 
-  public static final BlockState BELL_2 = new BlockState(NamespaceID.from("minecraft:bell:2"), (short) 14860, Block.BELL, "attachment=FLOOR","facing=south","powered=true");
+  public static final BlockState BELL_2 = new BlockState(NamespaceID.from("minecraft:bell_2"), (short) 14860, Block.BELL, "attachment=FLOOR","facing=south","powered=true");
 
-  public static final BlockState BELL_3 = new BlockState(NamespaceID.from("minecraft:bell:3"), (short) 14861, Block.BELL, "attachment=FLOOR","facing=south","powered=false");
+  public static final BlockState BELL_3 = new BlockState(NamespaceID.from("minecraft:bell_3"), (short) 14861, Block.BELL, "attachment=FLOOR","facing=south","powered=false");
 
-  public static final BlockState BELL_4 = new BlockState(NamespaceID.from("minecraft:bell:4"), (short) 14862, Block.BELL, "attachment=FLOOR","facing=west","powered=true");
+  public static final BlockState BELL_4 = new BlockState(NamespaceID.from("minecraft:bell_4"), (short) 14862, Block.BELL, "attachment=FLOOR","facing=west","powered=true");
 
-  public static final BlockState BELL_5 = new BlockState(NamespaceID.from("minecraft:bell:5"), (short) 14863, Block.BELL, "attachment=FLOOR","facing=west","powered=false");
+  public static final BlockState BELL_5 = new BlockState(NamespaceID.from("minecraft:bell_5"), (short) 14863, Block.BELL, "attachment=FLOOR","facing=west","powered=false");
 
-  public static final BlockState BELL_6 = new BlockState(NamespaceID.from("minecraft:bell:6"), (short) 14864, Block.BELL, "attachment=FLOOR","facing=east","powered=true");
+  public static final BlockState BELL_6 = new BlockState(NamespaceID.from("minecraft:bell_6"), (short) 14864, Block.BELL, "attachment=FLOOR","facing=east","powered=true");
 
-  public static final BlockState BELL_7 = new BlockState(NamespaceID.from("minecraft:bell:7"), (short) 14865, Block.BELL, "attachment=FLOOR","facing=east","powered=false");
+  public static final BlockState BELL_7 = new BlockState(NamespaceID.from("minecraft:bell_7"), (short) 14865, Block.BELL, "attachment=FLOOR","facing=east","powered=false");
 
-  public static final BlockState BELL_8 = new BlockState(NamespaceID.from("minecraft:bell:8"), (short) 14866, Block.BELL, "attachment=CEILING","facing=north","powered=true");
+  public static final BlockState BELL_8 = new BlockState(NamespaceID.from("minecraft:bell_8"), (short) 14866, Block.BELL, "attachment=CEILING","facing=north","powered=true");
 
-  public static final BlockState BELL_9 = new BlockState(NamespaceID.from("minecraft:bell:9"), (short) 14867, Block.BELL, "attachment=CEILING","facing=north","powered=false");
+  public static final BlockState BELL_9 = new BlockState(NamespaceID.from("minecraft:bell_9"), (short) 14867, Block.BELL, "attachment=CEILING","facing=north","powered=false");
 
-  public static final BlockState BELL_10 = new BlockState(NamespaceID.from("minecraft:bell:10"), (short) 14868, Block.BELL, "attachment=CEILING","facing=south","powered=true");
+  public static final BlockState BELL_10 = new BlockState(NamespaceID.from("minecraft:bell_10"), (short) 14868, Block.BELL, "attachment=CEILING","facing=south","powered=true");
 
-  public static final BlockState BELL_11 = new BlockState(NamespaceID.from("minecraft:bell:11"), (short) 14869, Block.BELL, "attachment=CEILING","facing=south","powered=false");
+  public static final BlockState BELL_11 = new BlockState(NamespaceID.from("minecraft:bell_11"), (short) 14869, Block.BELL, "attachment=CEILING","facing=south","powered=false");
 
-  public static final BlockState BELL_12 = new BlockState(NamespaceID.from("minecraft:bell:12"), (short) 14870, Block.BELL, "attachment=CEILING","facing=west","powered=true");
+  public static final BlockState BELL_12 = new BlockState(NamespaceID.from("minecraft:bell_12"), (short) 14870, Block.BELL, "attachment=CEILING","facing=west","powered=true");
 
-  public static final BlockState BELL_13 = new BlockState(NamespaceID.from("minecraft:bell:13"), (short) 14871, Block.BELL, "attachment=CEILING","facing=west","powered=false");
+  public static final BlockState BELL_13 = new BlockState(NamespaceID.from("minecraft:bell_13"), (short) 14871, Block.BELL, "attachment=CEILING","facing=west","powered=false");
 
-  public static final BlockState BELL_14 = new BlockState(NamespaceID.from("minecraft:bell:14"), (short) 14872, Block.BELL, "attachment=CEILING","facing=east","powered=true");
+  public static final BlockState BELL_14 = new BlockState(NamespaceID.from("minecraft:bell_14"), (short) 14872, Block.BELL, "attachment=CEILING","facing=east","powered=true");
 
-  public static final BlockState BELL_15 = new BlockState(NamespaceID.from("minecraft:bell:15"), (short) 14873, Block.BELL, "attachment=CEILING","facing=east","powered=false");
+  public static final BlockState BELL_15 = new BlockState(NamespaceID.from("minecraft:bell_15"), (short) 14873, Block.BELL, "attachment=CEILING","facing=east","powered=false");
 
-  public static final BlockState BELL_16 = new BlockState(NamespaceID.from("minecraft:bell:16"), (short) 14874, Block.BELL, "attachment=SINGLE_WALL","facing=north","powered=true");
+  public static final BlockState BELL_16 = new BlockState(NamespaceID.from("minecraft:bell_16"), (short) 14874, Block.BELL, "attachment=SINGLE_WALL","facing=north","powered=true");
 
-  public static final BlockState BELL_17 = new BlockState(NamespaceID.from("minecraft:bell:17"), (short) 14875, Block.BELL, "attachment=SINGLE_WALL","facing=north","powered=false");
+  public static final BlockState BELL_17 = new BlockState(NamespaceID.from("minecraft:bell_17"), (short) 14875, Block.BELL, "attachment=SINGLE_WALL","facing=north","powered=false");
 
-  public static final BlockState BELL_18 = new BlockState(NamespaceID.from("minecraft:bell:18"), (short) 14876, Block.BELL, "attachment=SINGLE_WALL","facing=south","powered=true");
+  public static final BlockState BELL_18 = new BlockState(NamespaceID.from("minecraft:bell_18"), (short) 14876, Block.BELL, "attachment=SINGLE_WALL","facing=south","powered=true");
 
-  public static final BlockState BELL_19 = new BlockState(NamespaceID.from("minecraft:bell:19"), (short) 14877, Block.BELL, "attachment=SINGLE_WALL","facing=south","powered=false");
+  public static final BlockState BELL_19 = new BlockState(NamespaceID.from("minecraft:bell_19"), (short) 14877, Block.BELL, "attachment=SINGLE_WALL","facing=south","powered=false");
 
-  public static final BlockState BELL_20 = new BlockState(NamespaceID.from("minecraft:bell:20"), (short) 14878, Block.BELL, "attachment=SINGLE_WALL","facing=west","powered=true");
+  public static final BlockState BELL_20 = new BlockState(NamespaceID.from("minecraft:bell_20"), (short) 14878, Block.BELL, "attachment=SINGLE_WALL","facing=west","powered=true");
 
-  public static final BlockState BELL_21 = new BlockState(NamespaceID.from("minecraft:bell:21"), (short) 14879, Block.BELL, "attachment=SINGLE_WALL","facing=west","powered=false");
+  public static final BlockState BELL_21 = new BlockState(NamespaceID.from("minecraft:bell_21"), (short) 14879, Block.BELL, "attachment=SINGLE_WALL","facing=west","powered=false");
 
-  public static final BlockState BELL_22 = new BlockState(NamespaceID.from("minecraft:bell:22"), (short) 14880, Block.BELL, "attachment=SINGLE_WALL","facing=east","powered=true");
+  public static final BlockState BELL_22 = new BlockState(NamespaceID.from("minecraft:bell_22"), (short) 14880, Block.BELL, "attachment=SINGLE_WALL","facing=east","powered=true");
 
-  public static final BlockState BELL_23 = new BlockState(NamespaceID.from("minecraft:bell:23"), (short) 14881, Block.BELL, "attachment=SINGLE_WALL","facing=east","powered=false");
+  public static final BlockState BELL_23 = new BlockState(NamespaceID.from("minecraft:bell_23"), (short) 14881, Block.BELL, "attachment=SINGLE_WALL","facing=east","powered=false");
 
-  public static final BlockState BELL_24 = new BlockState(NamespaceID.from("minecraft:bell:24"), (short) 14882, Block.BELL, "attachment=DOUBLE_WALL","facing=north","powered=true");
+  public static final BlockState BELL_24 = new BlockState(NamespaceID.from("minecraft:bell_24"), (short) 14882, Block.BELL, "attachment=DOUBLE_WALL","facing=north","powered=true");
 
-  public static final BlockState BELL_25 = new BlockState(NamespaceID.from("minecraft:bell:25"), (short) 14883, Block.BELL, "attachment=DOUBLE_WALL","facing=north","powered=false");
+  public static final BlockState BELL_25 = new BlockState(NamespaceID.from("minecraft:bell_25"), (short) 14883, Block.BELL, "attachment=DOUBLE_WALL","facing=north","powered=false");
 
-  public static final BlockState BELL_26 = new BlockState(NamespaceID.from("minecraft:bell:26"), (short) 14884, Block.BELL, "attachment=DOUBLE_WALL","facing=south","powered=true");
+  public static final BlockState BELL_26 = new BlockState(NamespaceID.from("minecraft:bell_26"), (short) 14884, Block.BELL, "attachment=DOUBLE_WALL","facing=south","powered=true");
 
-  public static final BlockState BELL_27 = new BlockState(NamespaceID.from("minecraft:bell:27"), (short) 14885, Block.BELL, "attachment=DOUBLE_WALL","facing=south","powered=false");
+  public static final BlockState BELL_27 = new BlockState(NamespaceID.from("minecraft:bell_27"), (short) 14885, Block.BELL, "attachment=DOUBLE_WALL","facing=south","powered=false");
 
-  public static final BlockState BELL_28 = new BlockState(NamespaceID.from("minecraft:bell:28"), (short) 14886, Block.BELL, "attachment=DOUBLE_WALL","facing=west","powered=true");
+  public static final BlockState BELL_28 = new BlockState(NamespaceID.from("minecraft:bell_28"), (short) 14886, Block.BELL, "attachment=DOUBLE_WALL","facing=west","powered=true");
 
-  public static final BlockState BELL_29 = new BlockState(NamespaceID.from("minecraft:bell:29"), (short) 14887, Block.BELL, "attachment=DOUBLE_WALL","facing=west","powered=false");
+  public static final BlockState BELL_29 = new BlockState(NamespaceID.from("minecraft:bell_29"), (short) 14887, Block.BELL, "attachment=DOUBLE_WALL","facing=west","powered=false");
 
-  public static final BlockState BELL_30 = new BlockState(NamespaceID.from("minecraft:bell:30"), (short) 14888, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=true");
+  public static final BlockState BELL_30 = new BlockState(NamespaceID.from("minecraft:bell_30"), (short) 14888, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=true");
 
-  public static final BlockState BELL_31 = new BlockState(NamespaceID.from("minecraft:bell:31"), (short) 14889, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=false");
+  public static final BlockState BELL_31 = new BlockState(NamespaceID.from("minecraft:bell_31"), (short) 14889, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=false");
 
   static {
     Registries.registerBlockState(BELL_0);

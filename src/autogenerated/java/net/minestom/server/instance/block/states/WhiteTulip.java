@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WhiteTulip {
-  public static final BlockState WHITE_TULIP_0 = new BlockState(NamespaceID.from("minecraft:white_tulip:0"), (short) 1419, Block.WHITE_TULIP);
+  public static final BlockState WHITE_TULIP_0 = new BlockState(NamespaceID.from("minecraft:white_tulip_0"), (short) 1419, Block.WHITE_TULIP);
 
   static {
     Registries.registerBlockState(WHITE_TULIP_0);

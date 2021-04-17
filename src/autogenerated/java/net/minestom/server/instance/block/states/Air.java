@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Air {
-  public static final BlockState AIR_0 = new BlockState(NamespaceID.from("minecraft:air:0"), (short) 0, Block.AIR);
+  public static final BlockState AIR_0 = new BlockState(NamespaceID.from("minecraft:air_0"), (short) 0, Block.AIR);
 
   static {
     Registries.registerBlockState(AIR_0);

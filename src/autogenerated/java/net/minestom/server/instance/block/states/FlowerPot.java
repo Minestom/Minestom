@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class FlowerPot {
-  public static final BlockState FLOWER_POT_0 = new BlockState(NamespaceID.from("minecraft:flower_pot:0"), (short) 6309, Block.FLOWER_POT);
+  public static final BlockState FLOWER_POT_0 = new BlockState(NamespaceID.from("minecraft:flower_pot_0"), (short) 6309, Block.FLOWER_POT);
 
   static {
     Registries.registerBlockState(FLOWER_POT_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Bookshelf {
-  public static final BlockState BOOKSHELF_0 = new BlockState(NamespaceID.from("minecraft:bookshelf:0"), (short) 1432, Block.BOOKSHELF);
+  public static final BlockState BOOKSHELF_0 = new BlockState(NamespaceID.from("minecraft:bookshelf_0"), (short) 1432, Block.BOOKSHELF);
 
   static {
     Registries.registerBlockState(BOOKSHELF_0);

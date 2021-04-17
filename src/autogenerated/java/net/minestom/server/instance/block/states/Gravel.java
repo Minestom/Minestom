@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Gravel {
-  public static final BlockState GRAVEL_0 = new BlockState(NamespaceID.from("minecraft:gravel:0"), (short) 68, Block.GRAVEL);
+  public static final BlockState GRAVEL_0 = new BlockState(NamespaceID.from("minecraft:gravel_0"), (short) 68, Block.GRAVEL);
 
   static {
     Registries.registerBlockState(GRAVEL_0);

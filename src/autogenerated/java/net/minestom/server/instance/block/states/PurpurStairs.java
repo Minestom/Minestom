@@ -14,165 +14,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PurpurStairs {
-  public static final BlockState PURPUR_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:0"), (short) 9142, Block.PURPUR_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_0"), (short) 9142, Block.PURPUR_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:1"), (short) 9143, Block.PURPUR_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_1"), (short) 9143, Block.PURPUR_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:2"), (short) 9144, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_2"), (short) 9144, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:3"), (short) 9145, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_3"), (short) 9145, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:4"), (short) 9146, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_4"), (short) 9146, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:5"), (short) 9147, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_5"), (short) 9147, Block.PURPUR_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:6"), (short) 9148, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_6"), (short) 9148, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:7"), (short) 9149, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_7"), (short) 9149, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:8"), (short) 9150, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_8"), (short) 9150, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:9"), (short) 9151, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_9"), (short) 9151, Block.PURPUR_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:10"), (short) 9152, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_10"), (short) 9152, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:11"), (short) 9153, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_11"), (short) 9153, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:12"), (short) 9154, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_12"), (short) 9154, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:13"), (short) 9155, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_13"), (short) 9155, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:14"), (short) 9156, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_14"), (short) 9156, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:15"), (short) 9157, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_15"), (short) 9157, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:16"), (short) 9158, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_16"), (short) 9158, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:17"), (short) 9159, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_17"), (short) 9159, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:18"), (short) 9160, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_18"), (short) 9160, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:19"), (short) 9161, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_19"), (short) 9161, Block.PURPUR_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:20"), (short) 9162, Block.PURPUR_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_20"), (short) 9162, Block.PURPUR_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:21"), (short) 9163, Block.PURPUR_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_21"), (short) 9163, Block.PURPUR_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:22"), (short) 9164, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_22"), (short) 9164, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:23"), (short) 9165, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_23"), (short) 9165, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:24"), (short) 9166, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_24"), (short) 9166, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:25"), (short) 9167, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_25"), (short) 9167, Block.PURPUR_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:26"), (short) 9168, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_26"), (short) 9168, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:27"), (short) 9169, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_27"), (short) 9169, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:28"), (short) 9170, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_28"), (short) 9170, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:29"), (short) 9171, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_29"), (short) 9171, Block.PURPUR_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:30"), (short) 9172, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_30"), (short) 9172, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:31"), (short) 9173, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_31"), (short) 9173, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:32"), (short) 9174, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_32"), (short) 9174, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:33"), (short) 9175, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_33"), (short) 9175, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:34"), (short) 9176, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_34"), (short) 9176, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:35"), (short) 9177, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_35"), (short) 9177, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:36"), (short) 9178, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_36"), (short) 9178, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:37"), (short) 9179, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_37"), (short) 9179, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:38"), (short) 9180, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_38"), (short) 9180, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:39"), (short) 9181, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_39"), (short) 9181, Block.PURPUR_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:40"), (short) 9182, Block.PURPUR_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_40"), (short) 9182, Block.PURPUR_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:41"), (short) 9183, Block.PURPUR_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_41"), (short) 9183, Block.PURPUR_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:42"), (short) 9184, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_42"), (short) 9184, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:43"), (short) 9185, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_43"), (short) 9185, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:44"), (short) 9186, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_44"), (short) 9186, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:45"), (short) 9187, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_45"), (short) 9187, Block.PURPUR_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:46"), (short) 9188, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_46"), (short) 9188, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:47"), (short) 9189, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_47"), (short) 9189, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:48"), (short) 9190, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_48"), (short) 9190, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:49"), (short) 9191, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_49"), (short) 9191, Block.PURPUR_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:50"), (short) 9192, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_50"), (short) 9192, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:51"), (short) 9193, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_51"), (short) 9193, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:52"), (short) 9194, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_52"), (short) 9194, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:53"), (short) 9195, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_53"), (short) 9195, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:54"), (short) 9196, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_54"), (short) 9196, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:55"), (short) 9197, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_55"), (short) 9197, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:56"), (short) 9198, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_56"), (short) 9198, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:57"), (short) 9199, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_57"), (short) 9199, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:58"), (short) 9200, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_58"), (short) 9200, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:59"), (short) 9201, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_59"), (short) 9201, Block.PURPUR_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:60"), (short) 9202, Block.PURPUR_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_60"), (short) 9202, Block.PURPUR_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:61"), (short) 9203, Block.PURPUR_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_61"), (short) 9203, Block.PURPUR_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:62"), (short) 9204, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_62"), (short) 9204, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:63"), (short) 9205, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_63"), (short) 9205, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:64"), (short) 9206, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_64"), (short) 9206, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:65"), (short) 9207, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_65"), (short) 9207, Block.PURPUR_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:66"), (short) 9208, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_66"), (short) 9208, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:67"), (short) 9209, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_67"), (short) 9209, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:68"), (short) 9210, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_68"), (short) 9210, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:69"), (short) 9211, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_69"), (short) 9211, Block.PURPUR_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:70"), (short) 9212, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_70"), (short) 9212, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:71"), (short) 9213, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_71"), (short) 9213, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:72"), (short) 9214, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_72"), (short) 9214, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:73"), (short) 9215, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_73"), (short) 9215, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:74"), (short) 9216, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_74"), (short) 9216, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:75"), (short) 9217, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_75"), (short) 9217, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:76"), (short) 9218, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_76"), (short) 9218, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:77"), (short) 9219, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_77"), (short) 9219, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState PURPUR_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:78"), (short) 9220, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState PURPUR_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_78"), (short) 9220, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState PURPUR_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:purpur_stairs:79"), (short) 9221, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState PURPUR_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:purpur_stairs_79"), (short) 9221, Block.PURPUR_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   static {
     Registries.registerBlockState(PURPUR_STAIRS_0);

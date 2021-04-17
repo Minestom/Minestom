@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedGranite {
-  public static final BlockState POLISHED_GRANITE_0 = new BlockState(NamespaceID.from("minecraft:polished_granite:0"), (short) 3, Block.POLISHED_GRANITE);
+  public static final BlockState POLISHED_GRANITE_0 = new BlockState(NamespaceID.from("minecraft:polished_granite_0"), (short) 3, Block.POLISHED_GRANITE);
 
   static {
     Registries.registerBlockState(POLISHED_GRANITE_0);

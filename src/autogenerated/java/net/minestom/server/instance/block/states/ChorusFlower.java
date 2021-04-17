@@ -14,17 +14,17 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class ChorusFlower {
-  public static final BlockState CHORUS_FLOWER_0 = new BlockState(NamespaceID.from("minecraft:chorus_flower:0"), (short) 9132, Block.CHORUS_FLOWER, "age=0");
+  public static final BlockState CHORUS_FLOWER_0 = new BlockState(NamespaceID.from("minecraft:chorus_flower_0"), (short) 9132, Block.CHORUS_FLOWER, "age=0");
 
-  public static final BlockState CHORUS_FLOWER_1 = new BlockState(NamespaceID.from("minecraft:chorus_flower:1"), (short) 9133, Block.CHORUS_FLOWER, "age=1");
+  public static final BlockState CHORUS_FLOWER_1 = new BlockState(NamespaceID.from("minecraft:chorus_flower_1"), (short) 9133, Block.CHORUS_FLOWER, "age=1");
 
-  public static final BlockState CHORUS_FLOWER_2 = new BlockState(NamespaceID.from("minecraft:chorus_flower:2"), (short) 9134, Block.CHORUS_FLOWER, "age=2");
+  public static final BlockState CHORUS_FLOWER_2 = new BlockState(NamespaceID.from("minecraft:chorus_flower_2"), (short) 9134, Block.CHORUS_FLOWER, "age=2");
 
-  public static final BlockState CHORUS_FLOWER_3 = new BlockState(NamespaceID.from("minecraft:chorus_flower:3"), (short) 9135, Block.CHORUS_FLOWER, "age=3");
+  public static final BlockState CHORUS_FLOWER_3 = new BlockState(NamespaceID.from("minecraft:chorus_flower_3"), (short) 9135, Block.CHORUS_FLOWER, "age=3");
 
-  public static final BlockState CHORUS_FLOWER_4 = new BlockState(NamespaceID.from("minecraft:chorus_flower:4"), (short) 9136, Block.CHORUS_FLOWER, "age=4");
+  public static final BlockState CHORUS_FLOWER_4 = new BlockState(NamespaceID.from("minecraft:chorus_flower_4"), (short) 9136, Block.CHORUS_FLOWER, "age=4");
 
-  public static final BlockState CHORUS_FLOWER_5 = new BlockState(NamespaceID.from("minecraft:chorus_flower:5"), (short) 9137, Block.CHORUS_FLOWER, "age=5");
+  public static final BlockState CHORUS_FLOWER_5 = new BlockState(NamespaceID.from("minecraft:chorus_flower_5"), (short) 9137, Block.CHORUS_FLOWER, "age=5");
 
   static {
     Registries.registerBlockState(CHORUS_FLOWER_0);

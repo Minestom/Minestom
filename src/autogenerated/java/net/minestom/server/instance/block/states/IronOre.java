@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class IronOre {
-  public static final BlockState IRON_ORE_0 = new BlockState(NamespaceID.from("minecraft:iron_ore:0"), (short) 70, Block.IRON_ORE);
+  public static final BlockState IRON_ORE_0 = new BlockState(NamespaceID.from("minecraft:iron_ore_0"), (short) 70, Block.IRON_ORE);
 
   static {
     Registries.registerBlockState(IRON_ORE_0);

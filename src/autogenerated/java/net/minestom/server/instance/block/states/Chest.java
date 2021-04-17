@@ -14,53 +14,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Chest {
-  public static final BlockState CHEST_0 = new BlockState(NamespaceID.from("minecraft:chest:0"), (short) 2034, Block.CHEST, "facing=north","type=SINGLE","waterlogged=true");
+  public static final BlockState CHEST_0 = new BlockState(NamespaceID.from("minecraft:chest_0"), (short) 2034, Block.CHEST, "facing=north","type=SINGLE","waterlogged=true");
 
-  public static final BlockState CHEST_1 = new BlockState(NamespaceID.from("minecraft:chest:1"), (short) 2035, Block.CHEST, "facing=north","type=SINGLE","waterlogged=false");
+  public static final BlockState CHEST_1 = new BlockState(NamespaceID.from("minecraft:chest_1"), (short) 2035, Block.CHEST, "facing=north","type=SINGLE","waterlogged=false");
 
-  public static final BlockState CHEST_2 = new BlockState(NamespaceID.from("minecraft:chest:2"), (short) 2036, Block.CHEST, "facing=north","type=LEFT","waterlogged=true");
+  public static final BlockState CHEST_2 = new BlockState(NamespaceID.from("minecraft:chest_2"), (short) 2036, Block.CHEST, "facing=north","type=LEFT","waterlogged=true");
 
-  public static final BlockState CHEST_3 = new BlockState(NamespaceID.from("minecraft:chest:3"), (short) 2037, Block.CHEST, "facing=north","type=LEFT","waterlogged=false");
+  public static final BlockState CHEST_3 = new BlockState(NamespaceID.from("minecraft:chest_3"), (short) 2037, Block.CHEST, "facing=north","type=LEFT","waterlogged=false");
 
-  public static final BlockState CHEST_4 = new BlockState(NamespaceID.from("minecraft:chest:4"), (short) 2038, Block.CHEST, "facing=north","type=RIGHT","waterlogged=true");
+  public static final BlockState CHEST_4 = new BlockState(NamespaceID.from("minecraft:chest_4"), (short) 2038, Block.CHEST, "facing=north","type=RIGHT","waterlogged=true");
 
-  public static final BlockState CHEST_5 = new BlockState(NamespaceID.from("minecraft:chest:5"), (short) 2039, Block.CHEST, "facing=north","type=RIGHT","waterlogged=false");
+  public static final BlockState CHEST_5 = new BlockState(NamespaceID.from("minecraft:chest_5"), (short) 2039, Block.CHEST, "facing=north","type=RIGHT","waterlogged=false");
 
-  public static final BlockState CHEST_6 = new BlockState(NamespaceID.from("minecraft:chest:6"), (short) 2040, Block.CHEST, "facing=south","type=SINGLE","waterlogged=true");
+  public static final BlockState CHEST_6 = new BlockState(NamespaceID.from("minecraft:chest_6"), (short) 2040, Block.CHEST, "facing=south","type=SINGLE","waterlogged=true");
 
-  public static final BlockState CHEST_7 = new BlockState(NamespaceID.from("minecraft:chest:7"), (short) 2041, Block.CHEST, "facing=south","type=SINGLE","waterlogged=false");
+  public static final BlockState CHEST_7 = new BlockState(NamespaceID.from("minecraft:chest_7"), (short) 2041, Block.CHEST, "facing=south","type=SINGLE","waterlogged=false");
 
-  public static final BlockState CHEST_8 = new BlockState(NamespaceID.from("minecraft:chest:8"), (short) 2042, Block.CHEST, "facing=south","type=LEFT","waterlogged=true");
+  public static final BlockState CHEST_8 = new BlockState(NamespaceID.from("minecraft:chest_8"), (short) 2042, Block.CHEST, "facing=south","type=LEFT","waterlogged=true");
 
-  public static final BlockState CHEST_9 = new BlockState(NamespaceID.from("minecraft:chest:9"), (short) 2043, Block.CHEST, "facing=south","type=LEFT","waterlogged=false");
+  public static final BlockState CHEST_9 = new BlockState(NamespaceID.from("minecraft:chest_9"), (short) 2043, Block.CHEST, "facing=south","type=LEFT","waterlogged=false");
 
-  public static final BlockState CHEST_10 = new BlockState(NamespaceID.from("minecraft:chest:10"), (short) 2044, Block.CHEST, "facing=south","type=RIGHT","waterlogged=true");
+  public static final BlockState CHEST_10 = new BlockState(NamespaceID.from("minecraft:chest_10"), (short) 2044, Block.CHEST, "facing=south","type=RIGHT","waterlogged=true");
 
-  public static final BlockState CHEST_11 = new BlockState(NamespaceID.from("minecraft:chest:11"), (short) 2045, Block.CHEST, "facing=south","type=RIGHT","waterlogged=false");
+  public static final BlockState CHEST_11 = new BlockState(NamespaceID.from("minecraft:chest_11"), (short) 2045, Block.CHEST, "facing=south","type=RIGHT","waterlogged=false");
 
-  public static final BlockState CHEST_12 = new BlockState(NamespaceID.from("minecraft:chest:12"), (short) 2046, Block.CHEST, "facing=west","type=SINGLE","waterlogged=true");
+  public static final BlockState CHEST_12 = new BlockState(NamespaceID.from("minecraft:chest_12"), (short) 2046, Block.CHEST, "facing=west","type=SINGLE","waterlogged=true");
 
-  public static final BlockState CHEST_13 = new BlockState(NamespaceID.from("minecraft:chest:13"), (short) 2047, Block.CHEST, "facing=west","type=SINGLE","waterlogged=false");
+  public static final BlockState CHEST_13 = new BlockState(NamespaceID.from("minecraft:chest_13"), (short) 2047, Block.CHEST, "facing=west","type=SINGLE","waterlogged=false");
 
-  public static final BlockState CHEST_14 = new BlockState(NamespaceID.from("minecraft:chest:14"), (short) 2048, Block.CHEST, "facing=west","type=LEFT","waterlogged=true");
+  public static final BlockState CHEST_14 = new BlockState(NamespaceID.from("minecraft:chest_14"), (short) 2048, Block.CHEST, "facing=west","type=LEFT","waterlogged=true");
 
-  public static final BlockState CHEST_15 = new BlockState(NamespaceID.from("minecraft:chest:15"), (short) 2049, Block.CHEST, "facing=west","type=LEFT","waterlogged=false");
+  public static final BlockState CHEST_15 = new BlockState(NamespaceID.from("minecraft:chest_15"), (short) 2049, Block.CHEST, "facing=west","type=LEFT","waterlogged=false");
 
-  public static final BlockState CHEST_16 = new BlockState(NamespaceID.from("minecraft:chest:16"), (short) 2050, Block.CHEST, "facing=west","type=RIGHT","waterlogged=true");
+  public static final BlockState CHEST_16 = new BlockState(NamespaceID.from("minecraft:chest_16"), (short) 2050, Block.CHEST, "facing=west","type=RIGHT","waterlogged=true");
 
-  public static final BlockState CHEST_17 = new BlockState(NamespaceID.from("minecraft:chest:17"), (short) 2051, Block.CHEST, "facing=west","type=RIGHT","waterlogged=false");
+  public static final BlockState CHEST_17 = new BlockState(NamespaceID.from("minecraft:chest_17"), (short) 2051, Block.CHEST, "facing=west","type=RIGHT","waterlogged=false");
 
-  public static final BlockState CHEST_18 = new BlockState(NamespaceID.from("minecraft:chest:18"), (short) 2052, Block.CHEST, "facing=east","type=SINGLE","waterlogged=true");
+  public static final BlockState CHEST_18 = new BlockState(NamespaceID.from("minecraft:chest_18"), (short) 2052, Block.CHEST, "facing=east","type=SINGLE","waterlogged=true");
 
-  public static final BlockState CHEST_19 = new BlockState(NamespaceID.from("minecraft:chest:19"), (short) 2053, Block.CHEST, "facing=east","type=SINGLE","waterlogged=false");
+  public static final BlockState CHEST_19 = new BlockState(NamespaceID.from("minecraft:chest_19"), (short) 2053, Block.CHEST, "facing=east","type=SINGLE","waterlogged=false");
 
-  public static final BlockState CHEST_20 = new BlockState(NamespaceID.from("minecraft:chest:20"), (short) 2054, Block.CHEST, "facing=east","type=LEFT","waterlogged=true");
+  public static final BlockState CHEST_20 = new BlockState(NamespaceID.from("minecraft:chest_20"), (short) 2054, Block.CHEST, "facing=east","type=LEFT","waterlogged=true");
 
-  public static final BlockState CHEST_21 = new BlockState(NamespaceID.from("minecraft:chest:21"), (short) 2055, Block.CHEST, "facing=east","type=LEFT","waterlogged=false");
+  public static final BlockState CHEST_21 = new BlockState(NamespaceID.from("minecraft:chest_21"), (short) 2055, Block.CHEST, "facing=east","type=LEFT","waterlogged=false");
 
-  public static final BlockState CHEST_22 = new BlockState(NamespaceID.from("minecraft:chest:22"), (short) 2056, Block.CHEST, "facing=east","type=RIGHT","waterlogged=true");
+  public static final BlockState CHEST_22 = new BlockState(NamespaceID.from("minecraft:chest_22"), (short) 2056, Block.CHEST, "facing=east","type=RIGHT","waterlogged=true");
 
-  public static final BlockState CHEST_23 = new BlockState(NamespaceID.from("minecraft:chest:23"), (short) 2057, Block.CHEST, "facing=east","type=RIGHT","waterlogged=false");
+  public static final BlockState CHEST_23 = new BlockState(NamespaceID.from("minecraft:chest_23"), (short) 2057, Block.CHEST, "facing=east","type=RIGHT","waterlogged=false");
 
   static {
     Registries.registerBlockState(CHEST_0);

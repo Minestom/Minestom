@@ -14,53 +14,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkOakButton {
-  public static final BlockState DARK_OAK_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:0"), (short) 6470, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=north","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_0"), (short) 6470, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=north","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:1"), (short) 6471, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=north","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_1"), (short) 6471, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=north","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:2"), (short) 6472, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=south","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_2 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_2"), (short) 6472, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=south","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:3"), (short) 6473, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=south","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_3 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_3"), (short) 6473, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=south","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:4"), (short) 6474, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=west","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_4 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_4"), (short) 6474, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=west","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:5"), (short) 6475, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=west","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_5 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_5"), (short) 6475, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=west","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:6"), (short) 6476, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=east","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_6 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_6"), (short) 6476, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=east","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:7"), (short) 6477, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=east","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_7 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_7"), (short) 6477, Block.DARK_OAK_BUTTON, "face=FLOOR","facing=east","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:8"), (short) 6478, Block.DARK_OAK_BUTTON, "face=WALL","facing=north","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_8 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_8"), (short) 6478, Block.DARK_OAK_BUTTON, "face=WALL","facing=north","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:9"), (short) 6479, Block.DARK_OAK_BUTTON, "face=WALL","facing=north","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_9 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_9"), (short) 6479, Block.DARK_OAK_BUTTON, "face=WALL","facing=north","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:10"), (short) 6480, Block.DARK_OAK_BUTTON, "face=WALL","facing=south","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_10 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_10"), (short) 6480, Block.DARK_OAK_BUTTON, "face=WALL","facing=south","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:11"), (short) 6481, Block.DARK_OAK_BUTTON, "face=WALL","facing=south","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_11 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_11"), (short) 6481, Block.DARK_OAK_BUTTON, "face=WALL","facing=south","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:12"), (short) 6482, Block.DARK_OAK_BUTTON, "face=WALL","facing=west","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_12 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_12"), (short) 6482, Block.DARK_OAK_BUTTON, "face=WALL","facing=west","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:13"), (short) 6483, Block.DARK_OAK_BUTTON, "face=WALL","facing=west","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_13 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_13"), (short) 6483, Block.DARK_OAK_BUTTON, "face=WALL","facing=west","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:14"), (short) 6484, Block.DARK_OAK_BUTTON, "face=WALL","facing=east","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_14 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_14"), (short) 6484, Block.DARK_OAK_BUTTON, "face=WALL","facing=east","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:15"), (short) 6485, Block.DARK_OAK_BUTTON, "face=WALL","facing=east","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_15 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_15"), (short) 6485, Block.DARK_OAK_BUTTON, "face=WALL","facing=east","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:16"), (short) 6486, Block.DARK_OAK_BUTTON, "face=CEILING","facing=north","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_16 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_16"), (short) 6486, Block.DARK_OAK_BUTTON, "face=CEILING","facing=north","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:17"), (short) 6487, Block.DARK_OAK_BUTTON, "face=CEILING","facing=north","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_17 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_17"), (short) 6487, Block.DARK_OAK_BUTTON, "face=CEILING","facing=north","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:18"), (short) 6488, Block.DARK_OAK_BUTTON, "face=CEILING","facing=south","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_18 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_18"), (short) 6488, Block.DARK_OAK_BUTTON, "face=CEILING","facing=south","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:19"), (short) 6489, Block.DARK_OAK_BUTTON, "face=CEILING","facing=south","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_19 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_19"), (short) 6489, Block.DARK_OAK_BUTTON, "face=CEILING","facing=south","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:20"), (short) 6490, Block.DARK_OAK_BUTTON, "face=CEILING","facing=west","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_20 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_20"), (short) 6490, Block.DARK_OAK_BUTTON, "face=CEILING","facing=west","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:21"), (short) 6491, Block.DARK_OAK_BUTTON, "face=CEILING","facing=west","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_21 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_21"), (short) 6491, Block.DARK_OAK_BUTTON, "face=CEILING","facing=west","powered=false");
 
-  public static final BlockState DARK_OAK_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:22"), (short) 6492, Block.DARK_OAK_BUTTON, "face=CEILING","facing=east","powered=true");
+  public static final BlockState DARK_OAK_BUTTON_22 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_22"), (short) 6492, Block.DARK_OAK_BUTTON, "face=CEILING","facing=east","powered=true");
 
-  public static final BlockState DARK_OAK_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:dark_oak_button:23"), (short) 6493, Block.DARK_OAK_BUTTON, "face=CEILING","facing=east","powered=false");
+  public static final BlockState DARK_OAK_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:dark_oak_button_23"), (short) 6493, Block.DARK_OAK_BUTTON, "face=CEILING","facing=east","powered=false");
 
   static {
     Registries.registerBlockState(DARK_OAK_BUTTON_0);

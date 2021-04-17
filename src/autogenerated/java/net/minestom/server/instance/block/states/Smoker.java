@@ -14,21 +14,21 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Smoker {
-  public static final BlockState SMOKER_0 = new BlockState(NamespaceID.from("minecraft:smoker:0"), (short) 14807, Block.SMOKER, "facing=north","lit=true");
+  public static final BlockState SMOKER_0 = new BlockState(NamespaceID.from("minecraft:smoker_0"), (short) 14807, Block.SMOKER, "facing=north","lit=true");
 
-  public static final BlockState SMOKER_1 = new BlockState(NamespaceID.from("minecraft:smoker:1"), (short) 14808, Block.SMOKER, "facing=north","lit=false");
+  public static final BlockState SMOKER_1 = new BlockState(NamespaceID.from("minecraft:smoker_1"), (short) 14808, Block.SMOKER, "facing=north","lit=false");
 
-  public static final BlockState SMOKER_2 = new BlockState(NamespaceID.from("minecraft:smoker:2"), (short) 14809, Block.SMOKER, "facing=south","lit=true");
+  public static final BlockState SMOKER_2 = new BlockState(NamespaceID.from("minecraft:smoker_2"), (short) 14809, Block.SMOKER, "facing=south","lit=true");
 
-  public static final BlockState SMOKER_3 = new BlockState(NamespaceID.from("minecraft:smoker:3"), (short) 14810, Block.SMOKER, "facing=south","lit=false");
+  public static final BlockState SMOKER_3 = new BlockState(NamespaceID.from("minecraft:smoker_3"), (short) 14810, Block.SMOKER, "facing=south","lit=false");
 
-  public static final BlockState SMOKER_4 = new BlockState(NamespaceID.from("minecraft:smoker:4"), (short) 14811, Block.SMOKER, "facing=west","lit=true");
+  public static final BlockState SMOKER_4 = new BlockState(NamespaceID.from("minecraft:smoker_4"), (short) 14811, Block.SMOKER, "facing=west","lit=true");
 
-  public static final BlockState SMOKER_5 = new BlockState(NamespaceID.from("minecraft:smoker:5"), (short) 14812, Block.SMOKER, "facing=west","lit=false");
+  public static final BlockState SMOKER_5 = new BlockState(NamespaceID.from("minecraft:smoker_5"), (short) 14812, Block.SMOKER, "facing=west","lit=false");
 
-  public static final BlockState SMOKER_6 = new BlockState(NamespaceID.from("minecraft:smoker:6"), (short) 14813, Block.SMOKER, "facing=east","lit=true");
+  public static final BlockState SMOKER_6 = new BlockState(NamespaceID.from("minecraft:smoker_6"), (short) 14813, Block.SMOKER, "facing=east","lit=true");
 
-  public static final BlockState SMOKER_7 = new BlockState(NamespaceID.from("minecraft:smoker:7"), (short) 14814, Block.SMOKER, "facing=east","lit=false");
+  public static final BlockState SMOKER_7 = new BlockState(NamespaceID.from("minecraft:smoker_7"), (short) 14814, Block.SMOKER, "facing=east","lit=false");
 
   static {
     Registries.registerBlockState(SMOKER_0);

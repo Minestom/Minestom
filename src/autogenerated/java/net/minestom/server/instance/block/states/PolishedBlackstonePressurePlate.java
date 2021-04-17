@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedBlackstonePressurePlate {
-  public static final BlockState POLISHED_BLACKSTONE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_pressure_plate:0"), (short) 16759, Block.POLISHED_BLACKSTONE_PRESSURE_PLATE, "powered=true");
+  public static final BlockState POLISHED_BLACKSTONE_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_pressure_plate_0"), (short) 16759, Block.POLISHED_BLACKSTONE_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState POLISHED_BLACKSTONE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_pressure_plate:1"), (short) 16760, Block.POLISHED_BLACKSTONE_PRESSURE_PLATE, "powered=false");
+  public static final BlockState POLISHED_BLACKSTONE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_pressure_plate_1"), (short) 16760, Block.POLISHED_BLACKSTONE_PRESSURE_PLATE, "powered=false");
 
   static {
     Registries.registerBlockState(POLISHED_BLACKSTONE_PRESSURE_PLATE_0);

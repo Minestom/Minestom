@@ -14,33 +14,33 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class JungleLeaves {
-  public static final BlockState JUNGLE_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:0"), (short) 187, Block.JUNGLE_LEAVES, "distance=1","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_0 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_0"), (short) 187, Block.JUNGLE_LEAVES, "distance=1","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:1"), (short) 188, Block.JUNGLE_LEAVES, "distance=1","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_1 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_1"), (short) 188, Block.JUNGLE_LEAVES, "distance=1","persistent=false");
 
-  public static final BlockState JUNGLE_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:2"), (short) 189, Block.JUNGLE_LEAVES, "distance=2","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_2 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_2"), (short) 189, Block.JUNGLE_LEAVES, "distance=2","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:3"), (short) 190, Block.JUNGLE_LEAVES, "distance=2","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_3 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_3"), (short) 190, Block.JUNGLE_LEAVES, "distance=2","persistent=false");
 
-  public static final BlockState JUNGLE_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:4"), (short) 191, Block.JUNGLE_LEAVES, "distance=3","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_4 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_4"), (short) 191, Block.JUNGLE_LEAVES, "distance=3","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:5"), (short) 192, Block.JUNGLE_LEAVES, "distance=3","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_5 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_5"), (short) 192, Block.JUNGLE_LEAVES, "distance=3","persistent=false");
 
-  public static final BlockState JUNGLE_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:6"), (short) 193, Block.JUNGLE_LEAVES, "distance=4","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_6 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_6"), (short) 193, Block.JUNGLE_LEAVES, "distance=4","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:7"), (short) 194, Block.JUNGLE_LEAVES, "distance=4","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_7 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_7"), (short) 194, Block.JUNGLE_LEAVES, "distance=4","persistent=false");
 
-  public static final BlockState JUNGLE_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:8"), (short) 195, Block.JUNGLE_LEAVES, "distance=5","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_8 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_8"), (short) 195, Block.JUNGLE_LEAVES, "distance=5","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:9"), (short) 196, Block.JUNGLE_LEAVES, "distance=5","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_9 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_9"), (short) 196, Block.JUNGLE_LEAVES, "distance=5","persistent=false");
 
-  public static final BlockState JUNGLE_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:10"), (short) 197, Block.JUNGLE_LEAVES, "distance=6","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_10 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_10"), (short) 197, Block.JUNGLE_LEAVES, "distance=6","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:11"), (short) 198, Block.JUNGLE_LEAVES, "distance=6","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_11 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_11"), (short) 198, Block.JUNGLE_LEAVES, "distance=6","persistent=false");
 
-  public static final BlockState JUNGLE_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:12"), (short) 199, Block.JUNGLE_LEAVES, "distance=7","persistent=true");
+  public static final BlockState JUNGLE_LEAVES_12 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_12"), (short) 199, Block.JUNGLE_LEAVES, "distance=7","persistent=true");
 
-  public static final BlockState JUNGLE_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:jungle_leaves:13"), (short) 200, Block.JUNGLE_LEAVES, "distance=7","persistent=false");
+  public static final BlockState JUNGLE_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_13"), (short) 200, Block.JUNGLE_LEAVES, "distance=7","persistent=false");
 
   static {
     Registries.registerBlockState(JUNGLE_LEAVES_0);

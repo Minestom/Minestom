@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrackedNetherBricks {
-  public static final BlockState CRACKED_NETHER_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:cracked_nether_bricks:0"), (short) 17110, Block.CRACKED_NETHER_BRICKS);
+  public static final BlockState CRACKED_NETHER_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:cracked_nether_bricks_0"), (short) 17110, Block.CRACKED_NETHER_BRICKS);
 
   static {
     Registries.registerBlockState(CRACKED_NETHER_BRICKS_0);

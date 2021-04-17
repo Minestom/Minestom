@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PurpurBlock {
-  public static final BlockState PURPUR_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:purpur_block:0"), (short) 9138, Block.PURPUR_BLOCK);
+  public static final BlockState PURPUR_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:purpur_block_0"), (short) 9138, Block.PURPUR_BLOCK);
 
   static {
     Registries.registerBlockState(PURPUR_BLOCK_0);

@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LightBlueWool {
-  public static final BlockState LIGHT_BLUE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:light_blue_wool:0"), (short) 1387, Block.LIGHT_BLUE_WOOL);
+  public static final BlockState LIGHT_BLUE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:light_blue_wool_0"), (short) 1387, Block.LIGHT_BLUE_WOOL);
 
   static {
     Registries.registerBlockState(LIGHT_BLUE_WOOL_0);

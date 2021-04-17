@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class GrayWool {
-  public static final BlockState GRAY_WOOL_0 = new BlockState(NamespaceID.from("minecraft:gray_wool:0"), (short) 1391, Block.GRAY_WOOL);
+  public static final BlockState GRAY_WOOL_0 = new BlockState(NamespaceID.from("minecraft:gray_wool_0"), (short) 1391, Block.GRAY_WOOL);
 
   static {
     Registries.registerBlockState(GRAY_WOOL_0);

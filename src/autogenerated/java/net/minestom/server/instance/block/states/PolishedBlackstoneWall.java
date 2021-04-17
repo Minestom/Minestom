@@ -14,653 +14,653 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedBlackstoneWall {
-  public static final BlockState POLISHED_BLACKSTONE_WALL_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:0"), (short) 16785, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_0 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_0"), (short) 16785, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:1"), (short) 16786, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_1 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_1"), (short) 16786, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_2 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:2"), (short) 16787, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_2 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_2"), (short) 16787, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_3 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:3"), (short) 16788, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_3 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_3"), (short) 16788, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_4 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:4"), (short) 16789, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_4 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_4"), (short) 16789, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_5 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:5"), (short) 16790, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_5 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_5"), (short) 16790, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_6 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:6"), (short) 16791, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_6 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_6"), (short) 16791, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_7 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:7"), (short) 16792, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_7 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_7"), (short) 16792, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_8 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:8"), (short) 16793, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_8 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_8"), (short) 16793, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_9 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:9"), (short) 16794, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_9 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_9"), (short) 16794, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_10 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:10"), (short) 16795, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_10 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_10"), (short) 16795, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_11 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:11"), (short) 16796, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_11 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_11"), (short) 16796, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_12 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:12"), (short) 16797, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_12 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_12"), (short) 16797, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_13 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:13"), (short) 16798, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_13 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_13"), (short) 16798, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_14 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:14"), (short) 16799, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_14 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_14"), (short) 16799, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_15 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:15"), (short) 16800, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_15 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_15"), (short) 16800, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_16 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:16"), (short) 16801, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_16 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_16"), (short) 16801, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_17 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:17"), (short) 16802, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_17 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_17"), (short) 16802, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_18 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:18"), (short) 16803, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_18 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_18"), (short) 16803, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_19 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:19"), (short) 16804, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_19 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_19"), (short) 16804, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_20 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:20"), (short) 16805, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_20 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_20"), (short) 16805, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_21 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:21"), (short) 16806, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_21 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_21"), (short) 16806, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:22"), (short) 16807, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_22 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_22"), (short) 16807, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:23"), (short) 16808, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_23 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_23"), (short) 16808, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_24 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:24"), (short) 16809, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_24 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_24"), (short) 16809, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_25 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:25"), (short) 16810, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_25 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_25"), (short) 16810, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_26 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:26"), (short) 16811, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_26 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_26"), (short) 16811, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_27 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:27"), (short) 16812, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_27 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_27"), (short) 16812, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_28 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:28"), (short) 16813, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_28 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_28"), (short) 16813, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_29 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:29"), (short) 16814, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_29 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_29"), (short) 16814, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_30 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:30"), (short) 16815, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_30 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_30"), (short) 16815, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_31 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:31"), (short) 16816, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_31 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_31"), (short) 16816, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_32 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:32"), (short) 16817, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_32 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_32"), (short) 16817, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_33 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:33"), (short) 16818, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_33 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_33"), (short) 16818, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_34 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:34"), (short) 16819, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_34 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_34"), (short) 16819, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_35 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:35"), (short) 16820, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_35 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_35"), (short) 16820, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_36 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:36"), (short) 16821, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_36 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_36"), (short) 16821, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_37 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:37"), (short) 16822, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_37 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_37"), (short) 16822, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_38 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:38"), (short) 16823, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_38 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_38"), (short) 16823, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_39 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:39"), (short) 16824, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_39 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_39"), (short) 16824, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_40 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:40"), (short) 16825, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_40 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_40"), (short) 16825, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_41 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:41"), (short) 16826, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_41 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_41"), (short) 16826, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_42 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:42"), (short) 16827, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_42 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_42"), (short) 16827, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_43 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:43"), (short) 16828, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_43 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_43"), (short) 16828, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_44 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:44"), (short) 16829, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_44 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_44"), (short) 16829, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_45 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:45"), (short) 16830, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_45 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_45"), (short) 16830, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_46 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:46"), (short) 16831, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_46 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_46"), (short) 16831, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_47 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:47"), (short) 16832, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_47 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_47"), (short) 16832, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_48 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:48"), (short) 16833, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_48 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_48"), (short) 16833, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_49 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:49"), (short) 16834, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_49 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_49"), (short) 16834, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_50 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:50"), (short) 16835, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_50 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_50"), (short) 16835, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_51 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:51"), (short) 16836, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_51 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_51"), (short) 16836, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_52 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:52"), (short) 16837, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_52 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_52"), (short) 16837, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_53 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:53"), (short) 16838, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_53 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_53"), (short) 16838, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_54 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:54"), (short) 16839, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_54 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_54"), (short) 16839, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_55 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:55"), (short) 16840, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_55 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_55"), (short) 16840, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_56 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:56"), (short) 16841, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_56 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_56"), (short) 16841, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_57 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:57"), (short) 16842, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_57 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_57"), (short) 16842, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_58 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:58"), (short) 16843, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_58 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_58"), (short) 16843, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_59 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:59"), (short) 16844, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_59 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_59"), (short) 16844, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_60 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:60"), (short) 16845, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_60 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_60"), (short) 16845, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_61 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:61"), (short) 16846, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_61 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_61"), (short) 16846, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_62 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:62"), (short) 16847, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_62 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_62"), (short) 16847, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_63 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:63"), (short) 16848, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_63 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_63"), (short) 16848, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_64 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:64"), (short) 16849, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_64 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_64"), (short) 16849, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_65 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:65"), (short) 16850, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_65 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_65"), (short) 16850, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_66 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:66"), (short) 16851, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_66 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_66"), (short) 16851, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_67 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:67"), (short) 16852, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_67 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_67"), (short) 16852, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_68 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:68"), (short) 16853, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_68 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_68"), (short) 16853, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_69 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:69"), (short) 16854, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_69 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_69"), (short) 16854, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_70 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:70"), (short) 16855, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_70 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_70"), (short) 16855, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_71 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:71"), (short) 16856, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_71 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_71"), (short) 16856, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_72 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:72"), (short) 16857, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_72 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_72"), (short) 16857, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_73 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:73"), (short) 16858, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_73 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_73"), (short) 16858, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_74 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:74"), (short) 16859, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_74 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_74"), (short) 16859, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_75 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:75"), (short) 16860, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_75 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_75"), (short) 16860, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_76 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:76"), (short) 16861, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_76 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_76"), (short) 16861, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_77 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:77"), (short) 16862, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_77 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_77"), (short) 16862, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_78 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:78"), (short) 16863, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_78 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_78"), (short) 16863, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_79 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:79"), (short) 16864, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_79 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_79"), (short) 16864, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_80 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:80"), (short) 16865, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_80 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_80"), (short) 16865, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_81 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:81"), (short) 16866, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_81 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_81"), (short) 16866, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_82 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:82"), (short) 16867, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_82 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_82"), (short) 16867, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_83 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:83"), (short) 16868, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_83 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_83"), (short) 16868, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_84 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:84"), (short) 16869, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_84 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_84"), (short) 16869, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_85 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:85"), (short) 16870, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_85 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_85"), (short) 16870, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_86 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:86"), (short) 16871, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_86 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_86"), (short) 16871, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_87 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:87"), (short) 16872, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_87 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_87"), (short) 16872, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_88 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:88"), (short) 16873, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_88 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_88"), (short) 16873, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_89 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:89"), (short) 16874, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_89 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_89"), (short) 16874, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_90 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:90"), (short) 16875, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_90 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_90"), (short) 16875, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_91 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:91"), (short) 16876, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_91 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_91"), (short) 16876, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_92 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:92"), (short) 16877, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_92 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_92"), (short) 16877, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_93 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:93"), (short) 16878, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_93 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_93"), (short) 16878, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_94 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:94"), (short) 16879, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_94 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_94"), (short) 16879, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_95 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:95"), (short) 16880, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_95 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_95"), (short) 16880, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_96 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:96"), (short) 16881, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_96 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_96"), (short) 16881, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_97 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:97"), (short) 16882, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_97 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_97"), (short) 16882, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_98 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:98"), (short) 16883, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_98 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_98"), (short) 16883, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_99 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:99"), (short) 16884, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_99 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_99"), (short) 16884, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_100 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:100"), (short) 16885, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_100 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_100"), (short) 16885, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_101 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:101"), (short) 16886, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_101 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_101"), (short) 16886, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_102 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:102"), (short) 16887, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_102 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_102"), (short) 16887, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_103 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:103"), (short) 16888, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_103 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_103"), (short) 16888, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_104 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:104"), (short) 16889, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_104 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_104"), (short) 16889, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_105 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:105"), (short) 16890, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_105 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_105"), (short) 16890, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_106 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:106"), (short) 16891, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_106 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_106"), (short) 16891, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_107 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:107"), (short) 16892, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_107 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_107"), (short) 16892, Block.POLISHED_BLACKSTONE_WALL, "east=none","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_108 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:108"), (short) 16893, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_108 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_108"), (short) 16893, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_109 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:109"), (short) 16894, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_109 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_109"), (short) 16894, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_110 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:110"), (short) 16895, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_110 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_110"), (short) 16895, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_111 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:111"), (short) 16896, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_111 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_111"), (short) 16896, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_112 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:112"), (short) 16897, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_112 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_112"), (short) 16897, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_113 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:113"), (short) 16898, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_113 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_113"), (short) 16898, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_114 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:114"), (short) 16899, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_114 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_114"), (short) 16899, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_115 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:115"), (short) 16900, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_115 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_115"), (short) 16900, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_116 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:116"), (short) 16901, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_116 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_116"), (short) 16901, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_117 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:117"), (short) 16902, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_117 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_117"), (short) 16902, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_118 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:118"), (short) 16903, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_118 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_118"), (short) 16903, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_119 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:119"), (short) 16904, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_119 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_119"), (short) 16904, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_120 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:120"), (short) 16905, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_120 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_120"), (short) 16905, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_121 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:121"), (short) 16906, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_121 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_121"), (short) 16906, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_122 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:122"), (short) 16907, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_122 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_122"), (short) 16907, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_123 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:123"), (short) 16908, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_123 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_123"), (short) 16908, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_124 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:124"), (short) 16909, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_124 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_124"), (short) 16909, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_125 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:125"), (short) 16910, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_125 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_125"), (short) 16910, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_126 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:126"), (short) 16911, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_126 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_126"), (short) 16911, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_127 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:127"), (short) 16912, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_127 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_127"), (short) 16912, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_128 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:128"), (short) 16913, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_128 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_128"), (short) 16913, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_129 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:129"), (short) 16914, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_129 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_129"), (short) 16914, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_130 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:130"), (short) 16915, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_130 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_130"), (short) 16915, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_131 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:131"), (short) 16916, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_131 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_131"), (short) 16916, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_132 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:132"), (short) 16917, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_132 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_132"), (short) 16917, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_133 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:133"), (short) 16918, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_133 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_133"), (short) 16918, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_134 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:134"), (short) 16919, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_134 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_134"), (short) 16919, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_135 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:135"), (short) 16920, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_135 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_135"), (short) 16920, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_136 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:136"), (short) 16921, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_136 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_136"), (short) 16921, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_137 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:137"), (short) 16922, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_137 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_137"), (short) 16922, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_138 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:138"), (short) 16923, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_138 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_138"), (short) 16923, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_139 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:139"), (short) 16924, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_139 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_139"), (short) 16924, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_140 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:140"), (short) 16925, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_140 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_140"), (short) 16925, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_141 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:141"), (short) 16926, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_141 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_141"), (short) 16926, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_142 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:142"), (short) 16927, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_142 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_142"), (short) 16927, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_143 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:143"), (short) 16928, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_143 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_143"), (short) 16928, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_144 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:144"), (short) 16929, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_144 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_144"), (short) 16929, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_145 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:145"), (short) 16930, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_145 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_145"), (short) 16930, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_146 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:146"), (short) 16931, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_146 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_146"), (short) 16931, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_147 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:147"), (short) 16932, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_147 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_147"), (short) 16932, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_148 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:148"), (short) 16933, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_148 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_148"), (short) 16933, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_149 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:149"), (short) 16934, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_149 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_149"), (short) 16934, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_150 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:150"), (short) 16935, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_150 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_150"), (short) 16935, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_151 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:151"), (short) 16936, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_151 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_151"), (short) 16936, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_152 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:152"), (short) 16937, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_152 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_152"), (short) 16937, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_153 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:153"), (short) 16938, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_153 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_153"), (short) 16938, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_154 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:154"), (short) 16939, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_154 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_154"), (short) 16939, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_155 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:155"), (short) 16940, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_155 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_155"), (short) 16940, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_156 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:156"), (short) 16941, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_156 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_156"), (short) 16941, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_157 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:157"), (short) 16942, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_157 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_157"), (short) 16942, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_158 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:158"), (short) 16943, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_158 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_158"), (short) 16943, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_159 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:159"), (short) 16944, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_159 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_159"), (short) 16944, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_160 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:160"), (short) 16945, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_160 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_160"), (short) 16945, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_161 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:161"), (short) 16946, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_161 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_161"), (short) 16946, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_162 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:162"), (short) 16947, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_162 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_162"), (short) 16947, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_163 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:163"), (short) 16948, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_163 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_163"), (short) 16948, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_164 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:164"), (short) 16949, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_164 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_164"), (short) 16949, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_165 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:165"), (short) 16950, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_165 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_165"), (short) 16950, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_166 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:166"), (short) 16951, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_166 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_166"), (short) 16951, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_167 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:167"), (short) 16952, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_167 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_167"), (short) 16952, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_168 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:168"), (short) 16953, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_168 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_168"), (short) 16953, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_169 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:169"), (short) 16954, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_169 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_169"), (short) 16954, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_170 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:170"), (short) 16955, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_170 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_170"), (short) 16955, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_171 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:171"), (short) 16956, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_171 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_171"), (short) 16956, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_172 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:172"), (short) 16957, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_172 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_172"), (short) 16957, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_173 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:173"), (short) 16958, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_173 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_173"), (short) 16958, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_174 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:174"), (short) 16959, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_174 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_174"), (short) 16959, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_175 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:175"), (short) 16960, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_175 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_175"), (short) 16960, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_176 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:176"), (short) 16961, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_176 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_176"), (short) 16961, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_177 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:177"), (short) 16962, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_177 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_177"), (short) 16962, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_178 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:178"), (short) 16963, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_178 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_178"), (short) 16963, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_179 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:179"), (short) 16964, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_179 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_179"), (short) 16964, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_180 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:180"), (short) 16965, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_180 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_180"), (short) 16965, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_181 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:181"), (short) 16966, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_181 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_181"), (short) 16966, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_182 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:182"), (short) 16967, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_182 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_182"), (short) 16967, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_183 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:183"), (short) 16968, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_183 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_183"), (short) 16968, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_184 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:184"), (short) 16969, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_184 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_184"), (short) 16969, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_185 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:185"), (short) 16970, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_185 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_185"), (short) 16970, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_186 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:186"), (short) 16971, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_186 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_186"), (short) 16971, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_187 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:187"), (short) 16972, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_187 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_187"), (short) 16972, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_188 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:188"), (short) 16973, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_188 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_188"), (short) 16973, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_189 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:189"), (short) 16974, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_189 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_189"), (short) 16974, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_190 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:190"), (short) 16975, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_190 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_190"), (short) 16975, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_191 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:191"), (short) 16976, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_191 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_191"), (short) 16976, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_192 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:192"), (short) 16977, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_192 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_192"), (short) 16977, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_193 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:193"), (short) 16978, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_193 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_193"), (short) 16978, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_194 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:194"), (short) 16979, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_194 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_194"), (short) 16979, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_195 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:195"), (short) 16980, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_195 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_195"), (short) 16980, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_196 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:196"), (short) 16981, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_196 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_196"), (short) 16981, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_197 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:197"), (short) 16982, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_197 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_197"), (short) 16982, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_198 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:198"), (short) 16983, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_198 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_198"), (short) 16983, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_199 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:199"), (short) 16984, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_199 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_199"), (short) 16984, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_200 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:200"), (short) 16985, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_200 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_200"), (short) 16985, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_201 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:201"), (short) 16986, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_201 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_201"), (short) 16986, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_202 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:202"), (short) 16987, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_202 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_202"), (short) 16987, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_203 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:203"), (short) 16988, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_203 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_203"), (short) 16988, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_204 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:204"), (short) 16989, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_204 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_204"), (short) 16989, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_205 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:205"), (short) 16990, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_205 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_205"), (short) 16990, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_206 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:206"), (short) 16991, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_206 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_206"), (short) 16991, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_207 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:207"), (short) 16992, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_207 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_207"), (short) 16992, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_208 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:208"), (short) 16993, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_208 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_208"), (short) 16993, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_209 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:209"), (short) 16994, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_209 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_209"), (short) 16994, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_210 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:210"), (short) 16995, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_210 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_210"), (short) 16995, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_211 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:211"), (short) 16996, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_211 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_211"), (short) 16996, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_212 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:212"), (short) 16997, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_212 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_212"), (short) 16997, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_213 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:213"), (short) 16998, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_213 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_213"), (short) 16998, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_214 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:214"), (short) 16999, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_214 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_214"), (short) 16999, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_215 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:215"), (short) 17000, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_215 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_215"), (short) 17000, Block.POLISHED_BLACKSTONE_WALL, "east=low","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_216 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:216"), (short) 17001, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_216 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_216"), (short) 17001, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_217 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:217"), (short) 17002, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_217 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_217"), (short) 17002, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_218 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:218"), (short) 17003, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_218 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_218"), (short) 17003, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_219 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:219"), (short) 17004, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_219 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_219"), (short) 17004, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_220 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:220"), (short) 17005, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_220 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_220"), (short) 17005, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_221 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:221"), (short) 17006, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_221 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_221"), (short) 17006, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_222 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:222"), (short) 17007, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_222 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_222"), (short) 17007, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_223 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:223"), (short) 17008, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_223 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_223"), (short) 17008, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_224 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:224"), (short) 17009, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_224 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_224"), (short) 17009, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_225 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:225"), (short) 17010, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_225 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_225"), (short) 17010, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_226 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:226"), (short) 17011, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_226 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_226"), (short) 17011, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_227 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:227"), (short) 17012, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_227 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_227"), (short) 17012, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_228 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:228"), (short) 17013, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_228 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_228"), (short) 17013, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_229 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:229"), (short) 17014, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_229 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_229"), (short) 17014, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_230 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:230"), (short) 17015, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_230 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_230"), (short) 17015, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_231 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:231"), (short) 17016, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_231 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_231"), (short) 17016, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_232 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:232"), (short) 17017, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_232 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_232"), (short) 17017, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_233 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:233"), (short) 17018, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_233 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_233"), (short) 17018, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_234 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:234"), (short) 17019, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_234 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_234"), (short) 17019, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_235 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:235"), (short) 17020, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_235 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_235"), (short) 17020, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_236 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:236"), (short) 17021, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_236 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_236"), (short) 17021, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_237 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:237"), (short) 17022, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_237 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_237"), (short) 17022, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_238 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:238"), (short) 17023, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_238 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_238"), (short) 17023, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_239 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:239"), (short) 17024, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_239 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_239"), (short) 17024, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_240 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:240"), (short) 17025, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_240 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_240"), (short) 17025, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_241 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:241"), (short) 17026, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_241 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_241"), (short) 17026, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_242 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:242"), (short) 17027, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_242 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_242"), (short) 17027, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_243 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:243"), (short) 17028, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_243 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_243"), (short) 17028, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_244 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:244"), (short) 17029, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_244 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_244"), (short) 17029, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_245 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:245"), (short) 17030, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_245 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_245"), (short) 17030, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_246 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:246"), (short) 17031, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_246 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_246"), (short) 17031, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_247 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:247"), (short) 17032, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_247 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_247"), (short) 17032, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_248 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:248"), (short) 17033, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_248 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_248"), (short) 17033, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_249 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:249"), (short) 17034, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_249 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_249"), (short) 17034, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_250 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:250"), (short) 17035, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_250 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_250"), (short) 17035, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_251 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:251"), (short) 17036, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_251 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_251"), (short) 17036, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=none","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_252 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:252"), (short) 17037, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_252 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_252"), (short) 17037, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_253 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:253"), (short) 17038, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_253 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_253"), (short) 17038, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_254 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:254"), (short) 17039, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_254 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_254"), (short) 17039, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_255 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:255"), (short) 17040, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_255 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_255"), (short) 17040, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_256 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:256"), (short) 17041, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_256 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_256"), (short) 17041, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_257 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:257"), (short) 17042, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_257 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_257"), (short) 17042, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_258 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:258"), (short) 17043, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_258 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_258"), (short) 17043, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_259 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:259"), (short) 17044, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_259 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_259"), (short) 17044, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_260 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:260"), (short) 17045, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_260 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_260"), (short) 17045, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_261 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:261"), (short) 17046, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_261 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_261"), (short) 17046, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_262 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:262"), (short) 17047, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_262 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_262"), (short) 17047, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_263 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:263"), (short) 17048, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_263 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_263"), (short) 17048, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_264 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:264"), (short) 17049, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_264 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_264"), (short) 17049, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_265 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:265"), (short) 17050, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_265 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_265"), (short) 17050, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_266 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:266"), (short) 17051, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_266 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_266"), (short) 17051, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_267 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:267"), (short) 17052, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_267 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_267"), (short) 17052, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_268 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:268"), (short) 17053, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_268 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_268"), (short) 17053, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_269 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:269"), (short) 17054, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_269 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_269"), (short) 17054, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_270 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:270"), (short) 17055, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_270 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_270"), (short) 17055, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_271 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:271"), (short) 17056, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_271 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_271"), (short) 17056, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_272 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:272"), (short) 17057, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_272 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_272"), (short) 17057, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_273 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:273"), (short) 17058, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_273 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_273"), (short) 17058, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_274 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:274"), (short) 17059, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_274 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_274"), (short) 17059, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_275 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:275"), (short) 17060, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_275 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_275"), (short) 17060, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_276 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:276"), (short) 17061, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_276 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_276"), (short) 17061, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_277 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:277"), (short) 17062, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_277 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_277"), (short) 17062, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_278 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:278"), (short) 17063, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_278 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_278"), (short) 17063, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_279 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:279"), (short) 17064, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_279 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_279"), (short) 17064, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_280 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:280"), (short) 17065, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_280 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_280"), (short) 17065, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_281 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:281"), (short) 17066, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_281 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_281"), (short) 17066, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_282 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:282"), (short) 17067, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_282 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_282"), (short) 17067, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_283 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:283"), (short) 17068, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_283 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_283"), (short) 17068, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_284 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:284"), (short) 17069, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_284 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_284"), (short) 17069, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_285 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:285"), (short) 17070, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_285 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_285"), (short) 17070, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_286 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:286"), (short) 17071, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_286 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_286"), (short) 17071, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_287 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:287"), (short) 17072, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_287 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_287"), (short) 17072, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=low","south=tall","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_288 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:288"), (short) 17073, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_288 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_288"), (short) 17073, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_289 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:289"), (short) 17074, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_289 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_289"), (short) 17074, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_290 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:290"), (short) 17075, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_290 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_290"), (short) 17075, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_291 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:291"), (short) 17076, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_291 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_291"), (short) 17076, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_292 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:292"), (short) 17077, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_292 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_292"), (short) 17077, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_293 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:293"), (short) 17078, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_293 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_293"), (short) 17078, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_294 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:294"), (short) 17079, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_294 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_294"), (short) 17079, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_295 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:295"), (short) 17080, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_295 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_295"), (short) 17080, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_296 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:296"), (short) 17081, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_296 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_296"), (short) 17081, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_297 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:297"), (short) 17082, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_297 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_297"), (short) 17082, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_298 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:298"), (short) 17083, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_298 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_298"), (short) 17083, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_299 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:299"), (short) 17084, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_299 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_299"), (short) 17084, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=none","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_300 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:300"), (short) 17085, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_300 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_300"), (short) 17085, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_301 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:301"), (short) 17086, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_301 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_301"), (short) 17086, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_302 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:302"), (short) 17087, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_302 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_302"), (short) 17087, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_303 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:303"), (short) 17088, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_303 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_303"), (short) 17088, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_304 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:304"), (short) 17089, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_304 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_304"), (short) 17089, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_305 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:305"), (short) 17090, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_305 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_305"), (short) 17090, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_306 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:306"), (short) 17091, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_306 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_306"), (short) 17091, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_307 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:307"), (short) 17092, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_307 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_307"), (short) 17092, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_308 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:308"), (short) 17093, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_308 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_308"), (short) 17093, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_309 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:309"), (short) 17094, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_309 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_309"), (short) 17094, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_310 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:310"), (short) 17095, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_310 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_310"), (short) 17095, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_311 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:311"), (short) 17096, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_311 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_311"), (short) 17096, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=low","up=false","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_312 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:312"), (short) 17097, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_312 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_312"), (short) 17097, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_313 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:313"), (short) 17098, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_313 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_313"), (short) 17098, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_314 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:314"), (short) 17099, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_314 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_314"), (short) 17099, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_315 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:315"), (short) 17100, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_315 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_315"), (short) 17100, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_316 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:316"), (short) 17101, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_316 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_316"), (short) 17101, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_317 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:317"), (short) 17102, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_317 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_317"), (short) 17102, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=true","waterlogged=false","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_318 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:318"), (short) 17103, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_318 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_318"), (short) 17103, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_319 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:319"), (short) 17104, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_319 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_319"), (short) 17104, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_320 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:320"), (short) 17105, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_320 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_320"), (short) 17105, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=true","west=tall");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_321 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:321"), (short) 17106, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_321 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_321"), (short) 17106, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=none");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_322 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:322"), (short) 17107, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_322 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_322"), (short) 17107, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=low");
 
-  public static final BlockState POLISHED_BLACKSTONE_WALL_323 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall:323"), (short) 17108, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
+  public static final BlockState POLISHED_BLACKSTONE_WALL_323 = new BlockState(NamespaceID.from("minecraft:polished_blackstone_wall_323"), (short) 17108, Block.POLISHED_BLACKSTONE_WALL, "east=tall","north=tall","south=tall","up=false","waterlogged=false","west=tall");
 
   static {
     Registries.registerBlockState(POLISHED_BLACKSTONE_WALL_0);

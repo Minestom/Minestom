@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class SoulSoil {
-  public static final BlockState SOUL_SOIL_0 = new BlockState(NamespaceID.from("minecraft:soul_soil:0"), (short) 4001, Block.SOUL_SOIL);
+  public static final BlockState SOUL_SOIL_0 = new BlockState(NamespaceID.from("minecraft:soul_soil_0"), (short) 4001, Block.SOUL_SOIL);
 
   static {
     Registries.registerBlockState(SOUL_SOIL_0);

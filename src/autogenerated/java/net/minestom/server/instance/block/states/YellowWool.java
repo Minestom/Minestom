@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class YellowWool {
-  public static final BlockState YELLOW_WOOL_0 = new BlockState(NamespaceID.from("minecraft:yellow_wool:0"), (short) 1388, Block.YELLOW_WOOL);
+  public static final BlockState YELLOW_WOOL_0 = new BlockState(NamespaceID.from("minecraft:yellow_wool_0"), (short) 1388, Block.YELLOW_WOOL);
 
   static {
     Registries.registerBlockState(YELLOW_WOOL_0);

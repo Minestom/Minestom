@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedRedTulip {
-  public static final BlockState POTTED_RED_TULIP_0 = new BlockState(NamespaceID.from("minecraft:potted_red_tulip:0"), (short) 6322, Block.POTTED_RED_TULIP);
+  public static final BlockState POTTED_RED_TULIP_0 = new BlockState(NamespaceID.from("minecraft:potted_red_tulip_0"), (short) 6322, Block.POTTED_RED_TULIP);
 
   static {
     Registries.registerBlockState(POTTED_RED_TULIP_0);

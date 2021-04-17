@@ -14,19 +14,19 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Cake {
-  public static final BlockState CAKE_0 = new BlockState(NamespaceID.from("minecraft:cake:0"), (short) 4024, Block.CAKE, "bites=0");
+  public static final BlockState CAKE_0 = new BlockState(NamespaceID.from("minecraft:cake_0"), (short) 4024, Block.CAKE, "bites=0");
 
-  public static final BlockState CAKE_1 = new BlockState(NamespaceID.from("minecraft:cake:1"), (short) 4025, Block.CAKE, "bites=1");
+  public static final BlockState CAKE_1 = new BlockState(NamespaceID.from("minecraft:cake_1"), (short) 4025, Block.CAKE, "bites=1");
 
-  public static final BlockState CAKE_2 = new BlockState(NamespaceID.from("minecraft:cake:2"), (short) 4026, Block.CAKE, "bites=2");
+  public static final BlockState CAKE_2 = new BlockState(NamespaceID.from("minecraft:cake_2"), (short) 4026, Block.CAKE, "bites=2");
 
-  public static final BlockState CAKE_3 = new BlockState(NamespaceID.from("minecraft:cake:3"), (short) 4027, Block.CAKE, "bites=3");
+  public static final BlockState CAKE_3 = new BlockState(NamespaceID.from("minecraft:cake_3"), (short) 4027, Block.CAKE, "bites=3");
 
-  public static final BlockState CAKE_4 = new BlockState(NamespaceID.from("minecraft:cake:4"), (short) 4028, Block.CAKE, "bites=4");
+  public static final BlockState CAKE_4 = new BlockState(NamespaceID.from("minecraft:cake_4"), (short) 4028, Block.CAKE, "bites=4");
 
-  public static final BlockState CAKE_5 = new BlockState(NamespaceID.from("minecraft:cake:5"), (short) 4029, Block.CAKE, "bites=5");
+  public static final BlockState CAKE_5 = new BlockState(NamespaceID.from("minecraft:cake_5"), (short) 4029, Block.CAKE, "bites=5");
 
-  public static final BlockState CAKE_6 = new BlockState(NamespaceID.from("minecraft:cake:6"), (short) 4030, Block.CAKE, "bites=6");
+  public static final BlockState CAKE_6 = new BlockState(NamespaceID.from("minecraft:cake_6"), (short) 4030, Block.CAKE, "bites=6");
 
   static {
     Registries.registerBlockState(CAKE_0);

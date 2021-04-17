@@ -14,25 +14,25 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Hopper {
-  public static final BlockState HOPPER_0 = new BlockState(NamespaceID.from("minecraft:hopper:0"), (short) 6732, Block.HOPPER, "enabled=true","facing=down");
+  public static final BlockState HOPPER_0 = new BlockState(NamespaceID.from("minecraft:hopper_0"), (short) 6732, Block.HOPPER, "enabled=true","facing=down");
 
-  public static final BlockState HOPPER_1 = new BlockState(NamespaceID.from("minecraft:hopper:1"), (short) 6733, Block.HOPPER, "enabled=true","facing=north");
+  public static final BlockState HOPPER_1 = new BlockState(NamespaceID.from("minecraft:hopper_1"), (short) 6733, Block.HOPPER, "enabled=true","facing=north");
 
-  public static final BlockState HOPPER_2 = new BlockState(NamespaceID.from("minecraft:hopper:2"), (short) 6734, Block.HOPPER, "enabled=true","facing=south");
+  public static final BlockState HOPPER_2 = new BlockState(NamespaceID.from("minecraft:hopper_2"), (short) 6734, Block.HOPPER, "enabled=true","facing=south");
 
-  public static final BlockState HOPPER_3 = new BlockState(NamespaceID.from("minecraft:hopper:3"), (short) 6735, Block.HOPPER, "enabled=true","facing=west");
+  public static final BlockState HOPPER_3 = new BlockState(NamespaceID.from("minecraft:hopper_3"), (short) 6735, Block.HOPPER, "enabled=true","facing=west");
 
-  public static final BlockState HOPPER_4 = new BlockState(NamespaceID.from("minecraft:hopper:4"), (short) 6736, Block.HOPPER, "enabled=true","facing=east");
+  public static final BlockState HOPPER_4 = new BlockState(NamespaceID.from("minecraft:hopper_4"), (short) 6736, Block.HOPPER, "enabled=true","facing=east");
 
-  public static final BlockState HOPPER_5 = new BlockState(NamespaceID.from("minecraft:hopper:5"), (short) 6737, Block.HOPPER, "enabled=false","facing=down");
+  public static final BlockState HOPPER_5 = new BlockState(NamespaceID.from("minecraft:hopper_5"), (short) 6737, Block.HOPPER, "enabled=false","facing=down");
 
-  public static final BlockState HOPPER_6 = new BlockState(NamespaceID.from("minecraft:hopper:6"), (short) 6738, Block.HOPPER, "enabled=false","facing=north");
+  public static final BlockState HOPPER_6 = new BlockState(NamespaceID.from("minecraft:hopper_6"), (short) 6738, Block.HOPPER, "enabled=false","facing=north");
 
-  public static final BlockState HOPPER_7 = new BlockState(NamespaceID.from("minecraft:hopper:7"), (short) 6739, Block.HOPPER, "enabled=false","facing=south");
+  public static final BlockState HOPPER_7 = new BlockState(NamespaceID.from("minecraft:hopper_7"), (short) 6739, Block.HOPPER, "enabled=false","facing=south");
 
-  public static final BlockState HOPPER_8 = new BlockState(NamespaceID.from("minecraft:hopper:8"), (short) 6740, Block.HOPPER, "enabled=false","facing=west");
+  public static final BlockState HOPPER_8 = new BlockState(NamespaceID.from("minecraft:hopper_8"), (short) 6740, Block.HOPPER, "enabled=false","facing=west");
 
-  public static final BlockState HOPPER_9 = new BlockState(NamespaceID.from("minecraft:hopper:9"), (short) 6741, Block.HOPPER, "enabled=false","facing=east");
+  public static final BlockState HOPPER_9 = new BlockState(NamespaceID.from("minecraft:hopper_9"), (short) 6741, Block.HOPPER, "enabled=false","facing=east");
 
   static {
     Registries.registerBlockState(HOPPER_0);

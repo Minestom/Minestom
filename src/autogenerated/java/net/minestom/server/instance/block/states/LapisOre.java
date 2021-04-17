@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class LapisOre {
-  public static final BlockState LAPIS_ORE_0 = new BlockState(NamespaceID.from("minecraft:lapis_ore:0"), (short) 232, Block.LAPIS_ORE);
+  public static final BlockState LAPIS_ORE_0 = new BlockState(NamespaceID.from("minecraft:lapis_ore_0"), (short) 232, Block.LAPIS_ORE);
 
   static {
     Registries.registerBlockState(LAPIS_ORE_0);

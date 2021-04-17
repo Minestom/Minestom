@@ -14,11 +14,11 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class StrippedJungleLog {
-  public static final BlockState STRIPPED_JUNGLE_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_log:0"), (short) 97, Block.STRIPPED_JUNGLE_LOG, "axis=x");
+  public static final BlockState STRIPPED_JUNGLE_LOG_0 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_log_0"), (short) 97, Block.STRIPPED_JUNGLE_LOG, "axis=x");
 
-  public static final BlockState STRIPPED_JUNGLE_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_log:1"), (short) 98, Block.STRIPPED_JUNGLE_LOG, "axis=y");
+  public static final BlockState STRIPPED_JUNGLE_LOG_1 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_log_1"), (short) 98, Block.STRIPPED_JUNGLE_LOG, "axis=y");
 
-  public static final BlockState STRIPPED_JUNGLE_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_log:2"), (short) 99, Block.STRIPPED_JUNGLE_LOG, "axis=z");
+  public static final BlockState STRIPPED_JUNGLE_LOG_2 = new BlockState(NamespaceID.from("minecraft:stripped_jungle_log_2"), (short) 99, Block.STRIPPED_JUNGLE_LOG, "axis=z");
 
   static {
     Registries.registerBlockState(STRIPPED_JUNGLE_LOG_0);

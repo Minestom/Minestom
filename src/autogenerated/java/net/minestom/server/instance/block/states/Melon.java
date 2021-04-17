@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Melon {
-  public static final BlockState MELON_0 = new BlockState(NamespaceID.from("minecraft:melon:0"), (short) 4767, Block.MELON);
+  public static final BlockState MELON_0 = new BlockState(NamespaceID.from("minecraft:melon_0"), (short) 4767, Block.MELON);
 
   static {
     Registries.registerBlockState(MELON_0);

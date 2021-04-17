@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DeadFireCoralBlock {
-  public static final BlockState DEAD_FIRE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_block:0"), (short) 9517, Block.DEAD_FIRE_CORAL_BLOCK);
+  public static final BlockState DEAD_FIRE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:dead_fire_coral_block_0"), (short) 9517, Block.DEAD_FIRE_CORAL_BLOCK);
 
   static {
     Registries.registerBlockState(DEAD_FIRE_CORAL_BLOCK_0);

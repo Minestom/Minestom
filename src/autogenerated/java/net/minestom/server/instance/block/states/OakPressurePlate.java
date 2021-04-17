@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class OakPressurePlate {
-  public static final BlockState OAK_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:oak_pressure_plate:0"), (short) 3873, Block.OAK_PRESSURE_PLATE, "powered=true");
+  public static final BlockState OAK_PRESSURE_PLATE_0 = new BlockState(NamespaceID.from("minecraft:oak_pressure_plate_0"), (short) 3873, Block.OAK_PRESSURE_PLATE, "powered=true");
 
-  public static final BlockState OAK_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:oak_pressure_plate:1"), (short) 3874, Block.OAK_PRESSURE_PLATE, "powered=false");
+  public static final BlockState OAK_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:oak_pressure_plate_1"), (short) 3874, Block.OAK_PRESSURE_PLATE, "powered=false");
 
   static {
     Registries.registerBlockState(OAK_PRESSURE_PLATE_0);

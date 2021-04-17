@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Grass {
-  public static final BlockState GRASS_0 = new BlockState(NamespaceID.from("minecraft:grass:0"), (short) 1342, Block.GRASS);
+  public static final BlockState GRASS_0 = new BlockState(NamespaceID.from("minecraft:grass_0"), (short) 1342, Block.GRASS);
 
   static {
     Registries.registerBlockState(GRASS_0);

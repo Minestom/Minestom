@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Podzol {
-  public static final BlockState PODZOL_0 = new BlockState(NamespaceID.from("minecraft:podzol:0"), (short) 12, Block.PODZOL, "snowy=true");
+  public static final BlockState PODZOL_0 = new BlockState(NamespaceID.from("minecraft:podzol_0"), (short) 12, Block.PODZOL, "snowy=true");
 
-  public static final BlockState PODZOL_1 = new BlockState(NamespaceID.from("minecraft:podzol:1"), (short) 13, Block.PODZOL, "snowy=false");
+  public static final BlockState PODZOL_1 = new BlockState(NamespaceID.from("minecraft:podzol_1"), (short) 13, Block.PODZOL, "snowy=false");
 
   static {
     Registries.registerBlockState(PODZOL_0);

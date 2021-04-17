@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PolishedAndesite {
-  public static final BlockState POLISHED_ANDESITE_0 = new BlockState(NamespaceID.from("minecraft:polished_andesite:0"), (short) 7, Block.POLISHED_ANDESITE);
+  public static final BlockState POLISHED_ANDESITE_0 = new BlockState(NamespaceID.from("minecraft:polished_andesite_0"), (short) 7, Block.POLISHED_ANDESITE);
 
   static {
     Registries.registerBlockState(POLISHED_ANDESITE_0);

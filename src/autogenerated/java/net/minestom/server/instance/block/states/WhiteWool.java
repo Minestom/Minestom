@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WhiteWool {
-  public static final BlockState WHITE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:white_wool:0"), (short) 1384, Block.WHITE_WOOL);
+  public static final BlockState WHITE_WOOL_0 = new BlockState(NamespaceID.from("minecraft:white_wool_0"), (short) 1384, Block.WHITE_WOOL);
 
   static {
     Registries.registerBlockState(WHITE_WOOL_0);

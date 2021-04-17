@@ -14,165 +14,165 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CrimsonStairs {
-  public static final BlockState CRIMSON_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:0"), (short) 15327, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_0 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_0"), (short) 15327, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:1"), (short) 15328, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_1 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_1"), (short) 15328, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:2"), (short) 15329, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_2 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_2"), (short) 15329, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:3"), (short) 15330, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_3 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_3"), (short) 15330, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:4"), (short) 15331, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_4 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_4"), (short) 15331, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:5"), (short) 15332, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_5 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_5"), (short) 15332, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:6"), (short) 15333, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_6 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_6"), (short) 15333, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:7"), (short) 15334, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_7 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_7"), (short) 15334, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:8"), (short) 15335, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_8 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_8"), (short) 15335, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:9"), (short) 15336, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_9 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_9"), (short) 15336, Block.CRIMSON_STAIRS, "facing=north","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:10"), (short) 15337, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_10 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_10"), (short) 15337, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:11"), (short) 15338, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_11 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_11"), (short) 15338, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:12"), (short) 15339, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_12 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_12"), (short) 15339, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:13"), (short) 15340, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_13 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_13"), (short) 15340, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:14"), (short) 15341, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_14 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_14"), (short) 15341, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:15"), (short) 15342, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_15 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_15"), (short) 15342, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:16"), (short) 15343, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_16 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_16"), (short) 15343, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:17"), (short) 15344, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_17 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_17"), (short) 15344, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:18"), (short) 15345, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_18 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_18"), (short) 15345, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:19"), (short) 15346, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_19 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_19"), (short) 15346, Block.CRIMSON_STAIRS, "facing=north","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:20"), (short) 15347, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_20 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_20"), (short) 15347, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:21"), (short) 15348, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_21 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_21"), (short) 15348, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:22"), (short) 15349, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_22 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_22"), (short) 15349, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:23"), (short) 15350, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_23 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_23"), (short) 15350, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:24"), (short) 15351, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_24 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_24"), (short) 15351, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:25"), (short) 15352, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_25 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_25"), (short) 15352, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:26"), (short) 15353, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_26 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_26"), (short) 15353, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:27"), (short) 15354, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_27 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_27"), (short) 15354, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:28"), (short) 15355, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_28 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_28"), (short) 15355, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:29"), (short) 15356, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_29 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_29"), (short) 15356, Block.CRIMSON_STAIRS, "facing=south","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:30"), (short) 15357, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_30 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_30"), (short) 15357, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:31"), (short) 15358, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_31 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_31"), (short) 15358, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:32"), (short) 15359, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_32 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_32"), (short) 15359, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:33"), (short) 15360, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_33 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_33"), (short) 15360, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:34"), (short) 15361, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_34 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_34"), (short) 15361, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:35"), (short) 15362, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_35 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_35"), (short) 15362, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:36"), (short) 15363, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_36 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_36"), (short) 15363, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:37"), (short) 15364, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_37 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_37"), (short) 15364, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:38"), (short) 15365, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_38 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_38"), (short) 15365, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:39"), (short) 15366, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_39 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_39"), (short) 15366, Block.CRIMSON_STAIRS, "facing=south","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:40"), (short) 15367, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_40 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_40"), (short) 15367, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:41"), (short) 15368, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_41 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_41"), (short) 15368, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:42"), (short) 15369, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_42 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_42"), (short) 15369, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:43"), (short) 15370, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_43 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_43"), (short) 15370, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:44"), (short) 15371, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_44 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_44"), (short) 15371, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:45"), (short) 15372, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_45 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_45"), (short) 15372, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:46"), (short) 15373, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_46 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_46"), (short) 15373, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:47"), (short) 15374, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_47 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_47"), (short) 15374, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:48"), (short) 15375, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_48 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_48"), (short) 15375, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:49"), (short) 15376, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_49 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_49"), (short) 15376, Block.CRIMSON_STAIRS, "facing=west","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:50"), (short) 15377, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_50 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_50"), (short) 15377, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:51"), (short) 15378, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_51 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_51"), (short) 15378, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:52"), (short) 15379, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_52 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_52"), (short) 15379, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:53"), (short) 15380, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_53 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_53"), (short) 15380, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:54"), (short) 15381, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_54 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_54"), (short) 15381, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:55"), (short) 15382, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_55 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_55"), (short) 15382, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:56"), (short) 15383, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_56 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_56"), (short) 15383, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:57"), (short) 15384, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_57 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_57"), (short) 15384, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:58"), (short) 15385, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_58 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_58"), (short) 15385, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:59"), (short) 15386, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_59 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_59"), (short) 15386, Block.CRIMSON_STAIRS, "facing=west","half=bottom","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:60"), (short) 15387, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_60 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_60"), (short) 15387, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:61"), (short) 15388, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_61 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_61"), (short) 15388, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:62"), (short) 15389, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_62 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_62"), (short) 15389, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:63"), (short) 15390, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_63 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_63"), (short) 15390, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:64"), (short) 15391, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_64 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_64"), (short) 15391, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:65"), (short) 15392, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_65 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_65"), (short) 15392, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:66"), (short) 15393, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_66 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_66"), (short) 15393, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:67"), (short) 15394, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_67 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_67"), (short) 15394, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:68"), (short) 15395, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_68 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_68"), (short) 15395, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:69"), (short) 15396, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_69 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_69"), (short) 15396, Block.CRIMSON_STAIRS, "facing=east","half=top","shape=outer_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:70"), (short) 15397, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_70 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_70"), (short) 15397, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:71"), (short) 15398, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_71 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_71"), (short) 15398, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=straight","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:72"), (short) 15399, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_72 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_72"), (short) 15399, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:73"), (short) 15400, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_73 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_73"), (short) 15400, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:74"), (short) 15401, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_74 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_74"), (short) 15401, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:75"), (short) 15402, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_75 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_75"), (short) 15402, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=inner_right","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:76"), (short) 15403, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_76 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_76"), (short) 15403, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:77"), (short) 15404, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_77 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_77"), (short) 15404, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_left","waterlogged=false");
 
-  public static final BlockState CRIMSON_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:78"), (short) 15405, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
+  public static final BlockState CRIMSON_STAIRS_78 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_78"), (short) 15405, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=true");
 
-  public static final BlockState CRIMSON_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:crimson_stairs:79"), (short) 15406, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
+  public static final BlockState CRIMSON_STAIRS_79 = new BlockState(NamespaceID.from("minecraft:crimson_stairs_79"), (short) 15406, Block.CRIMSON_STAIRS, "facing=east","half=bottom","shape=outer_right","waterlogged=false");
 
   static {
     Registries.registerBlockState(CRIMSON_STAIRS_0);

@@ -14,57 +14,57 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WeepingVines {
-  public static final BlockState WEEPING_VINES_0 = new BlockState(NamespaceID.from("minecraft:weeping_vines:0"), (short) 14998, Block.WEEPING_VINES, "age=0");
+  public static final BlockState WEEPING_VINES_0 = new BlockState(NamespaceID.from("minecraft:weeping_vines_0"), (short) 14998, Block.WEEPING_VINES, "age=0");
 
-  public static final BlockState WEEPING_VINES_1 = new BlockState(NamespaceID.from("minecraft:weeping_vines:1"), (short) 14999, Block.WEEPING_VINES, "age=1");
+  public static final BlockState WEEPING_VINES_1 = new BlockState(NamespaceID.from("minecraft:weeping_vines_1"), (short) 14999, Block.WEEPING_VINES, "age=1");
 
-  public static final BlockState WEEPING_VINES_2 = new BlockState(NamespaceID.from("minecraft:weeping_vines:2"), (short) 15000, Block.WEEPING_VINES, "age=2");
+  public static final BlockState WEEPING_VINES_2 = new BlockState(NamespaceID.from("minecraft:weeping_vines_2"), (short) 15000, Block.WEEPING_VINES, "age=2");
 
-  public static final BlockState WEEPING_VINES_3 = new BlockState(NamespaceID.from("minecraft:weeping_vines:3"), (short) 15001, Block.WEEPING_VINES, "age=3");
+  public static final BlockState WEEPING_VINES_3 = new BlockState(NamespaceID.from("minecraft:weeping_vines_3"), (short) 15001, Block.WEEPING_VINES, "age=3");
 
-  public static final BlockState WEEPING_VINES_4 = new BlockState(NamespaceID.from("minecraft:weeping_vines:4"), (short) 15002, Block.WEEPING_VINES, "age=4");
+  public static final BlockState WEEPING_VINES_4 = new BlockState(NamespaceID.from("minecraft:weeping_vines_4"), (short) 15002, Block.WEEPING_VINES, "age=4");
 
-  public static final BlockState WEEPING_VINES_5 = new BlockState(NamespaceID.from("minecraft:weeping_vines:5"), (short) 15003, Block.WEEPING_VINES, "age=5");
+  public static final BlockState WEEPING_VINES_5 = new BlockState(NamespaceID.from("minecraft:weeping_vines_5"), (short) 15003, Block.WEEPING_VINES, "age=5");
 
-  public static final BlockState WEEPING_VINES_6 = new BlockState(NamespaceID.from("minecraft:weeping_vines:6"), (short) 15004, Block.WEEPING_VINES, "age=6");
+  public static final BlockState WEEPING_VINES_6 = new BlockState(NamespaceID.from("minecraft:weeping_vines_6"), (short) 15004, Block.WEEPING_VINES, "age=6");
 
-  public static final BlockState WEEPING_VINES_7 = new BlockState(NamespaceID.from("minecraft:weeping_vines:7"), (short) 15005, Block.WEEPING_VINES, "age=7");
+  public static final BlockState WEEPING_VINES_7 = new BlockState(NamespaceID.from("minecraft:weeping_vines_7"), (short) 15005, Block.WEEPING_VINES, "age=7");
 
-  public static final BlockState WEEPING_VINES_8 = new BlockState(NamespaceID.from("minecraft:weeping_vines:8"), (short) 15006, Block.WEEPING_VINES, "age=8");
+  public static final BlockState WEEPING_VINES_8 = new BlockState(NamespaceID.from("minecraft:weeping_vines_8"), (short) 15006, Block.WEEPING_VINES, "age=8");
 
-  public static final BlockState WEEPING_VINES_9 = new BlockState(NamespaceID.from("minecraft:weeping_vines:9"), (short) 15007, Block.WEEPING_VINES, "age=9");
+  public static final BlockState WEEPING_VINES_9 = new BlockState(NamespaceID.from("minecraft:weeping_vines_9"), (short) 15007, Block.WEEPING_VINES, "age=9");
 
-  public static final BlockState WEEPING_VINES_10 = new BlockState(NamespaceID.from("minecraft:weeping_vines:10"), (short) 15008, Block.WEEPING_VINES, "age=10");
+  public static final BlockState WEEPING_VINES_10 = new BlockState(NamespaceID.from("minecraft:weeping_vines_10"), (short) 15008, Block.WEEPING_VINES, "age=10");
 
-  public static final BlockState WEEPING_VINES_11 = new BlockState(NamespaceID.from("minecraft:weeping_vines:11"), (short) 15009, Block.WEEPING_VINES, "age=11");
+  public static final BlockState WEEPING_VINES_11 = new BlockState(NamespaceID.from("minecraft:weeping_vines_11"), (short) 15009, Block.WEEPING_VINES, "age=11");
 
-  public static final BlockState WEEPING_VINES_12 = new BlockState(NamespaceID.from("minecraft:weeping_vines:12"), (short) 15010, Block.WEEPING_VINES, "age=12");
+  public static final BlockState WEEPING_VINES_12 = new BlockState(NamespaceID.from("minecraft:weeping_vines_12"), (short) 15010, Block.WEEPING_VINES, "age=12");
 
-  public static final BlockState WEEPING_VINES_13 = new BlockState(NamespaceID.from("minecraft:weeping_vines:13"), (short) 15011, Block.WEEPING_VINES, "age=13");
+  public static final BlockState WEEPING_VINES_13 = new BlockState(NamespaceID.from("minecraft:weeping_vines_13"), (short) 15011, Block.WEEPING_VINES, "age=13");
 
-  public static final BlockState WEEPING_VINES_14 = new BlockState(NamespaceID.from("minecraft:weeping_vines:14"), (short) 15012, Block.WEEPING_VINES, "age=14");
+  public static final BlockState WEEPING_VINES_14 = new BlockState(NamespaceID.from("minecraft:weeping_vines_14"), (short) 15012, Block.WEEPING_VINES, "age=14");
 
-  public static final BlockState WEEPING_VINES_15 = new BlockState(NamespaceID.from("minecraft:weeping_vines:15"), (short) 15013, Block.WEEPING_VINES, "age=15");
+  public static final BlockState WEEPING_VINES_15 = new BlockState(NamespaceID.from("minecraft:weeping_vines_15"), (short) 15013, Block.WEEPING_VINES, "age=15");
 
-  public static final BlockState WEEPING_VINES_16 = new BlockState(NamespaceID.from("minecraft:weeping_vines:16"), (short) 15014, Block.WEEPING_VINES, "age=16");
+  public static final BlockState WEEPING_VINES_16 = new BlockState(NamespaceID.from("minecraft:weeping_vines_16"), (short) 15014, Block.WEEPING_VINES, "age=16");
 
-  public static final BlockState WEEPING_VINES_17 = new BlockState(NamespaceID.from("minecraft:weeping_vines:17"), (short) 15015, Block.WEEPING_VINES, "age=17");
+  public static final BlockState WEEPING_VINES_17 = new BlockState(NamespaceID.from("minecraft:weeping_vines_17"), (short) 15015, Block.WEEPING_VINES, "age=17");
 
-  public static final BlockState WEEPING_VINES_18 = new BlockState(NamespaceID.from("minecraft:weeping_vines:18"), (short) 15016, Block.WEEPING_VINES, "age=18");
+  public static final BlockState WEEPING_VINES_18 = new BlockState(NamespaceID.from("minecraft:weeping_vines_18"), (short) 15016, Block.WEEPING_VINES, "age=18");
 
-  public static final BlockState WEEPING_VINES_19 = new BlockState(NamespaceID.from("minecraft:weeping_vines:19"), (short) 15017, Block.WEEPING_VINES, "age=19");
+  public static final BlockState WEEPING_VINES_19 = new BlockState(NamespaceID.from("minecraft:weeping_vines_19"), (short) 15017, Block.WEEPING_VINES, "age=19");
 
-  public static final BlockState WEEPING_VINES_20 = new BlockState(NamespaceID.from("minecraft:weeping_vines:20"), (short) 15018, Block.WEEPING_VINES, "age=20");
+  public static final BlockState WEEPING_VINES_20 = new BlockState(NamespaceID.from("minecraft:weeping_vines_20"), (short) 15018, Block.WEEPING_VINES, "age=20");
 
-  public static final BlockState WEEPING_VINES_21 = new BlockState(NamespaceID.from("minecraft:weeping_vines:21"), (short) 15019, Block.WEEPING_VINES, "age=21");
+  public static final BlockState WEEPING_VINES_21 = new BlockState(NamespaceID.from("minecraft:weeping_vines_21"), (short) 15019, Block.WEEPING_VINES, "age=21");
 
-  public static final BlockState WEEPING_VINES_22 = new BlockState(NamespaceID.from("minecraft:weeping_vines:22"), (short) 15020, Block.WEEPING_VINES, "age=22");
+  public static final BlockState WEEPING_VINES_22 = new BlockState(NamespaceID.from("minecraft:weeping_vines_22"), (short) 15020, Block.WEEPING_VINES, "age=22");
 
-  public static final BlockState WEEPING_VINES_23 = new BlockState(NamespaceID.from("minecraft:weeping_vines:23"), (short) 15021, Block.WEEPING_VINES, "age=23");
+  public static final BlockState WEEPING_VINES_23 = new BlockState(NamespaceID.from("minecraft:weeping_vines_23"), (short) 15021, Block.WEEPING_VINES, "age=23");
 
-  public static final BlockState WEEPING_VINES_24 = new BlockState(NamespaceID.from("minecraft:weeping_vines:24"), (short) 15022, Block.WEEPING_VINES, "age=24");
+  public static final BlockState WEEPING_VINES_24 = new BlockState(NamespaceID.from("minecraft:weeping_vines_24"), (short) 15022, Block.WEEPING_VINES, "age=24");
 
-  public static final BlockState WEEPING_VINES_25 = new BlockState(NamespaceID.from("minecraft:weeping_vines:25"), (short) 15023, Block.WEEPING_VINES, "age=25");
+  public static final BlockState WEEPING_VINES_25 = new BlockState(NamespaceID.from("minecraft:weeping_vines_25"), (short) 15023, Block.WEEPING_VINES, "age=25");
 
   static {
     Registries.registerBlockState(WEEPING_VINES_0);

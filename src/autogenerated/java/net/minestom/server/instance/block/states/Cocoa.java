@@ -14,29 +14,29 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Cocoa {
-  public static final BlockState COCOA_0 = new BlockState(NamespaceID.from("minecraft:cocoa:0"), (short) 5162, Block.COCOA, "age=0","facing=north");
+  public static final BlockState COCOA_0 = new BlockState(NamespaceID.from("minecraft:cocoa_0"), (short) 5162, Block.COCOA, "age=0","facing=north");
 
-  public static final BlockState COCOA_1 = new BlockState(NamespaceID.from("minecraft:cocoa:1"), (short) 5163, Block.COCOA, "age=0","facing=south");
+  public static final BlockState COCOA_1 = new BlockState(NamespaceID.from("minecraft:cocoa_1"), (short) 5163, Block.COCOA, "age=0","facing=south");
 
-  public static final BlockState COCOA_2 = new BlockState(NamespaceID.from("minecraft:cocoa:2"), (short) 5164, Block.COCOA, "age=0","facing=west");
+  public static final BlockState COCOA_2 = new BlockState(NamespaceID.from("minecraft:cocoa_2"), (short) 5164, Block.COCOA, "age=0","facing=west");
 
-  public static final BlockState COCOA_3 = new BlockState(NamespaceID.from("minecraft:cocoa:3"), (short) 5165, Block.COCOA, "age=0","facing=east");
+  public static final BlockState COCOA_3 = new BlockState(NamespaceID.from("minecraft:cocoa_3"), (short) 5165, Block.COCOA, "age=0","facing=east");
 
-  public static final BlockState COCOA_4 = new BlockState(NamespaceID.from("minecraft:cocoa:4"), (short) 5166, Block.COCOA, "age=1","facing=north");
+  public static final BlockState COCOA_4 = new BlockState(NamespaceID.from("minecraft:cocoa_4"), (short) 5166, Block.COCOA, "age=1","facing=north");
 
-  public static final BlockState COCOA_5 = new BlockState(NamespaceID.from("minecraft:cocoa:5"), (short) 5167, Block.COCOA, "age=1","facing=south");
+  public static final BlockState COCOA_5 = new BlockState(NamespaceID.from("minecraft:cocoa_5"), (short) 5167, Block.COCOA, "age=1","facing=south");
 
-  public static final BlockState COCOA_6 = new BlockState(NamespaceID.from("minecraft:cocoa:6"), (short) 5168, Block.COCOA, "age=1","facing=west");
+  public static final BlockState COCOA_6 = new BlockState(NamespaceID.from("minecraft:cocoa_6"), (short) 5168, Block.COCOA, "age=1","facing=west");
 
-  public static final BlockState COCOA_7 = new BlockState(NamespaceID.from("minecraft:cocoa:7"), (short) 5169, Block.COCOA, "age=1","facing=east");
+  public static final BlockState COCOA_7 = new BlockState(NamespaceID.from("minecraft:cocoa_7"), (short) 5169, Block.COCOA, "age=1","facing=east");
 
-  public static final BlockState COCOA_8 = new BlockState(NamespaceID.from("minecraft:cocoa:8"), (short) 5170, Block.COCOA, "age=2","facing=north");
+  public static final BlockState COCOA_8 = new BlockState(NamespaceID.from("minecraft:cocoa_8"), (short) 5170, Block.COCOA, "age=2","facing=north");
 
-  public static final BlockState COCOA_9 = new BlockState(NamespaceID.from("minecraft:cocoa:9"), (short) 5171, Block.COCOA, "age=2","facing=south");
+  public static final BlockState COCOA_9 = new BlockState(NamespaceID.from("minecraft:cocoa_9"), (short) 5171, Block.COCOA, "age=2","facing=south");
 
-  public static final BlockState COCOA_10 = new BlockState(NamespaceID.from("minecraft:cocoa:10"), (short) 5172, Block.COCOA, "age=2","facing=west");
+  public static final BlockState COCOA_10 = new BlockState(NamespaceID.from("minecraft:cocoa_10"), (short) 5172, Block.COCOA, "age=2","facing=west");
 
-  public static final BlockState COCOA_11 = new BlockState(NamespaceID.from("minecraft:cocoa:11"), (short) 5173, Block.COCOA, "age=2","facing=east");
+  public static final BlockState COCOA_11 = new BlockState(NamespaceID.from("minecraft:cocoa_11"), (short) 5173, Block.COCOA, "age=2","facing=east");
 
   static {
     Registries.registerBlockState(COCOA_0);

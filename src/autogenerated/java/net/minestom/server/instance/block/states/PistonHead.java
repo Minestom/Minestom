@@ -14,53 +14,53 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PistonHead {
-  public static final BlockState PISTON_HEAD_0 = new BlockState(NamespaceID.from("minecraft:piston_head:0"), (short) 1360, Block.PISTON_HEAD, "facing=north","short=true","type=normal");
+  public static final BlockState PISTON_HEAD_0 = new BlockState(NamespaceID.from("minecraft:piston_head_0"), (short) 1360, Block.PISTON_HEAD, "facing=north","short=true","type=normal");
 
-  public static final BlockState PISTON_HEAD_1 = new BlockState(NamespaceID.from("minecraft:piston_head:1"), (short) 1361, Block.PISTON_HEAD, "facing=north","short=true","type=sticky");
+  public static final BlockState PISTON_HEAD_1 = new BlockState(NamespaceID.from("minecraft:piston_head_1"), (short) 1361, Block.PISTON_HEAD, "facing=north","short=true","type=sticky");
 
-  public static final BlockState PISTON_HEAD_2 = new BlockState(NamespaceID.from("minecraft:piston_head:2"), (short) 1362, Block.PISTON_HEAD, "facing=north","short=false","type=normal");
+  public static final BlockState PISTON_HEAD_2 = new BlockState(NamespaceID.from("minecraft:piston_head_2"), (short) 1362, Block.PISTON_HEAD, "facing=north","short=false","type=normal");
 
-  public static final BlockState PISTON_HEAD_3 = new BlockState(NamespaceID.from("minecraft:piston_head:3"), (short) 1363, Block.PISTON_HEAD, "facing=north","short=false","type=sticky");
+  public static final BlockState PISTON_HEAD_3 = new BlockState(NamespaceID.from("minecraft:piston_head_3"), (short) 1363, Block.PISTON_HEAD, "facing=north","short=false","type=sticky");
 
-  public static final BlockState PISTON_HEAD_4 = new BlockState(NamespaceID.from("minecraft:piston_head:4"), (short) 1364, Block.PISTON_HEAD, "facing=east","short=true","type=normal");
+  public static final BlockState PISTON_HEAD_4 = new BlockState(NamespaceID.from("minecraft:piston_head_4"), (short) 1364, Block.PISTON_HEAD, "facing=east","short=true","type=normal");
 
-  public static final BlockState PISTON_HEAD_5 = new BlockState(NamespaceID.from("minecraft:piston_head:5"), (short) 1365, Block.PISTON_HEAD, "facing=east","short=true","type=sticky");
+  public static final BlockState PISTON_HEAD_5 = new BlockState(NamespaceID.from("minecraft:piston_head_5"), (short) 1365, Block.PISTON_HEAD, "facing=east","short=true","type=sticky");
 
-  public static final BlockState PISTON_HEAD_6 = new BlockState(NamespaceID.from("minecraft:piston_head:6"), (short) 1366, Block.PISTON_HEAD, "facing=east","short=false","type=normal");
+  public static final BlockState PISTON_HEAD_6 = new BlockState(NamespaceID.from("minecraft:piston_head_6"), (short) 1366, Block.PISTON_HEAD, "facing=east","short=false","type=normal");
 
-  public static final BlockState PISTON_HEAD_7 = new BlockState(NamespaceID.from("minecraft:piston_head:7"), (short) 1367, Block.PISTON_HEAD, "facing=east","short=false","type=sticky");
+  public static final BlockState PISTON_HEAD_7 = new BlockState(NamespaceID.from("minecraft:piston_head_7"), (short) 1367, Block.PISTON_HEAD, "facing=east","short=false","type=sticky");
 
-  public static final BlockState PISTON_HEAD_8 = new BlockState(NamespaceID.from("minecraft:piston_head:8"), (short) 1368, Block.PISTON_HEAD, "facing=south","short=true","type=normal");
+  public static final BlockState PISTON_HEAD_8 = new BlockState(NamespaceID.from("minecraft:piston_head_8"), (short) 1368, Block.PISTON_HEAD, "facing=south","short=true","type=normal");
 
-  public static final BlockState PISTON_HEAD_9 = new BlockState(NamespaceID.from("minecraft:piston_head:9"), (short) 1369, Block.PISTON_HEAD, "facing=south","short=true","type=sticky");
+  public static final BlockState PISTON_HEAD_9 = new BlockState(NamespaceID.from("minecraft:piston_head_9"), (short) 1369, Block.PISTON_HEAD, "facing=south","short=true","type=sticky");
 
-  public static final BlockState PISTON_HEAD_10 = new BlockState(NamespaceID.from("minecraft:piston_head:10"), (short) 1370, Block.PISTON_HEAD, "facing=south","short=false","type=normal");
+  public static final BlockState PISTON_HEAD_10 = new BlockState(NamespaceID.from("minecraft:piston_head_10"), (short) 1370, Block.PISTON_HEAD, "facing=south","short=false","type=normal");
 
-  public static final BlockState PISTON_HEAD_11 = new BlockState(NamespaceID.from("minecraft:piston_head:11"), (short) 1371, Block.PISTON_HEAD, "facing=south","short=false","type=sticky");
+  public static final BlockState PISTON_HEAD_11 = new BlockState(NamespaceID.from("minecraft:piston_head_11"), (short) 1371, Block.PISTON_HEAD, "facing=south","short=false","type=sticky");
 
-  public static final BlockState PISTON_HEAD_12 = new BlockState(NamespaceID.from("minecraft:piston_head:12"), (short) 1372, Block.PISTON_HEAD, "facing=west","short=true","type=normal");
+  public static final BlockState PISTON_HEAD_12 = new BlockState(NamespaceID.from("minecraft:piston_head_12"), (short) 1372, Block.PISTON_HEAD, "facing=west","short=true","type=normal");
 
-  public static final BlockState PISTON_HEAD_13 = new BlockState(NamespaceID.from("minecraft:piston_head:13"), (short) 1373, Block.PISTON_HEAD, "facing=west","short=true","type=sticky");
+  public static final BlockState PISTON_HEAD_13 = new BlockState(NamespaceID.from("minecraft:piston_head_13"), (short) 1373, Block.PISTON_HEAD, "facing=west","short=true","type=sticky");
 
-  public static final BlockState PISTON_HEAD_14 = new BlockState(NamespaceID.from("minecraft:piston_head:14"), (short) 1374, Block.PISTON_HEAD, "facing=west","short=false","type=normal");
+  public static final BlockState PISTON_HEAD_14 = new BlockState(NamespaceID.from("minecraft:piston_head_14"), (short) 1374, Block.PISTON_HEAD, "facing=west","short=false","type=normal");
 
-  public static final BlockState PISTON_HEAD_15 = new BlockState(NamespaceID.from("minecraft:piston_head:15"), (short) 1375, Block.PISTON_HEAD, "facing=west","short=false","type=sticky");
+  public static final BlockState PISTON_HEAD_15 = new BlockState(NamespaceID.from("minecraft:piston_head_15"), (short) 1375, Block.PISTON_HEAD, "facing=west","short=false","type=sticky");
 
-  public static final BlockState PISTON_HEAD_16 = new BlockState(NamespaceID.from("minecraft:piston_head:16"), (short) 1376, Block.PISTON_HEAD, "facing=up","short=true","type=normal");
+  public static final BlockState PISTON_HEAD_16 = new BlockState(NamespaceID.from("minecraft:piston_head_16"), (short) 1376, Block.PISTON_HEAD, "facing=up","short=true","type=normal");
 
-  public static final BlockState PISTON_HEAD_17 = new BlockState(NamespaceID.from("minecraft:piston_head:17"), (short) 1377, Block.PISTON_HEAD, "facing=up","short=true","type=sticky");
+  public static final BlockState PISTON_HEAD_17 = new BlockState(NamespaceID.from("minecraft:piston_head_17"), (short) 1377, Block.PISTON_HEAD, "facing=up","short=true","type=sticky");
 
-  public static final BlockState PISTON_HEAD_18 = new BlockState(NamespaceID.from("minecraft:piston_head:18"), (short) 1378, Block.PISTON_HEAD, "facing=up","short=false","type=normal");
+  public static final BlockState PISTON_HEAD_18 = new BlockState(NamespaceID.from("minecraft:piston_head_18"), (short) 1378, Block.PISTON_HEAD, "facing=up","short=false","type=normal");
 
-  public static final BlockState PISTON_HEAD_19 = new BlockState(NamespaceID.from("minecraft:piston_head:19"), (short) 1379, Block.PISTON_HEAD, "facing=up","short=false","type=sticky");
+  public static final BlockState PISTON_HEAD_19 = new BlockState(NamespaceID.from("minecraft:piston_head_19"), (short) 1379, Block.PISTON_HEAD, "facing=up","short=false","type=sticky");
 
-  public static final BlockState PISTON_HEAD_20 = new BlockState(NamespaceID.from("minecraft:piston_head:20"), (short) 1380, Block.PISTON_HEAD, "facing=down","short=true","type=normal");
+  public static final BlockState PISTON_HEAD_20 = new BlockState(NamespaceID.from("minecraft:piston_head_20"), (short) 1380, Block.PISTON_HEAD, "facing=down","short=true","type=normal");
 
-  public static final BlockState PISTON_HEAD_21 = new BlockState(NamespaceID.from("minecraft:piston_head:21"), (short) 1381, Block.PISTON_HEAD, "facing=down","short=true","type=sticky");
+  public static final BlockState PISTON_HEAD_21 = new BlockState(NamespaceID.from("minecraft:piston_head_21"), (short) 1381, Block.PISTON_HEAD, "facing=down","short=true","type=sticky");
 
-  public static final BlockState PISTON_HEAD_22 = new BlockState(NamespaceID.from("minecraft:piston_head:22"), (short) 1382, Block.PISTON_HEAD, "facing=down","short=false","type=normal");
+  public static final BlockState PISTON_HEAD_22 = new BlockState(NamespaceID.from("minecraft:piston_head_22"), (short) 1382, Block.PISTON_HEAD, "facing=down","short=false","type=normal");
 
-  public static final BlockState PISTON_HEAD_23 = new BlockState(NamespaceID.from("minecraft:piston_head:23"), (short) 1383, Block.PISTON_HEAD, "facing=down","short=false","type=sticky");
+  public static final BlockState PISTON_HEAD_23 = new BlockState(NamespaceID.from("minecraft:piston_head_23"), (short) 1383, Block.PISTON_HEAD, "facing=down","short=false","type=sticky");
 
   static {
     Registries.registerBlockState(PISTON_HEAD_0);

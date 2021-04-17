@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneTorch {
-  public static final BlockState REDSTONE_TORCH_0 = new BlockState(NamespaceID.from("minecraft:redstone_torch:0"), (short) 3887, Block.REDSTONE_TORCH, "lit=true");
+  public static final BlockState REDSTONE_TORCH_0 = new BlockState(NamespaceID.from("minecraft:redstone_torch_0"), (short) 3887, Block.REDSTONE_TORCH, "lit=true");
 
-  public static final BlockState REDSTONE_TORCH_1 = new BlockState(NamespaceID.from("minecraft:redstone_torch:1"), (short) 3888, Block.REDSTONE_TORCH, "lit=false");
+  public static final BlockState REDSTONE_TORCH_1 = new BlockState(NamespaceID.from("minecraft:redstone_torch_1"), (short) 3888, Block.REDSTONE_TORCH, "lit=false");
 
   static {
     Registries.registerBlockState(REDSTONE_TORCH_0);

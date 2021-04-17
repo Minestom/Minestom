@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class BlueTerracotta {
-  public static final BlockState BLUE_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:blue_terracotta:0"), (short) 6862, Block.BLUE_TERRACOTTA);
+  public static final BlockState BLUE_TERRACOTTA_0 = new BlockState(NamespaceID.from("minecraft:blue_terracotta_0"), (short) 6862, Block.BLUE_TERRACOTTA);
 
   static {
     Registries.registerBlockState(BLUE_TERRACOTTA_0);

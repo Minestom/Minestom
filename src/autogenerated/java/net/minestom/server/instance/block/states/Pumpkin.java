@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Pumpkin {
-  public static final BlockState PUMPKIN_0 = new BlockState(NamespaceID.from("minecraft:pumpkin:0"), (short) 3998, Block.PUMPKIN);
+  public static final BlockState PUMPKIN_0 = new BlockState(NamespaceID.from("minecraft:pumpkin_0"), (short) 3998, Block.PUMPKIN);
 
   static {
     Registries.registerBlockState(PUMPKIN_0);

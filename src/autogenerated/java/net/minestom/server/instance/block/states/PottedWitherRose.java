@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class PottedWitherRose {
-  public static final BlockState POTTED_WITHER_ROSE_0 = new BlockState(NamespaceID.from("minecraft:potted_wither_rose:0"), (short) 6329, Block.POTTED_WITHER_ROSE);
+  public static final BlockState POTTED_WITHER_ROSE_0 = new BlockState(NamespaceID.from("minecraft:potted_wither_rose_0"), (short) 6329, Block.POTTED_WITHER_ROSE);
 
   static {
     Registries.registerBlockState(POTTED_WITHER_ROSE_0);

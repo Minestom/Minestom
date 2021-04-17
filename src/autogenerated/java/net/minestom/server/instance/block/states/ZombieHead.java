@@ -14,37 +14,37 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class ZombieHead {
-  public static final BlockState ZOMBIE_HEAD_0 = new BlockState(NamespaceID.from("minecraft:zombie_head:0"), (short) 6534, Block.ZOMBIE_HEAD, "rotation=0");
+  public static final BlockState ZOMBIE_HEAD_0 = new BlockState(NamespaceID.from("minecraft:zombie_head_0"), (short) 6534, Block.ZOMBIE_HEAD, "rotation=0");
 
-  public static final BlockState ZOMBIE_HEAD_1 = new BlockState(NamespaceID.from("minecraft:zombie_head:1"), (short) 6535, Block.ZOMBIE_HEAD, "rotation=1");
+  public static final BlockState ZOMBIE_HEAD_1 = new BlockState(NamespaceID.from("minecraft:zombie_head_1"), (short) 6535, Block.ZOMBIE_HEAD, "rotation=1");
 
-  public static final BlockState ZOMBIE_HEAD_2 = new BlockState(NamespaceID.from("minecraft:zombie_head:2"), (short) 6536, Block.ZOMBIE_HEAD, "rotation=2");
+  public static final BlockState ZOMBIE_HEAD_2 = new BlockState(NamespaceID.from("minecraft:zombie_head_2"), (short) 6536, Block.ZOMBIE_HEAD, "rotation=2");
 
-  public static final BlockState ZOMBIE_HEAD_3 = new BlockState(NamespaceID.from("minecraft:zombie_head:3"), (short) 6537, Block.ZOMBIE_HEAD, "rotation=3");
+  public static final BlockState ZOMBIE_HEAD_3 = new BlockState(NamespaceID.from("minecraft:zombie_head_3"), (short) 6537, Block.ZOMBIE_HEAD, "rotation=3");
 
-  public static final BlockState ZOMBIE_HEAD_4 = new BlockState(NamespaceID.from("minecraft:zombie_head:4"), (short) 6538, Block.ZOMBIE_HEAD, "rotation=4");
+  public static final BlockState ZOMBIE_HEAD_4 = new BlockState(NamespaceID.from("minecraft:zombie_head_4"), (short) 6538, Block.ZOMBIE_HEAD, "rotation=4");
 
-  public static final BlockState ZOMBIE_HEAD_5 = new BlockState(NamespaceID.from("minecraft:zombie_head:5"), (short) 6539, Block.ZOMBIE_HEAD, "rotation=5");
+  public static final BlockState ZOMBIE_HEAD_5 = new BlockState(NamespaceID.from("minecraft:zombie_head_5"), (short) 6539, Block.ZOMBIE_HEAD, "rotation=5");
 
-  public static final BlockState ZOMBIE_HEAD_6 = new BlockState(NamespaceID.from("minecraft:zombie_head:6"), (short) 6540, Block.ZOMBIE_HEAD, "rotation=6");
+  public static final BlockState ZOMBIE_HEAD_6 = new BlockState(NamespaceID.from("minecraft:zombie_head_6"), (short) 6540, Block.ZOMBIE_HEAD, "rotation=6");
 
-  public static final BlockState ZOMBIE_HEAD_7 = new BlockState(NamespaceID.from("minecraft:zombie_head:7"), (short) 6541, Block.ZOMBIE_HEAD, "rotation=7");
+  public static final BlockState ZOMBIE_HEAD_7 = new BlockState(NamespaceID.from("minecraft:zombie_head_7"), (short) 6541, Block.ZOMBIE_HEAD, "rotation=7");
 
-  public static final BlockState ZOMBIE_HEAD_8 = new BlockState(NamespaceID.from("minecraft:zombie_head:8"), (short) 6542, Block.ZOMBIE_HEAD, "rotation=8");
+  public static final BlockState ZOMBIE_HEAD_8 = new BlockState(NamespaceID.from("minecraft:zombie_head_8"), (short) 6542, Block.ZOMBIE_HEAD, "rotation=8");
 
-  public static final BlockState ZOMBIE_HEAD_9 = new BlockState(NamespaceID.from("minecraft:zombie_head:9"), (short) 6543, Block.ZOMBIE_HEAD, "rotation=9");
+  public static final BlockState ZOMBIE_HEAD_9 = new BlockState(NamespaceID.from("minecraft:zombie_head_9"), (short) 6543, Block.ZOMBIE_HEAD, "rotation=9");
 
-  public static final BlockState ZOMBIE_HEAD_10 = new BlockState(NamespaceID.from("minecraft:zombie_head:10"), (short) 6544, Block.ZOMBIE_HEAD, "rotation=10");
+  public static final BlockState ZOMBIE_HEAD_10 = new BlockState(NamespaceID.from("minecraft:zombie_head_10"), (short) 6544, Block.ZOMBIE_HEAD, "rotation=10");
 
-  public static final BlockState ZOMBIE_HEAD_11 = new BlockState(NamespaceID.from("minecraft:zombie_head:11"), (short) 6545, Block.ZOMBIE_HEAD, "rotation=11");
+  public static final BlockState ZOMBIE_HEAD_11 = new BlockState(NamespaceID.from("minecraft:zombie_head_11"), (short) 6545, Block.ZOMBIE_HEAD, "rotation=11");
 
-  public static final BlockState ZOMBIE_HEAD_12 = new BlockState(NamespaceID.from("minecraft:zombie_head:12"), (short) 6546, Block.ZOMBIE_HEAD, "rotation=12");
+  public static final BlockState ZOMBIE_HEAD_12 = new BlockState(NamespaceID.from("minecraft:zombie_head_12"), (short) 6546, Block.ZOMBIE_HEAD, "rotation=12");
 
-  public static final BlockState ZOMBIE_HEAD_13 = new BlockState(NamespaceID.from("minecraft:zombie_head:13"), (short) 6547, Block.ZOMBIE_HEAD, "rotation=13");
+  public static final BlockState ZOMBIE_HEAD_13 = new BlockState(NamespaceID.from("minecraft:zombie_head_13"), (short) 6547, Block.ZOMBIE_HEAD, "rotation=13");
 
-  public static final BlockState ZOMBIE_HEAD_14 = new BlockState(NamespaceID.from("minecraft:zombie_head:14"), (short) 6548, Block.ZOMBIE_HEAD, "rotation=14");
+  public static final BlockState ZOMBIE_HEAD_14 = new BlockState(NamespaceID.from("minecraft:zombie_head_14"), (short) 6548, Block.ZOMBIE_HEAD, "rotation=14");
 
-  public static final BlockState ZOMBIE_HEAD_15 = new BlockState(NamespaceID.from("minecraft:zombie_head:15"), (short) 6549, Block.ZOMBIE_HEAD, "rotation=15");
+  public static final BlockState ZOMBIE_HEAD_15 = new BlockState(NamespaceID.from("minecraft:zombie_head_15"), (short) 6549, Block.ZOMBIE_HEAD, "rotation=15");
 
   static {
     Registries.registerBlockState(ZOMBIE_HEAD_0);

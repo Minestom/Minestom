@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Allium {
-  public static final BlockState ALLIUM_0 = new BlockState(NamespaceID.from("minecraft:allium:0"), (short) 1415, Block.ALLIUM);
+  public static final BlockState ALLIUM_0 = new BlockState(NamespaceID.from("minecraft:allium_0"), (short) 1415, Block.ALLIUM);
 
   static {
     Registries.registerBlockState(ALLIUM_0);

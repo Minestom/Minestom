@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Obsidian {
-  public static final BlockState OBSIDIAN_0 = new BlockState(NamespaceID.from("minecraft:obsidian:0"), (short) 1434, Block.OBSIDIAN);
+  public static final BlockState OBSIDIAN_0 = new BlockState(NamespaceID.from("minecraft:obsidian_0"), (short) 1434, Block.OBSIDIAN);
 
   static {
     Registries.registerBlockState(OBSIDIAN_0);

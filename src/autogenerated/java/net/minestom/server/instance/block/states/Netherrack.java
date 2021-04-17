@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class Netherrack {
-  public static final BlockState NETHERRACK_0 = new BlockState(NamespaceID.from("minecraft:netherrack:0"), (short) 3999, Block.NETHERRACK);
+  public static final BlockState NETHERRACK_0 = new BlockState(NamespaceID.from("minecraft:netherrack_0"), (short) 3999, Block.NETHERRACK);
 
   static {
     Registries.registerBlockState(NETHERRACK_0);

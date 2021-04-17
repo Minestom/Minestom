@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class EnchantingTable {
-  public static final BlockState ENCHANTING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:enchanting_table:0"), (short) 5136, Block.ENCHANTING_TABLE);
+  public static final BlockState ENCHANTING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:enchanting_table_0"), (short) 5136, Block.ENCHANTING_TABLE);
 
   static {
     Registries.registerBlockState(ENCHANTING_TABLE_0);

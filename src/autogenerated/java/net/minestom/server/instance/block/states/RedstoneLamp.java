@@ -14,9 +14,9 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneLamp {
-  public static final BlockState REDSTONE_LAMP_0 = new BlockState(NamespaceID.from("minecraft:redstone_lamp:0"), (short) 5160, Block.REDSTONE_LAMP, "lit=true");
+  public static final BlockState REDSTONE_LAMP_0 = new BlockState(NamespaceID.from("minecraft:redstone_lamp_0"), (short) 5160, Block.REDSTONE_LAMP, "lit=true");
 
-  public static final BlockState REDSTONE_LAMP_1 = new BlockState(NamespaceID.from("minecraft:redstone_lamp:1"), (short) 5161, Block.REDSTONE_LAMP, "lit=false");
+  public static final BlockState REDSTONE_LAMP_1 = new BlockState(NamespaceID.from("minecraft:redstone_lamp_1"), (short) 5161, Block.REDSTONE_LAMP, "lit=false");
 
   static {
     Registries.registerBlockState(REDSTONE_LAMP_0);

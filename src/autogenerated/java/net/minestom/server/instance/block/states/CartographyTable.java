@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class CartographyTable {
-  public static final BlockState CARTOGRAPHY_TABLE_0 = new BlockState(NamespaceID.from("minecraft:cartography_table:0"), (short) 14823, Block.CARTOGRAPHY_TABLE);
+  public static final BlockState CARTOGRAPHY_TABLE_0 = new BlockState(NamespaceID.from("minecraft:cartography_table_0"), (short) 14823, Block.CARTOGRAPHY_TABLE);
 
   static {
     Registries.registerBlockState(CARTOGRAPHY_TABLE_0);

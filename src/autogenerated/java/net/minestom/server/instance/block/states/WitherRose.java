@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class WitherRose {
-  public static final BlockState WITHER_ROSE_0 = new BlockState(NamespaceID.from("minecraft:wither_rose:0"), (short) 1423, Block.WITHER_ROSE);
+  public static final BlockState WITHER_ROSE_0 = new BlockState(NamespaceID.from("minecraft:wither_rose_0"), (short) 1423, Block.WITHER_ROSE);
 
   static {
     Registries.registerBlockState(WITHER_ROSE_0);

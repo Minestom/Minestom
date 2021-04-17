@@ -14,7 +14,7 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class DarkPrismarine {
-  public static final BlockState DARK_PRISMARINE_0 = new BlockState(NamespaceID.from("minecraft:dark_prismarine:0"), (short) 7607, Block.DARK_PRISMARINE);
+  public static final BlockState DARK_PRISMARINE_0 = new BlockState(NamespaceID.from("minecraft:dark_prismarine_0"), (short) 7607, Block.DARK_PRISMARINE);
 
   static {
     Registries.registerBlockState(DARK_PRISMARINE_0);
