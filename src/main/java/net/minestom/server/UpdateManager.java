@@ -39,8 +39,8 @@ public final class UpdateManager {
 
     {
         // DEFAULT THREAD PROVIDER
-        //threadProvider = new PerGroupChunkProvider();
         threadProvider = new PerInstanceThreadProvider(4);
+        //threadProvider = new PerChunkThreadProvider(4);
     }
 
     /**

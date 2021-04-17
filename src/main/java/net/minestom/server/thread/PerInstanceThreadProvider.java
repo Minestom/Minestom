@@ -1,10 +1,12 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.ThreadLocalRandom;
-
+/**
+ * Each {@link Instance} gets assigned to a random thread.
+ */
 public class PerInstanceThreadProvider extends ThreadProvider {
 
     public PerInstanceThreadProvider(int threadCount) {
@@ -12,7 +14,7 @@ public class PerInstanceThreadProvider extends ThreadProvider {
     }
 
     @Override
-    public int findThread(@NotNull Chunk chunk) {
-        return ThreadLocalRandom.current().nextInt(getThreads().size());
+    public long findThread(@NotNull Chunk chunk) {
+        return System.identityHashCode(chunk.getInstance());
     }
 }

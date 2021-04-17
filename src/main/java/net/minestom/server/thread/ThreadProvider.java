@@ -57,10 +57,10 @@ public abstract class ThreadProvider {
      *
      * @param chunk the chunk
      */
-    public abstract int findThread(@NotNull Chunk chunk);
+    public abstract long findThread(@NotNull Chunk chunk);
 
     protected void addChunk(Chunk chunk) {
-        int threadId = findThread(chunk);
+        final int threadId = (int) (Math.abs(findThread(chunk)) % threads.size());
         BatchThread thread = threads.get(threadId);
         var chunks = threadChunkMap.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
 
