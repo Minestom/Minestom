@@ -4,6 +4,7 @@ import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
@@ -292,14 +293,5 @@ public class PlayerInit {
         });
     }
 
-    public static ResponseDataConsumer getResponseDataConsumer() {
-        return (playerConnection, responseData) -> {
-            responseData.setMaxPlayer(0);
-            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            responseData.addPlayer("A name", UUID.randomUUID());
-            responseData.addPlayer("Could be some message", UUID.randomUUID());
-            responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
-        };
-    }
 
 }

@@ -51,6 +51,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private String loginUsername;
     private String serverAddress;
     private int serverPort;
+    private int protocolVersion;
 
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
@@ -182,22 +183,24 @@ public class NettyPlayerConnection extends PlayerConnection {
             return;
         }
 
+        // Retrieve safe copy
+        final ByteBuf copy;
         synchronized (tickBuffer) {
-            final ByteBuf copy = tickBuffer.copy();
-
-            ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
-            channelFuture.addListener(future -> copy.release());
-
-            // Netty debug
-            if (MinecraftServer.shouldProcessNettyErrors()) {
-                channelFuture.addListener(future -> {
-                    if (!future.isSuccess() && channel.isActive()) {
-                        MinecraftServer.getExceptionManager().handleException(future.cause());
-                    }
-                });
-            }
-
+            copy = tickBuffer.copy();
             tickBuffer.clear();
+        }
+
+        // Write copied buffer to netty
+        ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
+        channelFuture.addListener(future -> copy.release());
+
+        // Netty debug
+        if (MinecraftServer.shouldProcessNettyErrors()) {
+            channelFuture.addListener(future -> {
+                if (!future.isSuccess() && channel.isActive()) {
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
+                }
+            });
         }
     }
 
@@ -227,6 +230,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
+
 
     @Override
     public void disconnect() {
@@ -266,8 +270,8 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server address used
      */
-    @Nullable
-    public String getServerAddress() {
+    @Override
+    public @Nullable String getServerAddress() {
         return serverAddress;
     }
 
@@ -278,9 +282,35 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server port used
      */
+    @Override
     public int getServerPort() {
         return serverPort;
     }
+
+    /**
+     * Gets the protocol version of a client.
+     *
+     * @return protocol version of client.
+     */
+    @Override
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+
+    /**
+     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
+     *
+     * @param serverAddress   the server address which the client used
+     * @param serverPort      the server port which the client used
+     * @param protocolVersion the protocol version which the client used
+     */
+    public void refreshServerInformation(@Nullable String serverAddress, int serverPort, int protocolVersion) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+        this.protocolVersion = protocolVersion;
+    }
+
 
     @Nullable
     public UUID getBungeeUuid() {
@@ -339,16 +369,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    /**
-     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
-     *
-     * @param serverAddress the server address which the client used
-     * @param serverPort    the server port which the client used
-     */
-    public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
-        this.serverAddress = serverAddress;
-        this.serverPort = serverPort;
-    }
 
     @NotNull
     public ByteBuf getTickBuffer() {
