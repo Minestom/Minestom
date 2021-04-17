@@ -1,8 +1,21 @@
 package net.minestom.code_generation.blocks;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import net.minestom.code_generation.util.NameUtil;
 import org.jetbrains.annotations.NotNull;
@@ -150,7 +163,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        // getDefaultBlockState
+        // getDefaultBlockStateId
         blockClass.addMethod(
                 MethodSpec.methodBuilder("getDefaultBlockStateId")
                         .returns(TypeName.SHORT)
@@ -158,6 +171,17 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
 
+        );
+        // getDefaultBlockState
+        blockClass.addMethod(
+                MethodSpec.methodBuilder("getDefaultBlockState")
+                        .returns(blockStateClassName)
+                        .addStatement(
+                                "return $T.getBlockState(defaultBlockState)",
+                                ClassName.get("net.minestom.server.registry", "Registries")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
         );
         // getBlockStates method
         blockClass.addMethod(

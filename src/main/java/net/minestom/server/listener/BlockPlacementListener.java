@@ -124,7 +124,7 @@ public class BlockPlacementListener {
                 final Set<Entity> entities = instance.getChunkEntities(chunk);
                 // Check if the player is trying to place a block in an entity
                 boolean intersect = player.getBoundingBox().intersect(blockPosition);
-                if (!intersect && block.isSolid()) {
+                if (!intersect && block.getDefaultBlockState().isSolid()) {
                     // TODO push entities too close to the position
                     for (Entity entity : entities) {
                         // 'player' has already been checked

@@ -11,6 +11,7 @@ import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.map.MapColors;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.raw_data.*;
 import net.minestom.server.utils.NamespaceID;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -384,6 +385,37 @@ public class ResourceGatherer {
             materialData.block = Registries.getBlock(materialJson.get("blockId").getAsString());
             materialData.eatingSound = Registries.getSoundEvent(materialJson.get("eatingSound").getAsString());
             materialData.drinkingSound = Registries.getSoundEvent(materialJson.get("drinkingSound").getAsString());
+
+            // Is it an armor item
+            if (materialJson.get("armorProperties") != null) {
+                JsonObject armorJson = materialJson.get("armorProperties").getAsJsonObject();
+
+                RawMaterialData.RawArmorData armorData = new RawMaterialData.RawArmorData();
+                armorData.defense = armorJson.get("defense").getAsInt();
+                armorData.toughness = armorJson.get("toughness").getAsDouble();
+                // set correct slot
+                String slot = armorJson.get("slot").getAsString().toUpperCase();
+                switch (slot) {
+                    case "HEAD": {
+                        armorData.slot = EntityEquipmentPacket.Slot.HELMET;
+                        break;
+                    }
+                    case "CHEST": {
+                        armorData.slot = EntityEquipmentPacket.Slot.CHESTPLATE;
+                        break;
+                    }
+                    case "LEGS": {
+                        armorData.slot = EntityEquipmentPacket.Slot.LEGGINGS;
+                        break;
+                    }
+                    case "FEET": {
+                        armorData.slot = EntityEquipmentPacket.Slot.BOOTS;
+                        break;
+                    }
+                }
+
+                materialData.armorData = armorData;
+            }
         }
     }
 

@@ -71,7 +71,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
         itemClass.addField(
-                FieldSpec.builder(TypeName.BYTE, "maxDefaultStackSize")
+                FieldSpec.builder(TypeName.BYTE, "defaultStackSize")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
         itemClass.addField(
@@ -84,9 +84,9 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
-                        .addParameter(TypeName.BYTE, "maxDefaultStackSize")
+                        .addParameter(TypeName.BYTE, "defaultStackSize")
                         .addStatement("this.id = id")
-                        .addStatement("this.maxDefaultStackSize = maxDefaultStackSize")
+                        .addStatement("this.defaultStackSize = defaultStackSize")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -129,6 +129,14 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // getDefaultStackSize
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("getDefaultStackSize")
+                        .returns(TypeName.BYTE)
+                        .addStatement("return this.defaultStackSize")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // fromId Method
         itemClass.addMethod(
                 MethodSpec.methodBuilder("fromId")
@@ -159,8 +167,90 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-
-
+        // hasState method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("hasState")
+                        .returns(TypeName.BOOLEAN)
+                        .beginControlFlow("if (this == BOW || this == TRIDENT || this == CROSSBOW || this == SHIELD)")
+                        .addStatement("return true")
+                        .nextControlFlow("else")
+                        .addStatement("return isFood()")
+                        .endControlFlow()
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // isBlock method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isBlock")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement(
+                                "return this.materialData.block != $T.AIR",
+                                ClassName.get("net.minestom.server.instance.block", "Block")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // isArmor method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isArmor")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement("return this.materialData.armorData != null")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // isHelmet method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isHelmet")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement(
+                                "return this.isArmor() && this.materialData.armorData.slot == $T.HELMET",
+                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // isChestplate method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isChestplate")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement(
+                                "return this.isArmor() && this.materialData.armorData.slot == $T.CHESTPLATE",
+                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // isLeggings method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isLeggings")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement(
+                                "return this.isArmor() && this.materialData.armorData.slot == $T.LEGGINGS",
+                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // isBoots method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("isBoots")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement(
+                                "return this.isArmor() && this.materialData.armorData.slot == $T.BOOTS",
+                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                        )
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getBlock method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("getBlock")
+                        .addAnnotation(NotNull.class)
+                        .returns(ClassName.get("net.minestom.server.instance.block", "Block"))
+                        .addStatement("return this.materialData.block")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // values method
         itemClass.addMethod(
                 MethodSpec.methodBuilder("values")

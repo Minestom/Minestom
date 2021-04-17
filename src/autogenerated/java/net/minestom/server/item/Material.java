@@ -5,6 +5,8 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.raw_data.RawMaterialData;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
@@ -2948,14 +2950,14 @@ public class Material implements Keyed {
   @NotNull
   private final NamespaceID id;
 
-  private final byte maxDefaultStackSize;
+  private final byte defaultStackSize;
 
   @NotNull
   private final RawMaterialData materialData = new RawMaterialData();
 
-  protected Material(@NotNull NamespaceID id, byte maxDefaultStackSize) {
+  protected Material(@NotNull NamespaceID id, byte defaultStackSize) {
     this.id = id;
-    this.maxDefaultStackSize = maxDefaultStackSize;
+    this.defaultStackSize = defaultStackSize;
   }
 
   @Override
@@ -2978,6 +2980,10 @@ public class Material implements Keyed {
     return Registries.getMaterialId(this);
   }
 
+  public byte getDefaultStackSize() {
+    return this.defaultStackSize;
+  }
+
   @NotNull
   public static Material fromId(int id) {
     return Registries.getMaterial(id);
@@ -2990,6 +2996,43 @@ public class Material implements Keyed {
 
   public boolean isFood() {
     return this.materialData.edible;
+  }
+
+  public boolean hasState() {
+    if (this == BOW || this == TRIDENT || this == CROSSBOW || this == SHIELD) {
+      return true;
+    } else {
+      return isFood();
+    }
+  }
+
+  public boolean isBlock() {
+    return this.materialData.block != Block.AIR;
+  }
+
+  public boolean isArmor() {
+    return this.materialData.armorData != null;
+  }
+
+  public boolean isHelmet() {
+    return this.isArmor() && this.materialData.armorData.slot == EntityEquipmentPacket.Slot.HELMET;
+  }
+
+  public boolean isChestplate() {
+    return this.isArmor() && this.materialData.armorData.slot == EntityEquipmentPacket.Slot.CHESTPLATE;
+  }
+
+  public boolean isLeggings() {
+    return this.isArmor() && this.materialData.armorData.slot == EntityEquipmentPacket.Slot.LEGGINGS;
+  }
+
+  public boolean isBoots() {
+    return this.isArmor() && this.materialData.armorData.slot == EntityEquipmentPacket.Slot.BOOTS;
+  }
+
+  @NotNull
+  public Block getBlock() {
+    return this.materialData.block;
   }
 
   @NotNull

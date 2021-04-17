@@ -3884,6 +3884,10 @@ public class Block implements Keyed {
     return this.defaultBlockState;
   }
 
+  public BlockState getDefaultBlockState() {
+    return Registries.getBlockState(defaultBlockState);
+  }
+
   @NotNull
   public final List<BlockState> getBlockStates() {
     return this.blockStates;

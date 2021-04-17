@@ -7,6 +7,7 @@ import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -14,6 +15,7 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
+import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
@@ -183,7 +185,7 @@ public class PlayerDiggingListener {
                 status, result);
 
         if (!result) {
-            final boolean solid = Block.fromStateId((short) blockStateId).isSolid();
+            final boolean solid = BlockState.fromId((short) blockStateId).isSolid();
             if (solid) {
                 final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
 
