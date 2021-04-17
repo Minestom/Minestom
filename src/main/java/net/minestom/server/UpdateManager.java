@@ -4,12 +4,10 @@ import com.google.common.collect.Queues;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.lock.Acquirable;
 import net.minestom.server.lock.Acquisition;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
-import net.minestom.server.thread.BatchThread;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -117,7 +115,7 @@ public final class UpdateManager {
         MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
                 instance.tick(tickStart));
 
-        // Server tick (instance/chunk/entity)
+        // Tick all chunks (and entities inside)
         final CountDownLatch countDownLatch = threadProvider.update(tickStart);
 
         // Wait tick end
