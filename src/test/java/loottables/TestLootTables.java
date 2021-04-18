@@ -33,7 +33,11 @@ public class TestLootTables {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        ResourceGatherer.ensureResourcesArePresent(false);
+        try {
+            ResourceGatherer.ensureResourcesArePresent();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         tableManager = new LootTableManager();
         tableManager.registerConditionDeserializer(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition.Deserializer());

@@ -35,7 +35,7 @@ public class DataInitializer {
     }
 
     private static void loadBlockData(@NotNull File blocksFile) {
-        if (!blocksFile.exists()) {
+        if (!blocksFile.getAbsoluteFile().exists()) {
             LOGGER.error("Failed to find blocks.json.");
             LOGGER.error("Stopped raw data engine for blocks.");
             return;
