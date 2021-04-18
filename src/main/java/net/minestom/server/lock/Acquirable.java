@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -60,7 +61,7 @@ public final class Acquirable<T> {
     public boolean tryAcquire(@NotNull Consumer<@NotNull T> consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
-        if (elementThread == null || elementThread == currentThread) {
+        if (Objects.equals(currentThread, elementThread)) {
             consumer.accept(unwrap());
             return true;
         }

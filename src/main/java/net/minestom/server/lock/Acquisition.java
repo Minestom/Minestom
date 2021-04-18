@@ -79,7 +79,7 @@ public final class Acquisition {
      */
     protected static void acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread,
                                   @NotNull Runnable callback) {
-        if (elementThread == null || elementThread == currentThread) {
+        if (Objects.equals(currentThread, elementThread)) {
             callback.run();
         } else {
 
@@ -101,8 +101,8 @@ public final class Acquisition {
             if (currentAcquired)
                 current.monitor.enter();
 
-            final var monitor = elementThread.monitor;
-            final boolean acquired = monitor.isOccupiedByCurrentThread();
+            final var monitor = elementThread != null ? elementThread.monitor : null;
+            final boolean acquired = monitor == null || monitor.isOccupiedByCurrentThread();
             if (!acquired) {
                 monitor.enter();
             }
@@ -114,6 +114,7 @@ public final class Acquisition {
             }
 
             callback.run();
+
             if (!acquired) {
                 monitor.leave();
             }
