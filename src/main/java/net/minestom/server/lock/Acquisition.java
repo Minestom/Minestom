@@ -29,10 +29,9 @@ public final class Acquisition {
      * @param collection the collection to acquire
      * @param consumer   the consumer called for each of the collection element
      * @param <E>        the object type
-     * @param <T>        the acquirable object
      */
-    public static <E, T extends Acquirable<E>> void acquireForEach(@NotNull Collection<? super T> collection,
-                                                                   @NotNull Consumer<? super E> consumer) {
+    public static <E> void acquireForEach(@NotNull Collection<Acquirable<E>> collection,
+                                          @NotNull Consumer<? super E> consumer) {
         final Thread currentThread = Thread.currentThread();
         Map<BatchThread, List<E>> threadCacheMap = retrieveThreadMap(collection, currentThread, consumer);
 

@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  *
  * @param <T> the acquirable object type
  */
-public class Acquirable<T> {
+public final class Acquirable<T> {
 
     public static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
 
