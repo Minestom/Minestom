@@ -1,6 +1,5 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -32,7 +31,9 @@ public abstract class ThreadProvider {
 
     // Represents the maximum percentage of tick time
     // that can be spent refreshing chunks thread
-    protected float refreshPercentage = 0.3f;
+    protected double refreshPercentage = 0.3f;
+    // Minimum refresh time
+    private long min = 3;
 
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
@@ -92,7 +93,7 @@ public abstract class ThreadProvider {
 
     protected @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
                                                  @NotNull Function<@NotNull BatchThread, @NotNull ChunkEntry> chunkEntrySupplier) {
-        final int threadId = (int) (Math.abs(findThread(chunk)) % threads.size());
+        final int threadId = getThreadId(chunk);
         BatchThread thread = threads.get(threadId);
         var chunks = threadChunkMap.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
 
@@ -112,6 +113,10 @@ public abstract class ThreadProvider {
             chunkEntryMap.remove(chunk);
         }
         this.chunks.remove(chunk);
+    }
+
+    protected int getThreadId(Chunk chunk) {
+        return (int) (Math.abs(findThread(chunk)) % threads.size());
     }
 
     /**
@@ -152,7 +157,7 @@ public abstract class ThreadProvider {
         return countDownLatch;
     }
 
-    public synchronized void refreshThreads() {
+    public synchronized void refreshThreads(long tickTime) {
         // Clear removed entities
         {
             for (Entity entity : removedEntities) {
@@ -167,11 +172,11 @@ public abstract class ThreadProvider {
         }
 
 
-        final long endTime = (long) (System.currentTimeMillis() + ((float) MinecraftServer.TICK_MS * refreshPercentage));
+        final long endTime = (System.currentTimeMillis() +
+                Math.max((long) ((double) tickTime * refreshPercentage), min));
         final int size = chunks.size();
         int counter = 0;
-        while (counter++ < size ||
-                System.currentTimeMillis() < endTime) {
+        while (true) {
             Chunk chunk = chunks.pollFirst();
             if (!ChunkUtils.isLoaded(chunk)) {
                 removeChunk(chunk);
@@ -196,6 +201,13 @@ public abstract class ThreadProvider {
 
             // Add back to the deque
             chunks.addLast(chunk);
+
+            if (++counter > size)
+                break;
+
+            if (System.currentTimeMillis() >= endTime)
+                break;
+
         }
         System.out.println("update " + counter);
     }

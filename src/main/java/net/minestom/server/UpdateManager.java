@@ -126,7 +126,8 @@ public final class UpdateManager {
         }
 
         // Clear removed entities & update threads
-        this.threadProvider.refreshThreads();
+        long tickTime = System.currentTimeMillis() - tickStart;
+        this.threadProvider.refreshThreads(tickTime);
     }
 
     /**
