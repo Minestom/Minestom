@@ -36,12 +36,30 @@ public interface Acquirable<T> {
      * Blocks the current thread until 'this' can be acquired,
      * and execute {@code consumer} as a callback with the acquired object.
      *
-     * @param consumer the consumer of the acquired object
+     * @param consumer the acquisition consumer
      */
     default void acquire(@NotNull Consumer<@NotNull T> consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
+    }
+
+    /**
+     * Executes {@code consumer} only if this element can be safely
+     * acquired without any synchronization.
+     *
+     * @param consumer the acquisition consumer
+     * @return true if the acquisition happened without synchronization,
+     * false otherwise
+     */
+    default boolean tryAcquire(@NotNull Consumer<@NotNull T> consumer) {
+        final Thread currentThread = Thread.currentThread();
+        final BatchThread elementThread = getHandler().getBatchThread();
+        if (elementThread == null || elementThread == currentThread) {
+            consumer.accept(unwrap());
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -7,14 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
 public final class Acquisition {
 
-    private static final Map<BatchThread, Collection<Request>> REQUEST_MAP = new ConcurrentHashMap<>();
     private static final ThreadLocal<ScheduledAcquisition> SCHEDULED_ACQUISITION = ThreadLocal.withInitial(ScheduledAcquisition::new);
 
     private static final Monitor GLOBAL_MONITOR = new Monitor();
@@ -41,6 +38,9 @@ public final class Acquisition {
         }
     }
 
+    /**
+     * Processes all scheduled acquisitions.
+     */
     public static void processThreadTick() {
         ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
 
@@ -63,7 +63,7 @@ public final class Acquisition {
     }
 
     /**
-     * Ensure that {@code callback} is safely executed inside the batch thread.
+     * Ensures that {@code callback} is safely executed inside the batch thread.
      */
     protected static void acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread, Runnable callback) {
         if (elementThread == null || elementThread == currentThread) {
@@ -108,23 +108,6 @@ public final class Acquisition {
         }
     }
 
-    public static void process(@NotNull BatchThread thread) {
-        var requests = getRequests(thread);
-        requests.forEach(request -> {
-            requests.remove(request);
-            request.localLatch.countDown();
-            try {
-                request.processLatch.await();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        });
-    }
-
-    private static @NotNull Collection<Request> getRequests(@NotNull BatchThread thread) {
-        return REQUEST_MAP.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
-    }
-
     protected synchronized static <T> void scheduledAcquireRequest(@NotNull Acquirable<T> acquirable, Consumer<T> consumer) {
         ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
         scheduledAcquisition.acquirableElements.add((Acquirable<Object>) acquirable);
@@ -161,11 +144,6 @@ public final class Acquisition {
 
     public static void resetWaitMonitoring() {
         WAIT_COUNTER_NANO.set(0);
-    }
-
-    private static class Request {
-        public CountDownLatch localLatch, processLatch;
-        public Runnable runnable;
     }
 
     private static class ScheduledAcquisition {
