@@ -75,7 +75,7 @@ public final class NBTUtils {
             if (tag.containsKey("tag")) {
                 nbtCompound = tag.getCompound("tag");
             }
-            ItemStack itemStack = loadItem(material, count, nbtCompound);
+            ItemStack itemStack = ItemStack.fromNBT(material, nbtCompound, count);
             destination.setItemStack(tag.getByte("Slot"), itemStack);
         }
     }
@@ -138,20 +138,7 @@ public final class NBTUtils {
             MinecraftServer.getExceptionManager().handleException(e);
         }
 
-        return loadItem(material, count, nbtCompound);
-    }
-
-    public static @NotNull ItemStack loadItem(@NotNull Material material, int count, @Nullable NBTCompound nbtCompound) {
-        return ItemStack.builder(material)
-                .amount(count)
-                .meta(metaBuilder -> {
-                    if (nbtCompound != null) {
-                        return ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound);
-                    } else {
-                        return metaBuilder;
-                    }
-                })
-                .build();
+        return ItemStack.fromNBT(material, nbtCompound, count);
     }
 
     @SuppressWarnings("ConstantConditions")
