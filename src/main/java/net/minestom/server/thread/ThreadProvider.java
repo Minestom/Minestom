@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -64,15 +65,35 @@ public abstract class ThreadProvider {
     public abstract long findThread(@NotNull Chunk chunk);
 
     protected void addChunk(Chunk chunk) {
+        ChunkEntry chunkEntry = setChunkThread(chunk, (thread) -> new ChunkEntry(thread, chunk));
+        this.chunkEntryMap.put(chunk, chunkEntry);
+        this.chunks.add(chunk);
+    }
+
+    protected void switchChunk(@NotNull Chunk chunk) {
+        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+        if (chunkEntry == null)
+            return;
+        var chunks = threadChunkMap.get(chunkEntry.thread);
+        if (chunks == null || chunks.isEmpty())
+            return;
+        chunks.remove(chunkEntry);
+
+        setChunkThread(chunk, batchThread -> {
+            chunkEntry.thread = batchThread;
+            return chunkEntry;
+        });
+    }
+
+    protected @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
+                                                 @NotNull Function<@NotNull BatchThread, @NotNull ChunkEntry> chunkEntrySupplier) {
         final int threadId = (int) (Math.abs(findThread(chunk)) % threads.size());
         BatchThread thread = threads.get(threadId);
         var chunks = threadChunkMap.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
 
-        ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
+        ChunkEntry chunkEntry = chunkEntrySupplier.apply(thread);
         chunks.add(chunkEntry);
-
-        this.chunkEntryMap.put(chunk, chunkEntry);
-        this.chunks.add(chunk);
+        return chunkEntry;
     }
 
     protected void removeChunk(Chunk chunk) {
@@ -153,7 +174,7 @@ public abstract class ThreadProvider {
 
             // Update chunk threads
             {
-                // TODO
+                switchChunk(chunk);
             }
 
             // Update entities
@@ -215,7 +236,7 @@ public abstract class ThreadProvider {
     }
 
     public static class ChunkEntry {
-        private final BatchThread thread;
+        private volatile BatchThread thread;
         private final Chunk chunk;
         private final List<Entity> entities = new ArrayList<>();
 
