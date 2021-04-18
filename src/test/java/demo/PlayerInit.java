@@ -40,13 +40,12 @@ import net.minestom.server.world.DimensionType;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInit {
-
-    private static final InstanceContainer instanceContainer;
 
     private static final Inventory inventory;
 
@@ -55,9 +54,11 @@ public class PlayerInit {
         //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        for (int i = 0; i < 10; i++) {
+            InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+            instanceContainer.enableAutoChunkLoad(true);
+            instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -185,7 +186,7 @@ public class PlayerInit {
             final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
             final Block block = Block.fromStateId(blockStateId);
             player.sendMessage("You clicked at the block " + block + " " + customBlock);
-            player.sendMessage("CHUNK COUNT " + instanceContainer.getChunks().size());
+            player.sendMessage("CHUNK COUNT " + player.getInstance().getChunks().size());
         });
 
         globalEventHandler.addEventCallback(PickupItemEvent.class, event -> {
@@ -216,12 +217,13 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.sendMessage("test");
 
-            event.setSpawningInstance(instanceContainer);
-            int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
-            int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
-            player.setRespawnPoint(new Position(0, 42f, 0));
+            var instances = MinecraftServer.getInstanceManager().getInstances();
+            Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
+            event.setSpawningInstance(instance);
+            int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
+            int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
+            player.setRespawnPoint(new Position(x, 42f, z));
 
             player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                 if (slot == -999)

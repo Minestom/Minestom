@@ -330,7 +330,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         //System.out.println(getAcquiredElement().getHandler().getBatchThread());
         Collection<Acquirable<Player>> players = new ArrayList<>();
         //if (username.equals("TheMode911"))
-        for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+        /*for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             //players.add(p1.getAcquiredElement());
             p1.getAcquiredElement().acquire(o -> {
                 for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
@@ -338,7 +338,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         //System.out.println(getAcquiredElement().getHandler().getBatchThread().monitor.isOccupiedByCurrentThread());
                     });
             });
-        }
+        }*/
 
         /*AcquirableCollection<Player> players1 = new AcquirableCollection<>(players);
         players1.forEach(player -> {
