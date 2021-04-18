@@ -2,7 +2,7 @@ package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.map.Framebuffer;
-import net.minestom.server.map.MapColors;
+import net.minestom.server.map.MapColor;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.time.TimeUnit;
 import org.lwjgl.BufferUtils;
@@ -114,7 +114,7 @@ public abstract class GLFWCapableBuffer {
                     int blue = pixels.get(i+2) & 0xFF;
                     int alpha = pixels.get(i+3) & 0xFF;
                     int argb = (alpha << 24) | (red << 16) | (green << 8) | blue;
-                    colors[Framebuffer.index(x, y, width)] = MapColors.closestColor(argb).getIndex();
+                    colors[Framebuffer.index(x, y, width)] = MapColor.closestColor(argb).getIndex();
                 }
             }
         }
