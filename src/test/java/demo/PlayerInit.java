@@ -54,10 +54,12 @@ public class PlayerInit {
         //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
+
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.enableAutoChunkLoad(true);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
         for (int i = 0; i < 10; i++) {
-            InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-            instanceContainer.enableAutoChunkLoad(true);
-            instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+            instanceManager.createSharedInstance(instanceContainer);
         }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
