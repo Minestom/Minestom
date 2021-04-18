@@ -1,8 +1,6 @@
 package net.minestom.server.scoreboard;
 
 import com.google.common.collect.MapMaker;
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;

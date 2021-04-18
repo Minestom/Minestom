@@ -9,7 +9,6 @@ import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.NotNull;
@@ -180,6 +179,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Writes a JsonMessage to the buffer.
      * Simply a writeSizedString with message.toString()
+     *
      * @param message
      */
     public void writeJsonMessage(JsonMessage message) {
@@ -234,16 +234,6 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Consumer this object to write at a different time
-     *
-     * @param consumer the writer consumer
-     */
-    public void write(Consumer<BinaryWriter> consumer) {
-        if (consumer != null)
-            consumer.accept(this);
-    }
-
-    /**
      * Writes an {@link UUID}.
      * It is done by writing both long, the most and least significant bits.
      *
@@ -263,7 +253,14 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeItemStack(@NotNull ItemStack itemStack) {
-        NBTUtils.writeItemStack(this, itemStack);
+        if (itemStack.isAir()) {
+            writeBoolean(false);
+        } else {
+            writeBoolean(true);
+            writeVarInt(itemStack.getMaterial().getId());
+            writeByte((byte) itemStack.getAmount());
+            write(itemStack.getMeta());
+        }
     }
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {
@@ -277,20 +274,30 @@ public class BinaryWriter extends OutputStream {
 
     /**
      * Writes the given writeable object into this writer.
+     *
      * @param writeable the object to write
      */
-    public void write(Writeable writeable) {
+    public void write(@NotNull Writeable writeable) {
         writeable.write(this);
+    }
+
+    public void write(@NotNull BinaryWriter writer) {
+        this.buffer.writeBytes(writer.getBuffer());
+    }
+
+    public void write(@NotNull ByteBuf buffer) {
+        this.buffer.writeBytes(buffer);
     }
 
     /**
      * Writes an array of writeable objects to this writer. Will prepend the binary stream with a var int to denote the
      * length of the array.
+     *
      * @param writeables the array of writeables to write
      */
-    public void writeArray(Writeable[] writeables) {
+    public void writeArray(@NotNull Writeable[] writeables) {
         writeVarInt(writeables.length);
-        for(Writeable w : writeables) {
+        for (Writeable w : writeables) {
             write(w);
         }
     }
@@ -340,7 +347,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @return the raw buffer
      */
-    public ByteBuf getBuffer() {
+    public @NotNull ByteBuf getBuffer() {
         return buffer;
     }
 
@@ -365,7 +372,7 @@ public class BinaryWriter extends OutputStream {
     /**
      * Returns a byte[] with the contents written via BinaryWriter
      */
-    public static byte[] makeArray(Consumer<BinaryWriter> writing) {
+    public static byte[] makeArray(@NotNull Consumer<@NotNull BinaryWriter> writing) {
         BinaryWriter writer = new BinaryWriter();
         writing.accept(writer);
         return writer.toByteArray();

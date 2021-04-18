@@ -4,7 +4,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.condition.Conditions;

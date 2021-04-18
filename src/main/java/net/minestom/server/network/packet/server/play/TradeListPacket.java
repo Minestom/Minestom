@@ -96,7 +96,7 @@ public class TradeListPacket implements ServerPacket {
             result = reader.readItemStack();
 
             boolean hasSecondItem = reader.readBoolean();
-            if(hasSecondItem) {
+            if (hasSecondItem) {
                 inputItem2 = reader.readItemStack();
             } else {
                 inputItem2 = null;

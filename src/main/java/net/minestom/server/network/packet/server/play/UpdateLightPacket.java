@@ -5,21 +5,18 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryCache;
-import net.minestom.server.utils.cache.TimedBuffer;
+import net.minestom.server.utils.cache.TemporaryPacketCache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES,
-            notification -> notification.getValue().getBuffer().release());
+    private static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
     public int chunkX;
     public int chunkZ;
@@ -103,7 +100,7 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
         skyLight.clear();
         for (int i = 0; i < 14; i++) {
             int length = reader.readVarInt();
-            if(length != 2048) {
+            if (length != 2048) {
                 throw new IllegalStateException("Length must be 2048.");
             }
 
@@ -115,7 +112,7 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
         blockLight.clear();
         for (int i = 0; i < 6; i++) {
             int length = reader.readVarInt();
-            if(length != 2048) {
+            if (length != 2048) {
                 throw new IllegalStateException("Length must be 2048.");
             }
 
@@ -129,9 +126,8 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
         return ServerPacketIdentifier.UPDATE_LIGHT;
     }
 
-    @NotNull
     @Override
-    public TemporaryCache<TimedBuffer> getCache() {
+    public @NotNull TemporaryPacketCache getCache() {
         return CACHE;
     }
 

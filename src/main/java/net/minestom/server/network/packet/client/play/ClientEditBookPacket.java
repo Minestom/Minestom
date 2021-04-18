@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientEditBookPacket extends ClientPlayPacket {
 
-    public ItemStack book = ItemStack.getAirItem();
+    public ItemStack book = ItemStack.AIR;
     public boolean isSigning;
     public Player.Hand hand = Player.Hand.MAIN;
 

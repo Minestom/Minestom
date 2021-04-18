@@ -51,6 +51,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private String loginUsername;
     private String serverAddress;
     private int serverPort;
+    private int protocolVersion;
 
     // Used for the login plugin request packet, to retrieve the channel from a message id,
     // cleared once the player enters the play state
@@ -60,7 +61,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final static int INITIAL_BUFFER_SIZE = 1_048_576; // 2^20
+    private final static int INITIAL_BUFFER_SIZE = 65_535; // 2^16-1
     private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
@@ -69,22 +70,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.remoteAddress = channel.remoteAddress();
 
         this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
-    }
-
-    @Override
-    public void update() {
-        // Flush
-        final int bufferSize = tickBuffer.writerIndex();
-        if (bufferSize > 0) {
-            this.channel.eventLoop().submit(() -> {
-                if (channel.isActive()) {
-                    writeWaitingPackets();
-                    channel.flush();
-                }
-            });
-        }
-        // Network stats
-        super.update();
     }
 
     /**
@@ -134,12 +119,10 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (getPlayer() != null) {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    // Check if the packet is cached or can be
-                    final FramedPacket cachedPacket = CacheablePacket.getCache(serverPacket);
-                    if (cachedPacket != null) {
-                        write(cachedPacket);
-                    } else {
-                        write(serverPacket, skipTranslating);
+                    synchronized (tickBuffer) {
+                        if (tickBuffer.refCnt() == 0)
+                            return;
+                        CacheablePacket.writeCache(tickBuffer, serverPacket);
                     }
                 } else {
                     write(serverPacket, skipTranslating);
@@ -159,6 +142,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
             synchronized (tickBuffer) {
+                if (tickBuffer.refCnt() == 0)
+                    return;
                 final ByteBuf body = framedPacket.getBody();
                 tickBuffer.writeBytes(body, body.readerIndex(), body.readableBytes());
             }
@@ -171,11 +156,15 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
 
             synchronized (tickBuffer) {
+                if (tickBuffer.refCnt() == 0)
+                    return;
                 PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
             }
             return;
         } else if (message instanceof ByteBuf) {
             synchronized (tickBuffer) {
+                if (tickBuffer.refCnt() == 0)
+                    return;
                 tickBuffer.writeBytes((ByteBuf) message);
             }
             return;
@@ -196,28 +185,42 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    private void writeWaitingPackets() {
+    public void writeWaitingPackets() {
         if (tickBuffer.writerIndex() == 0) {
             // Nothing to write
             return;
         }
 
+        // Retrieve safe copy
+        final ByteBuf copy;
         synchronized (tickBuffer) {
-            final ByteBuf copy = tickBuffer.copy();
-
-            ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
-            channelFuture.addListener(future -> copy.release());
-
-            // Netty debug
-            if (MinecraftServer.shouldProcessNettyErrors()) {
-                channelFuture.addListener(future -> {
-                    if (!future.isSuccess() && channel.isActive()) {
-                        MinecraftServer.getExceptionManager().handleException(future.cause());
-                    }
-                });
-            }
-
+            if (tickBuffer.refCnt() == 0)
+                return;
+            copy = tickBuffer.copy();
             tickBuffer.clear();
+        }
+
+        // Write copied buffer to netty
+        ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
+        channelFuture.addListener(future -> copy.release());
+
+        // Netty debug
+        if (MinecraftServer.shouldProcessNettyErrors()) {
+            channelFuture.addListener(future -> {
+                if (!future.isSuccess() && channel.isActive()) {
+                    MinecraftServer.getExceptionManager().handleException(future.cause());
+                }
+            });
+        }
+    }
+
+    public void flush() {
+        final int bufferSize = tickBuffer.writerIndex();
+        if (bufferSize > 0) {
+            if (channel.isActive()) {
+                writeWaitingPackets();
+                channel.flush();
+            }
         }
     }
 
@@ -237,6 +240,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
+
 
     @Override
     public void disconnect() {
@@ -276,8 +280,8 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server address used
      */
-    @Nullable
-    public String getServerAddress() {
+    @Override
+    public @Nullable String getServerAddress() {
         return serverAddress;
     }
 
@@ -288,9 +292,35 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the server port used
      */
+    @Override
     public int getServerPort() {
         return serverPort;
     }
+
+    /**
+     * Gets the protocol version of a client.
+     *
+     * @return protocol version of client.
+     */
+    @Override
+    public int getProtocolVersion() {
+        return protocolVersion;
+    }
+
+
+    /**
+     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
+     *
+     * @param serverAddress   the server address which the client used
+     * @param serverPort      the server port which the client used
+     * @param protocolVersion the protocol version which the client used
+     */
+    public void refreshServerInformation(@Nullable String serverAddress, int serverPort, int protocolVersion) {
+        this.serverAddress = serverAddress;
+        this.serverPort = serverPort;
+        this.protocolVersion = protocolVersion;
+    }
+
 
     @Nullable
     public UUID getBungeeUuid() {
@@ -349,16 +379,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    /**
-     * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.
-     *
-     * @param serverAddress the server address which the client used
-     * @param serverPort    the server port which the client used
-     */
-    public void refreshServerInformation(@Nullable String serverAddress, int serverPort) {
-        this.serverAddress = serverAddress;
-        this.serverPort = serverPort;
-    }
 
     @NotNull
     public ByteBuf getTickBuffer() {

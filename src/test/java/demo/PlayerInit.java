@@ -1,11 +1,12 @@
 package demo;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
@@ -27,16 +28,21 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.metadata.CompassMeta;
+import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -55,18 +61,44 @@ public class PlayerInit {
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
-        inventory = new Inventory(InventoryType.CHEST_1_ROW, "Test inventory");
+        inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
             p.sendMessage("click type inventory: " + clickType);
             System.out.println("slot inv: " + slot)0;
             inventoryConditionResult.setCancel(slot == 3);
         });*/
-        //inventory.setItemStack(3, new ItemStack(Material.DIAMOND, (byte) 34));
+        inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
+
+        {
+            CompassMeta compassMeta = new CompassMeta.Builder()
+                    .lodestonePosition(new Position(0, 0, 0))
+                    .build();
+
+            ItemStack itemStack = ItemStack.builder(Material.COMPASS)
+                    .meta(CompassMeta.class, builder -> {
+                        builder.lodestonePosition(new Position(0, 0, 0));
+                        builder.set(ItemTag.Integer("int"), 25);
+                    })
+                    .build();
+
+            itemStack = itemStack.with(itemBuilder -> itemBuilder
+                    .amount(10)
+                    .meta(CompassMeta.class, builder -> {
+                        builder.lodestonePosition(new Position(5, 0, 0));
+                    })
+                    .lore(Component.text("Lore")));
+        }
+
     }
+
+    private static AtomicDouble LAST_TICK_TIME = new AtomicDouble();
 
     public static void init() {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
+
+        MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
+                LAST_TICK_TIME.set(tickMonitor.getTickTime()));
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
 
@@ -78,7 +110,9 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
-            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB");
+            final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
+                    .append(Component.newline())
+                    .append(Component.text("TICK TIME: " + MathUtils.round(LAST_TICK_TIME.get(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
 
@@ -180,6 +214,7 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
+            player.sendMessage("test");
 
             event.setSpawningInstance(instanceContainer);
             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
@@ -201,19 +236,29 @@ public class PlayerInit {
             player.setPermissionLevel(4);
 
             PlayerInventory inventory = player.getInventory();
-            ItemStack itemStack = new ItemStack(Material.STONE, (byte) 64);
+            ItemStack itemStack = ItemStack.builder(Material.STONE)
+                    .amount(64)
+                    .meta(itemMetaBuilder ->
+                            itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
+                                    .canDestroy(Set.of(Block.DIAMOND_ORE)))
+                    .build();
+
+            //itemStack = itemStack.withStore(storeBuilder -> storeBuilder.set("key2", 25, Integer::sum));
+
             inventory.addItemStack(itemStack);
 
             {
-                ItemStack item = new ItemStack(Material.DIAMOND_CHESTPLATE, (byte) 1);
-                inventory.setChestplate(item);
-                item.setDisplayName(ColoredText.of("test"));
+                ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
+                        .displayName(Component.text("test"))
+                        .lore(Component.text("lore"))
+                        .build();
 
-                inventory.refreshSlot((short) PlayerInventoryUtils.CHESTPLATE_SLOT);
+                //inventory.setChestplate(item);
 
+                inventory.setChestplate(item.with(itemStackBuilder -> {
+                    itemStackBuilder.lore(Collections.emptyList());
+                }));
             }
-
-            //player.getInventory().addItemStack(new ItemStack(Material.STONE, (byte) 32));
         });
 
         globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
@@ -248,14 +293,5 @@ public class PlayerInit {
         });
     }
 
-    public static ResponseDataConsumer getResponseDataConsumer() {
-        return (playerConnection, responseData) -> {
-            responseData.setMaxPlayer(0);
-            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            responseData.addPlayer("A name", UUID.randomUUID());
-            responseData.addPlayer("Could be some message", UUID.randomUUID());
-            responseData.setDescription("IP test: " + playerConnection.getRemoteAddress());
-        };
-    }
 
 }

@@ -14,7 +14,6 @@ import org.lwjgl.system.MemoryStack;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
 import static org.lwjgl.opengl.GL11.*;
 
 public abstract class GLFWCapableBuffer {

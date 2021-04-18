@@ -17,11 +17,11 @@ public abstract class ShapedRecipe extends Recipe {
     private ItemStack result;
 
     protected ShapedRecipe(@NotNull String recipeId,
-                        int width,
-                        int height,
-                        @NotNull String group,
-                        @Nullable List<DeclareRecipesPacket.Ingredient> ingredients,
-                        @NotNull ItemStack result) {
+                           int width,
+                           int height,
+                           @NotNull String group,
+                           @Nullable List<DeclareRecipesPacket.Ingredient> ingredients,
+                           @NotNull ItemStack result) {
         super(RecipeType.SHAPED, recipeId);
         this.width = width;
         this.height = height;

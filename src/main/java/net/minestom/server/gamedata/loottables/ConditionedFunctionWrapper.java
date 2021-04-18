@@ -22,7 +22,7 @@ public class ConditionedFunctionWrapper implements LootTableFunction {
     @Override
     public ItemStack apply(ItemStack stack, Data data) {
         for (Condition c : conditions) {
-            if(!c.test(data))
+            if (!c.test(data))
                 return stack;
         }
         return baseFunction.apply(stack, data);

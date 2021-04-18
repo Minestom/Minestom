@@ -47,13 +47,13 @@ public class ReadWritePackets {
     private <T extends Readable & Writeable> Collection<DynamicTest> checkImplementationPresence(Class<T> packetClass) throws IOException {
         ClassPath cp = ClassPath.from(ClassLoader.getSystemClassLoader());
         List<DynamicTest> allTests = new LinkedList<>();
-        for(ClassPath.ClassInfo classInfo : cp.getAllClasses()) {
-            if(!classInfo.getPackageName().startsWith("net.minestom.server.network.packet"))
+        for (ClassPath.ClassInfo classInfo : cp.getAllClasses()) {
+            if (!classInfo.getPackageName().startsWith("net.minestom.server.network.packet"))
                 continue;
             try {
                 Class<?> clazz = classInfo.load();
-                if(packetClass.isAssignableFrom(clazz) && !clazz.isInterface() && ((clazz.getModifiers() & Modifier.ABSTRACT) != Modifier.ABSTRACT)) {
-                    allTests.add(DynamicTest.dynamicTest("WriteThenRead "+clazz.getSimpleName(), () -> {
+                if (packetClass.isAssignableFrom(clazz) && !clazz.isInterface() && ((clazz.getModifiers() & Modifier.ABSTRACT) != Modifier.ABSTRACT)) {
+                    allTests.add(DynamicTest.dynamicTest("WriteThenRead " + clazz.getSimpleName(), () -> {
                         // required for managers to be loaded
                         MinecraftServer.init();
 
@@ -63,14 +63,13 @@ public class ReadWritePackets {
                         T packet;
 
                         // exceptions
-                        if(clazz.getSimpleName().equals("EntityEquipmentPacket")) {
+                        if (clazz.getSimpleName().equals("EntityEquipmentPacket")) {
                             // requires at least one slot and one item
                             EntityEquipmentPacket p = new EntityEquipmentPacket();
-                            p.itemStacks = new ItemStack[] { ItemStack.getAirItem() };
-                            p.slots = new EntityEquipmentPacket.Slot[] { EntityEquipmentPacket.Slot.MAIN_HAND };
+                            p.itemStacks = new ItemStack[]{ItemStack.AIR};
+                            p.slots = new EntityEquipmentPacket.Slot[]{EntityEquipmentPacket.Slot.MAIN_HAND};
                             packet = (T) p;
-                        }
-                        else {
+                        } else {
                             packet = (T) constructor.newInstance();
                         }
 

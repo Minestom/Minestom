@@ -6,6 +6,7 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
@@ -57,13 +58,14 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     protected Instance instance;
+    protected Chunk currentChunk;
     protected final Position position;
     protected double lastX, lastY, lastZ;
     protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
@@ -442,6 +444,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @param time the update time in milliseconds
      */
+    @Override
     public void tick(long time) {
         if (instance == null)
             return;
@@ -461,8 +464,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             return;
         }
 
+        // Fix current chunk being null if the entity has been spawned before
+        if (currentChunk == null) {
+            currentChunk = instance.getChunkAt(position);
+        }
+
         // Check if the entity chunk is loaded
-        final Chunk currentChunk = getChunk();
         if (!ChunkUtils.isLoaded(currentChunk)) {
             // No update for entities in unloaded chunk
             return;
@@ -566,11 +573,14 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
+                Chunk finalChunk = currentChunk;
+                if (!ChunkUtils.same(position, finalVelocityPosition)) {
+                    finalChunk = instance.getChunkAt(finalVelocityPosition);
 
-                // Entity shouldn't be updated when moving in an unloaded chunk
-                if (!ChunkUtils.isLoaded(finalChunk)) {
-                    return;
+                    // Entity shouldn't be updated when moving in an unloaded chunk
+                    if (!ChunkUtils.isLoaded(finalChunk)) {
+                        return;
+                    }
                 }
 
                 // Apply the position if changed
@@ -637,9 +647,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = instance.getChunkAt(x, z);
-                        if (!ChunkUtils.isLoaded(chunk))
-                            continue;
+                        Chunk chunk = currentChunk;
+                        if (!ChunkUtils.same(currentChunk, x, z)) {
+                            chunk = instance.getChunkAt(x, z);
+                            if (!ChunkUtils.isLoaded(chunk))
+                                continue;
+                        }
 
                         final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
@@ -816,9 +829,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity chunk, can be null even if unlikely
      */
-    @Nullable
-    public Chunk getChunk() {
-        return instance.getChunkAt(position.getX(), position.getZ());
+    public @Nullable Chunk getChunk() {
+        return currentChunk;
     }
 
     /**
@@ -826,8 +838,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
-    @Nullable
-    public Instance getInstance() {
+    public @Nullable Instance getInstance() {
         return instance;
     }
 
@@ -855,6 +866,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         this.isActive = true;
         this.instance = instance;
+        this.currentChunk = instance.getChunkAt(position.getX(), position.getZ());
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
@@ -1309,20 +1321,26 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         final Instance instance = getInstance();
         if (instance != null) {
-            final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
-            final Chunk newChunk = instance.getChunkAt(x, z);
+            final int lastChunkX = currentChunk.getChunkX();
+            final int lastChunkZ = currentChunk.getChunkZ();
 
-            Check.notNull(lastChunk, "The entity {0} was in an unloaded chunk at {1};{2}", getEntityId(), lastX, lastZ);
-            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
+            final int newChunkX = ChunkUtils.getChunkCoordinate(x);
+            final int newChunkZ = ChunkUtils.getChunkCoordinate(z);
 
-            if (lastChunk != newChunk) {
-                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
+            if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
+                // Entity moved in a new chunk
+                final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
+                Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
+
+                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
                     player.refreshVisibleChunks(newChunk);
                     player.refreshVisibleEntities(newChunk);
                 }
+
+                this.currentChunk = newChunk;
             }
         }
 
@@ -1538,10 +1556,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     private UpdateOption getSynchronizationCooldown() {
-        if (this.customSynchronizationCooldown != null) {
-            return this.customSynchronizationCooldown;
-        }
-        return SYNCHRONIZATION_COOLDOWN;
+        return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
     public enum Pose {

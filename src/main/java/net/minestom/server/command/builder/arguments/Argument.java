@@ -220,6 +220,18 @@ public abstract class Argument<T> {
         return suggestionCallback != null;
     }
 
+    /**
+     * Maps this argument's output to another result.
+     *
+     * @param mapper The mapper to use (this argument's input = desired output)
+     * @param <O>    The type of output expected.
+     * @return A new ArgumentMap that can get this complex object type.
+     */
+    @Beta
+    public <O> @NotNull ArgumentMap<T, O> map(@NotNull ArgumentMap.Mapper<T, O> mapper) {
+        return new ArgumentMap<>(this, mapper);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

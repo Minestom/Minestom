@@ -59,8 +59,8 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -68,6 +68,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -130,7 +131,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private long startEatingTime;
     private long defaultEatingTime = 1000L;
     private long eatingTime;
-    private boolean isEating;
+    private Hand eatingHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -397,10 +398,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Eating animation
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
-                refreshEating(false);
-
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true, eatingHand);
 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
@@ -412,9 +411,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 final boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
                     callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
+
+                refreshEating(null);
             }
         }
 
@@ -589,14 +590,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        // Item ownership cache
-        {
-            ItemStack[] itemStacks = inventory.getItemStacks();
-            for (ItemStack itemStack : itemStacks) {
-                ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
-            }
-        }
-
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
@@ -671,17 +664,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Load all the required chunks
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, getChunkRange());
 
-            final ChunkCallback eachCallback = chunk -> {
-                if (chunk != null) {
-                    final int chunkX = ChunkUtils.getChunkCoordinate(spawnPosition.getX());
-                    final int chunkZ = ChunkUtils.getChunkCoordinate(spawnPosition.getZ());
-                    if (chunk.getChunkX() == chunkX &&
-                            chunk.getChunkZ() == chunkZ) {
-                        updateViewPosition(chunkX, chunkZ);
-                    }
-                }
-            };
-
             final ChunkCallback endCallback = chunk -> {
                 // This is the last chunk to be loaded , spawn player
                 spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
@@ -690,7 +672,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Chunk 0;0 always needs to be loaded
             instance.loadChunk(0, 0, chunk ->
                     // Load all the required chunks
-                    ChunkUtils.optionalLoadAll(instance, visibleChunks, eachCallback, endCallback));
+                    ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback));
 
         } else {
             // The player already has the good version of all the chunks.
@@ -1107,42 +1089,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         MinecraftServer.getBossBarManager().removeBossBar(this, bar);
     }
 
-    /**
-     * Opens a book ui for the player with the given book metadata.
-     *
-     * @param bookMeta The metadata of the book to open
-     * @deprecated Use {@link #openBook(Book)}
-     */
-    @Deprecated
-    public void openBook(@NotNull WrittenBookMeta bookMeta) {
-        // Set book in offhand
-        final ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(bookMeta);
-        final SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = 0;
-        setSlotPacket.slot = 45;
-        setSlotPacket.itemStack = writtenBook;
-        this.playerConnection.sendPacket(setSlotPacket);
-
-        // Open the book
-        final OpenBookPacket openBookPacket = new OpenBookPacket();
-        openBookPacket.hand = Hand.OFF;
-        this.playerConnection.sendPacket(openBookPacket);
-
-        // Update inventory to remove book (which the actual inventory does not have)
-        this.inventory.update();
-    }
-
     @Override
     public void openBook(@NotNull Book book) {
-        // make the book
-        ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(WrittenBookMeta.fromAdventure(book, this));
+        ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
+                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .build();
 
         // Set book in offhand
         SetSlotPacket setBookPacket = new SetSlotPacket();
         setBookPacket.windowId = 0;
-        setBookPacket.slot = 45;
+        setBookPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         setBookPacket.itemStack = writtenBook;
         playerConnection.sendPacket(setBookPacket);
 
@@ -1154,7 +1110,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Restore the item in offhand
         SetSlotPacket restoreItemPacket = new SetSlotPacket();
         restoreItemPacket.windowId = 0;
-        restoreItemPacket.slot = 45;
+        restoreItemPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         restoreItemPacket.itemStack = getItemInOffHand();
         playerConnection.sendPacket(restoreItemPacket);
     }
@@ -1236,7 +1192,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return isEating;
+        return eatingHand != null;
     }
 
     /**
@@ -2007,10 +1963,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ItemStack cursorItem;
         if (openInventory == null) {
             cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.getAirItem());
+            getInventory().setCursorItem(ItemStack.AIR);
         } else {
             cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.getAirItem());
+            openInventory.setCursorItem(this, ItemStack.AIR);
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
@@ -2363,12 +2319,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 
-        refreshEating(false);
+        refreshEating(null);
     }
 
-    public void refreshEating(boolean isEating, long eatingTime) {
-        this.isEating = isEating;
-        if (isEating) {
+    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
+        this.eatingHand = eatingHand;
+        if (eatingHand != null) {
             this.startEatingTime = System.currentTimeMillis();
             this.eatingTime = eatingTime;
         } else {
@@ -2376,8 +2332,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
-    public void refreshEating(boolean isEating) {
-        refreshEating(isEating, defaultEatingTime);
+    public void refreshEating(@Nullable Hand eatingHand) {
+        refreshEating(eatingHand, defaultEatingTime);
     }
 
     /**
@@ -2388,23 +2344,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    @Nullable
-    public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
-        final Material mainHandMat = getItemInMainHand().getMaterial();
-        final Material offHandMat = getItemInOffHand().getMaterial();
-        final boolean isOffhand = offHandMat.hasState();
-
-        final ItemStack updatedItem = isOffhand ? getItemInOffHand() :
-                mainHandMat.hasState() ? getItemInMainHand() : null;
-        if (updatedItem == null) // No item with state, cancel
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
+        if (hand == null)
             return null;
 
+        final ItemStack updatedItem = getItemInHand(hand);
         final boolean isFood = updatedItem.getMaterial().isFood();
 
         if (isFood && !allowFood)
             return null;
 
-        final Hand hand = isOffhand ? Hand.OFF : Hand.MAIN;
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
@@ -2715,8 +2664,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private byte displayedSkinParts;
         private MainHand mainHand;
 
-        private boolean firstRefresh = true;
-
         /**
          * The player game language.
          *
@@ -2791,8 +2738,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
 
             metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
-
-            this.firstRefresh = false;
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

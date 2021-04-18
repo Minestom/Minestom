@@ -1,92 +1,52 @@
 package net.minestom.server.item.metadata;
 
+import net.minestom.server.item.ItemMeta;
+import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.firework.FireworkEffect;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-public class FireworkEffectMeta extends ItemMeta {
+import java.util.function.Supplier;
 
-    private FireworkEffect fireworkEffect;
+public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Provider<FireworkEffectMeta.Builder> {
 
-    /**
-     * Retrieves the firework effect for this meta.
-     *
-     * @return The current firework effect, or {@code null} if none.
-     */
-    @Nullable
+    private final FireworkEffect fireworkEffect;
+
+    protected FireworkEffectMeta(@NotNull ItemMetaBuilder metaBuilder, FireworkEffect fireworkEffect) {
+        super(metaBuilder);
+        this.fireworkEffect = fireworkEffect;
+    }
+
     public FireworkEffect getFireworkEffect() {
         return fireworkEffect;
     }
 
-    /**
-     * Changes the {@link FireworkEffect} for this item meta.
-     *
-     * @param fireworkEffect The new firework effect, or {@code null}.
-     */
-    public void setFireworkEffect(@Nullable FireworkEffect fireworkEffect) {
-        this.fireworkEffect = fireworkEffect;
-    }
+    public static class Builder extends ItemMetaBuilder {
 
-    /**
-     * Whether if this item meta has an effect.
-     *
-     * @return {@code true} if this item meta has an effect, otherwise {@code false}.
-     */
-    public boolean hasFireworkEffect() {
-        return this.fireworkEffect != null;
-    }
+        private FireworkEffect fireworkEffect;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean hasNbt() {
-        return this.hasFireworkEffect();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isSimilar(@NotNull ItemMeta itemMeta) {
-        if (!(itemMeta instanceof FireworkEffectMeta)) {
-            return false;
+        public Builder effect(@Nullable FireworkEffect fireworkEffect) {
+            this.fireworkEffect = fireworkEffect;
+            this.nbt.set("Explosion", this.fireworkEffect.asCompound());
+            return this;
         }
 
-        FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta) itemMeta;
-        return fireworkEffectMeta.fireworkEffect == this.fireworkEffect;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void read(@NotNull NBTCompound compound) {
-        if (compound.containsKey("Explosion")) {
-            this.fireworkEffect = FireworkEffect.fromCompound(compound.getCompound("Explosion"));
+        @Override
+        public @NotNull FireworkEffectMeta build() {
+            return new FireworkEffectMeta(this, fireworkEffect);
         }
 
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void write(@NotNull NBTCompound compound) {
-        if (this.fireworkEffect != null) {
-            compound.set("Explosion", this.fireworkEffect.asCompound());
+        @Override
+        public void read(@NotNull NBTCompound nbtCompound) {
+            if (nbtCompound.containsKey("Explosion")) {
+                effect(FireworkEffect.fromCompound(nbtCompound.getCompound("Explosion")));
+            }
         }
-    }
 
-    /**
-     * {@inheritDoc}
-     */
-    @NotNull
-    @Override
-    public ItemMeta clone() {
-        FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta) super.clone();
-        fireworkEffectMeta.fireworkEffect = this.fireworkEffect;
-        return fireworkEffectMeta;
+        @Override
+        protected @NotNull Supplier<ItemMetaBuilder> getSupplier() {
+            return Builder::new;
+        }
     }
 }

@@ -15,8 +15,7 @@ import java.util.UUID;
 /**
  * Represents the data sent to the player when refreshing the server list.
  *
- * <p>Filled by {@link ResponseDataConsumer} and specified in {@link
- * net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}.
+ * <p>Edited by listening to the {@link net.minestom.server.event.server.ServerListPingEvent}.
  */
 public class ResponseData {
     private final List<PingPlayer> pingPlayers;
@@ -56,12 +55,30 @@ public class ResponseData {
     }
 
     /**
+     * Get the version name for the response.
+     *
+     * @return the version name for the response.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    /**
      * Sets the response protocol version.
      *
      * @param protocol The protocol version for the response data.
      */
     public void setProtocol(int protocol) {
         this.protocol = protocol;
+    }
+
+    /**
+     * Get the response protocol version.
+     *
+     * @return the response protocol version.
+     */
+    public int getProtocol() {
+        return protocol;
     }
 
     /**
@@ -74,12 +91,30 @@ public class ResponseData {
     }
 
     /**
+     * Get the response maximum player count.
+     *
+     * @return the response maximum player count.
+     */
+    public int getMaxPlayer() {
+        return maxPlayer;
+    }
+
+    /**
      * Sets the response online count.
      *
      * @param online The online count for the response data.
      */
     public void setOnline(int online) {
         this.online = online;
+    }
+
+    /**
+     * Get the response online count.
+     *
+     * @return the response online count.
+     */
+    public int getOnline() {
+        return online;
     }
 
     /**
@@ -109,9 +144,19 @@ public class ResponseData {
      * @param uuid The unique identifier of the player.
      */
     public void addPlayer(String name, UUID uuid) {
-        PingPlayer pingPlayer = new PingPlayer();
-        pingPlayer.name = name;
-        pingPlayer.uuid = uuid;
+        PingPlayer pingPlayer = PingPlayer.of(name, uuid);
+        this.pingPlayers.add(pingPlayer);
+    }
+
+    /**
+     * Adds a player to the response.
+     * <p>
+     * {@link UUID#randomUUID()} is used as the player's UUID.
+     *
+     * @param name The name of the player.
+     */
+    public void addPlayer(String name) {
+        PingPlayer pingPlayer = PingPlayer.of(name, UUID.randomUUID());
         this.pingPlayers.add(pingPlayer);
     }
 
@@ -121,6 +166,15 @@ public class ResponseData {
      */
     public void clearPlayers() {
         this.pingPlayers.clear();
+    }
+
+    /**
+     * Get the list of the response players.
+     *
+     * @return the list of the response players.
+     */
+    public List<PingPlayer> getPlayers() {
+        return pingPlayers;
     }
 
     /**
@@ -144,13 +198,34 @@ public class ResponseData {
     }
 
     /**
+     * Get the response description
+     *
+     * @return the response description
+     */
+    public Component getDescription() {
+        return description;
+    }
+
+    /**
      * Sets the response favicon.
+     * <p>
+     * MUST start with "data:image/png;base64,"
      *
      * @param favicon The favicon for the response data.
      */
     public void setFavicon(String favicon) {
         this.favicon = favicon;
     }
+
+    /**
+     * Get the response favicon.
+     *
+     * @return the response favicon.
+     */
+    public String getFavicon() {
+        return favicon;
+    }
+
 
     /**
      * Converts the response data into a {@link JsonObject}.
@@ -193,8 +268,26 @@ public class ResponseData {
     /**
      * Represents a player line in the server list hover.
      */
-    private static class PingPlayer {
-        private String name;
-        private UUID uuid;
+    public static class PingPlayer {
+
+        private static @NotNull PingPlayer of(@NotNull String name, @NotNull UUID uuid) {
+            return new PingPlayer(name, uuid);
+        }
+
+        private final String name;
+        private final UUID uuid;
+
+        private PingPlayer(@NotNull String name, @NotNull UUID uuid) {
+            this.name = name;
+            this.uuid = uuid;
+        }
+
+        public @NotNull String getName() {
+            return name;
+        }
+
+        public @NotNull UUID getUuid() {
+            return uuid;
+        }
     }
 }

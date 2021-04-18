@@ -82,10 +82,14 @@ public class ArgumentParser {
 
             // No state
             if (state == 0) {
-                if (c == ' ')
-                    continue;
-
-                if (c == '<') {
+                if (c == ' ') {
+                    // Use literal as the default argument
+                    final String argument = builder.toString();
+                    if (argument.length() != 0) {
+                        result.add(new ArgumentLiteral(argument));
+                        builder = new StringBuilder();
+                    }
+                } else if (c == '<') {
                     // Retrieve argument type
                     final String argument = builder.toString();
                     argumentFunction = ARGUMENT_FUNCTION_MAP.get(argument);
@@ -120,6 +124,14 @@ public class ArgumentParser {
                 continue;
             }
 
+        }
+
+        // Use remaining as literal if present
+        if (state == 0) {
+            final String argument = builder.toString();
+            if (argument.length() != 0) {
+                result.add(new ArgumentLiteral(argument));
+            }
         }
 
         return result.toArray(Argument[]::new);

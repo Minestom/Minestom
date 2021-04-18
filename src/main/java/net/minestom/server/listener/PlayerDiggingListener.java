@@ -47,7 +47,8 @@ public class PlayerDiggingListener {
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the item can break the block with the current item
                 ItemStack itemInMainHand = player.getItemInMainHand();
-                if (!itemInMainHand.canDestroy(instance.getBlock(blockPosition).getName())) {
+                Block destroyedBlock = instance.getBlock(blockPosition);
+                if (!itemInMainHand.getMeta().getCanDestroy().contains(destroyedBlock)) {
                     sendAcknowledgePacket(player, blockPosition, blockStateId,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                     return;
@@ -111,7 +112,7 @@ public class PlayerDiggingListener {
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
 
             final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
-            dropItem(player, droppedItemStack, ItemStack.getAirItem());
+            dropItem(player, droppedItemStack, ItemStack.AIR);
 
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
 
@@ -123,23 +124,26 @@ public class PlayerDiggingListener {
 
             if (handAmount <= dropAmount) {
                 // Drop the whole item without copy
-                dropItem(player, handItem, ItemStack.getAirItem());
+                dropItem(player, handItem, ItemStack.AIR);
             } else {
                 // Drop a single item, need a copy
-                ItemStack droppedItemStack2 = handItem.clone();
+                ItemStack droppedItemStack2 = stackingRule.apply(handItem, dropAmount);
 
-                droppedItemStack2 = stackingRule.apply(droppedItemStack2, dropAmount);
-
-                handItem = handItem.clone(); // Force the copy
                 handItem = stackingRule.apply(handItem, handAmount - dropAmount);
 
                 dropItem(player, droppedItemStack2, handItem);
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
+            Player.Hand hand = null;
+            if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
+                hand = Player.Hand.OFF;
+            } else if (player.getItemInHand(Player.Hand.MAIN).getMaterial().hasState()) {
+                hand = Player.Hand.MAIN;
+            }
 
-            player.refreshEating(false);
-            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(false);
+            player.refreshEating(null);
+            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(false, hand);
 
             if (itemUpdateStateEvent == null) {
                 player.refreshActiveHand(true, false, false);
