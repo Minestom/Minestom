@@ -61,7 +61,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final static int INITIAL_BUFFER_SIZE = 1_048_576; // 2^20
+    private final static int INITIAL_BUFFER_SIZE = 65_535; // 2^16-1
     private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
@@ -120,6 +120,8 @@ public class NettyPlayerConnection extends PlayerConnection {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
                     synchronized (tickBuffer) {
+                        if (tickBuffer.refCnt() == 0)
+                            return;
                         CacheablePacket.writeCache(tickBuffer, serverPacket);
                     }
                 } else {
@@ -140,6 +142,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
             synchronized (tickBuffer) {
+                if (tickBuffer.refCnt() == 0)
+                    return;
                 final ByteBuf body = framedPacket.getBody();
                 tickBuffer.writeBytes(body, body.readerIndex(), body.readableBytes());
             }
@@ -152,11 +156,15 @@ public class NettyPlayerConnection extends PlayerConnection {
             }
 
             synchronized (tickBuffer) {
+                if (tickBuffer.refCnt() == 0)
+                    return;
                 PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
             }
             return;
         } else if (message instanceof ByteBuf) {
             synchronized (tickBuffer) {
+                if (tickBuffer.refCnt() == 0)
+                    return;
                 tickBuffer.writeBytes((ByteBuf) message);
             }
             return;
@@ -186,6 +194,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         // Retrieve safe copy
         final ByteBuf copy;
         synchronized (tickBuffer) {
+            if (tickBuffer.refCnt() == 0)
+                return;
             copy = tickBuffer.copy();
             tickBuffer.clear();
         }
