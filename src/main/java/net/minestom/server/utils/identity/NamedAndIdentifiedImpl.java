@@ -20,6 +20,17 @@ class NamedAndIdentifiedImpl implements NamedAndIdentified {
      *
      * @param name the name
      * @param uuid the uuid
+     * @see NamedAndIdentified#of(String, UUID)
+     */
+    NamedAndIdentifiedImpl(@NotNull String name, @NotNull UUID uuid) {
+        this(Component.text(name), uuid);
+    }
+
+    /**
+     * Creates a new named and identified implementation.
+     *
+     * @param name the name
+     * @param uuid the uuid
      * @see NamedAndIdentified#of(Component, UUID)
      */
     NamedAndIdentifiedImpl(@NotNull Component name, @NotNull UUID uuid) {
