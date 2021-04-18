@@ -1,10 +1,12 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.lock.Acquirable;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -22,6 +24,8 @@ public abstract class ThreadProvider {
 
     private final Map<BatchThread, Set<ChunkEntry>> threadChunkMap = new HashMap<>();
     private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
+    // Iterated over to refresh the thread used to update entities & chunks
+    private final ArrayDeque<Chunk> chunks = new ArrayDeque<>();
     private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
 
     public ThreadProvider(int threadCount) {
@@ -67,7 +71,8 @@ public abstract class ThreadProvider {
         ChunkEntry chunkEntry = new ChunkEntry(thread, chunk);
         chunks.add(chunkEntry);
 
-        chunkEntryMap.put(chunk, chunkEntry);
+        this.chunkEntryMap.put(chunk, chunkEntry);
+        this.chunks.add(chunk);
     }
 
     protected void removeChunk(Chunk chunk) {
@@ -80,6 +85,7 @@ public abstract class ThreadProvider {
             }
             chunkEntryMap.remove(chunk);
         }
+        this.chunks.remove(chunk);
     }
 
     /**
@@ -105,7 +111,10 @@ public abstract class ThreadProvider {
                         .collect(Collectors.toList());
                 Acquirable.refreshEntities(Collections.unmodifiableList(entities));
                 chunkEntries.forEach(chunkEntry -> {
-                    chunkEntry.chunk.tick(time);
+                    Chunk chunk = chunkEntry.chunk;
+                    if (!ChunkUtils.isLoaded(chunk))
+                        return;
+                    chunk.tick(time);
                     chunkEntry.entities.forEach(entity -> {
                         thread.monitor.enter();
                         entity.tick(time);
@@ -122,48 +131,44 @@ public abstract class ThreadProvider {
         {
             for (Entity entity : removedEntities) {
                 Acquirable<Entity> acquirable = entity.getAcquiredElement();
-                Chunk batchChunk = acquirable.getHandler().getBatchChunk();
-
+                ChunkEntry chunkEntry = acquirable.getHandler().getChunkEntry();
                 // Remove from list
-                {
-                    ChunkEntry chunkEntry = chunkEntryMap.get(batchChunk);
-                    if (chunkEntry != null) {
-                        chunkEntry.entities.remove(entity);
-                    }
+                if (chunkEntry != null) {
+                    chunkEntry.entities.remove(entity);
                 }
             }
             this.removedEntities.clear();
         }
 
-        // Update as many entities as possible
-        // TODO: incremental update instead of full
-        for (Instance instance : MinecraftServer.getInstanceManager().getInstances()) {
-            var entities = instance.getEntities();
-            for (Entity entity : entities) {
-                Acquirable<Entity> acquirable = entity.getAcquiredElement();
-                Chunk batchChunk = acquirable.getHandler().getBatchChunk();
-                Chunk entityChunk = entity.getChunk();
-                if (!Objects.equals(batchChunk, entityChunk)) {
-                    // Entity is possibly not in the correct thread
 
-                    // Remove from previous list
-                    {
-                        ChunkEntry chunkEntry = chunkEntryMap.get(batchChunk);
-                        if (chunkEntry != null) {
-                            chunkEntry.entities.remove(entity);
-                        }
-                    }
+        int size = chunks.size();
+        int counter = 0;
+        // TODO incremental update, maybe a percentage of the tick time?
+        while (counter++ < size) {
+            Chunk chunk = chunks.pollFirst();
+            if (!ChunkUtils.isLoaded(chunk)) {
+                removeChunk(chunk);
+                return;
+            }
 
-                    // Add to new list
-                    {
-                        ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
-                        if (chunkEntry != null) {
-                            chunkEntry.entities.add(entity);
-                            acquirable.getHandler().refreshBatchInfo(chunkEntry.thread, chunkEntry.chunk);
-                        }
+            // Update chunk threads
+            {
+                // TODO
+            }
+
+            // Update entities
+            {
+                Instance instance = chunk.getInstance();
+                refreshEntitiesThread(instance, chunk);
+                if (instance instanceof InstanceContainer) {
+                    for (SharedInstance sharedInstance : ((InstanceContainer) instance).getSharedInstances()) {
+                        refreshEntitiesThread(sharedInstance, chunk);
                     }
                 }
             }
+
+            // Add back to the deque
+            chunks.addLast(chunk);
         }
     }
 
@@ -179,7 +184,37 @@ public abstract class ThreadProvider {
         return threads;
     }
 
-    private static class ChunkEntry {
+    private void refreshEntitiesThread(Instance instance, Chunk chunk) {
+        var entities = instance.getChunkEntities(chunk);
+        for (Entity entity : entities) {
+            Acquirable<Entity> acquirable = entity.getAcquiredElement();
+            ChunkEntry handlerChunkEntry = acquirable.getHandler().getChunkEntry();
+            Chunk batchChunk = handlerChunkEntry != null ? handlerChunkEntry.getChunk() : null;
+
+            Chunk entityChunk = entity.getChunk();
+            if (!Objects.equals(batchChunk, entityChunk)) {
+                // Entity is possibly not in the correct thread
+
+                // Remove from previous list
+                {
+                    if (handlerChunkEntry != null) {
+                        handlerChunkEntry.entities.remove(entity);
+                    }
+                }
+
+                // Add to new list
+                {
+                    ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
+                    if (chunkEntry != null) {
+                        chunkEntry.entities.add(entity);
+                        acquirable.getHandler().refreshChunkEntry(chunkEntry);
+                    }
+                }
+            }
+        }
+    }
+
+    public static class ChunkEntry {
         private final BatchThread thread;
         private final Chunk chunk;
         private final List<Entity> entities = new ArrayList<>();
@@ -187,6 +222,14 @@ public abstract class ThreadProvider {
         private ChunkEntry(BatchThread thread, Chunk chunk) {
             this.thread = thread;
             this.chunk = chunk;
+        }
+
+        public @NotNull BatchThread getThread() {
+            return thread;
+        }
+
+        public @NotNull Chunk getChunk() {
+            return chunk;
         }
 
         @Override

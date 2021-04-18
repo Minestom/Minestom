@@ -45,7 +45,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.lock.Acquirable;
-import net.minestom.server.lock.AcquirableCollection;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -330,15 +329,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         //System.out.println(getAcquiredElement().getHandler().getBatchThread());
         Collection<Acquirable<Player>> players = new ArrayList<>();
         //if (username.equals("TheMode911"))
-        /*for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+        for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             //players.add(p1.getAcquiredElement());
             p1.getAcquiredElement().acquire(o -> {
-                for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
+                //System.out.println(getUsername()+": "+o+" "+getAliveTicks());
+                /*for (Player p2 : MinecraftServer.getConnectionManager().getOnlinePlayers())
                     p2.getAcquiredElement().acquire(o2 -> {
                         //System.out.println(getAcquiredElement().getHandler().getBatchThread().monitor.isOccupiedByCurrentThread());
-                    });
+                    });*/
             });
-        }*/
+        }
 
         /*AcquirableCollection<Player> players1 = new AcquirableCollection<>(players);
         players1.forEach(player -> {

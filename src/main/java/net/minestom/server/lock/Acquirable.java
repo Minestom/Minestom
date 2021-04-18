@@ -1,8 +1,8 @@
 package net.minestom.server.lock;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.thread.BatchThread;
+import net.minestom.server.thread.ThreadProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -61,21 +61,19 @@ public interface Acquirable<T> {
 
     class Handler {
 
-        private volatile BatchThread batchThread;
-        private volatile Chunk batchChunk;
+        private volatile ThreadProvider.ChunkEntry chunkEntry;
 
-        public BatchThread getBatchThread() {
-            return batchThread;
-        }
-
-        public Chunk getBatchChunk() {
-            return batchChunk;
+        public ThreadProvider.ChunkEntry getChunkEntry() {
+            return chunkEntry;
         }
 
         @ApiStatus.Internal
-        public void refreshBatchInfo(@NotNull BatchThread batchThread, @NotNull Chunk batchChunk) {
-            this.batchThread = batchThread;
-            this.batchChunk = batchChunk;
+        public void refreshChunkEntry(@NotNull ThreadProvider.ChunkEntry chunkEntry) {
+            this.chunkEntry = chunkEntry;
+        }
+
+        public BatchThread getBatchThread() {
+            return chunkEntry != null ? chunkEntry.getThread() : null;
         }
     }
 

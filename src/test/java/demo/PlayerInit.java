@@ -292,7 +292,7 @@ public class PlayerInit {
 
             // Unload the chunk (save memory) if it has no remaining viewer
             if (chunk.getViewers().isEmpty()) {
-                //player.getInstance().unloadChunk(chunk);
+                player.getInstance().unloadChunk(chunk);
             }
         });
     }
