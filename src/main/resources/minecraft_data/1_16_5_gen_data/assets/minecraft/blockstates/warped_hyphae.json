@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minecraft:block/warped_hyphae",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minecraft:block/warped_hyphae"
+    },
+    "axis=z": {
+      "model": "minecraft:block/warped_hyphae",
+      "x": 90
+    }
+  }
+}

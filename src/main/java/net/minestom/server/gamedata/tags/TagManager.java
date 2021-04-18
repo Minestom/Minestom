@@ -9,10 +9,7 @@ import net.minestom.server.utils.NamespaceID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
+import java.io.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -189,7 +186,7 @@ public class TagManager {
      * @throws FileNotFoundException if the file does not exist
      */
     public Tag load(NamespaceID name, String tagType) throws FileNotFoundException {
-        return load(name, tagType, () -> new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/" + name.getDomain() + "/tags/" + tagType + "/" + name.getPath() + ".json")));
+        return load(name, tagType, () -> new FileReader(new File(ResourceGatherer.DATA_FOLDER, MinecraftServer.VERSION_NAME.replaceAll("\\.", "_") + "_gen_data/data/" + name.getDomain() + "/tags/" + tagType + "/" + name.getPath() + ".json")));
     }
 
     /**

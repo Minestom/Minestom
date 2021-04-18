@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "attachment=ceiling,facing=east": {
+      "model": "minecraft:block/bell_ceiling",
+      "y": 90
+    },
+    "attachment=ceiling,facing=north": {
+      "model": "minecraft:block/bell_ceiling"
+    },
+    "attachment=ceiling,facing=south": {
+      "model": "minecraft:block/bell_ceiling",
+      "y": 180
+    },
+    "attachment=ceiling,facing=west": {
+      "model": "minecraft:block/bell_ceiling",
+      "y": 270
+    },
+    "attachment=double_wall,facing=east": {
+      "model": "minecraft:block/bell_between_walls"
+    },
+    "attachment=double_wall,facing=north": {
+      "model": "minecraft:block/bell_between_walls",
+      "y": 270
+    },
+    "attachment=double_wall,facing=south": {
+      "model": "minecraft:block/bell_between_walls",
+      "y": 90
+    },
+    "attachment=double_wall,facing=west": {
+      "model": "minecraft:block/bell_between_walls",
+      "y": 180
+    },
+    "attachment=floor,facing=east": {
+      "model": "minecraft:block/bell_floor",
+      "y": 90
+    },
+    "attachment=floor,facing=north": {
+      "model": "minecraft:block/bell_floor"
+    },
+    "attachment=floor,facing=south": {
+      "model": "minecraft:block/bell_floor",
+      "y": 180
+    },
+    "attachment=floor,facing=west": {
+      "model": "minecraft:block/bell_floor",
+      "y": 270
+    },
+    "attachment=single_wall,facing=east": {
+      "model": "minecraft:block/bell_wall"
+    },
+    "attachment=single_wall,facing=north": {
+      "model": "minecraft:block/bell_wall",
+      "y": 270
+    },
+    "attachment=single_wall,facing=south": {
+      "model": "minecraft:block/bell_wall",
+      "y": 90
+    },
+    "attachment=single_wall,facing=west": {
+      "model": "minecraft:block/bell_wall",
+      "y": 180
+    }
+  }
+}

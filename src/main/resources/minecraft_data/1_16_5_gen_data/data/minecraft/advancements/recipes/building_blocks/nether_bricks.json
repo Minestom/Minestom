@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:nether_bricks"
+    ]
+  },
+  "criteria": {
+    "has_netherbrick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:nether_brick"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:nether_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_netherbrick",
+      "has_the_recipe"
+    ]
+  ]
+}

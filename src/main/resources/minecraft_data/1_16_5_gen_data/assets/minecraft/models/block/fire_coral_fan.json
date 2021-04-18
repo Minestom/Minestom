@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/coral_fan",
+  "textures": {
+    "fan": "minecraft:block/fire_coral_fan"
+  }
+}

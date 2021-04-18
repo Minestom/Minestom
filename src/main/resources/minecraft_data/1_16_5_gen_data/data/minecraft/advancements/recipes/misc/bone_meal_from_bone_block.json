@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:bone_meal_from_bone_block"
+    ]
+  },
+  "criteria": {
+    "has_bone_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:bone_block"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:bone_meal_from_bone_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_bone_block",
+      "has_the_recipe"
+    ]
+  ]
+}

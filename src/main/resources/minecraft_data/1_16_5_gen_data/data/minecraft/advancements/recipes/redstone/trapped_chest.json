@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:trapped_chest"
+    ]
+  },
+  "criteria": {
+    "has_tripwire_hook": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:tripwire_hook"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:trapped_chest"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_tripwire_hook",
+      "has_the_recipe"
+    ]
+  ]
+}

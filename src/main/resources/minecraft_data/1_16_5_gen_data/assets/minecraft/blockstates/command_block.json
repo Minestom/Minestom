@@ -1,0 +1,50 @@
+{
+  "variants": {
+    "conditional=false,facing=down": {
+      "model": "minecraft:block/command_block",
+      "x": 90
+    },
+    "conditional=false,facing=east": {
+      "model": "minecraft:block/command_block",
+      "y": 90
+    },
+    "conditional=false,facing=north": {
+      "model": "minecraft:block/command_block"
+    },
+    "conditional=false,facing=south": {
+      "model": "minecraft:block/command_block",
+      "y": 180
+    },
+    "conditional=false,facing=up": {
+      "model": "minecraft:block/command_block",
+      "x": 270
+    },
+    "conditional=false,facing=west": {
+      "model": "minecraft:block/command_block",
+      "y": 270
+    },
+    "conditional=true,facing=down": {
+      "model": "minecraft:block/command_block_conditional",
+      "x": 90
+    },
+    "conditional=true,facing=east": {
+      "model": "minecraft:block/command_block_conditional",
+      "y": 90
+    },
+    "conditional=true,facing=north": {
+      "model": "minecraft:block/command_block_conditional"
+    },
+    "conditional=true,facing=south": {
+      "model": "minecraft:block/command_block_conditional",
+      "y": 180
+    },
+    "conditional=true,facing=up": {
+      "model": "minecraft:block/command_block_conditional",
+      "x": 270
+    },
+    "conditional=true,facing=west": {
+      "model": "minecraft:block/command_block_conditional",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:lime_glazed_terracotta"
+    ]
+  },
+  "criteria": {
+    "has_lime_terracotta": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:lime_terracotta"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:lime_glazed_terracotta"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_lime_terracotta",
+      "has_the_recipe"
+    ]
+  ]
+}

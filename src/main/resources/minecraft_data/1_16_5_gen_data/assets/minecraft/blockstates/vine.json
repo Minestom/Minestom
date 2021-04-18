@@ -1,0 +1,120 @@
+{
+  "variants": {
+    "east=false,north=false,south=false,up=false,west=false": {
+      "model": "minecraft:block/vine_1"
+    },
+    "east=false,north=false,south=false,up=false,west=true": {
+      "model": "minecraft:block/vine_1",
+      "y": 90
+    },
+    "east=false,north=false,south=false,up=true,west=false": {
+      "model": "minecraft:block/vine_u"
+    },
+    "east=false,north=false,south=false,up=true,west=true": {
+      "model": "minecraft:block/vine_1u",
+      "y": 90
+    },
+    "east=false,north=false,south=true,up=false,west=false": {
+      "model": "minecraft:block/vine_1"
+    },
+    "east=false,north=false,south=true,up=false,west=true": {
+      "model": "minecraft:block/vine_2",
+      "y": 180
+    },
+    "east=false,north=false,south=true,up=true,west=false": {
+      "model": "minecraft:block/vine_1u"
+    },
+    "east=false,north=false,south=true,up=true,west=true": {
+      "model": "minecraft:block/vine_2u",
+      "y": 180
+    },
+    "east=false,north=true,south=false,up=false,west=false": {
+      "model": "minecraft:block/vine_1",
+      "y": 180
+    },
+    "east=false,north=true,south=false,up=false,west=true": {
+      "model": "minecraft:block/vine_2",
+      "y": 270
+    },
+    "east=false,north=true,south=false,up=true,west=false": {
+      "model": "minecraft:block/vine_1u",
+      "y": 180
+    },
+    "east=false,north=true,south=false,up=true,west=true": {
+      "model": "minecraft:block/vine_2u",
+      "y": 270
+    },
+    "east=false,north=true,south=true,up=false,west=false": {
+      "model": "minecraft:block/vine_2_opposite",
+      "y": 90
+    },
+    "east=false,north=true,south=true,up=false,west=true": {
+      "model": "minecraft:block/vine_3",
+      "y": 180
+    },
+    "east=false,north=true,south=true,up=true,west=false": {
+      "model": "minecraft:block/vine_2u_opposite",
+      "y": 90
+    },
+    "east=false,north=true,south=true,up=true,west=true": {
+      "model": "minecraft:block/vine_3u",
+      "y": 180
+    },
+    "east=true,north=false,south=false,up=false,west=false": {
+      "model": "minecraft:block/vine_1",
+      "y": 270
+    },
+    "east=true,north=false,south=false,up=false,west=true": {
+      "model": "minecraft:block/vine_2_opposite"
+    },
+    "east=true,north=false,south=false,up=true,west=false": {
+      "model": "minecraft:block/vine_1u",
+      "y": 270
+    },
+    "east=true,north=false,south=false,up=true,west=true": {
+      "model": "minecraft:block/vine_2u_opposite"
+    },
+    "east=true,north=false,south=true,up=false,west=false": {
+      "model": "minecraft:block/vine_2",
+      "y": 90
+    },
+    "east=true,north=false,south=true,up=false,west=true": {
+      "model": "minecraft:block/vine_3",
+      "y": 90
+    },
+    "east=true,north=false,south=true,up=true,west=false": {
+      "model": "minecraft:block/vine_2u",
+      "y": 90
+    },
+    "east=true,north=false,south=true,up=true,west=true": {
+      "model": "minecraft:block/vine_3u",
+      "y": 90
+    },
+    "east=true,north=true,south=false,up=false,west=false": {
+      "model": "minecraft:block/vine_2"
+    },
+    "east=true,north=true,south=false,up=false,west=true": {
+      "model": "minecraft:block/vine_3",
+      "y": 270
+    },
+    "east=true,north=true,south=false,up=true,west=false": {
+      "model": "minecraft:block/vine_2u"
+    },
+    "east=true,north=true,south=false,up=true,west=true": {
+      "model": "minecraft:block/vine_3u",
+      "y": 270
+    },
+    "east=true,north=true,south=true,up=false,west=false": {
+      "model": "minecraft:block/vine_3"
+    },
+    "east=true,north=true,south=true,up=false,west=true": {
+      "model": "minecraft:block/vine_4"
+    },
+    "east=true,north=true,south=true,up=true,west=false": {
+      "model": "minecraft:block/vine_3u"
+    },
+    "east=true,north=true,south=true,up=true,west=true": {
+      "model": "minecraft:block/vine_4u"
+    }
+  }
+}

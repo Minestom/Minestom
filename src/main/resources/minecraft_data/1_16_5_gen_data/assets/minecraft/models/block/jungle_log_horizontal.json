@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "minecraft:block/jungle_log_top",
+    "side": "minecraft:block/jungle_log"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "minecraft:block/rose_bush_bottom"
+    },
+    "half=upper": {
+      "model": "minecraft:block/rose_bush_top"
+    }
+  }
+}

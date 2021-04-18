@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:lime_carpet_from_white_carpet"
+    ]
+  },
+  "criteria": {
+    "has_white_carpet": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:white_carpet"
+          }
+        ]
+      }
+    },
+    "has_lime_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:lime_dye"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:lime_carpet_from_white_carpet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_white_carpet",
+      "has_lime_dye",
+      "has_the_recipe"
+    ]
+  ]
+}

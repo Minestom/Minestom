@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:mojang_banner_pattern"
+    ]
+  },
+  "criteria": {
+    "has_enchanted_golden_apple": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:enchanted_golden_apple"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:mojang_banner_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_enchanted_golden_apple",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:magenta_carpet"
+    ]
+  },
+  "criteria": {
+    "has_magenta_wool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:magenta_wool"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:magenta_carpet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_magenta_wool",
+      "has_the_recipe"
+    ]
+  ]
+}

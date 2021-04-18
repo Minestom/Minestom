@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:quartz_from_blasting"
+    ]
+  },
+  "criteria": {
+    "has_nether_quartz_ore": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:nether_quartz_ore"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:quartz_from_blasting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_nether_quartz_ore",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringReader;
 
 public class TestTags {
@@ -21,7 +21,7 @@ public class TestTags {
     }
 
     @Test
-    public void testSubTag() throws FileNotFoundException {
+    public void testSubTag() throws IOException {
         String tag1 = "{\n" +
                 "\t\"replace\": false,\n" +
                 "\t\"values\": [\n" +
@@ -49,7 +49,7 @@ public class TestTags {
      * A value of 'true' in 'replace' should replace previous contents
      */
     @Test
-    public void testReplacement() throws FileNotFoundException {
+    public void testReplacement() throws IOException {
         String tag1 = "{\n" +
                 "\t\"replace\": false,\n" +
                 "\t\"values\": [\n" +
@@ -75,7 +75,7 @@ public class TestTags {
      * A value of 'false' in 'replace' should append to previous contents
      */
     @Test
-    public void testAppend() throws FileNotFoundException {
+    public void testAppend() throws IOException {
         String tag1 = "{\n" +
                 "\t\"replace\": false,\n" +
                 "\t\"values\": [\n" +

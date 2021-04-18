@@ -1,0 +1,157 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "0"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.06666667,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "1"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.13333334,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "2"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.2,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "3"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.26666668,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "4"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.33333334,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "5"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.4,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "6"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.46666667,
+                "type": "minecraft:binomial"
+              }
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "minecraft:melon_stem",
+                  "properties": {
+                    "age": "7"
+                  }
+                }
+              ],
+              "count": {
+                "n": 3,
+                "p": 0.53333336,
+                "type": "minecraft:binomial"
+              }
+            }
+          ],
+          "name": "minecraft:melon_seeds"
+        }
+      ],
+      "functions": [
+        {
+          "function": "minecraft:explosion_decay"
+        }
+      ]
+    }
+  ]
+}

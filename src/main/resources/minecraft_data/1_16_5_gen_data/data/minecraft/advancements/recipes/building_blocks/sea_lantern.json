@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:sea_lantern"
+    ]
+  },
+  "criteria": {
+    "has_prismarine_crystals": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:prismarine_crystals"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:sea_lantern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_prismarine_crystals",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "parent": "minecraft:end/enter_end_gateway",
+  "display": {
+    "icon": {
+      "item": "minecraft:purpur_block"
+    },
+    "title": {
+      "translate": "advancements.end.find_end_city.title"
+    },
+    "description": {
+      "translate": "advancements.end.find_end_city.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "in_city": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "location": {
+          "feature": "endcity"
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "in_city"
+    ]
+  ]
+}

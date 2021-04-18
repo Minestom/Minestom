@@ -59,9 +59,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
-
 /**
  * The main server class used to start the server and retrieve all the managers.
  * <p>
@@ -211,14 +208,13 @@ public final class MinecraftServer {
 
         nettyServer = new NettyServer(packetProcessor);
 
-        // Registry
-        try {
-            ResourceGatherer.ensureResourcesArePresent(VERSION_NAME);
-        } catch (IOException e) {
-            LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
-        }
+        // ResourceGatherer
+        // TODO: Allow for external form using launch option
+        // true means copy and use the data from minecraft_data folder.
+        // false means use the data from the JAR.
+        ResourceGatherer.ensureResourcesArePresent(false);
         // DataInitializer
-        DataInitializer.runDataInitializer(new File(ResourceGatherer.DATA_FOLDER, "/json"), VERSION_NAME);
+        DataInitializer.runDataInitializer(ResourceGatherer.DATA_FOLDER, VERSION_NAME);
 
         initialized = true;
 

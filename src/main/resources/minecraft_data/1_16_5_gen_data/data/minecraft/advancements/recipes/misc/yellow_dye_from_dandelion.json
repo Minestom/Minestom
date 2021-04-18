@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:yellow_dye_from_dandelion"
+    ]
+  },
+  "criteria": {
+    "has_yellow_flower": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:dandelion"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:yellow_dye_from_dandelion"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_yellow_flower",
+      "has_the_recipe"
+    ]
+  ]
+}

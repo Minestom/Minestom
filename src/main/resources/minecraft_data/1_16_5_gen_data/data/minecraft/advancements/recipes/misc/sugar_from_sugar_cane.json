@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:sugar_from_sugar_cane"
+    ]
+  },
+  "criteria": {
+    "has_reeds": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:sugar_cane"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:sugar_from_sugar_cane"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_reeds",
+      "has_the_recipe"
+    ]
+  ]
+}

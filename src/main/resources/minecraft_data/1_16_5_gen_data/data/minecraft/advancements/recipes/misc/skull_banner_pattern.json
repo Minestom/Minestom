@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:skull_banner_pattern"
+    ]
+  },
+  "criteria": {
+    "has_wither_skeleton_skull": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:wither_skeleton_skull"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:skull_banner_pattern"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wither_skeleton_skull",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "mode=corner": {
+      "model": "minecraft:block/structure_block_corner"
+    },
+    "mode=data": {
+      "model": "minecraft:block/structure_block_data"
+    },
+    "mode=load": {
+      "model": "minecraft:block/structure_block_load"
+    },
+    "mode=save": {
+      "model": "minecraft:block/structure_block_save"
+    }
+  }
+}

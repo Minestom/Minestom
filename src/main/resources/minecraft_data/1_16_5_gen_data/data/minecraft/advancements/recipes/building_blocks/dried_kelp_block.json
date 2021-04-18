@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:dried_kelp_block"
+    ]
+  },
+  "criteria": {
+    "has_dried_kelp": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:dried_kelp"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:dried_kelp_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dried_kelp",
+      "has_the_recipe"
+    ]
+  ]
+}

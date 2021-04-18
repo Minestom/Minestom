@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:brick_stairs"
+    ]
+  },
+  "criteria": {
+    "has_brick_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:brick_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_brick_block",
+      "has_the_recipe"
+    ]
+  ]
+}

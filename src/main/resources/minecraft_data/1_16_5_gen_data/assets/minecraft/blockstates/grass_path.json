@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "minecraft:block/grass_path"
+      },
+      {
+        "model": "minecraft:block/grass_path",
+        "y": 90
+      },
+      {
+        "model": "minecraft:block/grass_path",
+        "y": 180
+      },
+      {
+        "model": "minecraft:block/grass_path",
+        "y": 270
+      }
+    ]
+  }
+}

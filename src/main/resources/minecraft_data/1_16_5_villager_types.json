@@ -1,0 +1,30 @@
+[
+  {
+    "id": "minecraft:desert",
+    "name": "DESERT"
+  },
+  {
+    "id": "minecraft:jungle",
+    "name": "JUNGLE"
+  },
+  {
+    "id": "minecraft:plains",
+    "name": "PLAINS"
+  },
+  {
+    "id": "minecraft:savanna",
+    "name": "SAVANNA"
+  },
+  {
+    "id": "minecraft:snow",
+    "name": "SNOW"
+  },
+  {
+    "id": "minecraft:swamp",
+    "name": "SWAMP"
+  },
+  {
+    "id": "minecraft:taiga",
+    "name": "TAIGA"
+  }
+]

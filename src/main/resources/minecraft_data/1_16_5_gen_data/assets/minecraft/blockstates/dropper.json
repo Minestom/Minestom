@@ -1,0 +1,26 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "minecraft:block/dropper_vertical",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "minecraft:block/dropper",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "minecraft:block/dropper"
+    },
+    "facing=south": {
+      "model": "minecraft:block/dropper",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "minecraft:block/dropper_vertical"
+    },
+    "facing=west": {
+      "model": "minecraft:block/dropper",
+      "y": 270
+    }
+  }
+}

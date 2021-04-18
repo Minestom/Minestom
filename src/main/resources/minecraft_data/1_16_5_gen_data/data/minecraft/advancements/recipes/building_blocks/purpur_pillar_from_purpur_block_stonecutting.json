@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:purpur_pillar_from_purpur_block_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_purpur_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:purpur_block"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:purpur_pillar_from_purpur_block_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_purpur_block",
+      "has_the_recipe"
+    ]
+  ]
+}

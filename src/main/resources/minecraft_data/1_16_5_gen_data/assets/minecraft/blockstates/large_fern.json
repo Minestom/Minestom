@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "minecraft:block/large_fern_bottom"
+    },
+    "half=upper": {
+      "model": "minecraft:block/large_fern_top"
+    }
+  }
+}

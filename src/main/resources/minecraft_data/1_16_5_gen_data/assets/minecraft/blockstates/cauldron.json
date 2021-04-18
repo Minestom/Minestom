@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "level=0": {
+      "model": "minecraft:block/cauldron"
+    },
+    "level=1": {
+      "model": "minecraft:block/cauldron_level1"
+    },
+    "level=2": {
+      "model": "minecraft:block/cauldron_level2"
+    },
+    "level=3": {
+      "model": "minecraft:block/cauldron_level3"
+    }
+  }
+}

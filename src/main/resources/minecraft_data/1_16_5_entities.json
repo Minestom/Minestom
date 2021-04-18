@@ -1,0 +1,866 @@
+[
+  {
+    "id": "minecraft:area_effect_cloud",
+    "name": "AREA_EFFECT_CLOUD",
+    "packetType": "BASE",
+    "fireImmune": true,
+    "height": 0.5,
+    "width": 6.0
+  },
+  {
+    "id": "minecraft:armor_stand",
+    "name": "ARMOR_STAND",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.975,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:arrow",
+    "name": "ARROW",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:bat",
+    "name": "BAT",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.9,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:bee",
+    "name": "BEE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.6,
+    "width": 0.7
+  },
+  {
+    "id": "minecraft:blaze",
+    "name": "BLAZE",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 1.8,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:boat",
+    "name": "BOAT",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.5625,
+    "width": 1.375
+  },
+  {
+    "id": "minecraft:cat",
+    "name": "CAT",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:cave_spider",
+    "name": "CAVE_SPIDER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.7
+  },
+  {
+    "id": "minecraft:chicken",
+    "name": "CHICKEN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.4
+  },
+  {
+    "id": "minecraft:cod",
+    "name": "COD",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.3,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:cow",
+    "name": "COW",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.4,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:creeper",
+    "name": "CREEPER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.7,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:dolphin",
+    "name": "DOLPHIN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.6,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:donkey",
+    "name": "DONKEY",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.5,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:dragon_fireball",
+    "name": "DRAGON_FIREBALL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 1.0,
+    "width": 1.0
+  },
+  {
+    "id": "minecraft:drowned",
+    "name": "DROWNED",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:elder_guardian",
+    "name": "ELDER_GUARDIAN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.9975,
+    "width": 1.9975
+  },
+  {
+    "id": "minecraft:end_crystal",
+    "name": "END_CRYSTAL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 2.0,
+    "width": 2.0
+  },
+  {
+    "id": "minecraft:ender_dragon",
+    "name": "ENDER_DRAGON",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 8.0,
+    "width": 16.0
+  },
+  {
+    "id": "minecraft:enderman",
+    "name": "ENDERMAN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 2.9,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:endermite",
+    "name": "ENDERMITE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.3,
+    "width": 0.4
+  },
+  {
+    "id": "minecraft:evoker",
+    "name": "EVOKER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:evoker_fangs",
+    "name": "EVOKER_FANGS",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.8,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:experience_orb",
+    "name": "EXPERIENCE_ORB",
+    "packetType": "EXPERIENCE_ORB",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:eye_of_ender",
+    "name": "EYE_OF_ENDER",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:falling_block",
+    "name": "FALLING_BLOCK",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.98,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:firework_rocket",
+    "name": "FIREWORK_ROCKET",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:fox",
+    "name": "FOX",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:ghast",
+    "name": "GHAST",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 4.0,
+    "width": 4.0
+  },
+  {
+    "id": "minecraft:giant",
+    "name": "GIANT",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 12.0,
+    "width": 3.6
+  },
+  {
+    "id": "minecraft:guardian",
+    "name": "GUARDIAN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.85,
+    "width": 0.85
+  },
+  {
+    "id": "minecraft:hoglin",
+    "name": "HOGLIN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.4,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:horse",
+    "name": "HORSE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.6,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:husk",
+    "name": "HUSK",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:illusioner",
+    "name": "ILLUSIONER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:iron_golem",
+    "name": "IRON_GOLEM",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 2.7,
+    "width": 1.4
+  },
+  {
+    "id": "minecraft:item",
+    "name": "ITEM",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:item_frame",
+    "name": "ITEM_FRAME",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:fireball",
+    "name": "FIREBALL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 1.0,
+    "width": 1.0
+  },
+  {
+    "id": "minecraft:leash_knot",
+    "name": "LEASH_KNOT",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:lightning_bolt",
+    "name": "LIGHTNING_BOLT",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.0,
+    "width": 0.0
+  },
+  {
+    "id": "minecraft:llama",
+    "name": "LLAMA",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.87,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:llama_spit",
+    "name": "LLAMA_SPIT",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:magma_cube",
+    "name": "MAGMA_CUBE",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 2.04,
+    "width": 2.04
+  },
+  {
+    "id": "minecraft:minecart",
+    "name": "MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:chest_minecart",
+    "name": "CHEST_MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:command_block_minecart",
+    "name": "COMMAND_BLOCK_MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:furnace_minecart",
+    "name": "FURNACE_MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:hopper_minecart",
+    "name": "HOPPER_MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:spawner_minecart",
+    "name": "SPAWNER_MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:tnt_minecart",
+    "name": "TNT_MINECART",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:mule",
+    "name": "MULE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.6,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:mooshroom",
+    "name": "MOOSHROOM",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.4,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:ocelot",
+    "name": "OCELOT",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:painting",
+    "name": "PAINTING",
+    "packetType": "PAINTING",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:panda",
+    "name": "PANDA",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.25,
+    "width": 1.3
+  },
+  {
+    "id": "minecraft:parrot",
+    "name": "PARROT",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.9,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:phantom",
+    "name": "PHANTOM",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:pig",
+    "name": "PIG",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.9,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:piglin",
+    "name": "PIGLIN",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:piglin_brute",
+    "name": "PIGLIN_BRUTE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:pillager",
+    "name": "PILLAGER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:polar_bear",
+    "name": "POLAR_BEAR",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.4,
+    "width": 1.4
+  },
+  {
+    "id": "minecraft:tnt",
+    "name": "TNT",
+    "packetType": "BASE",
+    "fireImmune": true,
+    "height": 0.98,
+    "width": 0.98
+  },
+  {
+    "id": "minecraft:pufferfish",
+    "name": "PUFFERFISH",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.7,
+    "width": 0.7
+  },
+  {
+    "id": "minecraft:rabbit",
+    "name": "RABBIT",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.4
+  },
+  {
+    "id": "minecraft:ravager",
+    "name": "RAVAGER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 2.2,
+    "width": 1.95
+  },
+  {
+    "id": "minecraft:salmon",
+    "name": "SALMON",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.4,
+    "width": 0.7
+  },
+  {
+    "id": "minecraft:sheep",
+    "name": "SHEEP",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.3,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:shulker",
+    "name": "SHULKER",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 1.0,
+    "width": 1.0
+  },
+  {
+    "id": "minecraft:shulker_bullet",
+    "name": "SHULKER_BULLET",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.3125,
+    "width": 0.3125
+  },
+  {
+    "id": "minecraft:silverfish",
+    "name": "SILVERFISH",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.3,
+    "width": 0.4
+  },
+  {
+    "id": "minecraft:skeleton",
+    "name": "SKELETON",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.99,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:skeleton_horse",
+    "name": "SKELETON_HORSE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.6,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:slime",
+    "name": "SLIME",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 2.04,
+    "width": 2.04
+  },
+  {
+    "id": "minecraft:small_fireball",
+    "name": "SMALL_FIREBALL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.3125,
+    "width": 0.3125
+  },
+  {
+    "id": "minecraft:snow_golem",
+    "name": "SNOW_GOLEM",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.9,
+    "width": 0.7
+  },
+  {
+    "id": "minecraft:snowball",
+    "name": "SNOWBALL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:spectral_arrow",
+    "name": "SPECTRAL_ARROW",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:spider",
+    "name": "SPIDER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.9,
+    "width": 1.4
+  },
+  {
+    "id": "minecraft:squid",
+    "name": "SQUID",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.8,
+    "width": 0.8
+  },
+  {
+    "id": "minecraft:stray",
+    "name": "STRAY",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.99,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:strider",
+    "name": "STRIDER",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 1.7,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:egg",
+    "name": "EGG",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:ender_pearl",
+    "name": "ENDER_PEARL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:experience_bottle",
+    "name": "EXPERIENCE_BOTTLE",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:potion",
+    "name": "POTION",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  },
+  {
+    "id": "minecraft:trident",
+    "name": "TRIDENT",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.5,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:trader_llama",
+    "name": "TRADER_LLAMA",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.87,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:tropical_fish",
+    "name": "TROPICAL_FISH",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.4,
+    "width": 0.5
+  },
+  {
+    "id": "minecraft:turtle",
+    "name": "TURTLE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.4,
+    "width": 1.2
+  },
+  {
+    "id": "minecraft:vex",
+    "name": "VEX",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 0.8,
+    "width": 0.4
+  },
+  {
+    "id": "minecraft:villager",
+    "name": "VILLAGER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:vindicator",
+    "name": "VINDICATOR",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:wandering_trader",
+    "name": "WANDERING_TRADER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:witch",
+    "name": "WITCH",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:wither",
+    "name": "WITHER",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 3.5,
+    "width": 0.9
+  },
+  {
+    "id": "minecraft:wither_skeleton",
+    "name": "WITHER_SKELETON",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 2.4,
+    "width": 0.7
+  },
+  {
+    "id": "minecraft:wither_skull",
+    "name": "WITHER_SKULL",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.3125,
+    "width": 0.3125
+  },
+  {
+    "id": "minecraft:wolf",
+    "name": "WOLF",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 0.85,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:zoglin",
+    "name": "ZOGLIN",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 1.4,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:zombie",
+    "name": "ZOMBIE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:zombie_horse",
+    "name": "ZOMBIE_HORSE",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.6,
+    "width": 1.3964844
+  },
+  {
+    "id": "minecraft:zombie_villager",
+    "name": "ZOMBIE_VILLAGER",
+    "packetType": "LIVING",
+    "fireImmune": false,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:zombified_piglin",
+    "name": "ZOMBIFIED_PIGLIN",
+    "packetType": "LIVING",
+    "fireImmune": true,
+    "height": 1.95,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:player",
+    "name": "PLAYER",
+    "packetType": "PLAYER",
+    "fireImmune": false,
+    "height": 1.8,
+    "width": 0.6
+  },
+  {
+    "id": "minecraft:fishing_bobber",
+    "name": "FISHING_BOBBER",
+    "packetType": "BASE",
+    "fireImmune": false,
+    "height": 0.25,
+    "width": 0.25
+  }
+]

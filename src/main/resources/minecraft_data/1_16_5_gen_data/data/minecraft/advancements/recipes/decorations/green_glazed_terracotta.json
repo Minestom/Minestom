@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:green_glazed_terracotta"
+    ]
+  },
+  "criteria": {
+    "has_green_terracotta": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:green_terracotta"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:green_glazed_terracotta"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_green_terracotta",
+      "has_the_recipe"
+    ]
+  ]
+}

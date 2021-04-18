@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "minecraft:block/stripped_jungle_wood",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "minecraft:block/stripped_jungle_wood"
+    },
+    "axis=z": {
+      "model": "minecraft:block/stripped_jungle_wood",
+      "x": 90
+    }
+  }
+}

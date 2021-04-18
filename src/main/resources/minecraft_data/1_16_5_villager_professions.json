@@ -1,0 +1,75 @@
+[
+  {
+    "id": "minecraft:none",
+    "name": "NONE"
+  },
+  {
+    "id": "minecraft:armorer",
+    "name": "ARMORER",
+    "workSound": "minecraft:entity.villager.work_armorer"
+  },
+  {
+    "id": "minecraft:butcher",
+    "name": "BUTCHER",
+    "workSound": "minecraft:entity.villager.work_butcher"
+  },
+  {
+    "id": "minecraft:cartographer",
+    "name": "CARTOGRAPHER",
+    "workSound": "minecraft:entity.villager.work_cartographer"
+  },
+  {
+    "id": "minecraft:cleric",
+    "name": "CLERIC",
+    "workSound": "minecraft:entity.villager.work_cleric"
+  },
+  {
+    "id": "minecraft:farmer",
+    "name": "FARMER",
+    "workSound": "minecraft:entity.villager.work_farmer"
+  },
+  {
+    "id": "minecraft:fisherman",
+    "name": "FISHERMAN",
+    "workSound": "minecraft:entity.villager.work_fisherman"
+  },
+  {
+    "id": "minecraft:fletcher",
+    "name": "FLETCHER",
+    "workSound": "minecraft:entity.villager.work_fletcher"
+  },
+  {
+    "id": "minecraft:leatherworker",
+    "name": "LEATHERWORKER",
+    "workSound": "minecraft:entity.villager.work_leatherworker"
+  },
+  {
+    "id": "minecraft:librarian",
+    "name": "LIBRARIAN",
+    "workSound": "minecraft:entity.villager.work_librarian"
+  },
+  {
+    "id": "minecraft:mason",
+    "name": "MASON",
+    "workSound": "minecraft:entity.villager.work_mason"
+  },
+  {
+    "id": "minecraft:nitwit",
+    "name": "NITWIT"
+  },
+  {
+    "id": "minecraft:shepherd",
+    "name": "SHEPHERD",
+    "workSound": "minecraft:entity.villager.work_shepherd"
+  },
+  {
+    "id": "minecraft:toolsmith",
+    "name": "TOOLSMITH",
+    "workSound": "minecraft:entity.villager.work_toolsmith"
+  },
+  {
+    "id": "minecraft:weaponsmith",
+    "name": "WEAPONSMITH",
+    "workSound": "minecraft:entity.villager.work_weaponsmith"
+  }
+]

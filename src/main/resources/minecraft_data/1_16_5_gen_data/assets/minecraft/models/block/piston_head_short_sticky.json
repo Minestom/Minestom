@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_piston_head_short",
+  "textures": {
+    "platform": "minecraft:block/piston_top_sticky",
+    "side": "minecraft:block/piston_side",
+    "unsticky": "minecraft:block/piston_top"
+  }
+}

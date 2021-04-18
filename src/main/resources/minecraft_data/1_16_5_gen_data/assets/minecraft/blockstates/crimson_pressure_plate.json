@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "minecraft:block/crimson_pressure_plate"
+    },
+    "powered=true": {
+      "model": "minecraft:block/crimson_pressure_plate_down"
+    }
+  }
+}

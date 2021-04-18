@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:light_blue_glazed_terracotta"
+    ]
+  },
+  "criteria": {
+    "has_light_blue_terracotta": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:light_blue_terracotta"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:light_blue_glazed_terracotta"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_light_blue_terracotta",
+      "has_the_recipe"
+    ]
+  ]
+}

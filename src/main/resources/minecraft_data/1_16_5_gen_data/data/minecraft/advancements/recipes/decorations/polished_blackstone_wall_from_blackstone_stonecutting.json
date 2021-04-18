@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:polished_blackstone_wall_from_blackstone_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_blackstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:blackstone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:polished_blackstone_wall_from_blackstone_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_blackstone",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "variants": {
+    "powered=false,shape=ascending_east": {
+      "model": "minecraft:block/detector_rail_raised_ne",
+      "y": 90
+    },
+    "powered=false,shape=ascending_north": {
+      "model": "minecraft:block/detector_rail_raised_ne"
+    },
+    "powered=false,shape=ascending_south": {
+      "model": "minecraft:block/detector_rail_raised_sw"
+    },
+    "powered=false,shape=ascending_west": {
+      "model": "minecraft:block/detector_rail_raised_sw",
+      "y": 90
+    },
+    "powered=false,shape=east_west": {
+      "model": "minecraft:block/detector_rail",
+      "y": 90
+    },
+    "powered=false,shape=north_south": {
+      "model": "minecraft:block/detector_rail"
+    },
+    "powered=true,shape=ascending_east": {
+      "model": "minecraft:block/detector_rail_on_raised_ne",
+      "y": 90
+    },
+    "powered=true,shape=ascending_north": {
+      "model": "minecraft:block/detector_rail_on_raised_ne"
+    },
+    "powered=true,shape=ascending_south": {
+      "model": "minecraft:block/detector_rail_on_raised_sw"
+    },
+    "powered=true,shape=ascending_west": {
+      "model": "minecraft:block/detector_rail_on_raised_sw",
+      "y": 90
+    },
+    "powered=true,shape=east_west": {
+      "model": "minecraft:block/detector_rail_on",
+      "y": 90
+    },
+    "powered=true,shape=north_south": {
+      "model": "minecraft:block/detector_rail_on"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:smooth_sandstone_stairs"
+    ]
+  },
+  "criteria": {
+    "has_smooth_sandstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:smooth_sandstone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:smooth_sandstone_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_smooth_sandstone",
+      "has_the_recipe"
+    ]
+  ]
+}

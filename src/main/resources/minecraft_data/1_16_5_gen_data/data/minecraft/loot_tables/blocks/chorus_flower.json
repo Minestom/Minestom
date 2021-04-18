@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:survives_explosion"
+            },
+            {
+              "condition": "minecraft:entity_properties",
+              "predicate": {},
+              "entity": "this"
+            }
+          ],
+          "name": "minecraft:chorus_flower"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:light_blue_carpet"
+    ]
+  },
+  "criteria": {
+    "has_light_blue_wool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:light_blue_wool"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:light_blue_carpet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_light_blue_wool",
+      "has_the_recipe"
+    ]
+  ]
+}

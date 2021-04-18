@@ -71,7 +71,7 @@ public final class LootTableManager {
     }
 
     public LootTable load(NamespaceID name) throws FileNotFoundException {
-        return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/" + name.getDomain() + "/loot_tables/" + name.getPath() + ".json")));
+        return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, MinecraftServer.VERSION_NAME.replaceAll("\\.", "_") + "_gen_data/data/" + name.getDomain() + "/loot_tables/" + name.getPath() + ".json")));
     }
 
     /**

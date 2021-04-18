@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "minecraft:block/blackstone_slab"
+    },
+    "type=double": {
+      "model": "minecraft:block/blackstone"
+    },
+    "type=top": {
+      "model": "minecraft:block/blackstone_slab_top"
+    }
+  }
+}

@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -34,11 +33,7 @@ public class TestLootTables {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        try {
-            ResourceGatherer.ensureResourcesArePresent(MinecraftServer.VERSION_NAME);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ResourceGatherer.ensureResourcesArePresent(false);
 
         tableManager = new LootTableManager();
         tableManager.registerConditionDeserializer(NamespaceID.from("minecraft:survives_explosion"), new SurvivesExplosionCondition.Deserializer());
@@ -84,7 +79,7 @@ public class TestLootTables {
     }
 
     @Test
-    public void loadFromFile() throws FileNotFoundException {
+    public void loadFromFile() throws IOException {
         LootTable lootTable = tableManager.load(NamespaceID.from("blocks/acacia_button"));
         Assertions.assertTrue(lootTable.getType() instanceof BlockType);
         Assertions.assertEquals(1, lootTable.getPools().size());
@@ -101,14 +96,14 @@ public class TestLootTables {
     }
 
     @Test
-    public void caching() throws FileNotFoundException {
+    public void caching() throws IOException {
         LootTable lootTable1 = tableManager.load(NamespaceID.from("blocks/acacia_button"));
         LootTable lootTable2 = tableManager.load(NamespaceID.from("blocks/acacia_button"));
         Assertions.assertSame(lootTable1, lootTable2);
     }
 
     @Test
-    public void simpleGenerate() throws FileNotFoundException {
+    public void simpleGenerate() throws IOException {
         LootTable lootTable = tableManager.load(NamespaceID.from("blocks/acacia_button"));
         Data arguments = new DataImpl();
         List<ItemStack> stacks = lootTable.generate(arguments);
@@ -117,7 +112,7 @@ public class TestLootTables {
     }
 
     @Test
-    public void testExplosion() throws FileNotFoundException {
+    public void testExplosion() throws IOException {
         LootTable lootTable = tableManager.load(NamespaceID.from("blocks/acacia_button"));
         Data arguments = new DataImpl();
         // negative value will force the condition to fail

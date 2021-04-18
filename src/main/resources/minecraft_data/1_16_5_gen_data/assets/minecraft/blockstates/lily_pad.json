@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "minecraft:block/lily_pad"
+      },
+      {
+        "model": "minecraft:block/lily_pad",
+        "y": 90
+      },
+      {
+        "model": "minecraft:block/lily_pad",
+        "y": 180
+      },
+      {
+        "model": "minecraft:block/lily_pad",
+        "y": 270
+      }
+    ]
+  }
+}

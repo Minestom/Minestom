@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:prismarine_brick_stairs_from_prismarine_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_prismarine_brick": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:prismarine_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:prismarine_brick_stairs_from_prismarine_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_prismarine_brick",
+      "has_the_recipe"
+    ]
+  ]
+}

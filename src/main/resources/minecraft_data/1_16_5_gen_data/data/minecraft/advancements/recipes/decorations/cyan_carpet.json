@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:cyan_carpet"
+    ]
+  },
+  "criteria": {
+    "has_cyan_wool": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:cyan_wool"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:cyan_carpet"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_cyan_wool",
+      "has_the_recipe"
+    ]
+  ]
+}
