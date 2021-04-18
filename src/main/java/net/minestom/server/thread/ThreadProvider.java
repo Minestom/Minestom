@@ -1,5 +1,6 @@
 package net.minestom.server.thread;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -28,6 +29,10 @@ public abstract class ThreadProvider {
     // Iterated over to refresh the thread used to update entities & chunks
     private final ArrayDeque<Chunk> chunks = new ArrayDeque<>();
     private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
+
+    // Represents the maximum percentage of tick time
+    // that can be spent refreshing chunks thread
+    protected float refreshPercentage = 0.3f;
 
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
@@ -162,10 +167,11 @@ public abstract class ThreadProvider {
         }
 
 
-        int size = chunks.size();
+        final long endTime = (long) (System.currentTimeMillis() + ((float) MinecraftServer.TICK_MS * refreshPercentage));
+        final int size = chunks.size();
         int counter = 0;
-        // TODO incremental update, maybe a percentage of the tick time?
-        while (counter++ < size) {
+        while (counter++ < size ||
+                System.currentTimeMillis() < endTime) {
             Chunk chunk = chunks.pollFirst();
             if (!ChunkUtils.isLoaded(chunk)) {
                 removeChunk(chunk);
@@ -191,6 +197,7 @@ public abstract class ThreadProvider {
             // Add back to the deque
             chunks.addLast(chunk);
         }
+        System.out.println("update " + counter);
     }
 
     public void removeEntity(@NotNull Entity entity) {
