@@ -16,6 +16,7 @@ import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 
@@ -68,35 +69,27 @@ public class Main {
             ResponseData responseData = event.getResponseData();
             responseData.setMaxPlayer(0);
             responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            responseData.addPlayer("The first line is separated from the others", UUID.randomUUID());
-            responseData.addPlayer("Could be a name, or a message", UUID.randomUUID());
-            responseData.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
-            responseData.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
-            responseData.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
+            responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
+            responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
+            responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
 
-            responseData.addPlayer("Connection Info:");
+            // components will be converted the legacy section sign format so they are displayed in the client
+            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use").append(Component.text("styling too!", NamedTextColor.RED))));
+
+            responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
             String ip = event.getConnection().getServerAddress();
-            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7IP: " + (char)0x00a7 + "e" + (ip != null ? ip : "???"));
-            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getConnection().getServerPort());
-            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7VERSION: " + (char)0x00a7 + "e" + event.getConnection().getProtocolVersion());
+            responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                    .append(Component.text("IP: ", NamedTextColor.GRAY))
+                    .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
+            responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                    .append(Component.text("PORT: ", NamedTextColor.GRAY))
+                    .append(Component.text(event.getConnection().getServerPort()))));
+            responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                    .append(Component.text("VERSION: ", NamedTextColor.GRAY))
+                    .append(Component.text(event.getConnection().getProtocolVersion()))));
 
-            // Check if client supports RGB color
-            if (event.getConnection().getProtocolVersion() >= 713) { // Snapshot 20w17a
-                responseData.setDescription(Component.text("You can do ")
-                        .append(Component.text("RGB", TextColor.color(0x66b3ff)))
-                        .append(Component.text(" color here")));
-            } else {
-                responseData.setDescription(Component.text("You can do ")
-                        .append(Component.text("RGB", NamedTextColor.nearestTo(TextColor.color(0x66b3ff))))
-                        .append(Component.text(" color here,"))
-                        .append(Component.newline())
-                        .append(Component.text("if you are on 1.16 or up"))
-                );
-            }
-
-
-
-
+            // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
+            responseData.setDescription(Component.text("This will be downsampled on older versions!", TextColor.color(0x66b3ff)));
         });
 
         PlayerInit.init();
