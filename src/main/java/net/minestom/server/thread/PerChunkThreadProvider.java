@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,6 +14,6 @@ public class PerChunkThreadProvider extends ThreadProvider {
 
     @Override
     public long findThread(@NotNull Chunk chunk) {
-        return ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        return chunk.hashCode();
     }
 }
