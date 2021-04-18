@@ -14,7 +14,7 @@ public class ParticleCreator {
     public static ParticlePacket createParticlePacket(Particle particleType, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
-                                                      float particleData, int count, @Nullable Consumer<BinaryWriter> dataWriter) {
+                                                      float speed, int count, @Nullable Consumer<BinaryWriter> dataWriter) {
         ParticlePacket particlePacket = new ParticlePacket();
         particlePacket.particleId = particleType.getId();
         particlePacket.longDistance = distance;
@@ -27,7 +27,7 @@ public class ParticleCreator {
         particlePacket.offsetY = offsetY;
         particlePacket.offsetZ = offsetZ;
 
-        particlePacket.particleData = particleData;
+        particlePacket.speed = speed;
         particlePacket.particleCount = count;
 
         if(dataWriter != null) {
