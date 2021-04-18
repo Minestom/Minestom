@@ -12,7 +12,7 @@ public class ParticlePacket implements ServerPacket {
     public boolean longDistance;
     public double x, y, z;
     public float offsetX, offsetY, offsetZ;
-    public float particleData;
+    public float speed;
     public int particleCount;
 
     public byte[] data;
@@ -31,7 +31,7 @@ public class ParticlePacket implements ServerPacket {
         writer.writeFloat(offsetX);
         writer.writeFloat(offsetY);
         writer.writeFloat(offsetZ);
-        writer.writeFloat(particleData);
+        writer.writeFloat(speed);
         writer.writeInt(particleCount);
 
         writer.writeBytes(data);
@@ -47,7 +47,7 @@ public class ParticlePacket implements ServerPacket {
         offsetX = reader.readFloat();
         offsetY = reader.readFloat();
         offsetZ = reader.readFloat();
-        particleData = reader.readFloat();
+        speed = reader.readFloat();
         particleCount = reader.readInt();
 
         data = reader.readRemainingBytes();

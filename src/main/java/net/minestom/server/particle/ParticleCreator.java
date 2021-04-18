@@ -27,7 +27,7 @@ public class ParticleCreator {
         particlePacket.offsetY = offsetY;
         particlePacket.offsetZ = offsetZ;
 
-        particlePacket.particleData = particleData;
+        particlePacket.speed = particleData;
         particlePacket.particleCount = count;
 
         if(dataWriter != null) {
