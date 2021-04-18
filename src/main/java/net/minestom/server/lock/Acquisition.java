@@ -14,10 +14,23 @@ public final class Acquisition {
 
     private static final ThreadLocal<ScheduledAcquisition> SCHEDULED_ACQUISITION = ThreadLocal.withInitial(ScheduledAcquisition::new);
 
+    /**
+     * Global lock used for synchronization.
+     */
     private static final Monitor GLOBAL_MONITOR = new Monitor();
 
     private static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
 
+    /**
+     * Acquires a {@link Collection}.
+     * <p>
+     * Order is not guaranteed.
+     *
+     * @param collection the collection to acquire
+     * @param consumer   the consumer called for each of the collection element
+     * @param <E>        the object type
+     * @param <T>        the acquirable object
+     */
     public static <E, T extends Acquirable<E>> void acquireForEach(@NotNull Collection<? super T> collection,
                                                                    @NotNull Consumer<? super E> consumer) {
         final Thread currentThread = Thread.currentThread();
@@ -65,7 +78,8 @@ public final class Acquisition {
     /**
      * Ensures that {@code callback} is safely executed inside the batch thread.
      */
-    protected static void acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread, Runnable callback) {
+    protected static void acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread,
+                                  @NotNull Runnable callback) {
         if (elementThread == null || elementThread == currentThread) {
             callback.run();
         } else {
@@ -119,6 +133,9 @@ public final class Acquisition {
     private static <E, T extends Acquirable<E>> Map<BatchThread, List<E>> retrieveThreadMap(@NotNull Collection<? super T> collection,
                                                                                             @NotNull Thread currentThread,
                                                                                             @NotNull Consumer<? super E> consumer) {
+        // Separate a collection of acquirable elements into a map of thread->elements
+        // Useful to reduce the number of acquisition
+
         Map<BatchThread, List<E>> threadCacheMap = new HashMap<>();
         for (Object obj : collection) {
             T element = (T) obj;

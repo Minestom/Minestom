@@ -23,7 +23,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.lock.Acquirable;
-import net.minestom.server.lock.AcquirableImpl;
 import net.minestom.server.lock.LockedElement;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -126,7 +125,7 @@ public class Entity implements Viewable, Tickable, LockedElement, EventHandler, 
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    private final Acquirable<Entity> acquirable = new AcquirableImpl<>(this);
+    private final Acquirable<Entity> acquirable = new Acquirable<>(this);
 
     /**
      * Lock used to support #switchEntityType

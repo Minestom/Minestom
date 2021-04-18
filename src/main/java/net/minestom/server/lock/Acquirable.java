@@ -13,23 +13,28 @@ import java.util.function.Consumer;
 /**
  * Represents an element which can be acquired.
  * Used for synchronization purpose.
- * <p>
- * Implementations of this class are recommended to be immutable (or at least thread-safe).
- * The default one is {@link AcquirableImpl}.
  *
  * @param <T> the acquirable object type
  */
-public interface Acquirable<T> {
+public class Acquirable<T> {
 
-    ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
+    public static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
 
-    static @NotNull Collection<@NotNull Entity> currentEntities() {
+    public static @NotNull Collection<@NotNull Entity> currentEntities() {
         return CURRENT_ENTITIES.get();
     }
 
     @ApiStatus.Internal
-    static void refreshEntities(@NotNull Collection<@NotNull Entity> entities) {
+    public static void refreshEntities(@NotNull Collection<@NotNull Entity> entities) {
         CURRENT_ENTITIES.set(entities);
+    }
+
+    private final T value;
+    private final Handler handler;
+
+    public Acquirable(@NotNull T value) {
+        this.value = value;
+        this.handler = new Handler();
     }
 
     /**
@@ -38,7 +43,7 @@ public interface Acquirable<T> {
      *
      * @param consumer the acquisition consumer
      */
-    default void acquire(@NotNull Consumer<@NotNull T> consumer) {
+    public void acquire(@NotNull Consumer<@NotNull T> consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
@@ -52,7 +57,7 @@ public interface Acquirable<T> {
      * @return true if the acquisition happened without synchronization,
      * false otherwise
      */
-    default boolean tryAcquire(@NotNull Consumer<@NotNull T> consumer) {
+    public boolean tryAcquire(@NotNull Consumer<@NotNull T> consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         if (elementThread == null || elementThread == currentThread) {
@@ -69,15 +74,32 @@ public interface Acquirable<T> {
      *
      * @param consumer the consumer of the acquired object
      */
-    default void scheduledAcquire(@NotNull Consumer<T> consumer) {
+    public void scheduledAcquire(@NotNull Consumer<T> consumer) {
         Acquisition.scheduledAcquireRequest(this, consumer);
     }
 
-    @NotNull T unwrap();
+    /**
+     * Unwrap the contained object unsafely.
+     * <p>
+     * Should only be considered when thread-safety is not necessary (e.g. comparing positions)
+     *
+     * @return the unwraped value
+     */
+    public @NotNull T unwrap() {
+        return value;
+    }
 
-    @NotNull Handler getHandler();
+    /**
+     * Gets the {@link Handler} of this acquirable element,
+     * containing the currently linked thread.
+     *
+     * @return this element handler
+     */
+    public @NotNull Handler getHandler() {
+        return handler;
+    }
 
-    class Handler {
+    public static class Handler {
 
         private volatile ThreadProvider.ChunkEntry chunkEntry;
 
