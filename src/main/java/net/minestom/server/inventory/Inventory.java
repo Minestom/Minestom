@@ -344,7 +344,7 @@ public class Inventory extends AbstractInventory implements Viewable {
         if (isInWindow) {
             clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
                     // Player inventory loop
-                    new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
+                    new InventoryClickLoopHandler(offset, PlayerInventory.INVENTORY_SIZE + offset, 1,
                             PlayerInventoryUtils::convertToPacketSlot,
                             index -> isClickInWindow(index) ?
                                     getItemStack(index) :
