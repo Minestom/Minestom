@@ -4,7 +4,6 @@ import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
@@ -33,7 +32,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.particle.shapes.Coords2;
+import net.minestom.server.particle.shapes.ParticlePolygon;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -43,7 +43,6 @@ import net.minestom.server.world.DimensionType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerInit {
@@ -259,6 +258,17 @@ public class PlayerInit {
                     itemStackBuilder.lore(Collections.emptyList());
                 }));
             }
+
+            MinecraftServer.getSchedulerManager().buildTask(() -> {
+                ParticlePolygon polygon = new ParticlePolygon(new Position[] {
+                        new Position(0, 80, 0),
+                        new Position(5, 60, 10),
+                        new Position(10, 50, 5),
+                        new Position(5, 52, -5)
+                });
+
+                polygon.iterator(10).draw(player);
+            }).repeat(10, TimeUnit.TICK).schedule();
         });
 
         globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
