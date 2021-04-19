@@ -91,13 +91,17 @@ public final class UpdateManager {
                     this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
                 }
 
-                PacketUtils.flush();
-
                 // Flush all waiting packets
-                AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().parallelStream()
-                        .filter(player -> player.getPlayerConnection() instanceof NettyPlayerConnection)
-                        .map(player -> (NettyPlayerConnection) player.getPlayerConnection())
-                        .forEach(NettyPlayerConnection::flush));
+                AsyncUtils.runAsync(() -> {
+                    // Flush viewable packets
+                    PacketUtils.flush();
+
+                    // Flush sockets
+                    connectionManager.getOnlinePlayers().parallelStream()
+                            .filter(player -> player.getPlayerConnection() instanceof NettyPlayerConnection)
+                            .map(player -> (NettyPlayerConnection) player.getPlayerConnection())
+                            .forEach(NettyPlayerConnection::flush);
+                });
 
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
