@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -18,13 +19,15 @@ import java.util.stream.Collectors;
  * @see ServerListPingEvent
  */
 public class ResponseData {
+    private static final Component DEFAULT_DESCRIPTION = Component.text("Minestom Server");
+
     private final List<NamedAndIdentified> entries;
+
     private String version;
     private int protocol;
     private int maxPlayer;
     private int online;
     private Component description;
-
     private String favicon;
 
     /**
@@ -32,6 +35,12 @@ public class ResponseData {
      */
     public ResponseData() {
         this.entries = new ArrayList<>();
+        this.version = MinecraftServer.VERSION_NAME;
+        this.protocol = MinecraftServer.PROTOCOL_VERSION;
+        this.online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
+        this.maxPlayer = this.online + 1;
+        this.description = DEFAULT_DESCRIPTION;
+        this.favicon = "";
     }
 
     /**
@@ -289,11 +298,11 @@ public class ResponseData {
      * Converts the response data into a {@link JsonObject}.
      *
      * @return The converted response data as a json tree.
-     * @deprecated Use {@link PingResponse#getResponse(ResponseData)}
+     * @deprecated Use {@link ServerListPingVersion#getPingResponse(ResponseData)}
      */
     @Deprecated
     public @NotNull JsonObject build() {
-        return PingResponse.FULL_RGB.getResponse(this);
+        return ServerListPingVersion.getModernPingResponse(this, true);
     }
 
     /**

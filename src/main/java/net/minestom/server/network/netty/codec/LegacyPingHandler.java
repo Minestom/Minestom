@@ -6,22 +6,23 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.ping.ServerListPingVersion;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
 
-// Copied from original minecraft :(
 public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
     private ByteBuf buf;
 
     @Override
     public void channelRead(@NotNull ChannelHandlerContext ctx, @NotNull Object object) {
-        ByteBuf buf = (ByteBuf) object;
+        final ByteBuf buf = (ByteBuf) object;
 
         if (this.buf != null) {
             try {
-                readLegacy1_6(ctx, buf);
+                handle1_6(ctx, buf);
             } finally {
                 buf.release();
             }
@@ -38,19 +39,17 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
                 switch (length) {
                     case 0:
-                        this.writeResponse(ctx, this.createResponse(formatResponse(-2)));
+                        if (trySendResponse(ServerListPingVersion.LEGACY, ctx)) return;
                         break;
                     case 1:
-                        if (buf.readUnsignedByte() != 1) {
-                            return;
-                        }
+                        if (buf.readUnsignedByte() != 1) return;
 
-                        this.writeResponse(ctx, this.createResponse(formatResponse(-1)));
+                        if (trySendResponse(ServerListPingVersion.LEGACY_VERSIONED, ctx)) return;
                         break;
                     default:
                         if (buf.readUnsignedByte() != 0x01 || buf.readUnsignedByte() != 0xFA) return;
 
-                        readLegacy1_6(ctx, buf);
+                        handle1_6(ctx, buf);
                         break;
                 }
 
@@ -66,19 +65,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private static String readLegacyString(ByteBuf buf) {
-        int size = buf.readShort() * Character.BYTES;
-        if (!buf.isReadable(size)) {
-            return null;
-        }
-
-        final String result = buf.toString(buf.readerIndex(), size, StandardCharsets.UTF_16BE);
-        buf.skipBytes(size);
-
-        return result;
-    }
-
-    private void readLegacy1_6(ChannelHandlerContext ctx, ByteBuf part) {
+    private void handle1_6(ChannelHandlerContext ctx, ByteBuf part) {
         ByteBuf buf = this.buf;
 
         if (buf == null) {
@@ -127,27 +114,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
         this.buf = null;
 
-        this.writeResponse(ctx, this.createResponse(formatResponse(protocolVersion)));
-    }
-
-    private String formatResponse(int playerProtocol) {
-        final String motd = MinecraftServer.getBrandName();
-        final String version = MinecraftServer.VERSION_NAME;
-        final int online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
-        final int max = 0;
-        final int protocol = MinecraftServer.PROTOCOL_VERSION;
-
-        if (playerProtocol == -2) {
-            return String.format(
-                    "%s\u00a7%d\u00a7%d",
-                    motd, online, max
-            );
-        }
-
-        return String.format(
-                "\u00a71\u0000%d\u0000%s\u0000%s\u0000%d\u0000%d",
-                protocol, version, motd, online, max
-        );
+        trySendResponse(ServerListPingVersion.LEGACY_VERSIONED, ctx);
     }
 
     private void removeHandler(ChannelHandlerContext ctx) {
@@ -167,22 +134,51 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private void writeResponse(ChannelHandlerContext ctx, ByteBuf buf) {
-        ctx.pipeline().firstContext().writeAndFlush(buf).addListener(ChannelFutureListener.CLOSE);
+    /**
+     * Calls a {@link ServerListPingEvent} and sends the response, if the event was not cancelled.
+     *
+     * @param version the version
+     * @param ctx the context
+     * @return {@code true} if the response was cancelled, {@code false} otherwise
+     */
+    private static boolean trySendResponse(@NotNull ServerListPingVersion version, @NotNull ChannelHandlerContext ctx) {
+        final ServerListPingEvent event = new ServerListPingEvent(version);
+        MinecraftServer.getGlobalEventHandler().callEvent(ServerListPingEvent.class, event);
+
+        if (event.isCancelled()) {
+            return true;
+        } else {
+            // get the response string
+            String s = version.getPingResponse(event.getResponseData());
+
+            // create the buffer
+            ByteBuf response = Unpooled.buffer();
+            response.writeByte(255);
+
+            final char[] chars = s.toCharArray();
+
+            response.writeShort(chars.length);
+
+            for (char c : chars) {
+                response.writeChar(c);
+            }
+
+            // write the buffer
+            ctx.pipeline().firstContext().writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+
+            return false;
+        }
     }
 
-    private ByteBuf createResponse(String s) {
-        ByteBuf response = Unpooled.buffer();
-        response.writeByte(255);
-
-        final char[] chars = s.toCharArray();
-
-        response.writeShort(chars.length);
-
-        for (char c : chars) {
-            response.writeChar(c);
+    private static String readLegacyString(ByteBuf buf) {
+        int size = buf.readShort() * Character.BYTES;
+        if (!buf.isReadable(size)) {
+            return null;
         }
 
-        return response;
+        final String result = buf.toString(buf.readerIndex(), size, StandardCharsets.UTF_16BE);
+        buf.skipBytes(size);
+
+        return result;
     }
 }

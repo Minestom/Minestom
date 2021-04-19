@@ -5,8 +5,10 @@ import demo.blocks.CustomBlockSample;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.ServerListPingEvent;
@@ -67,29 +69,32 @@ public class Main {
 
         MinecraftServer.getGlobalEventHandler().addEventCallback(ServerListPingEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
-            responseData.setMaxPlayer(0);
-            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
             responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
             responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
-            responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
+
+            // on modern versions, you can obtain the player connection directly from the event
+            if (event.getConnection() != null) {
+                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
+
+                responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
+                String ip = event.getConnection().getServerAddress();
+                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                        .append(Component.text(" IP: ", NamedTextColor.GRAY))
+                        .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
+                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                        .append(Component.text(" PORT: ", NamedTextColor.GRAY))
+                        .append(Component.text(event.getConnection().getServerPort()))));
+                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                        .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
+                        .append(Component.text(event.getConnection().getProtocolVersion()))));
+            }
 
             // components will be converted the legacy section sign format so they are displayed in the client
-            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use").append(Component.text("styling too!", NamedTextColor.RED))));
-
-            responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
-            String ip = event.getConnection().getServerAddress();
-            responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                    .append(Component.text("IP: ", NamedTextColor.GRAY))
-                    .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
-            responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                    .append(Component.text("PORT: ", NamedTextColor.GRAY))
-                    .append(Component.text(event.getConnection().getServerPort()))));
-            responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                    .append(Component.text("VERSION: ", NamedTextColor.GRAY))
-                    .append(Component.text(event.getConnection().getProtocolVersion()))));
+            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
 
             // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
-            responseData.setDescription(Component.text("This will be downsampled on older versions!", TextColor.color(0x66b3ff)));
+            // on legacy versions, colors will be converted to the section format so it'll work there too
+            responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
         });
 
         PlayerInit.init();
