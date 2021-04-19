@@ -1,5 +1,6 @@
 package net.minestom.server.thread;
 
+import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
@@ -144,17 +145,24 @@ public abstract class ThreadProvider {
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList());
                 Acquirable.refreshEntities(Collections.unmodifiableList(entities));
+
+                final Monitor monitor = thread.monitor;
+                monitor.enter();
                 chunkEntries.forEach(chunkEntry -> {
                     Chunk chunk = chunkEntry.chunk;
                     if (!ChunkUtils.isLoaded(chunk))
                         return;
                     chunk.tick(time);
                     chunkEntry.entities.forEach(entity -> {
-                        thread.monitor.enter();
+                        final boolean hasQueue = monitor.hasQueuedThreads();
+                        if (hasQueue) {
+                            monitor.leave();
+                            monitor.enter();
+                        }
                         entity.tick(time);
-                        thread.monitor.leave();
                     });
                 });
+                monitor.leave();
             });
         }
         return countDownLatch;
