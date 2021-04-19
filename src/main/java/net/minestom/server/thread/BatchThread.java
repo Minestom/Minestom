@@ -1,6 +1,5 @@
 package net.minestom.server.thread;
 
-import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -10,12 +9,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class BatchThread extends Thread {
 
     private final BatchRunnable runnable;
 
-    public volatile Monitor monitor = new Monitor();
+    public volatile ReentrantLock lock = new ReentrantLock();
 
     public BatchThread(@NotNull BatchRunnable runnable, int number) {
         super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);

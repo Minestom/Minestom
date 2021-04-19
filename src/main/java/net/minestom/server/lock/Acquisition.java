@@ -1,6 +1,5 @@
 package net.minestom.server.lock;
 
-import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 public final class Acquisition {
@@ -17,7 +17,7 @@ public final class Acquisition {
     /**
      * Global lock used for synchronization.
      */
-    private static final Monitor GLOBAL_MONITOR = new Monitor();
+    private static final ReentrantLock GLOBAL_LOCK = new ReentrantLock();
 
     private static final AtomicLong WAIT_COUNTER_NANO = new AtomicLong();
 
@@ -91,20 +91,20 @@ public final class Acquisition {
             }
 
             BatchThread current = (BatchThread) currentThread;
-            Monitor currentMonitor = current.monitor;
-            final boolean currentAcquired = currentMonitor.isOccupiedByCurrentThread();
+            ReentrantLock currentLock = current.lock;
+            final boolean currentAcquired = currentLock.isHeldByCurrentThread();
             if (currentAcquired)
-                current.monitor.leave();
+                currentLock.unlock();
 
-            GLOBAL_MONITOR.enter();
+            GLOBAL_LOCK.lock();
 
             if (currentAcquired)
-                current.monitor.enter();
+                currentLock.lock();
 
-            final var monitor = elementThread != null ? elementThread.monitor : null;
-            final boolean acquired = monitor == null || monitor.isOccupiedByCurrentThread();
+            final var lock = elementThread != null ? elementThread.lock : null;
+            final boolean acquired = lock == null || lock.isHeldByCurrentThread();
             if (!acquired) {
-                monitor.enter();
+                lock.lock();
             }
 
             // Monitoring
@@ -116,9 +116,9 @@ public final class Acquisition {
             callback.run();
 
             if (!acquired) {
-                monitor.leave();
+                lock.unlock();
             }
-            GLOBAL_MONITOR.leave();
+            GLOBAL_LOCK.unlock();
         }
     }
 

@@ -1,6 +1,5 @@
 package net.minestom.server.thread;
 
-import com.google.common.util.concurrent.Monitor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
@@ -15,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -146,24 +146,24 @@ public abstract class ThreadProvider {
                         .collect(Collectors.toList());
                 Acquirable.refreshEntities(Collections.unmodifiableList(entities));
 
-                final Monitor monitor = thread.monitor;
-                monitor.enter();
+                final ReentrantLock lock = thread.lock;
+                lock.lock();
                 chunkEntries.forEach(chunkEntry -> {
                     Chunk chunk = chunkEntry.chunk;
                     if (!ChunkUtils.isLoaded(chunk))
                         return;
                     chunk.tick(time);
                     chunkEntry.entities.forEach(entity -> {
-                        final boolean hasQueue = monitor.hasQueuedThreads();
+                        final boolean hasQueue = lock.hasQueuedThreads();
                         if (hasQueue) {
-                            monitor.leave();
+                            lock.unlock();
                             // #acquire callbacks should be called here
-                            monitor.enter();
+                            lock.lock();
                         }
                         entity.tick(time);
                     });
                 });
-                monitor.leave();
+                lock.unlock();
             });
         }
         return countDownLatch;
