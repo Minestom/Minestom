@@ -37,7 +37,7 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
 
     protected ItemStack(@NotNull Material material, int amount,
                         @NotNull ItemMeta meta,
-                        @NotNull StackingRule stackingRule) {
+                        @Nullable StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
@@ -61,15 +61,17 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
     }
 
     @Contract(value = "_, _, _ -> new", pure = true)
-    public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound, int amount) {
-        return ItemStack.builder(material)
-                .amount(amount)
-                .meta(metaBuilder -> ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound))
-                .build();
+    public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound, int amount) {
+        var itemBuilder = ItemStack.builder(material)
+                .amount(amount);
+        if (nbtCompound != null) {
+            itemBuilder.meta(metaBuilder -> ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound));
+        }
+        return itemBuilder.build();
     }
 
     @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull ItemStack fromNBT(@NotNull Material material, @NotNull NBTCompound nbtCompound) {
+    public static @NotNull ItemStack fromNBT(@NotNull Material material, @Nullable NBTCompound nbtCompound) {
         return fromNBT(material, nbtCompound, 1);
     }
 

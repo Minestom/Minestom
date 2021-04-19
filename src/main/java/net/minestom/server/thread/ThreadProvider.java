@@ -143,7 +143,7 @@ public abstract class ThreadProvider {
      * @param time     the current time in ms
      */
     protected void updateChunk(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        chunk.tick(time, instance);
+        chunk.tick(time);
     }
 
     // ENTITY UPDATE

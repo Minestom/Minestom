@@ -5,17 +5,13 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.ResourceLocation;
-
 public class TestCommand extends Command {
 
     public TestCommand() {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        var test = ResourceLocation("msg");
-
-        addSyntax((sender, context) -> System.out.println("executed"),test);
+        addSyntax((sender, context) -> System.out.println("executed"), "test get");
     }
 
     private void usage(CommandSender sender, CommandContext context) {

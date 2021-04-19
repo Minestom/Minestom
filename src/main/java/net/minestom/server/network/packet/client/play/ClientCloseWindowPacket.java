@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class ClientCloseWindowPacket extends ClientPlayPacket {
 
-    public int windowId;
+    public byte windowId;
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.windowId = reader.readVarInt();
+        this.windowId = reader.readByte();
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(windowId);
+        writer.writeByte(windowId);
     }
 }

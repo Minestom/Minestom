@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.data.Data;
@@ -56,7 +57,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and {@link UpdateManager#signalChunkUnload(Instance, Chunk)}.
  */
-public abstract class Instance implements BlockModifier, EventHandler, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -488,7 +489,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      */
     public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
-            return new HashSet<>();
+            return Collections.emptySet();
 
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         final Set<Entity> entities = getEntitiesInChunk(index);
@@ -869,6 +870,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             if (isPlayer) {
                 final Player player = (Player) entity;
                 getWorldBorder().init(player);
+                player.getPlayerConnection().sendPacket(createTimePacket());
             }
 
             AsyncUtils.runAsync(() -> {
@@ -1012,6 +1014,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param time the tick time in milliseconds
      */
+    @Override
     public void tick(long time) {
         // Scheduled tasks
         if (!nextTick.isEmpty()) {
