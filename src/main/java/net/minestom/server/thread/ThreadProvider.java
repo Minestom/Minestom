@@ -1,11 +1,13 @@
 package net.minestom.server.thread;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.lock.Acquirable;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,7 +35,8 @@ public abstract class ThreadProvider {
     // that can be spent refreshing chunks thread
     protected double refreshPercentage = 0.3f;
     // Minimum refresh time
-    private long min = 3;
+    private int min = 3;
+    private int max = (int) (MinecraftServer.TICK_MS * 0.3);
 
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
@@ -172,8 +175,8 @@ public abstract class ThreadProvider {
         }
 
 
-        final long endTime = (System.currentTimeMillis() +
-                Math.max((long) ((double) tickTime * refreshPercentage), min));
+        final int timeOffset = MathUtils.clamp((int) ((double) tickTime * refreshPercentage), min, max);
+        final long endTime = System.currentTimeMillis() + timeOffset;
         final int size = chunks.size();
         int counter = 0;
         while (true) {
