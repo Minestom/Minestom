@@ -1,5 +1,6 @@
 package net.minestom.server.particle;
 
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.Nullable;
@@ -49,6 +50,18 @@ public class ParticleCreator {
                 x, y, z,
                 offsetX, offsetY, offsetZ,
                 0, count, null);
+    }
+
+    public static ParticlePacket createBlockParticlePacket(Block block, double x, double y, double z,
+                                                           float offsetX, float offsetY, float offsetZ,
+                                                           int count) {
+        return createParticlePacket(Particle.BLOCK, false,
+                x, y, z,
+                offsetX, offsetY, offsetZ,
+                0, count,
+                (writer) -> writer.writeVarInt(block.getBlockId()));
+
+
     }
 
 }
