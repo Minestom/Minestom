@@ -146,7 +146,7 @@ public abstract class ThreadProvider {
                         .collect(Collectors.toList());
                 Acquirable.refreshEntities(Collections.unmodifiableList(entities));
 
-                final ReentrantLock lock = thread.lock;
+                final ReentrantLock lock = thread.getLock();
                 lock.lock();
                 chunkEntries.forEach(chunkEntry -> {
                     Chunk chunk = chunkEntry.chunk;

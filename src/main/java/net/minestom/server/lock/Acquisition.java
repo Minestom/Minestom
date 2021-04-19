@@ -90,18 +90,22 @@ public final class Acquisition {
                 time = System.nanoTime();
             }
 
-            BatchThread current = (BatchThread) currentThread;
-            ReentrantLock currentLock = current.lock;
-            final boolean currentAcquired = currentLock.isHeldByCurrentThread();
-            if (currentAcquired)
+            ReentrantLock currentLock;
+            {
+                final BatchThread current = currentThread instanceof BatchThread ?
+                        (BatchThread) currentThread : null;
+                currentLock = current != null && current.getLock().isHeldByCurrentThread() ?
+                        current.getLock() : null;
+            }
+            if (currentLock != null)
                 currentLock.unlock();
 
             GLOBAL_LOCK.lock();
 
-            if (currentAcquired)
+            if (currentLock != null)
                 currentLock.lock();
 
-            final var lock = elementThread != null ? elementThread.lock : null;
+            final var lock = elementThread != null ? elementThread.getLock() : null;
             final boolean acquired = lock == null || lock.isHeldByCurrentThread();
             if (!acquired) {
                 lock.lock();

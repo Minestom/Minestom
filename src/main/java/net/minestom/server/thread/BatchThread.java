@@ -14,8 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class BatchThread extends Thread {
 
     private final BatchRunnable runnable;
-
-    public volatile ReentrantLock lock = new ReentrantLock();
+    private final ReentrantLock lock = new ReentrantLock();
 
     public BatchThread(@NotNull BatchRunnable runnable, int number) {
         super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
@@ -24,9 +23,12 @@ public class BatchThread extends Thread {
         this.runnable.setLinkedThread(this);
     }
 
-    @NotNull
-    public BatchRunnable getMainRunnable() {
+    public @NotNull BatchRunnable getMainRunnable() {
         return runnable;
+    }
+
+    public @NotNull ReentrantLock getLock() {
+        return lock;
     }
 
     public void shutdown() {
