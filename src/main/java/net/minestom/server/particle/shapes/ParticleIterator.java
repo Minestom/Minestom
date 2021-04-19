@@ -1,6 +1,9 @@
 package net.minestom.server.particle.shapes;
 
-public abstract class ParticleIterator<T extends CoordinateHolder> {
+import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.NotNull;
+
+public abstract class ParticleIterator<T extends ParticleShape> {
     protected final T shape;
     protected final int particleCount;
 
@@ -8,4 +11,6 @@ public abstract class ParticleIterator<T extends CoordinateHolder> {
         this.shape = shape;
         this.particleCount = particleCount;
     }
+
+    public abstract void draw(@NotNull Instance instance);
 }

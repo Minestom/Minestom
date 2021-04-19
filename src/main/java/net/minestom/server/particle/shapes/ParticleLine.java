@@ -1,17 +1,19 @@
 package net.minestom.server.particle.shapes;
 
-import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public class Coords2 extends CoordinateHolder {
+public class ParticleLine extends ParticleShape {
     private final double x1, y1, z1;
     private final double x2, y2, z2;
 
-    public Coords2(double x1, double y1, double z1, double x2, double y2, double z2) {
+    public ParticleLine(double x1, double y1, double z1, double x2, double y2, double z2) {
         this.x1 = x1;
         this.y1 = y1;
         this.z1 = z1;
@@ -20,8 +22,9 @@ public class Coords2 extends CoordinateHolder {
         this.z2 = z2;
     }
 
-    public Coords2(Position position1, Position position2) {
-        this(position1.getX(), position1.getY(), position1.getZ(), position2.getX(), position2.getY(), position2.getZ());
+    public ParticleLine(@NotNull Position position1, @NotNull Position position2) {
+        this(position1.getX(), position1.getY(), position1.getZ(),
+                position2.getX(), position2.getY(), position2.getZ());
     }
 
     public double getX1() {
@@ -48,18 +51,18 @@ public class Coords2 extends CoordinateHolder {
         return z2;
     }
 
-    public LineIterator line(int particleCount) {
+    public LineIterator iterator(int particleCount) {
         return new LineIterator(this, particleCount);
     }
 
-    public static class LineIterator extends ParticleIterator<Coords2> implements Iterator<Position> {
+    public static class LineIterator extends ParticleIterator<ParticleLine> implements Iterator<Position> {
         private final double changeX, changeY, changeZ;
 
         private double x, y, z;
 
         private int particles = 0;
 
-        public LineIterator(Coords2 line, int particleCount) {
+        public LineIterator(@NotNull ParticleLine line, int particleCount) {
             super(line, particleCount);
 
             double dx = line.getX2() - line.getX1();
@@ -93,12 +96,16 @@ public class Coords2 extends CoordinateHolder {
             return position;
         }
 
-        public void draw(Player player) {
+        @Override
+        public void draw(@NotNull Instance instance) {
             while (hasNext()) {
                 Position position = next();
-                player.sendPacketToViewersAndSelf(ParticleCreator.createParticlePacket(Particle.FLAME,
+                ParticlePacket packet = ParticleCreator.createParticlePacket(Particle.FLAME,
                         position.getX(), position.getY(), position.getZ(),
-                        0, 0, 0, 1));
+                        0, 0, 0, 1);
+
+                instance.getPlayers().forEach((player) ->
+                        player.getPlayerConnection().sendPacket(packet));
             }
         }
     }

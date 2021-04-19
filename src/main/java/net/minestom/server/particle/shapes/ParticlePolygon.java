@@ -1,14 +1,15 @@
 package net.minestom.server.particle.shapes;
 
-import net.minestom.server.entity.Player;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
-public class ParticlePolygon extends CoordinateHolder {
+public class ParticlePolygon extends ParticleShape {
     private final Position[] points;
 
-    public ParticlePolygon(Position[] points) {
+    public ParticlePolygon(@NotNull Position[] points) {
         this.points = points;
     }
 
@@ -20,7 +21,7 @@ public class ParticlePolygon extends CoordinateHolder {
         return new PolygonIterator(this, particleCount);
     }
 
-    public static class PolygonIterator extends ParticleIterator<ParticlePolygon> implements Iterator<Coords2.LineIterator> {
+    public static class PolygonIterator extends ParticleIterator<ParticlePolygon> implements Iterator<ParticleLine.LineIterator> {
         private int index = 0;
 
         protected PolygonIterator(ParticlePolygon polygon, int particleCount) {
@@ -33,18 +34,19 @@ public class ParticlePolygon extends CoordinateHolder {
         }
 
         @Override
-        public Coords2.LineIterator next() {
+        public ParticleLine.LineIterator next() {
             Position position1 = shape.getPoints()[index];
             index++;
             Position position2 = shape.getPoints()[hasNext() ? index : 0];
 
-            return new Coords2(position1, position2).line(particleCount);
+            return new ParticleLine(position1, position2).iterator(particleCount);
         }
 
-        public void draw(Player player) {
+        @Override
+        public void draw(@NotNull Instance instance) {
             while (hasNext()) {
-                Coords2.LineIterator line = next();
-                line.draw(player);
+                ParticleLine.LineIterator line = next();
+                line.draw(instance);
             }
         }
     }

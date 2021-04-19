@@ -32,7 +32,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.particle.shapes.Coords2;
 import net.minestom.server.particle.shapes.ParticlePolygon;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -267,7 +266,7 @@ public class PlayerInit {
                         new Position(5, 52, -5)
                 });
 
-                polygon.iterator(10).draw(player);
+                polygon.iterator(10).draw(player.getInstance());
             }).repeat(10, TimeUnit.TICK).schedule();
         });
 
