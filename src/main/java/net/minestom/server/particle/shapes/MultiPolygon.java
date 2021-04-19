@@ -15,7 +15,7 @@ public class MultiPolygon extends ParticleShape {
 
     @Override
     public ParticleIterator<?> iterator(int particleCount) {
-        return null;
+        return new MultiPolygonIterator(this, particleCount);
     }
 
     public static class MultiPolygonIterator extends ParticleIterator<MultiPolygon> implements Iterator<ParticleShape> {
