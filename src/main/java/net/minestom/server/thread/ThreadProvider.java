@@ -157,6 +157,7 @@ public abstract class ThreadProvider {
                         final boolean hasQueue = monitor.hasQueuedThreads();
                         if (hasQueue) {
                             monitor.leave();
+                            // #acquire callbacks should be called here
                             monitor.enter();
                         }
                         entity.tick(time);
