@@ -13,10 +13,6 @@ public class ParticlePolygon extends ParticleShape {
         this.points = points;
     }
 
-    public Position[] getPoints() {
-        return points;
-    }
-
     public PolygonIterator iterator(int particleCount) {
         return new PolygonIterator(this, particleCount);
     }
@@ -25,19 +21,20 @@ public class ParticlePolygon extends ParticleShape {
         private int index = 0;
 
         protected PolygonIterator(ParticlePolygon polygon, int particleCount) {
+            //TODO particleCount should become particleDistance (or at least optional)
             super(polygon, particleCount);
         }
 
         @Override
         public boolean hasNext() {
-            return index < shape.getPoints().length;
+            return index < shape.points.length;
         }
 
         @Override
         public ParticleLine.LineIterator next() {
-            Position position1 = shape.getPoints()[index];
+            Position position1 = shape.points[index];
             index++;
-            Position position2 = shape.getPoints()[hasNext() ? index : 0];
+            Position position2 = shape.points[hasNext() ? index : 0];
 
             return new ParticleLine(position1, position2).iterator(particleCount);
         }

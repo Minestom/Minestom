@@ -32,7 +32,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.particle.shapes.ParticlePolygon;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -259,14 +258,9 @@ public class PlayerInit {
             }
 
             MinecraftServer.getSchedulerManager().buildTask(() -> {
-                ParticlePolygon polygon = new ParticlePolygon(new Position[] {
-                        new Position(0, 80, 0),
-                        new Position(5, 60, 10),
-                        new Position(10, 50, 5),
-                        new Position(5, 52, -5)
-                });
+                //ParticleCube cube = new ParticleCube(new Position(0, 41, 0), 10, 5, 5);
 
-                polygon.iterator(10).draw(player.getInstance());
+                //cube.iterator(10).draw(player.getInstance());
             }).repeat(10, TimeUnit.TICK).schedule();
         });
 
