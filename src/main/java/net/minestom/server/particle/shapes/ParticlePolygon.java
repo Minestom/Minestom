@@ -4,6 +4,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class ParticlePolygon extends ParticleShape {
@@ -46,5 +47,12 @@ public class ParticlePolygon extends ParticleShape {
                 line.draw(instance);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ParticlePolygon{" +
+                "points=" + Arrays.toString(points) +
+                '}';
     }
 }

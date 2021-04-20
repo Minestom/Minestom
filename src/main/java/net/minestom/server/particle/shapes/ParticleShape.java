@@ -17,23 +17,23 @@ public abstract class ParticleShape {
     public static @NotNull MultiPolygon cube(Position position, double width, double height, double depth) {
         return multiPolygon()
                 .lineStart(position)
-                .lineTo(position.add(width, 0, 0))
-                .lineTo(position.add(width, 0, depth))
-                .lineTo(position.add(0, 0, depth))
+                .lineTo(position.clone().add(width, 0, 0))
+                .lineTo(position.clone().add(width, 0, depth))
+                .lineTo(position.clone().add(0, 0, depth))
 
-                .jumpTo(position.add(0, height, 0))
-                .lineTo(position.add(width, height, 0))
-                .lineTo(position.add(width, height, depth))
-                .lineTo(position.add(0, height, depth))
+                .jumpTo(position.clone().add(0, height, 0))
+                .lineTo(position.clone().add(width, height, 0))
+                .lineTo(position.clone().add(width, height, depth))
+                .lineTo(position.clone().add(0, height, depth))
 
                 .jumpTo(position)
-                .lineTo(position.add(0, height, 0))
-                .jumpTo(position.add(width, 0, 0))
-                .lineTo(position.add(width, height, 0))
-                .jumpTo(position.add(width, 0, depth))
-                .lineTo(position.add(width, height, depth))
-                .jumpTo(position.add(0, 0, depth))
-                .lineTo(position.add(0, height, depth))
+                .lineTo(position.clone().add(0, height, 0))
+                .jumpTo(position.clone().add(width, 0, 0))
+                .lineTo(position.clone().add(width, height, 0))
+                .jumpTo(position.clone().add(width, 0, depth))
+                .lineTo(position.clone().add(width, height, depth))
+                .jumpTo(position.clone().add(0, 0, depth))
+                .lineTo(position.clone().add(0, height, depth))
 
                 .build();
     }
