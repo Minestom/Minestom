@@ -14,6 +14,10 @@ public abstract class ParticleShape {
         return new MultiPolygonBuilder();
     }
 
+    public static @NotNull ParticleLine line(Position pos1, Position pos2) {
+        return new ParticleLine(pos1, pos2);
+    }
+
     public static @NotNull MultiPolygon cube(Position position, double width, double height, double depth) {
         return multiPolygon()
                 .lineStart(position)

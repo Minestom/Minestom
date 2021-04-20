@@ -41,10 +41,10 @@ public class ParticlePolygon extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance) {
+        public void draw(@NotNull Instance instance, @NotNull Position start) {
             while (hasNext()) {
                 ParticleLine.LineIterator line = next();
-                line.draw(instance);
+                line.draw(instance, start);
             }
         }
     }

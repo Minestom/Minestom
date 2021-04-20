@@ -97,11 +97,11 @@ public class ParticleLine extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance) {
+        public void draw(@NotNull Instance instance, @NotNull Position start) {
             while (hasNext()) {
                 Position position = next();
                 ParticlePacket packet = ParticleCreator.createParticlePacket(Particle.FLAME,
-                        position.getX(), position.getY(), position.getZ(),
+                        start.getX() + position.getX(), start.getY() + position.getY(), start.getZ() + position.getZ(),
                         0, 0, 0, 1);
 
                 instance.getPlayers().forEach((player) ->

@@ -1,6 +1,7 @@
 package net.minestom.server.particle.shapes;
 
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ParticleIterator<T extends ParticleShape> {
@@ -12,5 +13,5 @@ public abstract class ParticleIterator<T extends ParticleShape> {
         this.particleCount = particleCount;
     }
 
-    public abstract void draw(@NotNull Instance instance);
+    public abstract void draw(@NotNull Instance instance, @NotNull Position start);
 }

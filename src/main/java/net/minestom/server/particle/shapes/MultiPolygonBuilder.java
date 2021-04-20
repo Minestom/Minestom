@@ -37,6 +37,7 @@ public class MultiPolygonBuilder {
         return new MultiPolygon(completedShapes.toArray(ParticleShape[]::new));
     }
 
+    //TODO this will create a line between the polygon start and end, which it should not
     private @NotNull MultiPolygonBuilder endLine() {
         if (lastPolygon != null) {
             completedShapes.add(lastPolygon.build());

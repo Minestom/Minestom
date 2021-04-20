@@ -1,6 +1,7 @@
 package net.minestom.server.particle.shapes;
 
 import net.minestom.server.instance.Instance;
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -40,10 +41,10 @@ public class MultiPolygon extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance) {
+        public void draw(@NotNull Instance instance, @NotNull Position start) {
             while (hasNext()) {
                 ParticleShape shape = next();
-                shape.iterator(particleCount).draw(instance);
+                shape.iterator(particleCount).draw(instance, start);
             }
         }
     }
