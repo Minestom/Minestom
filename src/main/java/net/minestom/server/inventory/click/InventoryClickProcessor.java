@@ -15,21 +15,23 @@ import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
+@ApiStatus.Internal
 public class InventoryClickProcessor {
 
     // Dragging maps
-    private final Map<Player, IntSet> leftDraggingMap = new HashMap<>();
-    private final Map<Player, IntSet> rightDraggingMap = new HashMap<>();
+    private final Map<Player, IntSet> leftDraggingMap = new ConcurrentHashMap<>();
+    private final Map<Player, IntSet> rightDraggingMap = new ConcurrentHashMap<>();
 
     @NotNull
     public InventoryClickResult leftClick(@Nullable Inventory inventory, @NotNull Player player, int slot,
