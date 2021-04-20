@@ -8,10 +8,10 @@ import java.util.UUID;
 
 /**
  * Simple implementation of {@link NamedAndIdentified}.
+ * @see #of(String, UUID)
+ * @see #of(Component, UUID)
  */
 class NamedAndIdentifiedImpl implements NamedAndIdentified {
-    static final Component EMPTY = Component.empty();
-
     private final Component name;
     private final UUID uuid;
 
@@ -51,9 +51,9 @@ class NamedAndIdentifiedImpl implements NamedAndIdentified {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NamedAndIdentifiedImpl that = (NamedAndIdentifiedImpl) o;
-        return this.uuid.equals(that.uuid);
+        if (!(o instanceof NamedAndIdentified)) return false;
+        NamedAndIdentified that = (NamedAndIdentified) o;
+        return this.uuid.equals(that.getUuid());
     }
 
     @Override

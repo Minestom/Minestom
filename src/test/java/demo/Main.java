@@ -5,7 +5,6 @@ import demo.blocks.CustomBlockSample;
 import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -21,8 +20,6 @@ import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
-
-import java.util.UUID;
 
 
 public class Main {

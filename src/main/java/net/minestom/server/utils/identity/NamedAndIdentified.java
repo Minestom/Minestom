@@ -1,17 +1,14 @@
 package net.minestom.server.utils.identity;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-import static net.minestom.server.utils.identity.NamedAndIdentifiedImpl.EMPTY;
-
 /**
  * An object with a {@link Component} name and a {@link UUID} identity.
  */
-public interface NamedAndIdentified extends Named<Component>, Identified {
+public interface NamedAndIdentified {
 
     /**
      * Creates a {@link NamedAndIdentified} instance with an empty name and a random UUID.
@@ -19,7 +16,7 @@ public interface NamedAndIdentified extends Named<Component>, Identified {
      * @return the named and identified instance
      */
     static @NotNull NamedAndIdentified empty() {
-        return of(EMPTY, UUID.randomUUID());
+        return of(Component.empty(), UUID.randomUUID());
     }
 
     /**
@@ -49,7 +46,7 @@ public interface NamedAndIdentified extends Named<Component>, Identified {
      * @return the named and identified instance
      */
     static @NotNull NamedAndIdentified identified(@NotNull UUID uuid) {
-        return of(EMPTY, uuid);
+        return of(Component.empty(), uuid);
     }
 
     /**
@@ -73,4 +70,18 @@ public interface NamedAndIdentified extends Named<Component>, Identified {
     static @NotNull NamedAndIdentified of(@NotNull Component name, @NotNull UUID uuid) {
         return new NamedAndIdentifiedImpl(name, uuid);
     }
+
+    /**
+     * Gets the name of this object.
+     *
+     * @return the name
+     */
+    @NotNull Component getName();
+
+    /**
+     * Gets the UUID of this object.
+     *
+     * @return the uuid
+     */
+    @NotNull UUID getUuid();
 }
