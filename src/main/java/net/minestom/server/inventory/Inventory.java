@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
@@ -468,17 +467,8 @@ public class Inventory extends AbstractInventory implements Viewable {
         final ItemStack cursor = getCursorItem(player);
         final boolean isInWindow = isClickInWindow(slot);
 
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : null, player, slot, cursor,
-                // Start by looping through the opened inventory
-                new InventoryClickLoopHandler(0, getSize(), 1,
-                        i -> i,
-                        this::getItemStack,
-                        this::setItemStack),
-                // Looping through player inventory
-                new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
-                        PlayerInventoryUtils::convertToPacketSlot,
-                        index -> playerInventory.getItemStack(index, PlayerInventoryUtils.OFFSET),
-                        (index, itemStack) -> playerInventory.setItemStack(index, PlayerInventoryUtils.OFFSET, itemStack)));
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
+                this, player, slot, cursor);
 
         if (clickResult == null)
             return false;

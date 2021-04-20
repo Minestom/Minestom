@@ -3,7 +3,6 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -406,12 +405,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(null, player, slot, cursor,
-                new InventoryClickLoopHandler(0, itemStacks.length, 1,
-                        i -> i < 9 ? i + 9 : i - 9,
-                        index -> itemStacks[index],
-                        this::setItemStack));
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, null, player, slot, cursor);
 
         if (clickResult == null)
             return false;
@@ -419,6 +413,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         if (clickResult.doRefresh())
             update();
 
+        setItemStack(slot, OFFSET, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         return !clickResult.isCancel();

@@ -1,6 +1,5 @@
 package net.minestom.server.inventory.click;
 
-import it.unimi.dsi.fastutil.ints.Int2IntFunction;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -9,6 +8,7 @@ import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.TransactionOption;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
@@ -21,7 +21,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 public class InventoryClickProcessor {
 
@@ -342,8 +344,8 @@ public class InventoryClickProcessor {
     }
 
     @Nullable
-    public InventoryClickResult doubleClick(@Nullable Inventory inventory, @NotNull Player player, int slot,
-                                            @NotNull ItemStack cursor, @NotNull InventoryClickLoopHandler... loopHandlers) {
+    public InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @Nullable Inventory inventory, @NotNull Player player, int slot,
+                                            @NotNull final ItemStack cursor) {
         InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.START_DOUBLE_CLICK, ItemStack.AIR, cursor);
 
         if (clickResult.isCancel()) {
@@ -354,49 +356,46 @@ public class InventoryClickProcessor {
             return null;
 
         final StackingRule cursorRule = cursor.getStackingRule();
-        int amount = cursorRule.getAmount(cursor);
+        final int amount = cursorRule.getAmount(cursor);
+        final int remainingAmount = cursorRule.getMaxSize() - amount;
 
-        if (!cursorRule.canApply(cursor, amount + 1))
-            return null;
+        ItemStack remain = cursorRule.apply(cursor, remainingAmount);
 
-        for (InventoryClickLoopHandler loopHandler : loopHandlers) {
-            final Int2IntFunction indexModifier = loopHandler.getIndexModifier();
-            final Int2ObjectFunction<ItemStack> itemGetter = loopHandler.getItemGetter();
-            final BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
+        BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
+            var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
+                if (index == slot) // Prevent item lose/duplication
+                    return false;
+                InventoryClickResult result = startCondition(inventory, player, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
+                return !result.isCancel();
+            });
+            var itemResult = pair.left();
+            var map = pair.right();
+            return TransactionOption.ALL.fill(inv, itemResult, map);
+        };
 
-            for (int i = loopHandler.getStart(); i < loopHandler.getEnd(); i += loopHandler.getStep()) {
-                final int index = indexModifier.apply(i);
-                if (index == slot)
-                    continue;
+        var playerInventory = player.getInventory();
 
-                ItemStack item = itemGetter.apply(index);
-                final StackingRule itemRule = item.getStackingRule();
-                if (!cursorRule.canApply(cursor, amount + 1))
-                    break;
-                if (cursorRule.canBeStacked(cursor, item)) {
-                    clickResult = startCondition(inventory, player, index, ClickType.DOUBLE_CLICK, item, cursor);
-                    if (clickResult.isCancel())
-                        break;
-
-                    final int totalAmount = amount + cursorRule.getAmount(item);
-                    if (!cursorRule.canApply(cursor, totalAmount)) {
-                        cursor = cursorRule.apply(cursor, cursorRule.getMaxSize());
-
-                        item = itemRule.apply(item, totalAmount - itemRule.getMaxSize());
-                    } else {
-                        cursor = cursorRule.apply(cursor, totalAmount);
-                        item = itemRule.apply(item, 0);
-                    }
-                    itemSetter.accept(index, item);
-                    amount = cursorRule.getAmount(cursor);
-
-                    callClickEvent(player, inventory, index, ClickType.DOUBLE_CLICK, item, cursor);
-                }
+        if (Objects.equals(clickedInventory, inventory)) {
+            // Clicked inside inventory
+            remain = func.apply(inventory, remain);
+            if (!remain.isAir()) {
+                remain = func.apply(playerInventory, remain);
             }
+        } else if (inventory != null && clickedInventory == playerInventory) {
+            // Clicked inside player inventory, but with another inventory open
+            remain = func.apply(playerInventory, remain);
+            if (!remain.isAir()) {
+                remain = func.apply(inventory, remain);
+            }
+        } else {
+            // Clicked inside player inventory
+            remain = func.apply(playerInventory, remain);
         }
 
-        clickResult.setCursor(cursor);
+        final int tookAmount = remainingAmount - cursorRule.getAmount(remain);
 
+        ItemStack resultCursor = cursorRule.apply(cursor, amount + tookAmount);
+        clickResult.setCursor(resultCursor);
         return clickResult;
     }
 
