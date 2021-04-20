@@ -7,7 +7,9 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
@@ -167,9 +169,8 @@ public class InventoryClickProcessor {
         return clickResult;
     }
 
-    @Nullable
-    public InventoryClickResult shiftClick(@Nullable Inventory inventory, @NotNull Player player, int slot,
-                                           @NotNull ItemStack clicked, @NotNull ItemStack cursor, @NotNull InventoryClickLoopHandler... loopHandlers) {
+    public @Nullable InventoryClickResult shiftClick(AbstractInventory targetInventory, @Nullable Inventory inventory, @NotNull Player player, int slot,
+                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
 
         if (clickResult.isCancel()) {
@@ -179,71 +180,43 @@ public class InventoryClickProcessor {
         if (clicked.isAir())
             return null;
 
-        final StackingRule clickedRule = clicked.getStackingRule();
+        var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
+            InventoryClickResult result = startCondition(inventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            return !result.isCancel();
+        });
 
-        boolean filled = false;
-        ItemStack resultClicked = clicked;
+        var itemResult = pair.left();
+        var map = pair.right();
+        map.forEach(targetInventory::setItemStack);
 
-        for (InventoryClickLoopHandler loopHandler : loopHandlers) {
-            final Int2IntFunction indexModifier = loopHandler.getIndexModifier();
-            final Int2ObjectFunction<ItemStack> itemGetter = loopHandler.getItemGetter();
-            final BiConsumer<Integer, ItemStack> itemSetter = loopHandler.getItemSetter();
+        clickResult.setClicked(itemResult);
 
-            for (int i = loopHandler.getStart(); i < loopHandler.getEnd(); i += loopHandler.getStep()) {
-                final int index = indexModifier.apply(i);
-                if (index == slot)
-                    continue;
+        return clickResult;
+    }
 
-                ItemStack item = itemGetter.apply(index);
-                final StackingRule itemRule = item.getStackingRule();
-                if (itemRule.canBeStacked(item, clicked)) {
+    public @Nullable InventoryClickResult shiftClick(@NotNull AbstractInventory targetInventory, int start, int end, int step, @NotNull Player player, int slot,
+                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        InventoryClickResult clickResult = startCondition(null, player, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
 
-                    clickResult = startCondition(inventory, player, index, ClickType.SHIFT_CLICK, item, cursor);
-                    if (clickResult.isCancel())
-                        break;
-
-                    final int amount = itemRule.getAmount(item);
-                    if (!clickedRule.canApply(clicked, amount + 1))
-                        continue;
-
-                    final int totalAmount = clickedRule.getAmount(resultClicked) + amount;
-                    if (!clickedRule.canApply(clicked, totalAmount)) {
-                        item = itemRule.apply(item, itemRule.getMaxSize());
-                        itemSetter.accept(index, item);
-
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount - clickedRule.getMaxSize());
-                        filled = false;
-
-                        callClickEvent(player, inventory, index, ClickType.SHIFT_CLICK, item, cursor);
-                        continue;
-                    } else {
-                        resultClicked = clickedRule.apply(resultClicked, totalAmount);
-                        itemSetter.accept(index, resultClicked);
-
-                        item = itemRule.apply(item, 0);
-                        itemSetter.accept(slot, item);
-                        filled = true;
-
-                        callClickEvent(player, inventory, index, ClickType.SHIFT_CLICK, item, cursor);
-                        break;
-                    }
-                } else if (item.isAir()) {
-
-                    clickResult = startCondition(inventory, player, index, ClickType.SHIFT_CLICK, item, cursor);
-                    if (clickResult.isCancel())
-                        break;
-
-                    // Switch
-                    itemSetter.accept(index, resultClicked);
-                    itemSetter.accept(slot, ItemStack.AIR);
-                    filled = true;
-                    break;
-                }
-            }
-            if (!filled) {
-                itemSetter.accept(slot, resultClicked);
-            }
+        if (clickResult.isCancel()) {
+            return clickResult;
         }
+
+        if (clicked.isAir())
+            return null;
+
+        var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
+            if (index == slot) // Prevent item lose/duplication
+                return false;
+            InventoryClickResult result = startCondition(null, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            return !result.isCancel();
+        }, start, end, step);
+
+        var itemResult = pair.left();
+        var map = pair.right();
+        map.forEach(targetInventory::setItemStack);
+
+        clickResult.setClicked(itemResult);
 
         return clickResult;
     }

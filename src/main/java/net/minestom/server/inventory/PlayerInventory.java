@@ -339,26 +339,17 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public boolean shiftClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot, OFFSET);
-
-        final boolean hotBarClick = convertToPacketSlot(slot) < 9;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
-                new InventoryClickLoopHandler(0, itemStacks.length, 1,
-                        i -> {
-                            if (hotBarClick) {
-                                return i < 9 ? i + 9 : i - 9;
-                            } else {
-                                return convertPlayerInventorySlot(i, OFFSET);
-                            }
-                        },
-                        index -> getItemStack(index, OFFSET),
-                        (index, itemStack) -> setItemStack(index, OFFSET, itemStack)));
+        final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
+        final int start = hotBarClick ? 9 : 0;
+        final int end = hotBarClick ? getSize() - 9 : 8;
+        final InventoryClickResult clickResult = clickProcessor.shiftClick(this,
+                start, end, 1,
+                player, slot, clicked, cursor);
 
         if (clickResult == null)
             return false;
 
-        if (clickResult.doRefresh())
-            update();
-
+        setItemStack(slot, OFFSET, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         return !clickResult.isCancel();
