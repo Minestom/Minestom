@@ -3,7 +3,6 @@ package net.minestom.server.inventory;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -339,26 +338,17 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public boolean shiftClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot, OFFSET);
-
-        final boolean hotBarClick = convertToPacketSlot(slot) < 9;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
-                new InventoryClickLoopHandler(0, itemStacks.length, 1,
-                        i -> {
-                            if (hotBarClick) {
-                                return i < 9 ? i + 9 : i - 9;
-                            } else {
-                                return convertPlayerInventorySlot(i, OFFSET);
-                            }
-                        },
-                        index -> getItemStack(index, OFFSET),
-                        (index, itemStack) -> setItemStack(index, OFFSET, itemStack)));
+        final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
+        final int start = hotBarClick ? 9 : 0;
+        final int end = hotBarClick ? getSize() - 9 : 8;
+        final InventoryClickResult clickResult = clickProcessor.shiftClick(this,
+                start, end, 1,
+                player, slot, clicked, cursor);
 
         if (clickResult == null)
             return false;
 
-        if (clickResult.doRefresh())
-            update();
-
+        setItemStack(slot, OFFSET, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         return !clickResult.isCancel();
@@ -415,12 +405,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(null, player, slot, cursor,
-                new InventoryClickLoopHandler(0, itemStacks.length, 1,
-                        i -> i < 9 ? i + 9 : i - 9,
-                        index -> itemStacks[index],
-                        this::setItemStack));
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, null, player, slot, cursor);
 
         if (clickResult == null)
             return false;
@@ -428,6 +413,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         if (clickResult.doRefresh())
             update();
 
+        setItemStack(slot, OFFSET, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         return !clickResult.isCancel();

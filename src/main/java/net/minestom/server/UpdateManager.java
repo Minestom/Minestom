@@ -94,7 +94,7 @@ public final class UpdateManager {
                 }
 
                 // Flush all waiting packets
-                AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().stream()
+                AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().parallelStream()
                         .filter(player -> player.getPlayerConnection() instanceof NettyPlayerConnection)
                         .map(player -> (NettyPlayerConnection) player.getPlayerConnection())
                         .forEach(NettyPlayerConnection::flush));
