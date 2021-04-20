@@ -189,12 +189,8 @@ public class InventoryClickProcessor {
             return !result.isCancel();
         });
 
-        var itemResult = pair.left();
-        var map = pair.right();
-        map.forEach(targetInventory::setItemStack);
-
+        ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
         clickResult.setClicked(itemResult);
-
         return clickResult;
     }
 
@@ -216,12 +212,8 @@ public class InventoryClickProcessor {
             return !result.isCancel();
         }, start, end, step);
 
-        var itemResult = pair.left();
-        var map = pair.right();
-        map.forEach(targetInventory::setItemStack);
-
+        ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
         clickResult.setClicked(itemResult);
-
         return clickResult;
     }
 
