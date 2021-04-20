@@ -55,11 +55,10 @@ public class PlayerInit {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-        for (int i = 0; i < 10; i++) {
-            instanceManager.createSharedInstance(instanceContainer);
+        for (int i = 0; i < 4; i++) {
+            InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+            instanceContainer.enableAutoChunkLoad(true);
+            instanceContainer.setChunkGenerator(chunkGeneratorDemo);
         }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
@@ -225,7 +224,7 @@ public class PlayerInit {
             event.setSpawningInstance(instance);
             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
             int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-            player.setRespawnPoint(new Position(x, 42f, z));
+            player.setRespawnPoint(new Position(0, 42f, 0));
 
             player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
                 if (slot == -999)
