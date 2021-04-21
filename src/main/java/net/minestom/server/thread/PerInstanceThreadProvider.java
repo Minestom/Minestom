@@ -13,6 +13,10 @@ public class PerInstanceThreadProvider extends ThreadProvider {
         super(threadCount);
     }
 
+    public PerInstanceThreadProvider() {
+        super();
+    }
+
     @Override
     public long findThread(@NotNull Chunk chunk) {
         return chunk.getInstance().hashCode();

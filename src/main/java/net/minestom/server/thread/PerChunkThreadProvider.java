@@ -12,6 +12,10 @@ public class PerChunkThreadProvider extends ThreadProvider {
         super(threadCount);
     }
 
+    public PerChunkThreadProvider() {
+        super();
+    }
+
     @Override
     public long findThread(@NotNull Chunk chunk) {
         return chunk.hashCode();

@@ -8,7 +8,6 @@ import net.minestom.server.lock.Acquisition;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
-import net.minestom.server.thread.PerChunkThreadProvider;
 import net.minestom.server.thread.PerInstanceThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -40,8 +39,8 @@ public final class UpdateManager {
 
     {
         // DEFAULT THREAD PROVIDER
-        threadProvider = new PerInstanceThreadProvider(4);
-        //threadProvider = new PerChunkThreadProvider(4);
+        threadProvider = new PerInstanceThreadProvider();
+        //threadProvider = new PerChunkThreadProvider();
     }
 
     /**

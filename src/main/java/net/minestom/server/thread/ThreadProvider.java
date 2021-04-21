@@ -51,6 +51,10 @@ public abstract class ThreadProvider {
         }
     }
 
+    public ThreadProvider() {
+        this(Runtime.getRuntime().availableProcessors());
+    }
+
     public synchronized void onInstanceCreate(@NotNull Instance instance) {
         instance.getChunks().forEach(this::addChunk);
     }
