@@ -44,4 +44,11 @@ public interface TransactionOption<T> {
     @NotNull T fill(@NotNull AbstractInventory inventory,
                     @NotNull ItemStack result,
                     @NotNull Map<@NotNull Integer, @NotNull ItemStack> itemChangesMap);
+
+    default @NotNull T fill(@NotNull TransactionType type,
+                            @NotNull AbstractInventory inventory,
+                            @NotNull ItemStack itemStack) {
+        var pair = type.process(inventory, itemStack);
+        return fill(inventory, pair.left(), pair.right());
+    }
 }

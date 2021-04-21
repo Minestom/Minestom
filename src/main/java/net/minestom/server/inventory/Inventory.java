@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.inventory.click.InventoryClickLoopHandler;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
@@ -338,51 +337,21 @@ public class Inventory extends AbstractInventory implements Viewable {
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack cursor = getCursorItem(player); // Isn't used in the algorithm
 
-
-        final InventoryClickResult clickResult;
-
-        if (isInWindow) {
-            clickResult = clickProcessor.shiftClick(this, player, slot, clicked, cursor,
-                    // Player inventory loop
-                    new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
-                            PlayerInventoryUtils::convertToPacketSlot,
-                            index -> isClickInWindow(index) ?
-                                    getItemStack(index) :
-                                    playerInventory.getItemStack(PlayerInventoryUtils.convertSlot(index, offset)),
-                            (index, itemStack) -> {
-                                if (isClickInWindow(index)) {
-                                    setItemStack(index, itemStack);
-                                } else {
-                                    playerInventory.setItemStack(PlayerInventoryUtils.convertSlot(index, offset), itemStack);
-                                }
-                            }));
-        } else {
-            clickResult = clickProcessor.shiftClick(null, player, slot, clicked, cursor,
-                    // Window loop
-                    new InventoryClickLoopHandler(0, getSize(), 1,
-                            i -> i,
-                            index -> isClickInWindow(index) ?
-                                    getItemStack(index) :
-                                    playerInventory.getItemStack(PlayerInventoryUtils.convertSlot(index, offset)),
-                            (index, itemStack) -> {
-                                if (isClickInWindow(index)) {
-                                    setItemStack(index, itemStack);
-                                } else {
-                                    playerInventory.setItemStack(PlayerInventoryUtils.convertSlot(index, offset), itemStack);
-                                }
-                            }));
-        }
+        final InventoryClickResult clickResult = clickProcessor.shiftClick(
+                isInWindow ? playerInventory : this,
+                isInWindow ? this : null,
+                player, slot, clicked, cursor);
 
         if (clickResult == null)
             return false;
 
-        if (clickResult.doRefresh()) {
-            updateFromClick(clickResult, player);
+        if (isInWindow) {
+            setItemStack(slot, clickResult.getClicked());
+        } else {
+            playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
 
         refreshPlayerCursorItem(player, clickResult.getCursor());
-        playerInventory.update();
-        update();
 
         return !clickResult.isCancel();
     }
@@ -498,17 +467,8 @@ public class Inventory extends AbstractInventory implements Viewable {
         final ItemStack cursor = getCursorItem(player);
         final boolean isInWindow = isClickInWindow(slot);
 
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : null, player, slot, cursor,
-                // Start by looping through the opened inventory
-                new InventoryClickLoopHandler(0, getSize(), 1,
-                        i -> i,
-                        this::getItemStack,
-                        this::setItemStack),
-                // Looping through player inventory
-                new InventoryClickLoopHandler(0, PlayerInventory.INVENTORY_SIZE, 1,
-                        PlayerInventoryUtils::convertToPacketSlot,
-                        index -> playerInventory.getItemStack(index, PlayerInventoryUtils.OFFSET),
-                        (index, itemStack) -> playerInventory.setItemStack(index, PlayerInventoryUtils.OFFSET, itemStack)));
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
+                this, player, slot, cursor);
 
         if (clickResult == null)
             return false;
