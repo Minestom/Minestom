@@ -120,30 +120,22 @@ public class CollectionView<E, V> implements Collection<E> {
     @Override
     public boolean removeAll(@NotNull Collection<?> c) {
         boolean changed = false;
-        try {
-            for (Object e : c) {
-                if (remove(e))
-                    changed = true;
-            }
-        } catch (ClassCastException ignored) {
+        for (Object e : c) {
+            if (remove(e))
+                changed = true;
         }
-
         return changed;
     }
 
     @Override
     public boolean retainAll(@NotNull Collection<?> c) {
         boolean changed = false;
-        try {
-            for (Object e : c) {
-                if (!contains(e)) {
-                    remove(e);
-                    changed = true;
-                }
+        for (Object e : c) {
+            if (!contains(e)) {
+                remove(e);
+                changed = true;
             }
-        } catch (ClassCastException ignored) {
         }
-
         return changed;
     }
 
