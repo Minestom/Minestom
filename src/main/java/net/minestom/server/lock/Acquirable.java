@@ -5,6 +5,7 @@ import net.minestom.server.thread.BatchThread;
 import net.minestom.server.thread.ThreadProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -81,6 +82,21 @@ public final class Acquirable<T> {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Retrieves {@link #unwrap()} only if this element can be safely
+     * acquired without any synchronization.
+     *
+     * @return this element or null if unsafe
+     */
+    public @Nullable T tryAcquire() {
+        final Thread currentThread = Thread.currentThread();
+        final BatchThread elementThread = getHandler().getBatchThread();
+        if (Objects.equals(currentThread, elementThread)) {
+            return unwrap();
+        }
+        return null;
     }
 
     /**
