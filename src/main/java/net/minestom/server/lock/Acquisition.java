@@ -1,6 +1,5 @@
 package net.minestom.server.lock;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,11 +89,7 @@ public final class Acquisition {
 
     protected static ReentrantLock acquireEnter(Thread currentThread, BatchThread elementThread) {
         // Monitoring
-        final boolean monitoring = MinecraftServer.hasWaitMonitoring();
-        long time = 0;
-        if (monitoring) {
-            time = System.nanoTime();
-        }
+        long time = System.nanoTime();
 
         ReentrantLock currentLock;
         {
@@ -118,10 +113,7 @@ public final class Acquisition {
         }
 
         // Monitoring
-        if (monitoring) {
-            time = System.nanoTime() - time;
-            WAIT_COUNTER_NANO.addAndGet(time);
-        }
+        WAIT_COUNTER_NANO.addAndGet(System.nanoTime() - time);
 
         return !acquired ? lock : null;
     }
