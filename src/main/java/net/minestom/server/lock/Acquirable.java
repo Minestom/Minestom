@@ -21,10 +21,25 @@ public final class Acquirable<T> {
 
     public static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
 
+    /**
+     * Gets all the {@link Entity entities} being ticked in the current thread.
+     * <p>
+     * Useful when you want to ensure that no acquisition is ever done.
+     *
+     * @return the entities ticked in the current thread
+     */
     public static @NotNull Collection<@NotNull Entity> currentEntities() {
         return CURRENT_ENTITIES.get();
     }
 
+    /**
+     * Changes the collection returned by {@link #currentEntities()}.
+     * <p>
+     * Mostly for internal use, internal calls are unrecommended as they could lead
+     * to unexpected behavior.
+     *
+     * @param entities the new entity collection
+     */
     @ApiStatus.Internal
     public static void refreshEntities(@NotNull Collection<@NotNull Entity> entities) {
         CURRENT_ENTITIES.set(entities);
