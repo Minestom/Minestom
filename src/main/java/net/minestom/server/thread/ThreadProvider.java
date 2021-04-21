@@ -221,7 +221,6 @@ public abstract class ThreadProvider {
                 break;
 
         }
-        System.out.println("update " + counter);
     }
 
     public void removeEntity(@NotNull Entity entity) {

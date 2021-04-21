@@ -33,7 +33,7 @@ public final class Acquisition {
     public static <E> void acquireForEach(@NotNull Collection<Acquirable<E>> collection,
                                           @NotNull Consumer<? super E> consumer) {
         final Thread currentThread = Thread.currentThread();
-        Map<BatchThread, List<E>> threadCacheMap = retrieveThreadMap(collection, currentThread, consumer);
+        Map<BatchThread, List<E>> threadCacheMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
 
         // Acquire all the threads one by one
         {
@@ -82,48 +82,59 @@ public final class Acquisition {
         if (Objects.equals(currentThread, elementThread)) {
             callback.run();
         } else {
-
-            // Monitoring
-            final boolean monitoring = MinecraftServer.hasWaitMonitoring();
-            long time = 0;
-            if (monitoring) {
-                time = System.nanoTime();
-            }
-
-            ReentrantLock currentLock;
-            {
-                final BatchThread current = currentThread instanceof BatchThread ?
-                        (BatchThread) currentThread : null;
-                currentLock = current != null && current.getLock().isHeldByCurrentThread() ?
-                        current.getLock() : null;
-            }
-            if (currentLock != null)
-                currentLock.unlock();
-
-            GLOBAL_LOCK.lock();
-
-            if (currentLock != null)
-                currentLock.lock();
-
-            final var lock = elementThread != null ? elementThread.getLock() : null;
-            final boolean acquired = lock == null || lock.isHeldByCurrentThread();
-            if (!acquired) {
-                lock.lock();
-            }
-
-            // Monitoring
-            if (monitoring) {
-                time = System.nanoTime() - time;
-                WAIT_COUNTER_NANO.addAndGet(time);
-            }
-
+            var lock = acquireEnter(currentThread, elementThread);
             callback.run();
-
-            if (!acquired) {
-                lock.unlock();
-            }
-            GLOBAL_LOCK.unlock();
+            acquireLeave(lock);
         }
+    }
+
+    protected static ReentrantLock acquireEnter(Thread currentThread, BatchThread elementThread) {
+        // Monitoring
+        final boolean monitoring = MinecraftServer.hasWaitMonitoring();
+        long time = 0;
+        if (monitoring) {
+            time = System.nanoTime();
+        }
+
+        ReentrantLock currentLock;
+        {
+            final BatchThread current = currentThread instanceof BatchThread ?
+                    (BatchThread) currentThread : null;
+            currentLock = current != null && current.getLock().isHeldByCurrentThread() ?
+                    current.getLock() : null;
+        }
+        if (currentLock != null)
+            currentLock.unlock();
+
+        GLOBAL_LOCK.lock();
+
+        if (currentLock != null)
+            currentLock.lock();
+
+        final var lock = elementThread != null ? elementThread.getLock() : null;
+        final boolean acquired = lock == null || lock.isHeldByCurrentThread();
+        if (!acquired) {
+            lock.lock();
+        }
+
+        // Monitoring
+        if (monitoring) {
+            time = System.nanoTime() - time;
+            WAIT_COUNTER_NANO.addAndGet(time);
+        }
+
+        return !acquired ? lock : null;
+    }
+
+    protected static ReentrantLock acquireEnter(BatchThread elementThread) {
+        return acquireEnter(Thread.currentThread(), elementThread);
+    }
+
+    protected static void acquireLeave(ReentrantLock lock) {
+        if (lock != null) {
+            lock.unlock();
+        }
+        GLOBAL_LOCK.unlock();
     }
 
     protected synchronized static <T> void scheduledAcquireRequest(@NotNull Acquirable<T> acquirable, Consumer<T> consumer) {
@@ -134,15 +145,23 @@ public final class Acquisition {
                 .add((Consumer<Object>) consumer);
     }
 
-    private static <E, T extends Acquirable<E>> Map<BatchThread, List<E>> retrieveThreadMap(@NotNull Collection<? super T> collection,
-                                                                                            @NotNull Thread currentThread,
-                                                                                            @NotNull Consumer<? super E> consumer) {
+    /**
+     * Creates
+     *
+     * @param collection    the acquirable collection
+     * @param currentThread the current thread
+     * @param consumer      the consumer to execute when an element is already in the current thread
+     * @param <E>           the acquirable element type
+     * @return a new Thread to acquirable elements map
+     */
+    protected static <E> Map<BatchThread, List<E>> retrieveOptionalThreadMap(@NotNull Collection<Acquirable<E>> collection,
+                                                                             @NotNull Thread currentThread,
+                                                                             @NotNull Consumer<? super E> consumer) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
 
         Map<BatchThread, List<E>> threadCacheMap = new HashMap<>();
-        for (Object obj : collection) {
-            T element = (T) obj;
+        for (Acquirable<E> element : collection) {
             final E value = element.unwrap();
 
             final BatchThread elementThread = element.getHandler().getBatchThread();
@@ -154,6 +173,21 @@ public final class Acquisition {
                 List<E> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
                 threadCacheList.add(value);
             }
+        }
+
+        return threadCacheMap;
+    }
+
+    protected static <E> Map<BatchThread, List<E>> retrieveThreadMap(@NotNull Collection<Acquirable<E>> collection) {
+        // Separate a collection of acquirable elements into a map of thread->elements
+        // Useful to reduce the number of acquisition
+        Map<BatchThread, List<E>> threadCacheMap = new HashMap<>();
+        for (Acquirable<E> element : collection) {
+            final E value = element.unwrap();
+            final BatchThread elementThread = element.getHandler().getBatchThread();
+
+            List<E> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
+            threadCacheList.add(value);
         }
 
         return threadCacheMap;
