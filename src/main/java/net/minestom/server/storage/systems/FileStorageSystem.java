@@ -79,11 +79,10 @@ public class FileStorageSystem implements StorageSystem {
     @Override
     public void close() {
         try {
-            this.rocksDB.closeE();
-
             if (options != null)
                 this.options.close();
 
+            this.rocksDB.closeE();
         } catch (RocksDBException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
