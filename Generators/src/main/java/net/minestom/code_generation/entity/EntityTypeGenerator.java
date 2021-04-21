@@ -20,7 +20,7 @@ import java.util.function.BiFunction;
 public final class EntityTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "particles.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "particles.json");
     private static final Map<String, String> metadata = new HashMap<>() {{
         // Class's name (without the Meta suffix) <--> Package
         // UPDATE: Handle new entity metadata

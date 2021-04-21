@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/stem_growth1",
-  "textures": {
-    "stem": "minecraft:block/melon_stem"
-  }
-}

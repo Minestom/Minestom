@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/template_fire_floor",
-  "textures": {
-    "fire": "minecraft:block/fire_1"
-  }
-}

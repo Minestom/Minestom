@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class SoundGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "sounds.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "sounds.json");
     private final File soundsFile;
     private final File outputFolder;
 

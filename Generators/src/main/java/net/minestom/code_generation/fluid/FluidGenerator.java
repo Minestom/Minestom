@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class FluidGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FluidGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "fluids.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "fluids.json");
     private final File fluidsFile;
     private final File outputFolder;
 

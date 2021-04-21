@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class StatisticGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatisticGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "custom_statistics.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "custom_statistics.json");
     private final File statisticsFile;
     private final File outputFolder;
 

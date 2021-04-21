@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class PotionEffectGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionEffectGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "potion_effects.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "potion_effects.json");
     private final File potionEffectsFile;
     private final File outputFolder;
 

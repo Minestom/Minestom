@@ -198,6 +198,18 @@ configurations.all {
     // we use jetbrains annotations
     exclude group: "org.checkerframework", module: "checker-qual"
 }
+task generateData(type: GradleBuild) {
+    dir = file("./MinestomDataGenerator")
+    tasks = Arrays.asList("generateData")
+    startParameter.getProjectProperties()["mcversion"] = "1.16.5"
+    startParameter.getProjectProperties()["output"] = project.rootDir.path + "/src/main/resources/minecraft_data"
+}
+
+tasks {
+    processResources {
+        dependsOn("generateData")
+    }
+}
 
 publishing {
     publications {

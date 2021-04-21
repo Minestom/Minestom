@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(VillagerProfessionGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "villager_professions.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "villager_professions.json");
     private final File villagerProfessionsFile;
     private final File outputFolder;
 

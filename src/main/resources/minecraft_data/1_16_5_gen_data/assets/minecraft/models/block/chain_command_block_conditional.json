@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/template_command_block",
-  "textures": {
-    "front": "minecraft:block/chain_command_block_front",
-    "back": "minecraft:block/chain_command_block_back",
-    "side": "minecraft:block/chain_command_block_conditional"
-  }
-}

@@ -4,6 +4,9 @@
 
 /chunks/
 
+# When compiling Minestom we generate data and store it here
+/src/main/resources/minecraft_data/
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 # Compiled class file

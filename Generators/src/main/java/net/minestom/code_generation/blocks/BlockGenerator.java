@@ -19,7 +19,7 @@ import java.util.*;
 public final class BlockGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE_BLOCKS = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "blocks.json");
+    private static final File DEFAULT_INPUT_FILE_BLOCKS = new File(DEFAULT_SOURCE_FOLDER_ROOT, "blocks.json");
     private final File blocksFile;
     private final File outputFolder;
 

@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smoking",
-  "ingredient": {
-    "item": "minecraft:mutton"
-  },
-  "result": "minecraft:cooked_mutton",
-  "experience": 0.35,
-  "cookingtime": 100
-}
