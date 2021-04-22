@@ -6,6 +6,7 @@ import java.net.*;
 import java.nio.charset.StandardCharsets;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -36,7 +37,7 @@ public class OpenToLAN {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacySection();
     private static final Logger LOGGER = LoggerFactory.getLogger(OpenToLAN.class);
 
-    private static volatile Component description = Component.text("A Minestom server");
+    private static volatile Component description = Component.text("A Minestom server", NamedTextColor.AQUA);
     private static volatile DatagramPacket packet = null;
 
     private static volatile DatagramSocket socket = null;
@@ -166,14 +167,16 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        if (packet == null) {
-            generatePacket();
-        }
+        if (MinecraftServer.getNettyServer().getPort() != 0) {
+            if (packet == null) {
+                generatePacket();
+            }
 
-        try {
-            socket.send(packet);
-        } catch (IOException e) {
-            LOGGER.warn("Could not send Open to LAN packet!", e);
+            try {
+                socket.send(packet);
+            } catch (IOException e) {
+                LOGGER.warn("Could not send Open to LAN packet!", e);
+            }
         }
     }
 
