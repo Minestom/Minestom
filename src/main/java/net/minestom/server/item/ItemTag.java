@@ -82,16 +82,10 @@ public class ItemTag<T> {
                 (nbtCompound, value) -> nbtCompound.setString(key, value));
     }
 
-    public static @NotNull ItemTag<NBTCompound> Compound(@NotNull String key) {
+    public static @NotNull ItemTag<NBT> NBT(@NotNull String key) {
         return new ItemTag<>(key,
-                nbtCompound -> nbtCompound.getCompound(key).deepClone(),
-                ((nbtCompound, value) -> nbtCompound.set(key, value.deepClone())));
-    }
-
-    public static <O extends NBT> @NotNull ItemTag<NBTList<O>> List(@NotNull String key) {
-        return new ItemTag<>(key,
-                nbtCompound -> (NBTList<O>) nbtCompound.getList(key).deepClone(),
-                ((nbtCompound, value) -> nbtCompound.set(key, value.deepClone())));
+                nbt -> nbt.get(key).deepClone(),
+                ((nbt, value) -> nbt.set(key, value.deepClone())));
     }
 
     public static @NotNull ItemTag<int[]> IntArray(@NotNull String key) {
