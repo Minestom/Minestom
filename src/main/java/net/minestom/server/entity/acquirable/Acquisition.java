@@ -1,5 +1,6 @@
-package net.minestom.server.lock;
+package net.minestom.server.entity.acquirable;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.thread.BatchThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,22 +28,21 @@ public final class Acquisition {
      *
      * @param collection the collection to acquire
      * @param consumer   the consumer called for each of the collection element
-     * @param <E>        the object type
      */
-    public static <E> void acquireForEach(@NotNull Collection<Acquirable<E>> collection,
-                                          @NotNull Consumer<? super E> consumer) {
+    public static void acquireForEach(@NotNull Collection<AcquirableEntity> collection,
+                                      @NotNull Consumer<Entity> consumer) {
         final Thread currentThread = Thread.currentThread();
-        Map<BatchThread, List<E>> threadCacheMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
+        Map<BatchThread, List<Entity>> threadCacheMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
 
         // Acquire all the threads one by one
         {
-            for (Map.Entry<BatchThread, List<E>> entry : threadCacheMap.entrySet()) {
+            for (Map.Entry<BatchThread, List<Entity>> entry : threadCacheMap.entrySet()) {
                 final BatchThread batchThread = entry.getKey();
-                final List<E> elements = entry.getValue();
+                final List<Entity> entities = entry.getValue();
 
                 acquire(currentThread, batchThread, () -> {
-                    for (E element : elements) {
-                        consumer.accept(element);
+                    for (Entity entity : entities) {
+                        consumer.accept(entity);
                     }
                 });
             }
@@ -55,20 +55,20 @@ public final class Acquisition {
     public static void processThreadTick() {
         ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
 
-        final List<Acquirable<Object>> acquirableElements = scheduledAcquisition.acquirableElements;
+        final List<AcquirableEntity> acquirableEntityElements = scheduledAcquisition.acquirableEntityElements;
 
-        if (!acquirableElements.isEmpty()) {
-            final Map<Object, List<Consumer<Object>>> callbacks = scheduledAcquisition.callbacks;
+        if (!acquirableEntityElements.isEmpty()) {
+            final Map<Object, List<Consumer<Entity>>> callbacks = scheduledAcquisition.callbacks;
 
-            acquireForEach(acquirableElements, element -> {
-                List<Consumer<Object>> consumers = callbacks.get(element);
+            acquireForEach(acquirableEntityElements, element -> {
+                List<Consumer<Entity>> consumers = callbacks.get(element);
                 if (consumers == null || consumers.isEmpty())
                     return;
                 consumers.forEach(objectConsumer -> objectConsumer.accept(element));
             });
 
             // Clear collections..
-            acquirableElements.clear();
+            acquirableEntityElements.clear();
             callbacks.clear();
         }
     }
@@ -129,12 +129,12 @@ public final class Acquisition {
         GLOBAL_LOCK.unlock();
     }
 
-    protected synchronized static <T> void scheduledAcquireRequest(@NotNull Acquirable<T> acquirable, Consumer<T> consumer) {
+    protected synchronized static void scheduledAcquireRequest(@NotNull AcquirableEntity acquirableEntity, Consumer<Entity> consumer) {
         ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
-        scheduledAcquisition.acquirableElements.add((Acquirable<Object>) acquirable);
+        scheduledAcquisition.acquirableEntityElements.add(acquirableEntity);
         scheduledAcquisition.callbacks
-                .computeIfAbsent(acquirable.unwrap(), objectAcquirable -> new ArrayList<>())
-                .add((Consumer<Object>) consumer);
+                .computeIfAbsent(acquirableEntity.unwrap(), objectAcquirable -> new ArrayList<>())
+                .add(consumer);
     }
 
     /**
@@ -143,18 +143,17 @@ public final class Acquisition {
      * @param collection    the acquirable collection
      * @param currentThread the current thread
      * @param consumer      the consumer to execute when an element is already in the current thread
-     * @param <E>           the acquirable element type
      * @return a new Thread to acquirable elements map
      */
-    protected static <E> Map<BatchThread, List<E>> retrieveOptionalThreadMap(@NotNull Collection<Acquirable<E>> collection,
-                                                                             @NotNull Thread currentThread,
-                                                                             @NotNull Consumer<? super E> consumer) {
+    protected static Map<BatchThread, List<Entity>> retrieveOptionalThreadMap(@NotNull Collection<AcquirableEntity> collection,
+                                                                              @NotNull Thread currentThread,
+                                                                              @NotNull Consumer<? super Entity> consumer) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
 
-        Map<BatchThread, List<E>> threadCacheMap = new HashMap<>();
-        for (Acquirable<E> element : collection) {
-            final E value = element.unwrap();
+        Map<BatchThread, List<Entity>> threadCacheMap = new HashMap<>();
+        for (AcquirableEntity element : collection) {
+            final Entity value = element.unwrap();
 
             final BatchThread elementThread = element.getHandler().getBatchThread();
             if (currentThread == elementThread) {
@@ -162,7 +161,7 @@ public final class Acquisition {
                 consumer.accept(value);
             } else {
                 // The element is manager in a different thread, cache it
-                List<E> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
+                List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
                 threadCacheList.add(value);
             }
         }
@@ -170,16 +169,16 @@ public final class Acquisition {
         return threadCacheMap;
     }
 
-    protected static <E> Map<BatchThread, List<E>> retrieveThreadMap(@NotNull Collection<Acquirable<E>> collection) {
+    protected static Map<BatchThread, List<Entity>> retrieveThreadMap(@NotNull Collection<AcquirableEntity> collection) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
-        Map<BatchThread, List<E>> threadCacheMap = new HashMap<>();
-        for (Acquirable<E> element : collection) {
-            final E value = element.unwrap();
-            final BatchThread elementThread = element.getHandler().getBatchThread();
+        Map<BatchThread, List<Entity>> threadCacheMap = new HashMap<>();
+        for (AcquirableEntity acquirableEntity : collection) {
+            final Entity entity = acquirableEntity.unwrap();
+            final BatchThread elementThread = acquirableEntity.getHandler().getBatchThread();
 
-            List<E> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
-            threadCacheList.add(value);
+            List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
+            threadCacheList.add(entity);
         }
 
         return threadCacheMap;
@@ -194,7 +193,7 @@ public final class Acquisition {
     }
 
     private static class ScheduledAcquisition {
-        private final List<Acquirable<Object>> acquirableElements = new ArrayList<>();
-        private final Map<Object, List<Consumer<Object>>> callbacks = new HashMap<>();
+        private final List<AcquirableEntity> acquirableEntityElements = new ArrayList<>();
+        private final Map<Object, List<Consumer<Entity>>> callbacks = new HashMap<>();
     }
 }

@@ -13,6 +13,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
+import net.minestom.server.entity.acquirable.AcquirableEntity;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
@@ -22,8 +23,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.lock.Acquirable;
-import net.minestom.server.lock.LockedElement;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -60,7 +59,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, LockedElement, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -125,7 +124,7 @@ public class Entity implements Viewable, Tickable, LockedElement, EventHandler, 
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    private final Acquirable<Entity> acquirable = new Acquirable<>(this);
+    private final AcquirableEntity acquirableEntity = new AcquirableEntity(this);
 
     /**
      * Lock used to support #switchEntityType
@@ -1567,9 +1566,8 @@ public class Entity implements Viewable, Tickable, LockedElement, EventHandler, 
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
-    @Override
-    public @NotNull <T> Acquirable<T> getAcquiredElement() {
-        return (Acquirable<T>) acquirable;
+    public @NotNull AcquirableEntity getAcquirable() {
+        return acquirableEntity;
     }
 
     public enum Pose {

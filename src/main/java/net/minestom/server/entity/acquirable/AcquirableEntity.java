@@ -1,4 +1,4 @@
-package net.minestom.server.lock;
+package net.minestom.server.entity.acquirable;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.thread.BatchThread;
@@ -15,10 +15,8 @@ import java.util.function.Consumer;
 /**
  * Represents an element which can be acquired.
  * Used for synchronization purpose.
- *
- * @param <T> the acquirable object type
  */
-public final class Acquirable<T> {
+public final class AcquirableEntity {
 
     public static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
 
@@ -46,11 +44,11 @@ public final class Acquirable<T> {
         CURRENT_ENTITIES.set(entities);
     }
 
-    private final T value;
+    private final Entity entity;
     private final Handler handler;
 
-    public Acquirable(@NotNull T value) {
-        this.value = value;
+    public AcquirableEntity(@NotNull Entity entity) {
+        this.entity = entity;
         this.handler = new Handler();
     }
 
@@ -60,7 +58,7 @@ public final class Acquirable<T> {
      *
      * @param consumer the acquisition consumer
      */
-    public void acquire(@NotNull Consumer<@NotNull T> consumer) {
+    public void acquire(@NotNull Consumer<@NotNull Entity> consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
@@ -74,7 +72,7 @@ public final class Acquirable<T> {
      * @return true if the acquisition happened without synchronization,
      * false otherwise
      */
-    public boolean tryAcquire(@NotNull Consumer<@NotNull T> consumer) {
+    public boolean tryAcquire(@NotNull Consumer<@NotNull Entity> consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         if (Objects.equals(currentThread, elementThread)) {
@@ -90,7 +88,7 @@ public final class Acquirable<T> {
      *
      * @return this element or null if unsafe
      */
-    public @Nullable T tryAcquire() {
+    public @Nullable Entity tryAcquire() {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         if (Objects.equals(currentThread, elementThread)) {
@@ -106,7 +104,7 @@ public final class Acquirable<T> {
      *
      * @param consumer the consumer of the acquired object
      */
-    public void scheduledAcquire(@NotNull Consumer<T> consumer) {
+    public void scheduledAcquire(@NotNull Consumer<Entity> consumer) {
         Acquisition.scheduledAcquireRequest(this, consumer);
     }
 
@@ -117,8 +115,8 @@ public final class Acquirable<T> {
      *
      * @return the unwraped value
      */
-    public @NotNull T unwrap() {
-        return value;
+    public @NotNull Entity unwrap() {
+        return entity;
     }
 
     /**

@@ -2,11 +2,11 @@ package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.acquirable.AcquirableEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.SharedInstance;
-import net.minestom.server.lock.Acquirable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -148,7 +148,7 @@ public abstract class ThreadProvider {
                 final var entities = entitiesList.stream()
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList());
-                Acquirable.refreshEntities(Collections.unmodifiableList(entities));
+                AcquirableEntity.refreshEntities(Collections.unmodifiableList(entities));
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
@@ -177,8 +177,8 @@ public abstract class ThreadProvider {
         // Clear removed entities
         {
             for (Entity entity : removedEntities) {
-                Acquirable<Entity> acquirable = entity.getAcquiredElement();
-                ChunkEntry chunkEntry = acquirable.getHandler().getChunkEntry();
+                AcquirableEntity acquirableEntity = entity.getAcquirable();
+                ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
                 // Remove from list
                 if (chunkEntry != null) {
                     chunkEntry.entities.remove(entity);
@@ -242,8 +242,8 @@ public abstract class ThreadProvider {
     private void refreshEntitiesThread(Instance instance, Chunk chunk) {
         var entities = instance.getChunkEntities(chunk);
         for (Entity entity : entities) {
-            Acquirable<Entity> acquirable = entity.getAcquiredElement();
-            ChunkEntry handlerChunkEntry = acquirable.getHandler().getChunkEntry();
+            AcquirableEntity acquirableEntity = entity.getAcquirable();
+            ChunkEntry handlerChunkEntry = acquirableEntity.getHandler().getChunkEntry();
             Chunk batchChunk = handlerChunkEntry != null ? handlerChunkEntry.getChunk() : null;
 
             Chunk entityChunk = entity.getChunk();
@@ -262,7 +262,7 @@ public abstract class ThreadProvider {
                     ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
                     if (chunkEntry != null) {
                         chunkEntry.entities.add(entity);
-                        acquirable.getHandler().refreshChunkEntry(chunkEntry);
+                        acquirableEntity.getHandler().refreshChunkEntry(chunkEntry);
                     }
                 }
             }
