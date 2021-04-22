@@ -182,6 +182,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
         this.username = username;
+        this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
@@ -1294,10 +1295,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (this.displayName != null) {
             return this.displayName;
         } else {
-            if (this.usernameComponent == null) {
-                this.usernameComponent = Component.text(this.username);
-            }
-
             return this.usernameComponent;
         }
     }
@@ -1319,7 +1316,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setUsernameField(@NotNull String username) {
         this.username = username;
-        this.usernameComponent = null;
+        this.usernameComponent = Component.text(username);
     }
 
     private void sendChangeGameStatePacket(@NotNull ChangeGameStatePacket.Reason reason, float value) {
