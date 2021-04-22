@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class Piston {
   public static final BlockState PISTON_11 = new BlockState(NamespaceID.from("minecraft:piston_11"), (short) 1359, Block.PISTON, "extended=false","facing=down");
 
   static {
-    Registries.registerBlockState(PISTON_0);
-    Registries.registerBlockState(PISTON_1);
-    Registries.registerBlockState(PISTON_2);
-    Registries.registerBlockState(PISTON_3);
-    Registries.registerBlockState(PISTON_4);
-    Registries.registerBlockState(PISTON_5);
-    Registries.registerBlockState(PISTON_6);
-    Registries.registerBlockState(PISTON_7);
-    Registries.registerBlockState(PISTON_8);
-    Registries.registerBlockState(PISTON_9);
-    Registries.registerBlockState(PISTON_10);
-    Registries.registerBlockState(PISTON_11);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_0);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_1);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_2);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_3);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_4);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_5);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_6);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_7);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_8);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_9);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_10);
+    Registry.BLOCK_STATE_REGISTRY.register(PISTON_11);
   }
 
   public static void initStates() {

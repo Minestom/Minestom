@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class CyanBed {
   public static final BlockState CYAN_BED_15 = new BlockState(NamespaceID.from("minecraft:cyan_bed_15"), (short) 1208, Block.CYAN_BED, "facing=east","occupied=false","part=foot");
 
   static {
-    Registries.registerBlockState(CYAN_BED_0);
-    Registries.registerBlockState(CYAN_BED_1);
-    Registries.registerBlockState(CYAN_BED_2);
-    Registries.registerBlockState(CYAN_BED_3);
-    Registries.registerBlockState(CYAN_BED_4);
-    Registries.registerBlockState(CYAN_BED_5);
-    Registries.registerBlockState(CYAN_BED_6);
-    Registries.registerBlockState(CYAN_BED_7);
-    Registries.registerBlockState(CYAN_BED_8);
-    Registries.registerBlockState(CYAN_BED_9);
-    Registries.registerBlockState(CYAN_BED_10);
-    Registries.registerBlockState(CYAN_BED_11);
-    Registries.registerBlockState(CYAN_BED_12);
-    Registries.registerBlockState(CYAN_BED_13);
-    Registries.registerBlockState(CYAN_BED_14);
-    Registries.registerBlockState(CYAN_BED_15);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_6);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_7);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_8);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_9);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_10);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_11);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_12);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_13);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_14);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_BED_15);
   }
 
   public static void initStates() {

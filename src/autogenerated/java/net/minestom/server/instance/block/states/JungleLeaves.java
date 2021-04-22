@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -43,20 +43,20 @@ public final class JungleLeaves {
   public static final BlockState JUNGLE_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:jungle_leaves_13"), (short) 200, Block.JUNGLE_LEAVES, "distance=7","persistent=false");
 
   static {
-    Registries.registerBlockState(JUNGLE_LEAVES_0);
-    Registries.registerBlockState(JUNGLE_LEAVES_1);
-    Registries.registerBlockState(JUNGLE_LEAVES_2);
-    Registries.registerBlockState(JUNGLE_LEAVES_3);
-    Registries.registerBlockState(JUNGLE_LEAVES_4);
-    Registries.registerBlockState(JUNGLE_LEAVES_5);
-    Registries.registerBlockState(JUNGLE_LEAVES_6);
-    Registries.registerBlockState(JUNGLE_LEAVES_7);
-    Registries.registerBlockState(JUNGLE_LEAVES_8);
-    Registries.registerBlockState(JUNGLE_LEAVES_9);
-    Registries.registerBlockState(JUNGLE_LEAVES_10);
-    Registries.registerBlockState(JUNGLE_LEAVES_11);
-    Registries.registerBlockState(JUNGLE_LEAVES_12);
-    Registries.registerBlockState(JUNGLE_LEAVES_13);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_0);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_1);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_2);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_3);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_4);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_5);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_6);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_7);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_8);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_9);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_10);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_11);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_12);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_LEAVES_13);
   }
 
   public static void initStates() {

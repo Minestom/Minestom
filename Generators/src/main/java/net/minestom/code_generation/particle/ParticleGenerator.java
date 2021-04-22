@@ -50,6 +50,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray particles;
         try {
@@ -99,10 +100,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         particleClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getParticleId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.PARTICLE_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -112,10 +110,17 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                         .returns(particleClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getParticle(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.PARTICLE_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        particleClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(particleClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.PARTICLE_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -135,7 +140,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), particleClassName))
-                        .addStatement("return $T.getParticles()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.PARTICLE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -159,7 +164,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerParticle($N)", ClassName.get("net.minestom.server.registry", "Registries"), particleName);
+            staticBlock.addStatement("$T.PARTICLE_REGISTRY.register($N)", registryClassName, particleName);
         }
 
         particleClass.addStaticBlock(staticBlock.build());

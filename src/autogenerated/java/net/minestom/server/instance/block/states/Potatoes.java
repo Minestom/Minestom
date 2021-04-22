@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class Potatoes {
   public static final BlockState POTATOES_7 = new BlockState(NamespaceID.from("minecraft:potatoes_7"), (short) 6349, Block.POTATOES, "age=7");
 
   static {
-    Registries.registerBlockState(POTATOES_0);
-    Registries.registerBlockState(POTATOES_1);
-    Registries.registerBlockState(POTATOES_2);
-    Registries.registerBlockState(POTATOES_3);
-    Registries.registerBlockState(POTATOES_4);
-    Registries.registerBlockState(POTATOES_5);
-    Registries.registerBlockState(POTATOES_6);
-    Registries.registerBlockState(POTATOES_7);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_0);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_1);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_2);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_3);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_4);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_5);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_6);
+    Registry.BLOCK_STATE_REGISTRY.register(POTATOES_7);
   }
 
   public static void initStates() {

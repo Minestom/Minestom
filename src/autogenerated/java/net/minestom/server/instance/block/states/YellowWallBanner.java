@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class YellowWallBanner {
   public static final BlockState YELLOW_WALL_BANNER_3 = new BlockState(NamespaceID.from("minecraft:yellow_wall_banner_3"), (short) 8176, Block.YELLOW_WALL_BANNER, "facing=east");
 
   static {
-    Registries.registerBlockState(YELLOW_WALL_BANNER_0);
-    Registries.registerBlockState(YELLOW_WALL_BANNER_1);
-    Registries.registerBlockState(YELLOW_WALL_BANNER_2);
-    Registries.registerBlockState(YELLOW_WALL_BANNER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(YELLOW_WALL_BANNER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(YELLOW_WALL_BANNER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(YELLOW_WALL_BANNER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(YELLOW_WALL_BANNER_3);
   }
 
   public static void initStates() {

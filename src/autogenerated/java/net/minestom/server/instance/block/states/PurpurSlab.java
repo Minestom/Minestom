@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -27,12 +27,12 @@ public final class PurpurSlab {
   public static final BlockState PURPUR_SLAB_5 = new BlockState(NamespaceID.from("minecraft:purpur_slab_5"), (short) 8417, Block.PURPUR_SLAB, "type=double","waterlogged=false");
 
   static {
-    Registries.registerBlockState(PURPUR_SLAB_0);
-    Registries.registerBlockState(PURPUR_SLAB_1);
-    Registries.registerBlockState(PURPUR_SLAB_2);
-    Registries.registerBlockState(PURPUR_SLAB_3);
-    Registries.registerBlockState(PURPUR_SLAB_4);
-    Registries.registerBlockState(PURPUR_SLAB_5);
+    Registry.BLOCK_STATE_REGISTRY.register(PURPUR_SLAB_0);
+    Registry.BLOCK_STATE_REGISTRY.register(PURPUR_SLAB_1);
+    Registry.BLOCK_STATE_REGISTRY.register(PURPUR_SLAB_2);
+    Registry.BLOCK_STATE_REGISTRY.register(PURPUR_SLAB_3);
+    Registry.BLOCK_STATE_REGISTRY.register(PURPUR_SLAB_4);
+    Registry.BLOCK_STATE_REGISTRY.register(PURPUR_SLAB_5);
   }
 
   public static void initStates() {

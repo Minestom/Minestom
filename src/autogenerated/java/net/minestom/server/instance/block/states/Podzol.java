@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class Podzol {
   public static final BlockState PODZOL_1 = new BlockState(NamespaceID.from("minecraft:podzol_1"), (short) 13, Block.PODZOL, "snowy=false");
 
   static {
-    Registries.registerBlockState(PODZOL_0);
-    Registries.registerBlockState(PODZOL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(PODZOL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(PODZOL_1);
   }
 
   public static void initStates() {

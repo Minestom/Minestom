@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class SoulLantern {
   public static final BlockState SOUL_LANTERN_3 = new BlockState(NamespaceID.from("minecraft:soul_lantern_3"), (short) 14897, Block.SOUL_LANTERN, "hanging=false","waterlogged=false");
 
   static {
-    Registries.registerBlockState(SOUL_LANTERN_0);
-    Registries.registerBlockState(SOUL_LANTERN_1);
-    Registries.registerBlockState(SOUL_LANTERN_2);
-    Registries.registerBlockState(SOUL_LANTERN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_LANTERN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_LANTERN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_LANTERN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_LANTERN_3);
   }
 
   public static void initStates() {

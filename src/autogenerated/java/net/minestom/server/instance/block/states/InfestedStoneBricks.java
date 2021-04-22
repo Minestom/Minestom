@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class InfestedStoneBricks {
   public static final BlockState INFESTED_STONE_BRICKS_0 = new BlockState(NamespaceID.from("minecraft:infested_stone_bricks_0"), (short) 4501, Block.INFESTED_STONE_BRICKS);
 
   static {
-    Registries.registerBlockState(INFESTED_STONE_BRICKS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(INFESTED_STONE_BRICKS_0);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class BirchWallSign {
   public static final BlockState BIRCH_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:birch_wall_sign_7"), (short) 3758, Block.BIRCH_WALL_SIGN, "facing=east","waterlogged=false");
 
   static {
-    Registries.registerBlockState(BIRCH_WALL_SIGN_0);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_1);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_2);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_3);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_4);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_5);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_6);
-    Registries.registerBlockState(BIRCH_WALL_SIGN_7);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_4);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_5);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_6);
+    Registry.BLOCK_STATE_REGISTRY.register(BIRCH_WALL_SIGN_7);
   }
 
   public static void initStates() {

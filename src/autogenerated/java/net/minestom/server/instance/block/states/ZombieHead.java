@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class ZombieHead {
   public static final BlockState ZOMBIE_HEAD_15 = new BlockState(NamespaceID.from("minecraft:zombie_head_15"), (short) 6549, Block.ZOMBIE_HEAD, "rotation=15");
 
   static {
-    Registries.registerBlockState(ZOMBIE_HEAD_0);
-    Registries.registerBlockState(ZOMBIE_HEAD_1);
-    Registries.registerBlockState(ZOMBIE_HEAD_2);
-    Registries.registerBlockState(ZOMBIE_HEAD_3);
-    Registries.registerBlockState(ZOMBIE_HEAD_4);
-    Registries.registerBlockState(ZOMBIE_HEAD_5);
-    Registries.registerBlockState(ZOMBIE_HEAD_6);
-    Registries.registerBlockState(ZOMBIE_HEAD_7);
-    Registries.registerBlockState(ZOMBIE_HEAD_8);
-    Registries.registerBlockState(ZOMBIE_HEAD_9);
-    Registries.registerBlockState(ZOMBIE_HEAD_10);
-    Registries.registerBlockState(ZOMBIE_HEAD_11);
-    Registries.registerBlockState(ZOMBIE_HEAD_12);
-    Registries.registerBlockState(ZOMBIE_HEAD_13);
-    Registries.registerBlockState(ZOMBIE_HEAD_14);
-    Registries.registerBlockState(ZOMBIE_HEAD_15);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_4);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_5);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_6);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_7);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_8);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_9);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_10);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_11);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_12);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_13);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_14);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_HEAD_15);
   }
 
   public static void initStates() {

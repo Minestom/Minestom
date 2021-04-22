@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class BrewingStand {
   public static final BlockState BREWING_STAND_7 = new BlockState(NamespaceID.from("minecraft:brewing_stand_7"), (short) 5144, Block.BREWING_STAND, "has_bottle_0=false","has_bottle_1=false","has_bottle_2=false");
 
   static {
-    Registries.registerBlockState(BREWING_STAND_0);
-    Registries.registerBlockState(BREWING_STAND_1);
-    Registries.registerBlockState(BREWING_STAND_2);
-    Registries.registerBlockState(BREWING_STAND_3);
-    Registries.registerBlockState(BREWING_STAND_4);
-    Registries.registerBlockState(BREWING_STAND_5);
-    Registries.registerBlockState(BREWING_STAND_6);
-    Registries.registerBlockState(BREWING_STAND_7);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_4);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_5);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_6);
+    Registry.BLOCK_STATE_REGISTRY.register(BREWING_STAND_7);
   }
 
   public static void initStates() {

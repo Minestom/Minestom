@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -25,11 +25,11 @@ public final class RespawnAnchor {
   public static final BlockState RESPAWN_ANCHOR_4 = new BlockState(NamespaceID.from("minecraft:respawn_anchor_4"), (short) 15841, Block.RESPAWN_ANCHOR, "charges=4");
 
   static {
-    Registries.registerBlockState(RESPAWN_ANCHOR_0);
-    Registries.registerBlockState(RESPAWN_ANCHOR_1);
-    Registries.registerBlockState(RESPAWN_ANCHOR_2);
-    Registries.registerBlockState(RESPAWN_ANCHOR_3);
-    Registries.registerBlockState(RESPAWN_ANCHOR_4);
+    Registry.BLOCK_STATE_REGISTRY.register(RESPAWN_ANCHOR_0);
+    Registry.BLOCK_STATE_REGISTRY.register(RESPAWN_ANCHOR_1);
+    Registry.BLOCK_STATE_REGISTRY.register(RESPAWN_ANCHOR_2);
+    Registry.BLOCK_STATE_REGISTRY.register(RESPAWN_ANCHOR_3);
+    Registry.BLOCK_STATE_REGISTRY.register(RESPAWN_ANCHOR_4);
   }
 
   public static void initStates() {

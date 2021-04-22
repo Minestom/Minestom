@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class DragonEgg {
   public static final BlockState DRAGON_EGG_0 = new BlockState(NamespaceID.from("minecraft:dragon_egg_0"), (short) 5159, Block.DRAGON_EGG);
 
   static {
-    Registries.registerBlockState(DRAGON_EGG_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DRAGON_EGG_0);
   }
 
   public static void initStates() {

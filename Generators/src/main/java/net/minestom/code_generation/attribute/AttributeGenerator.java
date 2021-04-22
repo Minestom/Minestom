@@ -50,6 +50,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray attributes;
         try {
@@ -139,7 +140,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), attributeClassName))
-                        .addStatement("return $T.getAttributes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.ATTRIBUTE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -239,7 +240,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
                 );
             }
             // Add to static init.
-            staticBlock.addStatement("$T.registerAttribute($N)", ClassName.get("net.minestom.server.registry", "Registries"), attributeName);
+            staticBlock.addStatement("$T.ATTRIBUTE_REGISTRY.register($N)", registryClassName, attributeName);
         }
         attributeClass.addStaticBlock(staticBlock.build());
 

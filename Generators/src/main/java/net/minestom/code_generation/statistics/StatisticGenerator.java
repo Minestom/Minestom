@@ -1,8 +1,20 @@
 package net.minestom.code_generation.statistics;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +62,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray statistics;
         try {
@@ -99,10 +112,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
         statisticClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getStatisticTypeId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.STATISTIC_TYPE_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -112,10 +122,17 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
                         .returns(statisticClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getStatisticType(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.STATISTIC_TYPE_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        statisticClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(statisticClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.STATISTIC_TYPE_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -135,7 +152,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), statisticClassName))
-                        .addStatement("return $T.getStatisticTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.STATISTIC_TYPE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -159,7 +176,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerStatisticType($N)", ClassName.get("net.minestom.server.registry", "Registries"), statisticName);
+            staticBlock.addStatement("$T.STATISTIC_TYPE_REGISTRY.register($N)", registryClassName, statisticName);
         }
 
         statisticClass.addStaticBlock(staticBlock.build());

@@ -6,7 +6,7 @@ import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public class TagEntry extends LootTable.Entry {
         Material[] asArrayOfItems = new Material[values.size()];
         int ptr = 0;
         for (NamespaceID id : values) {
-            asArrayOfItems[ptr++] = Registries.getMaterial(id);
+            asArrayOfItems[ptr++] = Registry.MATERIAL_REGISTRY.get(id);
         }
         if (expand) {
             Material selectedMaterial = asArrayOfItems[rng.nextInt(asArrayOfItems.length)];

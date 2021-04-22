@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class EnderChest {
   public static final BlockState ENDER_CHEST_7 = new BlockState(NamespaceID.from("minecraft:ender_chest_7"), (short) 5262, Block.ENDER_CHEST, "facing=east","waterlogged=false");
 
   static {
-    Registries.registerBlockState(ENDER_CHEST_0);
-    Registries.registerBlockState(ENDER_CHEST_1);
-    Registries.registerBlockState(ENDER_CHEST_2);
-    Registries.registerBlockState(ENDER_CHEST_3);
-    Registries.registerBlockState(ENDER_CHEST_4);
-    Registries.registerBlockState(ENDER_CHEST_5);
-    Registries.registerBlockState(ENDER_CHEST_6);
-    Registries.registerBlockState(ENDER_CHEST_7);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_4);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_5);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_6);
+    Registry.BLOCK_STATE_REGISTRY.register(ENDER_CHEST_7);
   }
 
   public static void initStates() {

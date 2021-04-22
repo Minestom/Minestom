@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -21,9 +21,9 @@ public final class Basalt {
   public static final BlockState BASALT_2 = new BlockState(NamespaceID.from("minecraft:basalt_2"), (short) 4004, Block.BASALT, "axis=z");
 
   static {
-    Registries.registerBlockState(BASALT_0);
-    Registries.registerBlockState(BASALT_1);
-    Registries.registerBlockState(BASALT_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BASALT_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BASALT_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BASALT_2);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -35,16 +35,16 @@ public final class Hopper {
   public static final BlockState HOPPER_9 = new BlockState(NamespaceID.from("minecraft:hopper_9"), (short) 6741, Block.HOPPER, "enabled=false","facing=east");
 
   static {
-    Registries.registerBlockState(HOPPER_0);
-    Registries.registerBlockState(HOPPER_1);
-    Registries.registerBlockState(HOPPER_2);
-    Registries.registerBlockState(HOPPER_3);
-    Registries.registerBlockState(HOPPER_4);
-    Registries.registerBlockState(HOPPER_5);
-    Registries.registerBlockState(HOPPER_6);
-    Registries.registerBlockState(HOPPER_7);
-    Registries.registerBlockState(HOPPER_8);
-    Registries.registerBlockState(HOPPER_9);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(HOPPER_9);
   }
 
   public static void initStates() {

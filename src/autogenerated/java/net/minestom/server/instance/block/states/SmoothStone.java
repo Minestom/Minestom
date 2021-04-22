@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class SmoothStone {
   public static final BlockState SMOOTH_STONE_0 = new BlockState(NamespaceID.from("minecraft:smooth_stone_0"), (short) 8418, Block.SMOOTH_STONE);
 
   static {
-    Registries.registerBlockState(SMOOTH_STONE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOOTH_STONE_0);
   }
 
   public static void initStates() {

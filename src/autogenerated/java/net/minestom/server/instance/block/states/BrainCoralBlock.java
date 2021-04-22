@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class BrainCoralBlock {
   public static final BlockState BRAIN_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:brain_coral_block_0"), (short) 9520, Block.BRAIN_CORAL_BLOCK);
 
   static {
-    Registries.registerBlockState(BRAIN_CORAL_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BRAIN_CORAL_BLOCK_0);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -21,9 +21,9 @@ public final class QuartzPillar {
   public static final BlockState QUARTZ_PILLAR_2 = new BlockState(NamespaceID.from("minecraft:quartz_pillar_2"), (short) 6746, Block.QUARTZ_PILLAR, "axis=z");
 
   static {
-    Registries.registerBlockState(QUARTZ_PILLAR_0);
-    Registries.registerBlockState(QUARTZ_PILLAR_1);
-    Registries.registerBlockState(QUARTZ_PILLAR_2);
+    Registry.BLOCK_STATE_REGISTRY.register(QUARTZ_PILLAR_0);
+    Registry.BLOCK_STATE_REGISTRY.register(QUARTZ_PILLAR_1);
+    Registry.BLOCK_STATE_REGISTRY.register(QUARTZ_PILLAR_2);
   }
 
   public static void initStates() {

@@ -52,6 +52,7 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName blockClassName = ClassName.get("net.minestom.server.instance.block", "Block");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray blockEntities;
         try {
@@ -145,7 +146,7 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), blockEntityClassName))
-                        .addStatement("return $T.getBlockEntities()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.BLOCK_ENTITY_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -169,24 +170,23 @@ public final class BlockEntityGenerator extends MinestomCodeGenerator {
                             blockEntity.get("id").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
-            ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             JsonArray blocks = blockEntity.get("blocks").getAsJsonArray();
             for (JsonElement b : blocks) {
                 JsonObject block = b.getAsJsonObject();
                 staticBlock.addStatement(
-                        "$N.addBlock($T.getBlock($S))",
+                        "$N.addBlock($T.BLOCK_REGISTRY.get($S))",
                         blockEntityName,
-                        ClassName.get("net.minestom.server.registry", "Registries"),
+                        registryClassName,
                         block.get("id").getAsString()
                 );
                 staticBlock3.addStatement(
-                        "BLOCKS.add($T.getBlock($S))",
-                        ClassName.get("net.minestom.server.registry", "Registries"),
+                        "BLOCKS.add($T.BLOCK_REGISTRY.get($S))",
+                        registryClassName,
                         block.get("id").getAsString()
                 );
             }
             // Add to static init.
-            staticBlock2.addStatement("$T.registerBlockEntity($N)", registryClassName, blockEntityName);
+            staticBlock2.addStatement("$T.BLOCK_ENTITY_REGISTRY.register($N)", registryClassName, blockEntityName);
         }
 
         blockEntityClass.addStaticBlock(staticBlock.build());

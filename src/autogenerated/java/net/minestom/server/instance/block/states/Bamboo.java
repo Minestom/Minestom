@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class Bamboo {
   public static final BlockState BAMBOO_11 = new BlockState(NamespaceID.from("minecraft:bamboo_11"), (short) 9667, Block.BAMBOO, "age=1","leaves=large","stage=1");
 
   static {
-    Registries.registerBlockState(BAMBOO_0);
-    Registries.registerBlockState(BAMBOO_1);
-    Registries.registerBlockState(BAMBOO_2);
-    Registries.registerBlockState(BAMBOO_3);
-    Registries.registerBlockState(BAMBOO_4);
-    Registries.registerBlockState(BAMBOO_5);
-    Registries.registerBlockState(BAMBOO_6);
-    Registries.registerBlockState(BAMBOO_7);
-    Registries.registerBlockState(BAMBOO_8);
-    Registries.registerBlockState(BAMBOO_9);
-    Registries.registerBlockState(BAMBOO_10);
-    Registries.registerBlockState(BAMBOO_11);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_4);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_5);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_6);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_7);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_8);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_9);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_10);
+    Registry.BLOCK_STATE_REGISTRY.register(BAMBOO_11);
   }
 
   public static void initStates() {

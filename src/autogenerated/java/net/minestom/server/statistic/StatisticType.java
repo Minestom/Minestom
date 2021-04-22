@@ -5,7 +5,7 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -163,80 +163,80 @@ public class StatisticType implements Keyed {
   public static final StatisticType INTERACT_WITH_SMITHING_TABLE = new StatisticType(NamespaceID.from("minecraft:interact_with_smithing_table"));
 
   static {
-    Registries.registerStatisticType(LEAVE_GAME);
-    Registries.registerStatisticType(PLAY_ONE_MINUTE);
-    Registries.registerStatisticType(TIME_SINCE_DEATH);
-    Registries.registerStatisticType(TIME_SINCE_REST);
-    Registries.registerStatisticType(CROUCH_TIME);
-    Registries.registerStatisticType(WALK_ONE_CM);
-    Registries.registerStatisticType(CROUCH_ONE_CM);
-    Registries.registerStatisticType(SPRINT_ONE_CM);
-    Registries.registerStatisticType(WALK_ON_WATER_ONE_CM);
-    Registries.registerStatisticType(FALL_ONE_CM);
-    Registries.registerStatisticType(CLIMB_ONE_CM);
-    Registries.registerStatisticType(FLY_ONE_CM);
-    Registries.registerStatisticType(WALK_UNDER_WATER_ONE_CM);
-    Registries.registerStatisticType(MINECART_ONE_CM);
-    Registries.registerStatisticType(BOAT_ONE_CM);
-    Registries.registerStatisticType(PIG_ONE_CM);
-    Registries.registerStatisticType(HORSE_ONE_CM);
-    Registries.registerStatisticType(AVIATE_ONE_CM);
-    Registries.registerStatisticType(SWIM_ONE_CM);
-    Registries.registerStatisticType(STRIDER_ONE_CM);
-    Registries.registerStatisticType(JUMP);
-    Registries.registerStatisticType(DROP);
-    Registries.registerStatisticType(DAMAGE_DEALT);
-    Registries.registerStatisticType(DAMAGE_DEALT_ABSORBED);
-    Registries.registerStatisticType(DAMAGE_DEALT_RESISTED);
-    Registries.registerStatisticType(DAMAGE_TAKEN);
-    Registries.registerStatisticType(DAMAGE_BLOCKED_BY_SHIELD);
-    Registries.registerStatisticType(DAMAGE_ABSORBED);
-    Registries.registerStatisticType(DAMAGE_RESISTED);
-    Registries.registerStatisticType(DEATHS);
-    Registries.registerStatisticType(MOB_KILLS);
-    Registries.registerStatisticType(ANIMALS_BRED);
-    Registries.registerStatisticType(PLAYER_KILLS);
-    Registries.registerStatisticType(FISH_CAUGHT);
-    Registries.registerStatisticType(TALKED_TO_VILLAGER);
-    Registries.registerStatisticType(TRADED_WITH_VILLAGER);
-    Registries.registerStatisticType(EAT_CAKE_SLICE);
-    Registries.registerStatisticType(FILL_CAULDRON);
-    Registries.registerStatisticType(USE_CAULDRON);
-    Registries.registerStatisticType(CLEAN_ARMOR);
-    Registries.registerStatisticType(CLEAN_BANNER);
-    Registries.registerStatisticType(CLEAN_SHULKER_BOX);
-    Registries.registerStatisticType(INTERACT_WITH_BREWINGSTAND);
-    Registries.registerStatisticType(INTERACT_WITH_BEACON);
-    Registries.registerStatisticType(INSPECT_DROPPER);
-    Registries.registerStatisticType(INSPECT_HOPPER);
-    Registries.registerStatisticType(INSPECT_DISPENSER);
-    Registries.registerStatisticType(PLAY_NOTEBLOCK);
-    Registries.registerStatisticType(TUNE_NOTEBLOCK);
-    Registries.registerStatisticType(POT_FLOWER);
-    Registries.registerStatisticType(TRIGGER_TRAPPED_CHEST);
-    Registries.registerStatisticType(OPEN_ENDERCHEST);
-    Registries.registerStatisticType(ENCHANT_ITEM);
-    Registries.registerStatisticType(PLAY_RECORD);
-    Registries.registerStatisticType(INTERACT_WITH_FURNACE);
-    Registries.registerStatisticType(INTERACT_WITH_CRAFTING_TABLE);
-    Registries.registerStatisticType(OPEN_CHEST);
-    Registries.registerStatisticType(SLEEP_IN_BED);
-    Registries.registerStatisticType(OPEN_SHULKER_BOX);
-    Registries.registerStatisticType(OPEN_BARREL);
-    Registries.registerStatisticType(INTERACT_WITH_BLAST_FURNACE);
-    Registries.registerStatisticType(INTERACT_WITH_SMOKER);
-    Registries.registerStatisticType(INTERACT_WITH_LECTERN);
-    Registries.registerStatisticType(INTERACT_WITH_CAMPFIRE);
-    Registries.registerStatisticType(INTERACT_WITH_CARTOGRAPHY_TABLE);
-    Registries.registerStatisticType(INTERACT_WITH_LOOM);
-    Registries.registerStatisticType(INTERACT_WITH_STONECUTTER);
-    Registries.registerStatisticType(BELL_RING);
-    Registries.registerStatisticType(RAID_TRIGGER);
-    Registries.registerStatisticType(RAID_WIN);
-    Registries.registerStatisticType(INTERACT_WITH_ANVIL);
-    Registries.registerStatisticType(INTERACT_WITH_GRINDSTONE);
-    Registries.registerStatisticType(TARGET_HIT);
-    Registries.registerStatisticType(INTERACT_WITH_SMITHING_TABLE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(LEAVE_GAME);
+    Registry.STATISTIC_TYPE_REGISTRY.register(PLAY_ONE_MINUTE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TIME_SINCE_DEATH);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TIME_SINCE_REST);
+    Registry.STATISTIC_TYPE_REGISTRY.register(CROUCH_TIME);
+    Registry.STATISTIC_TYPE_REGISTRY.register(WALK_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(CROUCH_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(SPRINT_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(WALK_ON_WATER_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(FALL_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(CLIMB_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(FLY_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(WALK_UNDER_WATER_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(MINECART_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(BOAT_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(PIG_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(HORSE_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(AVIATE_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(SWIM_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(STRIDER_ONE_CM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(JUMP);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DROP);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_DEALT);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_DEALT_ABSORBED);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_DEALT_RESISTED);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_TAKEN);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_BLOCKED_BY_SHIELD);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_ABSORBED);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DAMAGE_RESISTED);
+    Registry.STATISTIC_TYPE_REGISTRY.register(DEATHS);
+    Registry.STATISTIC_TYPE_REGISTRY.register(MOB_KILLS);
+    Registry.STATISTIC_TYPE_REGISTRY.register(ANIMALS_BRED);
+    Registry.STATISTIC_TYPE_REGISTRY.register(PLAYER_KILLS);
+    Registry.STATISTIC_TYPE_REGISTRY.register(FISH_CAUGHT);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TALKED_TO_VILLAGER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TRADED_WITH_VILLAGER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(EAT_CAKE_SLICE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(FILL_CAULDRON);
+    Registry.STATISTIC_TYPE_REGISTRY.register(USE_CAULDRON);
+    Registry.STATISTIC_TYPE_REGISTRY.register(CLEAN_ARMOR);
+    Registry.STATISTIC_TYPE_REGISTRY.register(CLEAN_BANNER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(CLEAN_SHULKER_BOX);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_BREWINGSTAND);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_BEACON);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INSPECT_DROPPER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INSPECT_HOPPER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INSPECT_DISPENSER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(PLAY_NOTEBLOCK);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TUNE_NOTEBLOCK);
+    Registry.STATISTIC_TYPE_REGISTRY.register(POT_FLOWER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TRIGGER_TRAPPED_CHEST);
+    Registry.STATISTIC_TYPE_REGISTRY.register(OPEN_ENDERCHEST);
+    Registry.STATISTIC_TYPE_REGISTRY.register(ENCHANT_ITEM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(PLAY_RECORD);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_FURNACE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_CRAFTING_TABLE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(OPEN_CHEST);
+    Registry.STATISTIC_TYPE_REGISTRY.register(SLEEP_IN_BED);
+    Registry.STATISTIC_TYPE_REGISTRY.register(OPEN_SHULKER_BOX);
+    Registry.STATISTIC_TYPE_REGISTRY.register(OPEN_BARREL);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_BLAST_FURNACE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_SMOKER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_LECTERN);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_CAMPFIRE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_CARTOGRAPHY_TABLE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_LOOM);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_STONECUTTER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(BELL_RING);
+    Registry.STATISTIC_TYPE_REGISTRY.register(RAID_TRIGGER);
+    Registry.STATISTIC_TYPE_REGISTRY.register(RAID_WIN);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_ANVIL);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_GRINDSTONE);
+    Registry.STATISTIC_TYPE_REGISTRY.register(TARGET_HIT);
+    Registry.STATISTIC_TYPE_REGISTRY.register(INTERACT_WITH_SMITHING_TABLE);
   }
 
   @NotNull
@@ -258,12 +258,17 @@ public class StatisticType implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getStatisticTypeId(this);
+    return Registry.STATISTIC_TYPE_REGISTRY.getId(this);
   }
 
   @Nullable
   public static StatisticType fromId(int id) {
-    return Registries.getStatisticType(id);
+    return Registry.STATISTIC_TYPE_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static StatisticType fromId(Key id) {
+    return Registry.STATISTIC_TYPE_REGISTRY.get(id);
   }
 
   @NotNull
@@ -274,6 +279,6 @@ public class StatisticType implements Keyed {
 
   @NotNull
   public static List<StatisticType> values() {
-    return Registries.getStatisticTypes();
+    return Registry.STATISTIC_TYPE_REGISTRY.values();
   }
 }

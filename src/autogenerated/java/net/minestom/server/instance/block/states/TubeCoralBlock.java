@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class TubeCoralBlock {
   public static final BlockState TUBE_CORAL_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:tube_coral_block_0"), (short) 9519, Block.TUBE_CORAL_BLOCK);
 
   static {
-    Registries.registerBlockState(TUBE_CORAL_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(TUBE_CORAL_BLOCK_0);
   }
 
   public static void initStates() {

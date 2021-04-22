@@ -6,7 +6,7 @@ import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.raw_data.RawVillagerProfessionData;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,21 +46,21 @@ public class VillagerProfession implements Keyed {
   public static final VillagerProfession WEAPONSMITH = new VillagerProfession(NamespaceID.from("minecraft:weaponsmith"));
 
   static {
-    Registries.registerVillagerProfession(NONE);
-    Registries.registerVillagerProfession(ARMORER);
-    Registries.registerVillagerProfession(BUTCHER);
-    Registries.registerVillagerProfession(CARTOGRAPHER);
-    Registries.registerVillagerProfession(CLERIC);
-    Registries.registerVillagerProfession(FARMER);
-    Registries.registerVillagerProfession(FISHERMAN);
-    Registries.registerVillagerProfession(FLETCHER);
-    Registries.registerVillagerProfession(LEATHERWORKER);
-    Registries.registerVillagerProfession(LIBRARIAN);
-    Registries.registerVillagerProfession(MASON);
-    Registries.registerVillagerProfession(NITWIT);
-    Registries.registerVillagerProfession(SHEPHERD);
-    Registries.registerVillagerProfession(TOOLSMITH);
-    Registries.registerVillagerProfession(WEAPONSMITH);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(NONE);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(ARMORER);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(BUTCHER);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(CARTOGRAPHER);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(CLERIC);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(FARMER);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(FISHERMAN);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(FLETCHER);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(LEATHERWORKER);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(LIBRARIAN);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(MASON);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(NITWIT);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(SHEPHERD);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(TOOLSMITH);
+    Registry.VILLAGER_PROFESSION_REGISTRY.register(WEAPONSMITH);
   }
 
   @NotNull
@@ -90,12 +90,17 @@ public class VillagerProfession implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getVillagerProfessionId(this);
+    return Registry.VILLAGER_PROFESSION_REGISTRY.getId(this);
   }
 
   @Nullable
   public static VillagerProfession fromId(int id) {
-    return Registries.getVillagerProfession(id);
+    return Registry.VILLAGER_PROFESSION_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static VillagerProfession fromId(Key id) {
+    return Registry.VILLAGER_PROFESSION_REGISTRY.get(id);
   }
 
   @NotNull
@@ -106,6 +111,6 @@ public class VillagerProfession implements Keyed {
 
   @NotNull
   public static List<VillagerProfession> values() {
-    return Registries.getVillagerProfessions();
+    return Registry.VILLAGER_PROFESSION_REGISTRY.values();
   }
 }

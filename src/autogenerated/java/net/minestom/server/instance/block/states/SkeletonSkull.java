@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class SkeletonSkull {
   public static final BlockState SKELETON_SKULL_15 = new BlockState(NamespaceID.from("minecraft:skeleton_skull_15"), (short) 6509, Block.SKELETON_SKULL, "rotation=15");
 
   static {
-    Registries.registerBlockState(SKELETON_SKULL_0);
-    Registries.registerBlockState(SKELETON_SKULL_1);
-    Registries.registerBlockState(SKELETON_SKULL_2);
-    Registries.registerBlockState(SKELETON_SKULL_3);
-    Registries.registerBlockState(SKELETON_SKULL_4);
-    Registries.registerBlockState(SKELETON_SKULL_5);
-    Registries.registerBlockState(SKELETON_SKULL_6);
-    Registries.registerBlockState(SKELETON_SKULL_7);
-    Registries.registerBlockState(SKELETON_SKULL_8);
-    Registries.registerBlockState(SKELETON_SKULL_9);
-    Registries.registerBlockState(SKELETON_SKULL_10);
-    Registries.registerBlockState(SKELETON_SKULL_11);
-    Registries.registerBlockState(SKELETON_SKULL_12);
-    Registries.registerBlockState(SKELETON_SKULL_13);
-    Registries.registerBlockState(SKELETON_SKULL_14);
-    Registries.registerBlockState(SKELETON_SKULL_15);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_4);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_5);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_6);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_7);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_8);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_9);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_10);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_11);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_12);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_13);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_14);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_SKULL_15);
   }
 
   public static void initStates() {

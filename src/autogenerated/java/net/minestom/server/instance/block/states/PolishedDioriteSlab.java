@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -27,12 +27,12 @@ public final class PolishedDioriteSlab {
   public static final BlockState POLISHED_DIORITE_SLAB_5 = new BlockState(NamespaceID.from("minecraft:polished_diorite_slab_5"), (short) 10816, Block.POLISHED_DIORITE_SLAB, "type=double","waterlogged=false");
 
   static {
-    Registries.registerBlockState(POLISHED_DIORITE_SLAB_0);
-    Registries.registerBlockState(POLISHED_DIORITE_SLAB_1);
-    Registries.registerBlockState(POLISHED_DIORITE_SLAB_2);
-    Registries.registerBlockState(POLISHED_DIORITE_SLAB_3);
-    Registries.registerBlockState(POLISHED_DIORITE_SLAB_4);
-    Registries.registerBlockState(POLISHED_DIORITE_SLAB_5);
+    Registry.BLOCK_STATE_REGISTRY.register(POLISHED_DIORITE_SLAB_0);
+    Registry.BLOCK_STATE_REGISTRY.register(POLISHED_DIORITE_SLAB_1);
+    Registry.BLOCK_STATE_REGISTRY.register(POLISHED_DIORITE_SLAB_2);
+    Registry.BLOCK_STATE_REGISTRY.register(POLISHED_DIORITE_SLAB_3);
+    Registry.BLOCK_STATE_REGISTRY.register(POLISHED_DIORITE_SLAB_4);
+    Registry.BLOCK_STATE_REGISTRY.register(POLISHED_DIORITE_SLAB_5);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class Bell {
   public static final BlockState BELL_31 = new BlockState(NamespaceID.from("minecraft:bell_31"), (short) 14889, Block.BELL, "attachment=DOUBLE_WALL","facing=east","powered=false");
 
   static {
-    Registries.registerBlockState(BELL_0);
-    Registries.registerBlockState(BELL_1);
-    Registries.registerBlockState(BELL_2);
-    Registries.registerBlockState(BELL_3);
-    Registries.registerBlockState(BELL_4);
-    Registries.registerBlockState(BELL_5);
-    Registries.registerBlockState(BELL_6);
-    Registries.registerBlockState(BELL_7);
-    Registries.registerBlockState(BELL_8);
-    Registries.registerBlockState(BELL_9);
-    Registries.registerBlockState(BELL_10);
-    Registries.registerBlockState(BELL_11);
-    Registries.registerBlockState(BELL_12);
-    Registries.registerBlockState(BELL_13);
-    Registries.registerBlockState(BELL_14);
-    Registries.registerBlockState(BELL_15);
-    Registries.registerBlockState(BELL_16);
-    Registries.registerBlockState(BELL_17);
-    Registries.registerBlockState(BELL_18);
-    Registries.registerBlockState(BELL_19);
-    Registries.registerBlockState(BELL_20);
-    Registries.registerBlockState(BELL_21);
-    Registries.registerBlockState(BELL_22);
-    Registries.registerBlockState(BELL_23);
-    Registries.registerBlockState(BELL_24);
-    Registries.registerBlockState(BELL_25);
-    Registries.registerBlockState(BELL_26);
-    Registries.registerBlockState(BELL_27);
-    Registries.registerBlockState(BELL_28);
-    Registries.registerBlockState(BELL_29);
-    Registries.registerBlockState(BELL_30);
-    Registries.registerBlockState(BELL_31);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_4);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_5);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_6);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_7);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_8);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_9);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_10);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_11);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_12);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_13);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_14);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_15);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_16);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_17);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_18);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_19);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_20);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_21);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_22);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_23);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_24);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_25);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_26);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_27);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_28);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_29);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_30);
+    Registry.BLOCK_STATE_REGISTRY.register(BELL_31);
   }
 
   public static void initStates() {

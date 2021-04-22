@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class LilyPad {
   public static final BlockState LILY_PAD_0 = new BlockState(NamespaceID.from("minecraft:lily_pad_0"), (short) 5018, Block.LILY_PAD);
 
   static {
-    Registries.registerBlockState(LILY_PAD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(LILY_PAD_0);
   }
 
   public static void initStates() {

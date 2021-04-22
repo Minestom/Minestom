@@ -51,6 +51,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName rawMaterialDataClassName = ClassName.get("net.minestom.server.raw_data", "RawMaterialData");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray items;
         try {
@@ -122,10 +123,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getMaterialId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.MATERIAL_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -143,10 +141,17 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .returns(itemClassName)
                         .addAnnotation(NotNull.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getMaterial(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.MATERIAL_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(itemClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.MATERIAL_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -267,7 +272,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), itemClassName))
-                        .addStatement("return $T.getMaterials()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.MATERIAL_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -292,7 +297,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerMaterial($N)", ClassName.get("net.minestom.server.registry", "Registries"), itemName);
+            staticBlock.addStatement("$T.MATERIAL_REGISTRY.register($N)", registryClassName, itemName);
         }
 
         itemClass.addStaticBlock(staticBlock.build());

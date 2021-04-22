@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class SugarCane {
   public static final BlockState SUGAR_CANE_15 = new BlockState(NamespaceID.from("minecraft:sugar_cane_15"), (short) 3963, Block.SUGAR_CANE, "age=15");
 
   static {
-    Registries.registerBlockState(SUGAR_CANE_0);
-    Registries.registerBlockState(SUGAR_CANE_1);
-    Registries.registerBlockState(SUGAR_CANE_2);
-    Registries.registerBlockState(SUGAR_CANE_3);
-    Registries.registerBlockState(SUGAR_CANE_4);
-    Registries.registerBlockState(SUGAR_CANE_5);
-    Registries.registerBlockState(SUGAR_CANE_6);
-    Registries.registerBlockState(SUGAR_CANE_7);
-    Registries.registerBlockState(SUGAR_CANE_8);
-    Registries.registerBlockState(SUGAR_CANE_9);
-    Registries.registerBlockState(SUGAR_CANE_10);
-    Registries.registerBlockState(SUGAR_CANE_11);
-    Registries.registerBlockState(SUGAR_CANE_12);
-    Registries.registerBlockState(SUGAR_CANE_13);
-    Registries.registerBlockState(SUGAR_CANE_14);
-    Registries.registerBlockState(SUGAR_CANE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(SUGAR_CANE_15);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class Smoker {
   public static final BlockState SMOKER_7 = new BlockState(NamespaceID.from("minecraft:smoker_7"), (short) 14814, Block.SMOKER, "facing=east","lit=false");
 
   static {
-    Registries.registerBlockState(SMOKER_0);
-    Registries.registerBlockState(SMOKER_1);
-    Registries.registerBlockState(SMOKER_2);
-    Registries.registerBlockState(SMOKER_3);
-    Registries.registerBlockState(SMOKER_4);
-    Registries.registerBlockState(SMOKER_5);
-    Registries.registerBlockState(SMOKER_6);
-    Registries.registerBlockState(SMOKER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOKER_7);
   }
 
   public static void initStates() {

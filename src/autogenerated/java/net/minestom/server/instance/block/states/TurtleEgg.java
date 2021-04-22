@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class TurtleEgg {
   public static final BlockState TURTLE_EGG_11 = new BlockState(NamespaceID.from("minecraft:turtle_egg_11"), (short) 9513, Block.TURTLE_EGG, "eggs=4","hatch=2");
 
   static {
-    Registries.registerBlockState(TURTLE_EGG_0);
-    Registries.registerBlockState(TURTLE_EGG_1);
-    Registries.registerBlockState(TURTLE_EGG_2);
-    Registries.registerBlockState(TURTLE_EGG_3);
-    Registries.registerBlockState(TURTLE_EGG_4);
-    Registries.registerBlockState(TURTLE_EGG_5);
-    Registries.registerBlockState(TURTLE_EGG_6);
-    Registries.registerBlockState(TURTLE_EGG_7);
-    Registries.registerBlockState(TURTLE_EGG_8);
-    Registries.registerBlockState(TURTLE_EGG_9);
-    Registries.registerBlockState(TURTLE_EGG_10);
-    Registries.registerBlockState(TURTLE_EGG_11);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_0);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_1);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_2);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_3);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_4);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_5);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_6);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_7);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_8);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_9);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_10);
+    Registry.BLOCK_STATE_REGISTRY.register(TURTLE_EGG_11);
   }
 
   public static void initStates() {

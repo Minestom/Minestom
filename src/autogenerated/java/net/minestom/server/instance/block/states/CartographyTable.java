@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class CartographyTable {
   public static final BlockState CARTOGRAPHY_TABLE_0 = new BlockState(NamespaceID.from("minecraft:cartography_table_0"), (short) 14823, Block.CARTOGRAPHY_TABLE);
 
   static {
-    Registries.registerBlockState(CARTOGRAPHY_TABLE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CARTOGRAPHY_TABLE_0);
   }
 
   public static void initStates() {

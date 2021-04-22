@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class MelonStem {
   public static final BlockState MELON_STEM_7 = new BlockState(NamespaceID.from("minecraft:melon_stem_7"), (short) 4791, Block.MELON_STEM, "age=7");
 
   static {
-    Registries.registerBlockState(MELON_STEM_0);
-    Registries.registerBlockState(MELON_STEM_1);
-    Registries.registerBlockState(MELON_STEM_2);
-    Registries.registerBlockState(MELON_STEM_3);
-    Registries.registerBlockState(MELON_STEM_4);
-    Registries.registerBlockState(MELON_STEM_5);
-    Registries.registerBlockState(MELON_STEM_6);
-    Registries.registerBlockState(MELON_STEM_7);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_0);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_1);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_2);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_3);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_4);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_5);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_6);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_STEM_7);
   }
 
   public static void initStates() {

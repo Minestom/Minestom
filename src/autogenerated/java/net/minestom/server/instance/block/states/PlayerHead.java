@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class PlayerHead {
   public static final BlockState PLAYER_HEAD_15 = new BlockState(NamespaceID.from("minecraft:player_head_15"), (short) 6569, Block.PLAYER_HEAD, "rotation=15");
 
   static {
-    Registries.registerBlockState(PLAYER_HEAD_0);
-    Registries.registerBlockState(PLAYER_HEAD_1);
-    Registries.registerBlockState(PLAYER_HEAD_2);
-    Registries.registerBlockState(PLAYER_HEAD_3);
-    Registries.registerBlockState(PLAYER_HEAD_4);
-    Registries.registerBlockState(PLAYER_HEAD_5);
-    Registries.registerBlockState(PLAYER_HEAD_6);
-    Registries.registerBlockState(PLAYER_HEAD_7);
-    Registries.registerBlockState(PLAYER_HEAD_8);
-    Registries.registerBlockState(PLAYER_HEAD_9);
-    Registries.registerBlockState(PLAYER_HEAD_10);
-    Registries.registerBlockState(PLAYER_HEAD_11);
-    Registries.registerBlockState(PLAYER_HEAD_12);
-    Registries.registerBlockState(PLAYER_HEAD_13);
-    Registries.registerBlockState(PLAYER_HEAD_14);
-    Registries.registerBlockState(PLAYER_HEAD_15);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_1);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_2);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_3);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_4);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_5);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_6);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_7);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_8);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_9);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_10);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_11);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_12);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_13);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_14);
+    Registry.BLOCK_STATE_REGISTRY.register(PLAYER_HEAD_15);
   }
 
   public static void initStates() {

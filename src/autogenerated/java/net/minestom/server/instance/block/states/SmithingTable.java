@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class SmithingTable {
   public static final BlockState SMITHING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:smithing_table_0"), (short) 14853, Block.SMITHING_TABLE);
 
   static {
-    Registries.registerBlockState(SMITHING_TABLE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SMITHING_TABLE_0);
   }
 
   public static void initStates() {

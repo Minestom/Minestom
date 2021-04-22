@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class CreeperWallHead {
   public static final BlockState CREEPER_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:creeper_wall_head_3"), (short) 6593, Block.CREEPER_WALL_HEAD, "facing=east");
 
   static {
-    Registries.registerBlockState(CREEPER_WALL_HEAD_0);
-    Registries.registerBlockState(CREEPER_WALL_HEAD_1);
-    Registries.registerBlockState(CREEPER_WALL_HEAD_2);
-    Registries.registerBlockState(CREEPER_WALL_HEAD_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_WALL_HEAD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_WALL_HEAD_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_WALL_HEAD_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_WALL_HEAD_3);
   }
 
   public static void initStates() {

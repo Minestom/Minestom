@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class Lava {
   public static final BlockState LAVA_15 = new BlockState(NamespaceID.from("minecraft:lava_15"), (short) 65, Block.LAVA, "level=15");
 
   static {
-    Registries.registerBlockState(LAVA_0);
-    Registries.registerBlockState(LAVA_1);
-    Registries.registerBlockState(LAVA_2);
-    Registries.registerBlockState(LAVA_3);
-    Registries.registerBlockState(LAVA_4);
-    Registries.registerBlockState(LAVA_5);
-    Registries.registerBlockState(LAVA_6);
-    Registries.registerBlockState(LAVA_7);
-    Registries.registerBlockState(LAVA_8);
-    Registries.registerBlockState(LAVA_9);
-    Registries.registerBlockState(LAVA_10);
-    Registries.registerBlockState(LAVA_11);
-    Registries.registerBlockState(LAVA_12);
-    Registries.registerBlockState(LAVA_13);
-    Registries.registerBlockState(LAVA_14);
-    Registries.registerBlockState(LAVA_15);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_0);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_1);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_2);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_3);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_4);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_5);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_6);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_7);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_8);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_9);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_10);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_11);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_12);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_13);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_14);
+    Registry.BLOCK_STATE_REGISTRY.register(LAVA_15);
   }
 
   public static void initStates() {

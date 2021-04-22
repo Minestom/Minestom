@@ -5,7 +5,7 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -159,78 +159,78 @@ public class Particle implements Keyed {
   public static final Particle WHITE_ASH = new Particle(NamespaceID.from("minecraft:white_ash"));
 
   static {
-    Registries.registerParticle(AMBIENT_ENTITY_EFFECT);
-    Registries.registerParticle(ANGRY_VILLAGER);
-    Registries.registerParticle(BARRIER);
-    Registries.registerParticle(BLOCK);
-    Registries.registerParticle(BUBBLE);
-    Registries.registerParticle(CLOUD);
-    Registries.registerParticle(CRIT);
-    Registries.registerParticle(DAMAGE_INDICATOR);
-    Registries.registerParticle(DRAGON_BREATH);
-    Registries.registerParticle(DRIPPING_LAVA);
-    Registries.registerParticle(FALLING_LAVA);
-    Registries.registerParticle(LANDING_LAVA);
-    Registries.registerParticle(DRIPPING_WATER);
-    Registries.registerParticle(FALLING_WATER);
-    Registries.registerParticle(DUST);
-    Registries.registerParticle(EFFECT);
-    Registries.registerParticle(ELDER_GUARDIAN);
-    Registries.registerParticle(ENCHANTED_HIT);
-    Registries.registerParticle(ENCHANT);
-    Registries.registerParticle(END_ROD);
-    Registries.registerParticle(ENTITY_EFFECT);
-    Registries.registerParticle(EXPLOSION_EMITTER);
-    Registries.registerParticle(EXPLOSION);
-    Registries.registerParticle(FALLING_DUST);
-    Registries.registerParticle(FIREWORK);
-    Registries.registerParticle(FISHING);
-    Registries.registerParticle(FLAME);
-    Registries.registerParticle(SOUL_FIRE_FLAME);
-    Registries.registerParticle(SOUL);
-    Registries.registerParticle(FLASH);
-    Registries.registerParticle(HAPPY_VILLAGER);
-    Registries.registerParticle(COMPOSTER);
-    Registries.registerParticle(HEART);
-    Registries.registerParticle(INSTANT_EFFECT);
-    Registries.registerParticle(ITEM);
-    Registries.registerParticle(ITEM_SLIME);
-    Registries.registerParticle(ITEM_SNOWBALL);
-    Registries.registerParticle(LARGE_SMOKE);
-    Registries.registerParticle(LAVA);
-    Registries.registerParticle(MYCELIUM);
-    Registries.registerParticle(NOTE);
-    Registries.registerParticle(POOF);
-    Registries.registerParticle(PORTAL);
-    Registries.registerParticle(RAIN);
-    Registries.registerParticle(SMOKE);
-    Registries.registerParticle(SNEEZE);
-    Registries.registerParticle(SPIT);
-    Registries.registerParticle(SQUID_INK);
-    Registries.registerParticle(SWEEP_ATTACK);
-    Registries.registerParticle(TOTEM_OF_UNDYING);
-    Registries.registerParticle(UNDERWATER);
-    Registries.registerParticle(SPLASH);
-    Registries.registerParticle(WITCH);
-    Registries.registerParticle(BUBBLE_POP);
-    Registries.registerParticle(CURRENT_DOWN);
-    Registries.registerParticle(BUBBLE_COLUMN_UP);
-    Registries.registerParticle(NAUTILUS);
-    Registries.registerParticle(DOLPHIN);
-    Registries.registerParticle(CAMPFIRE_COSY_SMOKE);
-    Registries.registerParticle(CAMPFIRE_SIGNAL_SMOKE);
-    Registries.registerParticle(DRIPPING_HONEY);
-    Registries.registerParticle(FALLING_HONEY);
-    Registries.registerParticle(LANDING_HONEY);
-    Registries.registerParticle(FALLING_NECTAR);
-    Registries.registerParticle(ASH);
-    Registries.registerParticle(CRIMSON_SPORE);
-    Registries.registerParticle(WARPED_SPORE);
-    Registries.registerParticle(DRIPPING_OBSIDIAN_TEAR);
-    Registries.registerParticle(FALLING_OBSIDIAN_TEAR);
-    Registries.registerParticle(LANDING_OBSIDIAN_TEAR);
-    Registries.registerParticle(REVERSE_PORTAL);
-    Registries.registerParticle(WHITE_ASH);
+    Registry.PARTICLE_REGISTRY.register(AMBIENT_ENTITY_EFFECT);
+    Registry.PARTICLE_REGISTRY.register(ANGRY_VILLAGER);
+    Registry.PARTICLE_REGISTRY.register(BARRIER);
+    Registry.PARTICLE_REGISTRY.register(BLOCK);
+    Registry.PARTICLE_REGISTRY.register(BUBBLE);
+    Registry.PARTICLE_REGISTRY.register(CLOUD);
+    Registry.PARTICLE_REGISTRY.register(CRIT);
+    Registry.PARTICLE_REGISTRY.register(DAMAGE_INDICATOR);
+    Registry.PARTICLE_REGISTRY.register(DRAGON_BREATH);
+    Registry.PARTICLE_REGISTRY.register(DRIPPING_LAVA);
+    Registry.PARTICLE_REGISTRY.register(FALLING_LAVA);
+    Registry.PARTICLE_REGISTRY.register(LANDING_LAVA);
+    Registry.PARTICLE_REGISTRY.register(DRIPPING_WATER);
+    Registry.PARTICLE_REGISTRY.register(FALLING_WATER);
+    Registry.PARTICLE_REGISTRY.register(DUST);
+    Registry.PARTICLE_REGISTRY.register(EFFECT);
+    Registry.PARTICLE_REGISTRY.register(ELDER_GUARDIAN);
+    Registry.PARTICLE_REGISTRY.register(ENCHANTED_HIT);
+    Registry.PARTICLE_REGISTRY.register(ENCHANT);
+    Registry.PARTICLE_REGISTRY.register(END_ROD);
+    Registry.PARTICLE_REGISTRY.register(ENTITY_EFFECT);
+    Registry.PARTICLE_REGISTRY.register(EXPLOSION_EMITTER);
+    Registry.PARTICLE_REGISTRY.register(EXPLOSION);
+    Registry.PARTICLE_REGISTRY.register(FALLING_DUST);
+    Registry.PARTICLE_REGISTRY.register(FIREWORK);
+    Registry.PARTICLE_REGISTRY.register(FISHING);
+    Registry.PARTICLE_REGISTRY.register(FLAME);
+    Registry.PARTICLE_REGISTRY.register(SOUL_FIRE_FLAME);
+    Registry.PARTICLE_REGISTRY.register(SOUL);
+    Registry.PARTICLE_REGISTRY.register(FLASH);
+    Registry.PARTICLE_REGISTRY.register(HAPPY_VILLAGER);
+    Registry.PARTICLE_REGISTRY.register(COMPOSTER);
+    Registry.PARTICLE_REGISTRY.register(HEART);
+    Registry.PARTICLE_REGISTRY.register(INSTANT_EFFECT);
+    Registry.PARTICLE_REGISTRY.register(ITEM);
+    Registry.PARTICLE_REGISTRY.register(ITEM_SLIME);
+    Registry.PARTICLE_REGISTRY.register(ITEM_SNOWBALL);
+    Registry.PARTICLE_REGISTRY.register(LARGE_SMOKE);
+    Registry.PARTICLE_REGISTRY.register(LAVA);
+    Registry.PARTICLE_REGISTRY.register(MYCELIUM);
+    Registry.PARTICLE_REGISTRY.register(NOTE);
+    Registry.PARTICLE_REGISTRY.register(POOF);
+    Registry.PARTICLE_REGISTRY.register(PORTAL);
+    Registry.PARTICLE_REGISTRY.register(RAIN);
+    Registry.PARTICLE_REGISTRY.register(SMOKE);
+    Registry.PARTICLE_REGISTRY.register(SNEEZE);
+    Registry.PARTICLE_REGISTRY.register(SPIT);
+    Registry.PARTICLE_REGISTRY.register(SQUID_INK);
+    Registry.PARTICLE_REGISTRY.register(SWEEP_ATTACK);
+    Registry.PARTICLE_REGISTRY.register(TOTEM_OF_UNDYING);
+    Registry.PARTICLE_REGISTRY.register(UNDERWATER);
+    Registry.PARTICLE_REGISTRY.register(SPLASH);
+    Registry.PARTICLE_REGISTRY.register(WITCH);
+    Registry.PARTICLE_REGISTRY.register(BUBBLE_POP);
+    Registry.PARTICLE_REGISTRY.register(CURRENT_DOWN);
+    Registry.PARTICLE_REGISTRY.register(BUBBLE_COLUMN_UP);
+    Registry.PARTICLE_REGISTRY.register(NAUTILUS);
+    Registry.PARTICLE_REGISTRY.register(DOLPHIN);
+    Registry.PARTICLE_REGISTRY.register(CAMPFIRE_COSY_SMOKE);
+    Registry.PARTICLE_REGISTRY.register(CAMPFIRE_SIGNAL_SMOKE);
+    Registry.PARTICLE_REGISTRY.register(DRIPPING_HONEY);
+    Registry.PARTICLE_REGISTRY.register(FALLING_HONEY);
+    Registry.PARTICLE_REGISTRY.register(LANDING_HONEY);
+    Registry.PARTICLE_REGISTRY.register(FALLING_NECTAR);
+    Registry.PARTICLE_REGISTRY.register(ASH);
+    Registry.PARTICLE_REGISTRY.register(CRIMSON_SPORE);
+    Registry.PARTICLE_REGISTRY.register(WARPED_SPORE);
+    Registry.PARTICLE_REGISTRY.register(DRIPPING_OBSIDIAN_TEAR);
+    Registry.PARTICLE_REGISTRY.register(FALLING_OBSIDIAN_TEAR);
+    Registry.PARTICLE_REGISTRY.register(LANDING_OBSIDIAN_TEAR);
+    Registry.PARTICLE_REGISTRY.register(REVERSE_PORTAL);
+    Registry.PARTICLE_REGISTRY.register(WHITE_ASH);
   }
 
   @NotNull
@@ -252,12 +252,17 @@ public class Particle implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getParticleId(this);
+    return Registry.PARTICLE_REGISTRY.getId(this);
   }
 
   @Nullable
   public static Particle fromId(int id) {
-    return Registries.getParticle(id);
+    return Registry.PARTICLE_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static Particle fromId(Key id) {
+    return Registry.PARTICLE_REGISTRY.get(id);
   }
 
   @NotNull
@@ -268,6 +273,6 @@ public class Particle implements Keyed {
 
   @NotNull
   public static List<Particle> values() {
-    return Registries.getParticles();
+    return Registry.PARTICLE_REGISTRY.values();
   }
 }

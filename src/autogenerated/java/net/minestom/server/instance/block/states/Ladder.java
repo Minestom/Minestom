@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class Ladder {
   public static final BlockState LADDER_7 = new BlockState(NamespaceID.from("minecraft:ladder_7"), (short) 3644, Block.LADDER, "facing=east","waterlogged=false");
 
   static {
-    Registries.registerBlockState(LADDER_0);
-    Registries.registerBlockState(LADDER_1);
-    Registries.registerBlockState(LADDER_2);
-    Registries.registerBlockState(LADDER_3);
-    Registries.registerBlockState(LADDER_4);
-    Registries.registerBlockState(LADDER_5);
-    Registries.registerBlockState(LADDER_6);
-    Registries.registerBlockState(LADDER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(LADDER_7);
   }
 
   public static void initStates() {

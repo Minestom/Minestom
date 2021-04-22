@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -63,30 +63,30 @@ public final class Lever {
   public static final BlockState LEVER_23 = new BlockState(NamespaceID.from("minecraft:lever_23"), (short) 3806, Block.LEVER, "face=CEILING","facing=east","powered=false");
 
   static {
-    Registries.registerBlockState(LEVER_0);
-    Registries.registerBlockState(LEVER_1);
-    Registries.registerBlockState(LEVER_2);
-    Registries.registerBlockState(LEVER_3);
-    Registries.registerBlockState(LEVER_4);
-    Registries.registerBlockState(LEVER_5);
-    Registries.registerBlockState(LEVER_6);
-    Registries.registerBlockState(LEVER_7);
-    Registries.registerBlockState(LEVER_8);
-    Registries.registerBlockState(LEVER_9);
-    Registries.registerBlockState(LEVER_10);
-    Registries.registerBlockState(LEVER_11);
-    Registries.registerBlockState(LEVER_12);
-    Registries.registerBlockState(LEVER_13);
-    Registries.registerBlockState(LEVER_14);
-    Registries.registerBlockState(LEVER_15);
-    Registries.registerBlockState(LEVER_16);
-    Registries.registerBlockState(LEVER_17);
-    Registries.registerBlockState(LEVER_18);
-    Registries.registerBlockState(LEVER_19);
-    Registries.registerBlockState(LEVER_20);
-    Registries.registerBlockState(LEVER_21);
-    Registries.registerBlockState(LEVER_22);
-    Registries.registerBlockState(LEVER_23);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_9);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_10);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_11);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_12);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_13);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_14);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_15);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_16);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_17);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_18);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_19);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_20);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_21);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_22);
+    Registry.BLOCK_STATE_REGISTRY.register(LEVER_23);
   }
 
   public static void initStates() {

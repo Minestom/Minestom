@@ -1,8 +1,20 @@
 package net.minestom.code_generation.fluid;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,6 +63,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName rawFluidDataClassName = ClassName.get("net.minestom.server.raw_data", "RawFluidData");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray fluids;
         try {
@@ -107,10 +120,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         fluidClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getFluidId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.FLUID_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -120,10 +130,17 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                         .returns(fluidClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getFluid(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.FLUID_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        fluidClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(fluidClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.FLUID_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -152,7 +169,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), fluidClassName))
-                        .addStatement("return $T.getFluids()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.FLUID_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -176,7 +193,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerFluid($N)", ClassName.get("net.minestom.server.registry", "Registries"), fluidName);
+            staticBlock.addStatement("$T.FLUID_REGISTRY.register($N)", registryClassName, fluidName);
         }
 
         fluidClass.addStaticBlock(staticBlock.build());

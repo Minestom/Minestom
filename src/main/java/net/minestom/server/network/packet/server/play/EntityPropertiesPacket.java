@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.attribute.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
@@ -78,7 +78,7 @@ public class EntityPropertiesPacket implements ServerPacket {
         @Override
         public void read(@NotNull BinaryReader reader) {
             String key = reader.readSizedString(Integer.MAX_VALUE);
-            attribute = Registries.getAttribute(key); //TODO: Static
+            attribute = Registry.ATTRIBUTE_REGISTRY.get(key); //TODO: Static
 
             value = reader.readDouble();
 

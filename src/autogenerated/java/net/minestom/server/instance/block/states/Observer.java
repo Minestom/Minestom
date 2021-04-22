@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class Observer {
   public static final BlockState OBSERVER_11 = new BlockState(NamespaceID.from("minecraft:observer_11"), (short) 9275, Block.OBSERVER, "facing=down","powered=false");
 
   static {
-    Registries.registerBlockState(OBSERVER_0);
-    Registries.registerBlockState(OBSERVER_1);
-    Registries.registerBlockState(OBSERVER_2);
-    Registries.registerBlockState(OBSERVER_3);
-    Registries.registerBlockState(OBSERVER_4);
-    Registries.registerBlockState(OBSERVER_5);
-    Registries.registerBlockState(OBSERVER_6);
-    Registries.registerBlockState(OBSERVER_7);
-    Registries.registerBlockState(OBSERVER_8);
-    Registries.registerBlockState(OBSERVER_9);
-    Registries.registerBlockState(OBSERVER_10);
-    Registries.registerBlockState(OBSERVER_11);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_9);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_10);
+    Registry.BLOCK_STATE_REGISTRY.register(OBSERVER_11);
   }
 
   public static void initStates() {

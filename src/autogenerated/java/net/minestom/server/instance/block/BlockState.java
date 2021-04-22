@@ -9,7 +9,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.instance.block.states.Air;
 import net.minestom.server.raw_data.RawBlockStateData;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -89,13 +89,13 @@ public class BlockState implements Keyed {
   }
 
   @NotNull
-  public static BlockState fromId(short id) {
-    return Registries.getBlockState(id);
+  public static BlockState fromId(int id) {
+    return Registry.BLOCK_STATE_REGISTRY.get((short) id);
   }
 
   @NotNull
   public static BlockState fromId(Key id) {
-    return Registries.getBlockState(id);
+    return Registry.BLOCK_STATE_REGISTRY.get(id);
   }
 
   @NotNull
@@ -113,7 +113,7 @@ public class BlockState implements Keyed {
 
   @NotNull
   public static List<BlockState> values() {
-    return Registries.getBlockStates();
+    return Registry.BLOCK_STATE_REGISTRY.values();
   }
 
   @NotNull

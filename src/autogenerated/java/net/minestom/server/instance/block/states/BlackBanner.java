@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class BlackBanner {
   public static final BlockState BLACK_BANNER_15 = new BlockState(NamespaceID.from("minecraft:black_banner_15"), (short) 8156, Block.BLACK_BANNER, "rotation=15");
 
   static {
-    Registries.registerBlockState(BLACK_BANNER_0);
-    Registries.registerBlockState(BLACK_BANNER_1);
-    Registries.registerBlockState(BLACK_BANNER_2);
-    Registries.registerBlockState(BLACK_BANNER_3);
-    Registries.registerBlockState(BLACK_BANNER_4);
-    Registries.registerBlockState(BLACK_BANNER_5);
-    Registries.registerBlockState(BLACK_BANNER_6);
-    Registries.registerBlockState(BLACK_BANNER_7);
-    Registries.registerBlockState(BLACK_BANNER_8);
-    Registries.registerBlockState(BLACK_BANNER_9);
-    Registries.registerBlockState(BLACK_BANNER_10);
-    Registries.registerBlockState(BLACK_BANNER_11);
-    Registries.registerBlockState(BLACK_BANNER_12);
-    Registries.registerBlockState(BLACK_BANNER_13);
-    Registries.registerBlockState(BLACK_BANNER_14);
-    Registries.registerBlockState(BLACK_BANNER_15);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_9);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_10);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_11);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_12);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_13);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_14);
+    Registry.BLOCK_STATE_REGISTRY.register(BLACK_BANNER_15);
   }
 
   public static void initStates() {

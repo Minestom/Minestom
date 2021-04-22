@@ -50,6 +50,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray villagerTypes;
         try {
@@ -99,10 +100,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
         villagerTypeClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getVillagerTypeId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.VILLAGER_TYPE_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -112,10 +110,17 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
                         .returns(villagerTypeClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getVillagerType(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.VILLAGER_TYPE_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        villagerTypeClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(villagerTypeClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.VILLAGER_TYPE_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -135,7 +140,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), villagerTypeClassName))
-                        .addStatement("return $T.getVillagerTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.VILLAGER_TYPE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -157,9 +162,8 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
                             villagerProfession.get("id").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
-            ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            staticBlock.addStatement("$T.registerVillagerType($N)", registryClassName, villagerProfessionName);
+            staticBlock.addStatement("$T.VILLAGER_TYPE_REGISTRY.register($N)", registryClassName, villagerProfessionName);
         }
 
         villagerTypeClass.addStaticBlock(staticBlock.build());

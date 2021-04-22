@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class StickyPiston {
   public static final BlockState STICKY_PISTON_11 = new BlockState(NamespaceID.from("minecraft:sticky_piston_11"), (short) 1340, Block.STICKY_PISTON, "extended=false","facing=down");
 
   static {
-    Registries.registerBlockState(STICKY_PISTON_0);
-    Registries.registerBlockState(STICKY_PISTON_1);
-    Registries.registerBlockState(STICKY_PISTON_2);
-    Registries.registerBlockState(STICKY_PISTON_3);
-    Registries.registerBlockState(STICKY_PISTON_4);
-    Registries.registerBlockState(STICKY_PISTON_5);
-    Registries.registerBlockState(STICKY_PISTON_6);
-    Registries.registerBlockState(STICKY_PISTON_7);
-    Registries.registerBlockState(STICKY_PISTON_8);
-    Registries.registerBlockState(STICKY_PISTON_9);
-    Registries.registerBlockState(STICKY_PISTON_10);
-    Registries.registerBlockState(STICKY_PISTON_11);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_0);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_1);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_2);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_3);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_4);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_5);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_6);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_7);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_8);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_9);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_10);
+    Registry.BLOCK_STATE_REGISTRY.register(STICKY_PISTON_11);
   }
 
   public static void initStates() {

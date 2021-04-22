@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class Peony {
   public static final BlockState PEONY_1 = new BlockState(NamespaceID.from("minecraft:peony_1"), (short) 7896, Block.PEONY, "half=lower");
 
   static {
-    Registries.registerBlockState(PEONY_0);
-    Registries.registerBlockState(PEONY_1);
+    Registry.BLOCK_STATE_REGISTRY.register(PEONY_0);
+    Registry.BLOCK_STATE_REGISTRY.register(PEONY_1);
   }
 
   public static void initStates() {

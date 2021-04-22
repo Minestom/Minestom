@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class Water {
   public static final BlockState WATER_15 = new BlockState(NamespaceID.from("minecraft:water_15"), (short) 49, Block.WATER, "level=15");
 
   static {
-    Registries.registerBlockState(WATER_0);
-    Registries.registerBlockState(WATER_1);
-    Registries.registerBlockState(WATER_2);
-    Registries.registerBlockState(WATER_3);
-    Registries.registerBlockState(WATER_4);
-    Registries.registerBlockState(WATER_5);
-    Registries.registerBlockState(WATER_6);
-    Registries.registerBlockState(WATER_7);
-    Registries.registerBlockState(WATER_8);
-    Registries.registerBlockState(WATER_9);
-    Registries.registerBlockState(WATER_10);
-    Registries.registerBlockState(WATER_11);
-    Registries.registerBlockState(WATER_12);
-    Registries.registerBlockState(WATER_13);
-    Registries.registerBlockState(WATER_14);
-    Registries.registerBlockState(WATER_15);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_9);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_10);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_11);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_12);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_13);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_14);
+    Registry.BLOCK_STATE_REGISTRY.register(WATER_15);
   }
 
   public static void initStates() {

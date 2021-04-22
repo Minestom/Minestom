@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class GlassPane {
   public static final BlockState GLASS_PANE_31 = new BlockState(NamespaceID.from("minecraft:glass_pane_31"), (short) 4766, Block.GLASS_PANE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   static {
-    Registries.registerBlockState(GLASS_PANE_0);
-    Registries.registerBlockState(GLASS_PANE_1);
-    Registries.registerBlockState(GLASS_PANE_2);
-    Registries.registerBlockState(GLASS_PANE_3);
-    Registries.registerBlockState(GLASS_PANE_4);
-    Registries.registerBlockState(GLASS_PANE_5);
-    Registries.registerBlockState(GLASS_PANE_6);
-    Registries.registerBlockState(GLASS_PANE_7);
-    Registries.registerBlockState(GLASS_PANE_8);
-    Registries.registerBlockState(GLASS_PANE_9);
-    Registries.registerBlockState(GLASS_PANE_10);
-    Registries.registerBlockState(GLASS_PANE_11);
-    Registries.registerBlockState(GLASS_PANE_12);
-    Registries.registerBlockState(GLASS_PANE_13);
-    Registries.registerBlockState(GLASS_PANE_14);
-    Registries.registerBlockState(GLASS_PANE_15);
-    Registries.registerBlockState(GLASS_PANE_16);
-    Registries.registerBlockState(GLASS_PANE_17);
-    Registries.registerBlockState(GLASS_PANE_18);
-    Registries.registerBlockState(GLASS_PANE_19);
-    Registries.registerBlockState(GLASS_PANE_20);
-    Registries.registerBlockState(GLASS_PANE_21);
-    Registries.registerBlockState(GLASS_PANE_22);
-    Registries.registerBlockState(GLASS_PANE_23);
-    Registries.registerBlockState(GLASS_PANE_24);
-    Registries.registerBlockState(GLASS_PANE_25);
-    Registries.registerBlockState(GLASS_PANE_26);
-    Registries.registerBlockState(GLASS_PANE_27);
-    Registries.registerBlockState(GLASS_PANE_28);
-    Registries.registerBlockState(GLASS_PANE_29);
-    Registries.registerBlockState(GLASS_PANE_30);
-    Registries.registerBlockState(GLASS_PANE_31);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_16);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_17);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_18);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_19);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_20);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_21);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_22);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_23);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_24);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_25);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_26);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_27);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_28);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_29);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_30);
+    Registry.BLOCK_STATE_REGISTRY.register(GLASS_PANE_31);
   }
 
   public static void initStates() {

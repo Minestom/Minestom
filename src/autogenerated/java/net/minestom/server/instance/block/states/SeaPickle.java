@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class SeaPickle {
   public static final BlockState SEA_PICKLE_7 = new BlockState(NamespaceID.from("minecraft:sea_pickle_7"), (short) 9651, Block.SEA_PICKLE, "pickles=4","waterlogged=false");
 
   static {
-    Registries.registerBlockState(SEA_PICKLE_0);
-    Registries.registerBlockState(SEA_PICKLE_1);
-    Registries.registerBlockState(SEA_PICKLE_2);
-    Registries.registerBlockState(SEA_PICKLE_3);
-    Registries.registerBlockState(SEA_PICKLE_4);
-    Registries.registerBlockState(SEA_PICKLE_5);
-    Registries.registerBlockState(SEA_PICKLE_6);
-    Registries.registerBlockState(SEA_PICKLE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(SEA_PICKLE_7);
   }
 
   public static void initStates() {

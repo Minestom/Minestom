@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class AcaciaFence {
   public static final BlockState ACACIA_FENCE_31 = new BlockState(NamespaceID.from("minecraft:acacia_fence_31"), (short) 8709, Block.ACACIA_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   static {
-    Registries.registerBlockState(ACACIA_FENCE_0);
-    Registries.registerBlockState(ACACIA_FENCE_1);
-    Registries.registerBlockState(ACACIA_FENCE_2);
-    Registries.registerBlockState(ACACIA_FENCE_3);
-    Registries.registerBlockState(ACACIA_FENCE_4);
-    Registries.registerBlockState(ACACIA_FENCE_5);
-    Registries.registerBlockState(ACACIA_FENCE_6);
-    Registries.registerBlockState(ACACIA_FENCE_7);
-    Registries.registerBlockState(ACACIA_FENCE_8);
-    Registries.registerBlockState(ACACIA_FENCE_9);
-    Registries.registerBlockState(ACACIA_FENCE_10);
-    Registries.registerBlockState(ACACIA_FENCE_11);
-    Registries.registerBlockState(ACACIA_FENCE_12);
-    Registries.registerBlockState(ACACIA_FENCE_13);
-    Registries.registerBlockState(ACACIA_FENCE_14);
-    Registries.registerBlockState(ACACIA_FENCE_15);
-    Registries.registerBlockState(ACACIA_FENCE_16);
-    Registries.registerBlockState(ACACIA_FENCE_17);
-    Registries.registerBlockState(ACACIA_FENCE_18);
-    Registries.registerBlockState(ACACIA_FENCE_19);
-    Registries.registerBlockState(ACACIA_FENCE_20);
-    Registries.registerBlockState(ACACIA_FENCE_21);
-    Registries.registerBlockState(ACACIA_FENCE_22);
-    Registries.registerBlockState(ACACIA_FENCE_23);
-    Registries.registerBlockState(ACACIA_FENCE_24);
-    Registries.registerBlockState(ACACIA_FENCE_25);
-    Registries.registerBlockState(ACACIA_FENCE_26);
-    Registries.registerBlockState(ACACIA_FENCE_27);
-    Registries.registerBlockState(ACACIA_FENCE_28);
-    Registries.registerBlockState(ACACIA_FENCE_29);
-    Registries.registerBlockState(ACACIA_FENCE_30);
-    Registries.registerBlockState(ACACIA_FENCE_31);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_16);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_17);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_18);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_19);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_20);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_21);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_22);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_23);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_24);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_25);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_26);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_27);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_28);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_29);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_30);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_31);
   }
 
   public static void initStates() {

@@ -6,7 +6,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -41,11 +41,11 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
         if (nbtIndex == -1) {
             // Only item name
-            final Material material = Registries.getMaterial(input);
+            final Material material = Registry.MATERIAL_REGISTRY.get(input);
             return ItemStack.of(material);
         } else {
             final String materialName = input.substring(0, nbtIndex);
-            final Material material = Registries.getMaterial(materialName);
+            final Material material = Registry.MATERIAL_REGISTRY.get(materialName);
 
             final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
 

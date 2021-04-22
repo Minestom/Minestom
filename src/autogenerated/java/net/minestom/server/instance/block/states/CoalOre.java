@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class CoalOre {
   public static final BlockState COAL_ORE_0 = new BlockState(NamespaceID.from("minecraft:coal_ore_0"), (short) 71, Block.COAL_ORE);
 
   static {
-    Registries.registerBlockState(COAL_ORE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(COAL_ORE_0);
   }
 
   public static void initStates() {

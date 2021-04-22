@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -21,9 +21,9 @@ public final class SpruceLog {
   public static final BlockState SPRUCE_LOG_2 = new BlockState(NamespaceID.from("minecraft:spruce_log_2"), (short) 78, Block.SPRUCE_LOG, "axis=z");
 
   static {
-    Registries.registerBlockState(SPRUCE_LOG_0);
-    Registries.registerBlockState(SPRUCE_LOG_1);
-    Registries.registerBlockState(SPRUCE_LOG_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SPRUCE_LOG_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SPRUCE_LOG_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SPRUCE_LOG_2);
   }
 
   public static void initStates() {

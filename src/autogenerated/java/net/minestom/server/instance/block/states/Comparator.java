@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class Comparator {
   public static final BlockState COMPARATOR_15 = new BlockState(NamespaceID.from("minecraft:comparator_15"), (short) 6697, Block.COMPARATOR, "facing=east","mode=subtract","powered=false");
 
   static {
-    Registries.registerBlockState(COMPARATOR_0);
-    Registries.registerBlockState(COMPARATOR_1);
-    Registries.registerBlockState(COMPARATOR_2);
-    Registries.registerBlockState(COMPARATOR_3);
-    Registries.registerBlockState(COMPARATOR_4);
-    Registries.registerBlockState(COMPARATOR_5);
-    Registries.registerBlockState(COMPARATOR_6);
-    Registries.registerBlockState(COMPARATOR_7);
-    Registries.registerBlockState(COMPARATOR_8);
-    Registries.registerBlockState(COMPARATOR_9);
-    Registries.registerBlockState(COMPARATOR_10);
-    Registries.registerBlockState(COMPARATOR_11);
-    Registries.registerBlockState(COMPARATOR_12);
-    Registries.registerBlockState(COMPARATOR_13);
-    Registries.registerBlockState(COMPARATOR_14);
-    Registries.registerBlockState(COMPARATOR_15);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_0);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_1);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_2);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_3);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_4);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_5);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_6);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_7);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_8);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_9);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_10);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_11);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_12);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_13);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_14);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPARATOR_15);
   }
 
   public static void initStates() {

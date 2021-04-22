@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class SlimeBlock {
   public static final BlockState SLIME_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:slime_block_0"), (short) 7539, Block.SLIME_BLOCK);
 
   static {
-    Registries.registerBlockState(SLIME_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SLIME_BLOCK_0);
   }
 
   public static void initStates() {
