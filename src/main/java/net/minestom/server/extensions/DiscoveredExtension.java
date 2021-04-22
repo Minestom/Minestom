@@ -1,5 +1,6 @@
 package net.minestom.server.extensions;
 
+import com.google.gson.JsonObject;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
@@ -55,6 +56,15 @@ public final class DiscoveredExtension {
 
     /** If this extension couldn't load its mixin configuration. */
     private boolean failedToLoadMixin = false;
+
+    /**
+     * Extra meta on the object.
+     * Do NOT use as configuration:
+     *
+     * Meta is meant to handle properties that will
+     * be accessed by other extensions, not accessed by itself
+     */
+    private JsonObject meta;
 
     /** All files of this extension */
     transient List<URL> files = new LinkedList<>();
@@ -205,6 +215,16 @@ public final class DiscoveredExtension {
             extension.externalDependencies = new ExternalDependencies();
         }
 
+        // No meta was provided
+        if (extension.meta == null) {
+            extension.meta = new JsonObject();
+        }
+
+    }
+
+    @NotNull
+    public JsonObject getMeta() {
+        return meta;
     }
 
     public void addMissingCodeModifier(String codeModifierClass) {
