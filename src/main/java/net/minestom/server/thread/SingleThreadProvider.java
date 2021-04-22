@@ -16,4 +16,9 @@ public class SingleThreadProvider extends ThreadProvider {
     public long findThread(@NotNull Chunk chunk) {
         return 0;
     }
+
+    @Override
+    public @NotNull RefreshType getChunkRefreshType() {
+        return RefreshType.NEVER;
+    }
 }

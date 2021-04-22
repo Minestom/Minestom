@@ -35,9 +35,6 @@ public abstract class ThreadProvider {
     // Represents the maximum percentage of tick time
     // that can be spent refreshing chunks thread
     protected double refreshPercentage = 0.3f;
-    // Minimum refresh time
-    private int min = 3;
-    private int max = (int) (MinecraftServer.TICK_MS * 0.3);
 
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
@@ -77,6 +74,42 @@ public abstract class ThreadProvider {
      * @param chunk the chunk
      */
     public abstract long findThread(@NotNull Chunk chunk);
+
+    /**
+     * Defines how often chunks thread should be updated.
+     *
+     * @return the refresh type
+     */
+    public @NotNull RefreshType getChunkRefreshType() {
+        return RefreshType.CONSTANT;
+    }
+
+    /**
+     * Defines how often entities thread should be updated.
+     *
+     * @return the refresh type
+     */
+    public @NotNull RefreshType getEntityRefreshType() {
+        return RefreshType.CONSTANT;
+    }
+
+    /**
+     * Minimum time used to refresh chunks & entities thread.
+     *
+     * @return the minimum refresh time in milliseconds
+     */
+    public int getMinimumRefreshTime() {
+        return 3;
+    }
+
+    /**
+     * Maximum time used to refresh chunks & entities thread.
+     *
+     * @return the maximum refresh time in milliseconds
+     */
+    public int getMaximumRefreshTime() {
+        return (int) (MinecraftServer.TICK_MS * 0.3);
+    }
 
     protected void addChunk(Chunk chunk) {
         ChunkEntry chunkEntry = setChunkThread(chunk, (thread) -> new ChunkEntry(thread, chunk));
@@ -187,8 +220,13 @@ public abstract class ThreadProvider {
             this.removedEntities.clear();
         }
 
+        final boolean chunkRefresh = getChunkRefreshType() != RefreshType.NEVER;
+        final boolean entityRefresh = getEntityRefreshType() != RefreshType.NEVER;
+        if (!chunkRefresh && !entityRefresh)
+            return;
 
-        final int timeOffset = MathUtils.clamp((int) ((double) tickTime * refreshPercentage), min, max);
+        final int timeOffset = MathUtils.clamp((int) ((double) tickTime * refreshPercentage),
+                getMinimumRefreshTime(), getMaximumRefreshTime());
         final long endTime = System.currentTimeMillis() + timeOffset;
         final int size = chunks.size();
         int counter = 0;
@@ -200,12 +238,12 @@ public abstract class ThreadProvider {
             }
 
             // Update chunk threads
-            {
+            if (chunkRefresh) {
                 switchChunk(chunk);
             }
 
             // Update entities
-            {
+            if (entityRefresh) {
                 Instance instance = chunk.getInstance();
                 refreshEntitiesThread(instance, chunk);
                 if (instance instanceof InstanceContainer) {
@@ -267,6 +305,24 @@ public abstract class ThreadProvider {
                 }
             }
         }
+    }
+
+    /**
+     * Defines how often chunks thread should be refreshed.
+     */
+    public enum RefreshType {
+        /**
+         * Chunk thread is constant after being defined.
+         */
+        NEVER,
+        /**
+         * Chunk thread should be recomputed as often as possible.
+         */
+        CONSTANT,
+        /**
+         * Chunk thread should be recomputed, but not continuously.
+         */
+        RARELY
     }
 
     public static class ChunkEntry {
