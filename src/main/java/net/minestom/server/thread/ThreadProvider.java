@@ -148,7 +148,7 @@ public abstract class ThreadProvider {
                 final var entities = entitiesList.stream()
                         .flatMap(Collection::stream)
                         .collect(Collectors.toList());
-                AcquirableEntity.refreshEntities(Collections.unmodifiableList(entities));
+                AcquirableEntity.refresh(Collections.unmodifiableList(entities));
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();

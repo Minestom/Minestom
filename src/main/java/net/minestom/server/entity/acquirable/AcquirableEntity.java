@@ -16,7 +16,7 @@ import java.util.function.Consumer;
  * Represents an element which can be acquired.
  * Used for synchronization purpose.
  */
-public final class AcquirableEntity {
+public class AcquirableEntity {
 
     public static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
 
@@ -27,12 +27,12 @@ public final class AcquirableEntity {
      *
      * @return the entities ticked in the current thread
      */
-    public static @NotNull Collection<@NotNull Entity> currentEntities() {
+    public static @NotNull Collection<@NotNull Entity> current() {
         return CURRENT_ENTITIES.get();
     }
 
     /**
-     * Changes the collection returned by {@link #currentEntities()}.
+     * Changes the collection returned by {@link #current()}.
      * <p>
      * Mostly for internal use, internal calls are unrecommended as they could lead
      * to unexpected behavior.
@@ -40,7 +40,7 @@ public final class AcquirableEntity {
      * @param entities the new entity collection
      */
     @ApiStatus.Internal
-    public static void refreshEntities(@NotNull Collection<@NotNull Entity> entities) {
+    public static void refresh(@NotNull Collection<@NotNull Entity> entities) {
         CURRENT_ENTITIES.set(entities);
     }
 
@@ -113,7 +113,7 @@ public final class AcquirableEntity {
      * <p>
      * Should only be considered when thread-safety is not necessary (e.g. comparing positions)
      *
-     * @return the unwraped value
+     * @return the unwrapped value
      */
     public @NotNull Entity unwrap() {
         return entity;
