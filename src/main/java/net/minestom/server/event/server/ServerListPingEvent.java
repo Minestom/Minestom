@@ -71,9 +71,8 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     }
 
     /**
-     * PlayerConnection of received packet.
-     * Note that the player has not joined the server at this time.
-     * This will be null for legacy server list pings.
+     * PlayerConnection of received packet. Note that the player has not joined the server
+     * at this time. This will <b>only</b> be non-null for modern server list pings.
      *
      * @return the playerConnection.
      */
