@@ -602,7 +602,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean addViewer0(@NotNull Player player) {
+    protected boolean addViewer0(@NotNull Player player) {
         if (player == this) {
             return false;
         }
@@ -612,7 +612,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean removeViewer0(@NotNull Player player) {
+    protected boolean removeViewer0(@NotNull Player player) {
         if (player == this || !super.removeViewer0(player)) {
             return false;
         }
