@@ -62,6 +62,7 @@ public class ParticleLine extends ParticleShape {
 
         private final int particleCount;
         private int particles = 0;
+        private int line = 0;
 
         public LineIterator(@NotNull ParticleLine line, ShapeOptions options) {
             super(line, options);
@@ -86,18 +87,28 @@ public class ParticleLine extends ParticleShape {
 
         @Override
         public boolean hasNext() {
-            return particles < particleCount;
+            return particles < particleCount && line < options.getLineWidth();
         }
 
         @Override
         public Position next() {
             Position position = new Position(x, y, z);
 
-            x += changeX;
-            y += changeY;
-            z += changeZ;
-
             particles++;
+
+            if (particles < particleCount) {
+                //TODO offset the different lines for line width
+                x += changeX;
+                y += changeY;
+                z += changeZ;
+            } else {
+                x = shape.getX1();
+                y = shape.getY1();
+                z = shape.getZ1();
+
+                line++;
+                particles = 0;
+            }
 
             return position;
         }

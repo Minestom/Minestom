@@ -316,8 +316,8 @@ public class PlayerInit {
                 .build();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            shape.iterator(ShapeOptions.builder().build()).draw(instanceContainer, new Position(0, 0, 0));
-        }).repeat(10, TimeUnit.TICK).schedule();
+            shape.iterator(ShapeOptions.builder().lineWidth(3).build()).draw(instanceContainer, new Position(0, 0, 0));
+        }).repeat(80, TimeUnit.TICK).schedule();
     }
 
 
