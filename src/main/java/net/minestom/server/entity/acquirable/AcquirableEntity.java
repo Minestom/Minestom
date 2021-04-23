@@ -1,7 +1,7 @@
 package net.minestom.server.entity.acquirable;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.thread.BatchThread;
+import net.minestom.server.thread.TickThread;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.consumer.EntityConsumer;
 import org.jetbrains.annotations.ApiStatus;
@@ -61,7 +61,7 @@ public class AcquirableEntity {
      */
     public void acquire(@NotNull EntityConsumer consumer) {
         final Thread currentThread = Thread.currentThread();
-        final BatchThread elementThread = getHandler().getBatchThread();
+        final TickThread elementThread = getHandler().getBatchThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
     }
 
@@ -75,7 +75,7 @@ public class AcquirableEntity {
      */
     public boolean tryAcquire(@NotNull EntityConsumer consumer) {
         final Thread currentThread = Thread.currentThread();
-        final BatchThread elementThread = getHandler().getBatchThread();
+        final TickThread elementThread = getHandler().getBatchThread();
         if (Objects.equals(currentThread, elementThread)) {
             consumer.accept(unwrap());
             return true;
@@ -91,7 +91,7 @@ public class AcquirableEntity {
      */
     public @Nullable Entity tryAcquire() {
         final Thread currentThread = Thread.currentThread();
-        final BatchThread elementThread = getHandler().getBatchThread();
+        final TickThread elementThread = getHandler().getBatchThread();
         if (Objects.equals(currentThread, elementThread)) {
             return unwrap();
         }
@@ -143,7 +143,7 @@ public class AcquirableEntity {
             this.chunkEntry = chunkEntry;
         }
 
-        public BatchThread getBatchThread() {
+        public TickThread getBatchThread() {
             return chunkEntry != null ? chunkEntry.getThread() : null;
         }
     }

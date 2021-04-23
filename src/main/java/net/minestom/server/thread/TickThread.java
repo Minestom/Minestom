@@ -11,35 +11,44 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class BatchThread extends Thread {
+/**
+ * Thread responsible for ticking {@link net.minestom.server.instance.Chunk chunks} and {@link net.minestom.server.entity.Entity entities}.
+ * <p>
+ * Created in {@link ThreadProvider}, and awaken every tick with a task to execute.
+ */
+public class TickThread extends Thread {
 
-    private final BatchRunnable runnable;
+    protected final BatchRunnable runnable;
     private final ReentrantLock lock = new ReentrantLock();
 
-    public BatchThread(@NotNull BatchRunnable runnable, int number) {
+    public TickThread(@NotNull BatchRunnable runnable, int number) {
         super(runnable, MinecraftServer.THREAD_NAME_TICK + "-" + number);
         this.runnable = runnable;
 
         this.runnable.setLinkedThread(this);
     }
 
-    public @NotNull BatchRunnable getMainRunnable() {
-        return runnable;
-    }
-
+    /**
+     * Gets the lock used to ensure the safety of entity acquisition.
+     *
+     * @return the thread lock
+     */
     public @NotNull ReentrantLock getLock() {
         return lock;
     }
 
+    /**
+     * Shutdowns the thread. Cannot be undone.
+     */
     public void shutdown() {
         this.runnable.stop = true;
         LockSupport.unpark(this);
     }
 
-    public static class BatchRunnable implements Runnable {
+    protected static class BatchRunnable implements Runnable {
 
         private volatile boolean stop;
-        private BatchThread batchThread;
+        private TickThread tickThread;
 
         private volatile boolean inTick;
         private final AtomicReference<CountDownLatch> countDownLatch = new AtomicReference<>();
@@ -48,9 +57,9 @@ public class BatchThread extends Thread {
 
         @Override
         public void run() {
-            Check.notNull(batchThread, "The linked BatchThread cannot be null!");
+            Check.notNull(tickThread, "The linked BatchThread cannot be null!");
             while (!stop) {
-                LockSupport.park(batchThread);
+                LockSupport.park(tickThread);
                 if (stop)
                     break;
                 CountDownLatch localCountDownLatch = this.countDownLatch.get();
@@ -79,15 +88,15 @@ public class BatchThread extends Thread {
         public synchronized void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
             this.countDownLatch.set(countDownLatch);
             this.queue.add(runnable);
-            LockSupport.unpark(batchThread);
+            LockSupport.unpark(tickThread);
         }
 
         public boolean isInTick() {
             return inTick;
         }
 
-        private void setLinkedThread(BatchThread batchThread) {
-            this.batchThread = batchThread;
+        private void setLinkedThread(TickThread tickThread) {
+            this.tickThread = tickThread;
         }
     }
 

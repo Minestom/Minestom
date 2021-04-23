@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
  */
 public abstract class ThreadProvider {
 
-    private final List<BatchThread> threads;
+    private final List<TickThread> threads;
 
-    private final Map<BatchThread, Set<ChunkEntry>> threadChunkMap = new HashMap<>();
+    private final Map<TickThread, Set<ChunkEntry>> threadChunkMap = new HashMap<>();
     private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
     // Iterated over to refresh the thread used to update entities & chunks
     private final ArrayDeque<Chunk> chunks = new ArrayDeque<>();
@@ -40,11 +40,11 @@ public abstract class ThreadProvider {
         this.threads = new ArrayList<>(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-            final BatchThread.BatchRunnable batchRunnable = new BatchThread.BatchRunnable();
-            final BatchThread batchThread = new BatchThread(batchRunnable, i);
-            this.threads.add(batchThread);
+            final TickThread.BatchRunnable batchRunnable = new TickThread.BatchRunnable();
+            final TickThread tickThread = new TickThread(batchRunnable, i);
+            this.threads.add(tickThread);
 
-            batchThread.start();
+            tickThread.start();
         }
     }
 
@@ -126,17 +126,17 @@ public abstract class ThreadProvider {
             return;
         chunks.remove(chunkEntry);
 
-        setChunkThread(chunk, batchThread -> {
-            chunkEntry.thread = batchThread;
+        setChunkThread(chunk, tickThread -> {
+            chunkEntry.thread = tickThread;
             return chunkEntry;
         });
     }
 
     protected @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
-                                                 @NotNull Function<@NotNull BatchThread, @NotNull ChunkEntry> chunkEntrySupplier) {
+                                                 @NotNull Function<@NotNull TickThread, @NotNull ChunkEntry> chunkEntrySupplier) {
         final int threadId = getThreadId(chunk);
-        BatchThread thread = threads.get(threadId);
-        var chunks = threadChunkMap.computeIfAbsent(thread, batchThread -> ConcurrentHashMap.newKeySet());
+        TickThread thread = threads.get(threadId);
+        var chunks = threadChunkMap.computeIfAbsent(thread, tickThread -> ConcurrentHashMap.newKeySet());
 
         ChunkEntry chunkEntry = chunkEntrySupplier.apply(thread);
         chunks.add(chunkEntry);
@@ -146,7 +146,7 @@ public abstract class ThreadProvider {
     protected void removeChunk(Chunk chunk) {
         ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
         if (chunkEntry != null) {
-            BatchThread thread = chunkEntry.thread;
+            TickThread thread = chunkEntry.thread;
             var chunks = threadChunkMap.get(thread);
             if (chunks != null) {
                 chunks.remove(chunkEntry);
@@ -167,7 +167,7 @@ public abstract class ThreadProvider {
      */
     public synchronized @NotNull CountDownLatch update(long time) {
         CountDownLatch countDownLatch = new CountDownLatch(threads.size());
-        for (BatchThread thread : threads) {
+        for (TickThread thread : threads) {
             final var chunkEntries = threadChunkMap.get(thread);
             if (chunkEntries == null || chunkEntries.isEmpty()) {
                 // The thread never had any task
@@ -176,7 +176,7 @@ public abstract class ThreadProvider {
             }
 
             // Execute tick
-            thread.getMainRunnable().startTick(countDownLatch, () -> {
+            thread.runnable.startTick(countDownLatch, () -> {
                 final var entitiesList = chunkEntries.stream().map(chunkEntry -> chunkEntry.entities).collect(Collectors.toList());
                 final var entities = entitiesList.stream()
                         .flatMap(Collection::stream)
@@ -270,10 +270,10 @@ public abstract class ThreadProvider {
     }
 
     public void shutdown() {
-        this.threads.forEach(BatchThread::shutdown);
+        this.threads.forEach(TickThread::shutdown);
     }
 
-    public @NotNull List<@NotNull BatchThread> getThreads() {
+    public @NotNull List<@NotNull TickThread> getThreads() {
         return threads;
     }
 
@@ -326,16 +326,16 @@ public abstract class ThreadProvider {
     }
 
     public static class ChunkEntry {
-        private volatile BatchThread thread;
+        private volatile TickThread thread;
         private final Chunk chunk;
         private final List<Entity> entities = new ArrayList<>();
 
-        private ChunkEntry(BatchThread thread, Chunk chunk) {
+        private ChunkEntry(TickThread thread, Chunk chunk) {
             this.thread = thread;
             this.chunk = chunk;
         }
 
-        public @NotNull BatchThread getThread() {
+        public @NotNull TickThread getThread() {
             return thread;
         }
 

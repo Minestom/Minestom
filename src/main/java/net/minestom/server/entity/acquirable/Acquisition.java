@@ -1,7 +1,7 @@
 package net.minestom.server.entity.acquirable;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.thread.BatchThread;
+import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,15 +32,15 @@ public final class Acquisition {
     public static void acquireForEach(@NotNull Collection<AcquirableEntity> collection,
                                       @NotNull Consumer<Entity> consumer) {
         final Thread currentThread = Thread.currentThread();
-        Map<BatchThread, List<Entity>> threadCacheMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
+        Map<TickThread, List<Entity>> threadCacheMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
 
         // Acquire all the threads one by one
         {
-            for (Map.Entry<BatchThread, List<Entity>> entry : threadCacheMap.entrySet()) {
-                final BatchThread batchThread = entry.getKey();
+            for (Map.Entry<TickThread, List<Entity>> entry : threadCacheMap.entrySet()) {
+                final TickThread tickThread = entry.getKey();
                 final List<Entity> entities = entry.getValue();
 
-                acquire(currentThread, batchThread, () -> {
+                acquire(currentThread, tickThread, () -> {
                     for (Entity entity : entities) {
                         consumer.accept(entity);
                     }
@@ -76,7 +76,7 @@ public final class Acquisition {
     /**
      * Ensures that {@code callback} is safely executed inside the batch thread.
      */
-    protected static void acquire(@NotNull Thread currentThread, @Nullable BatchThread elementThread,
+    protected static void acquire(@NotNull Thread currentThread, @Nullable TickThread elementThread,
                                   @NotNull Runnable callback) {
         if (Objects.equals(currentThread, elementThread)) {
             callback.run();
@@ -87,14 +87,14 @@ public final class Acquisition {
         }
     }
 
-    protected static ReentrantLock acquireEnter(Thread currentThread, BatchThread elementThread) {
+    protected static ReentrantLock acquireEnter(Thread currentThread, TickThread elementThread) {
         // Monitoring
         long time = System.nanoTime();
 
         ReentrantLock currentLock;
         {
-            final BatchThread current = currentThread instanceof BatchThread ?
-                    (BatchThread) currentThread : null;
+            final TickThread current = currentThread instanceof TickThread ?
+                    (TickThread) currentThread : null;
             currentLock = current != null && current.getLock().isHeldByCurrentThread() ?
                     current.getLock() : null;
         }
@@ -118,7 +118,7 @@ public final class Acquisition {
         return !acquired ? lock : null;
     }
 
-    protected static ReentrantLock acquireEnter(BatchThread elementThread) {
+    protected static ReentrantLock acquireEnter(TickThread elementThread) {
         return acquireEnter(Thread.currentThread(), elementThread);
     }
 
@@ -145,23 +145,23 @@ public final class Acquisition {
      * @param consumer      the consumer to execute when an element is already in the current thread
      * @return a new Thread to acquirable elements map
      */
-    protected static Map<BatchThread, List<Entity>> retrieveOptionalThreadMap(@NotNull Collection<AcquirableEntity> collection,
-                                                                              @NotNull Thread currentThread,
-                                                                              @NotNull Consumer<? super Entity> consumer) {
+    protected static Map<TickThread, List<Entity>> retrieveOptionalThreadMap(@NotNull Collection<AcquirableEntity> collection,
+                                                                             @NotNull Thread currentThread,
+                                                                             @NotNull Consumer<? super Entity> consumer) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
 
-        Map<BatchThread, List<Entity>> threadCacheMap = new HashMap<>();
+        Map<TickThread, List<Entity>> threadCacheMap = new HashMap<>();
         for (AcquirableEntity element : collection) {
             final Entity value = element.unwrap();
 
-            final BatchThread elementThread = element.getHandler().getBatchThread();
+            final TickThread elementThread = element.getHandler().getBatchThread();
             if (currentThread == elementThread) {
                 // The element is managed in the current thread, consumer can be immediately called
                 consumer.accept(value);
             } else {
                 // The element is manager in a different thread, cache it
-                List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
+                List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
                 threadCacheList.add(value);
             }
         }
@@ -169,15 +169,15 @@ public final class Acquisition {
         return threadCacheMap;
     }
 
-    protected static Map<BatchThread, List<Entity>> retrieveThreadMap(@NotNull Collection<AcquirableEntity> collection) {
+    protected static Map<TickThread, List<Entity>> retrieveThreadMap(@NotNull Collection<AcquirableEntity> collection) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
-        Map<BatchThread, List<Entity>> threadCacheMap = new HashMap<>();
+        Map<TickThread, List<Entity>> threadCacheMap = new HashMap<>();
         for (AcquirableEntity acquirableEntity : collection) {
             final Entity entity = acquirableEntity.unwrap();
-            final BatchThread elementThread = acquirableEntity.getHandler().getBatchThread();
+            final TickThread elementThread = acquirableEntity.getHandler().getBatchThread();
 
-            List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, batchThread -> new ArrayList<>());
+            List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
             threadCacheList.add(entity);
         }
 
