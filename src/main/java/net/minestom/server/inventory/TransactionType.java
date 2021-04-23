@@ -98,12 +98,10 @@ public interface TransactionType {
                 final int itemAmount = stackingRule.getAmount(inventoryItem);
                 final int itemStackAmount = stackingRule.getAmount(itemStack);
                 if (itemStackAmount < itemAmount) {
-                    System.out.println(1);
                     itemChangesMap.put(i, stackingRule.apply(inventoryItem, itemAmount - itemStackAmount));
                     itemStack = stackingRule.apply(itemStack, 0);
                     break;
                 }
-                System.out.println(2);
                 itemChangesMap.put(i, stackingRule.apply(inventoryItem, 0));
                 itemStack = stackingRule.apply(itemStack, itemStackAmount - itemAmount);
                 if (stackingRule.getAmount(itemStack) == 0) {
