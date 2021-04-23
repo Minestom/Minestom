@@ -5,8 +5,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.acquirable.AcquirableEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -30,6 +28,7 @@ public abstract class ThreadProvider {
     private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
     // Iterated over to refresh the thread used to update entities & chunks
     private final ArrayDeque<Chunk> chunks = new ArrayDeque<>();
+    private final Set<Entity> updatableEntities = ConcurrentHashMap.newKeySet();
     private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
 
     // Represents the maximum percentage of tick time
@@ -81,15 +80,6 @@ public abstract class ThreadProvider {
      * @return the refresh type
      */
     public @NotNull RefreshType getChunkRefreshType() {
-        return RefreshType.CONSTANT;
-    }
-
-    /**
-     * Defines how often entities thread should be updated.
-     *
-     * @return the refresh type
-     */
-    public @NotNull RefreshType getEntityRefreshType() {
         return RefreshType.CONSTANT;
     }
 
@@ -156,12 +146,18 @@ public abstract class ThreadProvider {
         this.chunks.remove(chunk);
     }
 
-    protected int getThreadId(Chunk chunk) {
+    /**
+     * Finds the thread id associated to a {@link Chunk}.
+     *
+     * @param chunk the chunk to find the thread id from
+     * @return the chunk thread id
+     */
+    protected int getThreadId(@NotNull Chunk chunk) {
         return (int) (Math.abs(findThread(chunk)) % threads.size());
     }
 
     /**
-     * Prepares the update.
+     * Prepares the update by creating the {@link TickThread} tasks.
      *
      * @param time the tick time in milliseconds
      */
@@ -206,23 +202,25 @@ public abstract class ThreadProvider {
         return countDownLatch;
     }
 
+    /**
+     * Called at the end of each tick to clear removed entities,
+     * refresh the chunk linked to an entity, and chunk threads based on {@link #findThread(Chunk)}.
+     *
+     * @param tickTime the duration of the tick in ms,
+     *                 used to ensure that the refresh does not take more time than the tick itself
+     */
     public synchronized void refreshThreads(long tickTime) {
         // Clear removed entities
         {
-            for (Entity entity : removedEntities) {
-                AcquirableEntity acquirableEntity = entity.getAcquirable();
-                ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
-                // Remove from list
-                if (chunkEntry != null) {
-                    chunkEntry.entities.remove(entity);
-                }
-            }
-            this.removedEntities.clear();
+            processRemovedEntities();
         }
 
-        final boolean chunkRefresh = getChunkRefreshType() != RefreshType.NEVER;
-        final boolean entityRefresh = getEntityRefreshType() != RefreshType.NEVER;
-        if (!chunkRefresh && !entityRefresh)
+        // Update entities chunks
+        {
+            processUpdatedEntities();
+        }
+
+        if (getChunkRefreshType() == RefreshType.NEVER)
             return;
 
         final int timeOffset = MathUtils.clamp((int) ((double) tickTime * refreshPercentage),
@@ -238,20 +236,7 @@ public abstract class ThreadProvider {
             }
 
             // Update chunk threads
-            if (chunkRefresh) {
-                switchChunk(chunk);
-            }
-
-            // Update entities
-            if (entityRefresh) {
-                Instance instance = chunk.getInstance();
-                refreshEntitiesThread(instance, chunk);
-                if (instance instanceof InstanceContainer) {
-                    for (SharedInstance sharedInstance : ((InstanceContainer) instance).getSharedInstances()) {
-                        refreshEntitiesThread(sharedInstance, chunk);
-                    }
-                }
-            }
+            switchChunk(chunk);
 
             // Add back to the deque
             chunks.addLast(chunk);
@@ -261,8 +246,11 @@ public abstract class ThreadProvider {
 
             if (System.currentTimeMillis() >= endTime)
                 break;
-
         }
+    }
+
+    public void updateEntity(@NotNull Entity entity) {
+        this.updatableEntities.add(entity);
     }
 
     public void removeEntity(@NotNull Entity entity) {
@@ -277,34 +265,44 @@ public abstract class ThreadProvider {
         return threads;
     }
 
-    private void refreshEntitiesThread(Instance instance, Chunk chunk) {
-        var entities = instance.getChunkEntities(chunk);
-        for (Entity entity : entities) {
+    private void processRemovedEntities() {
+        for (Entity entity : removedEntities) {
+            AcquirableEntity acquirableEntity = entity.getAcquirable();
+            ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
+            // Remove from list
+            if (chunkEntry != null) {
+                chunkEntry.entities.remove(entity);
+            }
+        }
+        this.removedEntities.clear();
+    }
+
+    private void processUpdatedEntities() {
+        for (Entity entity : updatableEntities) {
             AcquirableEntity acquirableEntity = entity.getAcquirable();
             ChunkEntry handlerChunkEntry = acquirableEntity.getHandler().getChunkEntry();
-            Chunk batchChunk = handlerChunkEntry != null ? handlerChunkEntry.getChunk() : null;
 
             Chunk entityChunk = entity.getChunk();
-            if (!Objects.equals(batchChunk, entityChunk)) {
-                // Entity is possibly not in the correct thread
 
-                // Remove from previous list
-                {
-                    if (handlerChunkEntry != null) {
-                        handlerChunkEntry.entities.remove(entity);
-                    }
+            // Entity is possibly not in the correct thread
+
+            // Remove from previous list
+            {
+                if (handlerChunkEntry != null) {
+                    handlerChunkEntry.entities.remove(entity);
                 }
+            }
 
-                // Add to new list
-                {
-                    ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
-                    if (chunkEntry != null) {
-                        chunkEntry.entities.add(entity);
-                        acquirableEntity.getHandler().refreshChunkEntry(chunkEntry);
-                    }
+            // Add to new list
+            {
+                ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
+                if (chunkEntry != null) {
+                    chunkEntry.entities.add(entity);
+                    acquirableEntity.getHandler().refreshChunkEntry(chunkEntry);
                 }
             }
         }
+        this.updatableEntities.clear();
     }
 
     /**

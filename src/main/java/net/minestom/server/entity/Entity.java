@@ -43,6 +43,7 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -469,7 +470,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Fix current chunk being null if the entity has been spawned before
         if (currentChunk == null) {
-            currentChunk = instance.getChunkAt(position);
+            refreshCurrentChunk(instance.getChunkAt(position));
         }
 
         // Check if the entity chunk is loaded
@@ -836,6 +837,12 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return currentChunk;
     }
 
+    @ApiStatus.Internal
+    protected void refreshCurrentChunk(Chunk currentChunk) {
+        this.currentChunk = currentChunk;
+        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
+    }
+
     /**
      * Gets the entity current instance.
      *
@@ -869,7 +876,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         this.isActive = true;
         this.instance = instance;
-        this.currentChunk = instance.getChunkAt(position.getX(), position.getZ());
+        refreshCurrentChunk(instance.getChunkAt(position.getX(), position.getZ()));
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
@@ -1343,7 +1350,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     player.refreshVisibleEntities(newChunk);
                 }
 
-                this.currentChunk = newChunk;
+                refreshCurrentChunk(newChunk);
             }
         }
 
