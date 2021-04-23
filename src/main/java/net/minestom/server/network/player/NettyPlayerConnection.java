@@ -61,7 +61,6 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final static int INITIAL_BUFFER_SIZE = 65_535; // 2^16-1
     private final Object tickBufferLock = new Object();
     private volatile ByteBuf tickBuffer = BufUtils.getBuffer(true);
 
@@ -69,8 +68,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         super();
         this.channel = channel;
         this.remoteAddress = channel.remoteAddress();
-
-        this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
     }
 
     /**
