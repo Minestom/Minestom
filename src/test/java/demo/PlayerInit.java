@@ -33,8 +33,8 @@ import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.particle.shapes.MultiPolygon;
-import net.minestom.server.particle.shapes.ParticleIterator;
 import net.minestom.server.particle.shapes.ParticleShape;
+import net.minestom.server.particle.shapes.ShapeOptions;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -259,31 +259,6 @@ public class PlayerInit {
                     itemStackBuilder.lore(Collections.emptyList());
                 }));
             }
-
-            MultiPolygon shape = ParticleShape.cube(new Position(0, 41, 0), 10, 5, 14);
-            /*MultiPolygon shape = ParticleShape.multiPolygon()
-                    .lineStart(new Position(0, 41, 0))
-                    .lineTo(new Position(-1.5, 43.5, 0))
-                    .lineTo(new Position(0, 45, 0))
-                    .lineTo(new Position(1.5, 43.5, 0))
-
-                    .lineTo(new Position(0, 41, 0))
-                    .lineTo(new Position(0, 43.5, -1.5))
-                    .lineTo(new Position(0, 45, 0))
-                    .lineTo(new Position(0, 43.5, 1.5))
-                    .lineTo(new Position(0, 41, 0))
-
-                    .jumpTo(new Position(-1.5, 43.5, 0))
-                    .lineTo(new Position(0, 43.5, -1.5))
-                    .lineTo(new Position(1.5, 43.5, 0))
-                    .lineTo(new Position(0, 43.5, 1.5))
-                    .lineTo(new Position(-1.5, 43.5, 0))
-
-                    .build();*/
-
-            MinecraftServer.getSchedulerManager().buildTask(() -> {
-                shape.iterator(10).draw(player.getInstance(), new Position(0, 0, 0));
-            }).repeat(10, TimeUnit.TICK).schedule();
         });
 
         globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
@@ -316,6 +291,33 @@ public class PlayerInit {
                 //player.getInstance().unloadChunk(chunk);
             }
         });
+
+        // PARTICLE TEST
+
+        //MultiPolygon shape = ParticleShape.cube(new Position(0, 41, 0), 10, 5, 14);
+        MultiPolygon shape = ParticleShape.multiPolygon()
+                .lineStart(new Position(0, 41, 0))
+                .lineTo(new Position(-1.5, 43.5, 0))
+                .lineTo(new Position(0, 45, 0))
+                .lineTo(new Position(1.5, 43.5, 0))
+
+                .lineTo(new Position(0, 41, 0))
+                .lineTo(new Position(0, 43.5, -1.5))
+                .lineTo(new Position(0, 45, 0))
+                .lineTo(new Position(0, 43.5, 1.5))
+                .lineTo(new Position(0, 41, 0))
+
+                .jumpTo(new Position(-1.5, 43.5, 0))
+                .lineTo(new Position(0, 43.5, -1.5))
+                .lineTo(new Position(1.5, 43.5, 0))
+                .lineTo(new Position(0, 43.5, 1.5))
+                .lineTo(new Position(-1.5, 43.5, 0))
+
+                .build();
+
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            shape.iterator(ShapeOptions.builder().build()).draw(instanceContainer, new Position(0, 0, 0));
+        }).repeat(10, TimeUnit.TICK).schedule();
     }
 
 

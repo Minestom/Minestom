@@ -51,8 +51,8 @@ public class ParticleLine extends ParticleShape {
         return z2;
     }
 
-    public LineIterator iterator(int particleCount) {
-        return new LineIterator(this, particleCount);
+    public LineIterator iterator(ShapeOptions options) {
+        return new LineIterator(this, options);
     }
 
     public static class LineIterator extends ParticleIterator<ParticleLine> implements Iterator<Position> {
@@ -60,14 +60,20 @@ public class ParticleLine extends ParticleShape {
 
         private double x, y, z;
 
+        private final int particleCount;
         private int particles = 0;
 
-        public LineIterator(@NotNull ParticleLine line, int particleCount) {
-            super(line, particleCount);
+        public LineIterator(@NotNull ParticleLine line, ShapeOptions options) {
+            super(line, options);
 
             double dx = line.getX2() - line.getX1();
             double dy = line.getY2() - line.getY1();
             double dz = line.getZ2() - line.getZ1();
+
+            double lineLength = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+            //Stretch behavior
+            this.particleCount = (int) Math.round(lineLength / options.getParticleDistance());
 
             this.changeX = dx / particleCount;
             this.changeY = dy / particleCount;

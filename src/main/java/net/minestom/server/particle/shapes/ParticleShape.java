@@ -4,7 +4,7 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ParticleShape {
-    public abstract ParticleIterator<?> iterator(int particleCount);
+    public abstract ParticleIterator<?> iterator(ShapeOptions options);
 
     public static @NotNull PolygonBuilder polygon() {
         return new PolygonBuilder();
