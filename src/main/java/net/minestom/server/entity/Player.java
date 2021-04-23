@@ -27,6 +27,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
+import net.minestom.server.entity.acquirable.AcquirablePlayer;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -184,6 +185,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super(EntityType.PLAYER, uuid);
         this.username = username;
         this.playerConnection = playerConnection;
+
+        this.acquirable = new AcquirablePlayer(this);
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
@@ -2453,6 +2456,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public long getLastKeepAlive() {
         return lastKeepAlive;
+    }
+
+    @Override
+    public @NotNull AcquirablePlayer getAcquirable() {
+        return (AcquirablePlayer) super.getAcquirable();
     }
 
     @Override

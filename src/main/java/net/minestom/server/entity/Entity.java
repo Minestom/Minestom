@@ -125,7 +125,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    private final AcquirableEntity acquirableEntity = new AcquirableEntity(this);
+    // Not final in order to be modifiable in subclasses, use at your own risk
+    protected AcquirableEntity acquirable = new AcquirableEntity(this);
 
     /**
      * Lock used to support #switchEntityType
@@ -1574,7 +1575,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     public @NotNull AcquirableEntity getAcquirable() {
-        return acquirableEntity;
+        return acquirable;
     }
 
     public enum Pose {
