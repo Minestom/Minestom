@@ -61,7 +61,7 @@ public class AcquirableEntity {
      */
     public void acquire(@NotNull EntityConsumer consumer) {
         final Thread currentThread = Thread.currentThread();
-        final TickThread elementThread = getHandler().getBatchThread();
+        final TickThread elementThread = getHandler().getTickThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
     }
 
@@ -75,7 +75,7 @@ public class AcquirableEntity {
      */
     public boolean tryAcquire(@NotNull EntityConsumer consumer) {
         final Thread currentThread = Thread.currentThread();
-        final TickThread elementThread = getHandler().getBatchThread();
+        final TickThread elementThread = getHandler().getTickThread();
         if (Objects.equals(currentThread, elementThread)) {
             consumer.accept(unwrap());
             return true;
@@ -91,7 +91,7 @@ public class AcquirableEntity {
      */
     public @Nullable Entity tryAcquire() {
         final Thread currentThread = Thread.currentThread();
-        final TickThread elementThread = getHandler().getBatchThread();
+        final TickThread elementThread = getHandler().getTickThread();
         if (Objects.equals(currentThread, elementThread)) {
             return unwrap();
         }
@@ -143,7 +143,7 @@ public class AcquirableEntity {
             this.chunkEntry = chunkEntry;
         }
 
-        public TickThread getBatchThread() {
+        public TickThread getTickThread() {
             return chunkEntry != null ? chunkEntry.getThread() : null;
         }
     }

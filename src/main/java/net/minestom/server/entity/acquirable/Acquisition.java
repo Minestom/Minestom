@@ -155,7 +155,7 @@ public final class Acquisition {
         for (AcquirableEntity element : collection) {
             final Entity value = element.unwrap();
 
-            final TickThread elementThread = element.getHandler().getBatchThread();
+            final TickThread elementThread = element.getHandler().getTickThread();
             if (currentThread == elementThread) {
                 // The element is managed in the current thread, consumer can be immediately called
                 consumer.accept(value);
@@ -175,7 +175,7 @@ public final class Acquisition {
         Map<TickThread, List<Entity>> threadCacheMap = new HashMap<>();
         for (AcquirableEntity acquirableEntity : collection) {
             final Entity entity = acquirableEntity.unwrap();
-            final TickThread elementThread = acquirableEntity.getHandler().getBatchThread();
+            final TickThread elementThread = acquirableEntity.getHandler().getTickThread();
 
             List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
             threadCacheList.add(entity);
