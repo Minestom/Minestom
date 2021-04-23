@@ -156,8 +156,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
                     final Material material = Registry.MATERIAL_REGISTRY.get(id);
 
                     final NBTCompound tagsCompound = projectileCompound.getCompound("tag");
-
-                    ItemStack itemStack = NBTUtils.loadItem(material, count, tagsCompound);
+                    ItemStack itemStack = ItemStack.fromNBT(material, tagsCompound, count);
 
                     projectiles.add(itemStack);
                 }

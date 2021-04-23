@@ -30,7 +30,7 @@ public class ParticleCreator {
         particlePacket.particleData = particleData;
         particlePacket.particleCount = count;
 
-        if(dataWriter != null) {
+        if (dataWriter != null) {
             BinaryWriter writer = new BinaryWriter();
             dataWriter.accept(writer);
             particlePacket.data = writer.toByteArray();
@@ -45,7 +45,7 @@ public class ParticleCreator {
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
                                                       int count) {
-        return createParticlePacket(particleType, false,
+        return createParticlePacket(particleType, true,
                 x, y, z,
                 offsetX, offsetY, offsetZ,
                 0, count, null);

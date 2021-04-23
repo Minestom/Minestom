@@ -40,10 +40,11 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             throw new ArgumentSyntaxException("The item needs a material", input, NO_MATERIAL);
 
         if (nbtIndex == -1) {
-            // Only item name
-            final Material material = Registry.MATERIAL_REGISTRY.get(input);
+            // Only material name
+            final Material material = Registry.getMaterial(input);
             return ItemStack.of(material);
         } else {
+            // Material plus additional NBT
             final String materialName = input.substring(0, nbtIndex);
             final Material material = Registry.MATERIAL_REGISTRY.get(materialName);
 
@@ -56,7 +57,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }
 
-            return NBTUtils.loadItem(material, 1, compound);
+            return ItemStack.fromNBT(material, compound);
         }
     }
 

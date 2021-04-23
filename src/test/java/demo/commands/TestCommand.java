@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentType;
 
 public class TestCommand extends Command {
 
@@ -12,7 +11,7 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        addSyntax((sender, context) -> System.out.println("executed"), ArgumentType.generate("test get"));
+        addSyntax((sender, context) -> System.out.println("executed"), "test get");
     }
 
     private void usage(CommandSender sender, CommandContext context) {
