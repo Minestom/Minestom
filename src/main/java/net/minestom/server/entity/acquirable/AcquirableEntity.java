@@ -3,6 +3,7 @@ package net.minestom.server.entity.acquirable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.thread.BatchThread;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.consumer.EntityConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -58,7 +59,7 @@ public class AcquirableEntity {
      *
      * @param consumer the acquisition consumer
      */
-    public void acquire(@NotNull Consumer<@NotNull Entity> consumer) {
+    public void acquire(@NotNull EntityConsumer consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
@@ -72,7 +73,7 @@ public class AcquirableEntity {
      * @return true if the acquisition happened without synchronization,
      * false otherwise
      */
-    public boolean tryAcquire(@NotNull Consumer<@NotNull Entity> consumer) {
+    public boolean tryAcquire(@NotNull EntityConsumer consumer) {
         final Thread currentThread = Thread.currentThread();
         final BatchThread elementThread = getHandler().getBatchThread();
         if (Objects.equals(currentThread, elementThread)) {
@@ -104,8 +105,8 @@ public class AcquirableEntity {
      *
      * @param consumer the consumer of the acquired object
      */
-    public void scheduledAcquire(@NotNull Consumer<Entity> consumer) {
-        Acquisition.scheduledAcquireRequest(this, consumer);
+    public void scheduledAcquire(@NotNull EntityConsumer consumer) {
+        Acquisition.scheduledAcquireRequest(this, (Consumer<Entity>) consumer);
     }
 
     /**
