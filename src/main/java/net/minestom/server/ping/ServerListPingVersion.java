@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +35,14 @@ public enum ServerListPingVersion {
     /**
      * The client is on version 1.5 or lower and supports a description and the player count.
      */
-    LEGACY(data -> getLegacyPingResponse(data, false));
+    LEGACY(data -> getLegacyPingResponse(data, false)),
+
+    /**
+     * The ping that is sent when {@link OpenToLAN} is enabled and sending packets.
+     * Only the description formatted as a legacy string is sent.
+     * Ping events with this ping version are <b>not</b> cancellable.
+     */
+    OPEN_TO_LAN(ServerListPingVersion::getOpenToLANPing);
 
     private final Function<ResponseData, String> pingResponseCreator;
 
@@ -52,9 +60,21 @@ public enum ServerListPingVersion {
         return this.pingResponseCreator.apply(responseData);
     }
 
+    private static final String LAN_PING_FORMAT = "[MOTD]%s[/MOTD][AD]%s[/AD]";
     private static final GsonComponentSerializer FULL_RGB = GsonComponentSerializer.gson(),
             NAMED_RGB = GsonComponentSerializer.colorDownsamplingGson();
     private static final LegacyComponentSerializer SECTION = LegacyComponentSerializer.legacySection();
+
+    /**
+     * Creates a ping sent when the server is sending {@link OpenToLAN} packets.
+     *
+     * @param data the response data
+     * @return the ping
+     * @see OpenToLAN
+     */
+    public static @NotNull String getOpenToLANPing(@NotNull ResponseData data) {
+        return String.format(LAN_PING_FORMAT, SECTION.serialize(data.getDescription()), MinecraftServer.getNettyServer().getPort());
+    }
 
     /**
      * Creates a legacy ping response for client versions below the Netty rewrite (1.6-).

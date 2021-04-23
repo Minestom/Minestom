@@ -11,6 +11,8 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.extras.lan.OpenToLAN;
+import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
@@ -102,6 +104,9 @@ public class Main {
         //BungeeCordProxy.enable();
 
         //MojangAuth.init();
+
+        // useful for testing - we don't need to worry about event calls so just set this to a long time
+        OpenToLAN.open(new OpenToLANConfig().setDelayBetweenEventCalls(new UpdateOption(1, TimeUnit.DAY)));
 
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));

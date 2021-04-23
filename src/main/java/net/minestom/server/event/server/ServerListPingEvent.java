@@ -39,7 +39,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      * @param version the ping version to respond with
      */
     public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingVersion version) {
-        //noinspection deprecation we need to continue doing this until the consumer is removed
+        //noinspection deprecation we need to continue doing this until the consumer is removed - todo remove
         ResponseDataConsumer consumer = MinecraftServer.getResponseDataConsumer();
         this.responseData = new ResponseData();
 
@@ -97,7 +97,8 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     }
 
     /**
-     * Cancelling this event will cause you server to appear offline in the vanilla server list.
+     * Cancelling this event will cause the server to appear offline in the vanilla server list.
+     * Note that this will have no effect if the ping version is {@link ServerListPingVersion#OPEN_TO_LAN}.
      *
      * @param cancel true if the event should be cancelled, false otherwise
      */
