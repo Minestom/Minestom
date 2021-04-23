@@ -20,4 +20,9 @@ public class PerChunkThreadProvider extends ThreadProvider {
     public long findThread(@NotNull Chunk chunk) {
         return chunk.hashCode();
     }
+
+    @Override
+    public @NotNull RefreshType getChunkRefreshType() {
+        return RefreshType.NEVER;
+    }
 }
