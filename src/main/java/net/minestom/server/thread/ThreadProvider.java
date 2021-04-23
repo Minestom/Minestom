@@ -164,20 +164,19 @@ public abstract class ThreadProvider {
     public synchronized @NotNull CountDownLatch update(long time) {
         CountDownLatch countDownLatch = new CountDownLatch(threads.size());
         for (TickThread thread : threads) {
-            final var chunkEntries = threadChunkMap.get(thread);
-            if (chunkEntries == null || chunkEntries.isEmpty()) {
-                // The thread never had any task
-                countDownLatch.countDown();
-                continue;
-            }
-
             // Execute tick
             thread.runnable.startTick(countDownLatch, () -> {
-                final var entitiesList = chunkEntries.stream().map(chunkEntry -> chunkEntry.entities).collect(Collectors.toList());
-                final var entities = entitiesList.stream()
-                        .flatMap(Collection::stream)
-                        .collect(Collectors.toList());
-                AcquirableEntity.refresh(Collections.unmodifiableList(entities));
+                final var chunkEntries = threadChunkMap.get(thread);
+                if (chunkEntries == null || chunkEntries.isEmpty()) {
+                    // Nothing to tick
+                    AcquirableEntity.refresh(Collections.emptyList());
+                    return;
+                }
+
+                final var entities = chunkEntries.stream()
+                        .flatMap(chunkEntry -> chunkEntry.entities.stream())
+                        .collect(Collectors.toUnmodifiableList());
+                AcquirableEntity.refresh(entities);
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
