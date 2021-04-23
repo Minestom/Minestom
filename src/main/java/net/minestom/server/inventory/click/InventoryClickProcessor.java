@@ -57,10 +57,11 @@ public class InventoryClickProcessor {
 
         if (cursorRule.canBeStacked(cursor, clicked)) {
             final int totalAmount = cursorRule.getAmount(cursor) + clickedRule.getAmount(clicked);
+            final int maxSize = cursorRule.getMaxSize(cursor);
 
             if (!clickedRule.canApply(clicked, totalAmount)) {
-                resultCursor = cursorRule.apply(cursor, totalAmount - cursorRule.getMaxSize());
-                resultClicked = clickedRule.apply(clicked, clickedRule.getMaxSize());
+                resultCursor = cursorRule.apply(cursor, totalAmount - maxSize);
+                resultClicked = clickedRule.apply(clicked, maxSize);
             } else {
                 resultCursor = cursorRule.apply(cursor, 0);
                 resultClicked = clickedRule.apply(clicked, totalAmount);
@@ -256,7 +257,7 @@ public class InventoryClickProcessor {
                         break;
                     StackingRule slotItemRule = slotItem.getStackingRule();
 
-                    final int maxSize = stackingRule.getMaxSize();
+                    final int maxSize = stackingRule.getMaxSize(cursor);
                     if (stackingRule.canBeStacked(cursor, slotItem)) {
                         final int amount = slotItemRule.getAmount(slotItem);
                         if (stackingRule.canApply(slotItem, amount + slotSize)) {
@@ -351,7 +352,13 @@ public class InventoryClickProcessor {
 
         final StackingRule cursorRule = cursor.getStackingRule();
         final int amount = cursorRule.getAmount(cursor);
-        final int remainingAmount = cursorRule.getMaxSize() - amount;
+        final int maxSize = cursorRule.getMaxSize(cursor);
+        final int remainingAmount = maxSize - amount;
+
+        if (remainingAmount == 0) {
+            // Item is already full
+            return clickResult;
+        }
 
         ItemStack remain = cursorRule.apply(cursor, remainingAmount);
 
@@ -386,9 +393,15 @@ public class InventoryClickProcessor {
             remain = func.apply(playerInventory, remain);
         }
 
-        final int tookAmount = remainingAmount - cursorRule.getAmount(remain);
+        ItemStack resultCursor;
+        if (remain.isAir()) {
+            // Item has been filled
+            resultCursor = cursorRule.apply(cursor, maxSize);
+        } else {
+            final int tookAmount = remainingAmount - cursorRule.getAmount(remain);
+            resultCursor = cursorRule.apply(cursor, amount + tookAmount);
+        }
 
-        ItemStack resultCursor = cursorRule.apply(cursor, amount + tookAmount);
         clickResult.setCursor(resultCursor);
         return clickResult;
     }
