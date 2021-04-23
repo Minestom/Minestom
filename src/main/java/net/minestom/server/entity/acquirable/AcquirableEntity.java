@@ -1,8 +1,8 @@
 package net.minestom.server.entity.acquirable;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.thread.TickThread;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.consumer.EntityConsumer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +14,12 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Represents an element which can be acquired.
+ * Represents an {@link Entity entity} which can be acquired.
  * Used for synchronization purpose.
  */
 public class AcquirableEntity {
 
-    public static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
+    private static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
 
     /**
      * Gets all the {@link Entity entities} being ticked in the current thread.
