@@ -7,7 +7,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -41,7 +40,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
         if (nbtIndex == -1) {
             // Only material name
-            final Material material = Registry.getMaterial(input);
+            final Material material = Registry.MATERIAL_REGISTRY.get(input);
             return ItemStack.of(material);
         } else {
             // Material plus additional NBT
