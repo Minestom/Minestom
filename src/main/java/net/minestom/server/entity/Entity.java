@@ -349,7 +349,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
     }
 
-    public boolean addViewer0(@NotNull Player player) {
+    protected boolean addViewer0(@NotNull Player player) {
         if (!this.viewers.add(player)) {
             return false;
         }
@@ -385,7 +385,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
     }
 
-    public boolean removeViewer0(@NotNull Player player) {
+    protected boolean removeViewer0(@NotNull Player player) {
         if (!viewers.remove(player)) {
             return false;
         }
