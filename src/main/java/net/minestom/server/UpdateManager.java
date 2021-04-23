@@ -1,16 +1,14 @@
 package net.minestom.server;
 
 import com.google.common.collect.Queues;
+import net.minestom.server.entity.acquirable.Acquisition;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.entity.acquirable.Acquisition;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
-import net.minestom.server.thread.PerChunkThreadProvider;
 import net.minestom.server.thread.PerInstanceThreadProvider;
-import net.minestom.server.thread.SingleThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +27,7 @@ import java.util.function.LongConsumer;
 public final class UpdateManager {
 
     private final ScheduledExecutorService updateExecutionService = Executors.newSingleThreadScheduledExecutor(r ->
-            new Thread(r, "tick-scheduler"));
+            new Thread(r, MinecraftServer.THREAD_NAME_TICK_SCHEDULER));
 
     private volatile boolean stopRequested;
 
