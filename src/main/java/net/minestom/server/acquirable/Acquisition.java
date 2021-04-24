@@ -1,6 +1,5 @@
-package net.minestom.server.entity.acquirable;
+package net.minestom.server.acquirable;
 
-import net.minestom.server.entity.Entity;
 import net.minestom.server.thread.TickThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,8 +26,8 @@ public final class Acquisition {
      * @param collection the collection to acquire
      * @param consumer   the consumer called for each of the collection element
      */
-    public static void acquireForEach(@NotNull Collection<AcquirableEntity> collection,
-                                      @NotNull Consumer<Entity> consumer) {
+    public static <T> void acquireForEach(@NotNull Collection<Acquirable<T>> collection,
+                                          @NotNull Consumer<T> consumer) {
         final Thread currentThread = Thread.currentThread();
         var threadEntitiesMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
 
@@ -36,11 +35,11 @@ public final class Acquisition {
         {
             for (var entry : threadEntitiesMap.entrySet()) {
                 final TickThread tickThread = entry.getKey();
-                final List<Entity> entities = entry.getValue();
+                final List<T> values = entry.getValue();
 
                 acquire(currentThread, tickThread, () -> {
-                    for (Entity entity : entities) {
-                        consumer.accept(entity);
+                    for (T value : values) {
+                        consumer.accept(value);
                     }
                 });
             }
@@ -107,15 +106,15 @@ public final class Acquisition {
      * @param consumer      the consumer to execute when an element is already in the current thread
      * @return a new Thread to acquirable elements map
      */
-    protected static Map<TickThread, List<Entity>> retrieveOptionalThreadMap(@NotNull Collection<AcquirableEntity> collection,
-                                                                             @NotNull Thread currentThread,
-                                                                             @NotNull Consumer<? super Entity> consumer) {
+    protected static <T> Map<TickThread, List<T>> retrieveOptionalThreadMap(@NotNull Collection<Acquirable<T>> collection,
+                                                                            @NotNull Thread currentThread,
+                                                                            @NotNull Consumer<T> consumer) {
         // Separate a collection of acquirable elements into a map of thread->elements
         // Useful to reduce the number of acquisition
 
-        Map<TickThread, List<Entity>> threadCacheMap = new HashMap<>();
-        for (AcquirableEntity element : collection) {
-            final Entity value = element.unwrap();
+        Map<TickThread, List<T>> threadCacheMap = new HashMap<>();
+        for (var element : collection) {
+            final T value = element.unwrap();
 
             final TickThread elementThread = element.getHandler().getTickThread();
             if (currentThread == elementThread) {
@@ -123,7 +122,7 @@ public final class Acquisition {
                 consumer.accept(value);
             } else {
                 // The element is manager in a different thread, cache it
-                List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
+                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
                 threadCacheList.add(value);
             }
         }

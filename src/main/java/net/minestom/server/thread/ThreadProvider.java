@@ -1,8 +1,8 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.acquirable.AcquirableEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
@@ -121,13 +121,13 @@ public abstract class ThreadProvider {
                 final var chunkEntries = threadChunkMap.get(thread);
                 if (chunkEntries == null || chunkEntries.isEmpty()) {
                     // Nothing to tick
-                    AcquirableEntity.refresh(Stream.empty());
+                    Acquirable.refreshEntities(Stream.empty());
                     return;
                 }
 
                 final var entities = chunkEntries.stream()
                         .flatMap(chunkEntry -> chunkEntry.entities.stream());
-                AcquirableEntity.refresh(entities);
+                Acquirable.refreshEntities(entities);
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
@@ -146,7 +146,7 @@ public abstract class ThreadProvider {
                         entity.tick(time);
                     });
                 });
-                AcquirableEntity.refresh(Stream.empty());
+                Acquirable.refreshEntities(Stream.empty());
                 lock.unlock();
             });
         }
@@ -294,7 +294,7 @@ public abstract class ThreadProvider {
         if (removedEntities.isEmpty())
             return;
         for (Entity entity : removedEntities) {
-            AcquirableEntity acquirableEntity = entity.getAcquirable();
+            var acquirableEntity = entity.getAcquirable();
             ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
             // Remove from list
             if (chunkEntry != null) {
@@ -308,7 +308,7 @@ public abstract class ThreadProvider {
         if (updatableEntities.isEmpty())
             return;
         for (Entity entity : updatableEntities) {
-            AcquirableEntity acquirableEntity = entity.getAcquirable();
+            var acquirableEntity = entity.getAcquirable();
             ChunkEntry handlerChunkEntry = acquirableEntity.getHandler().getChunkEntry();
 
             Chunk entityChunk = entity.getChunk();

@@ -8,12 +8,12 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
-import net.minestom.server.entity.acquirable.AcquirableEntity;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
@@ -125,8 +125,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    // Not final in order to be modifiable in subclasses, use at your own risk
-    protected AcquirableEntity acquirable = new AcquirableEntity(this);
+    private final Acquirable<? extends Entity> acquirable = Acquirable.of(this);
 
     /**
      * Lock used to support #switchEntityType
@@ -1574,7 +1573,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
-    public @NotNull AcquirableEntity getAcquirable() {
+    public @NotNull Acquirable<? extends Entity> getAcquirable() {
         return acquirable;
     }
 

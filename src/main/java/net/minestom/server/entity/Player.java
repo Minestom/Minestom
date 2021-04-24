@@ -15,6 +15,7 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
@@ -27,8 +28,6 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
-import net.minestom.server.entity.acquirable.AcquirablePlayer;
-import net.minestom.server.entity.acquirable.Acquired;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -187,8 +186,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.username = username;
         this.playerConnection = playerConnection;
 
-        this.acquirable = new AcquirablePlayer(this);
-
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
         setRespawnPoint(new Position(0, 0, 0));
@@ -331,13 +328,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         //System.out.println(getAcquiredElement().getHandler().getBatchThread());
         if (username.equals("TheMode911"))
-        for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-            //players.add(p1.getAcquiredElement());
-            var acquired = p.getAcquirable().acquire();
-            acquired.sync(player -> {
-                //System.out.println("sync");
-            });
-        }
+            for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+                //players.add(p1.getAcquiredElement());
+                p.getAcquirable().sync(player -> {
+
+                });
+            }
 
         super.update(time); // Super update (item pickup/fire management)
 
@@ -2462,8 +2458,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public @NotNull AcquirablePlayer getAcquirable() {
-        return (AcquirablePlayer) super.getAcquirable();
+    public @NotNull Acquirable<? extends Player> getAcquirable() {
+        return (Acquirable<? extends Player>) super.getAcquirable();
     }
 
     @Override

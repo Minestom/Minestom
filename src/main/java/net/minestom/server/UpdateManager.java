@@ -1,7 +1,7 @@
 package net.minestom.server;
 
 import com.google.common.collect.Queues;
-import net.minestom.server.entity.acquirable.Acquisition;
+import net.minestom.server.acquirable.Acquisition;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
