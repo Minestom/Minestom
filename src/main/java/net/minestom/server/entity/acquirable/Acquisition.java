@@ -12,8 +12,6 @@ import java.util.function.Consumer;
 
 public final class Acquisition {
 
-    private static final ThreadLocal<ScheduledAcquisition> SCHEDULED_ACQUISITION = ThreadLocal.withInitial(ScheduledAcquisition::new);
-
     /**
      * Global lock used for synchronization.
      */
@@ -32,11 +30,11 @@ public final class Acquisition {
     public static void acquireForEach(@NotNull Collection<AcquirableEntity> collection,
                                       @NotNull Consumer<Entity> consumer) {
         final Thread currentThread = Thread.currentThread();
-        Map<TickThread, List<Entity>> threadCacheMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
+        var threadEntitiesMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
 
         // Acquire all the threads one by one
         {
-            for (Map.Entry<TickThread, List<Entity>> entry : threadCacheMap.entrySet()) {
+            for (var entry : threadEntitiesMap.entrySet()) {
                 final TickThread tickThread = entry.getKey();
                 final List<Entity> entities = entry.getValue();
 
@@ -46,30 +44,6 @@ public final class Acquisition {
                     }
                 });
             }
-        }
-    }
-
-    /**
-     * Processes all scheduled acquisitions.
-     */
-    public static void processThreadTick() {
-        ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
-
-        final List<AcquirableEntity> acquirableEntityElements = scheduledAcquisition.acquirableEntityElements;
-
-        if (!acquirableEntityElements.isEmpty()) {
-            final Map<Object, List<Consumer<Entity>>> callbacks = scheduledAcquisition.callbacks;
-
-            acquireForEach(acquirableEntityElements, element -> {
-                List<Consumer<Entity>> consumers = callbacks.get(element);
-                if (consumers == null || consumers.isEmpty())
-                    return;
-                consumers.forEach(objectConsumer -> objectConsumer.accept(element));
-            });
-
-            // Clear collections..
-            acquirableEntityElements.clear();
-            callbacks.clear();
         }
     }
 
@@ -118,23 +92,11 @@ public final class Acquisition {
         return !acquired ? lock : null;
     }
 
-    protected static ReentrantLock acquireEnter(TickThread elementThread) {
-        return acquireEnter(Thread.currentThread(), elementThread);
-    }
-
     protected static void acquireLeave(ReentrantLock lock) {
         if (lock != null) {
             lock.unlock();
         }
         GLOBAL_LOCK.unlock();
-    }
-
-    protected synchronized static void scheduledAcquireRequest(@NotNull AcquirableEntity acquirableEntity, Consumer<Entity> consumer) {
-        ScheduledAcquisition scheduledAcquisition = SCHEDULED_ACQUISITION.get();
-        scheduledAcquisition.acquirableEntityElements.add(acquirableEntity);
-        scheduledAcquisition.callbacks
-                .computeIfAbsent(acquirableEntity.unwrap(), objectAcquirable -> new ArrayList<>())
-                .add(consumer);
     }
 
     /**
@@ -169,31 +131,11 @@ public final class Acquisition {
         return threadCacheMap;
     }
 
-    protected static Map<TickThread, List<Entity>> retrieveThreadMap(@NotNull Collection<AcquirableEntity> collection) {
-        // Separate a collection of acquirable elements into a map of thread->elements
-        // Useful to reduce the number of acquisition
-        Map<TickThread, List<Entity>> threadCacheMap = new HashMap<>();
-        for (AcquirableEntity acquirableEntity : collection) {
-            final Entity entity = acquirableEntity.unwrap();
-            final TickThread elementThread = acquirableEntity.getHandler().getTickThread();
-
-            List<Entity> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
-            threadCacheList.add(entity);
-        }
-
-        return threadCacheMap;
-    }
-
     public static long getCurrentWaitMonitoring() {
         return WAIT_COUNTER_NANO.get();
     }
 
     public static void resetWaitMonitoring() {
         WAIT_COUNTER_NANO.set(0);
-    }
-
-    private static class ScheduledAcquisition {
-        private final List<AcquirableEntity> acquirableEntityElements = new ArrayList<>();
-        private final Map<Object, List<Consumer<Entity>>> callbacks = new HashMap<>();
     }
 }

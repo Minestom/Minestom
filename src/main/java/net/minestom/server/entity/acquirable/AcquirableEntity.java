@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 /**
@@ -32,12 +31,12 @@ public class AcquirableEntity {
     }
 
     /**
-     * Changes the collection returned by {@link #current()}.
+     * Changes the stream returned by {@link #current()}.
      * <p>
-     * Mostly for internal use, internal calls are unrecommended as they could lead
+     * Mostly for internal use, external calls are unrecommended as they could lead
      * to unexpected behavior.
      *
-     * @param entities the new entity collection
+     * @param entities the new entity stream
      */
     @ApiStatus.Internal
     public static void refresh(@NotNull Stream<@NotNull Entity> entities) {
@@ -98,17 +97,6 @@ public class AcquirableEntity {
     }
 
     /**
-     * Signals the acquisition manager to acquire 'this' at the end of the thread tick.
-     * <p>
-     * Thread-safety is guaranteed but not the order.
-     *
-     * @param consumer the consumer of the acquired object
-     */
-    public void scheduledAcquire(@NotNull EntityConsumer consumer) {
-        Acquisition.scheduledAcquireRequest(this, (Consumer<Entity>) consumer);
-    }
-
-    /**
      * Unwrap the contained object unsafely.
      * <p>
      * Should only be considered when thread-safety is not necessary (e.g. comparing positions)
@@ -122,9 +110,12 @@ public class AcquirableEntity {
     /**
      * Gets the {@link Handler} of this acquirable element,
      * containing the currently linked thread.
+     * <p>
+     * Mostly for internal use.
      *
      * @return this element handler
      */
+    @ApiStatus.Internal
     public @NotNull Handler getHandler() {
         return handler;
     }
