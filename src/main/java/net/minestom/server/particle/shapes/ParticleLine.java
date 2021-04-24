@@ -27,30 +27,6 @@ public class ParticleLine extends ParticleShape {
                 position2.getX(), position2.getY(), position2.getZ());
     }
 
-    public double getX1() {
-        return x1;
-    }
-
-    public double getY1() {
-        return y1;
-    }
-
-    public double getZ1() {
-        return z1;
-    }
-
-    public double getX2() {
-        return x2;
-    }
-
-    public double getY2() {
-        return y2;
-    }
-
-    public double getZ2() {
-        return z2;
-    }
-
     public LineIterator iterator(ShapeOptions options) {
         return new LineIterator(this, options);
     }
@@ -67,9 +43,9 @@ public class ParticleLine extends ParticleShape {
         public LineIterator(@NotNull ParticleLine line, ShapeOptions options) {
             super(line, options);
 
-            double dx = line.getX2() - line.getX1();
-            double dy = line.getY2() - line.getY1();
-            double dz = line.getZ2() - line.getZ1();
+            double dx = line.x2 - line.x1;
+            double dy = line.y2 - line.y1;
+            double dz = line.z2 - line.z1;
 
             double lineLength = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
@@ -80,9 +56,9 @@ public class ParticleLine extends ParticleShape {
             this.changeY = dy / particleCount;
             this.changeZ = dz / particleCount;
 
-            this.x = line.getX1();
-            this.y = line.getY1();
-            this.z = line.getZ1();
+            this.x = line.x1;
+            this.y = line.y1;
+            this.z = line.z1;
         }
 
         @Override
@@ -102,9 +78,9 @@ public class ParticleLine extends ParticleShape {
                 y += changeY;
                 z += changeZ;
             } else {
-                x = shape.getX1();
-                y = shape.getY1();
-                z = shape.getZ1();
+                x = shape.x1;
+                y = shape.y1;
+                z = shape.z1;
 
                 line++;
                 particles = 0;

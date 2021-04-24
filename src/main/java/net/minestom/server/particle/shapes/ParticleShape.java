@@ -18,6 +18,10 @@ public abstract class ParticleShape {
         return new ParticleLine(pos1, pos2);
     }
 
+    public static @NotNull BezierBuilder bezier(Position start, Position end) {
+        return new BezierBuilder().start(start).end(end);
+    }
+
     public static @NotNull MultiPolygon cube(Position position, double width, double height, double depth) {
         return multiPolygon()
                 .lineStart(position)
