@@ -42,17 +42,6 @@ public interface Acquirable<T> {
         return new AcquirableImpl<>(value);
     }
 
-    default void sync(@NotNull Consumer<T> consumer) {
-        final Thread currentThread = Thread.currentThread();
-        final TickThread tickThread = getHandler().getTickThread();
-        Acquisition.acquire(currentThread, tickThread, () -> consumer.accept(unwrap()));
-    }
-
-    default void async(@NotNull Consumer<T> consumer) {
-        // TODO per-thread list
-        AsyncUtils.runAsync(() -> sync(consumer));
-    }
-
     default @NotNull Acquired<T> lock() {
         var optional = optional();
         if (optional.isPresent()) {
@@ -63,6 +52,17 @@ public interface Acquirable<T> {
             var lock = Acquisition.acquireEnter(currentThread, tickThread);
             return new Acquired<>(unwrap(), true, lock);
         }
+    }
+
+    default void sync(@NotNull Consumer<T> consumer) {
+        var acquired = lock();
+        consumer.accept(acquired.get());
+        acquired.unlock();
+    }
+
+    default void async(@NotNull Consumer<T> consumer) {
+        // TODO per-thread list
+        AsyncUtils.runAsync(() -> sync(consumer));
     }
 
     default @NotNull Optional<T> optional() {
