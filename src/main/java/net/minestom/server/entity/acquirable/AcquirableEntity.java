@@ -51,49 +51,9 @@ public class AcquirableEntity {
         this.handler = new Handler();
     }
 
-    /**
-     * Blocks the current thread until 'this' can be acquired,
-     * and execute {@code consumer} as a callback with the acquired object.
-     *
-     * @param consumer the acquisition consumer
-     */
-    public void acquire(@NotNull EntityConsumer consumer) {
-        final Thread currentThread = Thread.currentThread();
+    public @NotNull Acquired<? extends Entity> acquire() {
         final TickThread elementThread = getHandler().getTickThread();
-        Acquisition.acquire(currentThread, elementThread, () -> consumer.accept(unwrap()));
-    }
-
-    /**
-     * Executes {@code consumer} only if this element can be safely
-     * acquired without any synchronization.
-     *
-     * @param consumer the acquisition consumer
-     * @return true if the acquisition happened without synchronization,
-     * false otherwise
-     */
-    public boolean tryAcquire(@NotNull EntityConsumer consumer) {
-        final Thread currentThread = Thread.currentThread();
-        final TickThread elementThread = getHandler().getTickThread();
-        if (Objects.equals(currentThread, elementThread)) {
-            consumer.accept(unwrap());
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Retrieves {@link #unwrap()} only if this element can be safely
-     * acquired without any synchronization.
-     *
-     * @return this element or null if unsafe
-     */
-    public @Nullable Entity tryAcquire() {
-        final Thread currentThread = Thread.currentThread();
-        final TickThread elementThread = getHandler().getTickThread();
-        if (Objects.equals(currentThread, elementThread)) {
-            return unwrap();
-        }
-        return null;
+        return new Acquired<>(unwrap(), elementThread);
     }
 
     /**

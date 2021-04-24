@@ -28,6 +28,7 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.acquirable.AcquirablePlayer;
+import net.minestom.server.entity.acquirable.Acquired;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -329,12 +330,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         //System.out.println(getAcquiredElement().getHandler().getBatchThread());
-        //if (username.equals("TheMode911"))
-        /*for (Player p1 : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+        if (username.equals("TheMode911"))
+        for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
             //players.add(p1.getAcquiredElement());
-            p1.getAcquirable().acquire(o -> {
+            var acquired = p.getAcquirable().acquire();
+            acquired.sync(player -> {
+                //System.out.println("sync");
             });
-        }*/
+        }
 
         super.update(time); // Super update (item pickup/fire management)
 
