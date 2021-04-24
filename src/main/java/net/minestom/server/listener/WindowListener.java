@@ -88,6 +88,14 @@ public class WindowListener {
         // Prevent the player from picking a ghost item in cursor
         refreshCursorItem(player, inventory);
 
+        // Prevent ghost item when the click is cancelled
+        if (!successful) {
+            player.getInventory().update();
+            if (inventory != null) {
+                inventory.update(player);
+            }
+        }
+
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;
         windowConfirmationPacket.actionNumber = actionNumber;
