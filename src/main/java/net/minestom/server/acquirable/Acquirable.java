@@ -54,6 +54,15 @@ public interface Acquirable<T> {
         }
     }
 
+    default @NotNull Optional<T> local() {
+        final Thread currentThread = Thread.currentThread();
+        final TickThread tickThread = getHandler().getTickThread();
+        if (Objects.equals(currentThread, tickThread)) {
+            return Optional.of(unwrap());
+        }
+        return Optional.empty();
+    }
+
     default void sync(@NotNull Consumer<T> consumer) {
         var acquired = lock();
         consumer.accept(acquired.get());
@@ -63,15 +72,6 @@ public interface Acquirable<T> {
     default void async(@NotNull Consumer<T> consumer) {
         // TODO per-thread list
         AsyncUtils.runAsync(() -> sync(consumer));
-    }
-
-    default @NotNull Optional<T> local() {
-        final Thread currentThread = Thread.currentThread();
-        final TickThread tickThread = getHandler().getTickThread();
-        if (Objects.equals(currentThread, tickThread)) {
-            return Optional.of(unwrap());
-        }
-        return Optional.empty();
     }
 
     /**

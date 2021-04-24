@@ -26,8 +26,8 @@ public final class Acquisition {
      * @param collection the collection to acquire
      * @param consumer   the consumer called for each of the collection element
      */
-    public static <T> void acquireForEach(@NotNull Collection<Acquirable<T>> collection,
-                                          @NotNull Consumer<T> consumer) {
+    protected static <T> void acquireForEach(@NotNull Collection<Acquirable<T>> collection,
+                                             @NotNull Consumer<T> consumer) {
         final Thread currentThread = Thread.currentThread();
         var threadEntitiesMap = retrieveOptionalThreadMap(collection, currentThread, consumer);
 
