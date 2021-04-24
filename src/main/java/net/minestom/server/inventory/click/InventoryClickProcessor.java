@@ -186,7 +186,7 @@ public class InventoryClickProcessor {
             return null;
 
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
-            InventoryClickResult result = startCondition(inventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             return !result.isCancel();
         });
 
@@ -209,7 +209,7 @@ public class InventoryClickProcessor {
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (index == slot) // Prevent item lose/duplication
                 return false;
-            InventoryClickResult result = startCondition(null, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             return !result.isCancel();
         }, start, end, step);
 
@@ -545,6 +545,13 @@ public class InventoryClickProcessor {
                                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         return startCondition(clickResult, inventory, player, slot, clickType);
+    }
+
+    @NotNull
+    private InventoryClickResult startCondition(@Nullable AbstractInventory inventory, @NotNull Player player, int slot,
+                                                @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        return startCondition(inventory instanceof Inventory ? (Inventory) inventory : null,
+                player, slot, clickType, clicked, cursor);
     }
 
     private void callClickEvent(@NotNull Player player, @Nullable Inventory inventory, int slot,
