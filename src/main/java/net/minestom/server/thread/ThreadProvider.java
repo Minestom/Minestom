@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Used to link chunks into multiple groups.
@@ -121,13 +121,12 @@ public abstract class ThreadProvider {
                 final var chunkEntries = threadChunkMap.get(thread);
                 if (chunkEntries == null || chunkEntries.isEmpty()) {
                     // Nothing to tick
-                    AcquirableEntity.refresh(Collections.emptyList());
+                    AcquirableEntity.refresh(Stream.empty());
                     return;
                 }
 
                 final var entities = chunkEntries.stream()
-                        .flatMap(chunkEntry -> chunkEntry.entities.stream())
-                        .collect(Collectors.toUnmodifiableList());
+                        .flatMap(chunkEntry -> chunkEntry.entities.stream());
                 AcquirableEntity.refresh(entities);
 
                 final ReentrantLock lock = thread.getLock();
@@ -147,7 +146,7 @@ public abstract class ThreadProvider {
                         entity.tick(time);
                     });
                 });
-                AcquirableEntity.refresh(Collections.emptyList());
+                AcquirableEntity.refresh(Stream.empty());
                 lock.unlock();
             });
         }
@@ -292,6 +291,8 @@ public abstract class ThreadProvider {
     }
 
     private void processRemovedEntities() {
+        if (removedEntities.isEmpty())
+            return;
         for (Entity entity : removedEntities) {
             AcquirableEntity acquirableEntity = entity.getAcquirable();
             ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
@@ -304,6 +305,8 @@ public abstract class ThreadProvider {
     }
 
     private void processUpdatedEntities() {
+        if (updatableEntities.isEmpty())
+            return;
         for (Entity entity : updatableEntities) {
             AcquirableEntity acquirableEntity = entity.getAcquirable();
             ChunkEntry handlerChunkEntry = acquirableEntity.getHandler().getChunkEntry();

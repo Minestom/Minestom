@@ -8,10 +8,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * Represents an {@link Entity entity} which can be acquired.
@@ -19,7 +18,7 @@ import java.util.function.Consumer;
  */
 public class AcquirableEntity {
 
-    private static final ThreadLocal<Collection<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Collections::emptyList);
+    private static final ThreadLocal<Stream<Entity>> CURRENT_ENTITIES = ThreadLocal.withInitial(Stream::empty);
 
     /**
      * Gets all the {@link Entity entities} being ticked in the current thread.
@@ -28,7 +27,7 @@ public class AcquirableEntity {
      *
      * @return the entities ticked in the current thread
      */
-    public static @NotNull Collection<@NotNull Entity> current() {
+    public static @NotNull Stream<@NotNull Entity> current() {
         return CURRENT_ENTITIES.get();
     }
 
@@ -41,7 +40,7 @@ public class AcquirableEntity {
      * @param entities the new entity collection
      */
     @ApiStatus.Internal
-    public static void refresh(@NotNull Collection<@NotNull Entity> entities) {
+    public static void refresh(@NotNull Stream<@NotNull Entity> entities) {
         CURRENT_ENTITIES.set(entities);
     }
 
