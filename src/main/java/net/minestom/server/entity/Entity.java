@@ -683,7 +683,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
 
             // remove expired effects
-            {
+            if (!effects.isEmpty()) {
                 this.effects.removeIf(timedPotion -> {
                     final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
                     // Remove if the potion should be expired
