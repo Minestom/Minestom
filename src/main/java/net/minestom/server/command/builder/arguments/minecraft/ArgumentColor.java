@@ -25,16 +25,15 @@ public class ArgumentColor extends Argument<Style> {
     @NotNull
     @Override
     public Style parse(@NotNull String input) throws ArgumentSyntaxException {
-        String uppercaseInput = input.toUpperCase();
 
         // check for colour
-        NamedTextColor color = NamedTextColor.NAMES.value(uppercaseInput);
+        NamedTextColor color = NamedTextColor.NAMES.value(input);
         if (color != null) {
             return Style.style(color);
         }
 
         // check for reset
-        if (uppercaseInput.equals("RESET")) {
+        if (input.equals("reset")) {
             return Style.empty();
         }
 
