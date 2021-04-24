@@ -53,6 +53,18 @@ public interface Acquirable<T> {
         AsyncUtils.runAsync(() -> sync(consumer));
     }
 
+    default @NotNull Acquired<T> lock() {
+        var optional = optional();
+        if (optional.isPresent()) {
+            return new Acquired<>(optional.get(), false, null);
+        } else {
+            final Thread currentThread = Thread.currentThread();
+            final TickThread tickThread = getHandler().getTickThread();
+            var lock = Acquisition.acquireEnter(currentThread, tickThread);
+            return new Acquired<>(unwrap(), true, lock);
+        }
+    }
+
     default @NotNull Optional<T> optional() {
         final Thread currentThread = Thread.currentThread();
         final TickThread tickThread = getHandler().getTickThread();
