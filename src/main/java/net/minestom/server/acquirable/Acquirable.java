@@ -43,7 +43,7 @@ public interface Acquirable<T> {
     }
 
     default @NotNull Acquired<T> lock() {
-        var optional = optional();
+        var optional = local();
         if (optional.isPresent()) {
             return new Acquired<>(optional.get(), false, null);
         } else {
@@ -65,7 +65,7 @@ public interface Acquirable<T> {
         AsyncUtils.runAsync(() -> sync(consumer));
     }
 
-    default @NotNull Optional<T> optional() {
+    default @NotNull Optional<T> local() {
         final Thread currentThread = Thread.currentThread();
         final TickThread tickThread = getHandler().getTickThread();
         if (Objects.equals(currentThread, tickThread)) {
