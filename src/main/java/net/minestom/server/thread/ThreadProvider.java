@@ -31,10 +31,6 @@ public abstract class ThreadProvider {
     private final Set<Entity> updatableEntities = ConcurrentHashMap.newKeySet();
     private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
 
-    // Represents the maximum percentage of tick time
-    // that can be spent refreshing chunks thread
-    protected double refreshPercentage = 0.3f;
-
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
 
@@ -84,6 +80,17 @@ public abstract class ThreadProvider {
     }
 
     /**
+     * Represents the maximum percentage of tick time that can be spent refreshing chunks thread.
+     * <p>
+     * Percentage based on {@link MinecraftServer#TICK_MS}.
+     *
+     * @return the refresh percentage
+     */
+    public float getRefreshPercentage() {
+        return 0.3f;
+    }
+
+    /**
      * Minimum time used to refresh chunks & entities thread.
      *
      * @return the minimum refresh time in milliseconds
@@ -99,61 +106,6 @@ public abstract class ThreadProvider {
      */
     public int getMaximumRefreshTime() {
         return (int) (MinecraftServer.TICK_MS * 0.3);
-    }
-
-    protected void addChunk(Chunk chunk) {
-        ChunkEntry chunkEntry = setChunkThread(chunk, (thread) -> new ChunkEntry(thread, chunk));
-        this.chunkEntryMap.put(chunk, chunkEntry);
-        this.chunks.add(chunk);
-    }
-
-    protected void switchChunk(@NotNull Chunk chunk) {
-        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
-        if (chunkEntry == null)
-            return;
-        var chunks = threadChunkMap.get(chunkEntry.thread);
-        if (chunks == null || chunks.isEmpty())
-            return;
-        chunks.remove(chunkEntry);
-
-        setChunkThread(chunk, tickThread -> {
-            chunkEntry.thread = tickThread;
-            return chunkEntry;
-        });
-    }
-
-    protected @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
-                                                 @NotNull Function<@NotNull TickThread, @NotNull ChunkEntry> chunkEntrySupplier) {
-        final int threadId = getThreadId(chunk);
-        TickThread thread = threads.get(threadId);
-        var chunks = threadChunkMap.computeIfAbsent(thread, tickThread -> ConcurrentHashMap.newKeySet());
-
-        ChunkEntry chunkEntry = chunkEntrySupplier.apply(thread);
-        chunks.add(chunkEntry);
-        return chunkEntry;
-    }
-
-    protected void removeChunk(Chunk chunk) {
-        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
-        if (chunkEntry != null) {
-            TickThread thread = chunkEntry.thread;
-            var chunks = threadChunkMap.get(thread);
-            if (chunks != null) {
-                chunks.remove(chunkEntry);
-            }
-            chunkEntryMap.remove(chunk);
-        }
-        this.chunks.remove(chunk);
-    }
-
-    /**
-     * Finds the thread id associated to a {@link Chunk}.
-     *
-     * @param chunk the chunk to find the thread id from
-     * @return the chunk thread id
-     */
-    protected int getThreadId(@NotNull Chunk chunk) {
-        return (int) (Math.abs(findThread(chunk)) % threads.size());
     }
 
     /**
@@ -195,6 +147,7 @@ public abstract class ThreadProvider {
                         entity.tick(time);
                     });
                 });
+                AcquirableEntity.refresh(Collections.emptyList());
                 lock.unlock();
             });
         }
@@ -210,19 +163,14 @@ public abstract class ThreadProvider {
      */
     public synchronized void refreshThreads(long tickTime) {
         // Clear removed entities
-        {
-            processRemovedEntities();
-        }
-
+        processRemovedEntities();
         // Update entities chunks
-        {
-            processUpdatedEntities();
-        }
+        processUpdatedEntities();
 
         if (getChunkRefreshType() == RefreshType.NEVER)
             return;
 
-        final int timeOffset = MathUtils.clamp((int) ((double) tickTime * refreshPercentage),
+        final int timeOffset = MathUtils.clamp((int) ((double) tickTime * getRefreshPercentage()),
                 getMinimumRefreshTime(), getMaximumRefreshTime());
         final long endTime = System.currentTimeMillis() + timeOffset;
         final int size = chunks.size();
@@ -248,20 +196,99 @@ public abstract class ThreadProvider {
         }
     }
 
+    /**
+     * Add an entity into the waiting list to get assigned in a thread.
+     * <p>
+     * Called when entering a new chunk.
+     *
+     * @param entity the entity to add
+     */
     public void updateEntity(@NotNull Entity entity) {
         this.updatableEntities.add(entity);
     }
 
+    /**
+     * Add an entity into the waiting list to get removed from its thread.
+     * <p>
+     * Called in {@link Entity#remove()}.
+     *
+     * @param entity the entity to remove
+     */
     public void removeEntity(@NotNull Entity entity) {
         this.removedEntities.add(entity);
     }
 
+    /**
+     * Shutdowns all the {@link TickThread tick threads}.
+     * <p>
+     * Action is irreversible.
+     */
     public void shutdown() {
         this.threads.forEach(TickThread::shutdown);
     }
 
+    /**
+     * Gets all the {@link TickThread tick threads}.
+     *
+     * @return the tick threads
+     */
     public @NotNull List<@NotNull TickThread> getThreads() {
         return threads;
+    }
+
+    protected void addChunk(@NotNull Chunk chunk) {
+        ChunkEntry chunkEntry = setChunkThread(chunk, (thread) -> new ChunkEntry(thread, chunk));
+        this.chunkEntryMap.put(chunk, chunkEntry);
+        this.chunks.add(chunk);
+    }
+
+    protected void switchChunk(@NotNull Chunk chunk) {
+        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+        if (chunkEntry == null)
+            return;
+        var chunks = threadChunkMap.get(chunkEntry.thread);
+        if (chunks == null || chunks.isEmpty())
+            return;
+        chunks.remove(chunkEntry);
+
+        setChunkThread(chunk, tickThread -> {
+            chunkEntry.thread = tickThread;
+            return chunkEntry;
+        });
+    }
+
+    protected @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
+                                                 @NotNull Function<TickThread, ChunkEntry> chunkEntrySupplier) {
+        final int threadId = getThreadId(chunk);
+        TickThread thread = threads.get(threadId);
+        var chunks = threadChunkMap.computeIfAbsent(thread, tickThread -> ConcurrentHashMap.newKeySet());
+
+        ChunkEntry chunkEntry = chunkEntrySupplier.apply(thread);
+        chunks.add(chunkEntry);
+        return chunkEntry;
+    }
+
+    protected void removeChunk(Chunk chunk) {
+        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+        if (chunkEntry != null) {
+            TickThread thread = chunkEntry.thread;
+            var chunks = threadChunkMap.get(thread);
+            if (chunks != null) {
+                chunks.remove(chunkEntry);
+            }
+            chunkEntryMap.remove(chunk);
+        }
+        this.chunks.remove(chunk);
+    }
+
+    /**
+     * Finds the thread id associated to a {@link Chunk}.
+     *
+     * @param chunk the chunk to find the thread id from
+     * @return the chunk thread id
+     */
+    protected int getThreadId(@NotNull Chunk chunk) {
+        return (int) (Math.abs(findThread(chunk)) % threads.size());
     }
 
     private void processRemovedEntities() {
