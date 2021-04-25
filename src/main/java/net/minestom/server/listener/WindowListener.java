@@ -12,6 +12,8 @@ import net.minestom.server.network.packet.client.play.ClientWindowConfirmationPa
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 
+import java.util.Objects;
+
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
@@ -86,7 +88,17 @@ public class WindowListener {
         }
 
         // Prevent the player from picking a ghost item in cursor
-        refreshCursorItem(player, inventory);
+        if (Objects.equals(player.getOpenInventory(), inventory)) {
+            refreshCursorItem(player, inventory);
+        }
+
+        // Prevent ghost item when the click is cancelled
+        if (!successful) {
+            player.getInventory().update();
+            if (inventory != null) {
+                inventory.update(player);
+            }
+        }
 
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;

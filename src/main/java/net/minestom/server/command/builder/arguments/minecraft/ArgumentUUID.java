@@ -33,4 +33,9 @@ public class ArgumentUUID extends Argument<UUID> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("UUID<%s>", getId());
+    }
 }

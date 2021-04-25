@@ -31,4 +31,9 @@ public class ArgumentResourceLocation extends Argument<String> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("ResourceLocation<%s>", getId());
+    }
 }
