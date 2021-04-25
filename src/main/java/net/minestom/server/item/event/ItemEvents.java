@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemEvents {
 
-    private static final ConcurrentHashMap<ItemTag, ItemEventRegistry> events = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<ItemTag<?>, ItemEventRegistry> events = new ConcurrentHashMap<>();
 
     private ItemEvents() {
 
