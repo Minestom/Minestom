@@ -9,9 +9,11 @@ import java.util.Iterator;
 
 public class ParticlePolygon extends ParticleShape {
     private final Position[] points;
+    private final boolean close;
 
-    public ParticlePolygon(@NotNull Position[] points) {
+    public ParticlePolygon(@NotNull Position[] points, boolean close) {
         this.points = points;
+        this.close = close;
     }
 
     public PolygonIterator iterator(ShapeOptions options) {
@@ -28,7 +30,7 @@ public class ParticlePolygon extends ParticleShape {
 
         @Override
         public boolean hasNext() {
-            return index < shape.points.length;
+            return index < shape.points.length - (shape.close ? 0 : 1);
         }
 
         @Override

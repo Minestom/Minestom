@@ -8,6 +8,7 @@ import java.util.List;
 
 public class PolygonBuilder {
     private List<Position> points = new ArrayList<>();
+    private boolean close = true;
 
     public @NotNull PolygonBuilder points(@NotNull List<Position> points) {
         this.points = points;
@@ -19,7 +20,12 @@ public class PolygonBuilder {
         return this;
     }
 
+    public @NotNull PolygonBuilder close(boolean close) {
+        this.close = close;
+        return this;
+    }
+
     public @NotNull ParticlePolygon build() {
-        return new ParticlePolygon(points.toArray(Position[]::new));
+        return new ParticlePolygon(points.toArray(Position[]::new), close);
     }
 }

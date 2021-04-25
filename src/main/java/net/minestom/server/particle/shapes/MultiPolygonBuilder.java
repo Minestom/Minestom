@@ -16,6 +16,13 @@ public class MultiPolygonBuilder {
         return this;
     }
 
+    public @NotNull MultiPolygonBuilder lineToLastStart() {
+        Check.stateCondition(lastPolygon == null, "Cannot use lineToLastStart when no starting point is specified");
+        completedShapes.add(lastPolygon.close(true).build());
+        lastPolygon = null;
+        return this;
+    }
+
     public @NotNull MultiPolygonBuilder lineTo(@NotNull Position position) {
         Check.stateCondition(lastPolygon == null, "Cannot use lineTo when no starting point is specified");
         lastPolygon.addPoint(position);
@@ -37,10 +44,10 @@ public class MultiPolygonBuilder {
         return new MultiPolygon(completedShapes.toArray(ParticleShape[]::new));
     }
 
-    //TODO this will create a line between the polygon start and end, which it should not
     private @NotNull MultiPolygonBuilder endLine() {
         if (lastPolygon != null) {
-            completedShapes.add(lastPolygon.build());
+            completedShapes.add(lastPolygon.close(false).build());
+            lastPolygon = null;
         }
         return this;
     }
