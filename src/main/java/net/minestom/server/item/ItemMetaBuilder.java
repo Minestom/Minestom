@@ -194,21 +194,6 @@ public abstract class ItemMetaBuilder {
         return this;
     }
 
-    @Beta
-    @Contract(value = "_ -> this")
-    public @NotNull ItemMetaBuilder addItemEvents(@NotNull String... ids) {
-        eventIDs.addAll(List.of(ids));
-
-        NBTList<NBTString> nbtList = new NBTList<>(NBTTypes.TAG_String);
-
-        for (String eventID : eventIDs) {
-            nbtList.add(new NBTString(eventID));
-        }
-
-        this.set(ItemTag.NBT("events"), nbtList);
-        return this;
-    }
-
     @Contract("-> new")
     public abstract @NotNull ItemMeta build();
 

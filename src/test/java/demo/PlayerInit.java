@@ -30,6 +30,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.event.ItemEvents;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -228,6 +229,19 @@ public class PlayerInit {
                 //System.out.println("test " + itemStack.getIdentifier() + " " + itemStack.getData());
             });
         });
+
+        {
+            // add an item event
+            var registry = ItemEvents.registry(ItemTag.String("item-drop"));
+
+            registry.identifier("stone").addEventCallback(ItemDropEvent.class, dropEvent -> {
+                dropEvent.getPlayer().sendMessage("You dropped the stone!");
+            });
+
+            registry.identifier("chestplate").addEventCallback(ItemDropEvent.class, dropEvent -> {
+                dropEvent.getPlayer().sendMessage("You dropped the chestplate!");
+            });
+        }
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();

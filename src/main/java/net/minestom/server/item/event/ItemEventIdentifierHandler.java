@@ -10,14 +10,14 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ItemEventHandler implements EventHandler {
+public class ItemEventIdentifierHandler<T> implements EventHandler {
+
+    ItemEventIdentifierHandler(T identifier) {
+
+    }
 
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
     private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
-
-    ItemEventHandler(String namespace) {
-
-    }
 
     @NotNull
     @Override
@@ -30,4 +30,5 @@ public class ItemEventHandler implements EventHandler {
     public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
         return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
     }
+
 }
