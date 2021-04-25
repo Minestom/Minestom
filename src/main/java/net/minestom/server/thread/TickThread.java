@@ -85,7 +85,7 @@ public class TickThread extends Thread {
             }
         }
 
-        public synchronized void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
+        public void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
             this.countDownLatch.set(countDownLatch);
             this.queue.add(runnable);
             LockSupport.unpark(tickThread);
