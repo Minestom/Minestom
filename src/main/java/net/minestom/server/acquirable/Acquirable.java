@@ -120,9 +120,7 @@ public interface Acquirable<T> {
     }
 
     /**
-     * Locks the acquirable element, execute {@code consumer} asynchronously and unlock the thread.
-     * <p>
-     * Free if the element is already present in the current thread, blocking otherwise.
+     * Async version of {@link #sync(Consumer)}.
      *
      * @param consumer the callback to execute once the element has been safely acquired
      * @see #sync(Consumer)
