@@ -1,5 +1,7 @@
-package net.minestom.server.particle.shapes;
+package net.minestom.server.particle.shapes.builder;
 
+import net.minestom.server.particle.shapes.MultiPolygon;
+import net.minestom.server.particle.shapes.ParticleShape;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;

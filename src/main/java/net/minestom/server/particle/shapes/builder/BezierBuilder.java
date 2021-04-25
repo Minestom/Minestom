@@ -1,5 +1,6 @@
-package net.minestom.server.particle.shapes;
+package net.minestom.server.particle.shapes.builder;
 
+import net.minestom.server.particle.shapes.BezierLine;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 

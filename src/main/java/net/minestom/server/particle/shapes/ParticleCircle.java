@@ -18,7 +18,7 @@ public class ParticleCircle extends ParticleShape {
 
     private final Facing facing;
 
-    public ParticleCircle(double x, double y, double z, double radius, Facing facing) {
+    public ParticleCircle(double x, double y, double z, double radius, @NotNull Facing facing) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -100,6 +100,8 @@ public class ParticleCircle extends ParticleShape {
                 ", y=" + y +
                 ", z=" + z +
                 ", radius=" + radius +
+                ", circumference=" + circumference +
+                ", facing=" + facing +
                 '}';
     }
 }

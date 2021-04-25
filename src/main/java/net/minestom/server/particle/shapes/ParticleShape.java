@@ -1,5 +1,9 @@
 package net.minestom.server.particle.shapes;
 
+import net.minestom.server.particle.shapes.builder.BezierBuilder;
+import net.minestom.server.particle.shapes.builder.CircleBuilder;
+import net.minestom.server.particle.shapes.builder.MultiPolygonBuilder;
+import net.minestom.server.particle.shapes.builder.PolygonBuilder;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +26,10 @@ public abstract class ParticleShape {
 
     public static @NotNull BezierBuilder bezier(Position start, Position end) {
         return new BezierBuilder().start(start).end(end);
+    }
+
+    public static @NotNull CircleBuilder circle(Position position) {
+        return new CircleBuilder().position(position);
     }
 
     public static @NotNull MultiPolygon cube(Position position, double width, double height, double depth) {
