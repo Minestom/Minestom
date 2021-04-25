@@ -321,6 +321,7 @@ public class PlayerInit {
                 .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.X))
                 .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.Y))
                 .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.Z))
+                .addShape(ParticleShape.single(new Position(0, 45, 0)))
                 .build();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {

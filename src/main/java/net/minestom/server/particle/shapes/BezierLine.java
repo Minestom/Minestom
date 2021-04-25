@@ -4,6 +4,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.ParticleCreator;
+import net.minestom.server.utils.ParticleUtils;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +29,7 @@ public class BezierLine extends ParticleShape {
         double time = 0;
 
         while (time <= 1 + EPSILON) {
-            positions.add(BezierCurves.bezier(points, time));
+            positions.add(ParticleUtils.bezier(points, time));
 
             time += step;
         }
@@ -67,12 +68,7 @@ public class BezierLine extends ParticleShape {
         public void draw(@NotNull Instance instance, @NotNull Position start) {
             while (hasNext()) {
                 Position position = next();
-                ParticlePacket packet = ParticleCreator.createParticlePacket(Particle.SOUL_FIRE_FLAME,
-                        start.getX() + position.getX(), start.getY() + position.getY(), start.getZ() + position.getZ(),
-                        0, 0, 0, 1);
-
-                instance.getPlayers().forEach((player) ->
-                        player.getPlayerConnection().sendPacket(packet));
+                ParticleUtils.drawParticle(instance, start.clone().add(position));
             }
         }
     }
