@@ -33,6 +33,18 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     @NotNull
     @Override
     public ItemStack parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+        argumentNode.parser = "minecraft:item_stack";
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    }
+
+    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("{");
 
         if (nbtIndex == 0)
@@ -58,14 +70,6 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
             return ItemStack.fromNBT(material, compound);
         }
-    }
-
-    @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:item_stack";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     @Override
