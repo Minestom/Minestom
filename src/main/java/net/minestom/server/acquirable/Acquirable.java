@@ -84,12 +84,11 @@ public interface Acquirable<T> {
     default @NotNull Acquired<T> lock() {
         var optional = local();
         if (optional.isPresent()) {
-            return new Acquired<>(optional.get(), false, null);
+            return Acquired.local(optional.get());
         } else {
             final Thread currentThread = Thread.currentThread();
             final TickThread tickThread = getHandler().getTickThread();
-            var lock = Acquired.acquireEnter(currentThread, tickThread);
-            return new Acquired<>(unwrap(), true, lock);
+            return Acquired.locked(unwrap(), currentThread, tickThread);
         }
     }
 

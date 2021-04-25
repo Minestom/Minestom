@@ -26,11 +26,11 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
                 final TickThread tickThread = entry.getKey();
                 final List<E> values = entry.getValue();
 
-                var lock = Acquired.acquireEnter(currentThread, tickThread);
+                var lock = AcquirableImpl.enter(currentThread, tickThread);
                 for (E value : values) {
                     consumer.accept(value);
                 }
-                Acquired.acquireLeave(lock);
+                AcquirableImpl.leave(lock);
             }
         }
     }
