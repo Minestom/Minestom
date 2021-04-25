@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 
 public class BezierLine extends ParticleShape {
-    private static final double EPSILON = 0.00001;
-
     private final Position[] positions;
 
     public BezierLine(@NotNull Position start, @NotNull Position end,
@@ -38,6 +36,7 @@ public class BezierLine extends ParticleShape {
         this.positions = positions.toArray(Position[]::new);
     }
 
+    //TODO options is not fully used for bezier curves (only linePattern)
     @Override
     public BezierIterator iterator(ShapeOptions options) {
         return new BezierIterator(this, options);

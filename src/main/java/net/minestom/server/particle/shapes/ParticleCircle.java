@@ -1,22 +1,31 @@
 package net.minestom.server.particle.shapes;
 
 import net.minestom.server.instance.Instance;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
 
 public class ParticleCircle extends ParticleShape {
+    private static final double _2PI = 2 * Math.PI;
+
     private final double x, y, z;
     private final double radius;
-    private final int particleCount;
+    private final double circumference;
 
-    public ParticleCircle(double x, double y, double z, double radius, int particleCount) {
+    private final Facing facing;
+
+    public ParticleCircle(double x, double y, double z, double radius, Facing facing) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.radius = radius;
-        this.particleCount = particleCount;
+        this.facing = facing;
+
+        this.circumference = _2PI * radius;
     }
 
     @Override
@@ -25,26 +34,63 @@ public class ParticleCircle extends ParticleShape {
     }
 
     public static class CircleIterator extends ParticleIterator<ParticleCircle> implements Iterator<Position> {
+        private final int particleCount;
+        private final double angleIncrement;
+
         private double currentAngle = 0;
+        private int particles = 0;
 
         public CircleIterator(ParticleCircle shape, ShapeOptions options) {
             super(shape, options);
+
+            if (options.hasParticleCount()) {
+                this.particleCount = options.getParticleCount();
+            } else {
+                //Stretch behavior
+                this.particleCount = (int) Math.round(shape.circumference / options.getParticleDistance());
+            }
+
+            this.angleIncrement = _2PI / particleCount;
         }
 
         @Override
         public boolean hasNext() {
-            return currentAngle < 0;
+            return particles < particleCount;
         }
 
         @Override
         public Position next() {
-            return null;
+            double c1 = shape.radius * Math.cos(currentAngle);
+            double c2 = shape.radius * Math.sin(currentAngle);
+
+            particles++;
+            currentAngle += angleIncrement;
+
+            if (shape.facing == Facing.X) {
+                return new Position(shape.x, shape.y + c1, shape.z + c2);
+            } else if (shape.facing == Facing.Y) {
+                return new Position(shape.x + c1, shape.y, shape.z + c2);
+            } else {
+                return new Position(shape.x + c1, shape.y + c2, shape.z);
+            }
         }
 
         @Override
         public void draw(@NotNull Instance instance, @NotNull Position start) {
+            while (hasNext()) {
+                Position position = next();
+                ParticlePacket packet = ParticleCreator.createParticlePacket(Particle.FLAME,
+                        start.getX() + position.getX(), start.getY() + position.getY(), start.getZ() + position.getZ(),
+                        0, 0, 0, 1);
 
+                instance.getPlayers().forEach((player) ->
+                        player.getPlayerConnection().sendPacket(packet));
+            }
         }
+    }
+
+    public enum Facing {
+        X, Y, Z
     }
 
     @Override
@@ -54,7 +100,6 @@ public class ParticleCircle extends ParticleShape {
                 ", y=" + y +
                 ", z=" + z +
                 ", radius=" + radius +
-                ", particleCount=" + particleCount +
                 '}';
     }
 }

@@ -32,10 +32,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.particle.shapes.BezierLine;
-import net.minestom.server.particle.shapes.MultiPolygon;
-import net.minestom.server.particle.shapes.ParticleShape;
-import net.minestom.server.particle.shapes.ShapeOptions;
+import net.minestom.server.particle.shapes.*;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -315,15 +312,20 @@ public class PlayerInit {
                 .lineTo(new Position(-1.5, 43.5, 0))
 
                 .build();*/
-        BezierLine shape = ParticleShape.bezier(new Position(0, 41, 0), new Position(10, 45, 5))
-                .addControlPoint(new Position(-5, 50, 2))
-                .addControlPoint(new Position(3, 45, -3))
-                .step(0.02)
+        //BezierLine shape = ParticleShape.bezier(new Position(0, 41, 0), new Position(10, 45, 5))
+        //        .addControlPoint(new Position(-5, 50, 2))
+        //        .addControlPoint(new Position(3, 45, -3))
+        //        .step(0.02)
+        //        .build();
+        ParticleShape shape = ParticleShape.multiPolygon()
+                .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.X))
+                .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.Y))
+                .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.Z))
                 .build();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            shape.iterator(ShapeOptions.builder().build()).draw(instanceContainer, new Position(0, 0, 0));
-        }).repeat(1, TimeUnit.TICK).schedule();
+            shape.iterator(ShapeOptions.builder().particleCount(20).build()).draw(instanceContainer, new Position(0, 0, 0));
+        }).repeat(10, TimeUnit.TICK).schedule();
     }
 
 

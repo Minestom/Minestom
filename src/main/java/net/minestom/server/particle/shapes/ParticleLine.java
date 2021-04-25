@@ -46,19 +46,23 @@ public class ParticleLine extends ParticleShape {
         private double x, y, z;
         private int particles = 0;
 
-        public LineIterator(@NotNull ParticleLine line, ShapeOptions options) {
-            super(line, options);
+        public LineIterator(@NotNull ParticleLine shape, ShapeOptions options) {
+            super(shape, options);
 
-            //Stretch behavior
-            this.particleCount = (int) Math.round(line.length / options.getParticleDistance());
+            if (options.hasParticleCount()) {
+                this.particleCount = options.getParticleCount();
+            } else {
+                //Stretch behavior
+                this.particleCount = (int) Math.round(shape.length / options.getParticleDistance());
+            }
 
-            this.changeX = line.dx / particleCount;
-            this.changeY = line.dy / particleCount;
-            this.changeZ = line.dz / particleCount;
+            this.changeX = shape.dx / particleCount;
+            this.changeY = shape.dy / particleCount;
+            this.changeZ = shape.dz / particleCount;
 
-            this.x = line.x1;
-            this.y = line.y1;
-            this.z = line.z1;
+            this.x = shape.x1;
+            this.y = shape.y1;
+            this.z = shape.z1;
         }
 
         @Override
