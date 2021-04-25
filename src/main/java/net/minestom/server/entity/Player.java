@@ -1382,7 +1382,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         if (itemDropEvent.isCancelled()) return false;
 
-        return ItemEvents.attemptEventCalls(item, ItemDropEvent.class, itemDropEvent);
+        return ItemEvents.callEventOnItem(item, ItemDropEvent.class, itemDropEvent);
     }
 
     /**

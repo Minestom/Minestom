@@ -15,6 +15,13 @@ public class ItemEventRegistry<T> {
         this.tag = tag;
     }
 
+    /**
+     * Finds an ItemEventIdentifierHandler by the identifier value, and creates a new instance if none were found.
+     *
+     * @param identifier The identifier used to find the ItemEventIdentifierHandler
+     *
+     * @return The found ItemEventIdentifierHandler with a new instance if none were found.
+     */
     public @NotNull ItemEventIdentifierHandler<T> identifierOrNew(T identifier) {
         if (identifierHandlerHashMap.containsKey(identifier)) return identifierHandlerHashMap.get(identifier);
 
@@ -25,6 +32,13 @@ public class ItemEventRegistry<T> {
         return itemEventIdentifierHandler;
     }
 
+    /**
+     * Finds an ItemEventIdentifierHandler by the identifier value
+     *
+     * @param identifier The identifier used to find the ItemEventIdentifierHandler
+     *
+     * @return The found ItemEventIdentifierHandler, null of none
+     */
     public @Nullable ItemEventIdentifierHandler<T> identifier(T identifier) {
         return identifierHandlerHashMap.get(identifier);
     }
