@@ -38,7 +38,7 @@ public class OpenToLAN {
     /**
      * Opens the server to LAN with the default config.
      *
-     * @return {@code true} if it was open successfully, {@code false} otherwise
+     * @return {@code true} if it was opened successfully, {@code false} otherwise
      */
     public static boolean open() {
         return open(new OpenToLANConfig());
@@ -48,7 +48,7 @@ public class OpenToLAN {
      * Opens the server to LAN.
      *
      * @param config the configuration
-     * @return {@code true} if it was open successfully, {@code false} otherwise
+     * @return {@code true} if it was opened successfully, {@code false} otherwise
      */
     public static boolean open(@NotNull OpenToLANConfig config) {
         if (socket != null) {
