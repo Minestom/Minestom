@@ -9,7 +9,7 @@ public class ItemUpdateStateEvent extends Event {
 
     private final Player player;
     private final Player.Hand hand;
-    private final ItemStack itemStack;
+    private ItemStack itemStack;
     private boolean handAnimation;
 
     public ItemUpdateStateEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack) {
@@ -31,6 +31,10 @@ public class ItemUpdateStateEvent extends Event {
     @NotNull
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public void setItemStack(@NotNull ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
     public void setHandAnimation(boolean handAnimation) {

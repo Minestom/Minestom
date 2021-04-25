@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ItemDropEvent extends Event implements CancellableEvent {
 
     private final Player player;
-    private final ItemStack itemStack;
+    private ItemStack itemStack;
 
     private boolean cancelled;
 
@@ -26,6 +26,10 @@ public class ItemDropEvent extends Event implements CancellableEvent {
     @NotNull
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public void setItemStack(@NotNull ItemStack itemStack) {
+        this.itemStack = itemStack;
     }
 
     @Override
