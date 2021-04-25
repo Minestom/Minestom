@@ -37,6 +37,7 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
+import net.minestom.server.utils.identified.UniquelyIdentified;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -58,7 +59,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity>, UniquelyIdentified {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -779,6 +780,11 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.uuid = uuid;
+    }
+
+    @Override
+    public @NotNull UUID uniqueIdentity() {
+        return this.uuid;
     }
 
     /**

@@ -31,6 +31,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
+import net.minestom.server.utils.identified.UniquelyIdentified;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -56,7 +57,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and {@link UpdateManager#signalChunkUnload(Instance, Chunk)}.
  */
-public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience, UniquelyIdentified {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -1109,5 +1110,10 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     @NotNull
     public PFInstanceSpace getInstanceSpace() {
         return instanceSpace;
+    }
+
+    @Override
+    public @NotNull UUID uniqueIdentity() {
+        return this.uniqueId;
     }
 }
