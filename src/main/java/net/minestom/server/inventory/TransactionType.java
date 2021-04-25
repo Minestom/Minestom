@@ -32,7 +32,8 @@ public interface TransactionType {
             }
             if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
                 final int itemAmount = stackingRule.getAmount(inventoryItem);
-                if (itemAmount == stackingRule.getMaxSize())
+                final int maxSize = stackingRule.getMaxSize(inventoryItem);
+                if (itemAmount == maxSize)
                     continue;
 
                 if (!slotPredicate.test(i, inventoryItem)) {
@@ -44,8 +45,8 @@ public interface TransactionType {
                 final int totalAmount = itemStackAmount + itemAmount;
                 if (!stackingRule.canApply(itemStack, totalAmount)) {
                     // Slot cannot accept the whole item, reduce amount to 'itemStack'
-                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, stackingRule.getMaxSize()));
-                    itemStack = stackingRule.apply(itemStack, totalAmount - stackingRule.getMaxSize());
+                    itemChangesMap.put(i, stackingRule.apply(inventoryItem, maxSize));
+                    itemStack = stackingRule.apply(itemStack, totalAmount - maxSize);
                 } else {
                     // Slot can accept the whole item
                     itemChangesMap.put(i, stackingRule.apply(inventoryItem, totalAmount));

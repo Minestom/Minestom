@@ -88,4 +88,9 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelative<RelativeBloc
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("RelativeBlockPosition<%s>", getId());
+    }
 }

@@ -116,4 +116,9 @@ public class ArgumentWord extends Argument<String> {
     public String[] getRestrictions() {
         return restrictions;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Word<%s>", getId());
+    }
 }

@@ -36,4 +36,9 @@ public class ArgumentStringArray extends Argument<String[]> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("StringArray<%s>", getId());
+    }
 }

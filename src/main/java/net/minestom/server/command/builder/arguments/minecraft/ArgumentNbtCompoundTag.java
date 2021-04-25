@@ -47,4 +47,9 @@ public class ArgumentNbtCompoundTag extends Argument<NBTCompound> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("NbtCompound<%s>", getId());
+    }
 }

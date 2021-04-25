@@ -174,7 +174,7 @@ public class Inventory extends AbstractInventory implements Viewable {
     @Override
     public boolean removeViewer(@NotNull Player player) {
         final boolean result = this.viewers.remove(player);
-        this.cursorPlayersItem.remove(player);
+        setCursorItem(player, ItemStack.AIR);
         this.clickProcessor.clearCache(player);
         return result;
     }
@@ -198,18 +198,19 @@ public class Inventory extends AbstractInventory implements Viewable {
      * @param cursorItem the new player cursor item
      */
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
-        if (!isViewer(player))
-            return;
-
-        final ItemStack currentCursorItem = cursorPlayersItem.get(player);
-        final boolean similar = currentCursorItem != null && currentCursorItem.isSimilar(cursorItem);
+        final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
+        final boolean similar = currentCursorItem.isSimilar(cursorItem);
 
         if (!similar) {
             final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
             player.getPlayerConnection().sendPacket(setSlotPacket);
         }
 
-        this.cursorPlayersItem.put(player, cursorItem);
+        if (!cursorItem.isAir()) {
+            this.cursorPlayersItem.put(player, cursorItem);
+        } else {
+            this.cursorPlayersItem.remove(player);
+        }
     }
 
     /**

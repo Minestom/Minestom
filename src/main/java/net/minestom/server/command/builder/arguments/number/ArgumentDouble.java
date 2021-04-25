@@ -57,4 +57,8 @@ public class ArgumentDouble extends ArgumentNumber<Double> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    @Override
+    public String toString() {
+        return String.format("Double<%s>", getId());
+    }
 }
