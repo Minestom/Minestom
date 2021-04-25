@@ -254,7 +254,8 @@ public class PlayerInit {
                     .amount(64)
                     .meta(itemMetaBuilder ->
                             itemMetaBuilder.canPlaceOn(Set.of(Block.STONE))
-                                    .canDestroy(Set.of(Block.DIAMOND_ORE)))
+                                    .canDestroy(Set.of(Block.DIAMOND_ORE))
+                                    .set(ItemTag.String("item-drop"), "stone"))
                     .build();
 
             //itemStack = itemStack.withStore(storeBuilder -> storeBuilder.set("key2", 25, Integer::sum));
@@ -265,6 +266,7 @@ public class PlayerInit {
                 ItemStack item = ItemStack.builder(Material.DIAMOND_CHESTPLATE)
                         .displayName(Component.text("test"))
                         .lore(Component.text("lore"))
+                        .meta(itemMetaBuilder -> itemMetaBuilder.set(ItemTag.String("item-drop"), "chestplate"))
                         .build();
 
                 //inventory.setChestplate(item);
