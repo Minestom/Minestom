@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class BezierLine extends ParticleShape {
+    private static final double EPSILON = 0.00001;
+
     private final Position[] positions;
 
     public BezierLine(@NotNull Position start, @NotNull Position end,
@@ -27,8 +29,7 @@ public class BezierLine extends ParticleShape {
 
         double time = 0;
 
-        while (time <= 1.01) {
-            System.out.println("time = " + time);
+        while (time <= 1 + EPSILON) {
             positions.add(BezierCurves.bezier(points, time));
 
             time += step;
