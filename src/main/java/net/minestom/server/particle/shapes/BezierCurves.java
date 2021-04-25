@@ -4,18 +4,7 @@ import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 public class BezierCurves {
-    public static Position bezier(@NotNull Position start, @NotNull Position end,
-                                  @NotNull Position[] controlPoints,
-                                  double time) {
-        Position[] points = new Position[2 + controlPoints.length];
-        points[0] = start;
-        System.arraycopy(controlPoints, 0, points, 1, controlPoints.length);
-        points[points.length - 1] = end;
-
-        return bezierN(points, time);
-    }
-
-    public static Position bezierN(@NotNull Position[] points, double time) {
+    public static Position bezier(@NotNull Position[] points, double time) {
         double x = 0;
         double y = 0;
         double z = 0;
