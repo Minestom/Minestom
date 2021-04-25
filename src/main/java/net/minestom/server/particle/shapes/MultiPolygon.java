@@ -4,6 +4,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 //TODO better name
@@ -47,5 +48,12 @@ public class MultiPolygon extends ParticleShape {
                 shape.iterator(options).draw(instance, start);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "MultiPolygon{" +
+                "shapes=" + Arrays.toString(shapes) +
+                '}';
     }
 }

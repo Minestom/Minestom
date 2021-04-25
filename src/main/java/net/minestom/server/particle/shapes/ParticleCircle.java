@@ -46,4 +46,15 @@ public class ParticleCircle extends ParticleShape {
 
         }
     }
+
+    @Override
+    public String toString() {
+        return "ParticleCircle{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", radius=" + radius +
+                ", particleCount=" + particleCount +
+                '}';
+    }
 }

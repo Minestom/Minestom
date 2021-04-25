@@ -7,6 +7,7 @@ import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class BezierLine extends ParticleShape {
@@ -63,5 +64,15 @@ public class BezierLine extends ParticleShape {
                         player.getPlayerConnection().sendPacket(packet));
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "BezierLine{" +
+                "start=" + start +
+                ", end=" + end +
+                ", controlPoints=" + Arrays.toString(controlPoints) +
+                ", step=" + step +
+                '}';
     }
 }

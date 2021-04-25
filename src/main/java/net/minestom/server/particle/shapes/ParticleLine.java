@@ -41,10 +41,9 @@ public class ParticleLine extends ParticleShape {
 
     public static class LineIterator extends ParticleIterator<ParticleLine> implements Iterator<Position> {
         private final double changeX, changeY, changeZ;
+        private final int particleCount;
 
         private double x, y, z;
-
-        private final int particleCount;
         private int particles = 0;
 
         public LineIterator(@NotNull ParticleLine line, ShapeOptions options) {
