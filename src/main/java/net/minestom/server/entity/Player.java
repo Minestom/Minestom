@@ -42,6 +42,7 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.event.ItemEvents;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.network.ConnectionManager;
@@ -1378,6 +1379,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
         callEvent(ItemDropEvent.class, itemDropEvent);
+
+        if (itemDropEvent.isCancelled()) return false;
+
+        ItemEvents.attemptEventCalls(item, ItemDropEvent.class, itemDropEvent);
+
         return !itemDropEvent.isCancelled();
     }
 

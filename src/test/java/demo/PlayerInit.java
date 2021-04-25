@@ -4,7 +4,6 @@ import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
@@ -34,7 +33,6 @@ import net.minestom.server.item.event.ItemEvents;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -44,7 +42,6 @@ import net.minestom.server.world.DimensionType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PlayerInit {
@@ -232,13 +229,13 @@ public class PlayerInit {
 
         {
             // add an item event
-            var registry = ItemEvents.registry(ItemTag.String("item-drop"));
+            var registry = ItemEvents.getRegistryOrNew(ItemTag.String("item-drop"));
 
-            registry.identifier("stone").addEventCallback(ItemDropEvent.class, dropEvent -> {
+            registry.identifierOrNew("stone").addEventCallback(ItemDropEvent.class, dropEvent -> {
                 dropEvent.getPlayer().sendMessage("You dropped the stone!");
             });
 
-            registry.identifier("chestplate").addEventCallback(ItemDropEvent.class, dropEvent -> {
+            registry.identifierOrNew("chestplate").addEventCallback(ItemDropEvent.class, dropEvent -> {
                 dropEvent.getPlayer().sendMessage("You dropped the chestplate!");
             });
         }
