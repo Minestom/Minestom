@@ -1,6 +1,5 @@
 package net.minestom.server.item;
 
-import com.google.common.annotations.Beta;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.AdventureSerializer;
@@ -31,7 +30,6 @@ public abstract class ItemMetaBuilder {
     protected int customModelData;
     protected Set<Block> canDestroy = new HashSet<>();
     protected Set<Block> canPlaceOn = new HashSet<>();
-    protected Set<String> eventIDs = new HashSet<>();
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder damage(int damage) {
