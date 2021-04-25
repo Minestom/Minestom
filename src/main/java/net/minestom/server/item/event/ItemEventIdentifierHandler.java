@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ItemEventIdentifierHandler<T> implements EventHandler {
 
-    ItemEventIdentifierHandler(T identifier) {
+    ItemEventIdentifierHandler() {
 
     }
 

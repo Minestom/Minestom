@@ -73,6 +73,7 @@ public class ItemEvents {
         boolean cancelled = false;
 
         for (ItemTag<?> tag : events.keySet()) {
+
             // If the tag was not found on the item then go to the next loop
             if (itemStack.getMeta().get(tag) == null) {
                 continue;

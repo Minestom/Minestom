@@ -25,7 +25,7 @@ public class ItemEventRegistry<T> {
     public @NotNull ItemEventIdentifierHandler<T> identifierOrNew(T identifier) {
         if (identifierHandlerHashMap.containsKey(identifier)) return identifierHandlerHashMap.get(identifier);
 
-        ItemEventIdentifierHandler<T> itemEventIdentifierHandler = new ItemEventIdentifierHandler<>(identifier);
+        ItemEventIdentifierHandler<T> itemEventIdentifierHandler = new ItemEventIdentifierHandler<>();
 
         identifierHandlerHashMap.put(identifier, itemEventIdentifierHandler);
 
