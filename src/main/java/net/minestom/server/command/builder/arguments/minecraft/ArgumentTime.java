@@ -66,4 +66,9 @@ public class ArgumentTime extends Argument<UpdateOption> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("Time<%s>", getId());
+    }
 }

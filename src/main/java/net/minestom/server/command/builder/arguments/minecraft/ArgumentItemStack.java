@@ -67,4 +67,9 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("ItemStack<%s>", getId());
+    }
 }
