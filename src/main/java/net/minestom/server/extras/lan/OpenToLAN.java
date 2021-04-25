@@ -3,6 +3,7 @@ package net.minestom.server.extras.lan;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
+import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -57,9 +58,7 @@ public class OpenToLAN {
 
             if (port == 0) {
                 try {
-                    final ServerSocket socket = new ServerSocket(0);
-                    port = socket.getLocalPort();
-                    socket.close();
+                    port = NetworkUtils.getFreePort();
                 } catch (IOException e) {
                     LOGGER.warn("Could not find an open port!", e);
                     return false;
