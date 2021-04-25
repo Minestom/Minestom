@@ -1,7 +1,7 @@
 package net.minestom.server;
 
 import com.google.common.collect.Queues;
-import net.minestom.server.acquirable.Acquisition;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -86,12 +86,12 @@ public final class UpdateManager {
 
                 // Monitoring
                 if (!tickMonitors.isEmpty()) {
-                    final double acquisitionTimeMs = Acquisition.getCurrentWaitMonitoring() / 1e6D;
+                    final double acquisitionTimeMs = Acquirable.getAcquiringTime() / 1e6D;
                     final double tickTimeMs = tickTime / 1e6D;
                     final TickMonitor tickMonitor = new TickMonitor(tickTimeMs, acquisitionTimeMs);
                     this.tickMonitors.forEach(consumer -> consumer.accept(tickMonitor));
 
-                    Acquisition.resetWaitMonitoring();
+                    Acquirable.resetAcquiringTime();
                 }
 
                 // Flush all waiting packets

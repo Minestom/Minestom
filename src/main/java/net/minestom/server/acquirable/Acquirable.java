@@ -39,6 +39,25 @@ public interface Acquirable<T> {
     }
 
     /**
+     * Gets the time spent acquiring since last tick.
+     *
+     * @return the acquiring time
+     */
+    static long getAcquiringTime() {
+        return AcquirableImpl.WAIT_COUNTER_NANO.get();
+    }
+
+    /**
+     * Resets {@link #getAcquiringTime()}.
+     * <p>
+     * Mostly for internal use.
+     */
+    @ApiStatus.Internal
+    static void resetAcquiringTime() {
+        AcquirableImpl.WAIT_COUNTER_NANO.set(0);
+    }
+
+    /**
      * Creates a new {@link Acquirable} object.
      * <p>
      * Mostly for internal use, as a {@link TickThread} has to be used
@@ -69,7 +88,7 @@ public interface Acquirable<T> {
         } else {
             final Thread currentThread = Thread.currentThread();
             final TickThread tickThread = getHandler().getTickThread();
-            var lock = Acquisition.acquireEnter(currentThread, tickThread);
+            var lock = Acquired.acquireEnter(currentThread, tickThread);
             return new Acquired<>(unwrap(), true, lock);
         }
     }

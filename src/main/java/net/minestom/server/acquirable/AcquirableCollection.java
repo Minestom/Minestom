@@ -1,10 +1,10 @@
 package net.minestom.server.acquirable;
 
+import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -17,7 +17,22 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
     }
 
     public void forEachSync(@NotNull Consumer<E> consumer) {
-        Acquisition.acquireForEach(acquirableCollection, consumer);
+        final Thread currentThread = Thread.currentThread();
+        var threadEntitiesMap = retrieveOptionalThreadMap(acquirableCollection, currentThread, consumer);
+
+        // Acquire all the threads one by one
+        {
+            for (var entry : threadEntitiesMap.entrySet()) {
+                final TickThread tickThread = entry.getKey();
+                final List<E> values = entry.getValue();
+
+                var lock = Acquired.acquireEnter(currentThread, tickThread);
+                for (E value : values) {
+                    consumer.accept(value);
+                }
+                Acquired.acquireLeave(lock);
+            }
+        }
     }
 
     public void forEachAsync(@NotNull Consumer<E> consumer) {
@@ -95,4 +110,37 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
     public void clear() {
         this.acquirableCollection.clear();
     }
+
+    /**
+     * Creates
+     *
+     * @param collection    the acquirable collection
+     * @param currentThread the current thread
+     * @param consumer      the consumer to execute when an element is already in the current thread
+     * @return a new Thread to acquirable elements map
+     */
+    protected static <T> Map<TickThread, List<T>> retrieveOptionalThreadMap(@NotNull Collection<Acquirable<T>> collection,
+                                                                            @NotNull Thread currentThread,
+                                                                            @NotNull Consumer<T> consumer) {
+        // Separate a collection of acquirable elements into a map of thread->elements
+        // Useful to reduce the number of acquisition
+
+        Map<TickThread, List<T>> threadCacheMap = new HashMap<>();
+        for (var element : collection) {
+            final T value = element.unwrap();
+
+            final TickThread elementThread = element.getHandler().getTickThread();
+            if (currentThread == elementThread) {
+                // The element is managed in the current thread, consumer can be immediately called
+                consumer.accept(value);
+            } else {
+                // The element is manager in a different thread, cache it
+                List<T> threadCacheList = threadCacheMap.computeIfAbsent(elementThread, tickThread -> new ArrayList<>());
+                threadCacheList.add(value);
+            }
+        }
+
+        return threadCacheMap;
+    }
+
 }
