@@ -12,6 +12,8 @@ import java.util.Iterator;
 public class ParticleLine extends ParticleShape {
     private final double x1, y1, z1;
     private final double x2, y2, z2;
+    private final double dx, dy, dz;
+    private final double length;
 
     public ParticleLine(double x1, double y1, double z1, double x2, double y2, double z2) {
         this.x1 = x1;
@@ -20,6 +22,12 @@ public class ParticleLine extends ParticleShape {
         this.x2 = x2;
         this.y2 = y2;
         this.z2 = z2;
+
+        this.dx = x2 - x1;
+        this.dy = y2 - y1;
+        this.dz = z2 - z1;
+
+        this.length = Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
 
     public ParticleLine(@NotNull Position position1, @NotNull Position position2) {
@@ -38,23 +46,16 @@ public class ParticleLine extends ParticleShape {
 
         private final int particleCount;
         private int particles = 0;
-        private int line = 0;
 
         public LineIterator(@NotNull ParticleLine line, ShapeOptions options) {
             super(line, options);
 
-            double dx = line.x2 - line.x1;
-            double dy = line.y2 - line.y1;
-            double dz = line.z2 - line.z1;
-
-            double lineLength = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
             //Stretch behavior
-            this.particleCount = (int) Math.round(lineLength / options.getParticleDistance());
+            this.particleCount = (int) Math.round(line.length / options.getParticleDistance());
 
-            this.changeX = dx / particleCount;
-            this.changeY = dy / particleCount;
-            this.changeZ = dz / particleCount;
+            this.changeX = line.dx / particleCount;
+            this.changeY = line.dy / particleCount;
+            this.changeZ = line.dz / particleCount;
 
             this.x = line.x1;
             this.y = line.y1;
@@ -63,7 +64,7 @@ public class ParticleLine extends ParticleShape {
 
         @Override
         public boolean hasNext() {
-            return particles < particleCount && line < options.getLineWidth();
+            return particles < particleCount;
         }
 
         @Override
@@ -72,19 +73,9 @@ public class ParticleLine extends ParticleShape {
 
             particles++;
 
-            if (particles < particleCount) {
-                //TODO offset the different lines for line width
-                x += changeX;
-                y += changeY;
-                z += changeZ;
-            } else {
-                x = shape.x1;
-                y = shape.y1;
-                z = shape.z1;
-
-                line++;
-                particles = 0;
-            }
+            x += changeX;
+            y += changeY;
+            z += changeZ;
 
             return position;
         }
