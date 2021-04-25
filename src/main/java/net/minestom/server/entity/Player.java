@@ -326,15 +326,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             packet.process(this);
         }
 
-        //System.out.println(getAcquiredElement().getHandler().getBatchThread());
-        if (username.equals("TheMode911"))
-            for (Player p : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
-                //players.add(p1.getAcquiredElement());
-                p.getAcquirable().sync(player -> {
-
-                });
-            }
-
         super.update(time); // Super update (item pickup/fire management)
 
         // Target block stage
