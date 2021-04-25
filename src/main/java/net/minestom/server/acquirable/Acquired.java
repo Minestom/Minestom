@@ -19,8 +19,10 @@ public class Acquired<T> {
         return new Acquired<>(value, false, null, null);
     }
 
-    protected static <T> Acquired<T> locked(@NotNull T value, Thread currentThread, TickThread tickThread) {
-        return new Acquired<>(value, true, currentThread, tickThread);
+    protected static <T> Acquired<T> locked(@NotNull Acquirable<T> acquirable) {
+        final Thread currentThread = Thread.currentThread();
+        final TickThread tickThread = acquirable.getHandler().getTickThread();
+        return new Acquired<>(acquirable.unwrap(), true, currentThread, tickThread);
     }
 
     private Acquired(@NotNull T value,
