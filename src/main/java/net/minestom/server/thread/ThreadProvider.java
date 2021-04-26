@@ -91,7 +91,7 @@ public abstract class ThreadProvider {
     }
 
     /**
-     * Minimum time used to refresh chunks & entities thread.
+     * Minimum time used to refresh chunks and entities thread.
      *
      * @return the minimum refresh time in milliseconds
      */
@@ -100,7 +100,7 @@ public abstract class ThreadProvider {
     }
 
     /**
-     * Maximum time used to refresh chunks & entities thread.
+     * Maximum time used to refresh chunks and entities thread.
      *
      * @return the maximum refresh time in milliseconds
      */
