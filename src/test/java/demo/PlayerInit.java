@@ -32,6 +32,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.particle.shapes.*;
 import net.minestom.server.particle.shapes.builder.CircleBuilder;
 import net.minestom.server.utils.MathUtils;
@@ -328,7 +329,7 @@ public class PlayerInit {
                 .build();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            shape.iterator(ShapeOptions.builder().particleCount(20).linePattern(LinePattern.of("---  ")).build()).draw(instanceContainer, new Position(0, 0, 0));
+            shape.iterator(ShapeOptions.builder(Particle.FLAME).particleCount(20).linePattern(LinePattern.of("---  ")).build()).draw(instanceContainer, new Position(0, 0, 0));
         }).repeat(10, TimeUnit.TICK).schedule();
     }
 

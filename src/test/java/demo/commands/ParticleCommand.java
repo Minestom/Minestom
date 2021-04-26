@@ -25,7 +25,8 @@ public class ParticleCommand extends Command {
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         Player player = sender.asPlayer();
 
+        //TODO particle data
         //noinspection ConstantConditions
-        ParticleUtils.drawParticle(player.getInstance(), player.getPosition().clone().add(0, 2, 0), context.get(particle));
+        ParticleUtils.drawParticle(player.getInstance(), player.getPosition().clone().add(0, 2, 0), context.get(particle), null);
     }
 }

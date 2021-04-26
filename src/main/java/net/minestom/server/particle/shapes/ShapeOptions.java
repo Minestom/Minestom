@@ -1,17 +1,33 @@
 package net.minestom.server.particle.shapes;
 
+import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ShapeOptions {
+    private final Particle particle;
+    private final ParticleData particleData;
     private final LinePattern linePattern;
     private final int particleDistance;
     private final int particleCount;
 
-    public ShapeOptions(@NotNull LinePattern linePattern, int particleDistance, int particleCount) {
+    public ShapeOptions(@NotNull Particle particle, @Nullable ParticleData particleData,
+                        @NotNull LinePattern linePattern, int particleDistance, int particleCount) {
+        this.particle = particle;
+        this.particleData = particleData;
         this.particleCount = particleCount;
         this.linePattern = linePattern;
         this.particleDistance = particleDistance;
+    }
+
+    public @NotNull Particle getParticle() {
+        return particle;
+    }
+
+    public @Nullable ParticleData getParticleData() {
+        return particleData;
     }
 
     public @NotNull LinePattern.Iterator getPatternIterator() {
@@ -30,16 +46,29 @@ public class ShapeOptions {
         return particleCount;
     }
 
-    public static @NotNull Builder builder() {
-        return new Builder();
+    public static @NotNull Builder builder(@NotNull Particle particle) {
+        return new Builder(particle);
     }
 
     public static class Builder {
+        private Particle particle;
+        private ParticleData particleData;
         private LinePattern linePattern = LinePattern.empty();
         private int particleDistance = -1;
         private int particleCount = -1;
 
-        private Builder() {
+        private Builder(@NotNull Particle particle) {
+            this.particle = particle;
+        }
+
+        public @NotNull Builder particle(@NotNull Particle particle) {
+            this.particle = particle;
+            return this;
+        }
+
+        public @NotNull Builder particleData(@Nullable ParticleData particleData) {
+            this.particleData = particleData;
+            return this;
         }
 
         public @NotNull Builder linePattern(@NotNull LinePattern linePattern) {
@@ -66,7 +95,7 @@ public class ShapeOptions {
                 particleDistance = 1;
             }
 
-            return new ShapeOptions(linePattern, particleDistance, particleCount);
+            return new ShapeOptions(particle, particleData, linePattern, particleDistance, particleCount);
         }
     }
 }
