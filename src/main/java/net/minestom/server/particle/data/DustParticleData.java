@@ -5,19 +5,21 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class DustParticleData extends ParticleData {
-    private final Color color;
+    private final float red, green, blue;
     private final float scale;
 
     public DustParticleData(@NotNull Color color, float scale) {
-        this.color = color;
+        this.red = color.getRed() / 255F;
+        this.green = color.getGreen() / 255F;
+        this.blue = color.getBlue() / 255F;
         this.scale = scale;
     }
 
     @Override
     public void write(BinaryWriter writer) {
-        writer.writeFloat(color.getRed());
-        writer.writeFloat(color.getGreen());
-        writer.writeFloat(color.getBlue());
+        writer.writeFloat(red);
+        writer.writeFloat(green);
+        writer.writeFloat(blue);
         writer.writeFloat(scale);
     }
 }

@@ -24,7 +24,6 @@ public class ParticlePolygon extends ParticleShape {
         private int index = 0;
 
         protected PolygonIterator(ParticlePolygon polygon, ShapeOptions options) {
-            //TODO particleCount should become particleDistance (or at least optional)
             super(polygon, options);
         }
 

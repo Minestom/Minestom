@@ -6,6 +6,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+//TODO add distance mode (like stretch, continue on other lines, etc.)
 public class ShapeOptions {
     private final Particle particle;
     private final ParticleData particleData;

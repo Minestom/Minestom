@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
+import net.minestom.server.color.Color;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
@@ -33,6 +34,7 @@ import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.particle.shapes.*;
 import net.minestom.server.particle.shapes.builder.CircleBuilder;
 import net.minestom.server.utils.MathUtils;
@@ -323,13 +325,12 @@ public class PlayerInit {
 
         ParticleShape shape = ParticleShape.multiPolygon()
                 .addShape(circleBuilder.facing(ParticleCircle.Facing.X).build())
-                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Y).build())
-                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Z).build())
-                .addShape(ParticleShape.single(new Position(0, 45, 0)))
+                .addShape(circleBuilder.facing(ParticleCircle.Facing.Y).build())
+                .addShape(circleBuilder.facing(ParticleCircle.Facing.Z).build())
                 .build();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            shape.iterator(ShapeOptions.builder(Particle.FLAME).particleCount(20).linePattern(LinePattern.of("---  ")).build()).draw(instanceContainer, new Position(0, 0, 0));
+            shape.iterator(ShapeOptions.builder(Particle.DUST).particleData(ParticleData.dust(new Color(0, 100, 25), 3)).particleCount(20).linePattern(LinePattern.of("-----")).build()).draw(instanceContainer, new Position(0, 0, 0));
         }).repeat(10, TimeUnit.TICK).schedule();
     }
 
