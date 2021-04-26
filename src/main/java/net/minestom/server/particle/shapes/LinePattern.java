@@ -6,8 +6,21 @@ import org.jetbrains.annotations.Nullable;
 public class LinePattern {
     private final boolean[] pattern;
 
+    private LinePattern(boolean[] pattern) {
+        this.pattern = pattern;
+    }
+
     private LinePattern(@Nullable String pattern) {
         this.pattern = createPattern(pattern);
+    }
+
+    public @NotNull LinePattern withOffset(int offset) {
+        boolean[] result = new boolean[pattern.length];
+
+        System.arraycopy(pattern, 0, result, offset, pattern.length - offset);
+        System.arraycopy(pattern, pattern.length - offset, result, 0, offset);
+
+        return new LinePattern(result);
     }
 
     public @NotNull LinePattern.Iterator iterator() {
@@ -57,6 +70,6 @@ public class LinePattern {
     }
 
     public static LinePattern empty() {
-        return new LinePattern(null);
+        return new LinePattern((String) null);
     }
 }

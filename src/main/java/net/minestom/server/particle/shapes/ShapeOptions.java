@@ -13,14 +13,17 @@ public class ShapeOptions {
     private final LinePattern linePattern;
     private final int particleDistance;
     private final int particleCount;
+    private final float particleSpeed;
 
     public ShapeOptions(@NotNull Particle particle, @Nullable ParticleData particleData,
-                        @NotNull LinePattern linePattern, int particleDistance, int particleCount) {
+                        @NotNull LinePattern linePattern, int particleDistance,
+                        int particleCount, float particleSpeed) {
         this.particle = particle;
         this.particleData = particleData;
         this.particleCount = particleCount;
         this.linePattern = linePattern;
         this.particleDistance = particleDistance;
+        this.particleSpeed = particleSpeed;
     }
 
     public @NotNull Particle getParticle() {
@@ -47,6 +50,10 @@ public class ShapeOptions {
         return particleCount;
     }
 
+    public float getParticleSpeed() {
+        return particleSpeed;
+    }
+
     public static @NotNull Builder builder(@NotNull Particle particle) {
         return new Builder(particle);
     }
@@ -57,6 +64,7 @@ public class ShapeOptions {
         private LinePattern linePattern = LinePattern.empty();
         private int particleDistance = -1;
         private int particleCount = -1;
+        private float particleSpeed = 0;
 
         private Builder(@NotNull Particle particle) {
             this.particle = particle;
@@ -91,12 +99,17 @@ public class ShapeOptions {
             return this;
         }
 
+        public @NotNull Builder particleSpeed(float particleSpeed) {
+            this.particleSpeed = particleSpeed;
+            return this;
+        }
+
         public @NotNull ShapeOptions build() {
             if (particleCount == -1 && particleDistance == -1) {
                 particleDistance = 1;
             }
 
-            return new ShapeOptions(particle, particleData, linePattern, particleDistance, particleCount);
+            return new ShapeOptions(particle, particleData, linePattern, particleDistance, particleCount, particleSpeed);
         }
     }
 }

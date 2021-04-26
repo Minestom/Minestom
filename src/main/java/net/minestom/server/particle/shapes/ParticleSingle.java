@@ -48,8 +48,7 @@ public class ParticleSingle extends ParticleShape {
         public void draw(@NotNull Instance instance, @NotNull Position start, @NotNull LinePattern.Iterator pattern) {
             Position position = next();
             if (pattern.next()) {
-                ParticleUtils.drawParticle(instance, start.clone().add(position),
-                        options.getParticle(), options.getParticleData());
+                ParticleUtils.drawParticle(instance, start.clone().add(position), options);
             }
         }
     }

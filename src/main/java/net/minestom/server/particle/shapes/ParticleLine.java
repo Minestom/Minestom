@@ -86,8 +86,7 @@ public class ParticleLine extends ParticleShape {
             while (hasNext()) {
                 Position position = next();
                 if (pattern.next()) {
-                    ParticleUtils.drawParticle(instance, start.clone().add(position),
-                            options.getParticle(), options.getParticleData());
+                    ParticleUtils.drawParticle(instance, start.clone().add(position), options);
                 }
             }
         }

@@ -325,13 +325,21 @@ public class PlayerInit {
 
         ParticleShape shape = ParticleShape.multiPolygon()
                 .addShape(circleBuilder.facing(ParticleCircle.Facing.X).build())
-                .addShape(circleBuilder.facing(ParticleCircle.Facing.Y).build())
-                .addShape(circleBuilder.facing(ParticleCircle.Facing.Z).build())
+                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Y).build())
+                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Z).build())
                 .build();
 
+        var ref = new Object() {
+            LinePattern linePattern = LinePattern.of("-              ");
+        };
+
+        ShapeOptions.Builder shapeOptionsBuilder = ShapeOptions.builder(Particle.FLAME).particleCount(60);
+
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            shape.iterator(ShapeOptions.builder(Particle.DUST).particleData(ParticleData.dust(new Color(0, 100, 25), 3)).particleCount(20).linePattern(LinePattern.of("-----")).build()).draw(instanceContainer, new Position(0, 0, 0));
-        }).repeat(10, TimeUnit.TICK).schedule();
+            ref.linePattern = ref.linePattern.withOffset(1);
+
+            shape.iterator(shapeOptionsBuilder.linePattern(ref.linePattern).build()).draw(instanceContainer, new Position(0, 0, 0));
+        }).repeat(3, TimeUnit.TICK).schedule();
     }
 
 
