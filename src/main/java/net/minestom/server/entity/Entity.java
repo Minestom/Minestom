@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Queues;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -1573,10 +1574,12 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
+    @Beta
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
         return (Acquirable<T>) acquirable;
     }
 
+    @Beta
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
         return (Acquirable<T>) acquirable;
     }

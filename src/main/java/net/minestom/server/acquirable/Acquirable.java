@@ -1,5 +1,6 @@
 package net.minestom.server.acquirable;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.thread.TickThread;
@@ -12,6 +13,7 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+@Beta
 public interface Acquirable<T> {
 
     /**
