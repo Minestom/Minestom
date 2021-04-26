@@ -186,8 +186,12 @@ public class InventoryClickProcessor {
             return null;
 
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
-            InventoryClickResult result = startCondition(inventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            return !result.isCancel();
+            InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            if(result.isCancel()){
+                clickResult.setRefresh(true);
+                return false;
+            }
+            return true;
         });
 
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
@@ -209,8 +213,12 @@ public class InventoryClickProcessor {
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (index == slot) // Prevent item lose/duplication
                 return false;
-            InventoryClickResult result = startCondition(null, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            return !result.isCancel();
+            InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            if(result.isCancel()){
+                clickResult.setRefresh(true);
+                return false;
+            }
+            return true;
         }, start, end, step);
 
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
@@ -545,6 +553,13 @@ public class InventoryClickProcessor {
                                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         return startCondition(clickResult, inventory, player, slot, clickType);
+    }
+
+    @NotNull
+    private InventoryClickResult startCondition(@Nullable AbstractInventory inventory, @NotNull Player player, int slot,
+                                                @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        return startCondition(inventory instanceof Inventory ? (Inventory) inventory : null,
+                player, slot, clickType, clicked, cursor);
     }
 
     private void callClickEvent(@NotNull Player player, @Nullable Inventory inventory, int slot,

@@ -77,4 +77,9 @@ public class ArgumentString extends Argument<String> {
 
         return StringEscapeUtils.unescapeJava(input);
     }
+
+    @Override
+    public String toString() {
+        return String.format("String<%s>", getId());
+    }
 }

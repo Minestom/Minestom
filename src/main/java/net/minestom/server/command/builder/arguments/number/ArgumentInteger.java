@@ -48,4 +48,8 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    @Override
+    public String toString() {
+        return String.format("Integer<%s>", getId());
+    }
 }

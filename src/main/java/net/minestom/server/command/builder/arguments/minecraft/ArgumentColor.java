@@ -47,4 +47,9 @@ public class ArgumentColor extends Argument<Style> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("Color<%s>", getId());
+    }
 }
