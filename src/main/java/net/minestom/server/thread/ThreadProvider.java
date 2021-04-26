@@ -1,251 +1,386 @@
 package net.minestom.server.thread;
 
-import io.netty.util.NettyRuntime;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.*;
+import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.SharedInstance;
-import net.minestom.server.utils.callback.validator.EntityValidator;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.function.Consumer;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 /**
  * Used to link chunks into multiple groups.
  * Then executed into a thread pool.
- * <p>
- * You can change the current thread provider by calling {@link net.minestom.server.UpdateManager#setThreadProvider(ThreadProvider)}.
  */
 public abstract class ThreadProvider {
 
-    /**
-     * The thread pool of this thread provider.
-     */
-    protected ExecutorService pool;
-    /**
-     * The amount of threads in the thread pool
-     */
-    private int threadCount;
+    private final List<TickThread> threads;
 
-    {
-        // Default thread count in the pool (cores * 2)
-        setThreadCount(1);
+    private final Map<TickThread, Set<ChunkEntry>> threadChunkMap = new HashMap<>();
+    private final Map<Chunk, ChunkEntry> chunkEntryMap = new HashMap<>();
+    // Iterated over to refresh the thread used to update entities & chunks
+    private final ArrayDeque<Chunk> chunks = new ArrayDeque<>();
+    private final Set<Entity> updatableEntities = ConcurrentHashMap.newKeySet();
+    private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
+
+    public ThreadProvider(int threadCount) {
+        this.threads = new ArrayList<>(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            final TickThread.BatchRunnable batchRunnable = new TickThread.BatchRunnable();
+            final TickThread tickThread = new TickThread(batchRunnable, i);
+            this.threads.add(tickThread);
+
+            tickThread.start();
+        }
     }
 
-    /**
-     * Called when an {@link Instance} is registered.
-     *
-     * @param instance the newly create {@link Instance}
-     */
-    public abstract void onInstanceCreate(@NotNull Instance instance);
+    public ThreadProvider() {
+        this(Runtime.getRuntime().availableProcessors());
+    }
 
-    /**
-     * Called when an {@link Instance} is unregistered.
-     *
-     * @param instance the deleted {@link Instance}
-     */
-    public abstract void onInstanceDelete(@NotNull Instance instance);
+    public synchronized void onInstanceCreate(@NotNull Instance instance) {
+        instance.getChunks().forEach(this::addChunk);
+    }
 
-    /**
-     * Called when a chunk is loaded.
-     * <p>
-     * Be aware that this is possible for an instance to load chunks before being registered.
-     *
-     * @param instance the instance of the chunk
-     * @param chunk    the loaded chunk
-     */
-    public abstract void onChunkLoad(@NotNull Instance instance, @NotNull Chunk chunk);
+    public synchronized void onInstanceDelete(@NotNull Instance instance) {
+        instance.getChunks().forEach(this::removeChunk);
+    }
 
-    /**
-     * Called when a chunk is unloaded.
-     *
-     * @param instance the instance of the chunk
-     * @param chunk    the unloaded chunk
-     */
-    public abstract void onChunkUnload(@NotNull Instance instance, @NotNull Chunk chunk);
+    public synchronized void onChunkLoad(Chunk chunk) {
+        addChunk(chunk);
+    }
+
+    public synchronized void onChunkUnload(Chunk chunk) {
+        removeChunk(chunk);
+    }
 
     /**
      * Performs a server tick for all chunks based on their linked thread.
      *
-     * @param time the update time in milliseconds
-     * @return the futures to execute to complete the tick
+     * @param chunk the chunk
      */
-    @NotNull
-    public abstract List<Future<?>> update(long time);
+    public abstract long findThread(@NotNull Chunk chunk);
 
     /**
-     * Gets the current size of the thread pool.
+     * Defines how often chunks thread should be updated.
      *
-     * @return the thread pool's size
+     * @return the refresh type
      */
-    public int getThreadCount() {
-        return threadCount;
+    public @NotNull RefreshType getChunkRefreshType() {
+        return RefreshType.CONSTANT;
     }
 
     /**
-     * Changes the amount of threads in the thread pool.
+     * Represents the maximum percentage of tick time that can be spent refreshing chunks thread.
+     * <p>
+     * Percentage based on {@link MinecraftServer#TICK_MS}.
      *
-     * @param threadCount the new amount of threads
+     * @return the refresh percentage
      */
-    public synchronized void setThreadCount(int threadCount) {
-        this.threadCount = threadCount;
-        refreshPool();
+    public float getRefreshPercentage() {
+        return 0.3f;
     }
 
-    private void refreshPool() {
-        if (pool != null) {
-            this.pool.shutdown();
+    /**
+     * Minimum time used to refresh chunks & entities thread.
+     *
+     * @return the minimum refresh time in milliseconds
+     */
+    public int getMinimumRefreshTime() {
+        return 3;
+    }
+
+    /**
+     * Maximum time used to refresh chunks & entities thread.
+     *
+     * @return the maximum refresh time in milliseconds
+     */
+    public int getMaximumRefreshTime() {
+        return (int) (MinecraftServer.TICK_MS * 0.3);
+    }
+
+    /**
+     * Prepares the update by creating the {@link TickThread} tasks.
+     *
+     * @param time the tick time in milliseconds
+     */
+    public synchronized @NotNull CountDownLatch update(long time) {
+        CountDownLatch countDownLatch = new CountDownLatch(threads.size());
+        for (TickThread thread : threads) {
+            // Execute tick
+            thread.runnable.startTick(countDownLatch, () -> {
+                final var chunkEntries = threadChunkMap.get(thread);
+                if (chunkEntries == null || chunkEntries.isEmpty()) {
+                    // Nothing to tick
+                    Acquirable.refreshEntities(Stream.empty());
+                    return;
+                }
+
+                final var entities = chunkEntries.stream()
+                        .flatMap(chunkEntry -> chunkEntry.entities.stream());
+                Acquirable.refreshEntities(entities);
+
+                final ReentrantLock lock = thread.getLock();
+                lock.lock();
+                chunkEntries.forEach(chunkEntry -> {
+                    Chunk chunk = chunkEntry.chunk;
+                    if (!ChunkUtils.isLoaded(chunk))
+                        return;
+                    chunk.tick(time);
+                    chunkEntry.entities.forEach(entity -> {
+                        final boolean hasQueue = lock.hasQueuedThreads();
+                        if (hasQueue) {
+                            lock.unlock();
+                            // #acquire callbacks should be called here
+                            lock.lock();
+                        }
+                        entity.tick(time);
+                    });
+                });
+                Acquirable.refreshEntities(Stream.empty());
+                lock.unlock();
+            });
         }
-        this.pool = new MinestomThread(threadCount, MinecraftServer.THREAD_NAME_TICK);
+        return countDownLatch;
     }
 
-    // INSTANCE UPDATE
-
     /**
-     * Processes a whole tick for a chunk.
+     * Called at the end of each tick to clear removed entities,
+     * refresh the chunk linked to an entity, and chunk threads based on {@link #findThread(Chunk)}.
      *
-     * @param instance the instance of the chunk
-     * @param chunk    the chunk to update
-     * @param time     the time of the update in milliseconds
+     * @param tickTime the duration of the tick in ms,
+     *                 used to ensure that the refresh does not take more time than the tick itself
      */
-    protected void processChunkTick(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        if (!ChunkUtils.isLoaded(chunk))
+    public synchronized void refreshThreads(long tickTime) {
+        // Clear removed entities
+        processRemovedEntities();
+        // Update entities chunks
+        processUpdatedEntities();
+
+        if (getChunkRefreshType() == RefreshType.NEVER)
             return;
 
-        updateChunk(instance, chunk, time);
-        updateEntities(instance, chunk, time);
+        final int timeOffset = MathUtils.clamp((int) ((double) tickTime * getRefreshPercentage()),
+                getMinimumRefreshTime(), getMaximumRefreshTime());
+        final long endTime = System.currentTimeMillis() + timeOffset;
+        final int size = chunks.size();
+        int counter = 0;
+        while (true) {
+            Chunk chunk = chunks.pollFirst();
+            if (!ChunkUtils.isLoaded(chunk)) {
+                removeChunk(chunk);
+                return;
+            }
+
+            // Update chunk threads
+            switchChunk(chunk);
+
+            // Add back to the deque
+            chunks.addLast(chunk);
+
+            if (++counter > size)
+                break;
+
+            if (System.currentTimeMillis() >= endTime)
+                break;
+        }
     }
 
     /**
-     * Executes an instance tick.
+     * Add an entity into the waiting list to get assigned in a thread.
+     * <p>
+     * Called when entering a new chunk.
      *
-     * @param instance the instance
-     * @param time     the current time in ms
+     * @param entity the entity to add
      */
-    protected void updateInstance(@NotNull Instance instance, long time) {
-        // The instance
-        instance.tick(time);
+    public void updateEntity(@NotNull Entity entity) {
+        this.updatableEntities.add(entity);
     }
 
     /**
-     * Executes a chunk tick (blocks update).
+     * Add an entity into the waiting list to get removed from its thread.
+     * <p>
+     * Called in {@link Entity#remove()}.
      *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
+     * @param entity the entity to remove
      */
-    protected void updateChunk(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        chunk.tick(time);
-    }
-
-    // ENTITY UPDATE
-
-    /**
-     * Executes an entity tick (all entities type creatures/objects/players) in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    protected void updateEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, null);
+    public void removeEntity(@NotNull Entity entity) {
+        this.removedEntities.add(entity);
     }
 
     /**
-     * Executes an entity tick for object entities in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
+     * Shutdowns all the {@link TickThread tick threads}.
+     * <p>
+     * Action is irreversible.
      */
-    protected void updateObjectEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof ObjectEntity);
+    public void shutdown() {
+        this.threads.forEach(TickThread::shutdown);
     }
 
     /**
-     * Executes an entity tick for living entities in an instance's chunk.
+     * Gets all the {@link TickThread tick threads}.
      *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
+     * @return the tick threads
      */
-    protected void updateLivingEntities(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof LivingEntity);
+    public @NotNull List<@NotNull TickThread> getThreads() {
+        return threads;
+    }
+
+    protected void addChunk(@NotNull Chunk chunk) {
+        ChunkEntry chunkEntry = setChunkThread(chunk, (thread) -> new ChunkEntry(thread, chunk));
+        this.chunkEntryMap.put(chunk, chunkEntry);
+        this.chunks.add(chunk);
+    }
+
+    protected void switchChunk(@NotNull Chunk chunk) {
+        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+        if (chunkEntry == null)
+            return;
+        var chunks = threadChunkMap.get(chunkEntry.thread);
+        if (chunks == null || chunks.isEmpty())
+            return;
+        chunks.remove(chunkEntry);
+
+        setChunkThread(chunk, tickThread -> {
+            chunkEntry.thread = tickThread;
+            return chunkEntry;
+        });
+    }
+
+    protected @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
+                                                 @NotNull Function<TickThread, ChunkEntry> chunkEntrySupplier) {
+        final int threadId = getThreadId(chunk);
+        TickThread thread = threads.get(threadId);
+        var chunks = threadChunkMap.computeIfAbsent(thread, tickThread -> ConcurrentHashMap.newKeySet());
+
+        ChunkEntry chunkEntry = chunkEntrySupplier.apply(thread);
+        chunks.add(chunkEntry);
+        return chunkEntry;
+    }
+
+    protected void removeChunk(Chunk chunk) {
+        ChunkEntry chunkEntry = chunkEntryMap.get(chunk);
+        if (chunkEntry != null) {
+            TickThread thread = chunkEntry.thread;
+            var chunks = threadChunkMap.get(thread);
+            if (chunks != null) {
+                chunks.remove(chunkEntry);
+            }
+            chunkEntryMap.remove(chunk);
+        }
+        this.chunks.remove(chunk);
     }
 
     /**
-     * Executes an entity tick for creatures entities in an instance's chunk.
+     * Finds the thread id associated to a {@link Chunk}.
      *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
+     * @param chunk the chunk to find the thread id from
+     * @return the chunk thread id
      */
-    protected void updateCreatures(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof EntityCreature);
+    protected int getThreadId(@NotNull Chunk chunk) {
+        return (int) (Math.abs(findThread(chunk)) % threads.size());
     }
 
-    /**
-     * Executes an entity tick for players in an instance's chunk.
-     *
-     * @param instance the chunk's instance
-     * @param chunk    the chunk
-     * @param time     the current time in ms
-     */
-    protected void updatePlayers(@NotNull Instance instance, @NotNull Chunk chunk, long time) {
-        conditionalEntityUpdate(instance, chunk, time, entity -> entity instanceof Player);
+    private void processRemovedEntities() {
+        if (removedEntities.isEmpty())
+            return;
+        for (Entity entity : removedEntities) {
+            var acquirableEntity = entity.getAcquirable();
+            ChunkEntry chunkEntry = acquirableEntity.getHandler().getChunkEntry();
+            // Remove from list
+            if (chunkEntry != null) {
+                chunkEntry.entities.remove(entity);
+            }
+        }
+        this.removedEntities.clear();
     }
 
-    /**
-     * Executes an entity tick in an instance's chunk if condition is verified.
-     *
-     * @param instance  the chunk's instance
-     * @param chunk     the chunk
-     * @param time      the current time in ms
-     * @param condition the condition which confirm if the update happens or not
-     */
-    protected void conditionalEntityUpdate(@NotNull Instance instance, @NotNull Chunk chunk, long time,
-                                           @Nullable EntityValidator condition) {
-        if (!instance.getEntities().isEmpty()) {
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
+    private void processUpdatedEntities() {
+        if (updatableEntities.isEmpty())
+            return;
+        for (Entity entity : updatableEntities) {
+            var acquirableEntity = entity.getAcquirable();
+            ChunkEntry handlerChunkEntry = acquirableEntity.getHandler().getChunkEntry();
 
-            if (!entities.isEmpty()) {
-                for (Entity entity : entities) {
-                    if (condition != null && !condition.isValid(entity))
-                        continue;
-                    entity.tick(time);
+            Chunk entityChunk = entity.getChunk();
+
+            // Entity is possibly not in the correct thread
+
+            // Remove from previous list
+            {
+                if (handlerChunkEntry != null) {
+                    handlerChunkEntry.entities.remove(entity);
+                }
+            }
+
+            // Add to new list
+            {
+                ChunkEntry chunkEntry = chunkEntryMap.get(entityChunk);
+                if (chunkEntry != null) {
+                    chunkEntry.entities.add(entity);
+                    acquirableEntity.getHandler().refreshChunkEntry(chunkEntry);
                 }
             }
         }
-
-        updateSharedInstances(instance, sharedInstance -> conditionalEntityUpdate(sharedInstance, chunk, time, condition));
+        this.updatableEntities.clear();
     }
 
     /**
-     * If {@code instance} is an {@link InstanceContainer}, run a callback for all of its
-     * {@link SharedInstance}.
-     *
-     * @param instance the instance
-     * @param callback the callback to run for all the {@link SharedInstance}
+     * Defines how often chunks thread should be refreshed.
      */
-    private void updateSharedInstances(@NotNull Instance instance, @NotNull Consumer<SharedInstance> callback) {
-        if (instance instanceof InstanceContainer) {
-            final InstanceContainer instanceContainer = (InstanceContainer) instance;
+    public enum RefreshType {
+        /**
+         * Chunk thread is constant after being defined.
+         */
+        NEVER,
+        /**
+         * Chunk thread should be recomputed as often as possible.
+         */
+        CONSTANT,
+        /**
+         * Chunk thread should be recomputed, but not continuously.
+         */
+        RARELY
+    }
 
-            if (!instanceContainer.hasSharedInstances())
-                return;
+    public static class ChunkEntry {
+        private volatile TickThread thread;
+        private final Chunk chunk;
+        private final List<Entity> entities = new ArrayList<>();
 
-            for (SharedInstance sharedInstance : instanceContainer.getSharedInstances()) {
-                callback.accept(sharedInstance);
-            }
+        private ChunkEntry(TickThread thread, Chunk chunk) {
+            this.thread = thread;
+            this.chunk = chunk;
+        }
+
+        public @NotNull TickThread getThread() {
+            return thread;
+        }
+
+        public @NotNull Chunk getChunk() {
+            return chunk;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            ChunkEntry that = (ChunkEntry) o;
+            return chunk.equals(that.chunk);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(chunk);
         }
     }
 

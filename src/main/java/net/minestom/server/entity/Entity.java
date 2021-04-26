@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Queues;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -8,6 +9,7 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
@@ -42,6 +44,7 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,6 +125,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     // Tick related
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
+
+    private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
     /**
      * Lock used to support #switchEntityType
@@ -466,7 +471,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Fix current chunk being null if the entity has been spawned before
         if (currentChunk == null) {
-            currentChunk = instance.getChunkAt(position);
+            refreshCurrentChunk(instance.getChunkAt(position));
         }
 
         // Check if the entity chunk is loaded
@@ -833,6 +838,12 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return currentChunk;
     }
 
+    @ApiStatus.Internal
+    protected void refreshCurrentChunk(Chunk currentChunk) {
+        this.currentChunk = currentChunk;
+        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
+    }
+
     /**
      * Gets the entity current instance.
      *
@@ -866,7 +877,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         this.isActive = true;
         this.instance = instance;
-        this.currentChunk = instance.getChunkAt(position.getX(), position.getZ());
+        refreshCurrentChunk(instance.getChunkAt(position.getX(), position.getZ()));
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
@@ -1340,7 +1351,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     player.refreshVisibleEntities(newChunk);
                 }
 
-                this.currentChunk = newChunk;
+                refreshCurrentChunk(newChunk);
             }
         }
 
@@ -1456,6 +1467,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * WARNING: this does not trigger {@link EntityDeathEvent}.
      */
     public void remove() {
+        if (isRemoved())
+            return;
+
+        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
@@ -1557,6 +1572,16 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
     private UpdateOption getSynchronizationCooldown() {
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
+    }
+
+    @Beta
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
+    @Beta
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
+        return (Acquirable<T>) acquirable;
     }
 
     public enum Pose {

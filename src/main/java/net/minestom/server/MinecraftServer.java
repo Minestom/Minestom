@@ -74,6 +74,7 @@ public final class MinecraftServer {
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
+    public static final String THREAD_NAME_TICK_SCHEDULER = "Ms-TickScheduler";
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
