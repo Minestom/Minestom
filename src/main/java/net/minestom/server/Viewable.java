@@ -1,13 +1,14 @@
 package net.minestom.server;
 
 import net.kyori.adventure.audience.Audience;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Represents something which can be displayed or hidden to players.
@@ -35,8 +36,7 @@ public interface Viewable {
      *
      * @return A Set containing all the element's viewers
      */
-    @NotNull
-    Set<Player> getViewers();
+    @NotNull AcquirableCollection<Player> getViewers();
 
     /**
      * Gets if a player is seeing this viewable object.
@@ -101,6 +101,6 @@ public interface Viewable {
      * @return the audiences
      */
     default @NotNull Iterable<? extends Audience> getViewersAsAudiences() {
-        return this.getViewers();
+        return this.getViewers().unwrap().collect(Collectors.toList());
     }
 }

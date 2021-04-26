@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
+import java.util.HashSet;
 
 public class ExperienceOrb extends Entity {
 
@@ -101,17 +103,16 @@ public class ExperienceOrb extends Entity {
      */
     public void setExperienceCount(short experienceCount) {
         // Remove the entity in order to respawn it with the correct experience count
-        getViewers().forEach(this::removeViewer);
-
-        this.experienceCount = experienceCount;
-
-        getViewers().forEach(this::addViewer);
+        var viewers = new HashSet<>(getViewers());
+        getViewers().acquireSync(this::removeViewer0);
+        viewers.forEach(playerAcquirable -> playerAcquirable.sync(this::addViewer0));
     }
 
     private Player getClosestPlayer(Entity entity, float maxDistance) {
         Player closest = entity.getInstance()
                 .getPlayers()
                 .stream()
+                .map(Acquirable::unwrap)
                 .min(Comparator.comparingDouble(a -> a.getDistance(entity)))
                 .orElse(null);
         if (closest == null) return null;

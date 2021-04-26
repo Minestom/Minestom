@@ -2,14 +2,13 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.packet.server.play.UpdateScorePacket;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 /**
  * This interface represents all scoreboard of Minecraft.
@@ -102,7 +101,7 @@ public interface Scoreboard extends Viewable, PacketGroupingAudience {
     String getObjectiveName();
 
     @Override
-    @NotNull default Collection<Player> getPlayers() {
+    default @NotNull AcquirableCollection<Player> getPlayers() {
         return this.getViewers();
     }
 }

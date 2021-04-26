@@ -2,6 +2,7 @@ package net.minestom.server.entity.hologram;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.type.decoration.EntityArmorStand;
@@ -9,8 +10,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 /**
  * Represents an invisible armor stand showing a {@link Component}.
@@ -189,9 +188,8 @@ public class Hologram implements Viewable {
     /**
      * {@inheritDoc}
      */
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
+    public @NotNull AcquirableCollection<Player> getViewers() {
         return entity.getViewers();
     }
 

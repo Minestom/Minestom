@@ -102,9 +102,7 @@ public class PlayerInit {
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
 
-            Collection<Player> players = connectionManager.getOnlinePlayers();
-
-            if (players.isEmpty())
+            if (connectionManager.getOnlinePlayers().isEmpty())
                 return;
 
             long ramUsage = benchmarkManager.getUsedMemory();

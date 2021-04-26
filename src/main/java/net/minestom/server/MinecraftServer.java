@@ -7,7 +7,6 @@ import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
@@ -493,7 +492,7 @@ public final class MinecraftServer {
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
 
-            for (final Player player : connectionManager.getOnlinePlayers()) {
+            connectionManager.getOnlinePlayers().unwrap().forEach(player -> {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
 
@@ -503,7 +502,7 @@ public final class MinecraftServer {
 
                     player.refreshVisibleChunks(playerChunk);
                 }
-            }
+            });
         }
     }
 
@@ -527,12 +526,12 @@ public final class MinecraftServer {
                 "The entity view distance must be between 0 and 32");
         MinecraftServer.entityViewDistance = entityViewDistance;
         if (started) {
-            for (final Player player : connectionManager.getOnlinePlayers()) {
+            connectionManager.getOnlinePlayers().unwrap().forEach(player -> {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
                     player.refreshVisibleEntities(playerChunk);
                 }
-            }
+            });
         }
     }
 

@@ -1,6 +1,7 @@
 package net.minestom.server.advancements;
 
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -24,7 +25,7 @@ public class AdvancementTab implements Viewable {
 
     private static final Map<UUID, Set<AdvancementTab>> PLAYER_TAB_MAP = new HashMap<>();
 
-    private final Set<Player> viewers = new HashSet<>();
+    private final AcquirableCollection<Player> viewers = new AcquirableCollection<>(new HashSet<>());
 
     private final AdvancementRoot root;
 
@@ -126,7 +127,7 @@ public class AdvancementTab implements Viewable {
 
     @Override
     public synchronized boolean addViewer(@NotNull Player player) {
-        final boolean result = viewers.add(player);
+        final boolean result = viewers.add(player.getAcquirable());
         if (!result) {
             return false;
         }
@@ -156,12 +157,11 @@ public class AdvancementTab implements Viewable {
 
         removePlayer(player);
 
-        return viewers.remove(player);
+        return viewers.remove(player.getAcquirable());
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
+    public @NotNull AcquirableCollection<Player> getViewers() {
         return viewers;
     }
 

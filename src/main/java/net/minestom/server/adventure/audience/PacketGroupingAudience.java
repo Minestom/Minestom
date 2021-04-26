@@ -10,6 +10,7 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.ChatMessagePacket;
@@ -17,8 +18,6 @@ import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterP
 import net.minestom.server.network.packet.server.play.TitlePacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 /**
  * An audience implementation that sends grouped packets if possible.
@@ -33,7 +32,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param players the players
      * @return the audience
      */
-    static PacketGroupingAudience of(Collection<Player> players) {
+    static PacketGroupingAudience of(AcquirableCollection<Player> players) {
         return () -> players;
     }
 
@@ -42,7 +41,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      *
      * @return the connections
      */
-    @NotNull Collection<Player> getPlayers();
+    @NotNull AcquirableCollection<Player> getPlayers();
 
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
@@ -97,6 +96,6 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default @NotNull Iterable<? extends Audience> audiences() {
-        return this.getPlayers();
+        return (Iterable<? extends Audience>) this.getPlayers().unwrap().iterator();
     }
 }

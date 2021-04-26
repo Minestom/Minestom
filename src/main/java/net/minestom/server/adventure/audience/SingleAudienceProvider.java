@@ -3,6 +3,8 @@ package net.minestom.server.adventure.audience;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,8 +44,11 @@ class SingleAudienceProvider implements AudienceProvider<Audience> {
     }
 
     @Override
-    public @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList()));
+    public @NotNull Audience players(@NotNull Predicate<Acquirable<Player>> filter) {
+        var acquirablePlayers = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+                .filter(filter)
+                .collect(Collectors.toList());
+        return PacketGroupingAudience.of(new AcquirableCollection<>(acquirablePlayers));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package net.minestom.server.bossbar;
 
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
@@ -29,8 +30,7 @@ public class BossBar implements Viewable {
     private static final Map<UUID, Set<BossBar>> PLAYER_BOSSBAR_MAP = new HashMap<>();
 
     private final UUID uuid = UUID.randomUUID();
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final AcquirableCollection<Player> viewers = new AcquirableCollection<>(new CopyOnWriteArraySet<>());
 
     private JsonMessage title;
     private float progress;
@@ -75,13 +75,13 @@ public class BossBar implements Viewable {
         }
 
         addToPlayer(player);
-        return viewers.add(player);
+        return viewers.add(player.getAcquirable());
     }
 
     @Override
     public synchronized boolean removeViewer(@NotNull Player player) {
         // Check not viewer
-        final boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player.getAcquirable());
         if (result) {
             removeToPlayer(player);
         }
@@ -90,10 +90,9 @@ public class BossBar implements Viewable {
         return result;
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return viewers;
     }
 
     /**

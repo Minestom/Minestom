@@ -7,6 +7,7 @@ import io.netty.buffer.Unpooled;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
@@ -21,8 +22,8 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.Collection;
+import java.util.stream.Stream;
 import java.util.zip.DataFormatException;
 
 /**
@@ -54,14 +55,14 @@ public final class PacketUtils {
      * </ol>
      *
      * @param audience the audience
-     * @param packet the packet
+     * @param packet   the packet
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
         if (audience instanceof Player) {
             ((Player) audience).getPlayerConnection().sendPacket(packet);
         } else if (audience instanceof PacketGroupingAudience) {
-            PacketUtils.sendGroupedPacket(((PacketGroupingAudience) audience).getPlayers(), packet);
+            PacketUtils.sendGroupedPacket(((PacketGroupingAudience) audience).getPlayers().unwrap(), packet);
         } else if (audience instanceof ForwardingAudience.Single) {
             PacketUtils.sendPacket(((ForwardingAudience.Single) audience).audience(), packet);
         } else if (audience instanceof ForwardingAudience) {
@@ -80,11 +81,8 @@ public final class PacketUtils {
      * @param packet          the packet to send to the players
      * @param playerValidator optional callback to check if a specify player of {@code players} should receive the packet
      */
-    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
+    public static void sendGroupedPacket(@NotNull Stream<Player> players, @NotNull ServerPacket packet,
                                          @Nullable PlayerValidator playerValidator) {
-        if (players.isEmpty())
-            return;
-
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
 
@@ -94,20 +92,21 @@ public final class PacketUtils {
 
         if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {
             // Send grouped packet...
-            final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
+            // FIXME: packet cancelling
+            final boolean success = true; //PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
                 final ByteBuf finalBuffer = createFramedPacket(packet, true);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
                 // Send packet to all players
-                for (Player player : players) {
+                players.forEach(player -> {
 
                     if (!player.isOnline())
-                        continue;
+                        return;
 
                     // Verify if the player should receive the packet
                     if (playerValidator != null && !playerValidator.isValid(player))
-                        continue;
+                        return;
 
                     finalBuffer.retain();
 
@@ -120,20 +119,19 @@ public final class PacketUtils {
                     }
 
                     finalBuffer.release();
-                }
+                });
                 finalBuffer.release(); // Release last reference
             }
         } else {
             // Write the same packet for each individual players
-            for (Player player : players) {
-
+            players.forEach(player -> {
                 // Verify if the player should receive the packet
                 if (playerValidator != null && !playerValidator.isValid(player))
-                    continue;
+                    return;
 
                 final PlayerConnection playerConnection = player.getPlayerConnection();
                 playerConnection.sendPacket(packet, false);
-            }
+            });
         }
     }
 
@@ -143,7 +141,33 @@ public final class PacketUtils {
      *
      * @see #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)
      */
+    public static void sendGroupedPacket(@NotNull Stream<Player> players, @NotNull ServerPacket packet) {
+        sendGroupedPacket(players, packet, null);
+    }
+
+    public static void sendGroupedPacket(@NotNull AcquirableCollection<Player> players, @NotNull ServerPacket packet,
+                                         @Nullable PlayerValidator playerValidator) {
+        if(players.isEmpty())
+            return;
+        sendGroupedPacket(players.unwrap(), packet, playerValidator);
+    }
+
+    public static void sendGroupedPacket(@NotNull AcquirableCollection<Player> players, @NotNull ServerPacket packet) {
+        if(players.isEmpty())
+            return;
+        sendGroupedPacket(players.unwrap(), packet, null);
+    }
+
+    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
+                                         @Nullable PlayerValidator playerValidator) {
+        if(players.isEmpty())
+            return;
+        sendGroupedPacket(players.stream(), packet, playerValidator);
+    }
+
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
+        if(players.isEmpty())
+            return;
         sendGroupedPacket(players, packet, null);
     }
 

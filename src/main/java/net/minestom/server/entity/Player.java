@@ -1313,7 +1313,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
-            getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
+            getViewers().unwrap().forEach(player -> showPlayer(player.getPlayerConnection()));
         }
 
         getInventory().update();

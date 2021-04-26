@@ -5,6 +5,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
@@ -45,8 +46,7 @@ public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
     private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
-    private final Set<Player> players = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
+    private final AcquirableCollection<Player> players = new AcquirableCollection<>(new CopyOnWriteArraySet<>());
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
     // All the consumers to call once a packet is received
@@ -77,8 +77,8 @@ public final class ConnectionManager {
      *
      * @return an unmodifiable collection containing all the online players
      */
-    public @NotNull Collection<@NotNull Player> getOnlinePlayers() {
-        return unmodifiablePlayers;
+    public @NotNull AcquirableCollection<@NotNull Player> getOnlinePlayers() {
+        return players;
     }
 
     /**
@@ -93,16 +93,12 @@ public final class ConnectionManager {
         if (exact != null) return exact;
 
         String lowercase = username.toLowerCase();
-        double currentDistance = 0;
-        for (Player player : getOnlinePlayers()) {
-            final JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
-            final double distance = jaroWinklerDistance.apply(lowercase, player.getUsername().toLowerCase());
-            if (distance > currentDistance) {
-                currentDistance = distance;
-                exact = player;
-            }
-        }
-        return exact;
+
+        final JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
+        var player = getOnlinePlayers().unwrap().min(Comparator.comparingDouble(p ->
+                jaroWinklerDistance.apply(lowercase, p.getUsername().toLowerCase())));
+
+        return player.orElse(null);
     }
 
     /**
@@ -115,11 +111,8 @@ public final class ConnectionManager {
      */
     @Nullable
     public Player getPlayer(@NotNull String username) {
-        for (Player player : getOnlinePlayers()) {
-            if (player.getUsername().equalsIgnoreCase(username))
-                return player;
-        }
-        return null;
+        var player = getOnlinePlayers().unwrap().filter(p -> p.getUsername().equalsIgnoreCase(username)).findFirst();
+        return player.orElse(null);
     }
 
     /**
@@ -132,11 +125,8 @@ public final class ConnectionManager {
      */
     @Nullable
     public Player getPlayer(@NotNull UUID uuid) {
-        for (Player player : getOnlinePlayers()) {
-            if (player.getUuid().equals(uuid))
-                return player;
-        }
-        return null;
+        var player = getOnlinePlayers().unwrap().filter(p -> p.getUuid().equals(uuid)).findFirst();
+        return player.orElse(null);
     }
 
     /**
@@ -151,7 +141,7 @@ public final class ConnectionManager {
         if (condition == null) {
             Audiences.players().sendMessage(jsonMessage);
         } else {
-            Audiences.players(condition).sendMessage(jsonMessage);
+            Audiences.players(playerAcquirable -> condition.isValid(playerAcquirable.unwrap())).sendMessage(jsonMessage);
         }
     }
 
@@ -164,24 +154,6 @@ public final class ConnectionManager {
     @Deprecated
     public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
         this.broadcastMessage(jsonMessage, null);
-    }
-
-    private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
-        Collection<Player> recipients;
-
-        // Get the recipients
-        if (condition == null) {
-            recipients = getOnlinePlayers();
-        } else {
-            recipients = new ArrayList<>();
-            getOnlinePlayers().forEach(player -> {
-                final boolean result = condition.isValid(player);
-                if (result)
-                    recipients.add(player);
-            });
-        }
-
-        return recipients;
     }
 
     /**
@@ -362,7 +334,7 @@ public final class ConnectionManager {
      * @param player the player to add
      */
     public synchronized void registerPlayer(@NotNull Player player) {
-        this.players.add(player);
+        this.players.add(player.getAcquirable());
         this.connectionPlayerMap.put(player.getPlayerConnection(), player);
     }
 
@@ -480,7 +452,7 @@ public final class ConnectionManager {
      */
     public void shutdown() {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
-        for (Player player : getOnlinePlayers()) {
+        getOnlinePlayers().unwrap().forEach(player -> {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
                 final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
@@ -488,7 +460,7 @@ public final class ConnectionManager {
                 channel.writeAndFlush(disconnectPacket);
                 channel.close();
             }
-        }
+        });
         this.players.clear();
         this.connectionPlayerMap.clear();
     }
@@ -508,7 +480,7 @@ public final class ConnectionManager {
      */
     public void handleKeepAlive(long tickStart) {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
-        for (Player player : getOnlinePlayers()) {
+        getOnlinePlayers().unwrap().forEach(player -> {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
             if (lastKeepAlive > KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
@@ -517,7 +489,7 @@ public final class ConnectionManager {
             } else if (lastKeepAlive >= KEEP_ALIVE_KICK) {
                 player.kick(TIMEOUT_TEXT);
             }
-        }
+        });
     }
 
     /**

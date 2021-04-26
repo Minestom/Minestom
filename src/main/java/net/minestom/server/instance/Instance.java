@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
@@ -83,10 +84,10 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
 
     // Entities present in this instance
-    protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
-    protected final Set<Player> players = ConcurrentHashMap.newKeySet();
-    protected final Set<EntityCreature> creatures = ConcurrentHashMap.newKeySet();
-    protected final Set<ExperienceOrb> experienceOrbs = ConcurrentHashMap.newKeySet();
+    protected final AcquirableCollection<Entity> entities = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
+    protected final AcquirableCollection<Player> players = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
+    protected final AcquirableCollection<EntityCreature> creatures = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
+    protected final AcquirableCollection<ExperienceOrb> experienceOrbs = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
     // Entities per chunk
     protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
     private final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
@@ -368,7 +369,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      */
     public void setTime(long time) {
         this.time = time;
-        PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+        PacketUtils.sendGroupedPacket(getPlayers().unwrap(), createTimePacket());
     }
 
     /**
@@ -444,8 +445,8 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     @NotNull
-    public Set<Entity> getEntities() {
-        return Collections.unmodifiableSet(entities);
+    public AcquirableCollection<Entity> getEntities() {
+        return entities;
     }
 
     /**
@@ -454,9 +455,8 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
     @Override
-    @NotNull
-    public Set<Player> getPlayers() {
-        return Collections.unmodifiableSet(players);
+    public @NotNull AcquirableCollection<Player> getPlayers() {
+        return players;
     }
 
     /**
@@ -465,8 +465,8 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
     @NotNull
-    public Set<EntityCreature> getCreatures() {
-        return Collections.unmodifiableSet(creatures);
+    public AcquirableCollection<EntityCreature> getCreatures() {
+        return creatures;
     }
 
     /**
@@ -475,8 +475,8 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
     @NotNull
-    public Set<ExperienceOrb> getExperienceOrbs() {
-        return Collections.unmodifiableSet(experienceOrbs);
+    public AcquirableCollection<ExperienceOrb> getExperienceOrbs() {
+        return experienceOrbs;
     }
 
     /**
@@ -909,7 +909,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
         callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
             // Remove this entity from players viewable list and send delete entities packet
-            entity.getViewers().forEach(entity::removeViewer);
+            entity.getViewers().acquireSync(entity::removeViewer);
 
             // Remove the entity from cache
             final Chunk chunk = getChunkAt(entity.getPosition());
@@ -950,13 +950,13 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
             entities.add(entity);
 
-            this.entities.add(entity);
+            this.entities.add(entity.getAcquirable());
             if (entity instanceof Player) {
-                this.players.add((Player) entity);
+                this.players.add(entity.getAcquirable());
             } else if (entity instanceof EntityCreature) {
-                this.creatures.add((EntityCreature) entity);
+                this.creatures.add(entity.getAcquirable());
             } else if (entity instanceof ExperienceOrb) {
-                this.experienceOrbs.add((ExperienceOrb) entity);
+                this.experienceOrbs.add(entity.getAcquirable());
             }
         }
     }
@@ -1029,7 +1029,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
 
             // time needs to be send to players
             if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
-                PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+                PacketUtils.sendGroupedPacket(getPlayers().unwrap(), createTimePacket());
                 this.lastTimeUpdate = time;
             }
 

@@ -3,6 +3,7 @@ package net.minestom.server.adventure.bossbar;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
@@ -74,9 +75,9 @@ public class BossBarManager {
      * @param players the players
      * @param bar     the boss bar
      */
-    public void addBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
+    public void addBossBar(@NotNull AcquirableCollection<Player> players, @NotNull BossBar bar) {
         BossBarHolder holder = this.getOrCreateHandler(bar);
-        Collection<Player> addedPlayers = players.stream().filter(holder::addViewer).collect(Collectors.toList());
+        Collection<Player> addedPlayers = players.unwrap().filter(holder::addViewer).collect(Collectors.toList());
 
         if (!addedPlayers.isEmpty()) {
             PacketUtils.sendGroupedPacket(addedPlayers, holder.createAddPacket());
@@ -89,11 +90,11 @@ public class BossBarManager {
      * @param players the intended viewers
      * @param bar     the boss bar to hide
      */
-    public void removeBossBar(@NotNull Collection<Player> players, @NotNull BossBar bar) {
+    public void removeBossBar(@NotNull AcquirableCollection<Player> players, @NotNull BossBar bar) {
         BossBarHolder holder = this.bars.get(bar);
 
         if (holder != null) {
-            Collection<Player> removedPlayers = players.stream().filter(holder::removeViewer).collect(Collectors.toList());
+            Collection<Player> removedPlayers = players.unwrap().filter(holder::removeViewer).collect(Collectors.toList());
 
             if (!removedPlayers.isEmpty()) {
                 PacketUtils.sendGroupedPacket(removedPlayers, holder.createRemovePacket());
@@ -112,9 +113,7 @@ public class BossBarManager {
         if (holder != null) {
             PacketUtils.sendGroupedPacket(holder.players, holder.createRemovePacket());
 
-            for (Player player : holder.players) {
-                this.removePlayer(player, holder);
-            }
+            holder.players.acquireSync(player -> removePlayer(player, holder));
         }
     }
 
@@ -157,13 +156,13 @@ public class BossBarManager {
      * @param bossBar the boss bar
      * @return the players
      */
-    public @NotNull Collection<Player> getBossBarViewers(@NotNull BossBar bossBar) {
+    public @NotNull AcquirableCollection<Player> getBossBarViewers(@NotNull BossBar bossBar) {
         BossBarHolder holder = this.bars.get(bossBar);
 
         if (holder == null) {
-            return Collections.emptyList();
+            return new AcquirableCollection<>(Collections.emptyList());
         } else {
-            return Collections.unmodifiableCollection(holder.players);
+            return new AcquirableCollection<>(holder.players);
         }
     }
 

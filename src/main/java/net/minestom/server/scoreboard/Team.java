@@ -1,9 +1,9 @@
 package net.minestom.server.scoreboard;
 
-import com.google.common.collect.MapMaker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.chat.ChatColor;
@@ -17,9 +17,9 @@ import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibil
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -70,7 +70,7 @@ public class Team implements PacketGroupingAudience {
      */
     private Component suffix;
 
-    private final Set<Player> playerMembers = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
+    private final AcquirableCollection<Player> playerMembers = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
     private boolean isPlayerMembersUpToDate;
 
     /**
@@ -570,7 +570,7 @@ public class Team implements PacketGroupingAudience {
     }
 
     @Override
-    public @NotNull Collection<Player> getPlayers() {
+    public @NotNull AcquirableCollection<Player> getPlayers() {
         if (!this.isPlayerMembersUpToDate) {
             this.playerMembers.clear();
 
@@ -578,7 +578,7 @@ public class Team implements PacketGroupingAudience {
                 Player player = MinecraftServer.getConnectionManager().getPlayer(member);
 
                 if (player != null) {
-                    this.playerMembers.add(player);
+                    this.playerMembers.add(player.getAcquirable());
                 }
             }
 

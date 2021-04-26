@@ -3,6 +3,7 @@ package net.minestom.server.adventure.audience;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all players matching the predicate
      */
-    @NotNull A players(@NotNull Predicate<Player> filter);
+    @NotNull A players(@NotNull Predicate<Acquirable<Player>> filter);
 
     /**
      * Gets the console as an audience.

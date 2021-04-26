@@ -3,6 +3,7 @@ package net.minestom.server.scoreboard;
 import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.DisplayScoreboardPacket;
@@ -44,7 +45,7 @@ public class Sidebar implements Scoreboard {
      */
     private static final int MAX_LINES_COUNT = 15;
 
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    private final AcquirableCollection<Player> viewers = new AcquirableCollection<>(new CopyOnWriteArraySet<>());
 
     private final Set<ScoreboardLine> lines = new CopyOnWriteArraySet<>();
     private final IntLinkedOpenHashSet availableColors = new IntLinkedOpenHashSet();
@@ -225,7 +226,7 @@ public class Sidebar implements Scoreboard {
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
+        final boolean result = this.viewers.add(player.getAcquirable());
         PlayerConnection playerConnection = player.getPlayerConnection();
 
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getCreationObjectivePacket(this.title, ScoreboardObjectivePacket.Type.INTEGER);
@@ -243,7 +244,7 @@ public class Sidebar implements Scoreboard {
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player.getAcquirable());
         PlayerConnection playerConnection = player.getPlayerConnection();
         ScoreboardObjectivePacket scoreboardObjectivePacket = this.getDestructionObjectivePacket();
         playerConnection.sendPacket(scoreboardObjectivePacket);
@@ -255,10 +256,9 @@ public class Sidebar implements Scoreboard {
         return result;
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return Collections.unmodifiableSet(viewers);
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return viewers;
     }
 
     @Override

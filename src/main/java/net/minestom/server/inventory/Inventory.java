@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -14,8 +15,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -40,8 +39,7 @@ public class Inventory extends AbstractInventory implements Viewable {
     private final int offset;
 
     // the players currently viewing this inventory
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    protected final AcquirableCollection<Player> viewers = new AcquirableCollection<>(new CopyOnWriteArraySet<>());
     // (player -> cursor item) map, used by the click listeners
     private final ConcurrentHashMap<Player, ItemStack> cursorPlayersItem = new ConcurrentHashMap<>();
 
@@ -119,7 +117,7 @@ public class Inventory extends AbstractInventory implements Viewable {
     public synchronized void clear() {
         super.clear();
         // Clear cursor
-        getViewers().forEach(player ->
+        getViewers().unwrap().forEach(player ->
                 setCursorItem(player, ItemStack.AIR));
     }
 
@@ -146,10 +144,9 @@ public class Inventory extends AbstractInventory implements Viewable {
         playerConnection.sendPacket(createNewWindowItemsPacket());
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return viewers;
     }
 
     /**
@@ -160,7 +157,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
+        final boolean result = this.viewers.add(player.getAcquirable());
         update(player);
         return result;
     }
@@ -173,7 +170,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player.getAcquirable());
         setCursorItem(player, ItemStack.AIR);
         this.clickProcessor.clearCache(player);
         return result;
@@ -197,7 +194,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      * @param player     the player to change the cursor item
      * @param cursorItem the new player cursor item
      */
-    public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
+    public synchronized void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
         final boolean similar = currentCursorItem.isSimilar(cursorItem);
 
@@ -352,7 +349,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
 
-        if(clickResult.doRefresh()){
+        if (clickResult.doRefresh()) {
             update(player);
         }
 

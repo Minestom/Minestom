@@ -1,6 +1,8 @@
 package net.minestom.server.event.player;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
@@ -19,18 +21,18 @@ import java.util.function.Supplier;
  */
 public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
 
-    private final Collection<Player> recipients;
+    private final AcquirableCollection<Player> recipients;
     private final Supplier<Component> defaultChatFormat;
     private String message;
     private Function<PlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
 
-    public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
+    public PlayerChatEvent(@NotNull Player player, @NotNull AcquirableCollection<Player> recipients,
                            @NotNull Supplier<Component> defaultChatFormat,
                            @NotNull String message) {
         super(player);
-        this.recipients = new ArrayList<>(recipients);
+        this.recipients = new AcquirableCollection<>(recipients);
         this.defaultChatFormat = defaultChatFormat;
         this.message = message;
     }
@@ -62,7 +64,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
      *
      * @return a modifiable list of message targets
      */
-    public @NotNull Collection<Player> getRecipients() {
+    public @NotNull AcquirableCollection<Player> getRecipients() {
         return recipients;
     }
 

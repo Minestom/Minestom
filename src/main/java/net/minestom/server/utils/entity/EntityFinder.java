@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // TODO
 
@@ -340,37 +341,28 @@ public class EntityFinder {
                                            @NotNull Position startPosition, @Nullable Entity self) {
 
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
-            Entity entity = null;
-            double closestDistance = Double.MAX_VALUE;
-
-            Collection<Player> instancePlayers = instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
-            for (Player player : instancePlayers) {
-                final double distance = player.getPosition().getDistance(startPosition);
-                if (distance < closestDistance) {
-                    entity = player;
-                    closestDistance = distance;
-                }
-            }
-            return Collections.singletonList(entity);
+            var player = MinecraftServer.getConnectionManager().getOnlinePlayers().unwrap()
+                    .min(Comparator.comparingDouble(p -> p.getPosition().getDistance(startPosition)));
+            return player.<List<Entity>>map(Collections::singletonList).orElse(Collections.emptyList());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
-            Collection<Player> instancePlayers = instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
-            final int index = ThreadLocalRandom.current().nextInt(instancePlayers.size());
-            final Player player = instancePlayers.stream().skip(index).findFirst().orElseThrow();
+            Stream<Player> players = instance != null ?
+                    instance.getPlayers().unwrap() : MinecraftServer.getConnectionManager().getOnlinePlayers().unwrap();
+            final int index = ThreadLocalRandom.current().nextInt((int) players.count());
+            final Player player = players.skip(index).findFirst().orElseThrow();
             return Collections.singletonList(player);
         } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
-            return new ArrayList<>(instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
+            Stream<Player> players = instance != null ?
+                    instance.getPlayers().unwrap() : MinecraftServer.getConnectionManager().getOnlinePlayers().unwrap();
+            return players.collect(Collectors.toList());
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
             if (instance != null) {
-                return new ArrayList<>(instance.getEntities());
+                return instance.getEntities().unwrap().collect(Collectors.toList());
             } else {
                 // Get entities from every instance
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 List<Entity> entities = new LinkedList<>();
                 for (Instance inst : instances) {
-                    entities.addAll(inst.getEntities());
+                    inst.getEntities().unwrap().forEach(entities::add);
                 }
                 return entities;
             }

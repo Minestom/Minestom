@@ -3,12 +3,12 @@ package net.minestom.server.adventure.bossbar;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.BossBarPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -23,7 +23,7 @@ import static net.minestom.server.network.packet.server.play.BossBarPacket.Actio
 final class BossBarHolder implements Viewable {
 
     protected final UUID uuid = UUID.randomUUID();
-    protected final Set<Player> players = new CopyOnWriteArraySet<>();
+    protected final AcquirableCollection<Player> players = new AcquirableCollection<>(new CopyOnWriteArraySet<>());
     protected final BossBar bar;
 
     BossBarHolder(@NotNull BossBar bar) {
@@ -31,7 +31,8 @@ final class BossBarHolder implements Viewable {
     }
 
     @NotNull BossBarPacket createRemovePacket() {
-        return this.createGenericPacket(REMOVE, packet -> { });
+        return this.createGenericPacket(REMOVE, packet -> {
+        });
     }
 
     @NotNull BossBarPacket createAddPacket() {
@@ -84,16 +85,16 @@ final class BossBarHolder implements Viewable {
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        return this.players.add(player);
+        return this.players.add(player.getAcquirable());
     }
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        return this.players.remove(player);
+        return this.players.remove(player.getAcquirable());
     }
 
     @Override
-    public @NotNull Set<Player> getViewers() {
-        return Collections.unmodifiableSet(this.players);
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return players;
     }
 }

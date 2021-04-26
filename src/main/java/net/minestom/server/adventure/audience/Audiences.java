@@ -4,6 +4,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -60,8 +62,11 @@ public class Audiences {
      * @param filter the predicate
      * @return all players matching the predicate
      */
-    public static @NotNull Audience players(@NotNull Predicate<Player> filter) {
-        return PacketGroupingAudience.of(MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).collect(Collectors.toList()));
+    public static @NotNull Audience players(@NotNull Predicate<Acquirable<Player>> filter) {
+        var audience = MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+                .filter(filter)
+                .collect(Collectors.toList());
+        return PacketGroupingAudience.of(new AcquirableCollection<>(audience));
     }
 
     /**

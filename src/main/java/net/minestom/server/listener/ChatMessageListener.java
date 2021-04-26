@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
@@ -12,7 +13,6 @@ import net.minestom.server.network.packet.server.play.ChatMessagePacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.function.Function;
 
 public class ChatMessageListener {
@@ -34,7 +34,7 @@ public class ChatMessageListener {
             return;
         }
 
-        final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
+        final AcquirableCollection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
         String finalMessage = message;
         PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, finalMessage), message);
 
@@ -53,7 +53,7 @@ public class ChatMessageListener {
                 textObject = playerChatEvent.getDefaultChatFormat().get();
             }
 
-            final Collection<Player> recipients = playerChatEvent.getRecipients();
+            final AcquirableCollection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {
                 // Send the message with the correct player UUID
                 ChatMessagePacket chatMessagePacket =

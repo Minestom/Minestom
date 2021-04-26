@@ -18,16 +18,16 @@ public class PlayersCommand extends Command {
     }
 
     private void usage(CommandSender sender, CommandContext context) {
-        final Collection<Player> players = MinecraftServer.getConnectionManager().getOnlinePlayers();
+        final var players = MinecraftServer.getConnectionManager().getOnlinePlayers();
         final int playerCount = players.size();
         sender.sendMessage(Component.text("Total players: " + playerCount));
         final int limit = 15;
         if (playerCount <= limit) {
-            for (final Player player : players) {
+            players.unwrap().forEach(player -> {
                 sender.sendMessage(Component.text(player.getUsername()));
-            }
+            });
         } else {
-            for (final Player player : players.stream().limit(limit).collect(Collectors.toList())) {
+            for (final Player player : players.unwrap().limit(limit).collect(Collectors.toList())) {
                 sender.sendMessage(Component.text(player.getUsername()));
             }
             sender.sendMessage(Component.text("..."));

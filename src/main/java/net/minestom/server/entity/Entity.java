@@ -10,6 +10,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
@@ -91,8 +92,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
     private boolean autoViewable;
     private final int id;
-    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    protected final AcquirableCollection<Player> viewers = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
     private Data data;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
@@ -350,7 +350,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     protected boolean addViewer0(@NotNull Player player) {
-        if (!this.viewers.add(player)) {
+        if (!this.viewers.add(player.getAcquirable())) {
             return false;
         }
         player.viewableEntities.add(this);
@@ -386,7 +386,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
-        if (!viewers.remove(player)) {
+        if (!viewers.remove(player.getAcquirable())) {
             return false;
         }
 
@@ -397,10 +397,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return true;
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return viewers;
     }
 
     /**
@@ -420,9 +419,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             this.metadata = new Metadata(this);
             this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
-            Set<Player> viewers = new HashSet<>(getViewers());
-            getViewers().forEach(this::removeViewer0);
-            viewers.forEach(this::addViewer0);
+            var viewers = new HashSet<>(getViewers());
+            getViewers().acquireSync(this::removeViewer0);
+            viewers.forEach(playerAcquirable -> playerAcquirable.sync(this::addViewer0));
         }
     }
 

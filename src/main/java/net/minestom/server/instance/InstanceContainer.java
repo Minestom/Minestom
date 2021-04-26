@@ -805,9 +805,7 @@ public class InstanceContainer extends Instance {
                 unloadChunkPacket.chunkZ = chunkZ;
                 chunk.sendPacketToViewers(unloadChunkPacket);
 
-                for (Player viewer : chunk.getViewers()) {
-                    chunk.removeViewer(viewer);
-                }
+                chunk.getViewers().acquireSync(chunk::removeViewer);
 
                 callChunkUnloadEvent(chunkX, chunkZ);
 

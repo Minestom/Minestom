@@ -1,13 +1,12 @@
 package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.ScoreboardObjectivePacket;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -20,8 +19,7 @@ public class BelowNameTag implements Scoreboard {
      */
     public static final String BELOW_NAME_TAG_PREFIX = "bnt-";
 
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    private final AcquirableCollection<Player> viewers = new AcquirableCollection<>(new CopyOnWriteArraySet<>());
     private final String objectiveName;
 
     private final ScoreboardObjectivePacket scoreboardObjectivePacket;
@@ -56,7 +54,7 @@ public class BelowNameTag implements Scoreboard {
 
     @Override
     public boolean addViewer(@NotNull Player player) {
-        boolean result = this.viewers.add(player);
+        boolean result = this.viewers.add(player.getAcquirable());
         PlayerConnection connection = player.getPlayerConnection();
 
         if (result) {
@@ -71,7 +69,7 @@ public class BelowNameTag implements Scoreboard {
 
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        boolean result = this.viewers.remove(player);
+        boolean result = this.viewers.remove(player.getAcquirable());
         PlayerConnection connection = player.getPlayerConnection();
 
         if (result) {
@@ -82,9 +80,8 @@ public class BelowNameTag implements Scoreboard {
         return result;
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return viewers;
     }
 }

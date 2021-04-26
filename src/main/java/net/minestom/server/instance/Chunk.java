@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.AcquirableCollection;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
@@ -74,8 +75,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     private boolean readOnly;
 
     protected volatile boolean loaded = true;
-    protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+    protected final AcquirableCollection<Player> viewers = new AcquirableCollection<>(ConcurrentHashMap.newKeySet());
 
     // Path finding
     protected PFColumnarSpace columnarSpace;
@@ -460,7 +460,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
+        final boolean result = this.viewers.add(player.getAcquirable());
 
         // Add to the viewable chunks set
         player.getViewableChunks().add(this);
@@ -485,7 +485,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
+        final boolean result = this.viewers.remove(player.getAcquirable());
 
         // Remove from the viewable chunks set
         player.getViewableChunks().remove(this);
@@ -498,10 +498,9 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         return result;
     }
 
-    @NotNull
     @Override
-    public Set<Player> getViewers() {
-        return unmodifiableViewers;
+    public @NotNull AcquirableCollection<Player> getViewers() {
+        return viewers;
     }
 
     @Nullable
