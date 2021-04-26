@@ -16,7 +16,7 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
         this.acquirableCollection = acquirableCollection;
     }
 
-    public void forEachSync(@NotNull Consumer<E> consumer) {
+    public void acquireSync(@NotNull Consumer<E> consumer) {
         final Thread currentThread = Thread.currentThread();
         var threadEntitiesMap = retrieveOptionalThreadMap(acquirableCollection, currentThread, consumer);
 
@@ -35,8 +35,8 @@ public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
         }
     }
 
-    public void forEachAsync(@NotNull Consumer<E> consumer) {
-        AsyncUtils.runAsync(() -> forEachSync(consumer));
+    public void acquireAsync(@NotNull Consumer<E> consumer) {
+        AsyncUtils.runAsync(() -> acquireSync(consumer));
     }
 
     public @NotNull Stream<E> unwrap() {
