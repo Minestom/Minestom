@@ -8,7 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 public class ParticleUtils {
     public static void drawParticle(@NotNull Instance instance, @NotNull Position position) {
-        ParticlePacket packet = ParticleCreator.createParticlePacket(Particle.FLAME,
+        drawParticle(instance, position, Particle.FLAME);
+    }
+
+    public static void drawParticle(@NotNull Instance instance, @NotNull Position position, @NotNull Particle particle) {
+        ParticlePacket packet = ParticleCreator.createParticlePacket(particle,
                 position.getX(), position.getY(), position.getZ(),
                 0, 0, 0, 1);
 
