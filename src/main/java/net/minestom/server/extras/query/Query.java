@@ -1,12 +1,14 @@
 package net.minestom.server.extras.query;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
+import net.minestom.server.extras.query.event.FullQueryEvent;
 import net.minestom.server.extras.query.response.QueryResponse;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.NetworkUtils;
@@ -25,7 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 /**
- * Utility class to manage responses to the UT3 Query Protocol.
+ * Utility class to manage responses to the GameSpy4 Query Protocol.
  * @see <a href="https://wiki.vg/Query">wiki.vg</a>
  */
 public class Query {
@@ -137,6 +139,7 @@ public class Query {
 
             // try and receive the packet
             try {
+                System.out.println("WAITING");
                 socket.receive(packet);
             } catch (IOException e) {
                 if (!started) {
@@ -152,11 +155,14 @@ public class Query {
 
             // check the magic field
             if (data.readUnsignedShort() != 0xFEFD) {
+                System.out.println("UNKNOWN");
                 continue;
             }
 
             // now check the query type
             byte type = data.readByte();
+            System.out.println("READ " + type);
+
             if (type == 9) { // handshake
                 int sessionID = data.readInt();
                 int challengeToken = RANDOM.nextInt();
@@ -180,16 +186,20 @@ public class Query {
                 int challengeToken = data.readInt();
                 SocketAddress sender = packet.getSocketAddress();
 
+                System.out.println("  STAT");
+
                 if (CHALLENGE_TOKENS.containsKey(challengeToken) && CHALLENGE_TOKENS.get(challengeToken).equals(sender)) {
                     int remaining = data.readableBytes();
+
+                    System.out.println("  REMAINING " + remaining);
 
                     if (remaining == 0) { // basic
                         BasicQueryEvent event = new BasicQueryEvent(sender);
                         MinecraftServer.getGlobalEventHandler().callCancellableEvent(BasicQueryEvent.class, event,
                                 () -> sendResponse(event.getQueryResponse(), sessionID, sender));
-                    } else if (remaining == 8) { // full
-                        BasicQueryEvent event = new BasicQueryEvent(sender);
-                        MinecraftServer.getGlobalEventHandler().callCancellableEvent(BasicQueryEvent.class, event,
+                    } else if (remaining == 5) { // full
+                        FullQueryEvent event = new FullQueryEvent(sender);
+                        MinecraftServer.getGlobalEventHandler().callCancellableEvent(FullQueryEvent.class, event,
                                 () -> sendResponse(event.getQueryResponse(), sessionID, sender));
                     }
                 }
@@ -210,6 +220,10 @@ public class Query {
         byte[] responseData = response.toByteArray();
         try {
             socket.send(new DatagramPacket(responseData, responseData.length, sender));
+
+            System.out.println(ByteBufUtil.hexDump(responseData));
+
+            System.out.println("SENT!! basic=" + (queryResponse instanceof BasicQueryEvent));
         } catch (IOException e) {
             LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
         }

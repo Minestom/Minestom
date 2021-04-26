@@ -139,7 +139,7 @@ public class FullQueryResponse implements QueryResponse {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeBytes(PADDING_10);
+        writer.writeBytes(PADDING_11);
 
         // key-values
         for (Map.Entry<String, String> entry : this.kv.entrySet()) {
@@ -148,7 +148,7 @@ public class FullQueryResponse implements QueryResponse {
         }
 
         writer.writeNullTerminatedString("", Query.CHARSET);
-        writer.writeBytes(PADDING_11);
+        writer.writeBytes(PADDING_10);
 
         // players
         for (String player : this.players) {
