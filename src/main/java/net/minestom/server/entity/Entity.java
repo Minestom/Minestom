@@ -125,7 +125,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
-    private final Acquirable<? extends Entity> acquirable = Acquirable.of(this);
+    private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
     /**
      * Lock used to support #switchEntityType
@@ -1573,8 +1573,12 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
-    public @NotNull Acquirable<? extends Entity> getAcquirable() {
-        return acquirable;
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
+        return (Acquirable<T>) acquirable;
     }
 
     public enum Pose {

@@ -15,7 +15,6 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
@@ -2446,11 +2445,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public long getLastKeepAlive() {
         return lastKeepAlive;
-    }
-
-    @Override
-    public @NotNull Acquirable<? extends Player> getAcquirable() {
-        return (Acquirable<? extends Player>) super.getAcquirable();
     }
 
     @Override
