@@ -187,7 +187,11 @@ public class InventoryClickProcessor {
 
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            return !result.isCancel();
+            if(result.isCancel()){
+                clickResult.setRefresh(true);
+                return false;
+            }
+            return true;
         });
 
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
@@ -210,7 +214,11 @@ public class InventoryClickProcessor {
             if (index == slot) // Prevent item lose/duplication
                 return false;
             InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            return !result.isCancel();
+            if(result.isCancel()){
+                clickResult.setRefresh(true);
+                return false;
+            }
+            return true;
         }, start, end, step);
 
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());

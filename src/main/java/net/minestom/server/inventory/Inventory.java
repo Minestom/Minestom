@@ -352,6 +352,10 @@ public class Inventory extends AbstractInventory implements Viewable {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
 
+        if(clickResult.doRefresh()){
+            update(player);
+        }
+
         refreshPlayerCursorItem(player, clickResult.getCursor());
 
         return !clickResult.isCancel();
