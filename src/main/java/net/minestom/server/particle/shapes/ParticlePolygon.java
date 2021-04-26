@@ -16,7 +16,7 @@ public class ParticlePolygon extends ParticleShape {
         this.close = close;
     }
 
-    public PolygonIterator iterator(ShapeOptions options) {
+    public @NotNull PolygonIterator iterator(ShapeOptions options) {
         return new PolygonIterator(this, options);
     }
 
@@ -43,10 +43,10 @@ public class ParticlePolygon extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance, @NotNull Position start) {
+        public void draw(@NotNull Instance instance, @NotNull Position start, @NotNull LinePattern.Iterator pattern) {
             while (hasNext()) {
                 ParticleLine.LineIterator line = next();
-                line.draw(instance, start);
+                line.draw(instance, start, pattern);
             }
         }
     }

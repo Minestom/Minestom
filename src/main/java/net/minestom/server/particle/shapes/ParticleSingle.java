@@ -21,7 +21,7 @@ public class ParticleSingle extends ParticleShape {
     }
 
     @Override
-    public SingleIterator iterator(ShapeOptions options) {
+    public @NotNull SingleIterator iterator(ShapeOptions options) {
         return new SingleIterator(this, options);
     }
 
@@ -45,9 +45,11 @@ public class ParticleSingle extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance, @NotNull Position start) {
+        public void draw(@NotNull Instance instance, @NotNull Position start, @NotNull LinePattern.Iterator pattern) {
             Position position = next();
-            ParticleUtils.drawParticle(instance, start.clone().add(position));
+            if (pattern.next()) {
+                ParticleUtils.drawParticle(instance, start.clone().add(position));
+            }
         }
     }
 }

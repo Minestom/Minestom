@@ -2,22 +2,20 @@ package net.minestom.server.particle.shapes;
 
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class ShapeOptions {
-    private final String linePattern;
+    private final LinePattern linePattern;
     private final int particleDistance;
     private final int particleCount;
 
-    public ShapeOptions(@Nullable String linePattern, int particleDistance, int particleCount) {
+    public ShapeOptions(@NotNull LinePattern linePattern, int particleDistance, int particleCount) {
         this.particleCount = particleCount;
-        Check.argCondition(!validateLinePattern(linePattern), "Line pattern is invalid");
         this.linePattern = linePattern;
         this.particleDistance = particleDistance;
     }
 
-    public @Nullable String getLinePattern() {
-        return linePattern;
+    public @NotNull LinePattern.Iterator getPatternIterator() {
+        return linePattern.iterator();
     }
 
     public boolean hasParticleCount() {
@@ -36,29 +34,15 @@ public class ShapeOptions {
         return new Builder();
     }
 
-    private boolean validateLinePattern(@Nullable String pattern) {
-        if (pattern == null) {
-            return true;
-        }
-
-        for (char c : pattern.toCharArray()) {
-            if (!Character.isSpaceChar(c) && c != '-') {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public static class Builder {
-        private String linePattern;
+        private LinePattern linePattern = LinePattern.empty();
         private int particleDistance = -1;
         private int particleCount = -1;
 
         private Builder() {
         }
 
-        public @NotNull Builder linePattern(String linePattern) {
+        public @NotNull Builder linePattern(@NotNull LinePattern linePattern) {
             this.linePattern = linePattern;
             return this;
         }

@@ -14,7 +14,7 @@ public class MultiPolygonBuilder {
     private PolygonBuilder lastPolygon;
 
     public @NotNull MultiPolygonBuilder lineStart(@NotNull Position position) {
-        lastPolygon = new PolygonBuilder().addPoint(position);
+        lastPolygon = ParticleShape.polygon().addPoint(position);
         return this;
     }
 

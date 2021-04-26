@@ -1,9 +1,6 @@
 package net.minestom.server.particle.shapes;
 
 import net.minestom.server.instance.Instance;
-import net.minestom.server.network.packet.server.play.ParticlePacket;
-import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.utils.ParticleUtils;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +27,7 @@ public class ParticleCircle extends ParticleShape {
     }
 
     @Override
-    public CircleIterator iterator(ShapeOptions options) {
+    public @NotNull CircleIterator iterator(ShapeOptions options) {
         return new CircleIterator(this, options);
     }
 
@@ -77,10 +74,12 @@ public class ParticleCircle extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance, @NotNull Position start) {
+        public void draw(@NotNull Instance instance, @NotNull Position start, @NotNull LinePattern.Iterator pattern) {
             while (hasNext()) {
                 Position position = next();
-                ParticleUtils.drawParticle(instance, start.clone().add(position));
+                if (pattern.next()) {
+                    ParticleUtils.drawParticle(instance, start.clone().add(position));
+                }
             }
         }
     }

@@ -13,5 +13,9 @@ public abstract class ParticleIterator<T extends ParticleShape> {
         this.options = options;
     }
 
-    public abstract void draw(@NotNull Instance instance, @NotNull Position start);
+    public void draw(@NotNull Instance instance, @NotNull Position start) {
+        draw(instance, start, options.getPatternIterator());
+    }
+
+    public abstract void draw(@NotNull Instance instance, @NotNull Position start, @NotNull LinePattern.Iterator pattern);
 }

@@ -33,6 +33,7 @@ import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.particle.shapes.*;
+import net.minestom.server.particle.shapes.builder.CircleBuilder;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -317,15 +318,17 @@ public class PlayerInit {
         //        .addControlPoint(new Position(3, 45, -3))
         //        .step(0.02)
         //        .build();
+        CircleBuilder circleBuilder = ParticleShape.circle(new Position(0, 45, 0)).radius(3);
+
         ParticleShape shape = ParticleShape.multiPolygon()
-                .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.X))
-                .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.Y))
-                .addShape(new ParticleCircle(0, 45, 0, 3, ParticleCircle.Facing.Z))
+                .addShape(circleBuilder.facing(ParticleCircle.Facing.X).build())
+                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Y).build())
+                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Z).build())
                 .addShape(ParticleShape.single(new Position(0, 45, 0)))
                 .build();
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
-            shape.iterator(ShapeOptions.builder().particleCount(20).build()).draw(instanceContainer, new Position(0, 0, 0));
+            shape.iterator(ShapeOptions.builder().particleCount(20).linePattern(LinePattern.of("---  ")).build()).draw(instanceContainer, new Position(0, 0, 0));
         }).repeat(10, TimeUnit.TICK).schedule();
     }
 

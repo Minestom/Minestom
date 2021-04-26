@@ -16,7 +16,7 @@ public class MultiPolygon extends ParticleShape {
     }
 
     @Override
-    public ParticleIterator<?> iterator(ShapeOptions options) {
+    public @NotNull ParticleIterator<?> iterator(ShapeOptions options) {
         return new MultiPolygonIterator(this, options);
     }
 
@@ -42,10 +42,10 @@ public class MultiPolygon extends ParticleShape {
         }
 
         @Override
-        public void draw(@NotNull Instance instance, @NotNull Position start) {
+        public void draw(@NotNull Instance instance, @NotNull Position start, @NotNull LinePattern.Iterator pattern) {
             while (hasNext()) {
                 ParticleShape shape = next();
-                shape.iterator(options).draw(instance, start);
+                shape.iterator(options).draw(instance, start, pattern.reset());
             }
         }
     }
