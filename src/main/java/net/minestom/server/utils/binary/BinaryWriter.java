@@ -3,6 +3,9 @@ package net.minestom.server.utils.binary;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
+
+import java.nio.charset.Charset;
+
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
@@ -174,6 +177,17 @@ public class BinaryWriter extends OutputStream {
         final int utf8Bytes = ByteBufUtil.utf8Bytes(string);
         writeVarInt(utf8Bytes);
         buffer.writeCharSequence(string, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Writes a null terminated string to the buffer. This method adds the null character
+     * to the end of the string before writing.
+     *
+     * @param string the string to write
+     * @param charset the charset to encode in
+     */
+    public void writeNullTerminatedString(@NotNull String string, @NotNull Charset charset) {
+        buffer.writeCharSequence(string + '\0', charset);
     }
 
     /**
