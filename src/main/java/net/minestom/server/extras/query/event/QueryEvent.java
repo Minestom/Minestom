@@ -3,9 +3,9 @@ package net.minestom.server.extras.query.event;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.extras.query.response.QueryResponse;
-import net.minestom.server.utils.InetAddressWithPort;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.SocketAddress;
 import java.util.Objects;
 
 /**
@@ -14,7 +14,7 @@ import java.util.Objects;
  * @param <T> the type of the response
  */
 public abstract class QueryEvent<T extends QueryResponse> extends Event implements CancellableEvent {
-    private final InetAddressWithPort sender;
+    private final SocketAddress sender;
 
     private T response;
     private boolean cancelled;
@@ -25,7 +25,7 @@ public abstract class QueryEvent<T extends QueryResponse> extends Event implemen
      * @param sender the sender
      * @param response the initial response
      */
-    public QueryEvent(@NotNull InetAddressWithPort sender, @NotNull T response) {
+    public QueryEvent(@NotNull SocketAddress sender, @NotNull T response) {
         this.sender = sender;
         this.response = response;
         this.cancelled = false;
@@ -51,11 +51,11 @@ public abstract class QueryEvent<T extends QueryResponse> extends Event implemen
     }
 
     /**
-     * Gets the IP address and port of the initiator of the query.
+     * Gets the socket address of the initiator of the query.
      *
      * @return the initiator
      */
-    public @NotNull InetAddressWithPort getSender() {
+    public @NotNull SocketAddress getSender() {
         return this.sender;
     }
 

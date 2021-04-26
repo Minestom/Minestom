@@ -9,7 +9,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.response.QueryResponse;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.InetAddressWithPort;
 import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -38,7 +38,7 @@ public class Query {
     private static volatile DatagramSocket socket;
     private static volatile Thread thread;
 
-    private static final Int2ObjectMap<InetAddressWithPort> CHALLENGE_TOKENS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
+    private static final Int2ObjectMap<SocketAddress> CHALLENGE_TOKENS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
     private static volatile Task task;
 
     private Query() { }
@@ -161,7 +161,7 @@ public class Query {
                 int sessionID = data.readInt();
                 int challengeToken = RANDOM.nextInt();
 
-                CHALLENGE_TOKENS.put(challengeToken, new InetAddressWithPort(packet.getAddress(), packet.getPort()));
+                CHALLENGE_TOKENS.put(challengeToken, packet.getSocketAddress());
 
                 // send the response
                 BinaryWriter response = new BinaryWriter(32);
@@ -171,24 +171,24 @@ public class Query {
 
                 try {
                     byte[] responseData = response.toByteArray();
-                    socket.send(new DatagramPacket(responseData, responseData.length, packet.getAddress(), packet.getPort()));
+                    socket.send(new DatagramPacket(responseData, responseData.length, packet.getSocketAddress()));
                 } catch (IOException e) {
                     LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
                 }
             } else if (type == 0) { // stat
                 int sessionID = data.readInt();
                 int challengeToken = data.readInt();
-                InetAddressWithPort sender = new InetAddressWithPort(packet.getAddress(), packet.getPort());
+                SocketAddress sender = packet.getSocketAddress();
 
                 if (CHALLENGE_TOKENS.containsKey(challengeToken) && CHALLENGE_TOKENS.get(challengeToken).equals(sender)) {
                     int remaining = data.readableBytes();
 
                     if (remaining == 0) { // basic
-                        BasicQueryEvent event = new BasicQueryEvent(new InetAddressWithPort(packet.getAddress(), packet.getPort()));
+                        BasicQueryEvent event = new BasicQueryEvent(sender);
                         MinecraftServer.getGlobalEventHandler().callCancellableEvent(BasicQueryEvent.class, event,
                                 () -> sendResponse(event.getQueryResponse(), sessionID, sender));
                     } else if (remaining == 8) { // full
-                        BasicQueryEvent event = new BasicQueryEvent(new InetAddressWithPort(packet.getAddress(), packet.getPort()));
+                        BasicQueryEvent event = new BasicQueryEvent(sender);
                         MinecraftServer.getGlobalEventHandler().callCancellableEvent(BasicQueryEvent.class, event,
                                 () -> sendResponse(event.getQueryResponse(), sessionID, sender));
                     }
@@ -197,7 +197,7 @@ public class Query {
         }
     }
 
-    private static void sendResponse(@NotNull QueryResponse queryResponse, int sessionID, @NotNull InetAddressWithPort sender) {
+    private static void sendResponse(@NotNull QueryResponse queryResponse, int sessionID, @NotNull SocketAddress sender) {
         // header
         BinaryWriter response = new BinaryWriter();
         response.writeByte((byte) 0);
@@ -209,7 +209,7 @@ public class Query {
         // send!
         byte[] responseData = response.toByteArray();
         try {
-            socket.send(new DatagramPacket(responseData, responseData.length, sender.getInetAddress(), sender.getPort()));
+            socket.send(new DatagramPacket(responseData, responseData.length, sender));
         } catch (IOException e) {
             LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
         }

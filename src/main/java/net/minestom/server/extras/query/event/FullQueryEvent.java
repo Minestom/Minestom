@@ -1,8 +1,9 @@
 package net.minestom.server.extras.query.event;
 
 import net.minestom.server.extras.query.response.FullQueryResponse;
-import net.minestom.server.utils.InetAddressWithPort;
 import org.jetbrains.annotations.NotNull;
+
+import java.net.SocketAddress;
 
 /**
  * An event called when a full query is received and ready to be responded to.
@@ -14,7 +15,7 @@ public class FullQueryEvent extends QueryEvent<FullQueryResponse> {
      *
      * @param sender the sender
      */
-    public FullQueryEvent(@NotNull InetAddressWithPort sender) {
+    public FullQueryEvent(@NotNull SocketAddress sender) {
         super(sender, new FullQueryResponse());
     }
 }

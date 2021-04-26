@@ -109,10 +109,10 @@ public class Main {
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().setDelayBetweenEventCalls(new UpdateOption(1, TimeUnit.DAY)));
 
+        Query.start(25566);
+
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
-
-        Query.start(25566);
     }
 
 }
