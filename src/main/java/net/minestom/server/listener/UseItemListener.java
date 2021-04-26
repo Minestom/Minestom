@@ -7,6 +7,7 @@ import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.event.ItemEvents;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 
 public class UseItemListener {
@@ -17,6 +18,7 @@ public class UseItemListener {
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
+        ItemEvents.callEventOnItem(itemStack, PlayerUseItemEvent.class, useItemEvent);
         player.callEvent(PlayerUseItemEvent.class, useItemEvent);
 
         final PlayerInventory playerInventory = player.getInventory();
@@ -69,8 +71,14 @@ public class UseItemListener {
         if (itemAnimationType != null) {
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
             player.callCancellableEvent(PlayerItemAnimationEvent.class, playerItemAnimationEvent, () -> {
+
+                boolean cancelled = ItemEvents.callEventOnItem(useItemEvent.getItemStack(), PlayerItemAnimationEvent.class, playerItemAnimationEvent);
+
+                if (cancelled) return;
+
                 player.refreshActiveHand(true, hand == Player.Hand.OFF, riptideSpinAttack);
                 player.sendPacketToViewers(player.getMetadataPacket());
+
             });
         }
     }

@@ -8,6 +8,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
+import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -19,6 +20,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.event.ItemEvents;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.BlockPosition;
@@ -58,6 +60,11 @@ public class BlockPlacementListener {
         playerBlockInteractEvent.setCancelled(cancel);
         playerBlockInteractEvent.setBlockingItemUse(cancel);
         player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
+
+            boolean cancelled = ItemEvents.callEventOnItem(player.getItemInHand(packet.hand), PlayerBlockInteractEvent.class, playerBlockInteractEvent);
+
+            if (cancelled) return;
+
             final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null) {
                 final Data data = instance.getBlockData(blockPosition);
@@ -188,6 +195,7 @@ public class BlockPlacementListener {
             final BlockPosition usePosition = blockPosition.clone().subtract(offsetX, offsetY, offsetZ);
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, usePosition, direction);
             player.callEvent(PlayerUseItemOnBlockEvent.class, event);
+            ItemEvents.callEventOnItem(event.getItemStack(), PlayerUseItemOnBlockEvent.class, event);
             refreshChunk = true;
         }
 

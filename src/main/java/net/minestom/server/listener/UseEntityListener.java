@@ -5,6 +5,9 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
+import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
+import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.event.ItemEvents;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 
 public class UseEntityListener {
@@ -28,6 +31,12 @@ public class UseEntityListener {
         } else if (type == ClientInteractEntityPacket.Type.INTERACT) {
             PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);
             player.callEvent(PlayerEntityInteractEvent.class, playerEntityInteractEvent);
+
+            // Trigger an item event if the player has an item.
+            if (!player.getItemInHand(packet.hand).equals(ItemStack.AIR)) {
+                ItemEvents.callEventOnItem(player.getItemInHand(packet.hand), PlayerEntityInteractEvent.class, playerEntityInteractEvent);
+            }
+
         } else {
             // TODO find difference with INTERACT
             //PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);
