@@ -8,6 +8,7 @@ import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -24,20 +25,19 @@ public interface Acquirable<T> {
      * @return the entities ticked in the current thread
      */
     static @NotNull Stream<@NotNull Entity> currentEntities() {
-        return AcquirableImpl.CURRENT_ENTITIES.get();
+        return AcquirableImpl.ENTRIES.get().stream()
+                .flatMap(chunkEntry -> chunkEntry.getEntities().stream());
     }
 
     /**
-     * Changes the stream returned by {@link #currentEntities()}.
-     * <p>
      * Mostly for internal use, external calls are unrecommended as they could lead
      * to unexpected behavior.
      *
-     * @param entities the new entity stream
+     * @param entries the new chunk entries
      */
     @ApiStatus.Internal
-    static void refreshEntities(@NotNull Stream<@NotNull Entity> entities) {
-        AcquirableImpl.CURRENT_ENTITIES.set(entities);
+    static void refreshEntries(@NotNull Collection<ThreadProvider.ChunkEntry> entries) {
+        AcquirableImpl.ENTRIES.set(entries);
     }
 
     /**
