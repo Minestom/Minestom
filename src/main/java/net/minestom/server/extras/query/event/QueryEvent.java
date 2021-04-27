@@ -15,6 +15,7 @@ import java.util.Objects;
  */
 public abstract class QueryEvent<T extends QueryResponse> extends Event implements CancellableEvent {
     private final SocketAddress sender;
+    private final int sessionID;
 
     private T response;
     private boolean cancelled;
@@ -23,10 +24,12 @@ public abstract class QueryEvent<T extends QueryResponse> extends Event implemen
      * Creates a new query event.
      *
      * @param sender the sender
+     * @param sessionID the session ID of the query sender
      * @param response the initial response
      */
-    public QueryEvent(@NotNull SocketAddress sender, @NotNull T response) {
+    public QueryEvent(@NotNull SocketAddress sender, int sessionID, @NotNull T response) {
         this.sender = sender;
+        this.sessionID = sessionID;
         this.response = response;
         this.cancelled = false;
     }
@@ -57,6 +60,15 @@ public abstract class QueryEvent<T extends QueryResponse> extends Event implemen
      */
     public @NotNull SocketAddress getSender() {
         return this.sender;
+    }
+
+    /**
+     * Gets the Session ID of the initiator of the query.
+     *
+     * @return the session ID
+     */
+    public int getSessionID() {
+        return this.sessionID;
     }
 
     @Override

@@ -14,8 +14,9 @@ public class FullQueryEvent extends QueryEvent<FullQueryResponse> {
      * Creates a new full query event.
      *
      * @param sender the sender
+     * @param sessionID the sessionID
      */
-    public FullQueryEvent(@NotNull SocketAddress sender) {
-        super(sender, new FullQueryResponse());
+    public FullQueryEvent(@NotNull SocketAddress sender, int sessionID) {
+        super(sender, sessionID, new FullQueryResponse());
     }
 }

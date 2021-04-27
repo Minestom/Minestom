@@ -13,9 +13,10 @@ public class BasicQueryEvent extends QueryEvent<BasicQueryResponse> {
     /**
      * Creates a new basic query event.
      *
+     * @param sessionID the session ID
      * @param sender the sender
      */
-    public BasicQueryEvent(@NotNull SocketAddress sender) {
-        super(sender, new BasicQueryResponse());
+    public BasicQueryEvent(@NotNull SocketAddress sender, int sessionID) {
+        super(sender, sessionID, new BasicQueryResponse());
     }
 }

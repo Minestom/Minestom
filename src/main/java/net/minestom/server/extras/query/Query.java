@@ -1,7 +1,6 @@
 package net.minestom.server.extras.query;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
@@ -13,6 +12,7 @@ import net.minestom.server.extras.query.response.QueryResponse;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +34,11 @@ public class Query {
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;
     private static final Logger LOGGER = LoggerFactory.getLogger(Query.class);
     private static final Random RANDOM = new Random();
+    private static final Int2ObjectMap<SocketAddress> CHALLENGE_TOKENS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
 
     private static volatile boolean started;
-
     private static volatile DatagramSocket socket;
     private static volatile Thread thread;
-
-    private static final Int2ObjectMap<SocketAddress> CHALLENGE_TOKENS = Int2ObjectMaps.synchronize(new Int2ObjectOpenHashMap<>());
     private static volatile Task task;
 
     private Query() { }
@@ -90,10 +88,10 @@ public class Query {
             thread.start();
             started = true;
 
-            /*task = MinecraftServer.getSchedulerManager()
+            task = MinecraftServer.getSchedulerManager()
                     .buildTask(CHALLENGE_TOKENS::clear)
                     .repeat(30, TimeUnit.SECOND)
-                    .schedule();*/
+                    .schedule();
 
             return true;
         }
@@ -139,7 +137,6 @@ public class Query {
 
             // try and receive the packet
             try {
-                System.out.println("WAITING");
                 socket.receive(packet);
             } catch (IOException e) {
                 if (!started) {
@@ -155,13 +152,11 @@ public class Query {
 
             // check the magic field
             if (data.readUnsignedShort() != 0xFEFD) {
-                System.out.println("UNKNOWN");
                 continue;
             }
 
             // now check the query type
             byte type = data.readByte();
-            System.out.println("READ " + type);
 
             if (type == 9) { // handshake
                 int sessionID = data.readInt();
@@ -179,26 +174,26 @@ public class Query {
                     byte[] responseData = response.toByteArray();
                     socket.send(new DatagramPacket(responseData, responseData.length, packet.getSocketAddress()));
                 } catch (IOException e) {
-                    LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
+                    if (!started) {
+                        LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
+                    } else {
+                        return;
+                    }
                 }
             } else if (type == 0) { // stat
                 int sessionID = data.readInt();
                 int challengeToken = data.readInt();
                 SocketAddress sender = packet.getSocketAddress();
 
-                System.out.println("  STAT");
-
                 if (CHALLENGE_TOKENS.containsKey(challengeToken) && CHALLENGE_TOKENS.get(challengeToken).equals(sender)) {
                     int remaining = data.readableBytes();
 
-                    System.out.println("  REMAINING " + remaining);
-
                     if (remaining == 0) { // basic
-                        BasicQueryEvent event = new BasicQueryEvent(sender);
+                        BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);
                         MinecraftServer.getGlobalEventHandler().callCancellableEvent(BasicQueryEvent.class, event,
                                 () -> sendResponse(event.getQueryResponse(), sessionID, sender));
                     } else if (remaining == 5) { // full
-                        FullQueryEvent event = new FullQueryEvent(sender);
+                        FullQueryEvent event = new FullQueryEvent(sender, sessionID);
                         MinecraftServer.getGlobalEventHandler().callCancellableEvent(FullQueryEvent.class, event,
                                 () -> sendResponse(event.getQueryResponse(), sessionID, sender));
                     }
@@ -220,12 +215,10 @@ public class Query {
         byte[] responseData = response.toByteArray();
         try {
             socket.send(new DatagramPacket(responseData, responseData.length, sender));
-
-            System.out.println(ByteBufUtil.hexDump(responseData));
-
-            System.out.println("SENT!! basic=" + (queryResponse instanceof BasicQueryEvent));
         } catch (IOException e) {
-            LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
+            if (!started) {
+                LOGGER.error("An error occurred whilst sending a query handshake packet.", e);
+            }
         }
     }
 }

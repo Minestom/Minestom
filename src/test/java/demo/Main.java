@@ -14,7 +14,6 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
-import net.minestom.server.extras.query.Query;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
@@ -23,7 +22,6 @@ import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
-
 
 public class Main {
 
@@ -109,10 +107,7 @@ public class Main {
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().setDelayBetweenEventCalls(new UpdateOption(1, TimeUnit.DAY)));
 
-        Query.start(25566);
-
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
-
 }
