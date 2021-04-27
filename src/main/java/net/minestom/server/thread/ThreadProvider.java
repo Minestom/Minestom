@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
 /**
  * Used to link chunks into multiple groups.
@@ -121,13 +120,11 @@ public abstract class ThreadProvider {
                 final var chunkEntries = threadChunkMap.get(thread);
                 if (chunkEntries == null || chunkEntries.isEmpty()) {
                     // Nothing to tick
-                    Acquirable.refreshEntities(Stream.empty());
+                    Acquirable.refreshEntries(Collections.emptySet());
                     return;
                 }
 
-                final var entities = chunkEntries.stream()
-                        .flatMap(chunkEntry -> chunkEntry.entities.stream());
-                Acquirable.refreshEntities(entities);
+                Acquirable.refreshEntries(chunkEntries);
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
@@ -146,7 +143,7 @@ public abstract class ThreadProvider {
                         entity.tick(time);
                     });
                 });
-                Acquirable.refreshEntities(Stream.empty());
+                Acquirable.refreshEntries(Collections.emptySet());
                 lock.unlock();
             });
         }
@@ -368,6 +365,10 @@ public abstract class ThreadProvider {
 
         public @NotNull Chunk getChunk() {
             return chunk;
+        }
+
+        public @NotNull List<Entity> getEntities() {
+            return entities;
         }
 
         @Override
