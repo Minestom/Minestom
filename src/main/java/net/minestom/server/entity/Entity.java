@@ -1607,7 +1607,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected void sendTeleportPacket() {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = getPosition();
+        entityTeleportPacket.position = getPosition().clone();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
 

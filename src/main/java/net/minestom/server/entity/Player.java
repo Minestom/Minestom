@@ -2060,7 +2060,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     protected void updatePlayerPosition() {
         PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-        positionAndLookPacket.position = position;
+        positionAndLookPacket.position = position.clone(); // clone needed to prevent synchronization issue
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = getNextTeleportId();
         playerConnection.sendPacket(positionAndLookPacket);
