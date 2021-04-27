@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class AcaciaFenceGate {
   public static final BlockState ACACIA_FENCE_GATE_31 = new BlockState(NamespaceID.from("minecraft:acacia_fence_gate_31"), (short) 8549, Block.ACACIA_FENCE_GATE, "facing=east","in_wall=false","open=false","powered=false");
 
   static {
-    Registries.registerBlockState(ACACIA_FENCE_GATE_0);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_1);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_2);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_3);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_4);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_5);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_6);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_7);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_8);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_9);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_10);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_11);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_12);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_13);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_14);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_15);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_16);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_17);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_18);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_19);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_20);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_21);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_22);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_23);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_24);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_25);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_26);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_27);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_28);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_29);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_30);
-    Registries.registerBlockState(ACACIA_FENCE_GATE_31);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_16);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_17);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_18);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_19);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_20);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_21);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_22);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_23);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_24);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_25);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_26);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_27);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_28);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_29);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_30);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_FENCE_GATE_31);
   }
 
   public static void initStates() {

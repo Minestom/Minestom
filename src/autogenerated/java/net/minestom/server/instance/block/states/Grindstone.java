@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class Grindstone {
   public static final BlockState GRINDSTONE_11 = new BlockState(NamespaceID.from("minecraft:grindstone_11"), (short) 14836, Block.GRINDSTONE, "face=CEILING","facing=east");
 
   static {
-    Registries.registerBlockState(GRINDSTONE_0);
-    Registries.registerBlockState(GRINDSTONE_1);
-    Registries.registerBlockState(GRINDSTONE_2);
-    Registries.registerBlockState(GRINDSTONE_3);
-    Registries.registerBlockState(GRINDSTONE_4);
-    Registries.registerBlockState(GRINDSTONE_5);
-    Registries.registerBlockState(GRINDSTONE_6);
-    Registries.registerBlockState(GRINDSTONE_7);
-    Registries.registerBlockState(GRINDSTONE_8);
-    Registries.registerBlockState(GRINDSTONE_9);
-    Registries.registerBlockState(GRINDSTONE_10);
-    Registries.registerBlockState(GRINDSTONE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(GRINDSTONE_11);
   }
 
   public static void initStates() {

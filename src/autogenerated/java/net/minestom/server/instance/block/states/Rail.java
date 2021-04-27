@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -35,16 +35,16 @@ public final class Rail {
   public static final BlockState RAIL_9 = new BlockState(NamespaceID.from("minecraft:rail_9"), (short) 3654, Block.RAIL, "shape=north_east");
 
   static {
-    Registries.registerBlockState(RAIL_0);
-    Registries.registerBlockState(RAIL_1);
-    Registries.registerBlockState(RAIL_2);
-    Registries.registerBlockState(RAIL_3);
-    Registries.registerBlockState(RAIL_4);
-    Registries.registerBlockState(RAIL_5);
-    Registries.registerBlockState(RAIL_6);
-    Registries.registerBlockState(RAIL_7);
-    Registries.registerBlockState(RAIL_8);
-    Registries.registerBlockState(RAIL_9);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_2);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_3);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_4);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_5);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_6);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_7);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_8);
+    Registry.BLOCK_STATE_REGISTRY.register(RAIL_9);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class JunglePressurePlate {
   public static final BlockState JUNGLE_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:jungle_pressure_plate_1"), (short) 3880, Block.JUNGLE_PRESSURE_PLATE, "powered=false");
 
   static {
-    Registries.registerBlockState(JUNGLE_PRESSURE_PLATE_0);
-    Registries.registerBlockState(JUNGLE_PRESSURE_PLATE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_PRESSURE_PLATE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_PRESSURE_PLATE_1);
   }
 
   public static void initStates() {

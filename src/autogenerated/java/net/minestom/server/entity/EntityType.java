@@ -116,7 +116,7 @@ import net.minestom.server.entity.metadata.water.fish.PufferfishMeta;
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
 import net.minestom.server.raw_data.RawEntityTypeData;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -342,114 +342,114 @@ public class EntityType implements Keyed {
   public static final EntityType FISHING_BOBBER = new EntityType(NamespaceID.from("minecraft:fishing_bobber"), 0.25, 0.25, FishingHookMeta::new, EntitySpawnType.BASE);
 
   static {
-    Registries.registerEntityType(AREA_EFFECT_CLOUD);
-    Registries.registerEntityType(ARMOR_STAND);
-    Registries.registerEntityType(ARROW);
-    Registries.registerEntityType(BAT);
-    Registries.registerEntityType(BEE);
-    Registries.registerEntityType(BLAZE);
-    Registries.registerEntityType(BOAT);
-    Registries.registerEntityType(CAT);
-    Registries.registerEntityType(CAVE_SPIDER);
-    Registries.registerEntityType(CHICKEN);
-    Registries.registerEntityType(COD);
-    Registries.registerEntityType(COW);
-    Registries.registerEntityType(CREEPER);
-    Registries.registerEntityType(DOLPHIN);
-    Registries.registerEntityType(DONKEY);
-    Registries.registerEntityType(DRAGON_FIREBALL);
-    Registries.registerEntityType(DROWNED);
-    Registries.registerEntityType(ELDER_GUARDIAN);
-    Registries.registerEntityType(END_CRYSTAL);
-    Registries.registerEntityType(ENDER_DRAGON);
-    Registries.registerEntityType(ENDERMAN);
-    Registries.registerEntityType(ENDERMITE);
-    Registries.registerEntityType(EVOKER);
-    Registries.registerEntityType(EVOKER_FANGS);
-    Registries.registerEntityType(EXPERIENCE_ORB);
-    Registries.registerEntityType(EYE_OF_ENDER);
-    Registries.registerEntityType(FALLING_BLOCK);
-    Registries.registerEntityType(FIREWORK_ROCKET);
-    Registries.registerEntityType(FOX);
-    Registries.registerEntityType(GHAST);
-    Registries.registerEntityType(GIANT);
-    Registries.registerEntityType(GUARDIAN);
-    Registries.registerEntityType(HOGLIN);
-    Registries.registerEntityType(HORSE);
-    Registries.registerEntityType(HUSK);
-    Registries.registerEntityType(ILLUSIONER);
-    Registries.registerEntityType(IRON_GOLEM);
-    Registries.registerEntityType(ITEM);
-    Registries.registerEntityType(ITEM_FRAME);
-    Registries.registerEntityType(FIREBALL);
-    Registries.registerEntityType(LEASH_KNOT);
-    Registries.registerEntityType(LIGHTNING_BOLT);
-    Registries.registerEntityType(LLAMA);
-    Registries.registerEntityType(LLAMA_SPIT);
-    Registries.registerEntityType(MAGMA_CUBE);
-    Registries.registerEntityType(MINECART);
-    Registries.registerEntityType(CHEST_MINECART);
-    Registries.registerEntityType(COMMAND_BLOCK_MINECART);
-    Registries.registerEntityType(FURNACE_MINECART);
-    Registries.registerEntityType(HOPPER_MINECART);
-    Registries.registerEntityType(SPAWNER_MINECART);
-    Registries.registerEntityType(TNT_MINECART);
-    Registries.registerEntityType(MULE);
-    Registries.registerEntityType(MOOSHROOM);
-    Registries.registerEntityType(OCELOT);
-    Registries.registerEntityType(PAINTING);
-    Registries.registerEntityType(PANDA);
-    Registries.registerEntityType(PARROT);
-    Registries.registerEntityType(PHANTOM);
-    Registries.registerEntityType(PIG);
-    Registries.registerEntityType(PIGLIN);
-    Registries.registerEntityType(PIGLIN_BRUTE);
-    Registries.registerEntityType(PILLAGER);
-    Registries.registerEntityType(POLAR_BEAR);
-    Registries.registerEntityType(TNT);
-    Registries.registerEntityType(PUFFERFISH);
-    Registries.registerEntityType(RABBIT);
-    Registries.registerEntityType(RAVAGER);
-    Registries.registerEntityType(SALMON);
-    Registries.registerEntityType(SHEEP);
-    Registries.registerEntityType(SHULKER);
-    Registries.registerEntityType(SHULKER_BULLET);
-    Registries.registerEntityType(SILVERFISH);
-    Registries.registerEntityType(SKELETON);
-    Registries.registerEntityType(SKELETON_HORSE);
-    Registries.registerEntityType(SLIME);
-    Registries.registerEntityType(SMALL_FIREBALL);
-    Registries.registerEntityType(SNOW_GOLEM);
-    Registries.registerEntityType(SNOWBALL);
-    Registries.registerEntityType(SPECTRAL_ARROW);
-    Registries.registerEntityType(SPIDER);
-    Registries.registerEntityType(SQUID);
-    Registries.registerEntityType(STRAY);
-    Registries.registerEntityType(STRIDER);
-    Registries.registerEntityType(EGG);
-    Registries.registerEntityType(ENDER_PEARL);
-    Registries.registerEntityType(EXPERIENCE_BOTTLE);
-    Registries.registerEntityType(POTION);
-    Registries.registerEntityType(TRIDENT);
-    Registries.registerEntityType(TRADER_LLAMA);
-    Registries.registerEntityType(TROPICAL_FISH);
-    Registries.registerEntityType(TURTLE);
-    Registries.registerEntityType(VEX);
-    Registries.registerEntityType(VILLAGER);
-    Registries.registerEntityType(VINDICATOR);
-    Registries.registerEntityType(WANDERING_TRADER);
-    Registries.registerEntityType(WITCH);
-    Registries.registerEntityType(WITHER);
-    Registries.registerEntityType(WITHER_SKELETON);
-    Registries.registerEntityType(WITHER_SKULL);
-    Registries.registerEntityType(WOLF);
-    Registries.registerEntityType(ZOGLIN);
-    Registries.registerEntityType(ZOMBIE);
-    Registries.registerEntityType(ZOMBIE_HORSE);
-    Registries.registerEntityType(ZOMBIE_VILLAGER);
-    Registries.registerEntityType(ZOMBIFIED_PIGLIN);
-    Registries.registerEntityType(PLAYER);
-    Registries.registerEntityType(FISHING_BOBBER);
+    Registry.ENTITY_TYPE_REGISTRY.register(AREA_EFFECT_CLOUD);
+    Registry.ENTITY_TYPE_REGISTRY.register(ARMOR_STAND);
+    Registry.ENTITY_TYPE_REGISTRY.register(ARROW);
+    Registry.ENTITY_TYPE_REGISTRY.register(BAT);
+    Registry.ENTITY_TYPE_REGISTRY.register(BEE);
+    Registry.ENTITY_TYPE_REGISTRY.register(BLAZE);
+    Registry.ENTITY_TYPE_REGISTRY.register(BOAT);
+    Registry.ENTITY_TYPE_REGISTRY.register(CAT);
+    Registry.ENTITY_TYPE_REGISTRY.register(CAVE_SPIDER);
+    Registry.ENTITY_TYPE_REGISTRY.register(CHICKEN);
+    Registry.ENTITY_TYPE_REGISTRY.register(COD);
+    Registry.ENTITY_TYPE_REGISTRY.register(COW);
+    Registry.ENTITY_TYPE_REGISTRY.register(CREEPER);
+    Registry.ENTITY_TYPE_REGISTRY.register(DOLPHIN);
+    Registry.ENTITY_TYPE_REGISTRY.register(DONKEY);
+    Registry.ENTITY_TYPE_REGISTRY.register(DRAGON_FIREBALL);
+    Registry.ENTITY_TYPE_REGISTRY.register(DROWNED);
+    Registry.ENTITY_TYPE_REGISTRY.register(ELDER_GUARDIAN);
+    Registry.ENTITY_TYPE_REGISTRY.register(END_CRYSTAL);
+    Registry.ENTITY_TYPE_REGISTRY.register(ENDER_DRAGON);
+    Registry.ENTITY_TYPE_REGISTRY.register(ENDERMAN);
+    Registry.ENTITY_TYPE_REGISTRY.register(ENDERMITE);
+    Registry.ENTITY_TYPE_REGISTRY.register(EVOKER);
+    Registry.ENTITY_TYPE_REGISTRY.register(EVOKER_FANGS);
+    Registry.ENTITY_TYPE_REGISTRY.register(EXPERIENCE_ORB);
+    Registry.ENTITY_TYPE_REGISTRY.register(EYE_OF_ENDER);
+    Registry.ENTITY_TYPE_REGISTRY.register(FALLING_BLOCK);
+    Registry.ENTITY_TYPE_REGISTRY.register(FIREWORK_ROCKET);
+    Registry.ENTITY_TYPE_REGISTRY.register(FOX);
+    Registry.ENTITY_TYPE_REGISTRY.register(GHAST);
+    Registry.ENTITY_TYPE_REGISTRY.register(GIANT);
+    Registry.ENTITY_TYPE_REGISTRY.register(GUARDIAN);
+    Registry.ENTITY_TYPE_REGISTRY.register(HOGLIN);
+    Registry.ENTITY_TYPE_REGISTRY.register(HORSE);
+    Registry.ENTITY_TYPE_REGISTRY.register(HUSK);
+    Registry.ENTITY_TYPE_REGISTRY.register(ILLUSIONER);
+    Registry.ENTITY_TYPE_REGISTRY.register(IRON_GOLEM);
+    Registry.ENTITY_TYPE_REGISTRY.register(ITEM);
+    Registry.ENTITY_TYPE_REGISTRY.register(ITEM_FRAME);
+    Registry.ENTITY_TYPE_REGISTRY.register(FIREBALL);
+    Registry.ENTITY_TYPE_REGISTRY.register(LEASH_KNOT);
+    Registry.ENTITY_TYPE_REGISTRY.register(LIGHTNING_BOLT);
+    Registry.ENTITY_TYPE_REGISTRY.register(LLAMA);
+    Registry.ENTITY_TYPE_REGISTRY.register(LLAMA_SPIT);
+    Registry.ENTITY_TYPE_REGISTRY.register(MAGMA_CUBE);
+    Registry.ENTITY_TYPE_REGISTRY.register(MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(CHEST_MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(COMMAND_BLOCK_MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(FURNACE_MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(HOPPER_MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(SPAWNER_MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(TNT_MINECART);
+    Registry.ENTITY_TYPE_REGISTRY.register(MULE);
+    Registry.ENTITY_TYPE_REGISTRY.register(MOOSHROOM);
+    Registry.ENTITY_TYPE_REGISTRY.register(OCELOT);
+    Registry.ENTITY_TYPE_REGISTRY.register(PAINTING);
+    Registry.ENTITY_TYPE_REGISTRY.register(PANDA);
+    Registry.ENTITY_TYPE_REGISTRY.register(PARROT);
+    Registry.ENTITY_TYPE_REGISTRY.register(PHANTOM);
+    Registry.ENTITY_TYPE_REGISTRY.register(PIG);
+    Registry.ENTITY_TYPE_REGISTRY.register(PIGLIN);
+    Registry.ENTITY_TYPE_REGISTRY.register(PIGLIN_BRUTE);
+    Registry.ENTITY_TYPE_REGISTRY.register(PILLAGER);
+    Registry.ENTITY_TYPE_REGISTRY.register(POLAR_BEAR);
+    Registry.ENTITY_TYPE_REGISTRY.register(TNT);
+    Registry.ENTITY_TYPE_REGISTRY.register(PUFFERFISH);
+    Registry.ENTITY_TYPE_REGISTRY.register(RABBIT);
+    Registry.ENTITY_TYPE_REGISTRY.register(RAVAGER);
+    Registry.ENTITY_TYPE_REGISTRY.register(SALMON);
+    Registry.ENTITY_TYPE_REGISTRY.register(SHEEP);
+    Registry.ENTITY_TYPE_REGISTRY.register(SHULKER);
+    Registry.ENTITY_TYPE_REGISTRY.register(SHULKER_BULLET);
+    Registry.ENTITY_TYPE_REGISTRY.register(SILVERFISH);
+    Registry.ENTITY_TYPE_REGISTRY.register(SKELETON);
+    Registry.ENTITY_TYPE_REGISTRY.register(SKELETON_HORSE);
+    Registry.ENTITY_TYPE_REGISTRY.register(SLIME);
+    Registry.ENTITY_TYPE_REGISTRY.register(SMALL_FIREBALL);
+    Registry.ENTITY_TYPE_REGISTRY.register(SNOW_GOLEM);
+    Registry.ENTITY_TYPE_REGISTRY.register(SNOWBALL);
+    Registry.ENTITY_TYPE_REGISTRY.register(SPECTRAL_ARROW);
+    Registry.ENTITY_TYPE_REGISTRY.register(SPIDER);
+    Registry.ENTITY_TYPE_REGISTRY.register(SQUID);
+    Registry.ENTITY_TYPE_REGISTRY.register(STRAY);
+    Registry.ENTITY_TYPE_REGISTRY.register(STRIDER);
+    Registry.ENTITY_TYPE_REGISTRY.register(EGG);
+    Registry.ENTITY_TYPE_REGISTRY.register(ENDER_PEARL);
+    Registry.ENTITY_TYPE_REGISTRY.register(EXPERIENCE_BOTTLE);
+    Registry.ENTITY_TYPE_REGISTRY.register(POTION);
+    Registry.ENTITY_TYPE_REGISTRY.register(TRIDENT);
+    Registry.ENTITY_TYPE_REGISTRY.register(TRADER_LLAMA);
+    Registry.ENTITY_TYPE_REGISTRY.register(TROPICAL_FISH);
+    Registry.ENTITY_TYPE_REGISTRY.register(TURTLE);
+    Registry.ENTITY_TYPE_REGISTRY.register(VEX);
+    Registry.ENTITY_TYPE_REGISTRY.register(VILLAGER);
+    Registry.ENTITY_TYPE_REGISTRY.register(VINDICATOR);
+    Registry.ENTITY_TYPE_REGISTRY.register(WANDERING_TRADER);
+    Registry.ENTITY_TYPE_REGISTRY.register(WITCH);
+    Registry.ENTITY_TYPE_REGISTRY.register(WITHER);
+    Registry.ENTITY_TYPE_REGISTRY.register(WITHER_SKELETON);
+    Registry.ENTITY_TYPE_REGISTRY.register(WITHER_SKULL);
+    Registry.ENTITY_TYPE_REGISTRY.register(WOLF);
+    Registry.ENTITY_TYPE_REGISTRY.register(ZOGLIN);
+    Registry.ENTITY_TYPE_REGISTRY.register(ZOMBIE);
+    Registry.ENTITY_TYPE_REGISTRY.register(ZOMBIE_HORSE);
+    Registry.ENTITY_TYPE_REGISTRY.register(ZOMBIE_VILLAGER);
+    Registry.ENTITY_TYPE_REGISTRY.register(ZOMBIFIED_PIGLIN);
+    Registry.ENTITY_TYPE_REGISTRY.register(PLAYER);
+    Registry.ENTITY_TYPE_REGISTRY.register(FISHING_BOBBER);
   }
 
   @NotNull
@@ -506,12 +506,17 @@ public class EntityType implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getEntityTypeId(this);
+    return Registry.ENTITY_TYPE_REGISTRY.getId(this);
   }
 
   @Nullable
   public static EntityType fromId(int id) {
-    return Registries.getEntityType(id);
+    return Registry.ENTITY_TYPE_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static EntityType fromId(Key id) {
+    return Registry.ENTITY_TYPE_REGISTRY.get(id);
   }
 
   @NotNull
@@ -527,6 +532,6 @@ public class EntityType implements Keyed {
 
   @NotNull
   public static List<EntityType> values() {
-    return Registries.getEntityTypes();
+    return Registry.ENTITY_TYPE_REGISTRY.values();
   }
 }

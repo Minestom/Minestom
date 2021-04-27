@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class NetherWart {
   public static final BlockState NETHER_WART_3 = new BlockState(NamespaceID.from("minecraft:nether_wart_3"), (short) 5135, Block.NETHER_WART, "age=3");
 
   static {
-    Registries.registerBlockState(NETHER_WART_0);
-    Registries.registerBlockState(NETHER_WART_1);
-    Registries.registerBlockState(NETHER_WART_2);
-    Registries.registerBlockState(NETHER_WART_3);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_WART_0);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_WART_1);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_WART_2);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_WART_3);
   }
 
   public static void initStates() {

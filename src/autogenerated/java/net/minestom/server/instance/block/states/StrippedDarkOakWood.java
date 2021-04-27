@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -21,9 +21,9 @@ public final class StrippedDarkOakWood {
   public static final BlockState STRIPPED_DARK_OAK_WOOD_2 = new BlockState(NamespaceID.from("minecraft:stripped_dark_oak_wood_2"), (short) 144, Block.STRIPPED_DARK_OAK_WOOD, "axis=z");
 
   static {
-    Registries.registerBlockState(STRIPPED_DARK_OAK_WOOD_0);
-    Registries.registerBlockState(STRIPPED_DARK_OAK_WOOD_1);
-    Registries.registerBlockState(STRIPPED_DARK_OAK_WOOD_2);
+    Registry.BLOCK_STATE_REGISTRY.register(STRIPPED_DARK_OAK_WOOD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(STRIPPED_DARK_OAK_WOOD_1);
+    Registry.BLOCK_STATE_REGISTRY.register(STRIPPED_DARK_OAK_WOOD_2);
   }
 
   public static void initStates() {

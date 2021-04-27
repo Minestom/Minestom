@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class WarpedSign {
   public static final BlockState WARPED_SIGN_31 = new BlockState(NamespaceID.from("minecraft:warped_sign_31"), (short) 15726, Block.WARPED_SIGN, "rotation=15","waterlogged=false");
 
   static {
-    Registries.registerBlockState(WARPED_SIGN_0);
-    Registries.registerBlockState(WARPED_SIGN_1);
-    Registries.registerBlockState(WARPED_SIGN_2);
-    Registries.registerBlockState(WARPED_SIGN_3);
-    Registries.registerBlockState(WARPED_SIGN_4);
-    Registries.registerBlockState(WARPED_SIGN_5);
-    Registries.registerBlockState(WARPED_SIGN_6);
-    Registries.registerBlockState(WARPED_SIGN_7);
-    Registries.registerBlockState(WARPED_SIGN_8);
-    Registries.registerBlockState(WARPED_SIGN_9);
-    Registries.registerBlockState(WARPED_SIGN_10);
-    Registries.registerBlockState(WARPED_SIGN_11);
-    Registries.registerBlockState(WARPED_SIGN_12);
-    Registries.registerBlockState(WARPED_SIGN_13);
-    Registries.registerBlockState(WARPED_SIGN_14);
-    Registries.registerBlockState(WARPED_SIGN_15);
-    Registries.registerBlockState(WARPED_SIGN_16);
-    Registries.registerBlockState(WARPED_SIGN_17);
-    Registries.registerBlockState(WARPED_SIGN_18);
-    Registries.registerBlockState(WARPED_SIGN_19);
-    Registries.registerBlockState(WARPED_SIGN_20);
-    Registries.registerBlockState(WARPED_SIGN_21);
-    Registries.registerBlockState(WARPED_SIGN_22);
-    Registries.registerBlockState(WARPED_SIGN_23);
-    Registries.registerBlockState(WARPED_SIGN_24);
-    Registries.registerBlockState(WARPED_SIGN_25);
-    Registries.registerBlockState(WARPED_SIGN_26);
-    Registries.registerBlockState(WARPED_SIGN_27);
-    Registries.registerBlockState(WARPED_SIGN_28);
-    Registries.registerBlockState(WARPED_SIGN_29);
-    Registries.registerBlockState(WARPED_SIGN_30);
-    Registries.registerBlockState(WARPED_SIGN_31);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_4);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_5);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_6);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_7);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_8);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_9);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_10);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_11);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_12);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_13);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_14);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_15);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_16);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_17);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_18);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_19);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_20);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_21);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_22);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_23);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_24);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_25);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_26);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_27);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_28);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_29);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_30);
+    Registry.BLOCK_STATE_REGISTRY.register(WARPED_SIGN_31);
   }
 
   public static void initStates() {

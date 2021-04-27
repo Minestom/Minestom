@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class NetherSprouts {
   public static final BlockState NETHER_SPROUTS_0 = new BlockState(NamespaceID.from("minecraft:nether_sprouts_0"), (short) 14982, Block.NETHER_SPROUTS);
 
   static {
-    Registries.registerBlockState(NETHER_SPROUTS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_SPROUTS_0);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class Dispenser {
   public static final BlockState DISPENSER_11 = new BlockState(NamespaceID.from("minecraft:dispenser_11"), (short) 245, Block.DISPENSER, "facing=down","triggered=false");
 
   static {
-    Registries.registerBlockState(DISPENSER_0);
-    Registries.registerBlockState(DISPENSER_1);
-    Registries.registerBlockState(DISPENSER_2);
-    Registries.registerBlockState(DISPENSER_3);
-    Registries.registerBlockState(DISPENSER_4);
-    Registries.registerBlockState(DISPENSER_5);
-    Registries.registerBlockState(DISPENSER_6);
-    Registries.registerBlockState(DISPENSER_7);
-    Registries.registerBlockState(DISPENSER_8);
-    Registries.registerBlockState(DISPENSER_9);
-    Registries.registerBlockState(DISPENSER_10);
-    Registries.registerBlockState(DISPENSER_11);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_9);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_10);
+    Registry.BLOCK_STATE_REGISTRY.register(DISPENSER_11);
   }
 
   public static void initStates() {

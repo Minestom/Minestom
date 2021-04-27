@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(VillagerProfessionGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "villager_professions.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "villager_professions.json");
     private final File villagerProfessionsFile;
     private final File outputFolder;
 
@@ -51,6 +51,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName rawVillagerProfessionDataClassName = ClassName.get("net.minestom.server.raw_data", "RawVillagerProfessionData");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray villagerProfessions;
         try {
@@ -116,10 +117,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         villagerProfessionClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getVillagerProfessionId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.VILLAGER_PROFESSION_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -129,10 +127,17 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                         .returns(villagerProfessionClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getVillagerProfession(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.VILLAGER_PROFESSION_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(villagerProfessionClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.VILLAGER_PROFESSION_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -152,7 +157,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), villagerProfessionClassName))
-                        .addStatement("return $T.getVillagerProfessions()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.VILLAGER_PROFESSION_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -174,9 +179,8 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                             villagerProfession.get("id").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
-            ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            staticBlock.addStatement("$T.registerVillagerProfession($N)", registryClassName, villagerProfessionName);
+            staticBlock.addStatement("$T.VILLAGER_PROFESSION_REGISTRY.register($N)", registryClassName, villagerProfessionName);
         }
 
         villagerProfessionClass.addStaticBlock(staticBlock.build());

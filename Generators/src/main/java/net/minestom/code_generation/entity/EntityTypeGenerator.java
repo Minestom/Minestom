@@ -20,7 +20,7 @@ import java.util.function.BiFunction;
 public final class EntityTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "particles.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "particles.json");
     private static final Map<String, String> metadata = new HashMap<>() {{
         // Class's name (without the Meta suffix) <--> Package
         // UPDATE: Handle new entity metadata
@@ -201,6 +201,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName rawEntityDataClassName = ClassName.get("net.minestom.server.raw_data", "RawEntityTypeData");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray entities;
         try {
@@ -354,10 +355,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         entityClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getEntityTypeId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.ENTITY_TYPE_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -367,10 +365,17 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         .returns(entityClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getEntityType(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.ENTITY_TYPE_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(entityClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.ENTITY_TYPE_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -399,7 +404,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), entityClassName))
-                        .addStatement("return $T.getEntityTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.ENTITY_TYPE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -451,9 +456,8 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                             entity.get("packetType").getAsString().toUpperCase()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
-            ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registries");
             // Add to static init.
-            staticBlock.addStatement("$T.registerEntityType($N)", registryClassName, entityName);
+            staticBlock.addStatement("$T.ENTITY_TYPE_REGISTRY.register($N)", registryClassName, entityName);
         }
 
         entityClass.addStaticBlock(staticBlock.build());

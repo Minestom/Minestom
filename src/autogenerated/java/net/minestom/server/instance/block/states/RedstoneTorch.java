@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class RedstoneTorch {
   public static final BlockState REDSTONE_TORCH_1 = new BlockState(NamespaceID.from("minecraft:redstone_torch_1"), (short) 3888, Block.REDSTONE_TORCH, "lit=false");
 
   static {
-    Registries.registerBlockState(REDSTONE_TORCH_0);
-    Registries.registerBlockState(REDSTONE_TORCH_1);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_TORCH_0);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_TORCH_1);
   }
 
   public static void initStates() {

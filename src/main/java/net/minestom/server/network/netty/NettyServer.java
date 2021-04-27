@@ -135,23 +135,6 @@ public final class NettyServer {
             }
         }
 
-        // Add default allocator settings
-        {
-            if (System.getProperty("io.netty.allocator.numDirectArenas") == null) {
-                System.setProperty("io.netty.allocator.numDirectArenas", String.valueOf(workerThreadCount));
-            }
-
-            if (System.getProperty("io.netty.allocator.numHeapArenas") == null) {
-                System.setProperty("io.netty.allocator.numHeapArenas", String.valueOf(workerThreadCount));
-            }
-
-            if (System.getProperty("io.netty.allocator.maxOrder") == null) {
-                // The default page size is 8192 bytes, a bit shift of 5 makes it 262KB
-                // largely enough for this type of server
-                System.setProperty("io.netty.allocator.maxOrder", "5");
-            }
-        }
-
         bootstrap = new ServerBootstrap()
                 .group(boss, worker)
                 .childOption(ChannelOption.WRITE_BUFFER_WATER_MARK, SERVER_WRITE_MARK)

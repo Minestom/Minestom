@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -33,15 +33,15 @@ public final class Composter {
   public static final BlockState COMPOSTER_8 = new BlockState(NamespaceID.from("minecraft:composter_8"), (short) 15767, Block.COMPOSTER, "level=8");
 
   static {
-    Registries.registerBlockState(COMPOSTER_0);
-    Registries.registerBlockState(COMPOSTER_1);
-    Registries.registerBlockState(COMPOSTER_2);
-    Registries.registerBlockState(COMPOSTER_3);
-    Registries.registerBlockState(COMPOSTER_4);
-    Registries.registerBlockState(COMPOSTER_5);
-    Registries.registerBlockState(COMPOSTER_6);
-    Registries.registerBlockState(COMPOSTER_7);
-    Registries.registerBlockState(COMPOSTER_8);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_2);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_3);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_4);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_5);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_6);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_7);
+    Registry.BLOCK_STATE_REGISTRY.register(COMPOSTER_8);
   }
 
   public static void initStates() {

@@ -19,7 +19,7 @@ import java.util.*;
 public final class BlockGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE_BLOCKS = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "blocks.json");
+    private static final File DEFAULT_INPUT_FILE_BLOCKS = new File(DEFAULT_SOURCE_FOLDER_ROOT, "blocks.json");
     private final File blocksFile;
     private final File outputFolder;
 
@@ -51,6 +51,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName rawBlockDataClassName = ClassName.get("net.minestom.server.raw_data", "RawBlockData");
         ClassName rawBlockStateDataClassName = ClassName.get("net.minestom.server.raw_data", "RawBlockStateData");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         List<JavaFile> filesToWrite = new ArrayList<>();
 
@@ -161,10 +162,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         blockClass.addMethod(
                 MethodSpec.methodBuilder("getDefaultBlockState")
                         .returns(blockStateClassName)
-                        .addStatement(
-                                "return $T.getBlockState(defaultBlockState)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.BLOCK_STATE_REGISTRY.get(defaultBlockState)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -266,7 +264,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(blockClassName)
                         .addAnnotation(NotNull.class)
                         .addParameter(TypeName.SHORT, "id")
-                        .addStatement("return $T.getBlockState(id).getBlock()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.BLOCK_STATE_REGISTRY.get(id).getBlock()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -274,10 +272,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         blockClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getBlockId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.BLOCK_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -287,10 +282,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(blockClassName)
                         .addAnnotation(NotNull.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getBlock(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.BLOCK_REGISTRY.get((short) id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -300,10 +292,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(blockClassName)
                         .addAnnotation(NotNull.class)
                         .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
-                        .addStatement(
-                                "return $T.getBlock(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.BLOCK_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -323,7 +312,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), blockClassName))
-                        .addStatement("return $T.getBlocks()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.BLOCK_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -475,11 +464,8 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("fromId")
                         .returns(blockStateClassName)
                         .addAnnotation(NotNull.class)
-                        .addParameter(TypeName.SHORT, "id")
-                        .addStatement(
-                                "return $T.getBlockState(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addParameter(TypeName.INT, "id")
+                        .addStatement("return $T.BLOCK_STATE_REGISTRY.get((short) id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -489,10 +475,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(blockStateClassName)
                         .addAnnotation(NotNull.class)
                         .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
-                        .addStatement(
-                                "return $T.getBlockState(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.BLOCK_STATE_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -524,7 +507,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), blockStateClassName))
-                        .addStatement("return $T.getBlockStates()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.BLOCK_STATE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -564,7 +547,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             JsonArray states = block.get("states").getAsJsonArray();
             // States should be split into a maximum size of maxSize to not reach the java limit.
             // If we ever reach the java limit we can reduce this number, it does not change anything users should be using.
-            int maxSize = 1000;
+            int maxSize = 800;
 
             for (int i=0; i < Math.ceil(states.size() / (double) maxSize); i++) {
                 String suffix = "";
@@ -651,7 +634,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                             stateName
                     );
                     // Add field to internal static method
-                    internalStaticBlock.addStatement("$T.registerBlockState($N)", ClassName.get("net.minestom.server.registry", "Registries"), stateName);
+                    internalStaticBlock.addStatement("$T.BLOCK_STATE_REGISTRY.register($N)", registryClassName, stateName);
                 }
                 // Add initStates Method
                 blockStateSpecificClass.addMethod(initStatesMethod.build());
@@ -664,7 +647,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 filesToWrite.add(JavaFile.builder("net.minestom.server.instance.block.states", blockStateSpecificClass.build()).build());
             }
             // Add to static init.
-            staticBlock2.addStatement("$T.registerBlock($N)", ClassName.get("net.minestom.server.registry", "Registries"), blockName);
+            staticBlock2.addStatement("$T.BLOCK_REGISTRY.register($N)", registryClassName, blockName);
         }
         blockClass.addStaticBlock(staticBlock.build());
         blockClass.addStaticBlock(staticBlock2.build());

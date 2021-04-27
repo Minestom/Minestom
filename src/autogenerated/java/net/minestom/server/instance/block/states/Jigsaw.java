@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class Jigsaw {
   public static final BlockState JIGSAW_11 = new BlockState(NamespaceID.from("minecraft:jigsaw_11"), (short) 15758, Block.JIGSAW, "orientation=SOUTH_UP");
 
   static {
-    Registries.registerBlockState(JIGSAW_0);
-    Registries.registerBlockState(JIGSAW_1);
-    Registries.registerBlockState(JIGSAW_2);
-    Registries.registerBlockState(JIGSAW_3);
-    Registries.registerBlockState(JIGSAW_4);
-    Registries.registerBlockState(JIGSAW_5);
-    Registries.registerBlockState(JIGSAW_6);
-    Registries.registerBlockState(JIGSAW_7);
-    Registries.registerBlockState(JIGSAW_8);
-    Registries.registerBlockState(JIGSAW_9);
-    Registries.registerBlockState(JIGSAW_10);
-    Registries.registerBlockState(JIGSAW_11);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_0);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_1);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_2);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_3);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_4);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_5);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_6);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_7);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_8);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_9);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_10);
+    Registry.BLOCK_STATE_REGISTRY.register(JIGSAW_11);
   }
 
   public static void initStates() {

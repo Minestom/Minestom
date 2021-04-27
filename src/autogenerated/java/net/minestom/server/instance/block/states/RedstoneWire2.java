@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -14,6 +14,406 @@ import net.minestom.server.utils.NamespaceID;
     forRemoval = false
 )
 public final class RedstoneWire2 {
+  public static final BlockState REDSTONE_WIRE_800 = new BlockState(NamespaceID.from("minecraft:redstone_wire_800"), (short) 2858, Block.REDSTONE_WIRE, "east=side","north=none","power=8","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_801 = new BlockState(NamespaceID.from("minecraft:redstone_wire_801"), (short) 2859, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_802 = new BlockState(NamespaceID.from("minecraft:redstone_wire_802"), (short) 2860, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_803 = new BlockState(NamespaceID.from("minecraft:redstone_wire_803"), (short) 2861, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_804 = new BlockState(NamespaceID.from("minecraft:redstone_wire_804"), (short) 2862, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_805 = new BlockState(NamespaceID.from("minecraft:redstone_wire_805"), (short) 2863, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_806 = new BlockState(NamespaceID.from("minecraft:redstone_wire_806"), (short) 2864, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_807 = new BlockState(NamespaceID.from("minecraft:redstone_wire_807"), (short) 2865, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_808 = new BlockState(NamespaceID.from("minecraft:redstone_wire_808"), (short) 2866, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_809 = new BlockState(NamespaceID.from("minecraft:redstone_wire_809"), (short) 2867, Block.REDSTONE_WIRE, "east=side","north=none","power=9","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_810 = new BlockState(NamespaceID.from("minecraft:redstone_wire_810"), (short) 2868, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_811 = new BlockState(NamespaceID.from("minecraft:redstone_wire_811"), (short) 2869, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_812 = new BlockState(NamespaceID.from("minecraft:redstone_wire_812"), (short) 2870, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_813 = new BlockState(NamespaceID.from("minecraft:redstone_wire_813"), (short) 2871, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_814 = new BlockState(NamespaceID.from("minecraft:redstone_wire_814"), (short) 2872, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_815 = new BlockState(NamespaceID.from("minecraft:redstone_wire_815"), (short) 2873, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_816 = new BlockState(NamespaceID.from("minecraft:redstone_wire_816"), (short) 2874, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_817 = new BlockState(NamespaceID.from("minecraft:redstone_wire_817"), (short) 2875, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_818 = new BlockState(NamespaceID.from("minecraft:redstone_wire_818"), (short) 2876, Block.REDSTONE_WIRE, "east=side","north=none","power=10","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_819 = new BlockState(NamespaceID.from("minecraft:redstone_wire_819"), (short) 2877, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_820 = new BlockState(NamespaceID.from("minecraft:redstone_wire_820"), (short) 2878, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_821 = new BlockState(NamespaceID.from("minecraft:redstone_wire_821"), (short) 2879, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_822 = new BlockState(NamespaceID.from("minecraft:redstone_wire_822"), (short) 2880, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_823 = new BlockState(NamespaceID.from("minecraft:redstone_wire_823"), (short) 2881, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_824 = new BlockState(NamespaceID.from("minecraft:redstone_wire_824"), (short) 2882, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_825 = new BlockState(NamespaceID.from("minecraft:redstone_wire_825"), (short) 2883, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_826 = new BlockState(NamespaceID.from("minecraft:redstone_wire_826"), (short) 2884, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_827 = new BlockState(NamespaceID.from("minecraft:redstone_wire_827"), (short) 2885, Block.REDSTONE_WIRE, "east=side","north=none","power=11","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_828 = new BlockState(NamespaceID.from("minecraft:redstone_wire_828"), (short) 2886, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_829 = new BlockState(NamespaceID.from("minecraft:redstone_wire_829"), (short) 2887, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_830 = new BlockState(NamespaceID.from("minecraft:redstone_wire_830"), (short) 2888, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_831 = new BlockState(NamespaceID.from("minecraft:redstone_wire_831"), (short) 2889, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_832 = new BlockState(NamespaceID.from("minecraft:redstone_wire_832"), (short) 2890, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_833 = new BlockState(NamespaceID.from("minecraft:redstone_wire_833"), (short) 2891, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_834 = new BlockState(NamespaceID.from("minecraft:redstone_wire_834"), (short) 2892, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_835 = new BlockState(NamespaceID.from("minecraft:redstone_wire_835"), (short) 2893, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_836 = new BlockState(NamespaceID.from("minecraft:redstone_wire_836"), (short) 2894, Block.REDSTONE_WIRE, "east=side","north=none","power=12","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_837 = new BlockState(NamespaceID.from("minecraft:redstone_wire_837"), (short) 2895, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_838 = new BlockState(NamespaceID.from("minecraft:redstone_wire_838"), (short) 2896, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_839 = new BlockState(NamespaceID.from("minecraft:redstone_wire_839"), (short) 2897, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_840 = new BlockState(NamespaceID.from("minecraft:redstone_wire_840"), (short) 2898, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_841 = new BlockState(NamespaceID.from("minecraft:redstone_wire_841"), (short) 2899, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_842 = new BlockState(NamespaceID.from("minecraft:redstone_wire_842"), (short) 2900, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_843 = new BlockState(NamespaceID.from("minecraft:redstone_wire_843"), (short) 2901, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_844 = new BlockState(NamespaceID.from("minecraft:redstone_wire_844"), (short) 2902, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_845 = new BlockState(NamespaceID.from("minecraft:redstone_wire_845"), (short) 2903, Block.REDSTONE_WIRE, "east=side","north=none","power=13","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_846 = new BlockState(NamespaceID.from("minecraft:redstone_wire_846"), (short) 2904, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_847 = new BlockState(NamespaceID.from("minecraft:redstone_wire_847"), (short) 2905, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_848 = new BlockState(NamespaceID.from("minecraft:redstone_wire_848"), (short) 2906, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_849 = new BlockState(NamespaceID.from("minecraft:redstone_wire_849"), (short) 2907, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_850 = new BlockState(NamespaceID.from("minecraft:redstone_wire_850"), (short) 2908, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_851 = new BlockState(NamespaceID.from("minecraft:redstone_wire_851"), (short) 2909, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_852 = new BlockState(NamespaceID.from("minecraft:redstone_wire_852"), (short) 2910, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_853 = new BlockState(NamespaceID.from("minecraft:redstone_wire_853"), (short) 2911, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_854 = new BlockState(NamespaceID.from("minecraft:redstone_wire_854"), (short) 2912, Block.REDSTONE_WIRE, "east=side","north=none","power=14","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_855 = new BlockState(NamespaceID.from("minecraft:redstone_wire_855"), (short) 2913, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_856 = new BlockState(NamespaceID.from("minecraft:redstone_wire_856"), (short) 2914, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_857 = new BlockState(NamespaceID.from("minecraft:redstone_wire_857"), (short) 2915, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_858 = new BlockState(NamespaceID.from("minecraft:redstone_wire_858"), (short) 2916, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_859 = new BlockState(NamespaceID.from("minecraft:redstone_wire_859"), (short) 2917, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_860 = new BlockState(NamespaceID.from("minecraft:redstone_wire_860"), (short) 2918, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_861 = new BlockState(NamespaceID.from("minecraft:redstone_wire_861"), (short) 2919, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_862 = new BlockState(NamespaceID.from("minecraft:redstone_wire_862"), (short) 2920, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_863 = new BlockState(NamespaceID.from("minecraft:redstone_wire_863"), (short) 2921, Block.REDSTONE_WIRE, "east=side","north=none","power=15","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_864 = new BlockState(NamespaceID.from("minecraft:redstone_wire_864"), (short) 2922, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_865 = new BlockState(NamespaceID.from("minecraft:redstone_wire_865"), (short) 2923, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_866 = new BlockState(NamespaceID.from("minecraft:redstone_wire_866"), (short) 2924, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_867 = new BlockState(NamespaceID.from("minecraft:redstone_wire_867"), (short) 2925, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_868 = new BlockState(NamespaceID.from("minecraft:redstone_wire_868"), (short) 2926, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_869 = new BlockState(NamespaceID.from("minecraft:redstone_wire_869"), (short) 2927, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_870 = new BlockState(NamespaceID.from("minecraft:redstone_wire_870"), (short) 2928, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_871 = new BlockState(NamespaceID.from("minecraft:redstone_wire_871"), (short) 2929, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_872 = new BlockState(NamespaceID.from("minecraft:redstone_wire_872"), (short) 2930, Block.REDSTONE_WIRE, "east=none","north=up","power=0","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_873 = new BlockState(NamespaceID.from("minecraft:redstone_wire_873"), (short) 2931, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_874 = new BlockState(NamespaceID.from("minecraft:redstone_wire_874"), (short) 2932, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_875 = new BlockState(NamespaceID.from("minecraft:redstone_wire_875"), (short) 2933, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_876 = new BlockState(NamespaceID.from("minecraft:redstone_wire_876"), (short) 2934, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_877 = new BlockState(NamespaceID.from("minecraft:redstone_wire_877"), (short) 2935, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_878 = new BlockState(NamespaceID.from("minecraft:redstone_wire_878"), (short) 2936, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_879 = new BlockState(NamespaceID.from("minecraft:redstone_wire_879"), (short) 2937, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_880 = new BlockState(NamespaceID.from("minecraft:redstone_wire_880"), (short) 2938, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_881 = new BlockState(NamespaceID.from("minecraft:redstone_wire_881"), (short) 2939, Block.REDSTONE_WIRE, "east=none","north=up","power=1","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_882 = new BlockState(NamespaceID.from("minecraft:redstone_wire_882"), (short) 2940, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_883 = new BlockState(NamespaceID.from("minecraft:redstone_wire_883"), (short) 2941, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_884 = new BlockState(NamespaceID.from("minecraft:redstone_wire_884"), (short) 2942, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_885 = new BlockState(NamespaceID.from("minecraft:redstone_wire_885"), (short) 2943, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_886 = new BlockState(NamespaceID.from("minecraft:redstone_wire_886"), (short) 2944, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_887 = new BlockState(NamespaceID.from("minecraft:redstone_wire_887"), (short) 2945, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_888 = new BlockState(NamespaceID.from("minecraft:redstone_wire_888"), (short) 2946, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_889 = new BlockState(NamespaceID.from("minecraft:redstone_wire_889"), (short) 2947, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_890 = new BlockState(NamespaceID.from("minecraft:redstone_wire_890"), (short) 2948, Block.REDSTONE_WIRE, "east=none","north=up","power=2","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_891 = new BlockState(NamespaceID.from("minecraft:redstone_wire_891"), (short) 2949, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_892 = new BlockState(NamespaceID.from("minecraft:redstone_wire_892"), (short) 2950, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_893 = new BlockState(NamespaceID.from("minecraft:redstone_wire_893"), (short) 2951, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_894 = new BlockState(NamespaceID.from("minecraft:redstone_wire_894"), (short) 2952, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_895 = new BlockState(NamespaceID.from("minecraft:redstone_wire_895"), (short) 2953, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_896 = new BlockState(NamespaceID.from("minecraft:redstone_wire_896"), (short) 2954, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_897 = new BlockState(NamespaceID.from("minecraft:redstone_wire_897"), (short) 2955, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_898 = new BlockState(NamespaceID.from("minecraft:redstone_wire_898"), (short) 2956, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_899 = new BlockState(NamespaceID.from("minecraft:redstone_wire_899"), (short) 2957, Block.REDSTONE_WIRE, "east=none","north=up","power=3","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_900 = new BlockState(NamespaceID.from("minecraft:redstone_wire_900"), (short) 2958, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_901 = new BlockState(NamespaceID.from("minecraft:redstone_wire_901"), (short) 2959, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_902 = new BlockState(NamespaceID.from("minecraft:redstone_wire_902"), (short) 2960, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_903 = new BlockState(NamespaceID.from("minecraft:redstone_wire_903"), (short) 2961, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_904 = new BlockState(NamespaceID.from("minecraft:redstone_wire_904"), (short) 2962, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_905 = new BlockState(NamespaceID.from("minecraft:redstone_wire_905"), (short) 2963, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_906 = new BlockState(NamespaceID.from("minecraft:redstone_wire_906"), (short) 2964, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_907 = new BlockState(NamespaceID.from("minecraft:redstone_wire_907"), (short) 2965, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_908 = new BlockState(NamespaceID.from("minecraft:redstone_wire_908"), (short) 2966, Block.REDSTONE_WIRE, "east=none","north=up","power=4","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_909 = new BlockState(NamespaceID.from("minecraft:redstone_wire_909"), (short) 2967, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_910 = new BlockState(NamespaceID.from("minecraft:redstone_wire_910"), (short) 2968, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_911 = new BlockState(NamespaceID.from("minecraft:redstone_wire_911"), (short) 2969, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_912 = new BlockState(NamespaceID.from("minecraft:redstone_wire_912"), (short) 2970, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_913 = new BlockState(NamespaceID.from("minecraft:redstone_wire_913"), (short) 2971, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_914 = new BlockState(NamespaceID.from("minecraft:redstone_wire_914"), (short) 2972, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_915 = new BlockState(NamespaceID.from("minecraft:redstone_wire_915"), (short) 2973, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_916 = new BlockState(NamespaceID.from("minecraft:redstone_wire_916"), (short) 2974, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_917 = new BlockState(NamespaceID.from("minecraft:redstone_wire_917"), (short) 2975, Block.REDSTONE_WIRE, "east=none","north=up","power=5","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_918 = new BlockState(NamespaceID.from("minecraft:redstone_wire_918"), (short) 2976, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_919 = new BlockState(NamespaceID.from("minecraft:redstone_wire_919"), (short) 2977, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_920 = new BlockState(NamespaceID.from("minecraft:redstone_wire_920"), (short) 2978, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_921 = new BlockState(NamespaceID.from("minecraft:redstone_wire_921"), (short) 2979, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_922 = new BlockState(NamespaceID.from("minecraft:redstone_wire_922"), (short) 2980, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_923 = new BlockState(NamespaceID.from("minecraft:redstone_wire_923"), (short) 2981, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_924 = new BlockState(NamespaceID.from("minecraft:redstone_wire_924"), (short) 2982, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_925 = new BlockState(NamespaceID.from("minecraft:redstone_wire_925"), (short) 2983, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_926 = new BlockState(NamespaceID.from("minecraft:redstone_wire_926"), (short) 2984, Block.REDSTONE_WIRE, "east=none","north=up","power=6","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_927 = new BlockState(NamespaceID.from("minecraft:redstone_wire_927"), (short) 2985, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_928 = new BlockState(NamespaceID.from("minecraft:redstone_wire_928"), (short) 2986, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_929 = new BlockState(NamespaceID.from("minecraft:redstone_wire_929"), (short) 2987, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_930 = new BlockState(NamespaceID.from("minecraft:redstone_wire_930"), (short) 2988, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_931 = new BlockState(NamespaceID.from("minecraft:redstone_wire_931"), (short) 2989, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_932 = new BlockState(NamespaceID.from("minecraft:redstone_wire_932"), (short) 2990, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_933 = new BlockState(NamespaceID.from("minecraft:redstone_wire_933"), (short) 2991, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_934 = new BlockState(NamespaceID.from("minecraft:redstone_wire_934"), (short) 2992, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_935 = new BlockState(NamespaceID.from("minecraft:redstone_wire_935"), (short) 2993, Block.REDSTONE_WIRE, "east=none","north=up","power=7","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_936 = new BlockState(NamespaceID.from("minecraft:redstone_wire_936"), (short) 2994, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_937 = new BlockState(NamespaceID.from("minecraft:redstone_wire_937"), (short) 2995, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_938 = new BlockState(NamespaceID.from("minecraft:redstone_wire_938"), (short) 2996, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_939 = new BlockState(NamespaceID.from("minecraft:redstone_wire_939"), (short) 2997, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_940 = new BlockState(NamespaceID.from("minecraft:redstone_wire_940"), (short) 2998, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_941 = new BlockState(NamespaceID.from("minecraft:redstone_wire_941"), (short) 2999, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_942 = new BlockState(NamespaceID.from("minecraft:redstone_wire_942"), (short) 3000, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_943 = new BlockState(NamespaceID.from("minecraft:redstone_wire_943"), (short) 3001, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_944 = new BlockState(NamespaceID.from("minecraft:redstone_wire_944"), (short) 3002, Block.REDSTONE_WIRE, "east=none","north=up","power=8","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_945 = new BlockState(NamespaceID.from("minecraft:redstone_wire_945"), (short) 3003, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_946 = new BlockState(NamespaceID.from("minecraft:redstone_wire_946"), (short) 3004, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_947 = new BlockState(NamespaceID.from("minecraft:redstone_wire_947"), (short) 3005, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_948 = new BlockState(NamespaceID.from("minecraft:redstone_wire_948"), (short) 3006, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_949 = new BlockState(NamespaceID.from("minecraft:redstone_wire_949"), (short) 3007, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_950 = new BlockState(NamespaceID.from("minecraft:redstone_wire_950"), (short) 3008, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_951 = new BlockState(NamespaceID.from("minecraft:redstone_wire_951"), (short) 3009, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_952 = new BlockState(NamespaceID.from("minecraft:redstone_wire_952"), (short) 3010, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_953 = new BlockState(NamespaceID.from("minecraft:redstone_wire_953"), (short) 3011, Block.REDSTONE_WIRE, "east=none","north=up","power=9","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_954 = new BlockState(NamespaceID.from("minecraft:redstone_wire_954"), (short) 3012, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_955 = new BlockState(NamespaceID.from("minecraft:redstone_wire_955"), (short) 3013, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_956 = new BlockState(NamespaceID.from("minecraft:redstone_wire_956"), (short) 3014, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_957 = new BlockState(NamespaceID.from("minecraft:redstone_wire_957"), (short) 3015, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_958 = new BlockState(NamespaceID.from("minecraft:redstone_wire_958"), (short) 3016, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_959 = new BlockState(NamespaceID.from("minecraft:redstone_wire_959"), (short) 3017, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_960 = new BlockState(NamespaceID.from("minecraft:redstone_wire_960"), (short) 3018, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_961 = new BlockState(NamespaceID.from("minecraft:redstone_wire_961"), (short) 3019, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_962 = new BlockState(NamespaceID.from("minecraft:redstone_wire_962"), (short) 3020, Block.REDSTONE_WIRE, "east=none","north=up","power=10","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_963 = new BlockState(NamespaceID.from("minecraft:redstone_wire_963"), (short) 3021, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_964 = new BlockState(NamespaceID.from("minecraft:redstone_wire_964"), (short) 3022, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_965 = new BlockState(NamespaceID.from("minecraft:redstone_wire_965"), (short) 3023, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_966 = new BlockState(NamespaceID.from("minecraft:redstone_wire_966"), (short) 3024, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_967 = new BlockState(NamespaceID.from("minecraft:redstone_wire_967"), (short) 3025, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_968 = new BlockState(NamespaceID.from("minecraft:redstone_wire_968"), (short) 3026, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_969 = new BlockState(NamespaceID.from("minecraft:redstone_wire_969"), (short) 3027, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_970 = new BlockState(NamespaceID.from("minecraft:redstone_wire_970"), (short) 3028, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_971 = new BlockState(NamespaceID.from("minecraft:redstone_wire_971"), (short) 3029, Block.REDSTONE_WIRE, "east=none","north=up","power=11","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_972 = new BlockState(NamespaceID.from("minecraft:redstone_wire_972"), (short) 3030, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_973 = new BlockState(NamespaceID.from("minecraft:redstone_wire_973"), (short) 3031, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_974 = new BlockState(NamespaceID.from("minecraft:redstone_wire_974"), (short) 3032, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_975 = new BlockState(NamespaceID.from("minecraft:redstone_wire_975"), (short) 3033, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_976 = new BlockState(NamespaceID.from("minecraft:redstone_wire_976"), (short) 3034, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_977 = new BlockState(NamespaceID.from("minecraft:redstone_wire_977"), (short) 3035, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_978 = new BlockState(NamespaceID.from("minecraft:redstone_wire_978"), (short) 3036, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_979 = new BlockState(NamespaceID.from("minecraft:redstone_wire_979"), (short) 3037, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_980 = new BlockState(NamespaceID.from("minecraft:redstone_wire_980"), (short) 3038, Block.REDSTONE_WIRE, "east=none","north=up","power=12","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_981 = new BlockState(NamespaceID.from("minecraft:redstone_wire_981"), (short) 3039, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_982 = new BlockState(NamespaceID.from("minecraft:redstone_wire_982"), (short) 3040, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_983 = new BlockState(NamespaceID.from("minecraft:redstone_wire_983"), (short) 3041, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_984 = new BlockState(NamespaceID.from("minecraft:redstone_wire_984"), (short) 3042, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_985 = new BlockState(NamespaceID.from("minecraft:redstone_wire_985"), (short) 3043, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_986 = new BlockState(NamespaceID.from("minecraft:redstone_wire_986"), (short) 3044, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_987 = new BlockState(NamespaceID.from("minecraft:redstone_wire_987"), (short) 3045, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_988 = new BlockState(NamespaceID.from("minecraft:redstone_wire_988"), (short) 3046, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_989 = new BlockState(NamespaceID.from("minecraft:redstone_wire_989"), (short) 3047, Block.REDSTONE_WIRE, "east=none","north=up","power=13","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_990 = new BlockState(NamespaceID.from("minecraft:redstone_wire_990"), (short) 3048, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=up","west=up");
+
+  public static final BlockState REDSTONE_WIRE_991 = new BlockState(NamespaceID.from("minecraft:redstone_wire_991"), (short) 3049, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=up","west=side");
+
+  public static final BlockState REDSTONE_WIRE_992 = new BlockState(NamespaceID.from("minecraft:redstone_wire_992"), (short) 3050, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=up","west=none");
+
+  public static final BlockState REDSTONE_WIRE_993 = new BlockState(NamespaceID.from("minecraft:redstone_wire_993"), (short) 3051, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=side","west=up");
+
+  public static final BlockState REDSTONE_WIRE_994 = new BlockState(NamespaceID.from("minecraft:redstone_wire_994"), (short) 3052, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=side","west=side");
+
+  public static final BlockState REDSTONE_WIRE_995 = new BlockState(NamespaceID.from("minecraft:redstone_wire_995"), (short) 3053, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=side","west=none");
+
+  public static final BlockState REDSTONE_WIRE_996 = new BlockState(NamespaceID.from("minecraft:redstone_wire_996"), (short) 3054, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=none","west=up");
+
+  public static final BlockState REDSTONE_WIRE_997 = new BlockState(NamespaceID.from("minecraft:redstone_wire_997"), (short) 3055, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=none","west=side");
+
+  public static final BlockState REDSTONE_WIRE_998 = new BlockState(NamespaceID.from("minecraft:redstone_wire_998"), (short) 3056, Block.REDSTONE_WIRE, "east=none","north=up","power=14","south=none","west=none");
+
+  public static final BlockState REDSTONE_WIRE_999 = new BlockState(NamespaceID.from("minecraft:redstone_wire_999"), (short) 3057, Block.REDSTONE_WIRE, "east=none","north=up","power=15","south=up","west=up");
+
   public static final BlockState REDSTONE_WIRE_1000 = new BlockState(NamespaceID.from("minecraft:redstone_wire_1000"), (short) 3058, Block.REDSTONE_WIRE, "east=none","north=up","power=15","south=up","west=side");
 
   public static final BlockState REDSTONE_WIRE_1001 = new BlockState(NamespaceID.from("minecraft:redstone_wire_1001"), (short) 3059, Block.REDSTONE_WIRE, "east=none","north=up","power=15","south=up","west=none");
@@ -607,305 +1007,705 @@ public final class RedstoneWire2 {
   public static final BlockState REDSTONE_WIRE_1295 = new BlockState(NamespaceID.from("minecraft:redstone_wire_1295"), (short) 3353, Block.REDSTONE_WIRE, "east=none","north=none","power=15","south=none","west=none");
 
   static {
-    Registries.registerBlockState(REDSTONE_WIRE_1000);
-    Registries.registerBlockState(REDSTONE_WIRE_1001);
-    Registries.registerBlockState(REDSTONE_WIRE_1002);
-    Registries.registerBlockState(REDSTONE_WIRE_1003);
-    Registries.registerBlockState(REDSTONE_WIRE_1004);
-    Registries.registerBlockState(REDSTONE_WIRE_1005);
-    Registries.registerBlockState(REDSTONE_WIRE_1006);
-    Registries.registerBlockState(REDSTONE_WIRE_1007);
-    Registries.registerBlockState(REDSTONE_WIRE_1008);
-    Registries.registerBlockState(REDSTONE_WIRE_1009);
-    Registries.registerBlockState(REDSTONE_WIRE_1010);
-    Registries.registerBlockState(REDSTONE_WIRE_1011);
-    Registries.registerBlockState(REDSTONE_WIRE_1012);
-    Registries.registerBlockState(REDSTONE_WIRE_1013);
-    Registries.registerBlockState(REDSTONE_WIRE_1014);
-    Registries.registerBlockState(REDSTONE_WIRE_1015);
-    Registries.registerBlockState(REDSTONE_WIRE_1016);
-    Registries.registerBlockState(REDSTONE_WIRE_1017);
-    Registries.registerBlockState(REDSTONE_WIRE_1018);
-    Registries.registerBlockState(REDSTONE_WIRE_1019);
-    Registries.registerBlockState(REDSTONE_WIRE_1020);
-    Registries.registerBlockState(REDSTONE_WIRE_1021);
-    Registries.registerBlockState(REDSTONE_WIRE_1022);
-    Registries.registerBlockState(REDSTONE_WIRE_1023);
-    Registries.registerBlockState(REDSTONE_WIRE_1024);
-    Registries.registerBlockState(REDSTONE_WIRE_1025);
-    Registries.registerBlockState(REDSTONE_WIRE_1026);
-    Registries.registerBlockState(REDSTONE_WIRE_1027);
-    Registries.registerBlockState(REDSTONE_WIRE_1028);
-    Registries.registerBlockState(REDSTONE_WIRE_1029);
-    Registries.registerBlockState(REDSTONE_WIRE_1030);
-    Registries.registerBlockState(REDSTONE_WIRE_1031);
-    Registries.registerBlockState(REDSTONE_WIRE_1032);
-    Registries.registerBlockState(REDSTONE_WIRE_1033);
-    Registries.registerBlockState(REDSTONE_WIRE_1034);
-    Registries.registerBlockState(REDSTONE_WIRE_1035);
-    Registries.registerBlockState(REDSTONE_WIRE_1036);
-    Registries.registerBlockState(REDSTONE_WIRE_1037);
-    Registries.registerBlockState(REDSTONE_WIRE_1038);
-    Registries.registerBlockState(REDSTONE_WIRE_1039);
-    Registries.registerBlockState(REDSTONE_WIRE_1040);
-    Registries.registerBlockState(REDSTONE_WIRE_1041);
-    Registries.registerBlockState(REDSTONE_WIRE_1042);
-    Registries.registerBlockState(REDSTONE_WIRE_1043);
-    Registries.registerBlockState(REDSTONE_WIRE_1044);
-    Registries.registerBlockState(REDSTONE_WIRE_1045);
-    Registries.registerBlockState(REDSTONE_WIRE_1046);
-    Registries.registerBlockState(REDSTONE_WIRE_1047);
-    Registries.registerBlockState(REDSTONE_WIRE_1048);
-    Registries.registerBlockState(REDSTONE_WIRE_1049);
-    Registries.registerBlockState(REDSTONE_WIRE_1050);
-    Registries.registerBlockState(REDSTONE_WIRE_1051);
-    Registries.registerBlockState(REDSTONE_WIRE_1052);
-    Registries.registerBlockState(REDSTONE_WIRE_1053);
-    Registries.registerBlockState(REDSTONE_WIRE_1054);
-    Registries.registerBlockState(REDSTONE_WIRE_1055);
-    Registries.registerBlockState(REDSTONE_WIRE_1056);
-    Registries.registerBlockState(REDSTONE_WIRE_1057);
-    Registries.registerBlockState(REDSTONE_WIRE_1058);
-    Registries.registerBlockState(REDSTONE_WIRE_1059);
-    Registries.registerBlockState(REDSTONE_WIRE_1060);
-    Registries.registerBlockState(REDSTONE_WIRE_1061);
-    Registries.registerBlockState(REDSTONE_WIRE_1062);
-    Registries.registerBlockState(REDSTONE_WIRE_1063);
-    Registries.registerBlockState(REDSTONE_WIRE_1064);
-    Registries.registerBlockState(REDSTONE_WIRE_1065);
-    Registries.registerBlockState(REDSTONE_WIRE_1066);
-    Registries.registerBlockState(REDSTONE_WIRE_1067);
-    Registries.registerBlockState(REDSTONE_WIRE_1068);
-    Registries.registerBlockState(REDSTONE_WIRE_1069);
-    Registries.registerBlockState(REDSTONE_WIRE_1070);
-    Registries.registerBlockState(REDSTONE_WIRE_1071);
-    Registries.registerBlockState(REDSTONE_WIRE_1072);
-    Registries.registerBlockState(REDSTONE_WIRE_1073);
-    Registries.registerBlockState(REDSTONE_WIRE_1074);
-    Registries.registerBlockState(REDSTONE_WIRE_1075);
-    Registries.registerBlockState(REDSTONE_WIRE_1076);
-    Registries.registerBlockState(REDSTONE_WIRE_1077);
-    Registries.registerBlockState(REDSTONE_WIRE_1078);
-    Registries.registerBlockState(REDSTONE_WIRE_1079);
-    Registries.registerBlockState(REDSTONE_WIRE_1080);
-    Registries.registerBlockState(REDSTONE_WIRE_1081);
-    Registries.registerBlockState(REDSTONE_WIRE_1082);
-    Registries.registerBlockState(REDSTONE_WIRE_1083);
-    Registries.registerBlockState(REDSTONE_WIRE_1084);
-    Registries.registerBlockState(REDSTONE_WIRE_1085);
-    Registries.registerBlockState(REDSTONE_WIRE_1086);
-    Registries.registerBlockState(REDSTONE_WIRE_1087);
-    Registries.registerBlockState(REDSTONE_WIRE_1088);
-    Registries.registerBlockState(REDSTONE_WIRE_1089);
-    Registries.registerBlockState(REDSTONE_WIRE_1090);
-    Registries.registerBlockState(REDSTONE_WIRE_1091);
-    Registries.registerBlockState(REDSTONE_WIRE_1092);
-    Registries.registerBlockState(REDSTONE_WIRE_1093);
-    Registries.registerBlockState(REDSTONE_WIRE_1094);
-    Registries.registerBlockState(REDSTONE_WIRE_1095);
-    Registries.registerBlockState(REDSTONE_WIRE_1096);
-    Registries.registerBlockState(REDSTONE_WIRE_1097);
-    Registries.registerBlockState(REDSTONE_WIRE_1098);
-    Registries.registerBlockState(REDSTONE_WIRE_1099);
-    Registries.registerBlockState(REDSTONE_WIRE_1100);
-    Registries.registerBlockState(REDSTONE_WIRE_1101);
-    Registries.registerBlockState(REDSTONE_WIRE_1102);
-    Registries.registerBlockState(REDSTONE_WIRE_1103);
-    Registries.registerBlockState(REDSTONE_WIRE_1104);
-    Registries.registerBlockState(REDSTONE_WIRE_1105);
-    Registries.registerBlockState(REDSTONE_WIRE_1106);
-    Registries.registerBlockState(REDSTONE_WIRE_1107);
-    Registries.registerBlockState(REDSTONE_WIRE_1108);
-    Registries.registerBlockState(REDSTONE_WIRE_1109);
-    Registries.registerBlockState(REDSTONE_WIRE_1110);
-    Registries.registerBlockState(REDSTONE_WIRE_1111);
-    Registries.registerBlockState(REDSTONE_WIRE_1112);
-    Registries.registerBlockState(REDSTONE_WIRE_1113);
-    Registries.registerBlockState(REDSTONE_WIRE_1114);
-    Registries.registerBlockState(REDSTONE_WIRE_1115);
-    Registries.registerBlockState(REDSTONE_WIRE_1116);
-    Registries.registerBlockState(REDSTONE_WIRE_1117);
-    Registries.registerBlockState(REDSTONE_WIRE_1118);
-    Registries.registerBlockState(REDSTONE_WIRE_1119);
-    Registries.registerBlockState(REDSTONE_WIRE_1120);
-    Registries.registerBlockState(REDSTONE_WIRE_1121);
-    Registries.registerBlockState(REDSTONE_WIRE_1122);
-    Registries.registerBlockState(REDSTONE_WIRE_1123);
-    Registries.registerBlockState(REDSTONE_WIRE_1124);
-    Registries.registerBlockState(REDSTONE_WIRE_1125);
-    Registries.registerBlockState(REDSTONE_WIRE_1126);
-    Registries.registerBlockState(REDSTONE_WIRE_1127);
-    Registries.registerBlockState(REDSTONE_WIRE_1128);
-    Registries.registerBlockState(REDSTONE_WIRE_1129);
-    Registries.registerBlockState(REDSTONE_WIRE_1130);
-    Registries.registerBlockState(REDSTONE_WIRE_1131);
-    Registries.registerBlockState(REDSTONE_WIRE_1132);
-    Registries.registerBlockState(REDSTONE_WIRE_1133);
-    Registries.registerBlockState(REDSTONE_WIRE_1134);
-    Registries.registerBlockState(REDSTONE_WIRE_1135);
-    Registries.registerBlockState(REDSTONE_WIRE_1136);
-    Registries.registerBlockState(REDSTONE_WIRE_1137);
-    Registries.registerBlockState(REDSTONE_WIRE_1138);
-    Registries.registerBlockState(REDSTONE_WIRE_1139);
-    Registries.registerBlockState(REDSTONE_WIRE_1140);
-    Registries.registerBlockState(REDSTONE_WIRE_1141);
-    Registries.registerBlockState(REDSTONE_WIRE_1142);
-    Registries.registerBlockState(REDSTONE_WIRE_1143);
-    Registries.registerBlockState(REDSTONE_WIRE_1144);
-    Registries.registerBlockState(REDSTONE_WIRE_1145);
-    Registries.registerBlockState(REDSTONE_WIRE_1146);
-    Registries.registerBlockState(REDSTONE_WIRE_1147);
-    Registries.registerBlockState(REDSTONE_WIRE_1148);
-    Registries.registerBlockState(REDSTONE_WIRE_1149);
-    Registries.registerBlockState(REDSTONE_WIRE_1150);
-    Registries.registerBlockState(REDSTONE_WIRE_1151);
-    Registries.registerBlockState(REDSTONE_WIRE_1152);
-    Registries.registerBlockState(REDSTONE_WIRE_1153);
-    Registries.registerBlockState(REDSTONE_WIRE_1154);
-    Registries.registerBlockState(REDSTONE_WIRE_1155);
-    Registries.registerBlockState(REDSTONE_WIRE_1156);
-    Registries.registerBlockState(REDSTONE_WIRE_1157);
-    Registries.registerBlockState(REDSTONE_WIRE_1158);
-    Registries.registerBlockState(REDSTONE_WIRE_1159);
-    Registries.registerBlockState(REDSTONE_WIRE_1160);
-    Registries.registerBlockState(REDSTONE_WIRE_1161);
-    Registries.registerBlockState(REDSTONE_WIRE_1162);
-    Registries.registerBlockState(REDSTONE_WIRE_1163);
-    Registries.registerBlockState(REDSTONE_WIRE_1164);
-    Registries.registerBlockState(REDSTONE_WIRE_1165);
-    Registries.registerBlockState(REDSTONE_WIRE_1166);
-    Registries.registerBlockState(REDSTONE_WIRE_1167);
-    Registries.registerBlockState(REDSTONE_WIRE_1168);
-    Registries.registerBlockState(REDSTONE_WIRE_1169);
-    Registries.registerBlockState(REDSTONE_WIRE_1170);
-    Registries.registerBlockState(REDSTONE_WIRE_1171);
-    Registries.registerBlockState(REDSTONE_WIRE_1172);
-    Registries.registerBlockState(REDSTONE_WIRE_1173);
-    Registries.registerBlockState(REDSTONE_WIRE_1174);
-    Registries.registerBlockState(REDSTONE_WIRE_1175);
-    Registries.registerBlockState(REDSTONE_WIRE_1176);
-    Registries.registerBlockState(REDSTONE_WIRE_1177);
-    Registries.registerBlockState(REDSTONE_WIRE_1178);
-    Registries.registerBlockState(REDSTONE_WIRE_1179);
-    Registries.registerBlockState(REDSTONE_WIRE_1180);
-    Registries.registerBlockState(REDSTONE_WIRE_1181);
-    Registries.registerBlockState(REDSTONE_WIRE_1182);
-    Registries.registerBlockState(REDSTONE_WIRE_1183);
-    Registries.registerBlockState(REDSTONE_WIRE_1184);
-    Registries.registerBlockState(REDSTONE_WIRE_1185);
-    Registries.registerBlockState(REDSTONE_WIRE_1186);
-    Registries.registerBlockState(REDSTONE_WIRE_1187);
-    Registries.registerBlockState(REDSTONE_WIRE_1188);
-    Registries.registerBlockState(REDSTONE_WIRE_1189);
-    Registries.registerBlockState(REDSTONE_WIRE_1190);
-    Registries.registerBlockState(REDSTONE_WIRE_1191);
-    Registries.registerBlockState(REDSTONE_WIRE_1192);
-    Registries.registerBlockState(REDSTONE_WIRE_1193);
-    Registries.registerBlockState(REDSTONE_WIRE_1194);
-    Registries.registerBlockState(REDSTONE_WIRE_1195);
-    Registries.registerBlockState(REDSTONE_WIRE_1196);
-    Registries.registerBlockState(REDSTONE_WIRE_1197);
-    Registries.registerBlockState(REDSTONE_WIRE_1198);
-    Registries.registerBlockState(REDSTONE_WIRE_1199);
-    Registries.registerBlockState(REDSTONE_WIRE_1200);
-    Registries.registerBlockState(REDSTONE_WIRE_1201);
-    Registries.registerBlockState(REDSTONE_WIRE_1202);
-    Registries.registerBlockState(REDSTONE_WIRE_1203);
-    Registries.registerBlockState(REDSTONE_WIRE_1204);
-    Registries.registerBlockState(REDSTONE_WIRE_1205);
-    Registries.registerBlockState(REDSTONE_WIRE_1206);
-    Registries.registerBlockState(REDSTONE_WIRE_1207);
-    Registries.registerBlockState(REDSTONE_WIRE_1208);
-    Registries.registerBlockState(REDSTONE_WIRE_1209);
-    Registries.registerBlockState(REDSTONE_WIRE_1210);
-    Registries.registerBlockState(REDSTONE_WIRE_1211);
-    Registries.registerBlockState(REDSTONE_WIRE_1212);
-    Registries.registerBlockState(REDSTONE_WIRE_1213);
-    Registries.registerBlockState(REDSTONE_WIRE_1214);
-    Registries.registerBlockState(REDSTONE_WIRE_1215);
-    Registries.registerBlockState(REDSTONE_WIRE_1216);
-    Registries.registerBlockState(REDSTONE_WIRE_1217);
-    Registries.registerBlockState(REDSTONE_WIRE_1218);
-    Registries.registerBlockState(REDSTONE_WIRE_1219);
-    Registries.registerBlockState(REDSTONE_WIRE_1220);
-    Registries.registerBlockState(REDSTONE_WIRE_1221);
-    Registries.registerBlockState(REDSTONE_WIRE_1222);
-    Registries.registerBlockState(REDSTONE_WIRE_1223);
-    Registries.registerBlockState(REDSTONE_WIRE_1224);
-    Registries.registerBlockState(REDSTONE_WIRE_1225);
-    Registries.registerBlockState(REDSTONE_WIRE_1226);
-    Registries.registerBlockState(REDSTONE_WIRE_1227);
-    Registries.registerBlockState(REDSTONE_WIRE_1228);
-    Registries.registerBlockState(REDSTONE_WIRE_1229);
-    Registries.registerBlockState(REDSTONE_WIRE_1230);
-    Registries.registerBlockState(REDSTONE_WIRE_1231);
-    Registries.registerBlockState(REDSTONE_WIRE_1232);
-    Registries.registerBlockState(REDSTONE_WIRE_1233);
-    Registries.registerBlockState(REDSTONE_WIRE_1234);
-    Registries.registerBlockState(REDSTONE_WIRE_1235);
-    Registries.registerBlockState(REDSTONE_WIRE_1236);
-    Registries.registerBlockState(REDSTONE_WIRE_1237);
-    Registries.registerBlockState(REDSTONE_WIRE_1238);
-    Registries.registerBlockState(REDSTONE_WIRE_1239);
-    Registries.registerBlockState(REDSTONE_WIRE_1240);
-    Registries.registerBlockState(REDSTONE_WIRE_1241);
-    Registries.registerBlockState(REDSTONE_WIRE_1242);
-    Registries.registerBlockState(REDSTONE_WIRE_1243);
-    Registries.registerBlockState(REDSTONE_WIRE_1244);
-    Registries.registerBlockState(REDSTONE_WIRE_1245);
-    Registries.registerBlockState(REDSTONE_WIRE_1246);
-    Registries.registerBlockState(REDSTONE_WIRE_1247);
-    Registries.registerBlockState(REDSTONE_WIRE_1248);
-    Registries.registerBlockState(REDSTONE_WIRE_1249);
-    Registries.registerBlockState(REDSTONE_WIRE_1250);
-    Registries.registerBlockState(REDSTONE_WIRE_1251);
-    Registries.registerBlockState(REDSTONE_WIRE_1252);
-    Registries.registerBlockState(REDSTONE_WIRE_1253);
-    Registries.registerBlockState(REDSTONE_WIRE_1254);
-    Registries.registerBlockState(REDSTONE_WIRE_1255);
-    Registries.registerBlockState(REDSTONE_WIRE_1256);
-    Registries.registerBlockState(REDSTONE_WIRE_1257);
-    Registries.registerBlockState(REDSTONE_WIRE_1258);
-    Registries.registerBlockState(REDSTONE_WIRE_1259);
-    Registries.registerBlockState(REDSTONE_WIRE_1260);
-    Registries.registerBlockState(REDSTONE_WIRE_1261);
-    Registries.registerBlockState(REDSTONE_WIRE_1262);
-    Registries.registerBlockState(REDSTONE_WIRE_1263);
-    Registries.registerBlockState(REDSTONE_WIRE_1264);
-    Registries.registerBlockState(REDSTONE_WIRE_1265);
-    Registries.registerBlockState(REDSTONE_WIRE_1266);
-    Registries.registerBlockState(REDSTONE_WIRE_1267);
-    Registries.registerBlockState(REDSTONE_WIRE_1268);
-    Registries.registerBlockState(REDSTONE_WIRE_1269);
-    Registries.registerBlockState(REDSTONE_WIRE_1270);
-    Registries.registerBlockState(REDSTONE_WIRE_1271);
-    Registries.registerBlockState(REDSTONE_WIRE_1272);
-    Registries.registerBlockState(REDSTONE_WIRE_1273);
-    Registries.registerBlockState(REDSTONE_WIRE_1274);
-    Registries.registerBlockState(REDSTONE_WIRE_1275);
-    Registries.registerBlockState(REDSTONE_WIRE_1276);
-    Registries.registerBlockState(REDSTONE_WIRE_1277);
-    Registries.registerBlockState(REDSTONE_WIRE_1278);
-    Registries.registerBlockState(REDSTONE_WIRE_1279);
-    Registries.registerBlockState(REDSTONE_WIRE_1280);
-    Registries.registerBlockState(REDSTONE_WIRE_1281);
-    Registries.registerBlockState(REDSTONE_WIRE_1282);
-    Registries.registerBlockState(REDSTONE_WIRE_1283);
-    Registries.registerBlockState(REDSTONE_WIRE_1284);
-    Registries.registerBlockState(REDSTONE_WIRE_1285);
-    Registries.registerBlockState(REDSTONE_WIRE_1286);
-    Registries.registerBlockState(REDSTONE_WIRE_1287);
-    Registries.registerBlockState(REDSTONE_WIRE_1288);
-    Registries.registerBlockState(REDSTONE_WIRE_1289);
-    Registries.registerBlockState(REDSTONE_WIRE_1290);
-    Registries.registerBlockState(REDSTONE_WIRE_1291);
-    Registries.registerBlockState(REDSTONE_WIRE_1292);
-    Registries.registerBlockState(REDSTONE_WIRE_1293);
-    Registries.registerBlockState(REDSTONE_WIRE_1294);
-    Registries.registerBlockState(REDSTONE_WIRE_1295);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_800);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_801);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_802);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_803);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_804);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_805);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_806);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_807);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_808);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_809);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_810);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_811);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_812);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_813);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_814);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_815);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_816);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_817);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_818);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_819);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_820);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_821);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_822);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_823);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_824);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_825);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_826);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_827);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_828);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_829);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_830);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_831);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_832);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_833);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_834);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_835);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_836);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_837);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_838);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_839);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_840);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_841);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_842);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_843);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_844);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_845);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_846);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_847);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_848);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_849);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_850);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_851);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_852);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_853);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_854);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_855);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_856);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_857);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_858);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_859);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_860);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_861);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_862);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_863);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_864);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_865);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_866);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_867);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_868);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_869);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_870);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_871);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_872);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_873);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_874);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_875);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_876);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_877);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_878);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_879);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_880);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_881);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_882);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_883);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_884);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_885);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_886);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_887);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_888);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_889);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_890);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_891);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_892);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_893);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_894);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_895);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_896);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_897);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_898);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_899);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_900);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_901);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_902);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_903);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_904);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_905);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_906);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_907);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_908);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_909);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_910);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_911);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_912);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_913);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_914);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_915);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_916);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_917);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_918);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_919);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_920);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_921);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_922);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_923);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_924);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_925);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_926);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_927);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_928);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_929);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_930);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_931);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_932);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_933);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_934);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_935);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_936);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_937);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_938);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_939);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_940);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_941);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_942);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_943);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_944);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_945);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_946);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_947);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_948);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_949);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_950);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_951);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_952);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_953);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_954);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_955);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_956);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_957);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_958);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_959);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_960);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_961);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_962);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_963);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_964);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_965);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_966);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_967);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_968);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_969);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_970);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_971);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_972);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_973);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_974);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_975);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_976);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_977);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_978);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_979);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_980);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_981);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_982);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_983);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_984);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_985);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_986);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_987);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_988);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_989);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_990);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_991);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_992);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_993);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_994);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_995);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_996);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_997);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_998);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_999);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1000);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1001);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1002);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1003);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1004);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1005);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1006);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1007);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1008);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1009);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1010);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1011);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1012);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1013);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1014);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1015);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1016);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1017);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1018);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1019);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1020);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1021);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1022);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1023);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1024);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1025);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1026);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1027);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1028);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1029);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1030);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1031);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1032);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1033);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1034);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1035);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1036);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1037);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1038);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1039);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1040);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1041);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1042);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1043);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1044);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1045);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1046);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1047);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1048);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1049);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1050);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1051);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1052);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1053);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1054);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1055);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1056);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1057);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1058);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1059);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1060);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1061);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1062);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1063);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1064);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1065);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1066);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1067);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1068);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1069);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1070);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1071);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1072);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1073);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1074);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1075);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1076);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1077);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1078);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1079);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1080);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1081);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1082);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1083);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1084);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1085);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1086);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1087);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1088);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1089);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1090);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1091);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1092);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1093);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1094);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1095);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1096);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1097);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1098);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1099);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1100);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1101);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1102);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1103);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1104);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1105);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1106);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1107);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1108);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1109);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1110);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1111);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1112);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1113);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1114);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1115);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1116);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1117);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1118);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1119);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1120);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1121);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1122);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1123);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1124);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1125);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1126);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1127);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1128);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1129);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1130);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1131);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1132);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1133);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1134);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1135);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1136);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1137);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1138);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1139);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1140);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1141);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1142);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1143);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1144);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1145);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1146);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1147);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1148);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1149);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1150);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1151);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1152);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1153);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1154);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1155);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1156);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1157);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1158);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1159);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1160);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1161);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1162);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1163);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1164);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1165);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1166);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1167);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1168);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1169);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1170);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1171);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1172);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1173);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1174);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1175);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1176);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1177);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1178);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1179);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1180);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1181);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1182);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1183);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1184);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1185);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1186);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1187);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1188);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1189);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1190);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1191);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1192);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1193);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1194);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1195);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1196);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1197);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1198);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1199);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1200);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1201);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1202);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1203);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1204);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1205);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1206);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1207);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1208);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1209);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1210);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1211);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1212);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1213);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1214);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1215);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1216);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1217);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1218);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1219);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1220);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1221);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1222);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1223);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1224);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1225);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1226);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1227);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1228);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1229);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1230);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1231);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1232);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1233);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1234);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1235);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1236);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1237);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1238);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1239);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1240);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1241);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1242);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1243);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1244);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1245);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1246);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1247);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1248);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1249);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1250);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1251);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1252);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1253);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1254);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1255);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1256);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1257);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1258);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1259);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1260);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1261);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1262);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1263);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1264);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1265);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1266);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1267);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1268);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1269);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1270);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1271);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1272);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1273);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1274);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1275);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1276);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1277);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1278);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1279);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1280);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1281);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1282);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1283);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1284);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1285);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1286);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1287);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1288);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1289);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1290);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1291);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1292);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1293);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1294);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WIRE_1295);
   }
 
   public static void initStates() {
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_800);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_801);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_802);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_803);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_804);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_805);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_806);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_807);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_808);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_809);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_810);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_811);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_812);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_813);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_814);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_815);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_816);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_817);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_818);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_819);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_820);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_821);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_822);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_823);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_824);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_825);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_826);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_827);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_828);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_829);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_830);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_831);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_832);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_833);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_834);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_835);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_836);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_837);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_838);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_839);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_840);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_841);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_842);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_843);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_844);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_845);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_846);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_847);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_848);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_849);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_850);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_851);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_852);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_853);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_854);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_855);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_856);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_857);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_858);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_859);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_860);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_861);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_862);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_863);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_864);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_865);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_866);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_867);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_868);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_869);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_870);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_871);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_872);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_873);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_874);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_875);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_876);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_877);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_878);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_879);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_880);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_881);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_882);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_883);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_884);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_885);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_886);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_887);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_888);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_889);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_890);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_891);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_892);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_893);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_894);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_895);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_896);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_897);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_898);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_899);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_900);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_901);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_902);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_903);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_904);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_905);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_906);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_907);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_908);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_909);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_910);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_911);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_912);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_913);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_914);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_915);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_916);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_917);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_918);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_919);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_920);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_921);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_922);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_923);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_924);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_925);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_926);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_927);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_928);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_929);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_930);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_931);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_932);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_933);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_934);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_935);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_936);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_937);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_938);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_939);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_940);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_941);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_942);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_943);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_944);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_945);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_946);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_947);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_948);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_949);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_950);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_951);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_952);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_953);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_954);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_955);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_956);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_957);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_958);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_959);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_960);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_961);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_962);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_963);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_964);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_965);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_966);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_967);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_968);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_969);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_970);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_971);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_972);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_973);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_974);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_975);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_976);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_977);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_978);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_979);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_980);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_981);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_982);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_983);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_984);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_985);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_986);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_987);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_988);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_989);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_990);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_991);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_992);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_993);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_994);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_995);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_996);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_997);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_998);
+    Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_999);
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1000);
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1001);
     Block.REDSTONE_WIRE.addBlockState(REDSTONE_WIRE_1002);

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class SmoothQuartz {
   public static final BlockState SMOOTH_QUARTZ_0 = new BlockState(NamespaceID.from("minecraft:smooth_quartz_0"), (short) 8420, Block.SMOOTH_QUARTZ);
 
   static {
-    Registries.registerBlockState(SMOOTH_QUARTZ_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SMOOTH_QUARTZ_0);
   }
 
   public static void initStates() {

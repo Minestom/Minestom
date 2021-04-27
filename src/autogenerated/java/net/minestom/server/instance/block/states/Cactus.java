@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class Cactus {
   public static final BlockState CACTUS_15 = new BlockState(NamespaceID.from("minecraft:cactus_15"), (short) 3946, Block.CACTUS, "age=15");
 
   static {
-    Registries.registerBlockState(CACTUS_0);
-    Registries.registerBlockState(CACTUS_1);
-    Registries.registerBlockState(CACTUS_2);
-    Registries.registerBlockState(CACTUS_3);
-    Registries.registerBlockState(CACTUS_4);
-    Registries.registerBlockState(CACTUS_5);
-    Registries.registerBlockState(CACTUS_6);
-    Registries.registerBlockState(CACTUS_7);
-    Registries.registerBlockState(CACTUS_8);
-    Registries.registerBlockState(CACTUS_9);
-    Registries.registerBlockState(CACTUS_10);
-    Registries.registerBlockState(CACTUS_11);
-    Registries.registerBlockState(CACTUS_12);
-    Registries.registerBlockState(CACTUS_13);
-    Registries.registerBlockState(CACTUS_14);
-    Registries.registerBlockState(CACTUS_15);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_6);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_7);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_8);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_9);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_10);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_11);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_12);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_13);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_14);
+    Registry.BLOCK_STATE_REGISTRY.register(CACTUS_15);
   }
 
   public static void initStates() {

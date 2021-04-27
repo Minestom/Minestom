@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class SoulWallTorch {
   public static final BlockState SOUL_WALL_TORCH_3 = new BlockState(NamespaceID.from("minecraft:soul_wall_torch_3"), (short) 4012, Block.SOUL_WALL_TORCH, "facing=east");
 
   static {
-    Registries.registerBlockState(SOUL_WALL_TORCH_0);
-    Registries.registerBlockState(SOUL_WALL_TORCH_1);
-    Registries.registerBlockState(SOUL_WALL_TORCH_2);
-    Registries.registerBlockState(SOUL_WALL_TORCH_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_WALL_TORCH_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_WALL_TORCH_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_WALL_TORCH_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SOUL_WALL_TORCH_3);
   }
 
   public static void initStates() {

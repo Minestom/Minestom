@@ -6,7 +6,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
@@ -207,7 +207,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             case "type": {
                 final boolean include = !value.startsWith("!");
                 final String entityName = include ? value : value.substring(1);
-                final EntityType entityType = Registries.getEntityType(entityName);
+                final EntityType entityType = Registry.ENTITY_TYPE_REGISTRY.get(entityName);
                 if (entityType == null)
                     throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
                 entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
@@ -267,6 +267,20 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     public boolean isOnlyPlayers() {
         return onlyPlayers;
+    }
+
+    @Override
+    public String toString() {
+        if (onlySingleEntity) {
+            if (onlyPlayers) {
+                return String.format("Player<%s>", getId());
+            }
+            return String.format("Entity<%s>", getId());
+        }
+        if (onlyPlayers) {
+            return String.format("Players<%s>", getId());
+        }
+        return String.format("Entities<%s>", getId());
     }
 
     private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {

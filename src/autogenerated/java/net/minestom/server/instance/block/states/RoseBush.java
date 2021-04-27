@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class RoseBush {
   public static final BlockState ROSE_BUSH_1 = new BlockState(NamespaceID.from("minecraft:rose_bush_1"), (short) 7894, Block.ROSE_BUSH, "half=lower");
 
   static {
-    Registries.registerBlockState(ROSE_BUSH_0);
-    Registries.registerBlockState(ROSE_BUSH_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ROSE_BUSH_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ROSE_BUSH_1);
   }
 
   public static void initStates() {

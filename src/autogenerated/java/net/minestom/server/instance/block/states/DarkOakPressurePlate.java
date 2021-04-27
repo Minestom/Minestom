@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class DarkOakPressurePlate {
   public static final BlockState DARK_OAK_PRESSURE_PLATE_1 = new BlockState(NamespaceID.from("minecraft:dark_oak_pressure_plate_1"), (short) 3884, Block.DARK_OAK_PRESSURE_PLATE, "powered=false");
 
   static {
-    Registries.registerBlockState(DARK_OAK_PRESSURE_PLATE_0);
-    Registries.registerBlockState(DARK_OAK_PRESSURE_PLATE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(DARK_OAK_PRESSURE_PLATE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DARK_OAK_PRESSURE_PLATE_1);
   }
 
   public static void initStates() {

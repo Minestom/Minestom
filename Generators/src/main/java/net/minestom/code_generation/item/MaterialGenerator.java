@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class MaterialGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MaterialGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "items.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "items.json");
     private final File itemsFile;
     private final File outputFolder;
 
@@ -51,6 +51,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName rawMaterialDataClassName = ClassName.get("net.minestom.server.raw_data", "RawMaterialData");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray items;
         try {
@@ -71,7 +72,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
         itemClass.addField(
-                FieldSpec.builder(TypeName.BYTE, "defaultStackSize")
+                FieldSpec.builder(TypeName.BYTE, "maxDefaultStackSize")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
         itemClass.addField(
@@ -84,9 +85,9 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
-                        .addParameter(TypeName.BYTE, "defaultStackSize")
+                        .addParameter(TypeName.BYTE, "maxDefaultStackSize")
                         .addStatement("this.id = id")
-                        .addStatement("this.defaultStackSize = defaultStackSize")
+                        .addStatement("this.maxDefaultStackSize = maxDefaultStackSize")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -122,18 +123,15 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getMaterialId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.MATERIAL_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        // getDefaultStackSize
+        // getMaxDefaultStackSize
         itemClass.addMethod(
-                MethodSpec.methodBuilder("getDefaultStackSize")
+                MethodSpec.methodBuilder("getMaxDefaultStackSize")
                         .returns(TypeName.BYTE)
-                        .addStatement("return this.defaultStackSize")
+                        .addStatement("return this.maxDefaultStackSize")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -143,10 +141,17 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .returns(itemClassName)
                         .addAnnotation(NotNull.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getMaterial(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.MATERIAL_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(itemClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.MATERIAL_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -267,7 +272,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), itemClassName))
-                        .addStatement("return $T.getMaterials()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.MATERIAL_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -292,7 +297,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerMaterial($N)", ClassName.get("net.minestom.server.registry", "Registries"), itemName);
+            staticBlock.addStatement("$T.MATERIAL_REGISTRY.register($N)", registryClassName, itemName);
         }
 
         itemClass.addStaticBlock(staticBlock.build());

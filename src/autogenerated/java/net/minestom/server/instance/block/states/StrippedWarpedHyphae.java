@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -21,9 +21,9 @@ public final class StrippedWarpedHyphae {
   public static final BlockState STRIPPED_WARPED_HYPHAE_2 = new BlockState(NamespaceID.from("minecraft:stripped_warped_hyphae_2"), (short) 14977, Block.STRIPPED_WARPED_HYPHAE, "axis=z");
 
   static {
-    Registries.registerBlockState(STRIPPED_WARPED_HYPHAE_0);
-    Registries.registerBlockState(STRIPPED_WARPED_HYPHAE_1);
-    Registries.registerBlockState(STRIPPED_WARPED_HYPHAE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(STRIPPED_WARPED_HYPHAE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(STRIPPED_WARPED_HYPHAE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(STRIPPED_WARPED_HYPHAE_2);
   }
 
   public static void initStates() {

@@ -5,7 +5,7 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -90,7 +90,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
             if (nbtCompound.containsKey("Potion")) {
-                potionType(Registries.getPotionType(nbtCompound.getString("Potion")));
+                potionType(Registry.POTION_TYPE_REGISTRY.get(nbtCompound.getString("Potion")));
             }
 
             if (nbtCompound.containsKey("CustomPotionEffects")) {

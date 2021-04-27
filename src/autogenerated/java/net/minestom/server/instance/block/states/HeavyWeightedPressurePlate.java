@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class HeavyWeightedPressurePlate {
   public static final BlockState HEAVY_WEIGHTED_PRESSURE_PLATE_15 = new BlockState(NamespaceID.from("minecraft:heavy_weighted_pressure_plate_15"), (short) 6681, Block.HEAVY_WEIGHTED_PRESSURE_PLATE, "power=15");
 
   static {
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_0);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_1);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_2);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_3);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_4);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_5);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_6);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_7);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_8);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_9);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_10);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_11);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_12);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_13);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_14);
-    Registries.registerBlockState(HEAVY_WEIGHTED_PRESSURE_PLATE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(HEAVY_WEIGHTED_PRESSURE_PLATE_15);
   }
 
   public static void initStates() {

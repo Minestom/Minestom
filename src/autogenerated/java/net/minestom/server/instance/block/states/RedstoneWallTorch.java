@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class RedstoneWallTorch {
   public static final BlockState REDSTONE_WALL_TORCH_7 = new BlockState(NamespaceID.from("minecraft:redstone_wall_torch_7"), (short) 3896, Block.REDSTONE_WALL_TORCH, "facing=east","lit=false");
 
   static {
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_0);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_1);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_2);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_3);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_4);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_5);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_6);
-    Registries.registerBlockState(REDSTONE_WALL_TORCH_7);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_0);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_1);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_2);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_3);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_4);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_5);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_6);
+    Registry.BLOCK_STATE_REGISTRY.register(REDSTONE_WALL_TORCH_7);
   }
 
   public static void initStates() {

@@ -52,7 +52,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     }
 
     @Override
-    public boolean addViewer0(@NotNull Player player) {
+    protected boolean addViewer0(@NotNull Player player) {
         if (!super.addViewer0(player)) {
             return false;
         }

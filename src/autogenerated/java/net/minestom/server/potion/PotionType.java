@@ -5,7 +5,7 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,49 +100,49 @@ public class PotionType implements Keyed {
   public static final PotionType LONG_SLOW_FALLING = new PotionType(NamespaceID.from("minecraft:long_slow_falling"));
 
   static {
-    Registries.registerPotionType(EMPTY);
-    Registries.registerPotionType(WATER);
-    Registries.registerPotionType(MUNDANE);
-    Registries.registerPotionType(THICK);
-    Registries.registerPotionType(AWKWARD);
-    Registries.registerPotionType(NIGHT_VISION);
-    Registries.registerPotionType(LONG_NIGHT_VISION);
-    Registries.registerPotionType(INVISIBILITY);
-    Registries.registerPotionType(LONG_INVISIBILITY);
-    Registries.registerPotionType(LEAPING);
-    Registries.registerPotionType(LONG_LEAPING);
-    Registries.registerPotionType(STRONG_LEAPING);
-    Registries.registerPotionType(FIRE_RESISTANCE);
-    Registries.registerPotionType(LONG_FIRE_RESISTANCE);
-    Registries.registerPotionType(SWIFTNESS);
-    Registries.registerPotionType(LONG_SWIFTNESS);
-    Registries.registerPotionType(STRONG_SWIFTNESS);
-    Registries.registerPotionType(SLOWNESS);
-    Registries.registerPotionType(LONG_SLOWNESS);
-    Registries.registerPotionType(STRONG_SLOWNESS);
-    Registries.registerPotionType(TURTLE_MASTER);
-    Registries.registerPotionType(LONG_TURTLE_MASTER);
-    Registries.registerPotionType(STRONG_TURTLE_MASTER);
-    Registries.registerPotionType(WATER_BREATHING);
-    Registries.registerPotionType(LONG_WATER_BREATHING);
-    Registries.registerPotionType(HEALING);
-    Registries.registerPotionType(STRONG_HEALING);
-    Registries.registerPotionType(HARMING);
-    Registries.registerPotionType(STRONG_HARMING);
-    Registries.registerPotionType(POISON);
-    Registries.registerPotionType(LONG_POISON);
-    Registries.registerPotionType(STRONG_POISON);
-    Registries.registerPotionType(REGENERATION);
-    Registries.registerPotionType(LONG_REGENERATION);
-    Registries.registerPotionType(STRONG_REGENERATION);
-    Registries.registerPotionType(STRENGTH);
-    Registries.registerPotionType(LONG_STRENGTH);
-    Registries.registerPotionType(STRONG_STRENGTH);
-    Registries.registerPotionType(WEAKNESS);
-    Registries.registerPotionType(LONG_WEAKNESS);
-    Registries.registerPotionType(LUCK);
-    Registries.registerPotionType(SLOW_FALLING);
-    Registries.registerPotionType(LONG_SLOW_FALLING);
+    Registry.POTION_TYPE_REGISTRY.register(EMPTY);
+    Registry.POTION_TYPE_REGISTRY.register(WATER);
+    Registry.POTION_TYPE_REGISTRY.register(MUNDANE);
+    Registry.POTION_TYPE_REGISTRY.register(THICK);
+    Registry.POTION_TYPE_REGISTRY.register(AWKWARD);
+    Registry.POTION_TYPE_REGISTRY.register(NIGHT_VISION);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_NIGHT_VISION);
+    Registry.POTION_TYPE_REGISTRY.register(INVISIBILITY);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_INVISIBILITY);
+    Registry.POTION_TYPE_REGISTRY.register(LEAPING);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_LEAPING);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_LEAPING);
+    Registry.POTION_TYPE_REGISTRY.register(FIRE_RESISTANCE);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_FIRE_RESISTANCE);
+    Registry.POTION_TYPE_REGISTRY.register(SWIFTNESS);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_SWIFTNESS);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_SWIFTNESS);
+    Registry.POTION_TYPE_REGISTRY.register(SLOWNESS);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_SLOWNESS);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_SLOWNESS);
+    Registry.POTION_TYPE_REGISTRY.register(TURTLE_MASTER);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_TURTLE_MASTER);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_TURTLE_MASTER);
+    Registry.POTION_TYPE_REGISTRY.register(WATER_BREATHING);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_WATER_BREATHING);
+    Registry.POTION_TYPE_REGISTRY.register(HEALING);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_HEALING);
+    Registry.POTION_TYPE_REGISTRY.register(HARMING);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_HARMING);
+    Registry.POTION_TYPE_REGISTRY.register(POISON);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_POISON);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_POISON);
+    Registry.POTION_TYPE_REGISTRY.register(REGENERATION);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_REGENERATION);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_REGENERATION);
+    Registry.POTION_TYPE_REGISTRY.register(STRENGTH);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_STRENGTH);
+    Registry.POTION_TYPE_REGISTRY.register(STRONG_STRENGTH);
+    Registry.POTION_TYPE_REGISTRY.register(WEAKNESS);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_WEAKNESS);
+    Registry.POTION_TYPE_REGISTRY.register(LUCK);
+    Registry.POTION_TYPE_REGISTRY.register(SLOW_FALLING);
+    Registry.POTION_TYPE_REGISTRY.register(LONG_SLOW_FALLING);
   }
 
   @NotNull
@@ -164,6 +164,11 @@ public class PotionType implements Keyed {
   }
 
   @NotNull
+  public static PotionType fromId(Key id) {
+    return Registry.POTION_TYPE_REGISTRY.get(id);
+  }
+
+  @NotNull
   @Override
   public String toString() {
     return "[" + this.id + "]";
@@ -171,6 +176,6 @@ public class PotionType implements Keyed {
 
   @NotNull
   public static List<PotionType> values() {
-    return Registries.getPotionTypes();
+    return Registry.POTION_TYPE_REGISTRY.values();
   }
 }

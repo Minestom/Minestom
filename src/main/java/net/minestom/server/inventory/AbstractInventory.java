@@ -55,8 +55,7 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
                                                         @NotNull TransactionOption<T> option) {
-        var pair = type.process(this, itemStack);
-        return option.fill(this, pair.left(), pair.right());
+        return option.fill(type, this, itemStack);
     }
 
     public synchronized <T> @NotNull List<@NotNull T> processItemStacks(@NotNull List<@NotNull ItemStack> itemStacks,

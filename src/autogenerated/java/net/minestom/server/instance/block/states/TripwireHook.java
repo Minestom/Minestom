@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class TripwireHook {
   public static final BlockState TRIPWIRE_HOOK_15 = new BlockState(NamespaceID.from("minecraft:tripwire_hook_15"), (short) 5278, Block.TRIPWIRE_HOOK, "attached=false","facing=east","powered=false");
 
   static {
-    Registries.registerBlockState(TRIPWIRE_HOOK_0);
-    Registries.registerBlockState(TRIPWIRE_HOOK_1);
-    Registries.registerBlockState(TRIPWIRE_HOOK_2);
-    Registries.registerBlockState(TRIPWIRE_HOOK_3);
-    Registries.registerBlockState(TRIPWIRE_HOOK_4);
-    Registries.registerBlockState(TRIPWIRE_HOOK_5);
-    Registries.registerBlockState(TRIPWIRE_HOOK_6);
-    Registries.registerBlockState(TRIPWIRE_HOOK_7);
-    Registries.registerBlockState(TRIPWIRE_HOOK_8);
-    Registries.registerBlockState(TRIPWIRE_HOOK_9);
-    Registries.registerBlockState(TRIPWIRE_HOOK_10);
-    Registries.registerBlockState(TRIPWIRE_HOOK_11);
-    Registries.registerBlockState(TRIPWIRE_HOOK_12);
-    Registries.registerBlockState(TRIPWIRE_HOOK_13);
-    Registries.registerBlockState(TRIPWIRE_HOOK_14);
-    Registries.registerBlockState(TRIPWIRE_HOOK_15);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_1);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_2);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_3);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_4);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_5);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_6);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_7);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_8);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_9);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_10);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_11);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_12);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_13);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_14);
+    Registry.BLOCK_STATE_REGISTRY.register(TRIPWIRE_HOOK_15);
   }
 
   public static void initStates() {

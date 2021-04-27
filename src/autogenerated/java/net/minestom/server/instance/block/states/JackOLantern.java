@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class JackOLantern {
   public static final BlockState JACK_O_LANTERN_3 = new BlockState(NamespaceID.from("minecraft:jack_o_lantern_3"), (short) 4023, Block.JACK_O_LANTERN, "facing=east");
 
   static {
-    Registries.registerBlockState(JACK_O_LANTERN_0);
-    Registries.registerBlockState(JACK_O_LANTERN_1);
-    Registries.registerBlockState(JACK_O_LANTERN_2);
-    Registries.registerBlockState(JACK_O_LANTERN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(JACK_O_LANTERN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(JACK_O_LANTERN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(JACK_O_LANTERN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(JACK_O_LANTERN_3);
   }
 
   public static void initStates() {

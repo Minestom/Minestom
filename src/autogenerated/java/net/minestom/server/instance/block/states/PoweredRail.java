@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class PoweredRail {
   public static final BlockState POWERED_RAIL_11 = new BlockState(NamespaceID.from("minecraft:powered_rail_11"), (short) 1316, Block.POWERED_RAIL, "powered=false","shape=ascending_south");
 
   static {
-    Registries.registerBlockState(POWERED_RAIL_0);
-    Registries.registerBlockState(POWERED_RAIL_1);
-    Registries.registerBlockState(POWERED_RAIL_2);
-    Registries.registerBlockState(POWERED_RAIL_3);
-    Registries.registerBlockState(POWERED_RAIL_4);
-    Registries.registerBlockState(POWERED_RAIL_5);
-    Registries.registerBlockState(POWERED_RAIL_6);
-    Registries.registerBlockState(POWERED_RAIL_7);
-    Registries.registerBlockState(POWERED_RAIL_8);
-    Registries.registerBlockState(POWERED_RAIL_9);
-    Registries.registerBlockState(POWERED_RAIL_10);
-    Registries.registerBlockState(POWERED_RAIL_11);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_2);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_3);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_4);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_5);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_6);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_7);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_8);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_9);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_10);
+    Registry.BLOCK_STATE_REGISTRY.register(POWERED_RAIL_11);
   }
 
   public static void initStates() {

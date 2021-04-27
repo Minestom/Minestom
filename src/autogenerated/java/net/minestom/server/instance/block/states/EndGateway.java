@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class EndGateway {
   public static final BlockState END_GATEWAY_0 = new BlockState(NamespaceID.from("minecraft:end_gateway_0"), (short) 9228, Block.END_GATEWAY);
 
   static {
-    Registries.registerBlockState(END_GATEWAY_0);
+    Registry.BLOCK_STATE_REGISTRY.register(END_GATEWAY_0);
   }
 
   public static void initStates() {

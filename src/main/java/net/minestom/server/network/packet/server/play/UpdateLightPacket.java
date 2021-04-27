@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
-    private static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
+    public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
     public int chunkX;
     public int chunkZ;

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class FireCoral {
   public static final BlockState FIRE_CORAL_1 = new BlockState(NamespaceID.from("minecraft:fire_coral_1"), (short) 9541, Block.FIRE_CORAL, "waterlogged=false");
 
   static {
-    Registries.registerBlockState(FIRE_CORAL_0);
-    Registries.registerBlockState(FIRE_CORAL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(FIRE_CORAL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(FIRE_CORAL_1);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class Beetroots {
   public static final BlockState BEETROOTS_3 = new BlockState(NamespaceID.from("minecraft:beetroots_3"), (short) 9226, Block.BEETROOTS, "age=3");
 
   static {
-    Registries.registerBlockState(BEETROOTS_0);
-    Registries.registerBlockState(BEETROOTS_1);
-    Registries.registerBlockState(BEETROOTS_2);
-    Registries.registerBlockState(BEETROOTS_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BEETROOTS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BEETROOTS_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BEETROOTS_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BEETROOTS_3);
   }
 
   public static void initStates() {

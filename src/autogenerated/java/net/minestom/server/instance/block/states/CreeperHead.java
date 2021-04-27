@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class CreeperHead {
   public static final BlockState CREEPER_HEAD_15 = new BlockState(NamespaceID.from("minecraft:creeper_head_15"), (short) 6589, Block.CREEPER_HEAD, "rotation=15");
 
   static {
-    Registries.registerBlockState(CREEPER_HEAD_0);
-    Registries.registerBlockState(CREEPER_HEAD_1);
-    Registries.registerBlockState(CREEPER_HEAD_2);
-    Registries.registerBlockState(CREEPER_HEAD_3);
-    Registries.registerBlockState(CREEPER_HEAD_4);
-    Registries.registerBlockState(CREEPER_HEAD_5);
-    Registries.registerBlockState(CREEPER_HEAD_6);
-    Registries.registerBlockState(CREEPER_HEAD_7);
-    Registries.registerBlockState(CREEPER_HEAD_8);
-    Registries.registerBlockState(CREEPER_HEAD_9);
-    Registries.registerBlockState(CREEPER_HEAD_10);
-    Registries.registerBlockState(CREEPER_HEAD_11);
-    Registries.registerBlockState(CREEPER_HEAD_12);
-    Registries.registerBlockState(CREEPER_HEAD_13);
-    Registries.registerBlockState(CREEPER_HEAD_14);
-    Registries.registerBlockState(CREEPER_HEAD_15);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_6);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_7);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_8);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_9);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_10);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_11);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_12);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_13);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_14);
+    Registry.BLOCK_STATE_REGISTRY.register(CREEPER_HEAD_15);
   }
 
   public static void initStates() {

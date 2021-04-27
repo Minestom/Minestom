@@ -12,7 +12,7 @@ import net.minestom.server.network.packet.server.play.EntitySoundEffectPacket;
 import net.minestom.server.network.packet.server.play.NamedSoundEffectPacket;
 import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.packet.server.play.StopSoundPacket;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -100,7 +100,7 @@ public class AdventurePacketConvertor {
      * @return the sound packet
      */
     public static ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
-        SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
+        SoundEvent minestomSound = Registry.SOUND_EVENT_REGISTRY.get(sound.name());
 
         if (minestomSound == null) {
             NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
@@ -132,7 +132,7 @@ public class AdventurePacketConvertor {
      * @return the packet
      */
     public static ServerPacket createEntitySoundPacket(@NotNull Sound sound, @NotNull Entity entity) {
-        SoundEvent soundEvent = Registries.getSoundEvent(sound.name());
+        SoundEvent soundEvent = Registry.SOUND_EVENT_REGISTRY.get(sound.name());
 
         if (soundEvent == null) {
             throw new IllegalArgumentException("Sound must be a valid sound event.");

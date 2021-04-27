@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class Melon {
   public static final BlockState MELON_0 = new BlockState(NamespaceID.from("minecraft:melon_0"), (short) 4767, Block.MELON);
 
   static {
-    Registries.registerBlockState(MELON_0);
+    Registry.BLOCK_STATE_REGISTRY.register(MELON_0);
   }
 
   public static void initStates() {

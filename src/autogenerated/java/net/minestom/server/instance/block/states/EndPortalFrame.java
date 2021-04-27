@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class EndPortalFrame {
   public static final BlockState END_PORTAL_FRAME_7 = new BlockState(NamespaceID.from("minecraft:end_portal_frame_7"), (short) 5157, Block.END_PORTAL_FRAME, "eye=false","facing=east");
 
   static {
-    Registries.registerBlockState(END_PORTAL_FRAME_0);
-    Registries.registerBlockState(END_PORTAL_FRAME_1);
-    Registries.registerBlockState(END_PORTAL_FRAME_2);
-    Registries.registerBlockState(END_PORTAL_FRAME_3);
-    Registries.registerBlockState(END_PORTAL_FRAME_4);
-    Registries.registerBlockState(END_PORTAL_FRAME_5);
-    Registries.registerBlockState(END_PORTAL_FRAME_6);
-    Registries.registerBlockState(END_PORTAL_FRAME_7);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_0);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_1);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_2);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_3);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_4);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_5);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_6);
+    Registry.BLOCK_STATE_REGISTRY.register(END_PORTAL_FRAME_7);
   }
 
   public static void initStates() {

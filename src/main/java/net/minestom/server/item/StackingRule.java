@@ -10,13 +10,7 @@ import java.util.function.IntUnaryOperator;
  * This can be used to mimic the vanilla one (using the displayed item quantity)
  * or a complete new one which can be stored in lore, name, etc...
  */
-public abstract class StackingRule {
-
-    private final int maxSize;
-
-    public StackingRule(int maxSize) {
-        this.maxSize = maxSize;
-    }
+public interface StackingRule {
 
     /**
      * Used to know if two {@link ItemStack} can be stacked together.
@@ -26,16 +20,16 @@ public abstract class StackingRule {
      * @return true if both {@link ItemStack} can be stacked together
      * (without taking their amount in consideration)
      */
-    public abstract boolean canBeStacked(@NotNull ItemStack item1, @NotNull ItemStack item2);
+    boolean canBeStacked(@NotNull ItemStack item1, @NotNull ItemStack item2);
 
     /**
      * Used to know if an {@link ItemStack} can have the size {@code newAmount} applied.
      *
      * @param item      the {@link ItemStack} to check
-     * @param newAmount the desired new amount
+     * @param amount the desired new amount
      * @return true if {@code item} can have its stack size set to newAmount
      */
-    public abstract boolean canApply(@NotNull ItemStack item, int newAmount);
+    boolean canApply(@NotNull ItemStack item, int amount);
 
     /**
      * Changes the size of the {@link ItemStack} to {@code newAmount}.
@@ -46,10 +40,10 @@ public abstract class StackingRule {
      * @return a new {@link ItemStack item} with the specified amount
      */
     @Contract("_, _ -> new")
-    public abstract @NotNull ItemStack apply(@NotNull ItemStack item, int newAmount);
+    @NotNull ItemStack apply(@NotNull ItemStack item, int newAmount);
 
     @Contract("_, _ -> new")
-    public @NotNull ItemStack apply(@NotNull ItemStack item, @NotNull IntUnaryOperator amountOperator) {
+    default @NotNull ItemStack apply(@NotNull ItemStack item, @NotNull IntUnaryOperator amountOperator) {
         return apply(item, amountOperator.applyAsInt(getAmount(item)));
     }
 
@@ -60,14 +54,13 @@ public abstract class StackingRule {
      * @param itemStack the {@link ItemStack} to check the size
      * @return the correct size of {@link ItemStack}
      */
-    public abstract int getAmount(@NotNull ItemStack itemStack);
+    int getAmount(@NotNull ItemStack itemStack);
 
     /**
      * Gets the max size of a stack.
      *
+     * @param itemStack the item to get the max size from
      * @return the max size of a stack
      */
-    public int getMaxSize() {
-        return maxSize;
-    }
+    int getMaxSize(@NotNull ItemStack itemStack);
 }

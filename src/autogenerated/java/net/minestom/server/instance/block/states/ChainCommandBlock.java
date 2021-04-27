@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -39,18 +39,18 @@ public final class ChainCommandBlock {
   public static final BlockState CHAIN_COMMAND_BLOCK_11 = new BlockState(NamespaceID.from("minecraft:chain_command_block_11"), (short) 9252, Block.CHAIN_COMMAND_BLOCK, "conditional=false","facing=down");
 
   static {
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_0);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_1);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_2);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_3);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_4);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_5);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_6);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_7);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_8);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_9);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_10);
-    Registries.registerBlockState(CHAIN_COMMAND_BLOCK_11);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_6);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_7);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_8);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_9);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_10);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_COMMAND_BLOCK_11);
   }
 
   public static void initStates() {

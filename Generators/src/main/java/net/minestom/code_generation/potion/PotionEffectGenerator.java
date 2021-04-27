@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class PotionEffectGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionEffectGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "potion_effects.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "potion_effects.json");
     private final File potionEffectsFile;
     private final File outputFolder;
 
@@ -50,6 +50,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray potionEffects;
         try {
@@ -127,10 +128,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
         potionEffectClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getPotionEffectId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.POTION_EFFECT_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -140,10 +138,17 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
                         .returns(potionEffectClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getPotionEffect(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.POTION_EFFECT_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        potionEffectClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(potionEffectClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.POTION_EFFECT_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -163,7 +168,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), potionEffectClassName))
-                        .addStatement("return $T.getPotionEffects()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.POTION_EFFECT_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -189,7 +194,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerPotionEffect($N)", ClassName.get("net.minestom.server.registry", "Registries"), potionEffectName);
+            staticBlock.addStatement("$T.POTION_EFFECT_REGISTRY.register($N)", registryClassName, potionEffectName);
         }
 
         potionEffectClass.addStaticBlock(staticBlock.build());

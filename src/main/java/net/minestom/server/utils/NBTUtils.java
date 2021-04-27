@@ -15,7 +15,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -66,7 +66,7 @@ public final class NBTUtils {
     public static void loadAllItems(@NotNull NBTList<NBTCompound> items, @NotNull Inventory destination) {
         destination.clear();
         for (NBTCompound tag : items) {
-            Material material = Registries.getMaterial(tag.getString("id"));
+            Material material = Registry.MATERIAL_REGISTRY.get(tag.getString("id"));
             if (material == Material.AIR) {
                 material = Material.STONE;
             }
@@ -75,7 +75,7 @@ public final class NBTUtils {
             if (tag.containsKey("tag")) {
                 nbtCompound = tag.getCompound("tag");
             }
-            ItemStack itemStack = loadItem(material, count, nbtCompound);
+            ItemStack itemStack = ItemStack.fromNBT(material, nbtCompound, count);
             destination.setItemStack(tag.getByte("Slot"), itemStack);
         }
     }
@@ -138,20 +138,7 @@ public final class NBTUtils {
             MinecraftServer.getExceptionManager().handleException(e);
         }
 
-        return loadItem(material, count, nbtCompound);
-    }
-
-    public static @NotNull ItemStack loadItem(@NotNull Material material, int count, @Nullable NBTCompound nbtCompound) {
-        return ItemStack.builder(material)
-                .amount(count)
-                .meta(metaBuilder -> {
-                    if (nbtCompound != null) {
-                        return ItemMetaBuilder.fromNBT(metaBuilder, nbtCompound);
-                    } else {
-                        return metaBuilder;
-                    }
-                })
-                .build();
+        return ItemStack.fromNBT(material, nbtCompound, count);
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -198,7 +185,7 @@ public final class NBTUtils {
                 final int operation = attributeNBT.getAsInt("Operation");
                 final String name = attributeNBT.getString("Name");
 
-                final Attribute attribute = Registries.getAttribute(attributeName);
+                final Attribute attribute = Registry.ATTRIBUTE_REGISTRY.get(attributeName);
                 // Wrong attribute name, stop here
                 if (attribute == null)
                     break;
@@ -240,7 +227,7 @@ public final class NBTUtils {
                 NBTList<NBTString> canPlaceOn = nbt.getList("CanPlaceOn");
                 Set<Block> blocks = new HashSet<>();
                 for (NBTString blockNamespace : canPlaceOn) {
-                    Block block = Registries.getBlock(blockNamespace.getValue());
+                    Block block = Registry.BLOCK_REGISTRY.get(blockNamespace.getValue());
                     blocks.add(block);
                 }
                 metaBuilder.canPlaceOn(blocks);
@@ -252,7 +239,7 @@ public final class NBTUtils {
                 NBTList<NBTString> canDestroy = nbt.getList("CanDestroy");
                 Set<Block> blocks = new HashSet<>();
                 for (NBTString blockNamespace : canDestroy) {
-                    Block block = Registries.getBlock(blockNamespace.getValue());
+                    Block block = Registry.BLOCK_REGISTRY.get(blockNamespace.getValue());
                     blocks.add(block);
                 }
                 metaBuilder.canDestroy(blocks);
@@ -264,7 +251,7 @@ public final class NBTUtils {
         for (NBTCompound enchantment : enchantments) {
             final short level = enchantment.getAsShort("lvl");
             final String id = enchantment.getString("id");
-            final Enchantment enchant = Registries.getEnchantment(id);
+            final Enchantment enchant = Registry.ENCHANTMENT_REGISTRY.get(id);
             if (enchant != null) {
                 setter.applyEnchantment(enchant, level);
             } else {

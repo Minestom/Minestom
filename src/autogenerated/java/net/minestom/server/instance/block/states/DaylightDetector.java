@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class DaylightDetector {
   public static final BlockState DAYLIGHT_DETECTOR_31 = new BlockState(NamespaceID.from("minecraft:daylight_detector_31"), (short) 6729, Block.DAYLIGHT_DETECTOR, "inverted=false","power=15");
 
   static {
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_0);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_1);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_2);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_3);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_4);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_5);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_6);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_7);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_8);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_9);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_10);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_11);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_12);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_13);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_14);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_15);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_16);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_17);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_18);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_19);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_20);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_21);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_22);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_23);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_24);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_25);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_26);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_27);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_28);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_29);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_30);
-    Registries.registerBlockState(DAYLIGHT_DETECTOR_31);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_1);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_2);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_3);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_4);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_5);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_6);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_7);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_8);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_9);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_10);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_11);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_12);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_13);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_14);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_15);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_16);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_17);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_18);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_19);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_20);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_21);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_22);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_23);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_24);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_25);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_26);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_27);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_28);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_29);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_30);
+    Registry.BLOCK_STATE_REGISTRY.register(DAYLIGHT_DETECTOR_31);
   }
 
   public static void initStates() {

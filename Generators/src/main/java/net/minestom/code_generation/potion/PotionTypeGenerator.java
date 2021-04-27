@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class PotionTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "potions.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "potions.json");
     private final File potionsFile;
     private final File outputFolder;
 
@@ -50,6 +50,7 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray potions;
         try {
@@ -95,6 +96,16 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // fromId Method
+        potionTypeClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(potionTypeClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.POTION_TYPE_REGISTRY.get(id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
         // toString method
         potionTypeClass.addMethod(
                 MethodSpec.methodBuilder("toString")
@@ -111,7 +122,7 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), potionTypeClassName))
-                        .addStatement("return $T.getPotionTypes()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.POTION_TYPE_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -135,7 +146,7 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerPotionType($N)", ClassName.get("net.minestom.server.registry", "Registries"), statisticName);
+            staticBlock.addStatement("$T.POTION_TYPE_REGISTRY.register($N)", registryClassName, statisticName);
         }
 
         potionTypeClass.addStaticBlock(staticBlock.build());

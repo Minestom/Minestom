@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class MagentaBed {
   public static final BlockState MAGENTA_BED_15 = new BlockState(NamespaceID.from("minecraft:magenta_bed_15"), (short) 1096, Block.MAGENTA_BED, "facing=east","occupied=false","part=foot");
 
   static {
-    Registries.registerBlockState(MAGENTA_BED_0);
-    Registries.registerBlockState(MAGENTA_BED_1);
-    Registries.registerBlockState(MAGENTA_BED_2);
-    Registries.registerBlockState(MAGENTA_BED_3);
-    Registries.registerBlockState(MAGENTA_BED_4);
-    Registries.registerBlockState(MAGENTA_BED_5);
-    Registries.registerBlockState(MAGENTA_BED_6);
-    Registries.registerBlockState(MAGENTA_BED_7);
-    Registries.registerBlockState(MAGENTA_BED_8);
-    Registries.registerBlockState(MAGENTA_BED_9);
-    Registries.registerBlockState(MAGENTA_BED_10);
-    Registries.registerBlockState(MAGENTA_BED_11);
-    Registries.registerBlockState(MAGENTA_BED_12);
-    Registries.registerBlockState(MAGENTA_BED_13);
-    Registries.registerBlockState(MAGENTA_BED_14);
-    Registries.registerBlockState(MAGENTA_BED_15);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_0);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_1);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_2);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_3);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_4);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_5);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_6);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_7);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_8);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_9);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_10);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_11);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_12);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_13);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_14);
+    Registry.BLOCK_STATE_REGISTRY.register(MAGENTA_BED_15);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class Vine {
   public static final BlockState VINE_31 = new BlockState(NamespaceID.from("minecraft:vine_31"), (short) 4823, Block.VINE, "east=false","north=false","south=false","up=false","west=false");
 
   static {
-    Registries.registerBlockState(VINE_0);
-    Registries.registerBlockState(VINE_1);
-    Registries.registerBlockState(VINE_2);
-    Registries.registerBlockState(VINE_3);
-    Registries.registerBlockState(VINE_4);
-    Registries.registerBlockState(VINE_5);
-    Registries.registerBlockState(VINE_6);
-    Registries.registerBlockState(VINE_7);
-    Registries.registerBlockState(VINE_8);
-    Registries.registerBlockState(VINE_9);
-    Registries.registerBlockState(VINE_10);
-    Registries.registerBlockState(VINE_11);
-    Registries.registerBlockState(VINE_12);
-    Registries.registerBlockState(VINE_13);
-    Registries.registerBlockState(VINE_14);
-    Registries.registerBlockState(VINE_15);
-    Registries.registerBlockState(VINE_16);
-    Registries.registerBlockState(VINE_17);
-    Registries.registerBlockState(VINE_18);
-    Registries.registerBlockState(VINE_19);
-    Registries.registerBlockState(VINE_20);
-    Registries.registerBlockState(VINE_21);
-    Registries.registerBlockState(VINE_22);
-    Registries.registerBlockState(VINE_23);
-    Registries.registerBlockState(VINE_24);
-    Registries.registerBlockState(VINE_25);
-    Registries.registerBlockState(VINE_26);
-    Registries.registerBlockState(VINE_27);
-    Registries.registerBlockState(VINE_28);
-    Registries.registerBlockState(VINE_29);
-    Registries.registerBlockState(VINE_30);
-    Registries.registerBlockState(VINE_31);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_16);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_17);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_18);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_19);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_20);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_21);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_22);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_23);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_24);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_25);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_26);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_27);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_28);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_29);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_30);
+    Registry.BLOCK_STATE_REGISTRY.register(VINE_31);
   }
 
   public static void initStates() {

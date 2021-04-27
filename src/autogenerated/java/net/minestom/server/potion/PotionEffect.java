@@ -5,7 +5,7 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -79,38 +79,38 @@ public class PotionEffect implements Keyed {
   public static final PotionEffect HERO_OF_THE_VILLAGE = new PotionEffect(NamespaceID.from("minecraft:hero_of_the_village"), 4521796, false);
 
   static {
-    Registries.registerPotionEffect(MOVEMENT_SPEED);
-    Registries.registerPotionEffect(MOVEMENT_SLOWDOWN);
-    Registries.registerPotionEffect(DIG_SPEED);
-    Registries.registerPotionEffect(DIG_SLOWDOWN);
-    Registries.registerPotionEffect(DAMAGE_BOOST);
-    Registries.registerPotionEffect(HEAL);
-    Registries.registerPotionEffect(HARM);
-    Registries.registerPotionEffect(JUMP);
-    Registries.registerPotionEffect(CONFUSION);
-    Registries.registerPotionEffect(REGENERATION);
-    Registries.registerPotionEffect(DAMAGE_RESISTANCE);
-    Registries.registerPotionEffect(FIRE_RESISTANCE);
-    Registries.registerPotionEffect(WATER_BREATHING);
-    Registries.registerPotionEffect(INVISIBILITY);
-    Registries.registerPotionEffect(BLINDNESS);
-    Registries.registerPotionEffect(NIGHT_VISION);
-    Registries.registerPotionEffect(HUNGER);
-    Registries.registerPotionEffect(WEAKNESS);
-    Registries.registerPotionEffect(POISON);
-    Registries.registerPotionEffect(WITHER);
-    Registries.registerPotionEffect(HEALTH_BOOST);
-    Registries.registerPotionEffect(ABSORPTION);
-    Registries.registerPotionEffect(SATURATION);
-    Registries.registerPotionEffect(GLOWING);
-    Registries.registerPotionEffect(LEVITATION);
-    Registries.registerPotionEffect(LUCK);
-    Registries.registerPotionEffect(UNLUCK);
-    Registries.registerPotionEffect(SLOW_FALLING);
-    Registries.registerPotionEffect(CONDUIT_POWER);
-    Registries.registerPotionEffect(DOLPHINS_GRACE);
-    Registries.registerPotionEffect(BAD_OMEN);
-    Registries.registerPotionEffect(HERO_OF_THE_VILLAGE);
+    Registry.POTION_EFFECT_REGISTRY.register(MOVEMENT_SPEED);
+    Registry.POTION_EFFECT_REGISTRY.register(MOVEMENT_SLOWDOWN);
+    Registry.POTION_EFFECT_REGISTRY.register(DIG_SPEED);
+    Registry.POTION_EFFECT_REGISTRY.register(DIG_SLOWDOWN);
+    Registry.POTION_EFFECT_REGISTRY.register(DAMAGE_BOOST);
+    Registry.POTION_EFFECT_REGISTRY.register(HEAL);
+    Registry.POTION_EFFECT_REGISTRY.register(HARM);
+    Registry.POTION_EFFECT_REGISTRY.register(JUMP);
+    Registry.POTION_EFFECT_REGISTRY.register(CONFUSION);
+    Registry.POTION_EFFECT_REGISTRY.register(REGENERATION);
+    Registry.POTION_EFFECT_REGISTRY.register(DAMAGE_RESISTANCE);
+    Registry.POTION_EFFECT_REGISTRY.register(FIRE_RESISTANCE);
+    Registry.POTION_EFFECT_REGISTRY.register(WATER_BREATHING);
+    Registry.POTION_EFFECT_REGISTRY.register(INVISIBILITY);
+    Registry.POTION_EFFECT_REGISTRY.register(BLINDNESS);
+    Registry.POTION_EFFECT_REGISTRY.register(NIGHT_VISION);
+    Registry.POTION_EFFECT_REGISTRY.register(HUNGER);
+    Registry.POTION_EFFECT_REGISTRY.register(WEAKNESS);
+    Registry.POTION_EFFECT_REGISTRY.register(POISON);
+    Registry.POTION_EFFECT_REGISTRY.register(WITHER);
+    Registry.POTION_EFFECT_REGISTRY.register(HEALTH_BOOST);
+    Registry.POTION_EFFECT_REGISTRY.register(ABSORPTION);
+    Registry.POTION_EFFECT_REGISTRY.register(SATURATION);
+    Registry.POTION_EFFECT_REGISTRY.register(GLOWING);
+    Registry.POTION_EFFECT_REGISTRY.register(LEVITATION);
+    Registry.POTION_EFFECT_REGISTRY.register(LUCK);
+    Registry.POTION_EFFECT_REGISTRY.register(UNLUCK);
+    Registry.POTION_EFFECT_REGISTRY.register(SLOW_FALLING);
+    Registry.POTION_EFFECT_REGISTRY.register(CONDUIT_POWER);
+    Registry.POTION_EFFECT_REGISTRY.register(DOLPHINS_GRACE);
+    Registry.POTION_EFFECT_REGISTRY.register(BAD_OMEN);
+    Registry.POTION_EFFECT_REGISTRY.register(HERO_OF_THE_VILLAGE);
   }
 
   @NotNull
@@ -146,12 +146,17 @@ public class PotionEffect implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getPotionEffectId(this);
+    return Registry.POTION_EFFECT_REGISTRY.getId(this);
   }
 
   @Nullable
   public static PotionEffect fromId(int id) {
-    return Registries.getPotionEffect(id);
+    return Registry.POTION_EFFECT_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static PotionEffect fromId(Key id) {
+    return Registry.POTION_EFFECT_REGISTRY.get(id);
   }
 
   @NotNull
@@ -162,6 +167,6 @@ public class PotionEffect implements Keyed {
 
   @NotNull
   public static List<PotionEffect> values() {
-    return Registries.getPotionEffects();
+    return Registry.POTION_EFFECT_REGISTRY.values();
   }
 }

@@ -11,7 +11,7 @@ import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.map.MapColors;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -26,12 +26,14 @@ public class DataInitializer {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     public static void runDataInitializer(File inputFolder, String version) {
+        LOGGER.info("Attempting to initialize external data...");
         loadBlockData(new File(inputFolder, version.replaceAll("\\.", "_") + "_blocks.json"));
         loadFluidData(new File(inputFolder, version.replaceAll("\\.", "_") + "_fluids.json"));
         loadEntityData(new File(inputFolder, version.replaceAll("\\.", "_") + "_entities.json"));
         loadMaterialData(new File(inputFolder, version.replaceAll("\\.", "_") + "_items.json"));
         loadEnchantmentData(new File(inputFolder, version.replaceAll("\\.", "_") + "_enchantments.json"));
         loadVillagerProfessionData(new File(inputFolder, version.replaceAll("\\.", "_") + "_villager_professions.json"));
+        LOGGER.info("Finished initializing external data.");
     }
 
     private static void loadBlockData(@NotNull File blocksFile) {
@@ -54,7 +56,7 @@ public class DataInitializer {
             NamespaceID blockId = NamespaceID.from(blockJson.get("id").getAsString());
 
             // Get correct block
-            Block b = Registries.getBlock(blockId);
+            Block b = Registry.BLOCK_REGISTRY.get(blockId);
             // CASE: Returning the defaulted value, however make sure to include the defaulted data itself.
             // to clarify: We return AIR if it doesn't exist, but we also need Air in the HashMap
             // Therefore we check the id for this functionality.
@@ -69,7 +71,7 @@ public class DataInitializer {
             blockData.friction = blockJson.get("friction").getAsDouble();
             blockData.speedFactor = blockJson.get("speedFactor").getAsDouble();
             blockData.jumpFactor = blockJson.get("jumpFactor").getAsDouble();
-            blockData.item = Registries.getMaterial(blockJson.get("itemId").getAsString());
+            blockData.item = Registry.MATERIAL_REGISTRY.get(blockJson.get("itemId").getAsString());
 
             JsonArray blockStatesJson = blockJson.get("states").getAsJsonArray();
             for (JsonElement jsonElement2 : blockStatesJson) {
@@ -77,7 +79,7 @@ public class DataInitializer {
                 short stateId = blockStateJson.get("id").getAsShort();
 
                 // Get correct Blockstate
-                BlockState bs = Registries.getBlockState(stateId);
+                BlockState bs = Registry.BLOCK_STATE_REGISTRY.get(stateId);
                 // CASE: Returning the defaulted value, however make sure to include the defaulted data itself.
                 if (bs == BlockState.AIR_0 && stateId != BlockState.AIR_0.getId()) {
                     // This should honestly never happen as the values in the Registry are based on the json file.
@@ -122,7 +124,7 @@ public class DataInitializer {
             NamespaceID fluidId = NamespaceID.from(fluidJson.get("id").getAsString());
 
             // Get correct fluid
-            Fluid f = Registries.getFluid(fluidId);
+            Fluid f = Registry.FLUID_REGISTRY.get(fluidId);
             // CASE: Returning the defaulted value, however make sure to include the defaulted data itself.
             // to clarify: We return AIR if it doesn't exist, but we also need Air in the HashMap
             // Therefore we check the id for this functionality.
@@ -133,7 +135,7 @@ public class DataInitializer {
 
             RawFluidData fluidData = f.getFluidData();
 
-            fluidData.bucketItem = Registries.getMaterial(fluidJson.get("bucketId").getAsString());
+            fluidData.bucketItem = Registry.MATERIAL_REGISTRY.get(fluidJson.get("bucketId").getAsString());
         }
     }
 
@@ -157,7 +159,7 @@ public class DataInitializer {
             NamespaceID entityId = NamespaceID.from(entityJson.get("id").getAsString());
 
             // Get correct item
-            EntityType et = Registries.getEntityType(entityId);
+            EntityType et = Registry.ENTITY_TYPE_REGISTRY.get(entityId);
             if (et == null) {
                 // shouldn't happen
                 continue;
@@ -189,7 +191,7 @@ public class DataInitializer {
             NamespaceID materialId = NamespaceID.from(materialJson.get("id").getAsString());
 
             // Get correct item
-            Material m = Registries.getMaterial(materialId);
+            Material m = Registry.MATERIAL_REGISTRY.get(materialId);
             // CASE: Returning the defaulted value, however make sure to include the defaulted data itself.
             // to clarify: We return AIR if it doesn't exist, but we also need Air in the HashMap
             // Therefore we check the id for this functionality.
@@ -204,9 +206,9 @@ public class DataInitializer {
             materialData.maxDurability = materialJson.get("maxDamage").getAsInt();
             materialData.edible = materialJson.get("edible").getAsBoolean();
             materialData.fireResistant = materialJson.get("fireResistant").getAsBoolean();
-            materialData.block = Registries.getBlock(materialJson.get("blockId").getAsString());
-            materialData.eatingSound = Registries.getSoundEvent(materialJson.get("eatingSound").getAsString());
-            materialData.drinkingSound = Registries.getSoundEvent(materialJson.get("drinkingSound").getAsString());
+            materialData.block = Registry.BLOCK_REGISTRY.get(materialJson.get("blockId").getAsString());
+            materialData.eatingSound = Registry.SOUND_EVENT_REGISTRY.get(materialJson.get("eatingSound").getAsString());
+            materialData.drinkingSound = Registry.SOUND_EVENT_REGISTRY.get(materialJson.get("drinkingSound").getAsString());
 
             // Is it an armor item
             if (materialJson.get("armorProperties") != null) {
@@ -261,7 +263,7 @@ public class DataInitializer {
             NamespaceID enchantmentId = NamespaceID.from(enchantmentJson.get("id").getAsString());
 
             // Get correct item
-            Enchantment e = Registries.getEnchantment(enchantmentId);
+            Enchantment e = Registry.ENCHANTMENT_REGISTRY.get(enchantmentId);
             if (e == null) {
                 // shouldn't happen
                 continue;
@@ -299,7 +301,7 @@ public class DataInitializer {
             NamespaceID villagerProfessionId = NamespaceID.from(villagerProfessionJson.get("id").getAsString());
 
             // Get correct item
-            VillagerProfession vp = Registries.getVillagerProfession(villagerProfessionId);
+            VillagerProfession vp = Registry.VILLAGER_PROFESSION_REGISTRY.get(villagerProfessionId);
             if (vp == null) {
                 // shouldn't happen
                 continue;
@@ -310,7 +312,7 @@ public class DataInitializer {
             if (workSound == null) {
                 vpData.workSound = null;
             } else {
-                vpData.workSound = Registries.getSoundEvent(workSound.getAsString());
+                vpData.workSound = Registry.SOUND_EVENT_REGISTRY.get(workSound.getAsString());
             }
         }
     }

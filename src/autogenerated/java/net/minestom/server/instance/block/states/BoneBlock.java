@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -21,9 +21,9 @@ public final class BoneBlock {
   public static final BlockState BONE_BLOCK_2 = new BlockState(NamespaceID.from("minecraft:bone_block_2"), (short) 9262, Block.BONE_BLOCK, "axis=z");
 
   static {
-    Registries.registerBlockState(BONE_BLOCK_0);
-    Registries.registerBlockState(BONE_BLOCK_1);
-    Registries.registerBlockState(BONE_BLOCK_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BONE_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BONE_BLOCK_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BONE_BLOCK_2);
   }
 
   public static void initStates() {

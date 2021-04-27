@@ -8,7 +8,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -40,10 +40,10 @@ public class TagsPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Registries.getBlock(name).getNumericalId());
-        writeTags(writer, itemTags, name -> Registries.getMaterial(name).getNumericalId());
-        writeTags(writer, fluidTags, name -> Registries.getFluid(name).getNumericalId());
-        writeTags(writer, entityTags, name -> Registries.getEntityType(name).getNumericalId()); // Not defaulted, so can be null.
+        writeTags(writer, blockTags, name -> Registry.BLOCK_REGISTRY.get(name).getNumericalId());
+        writeTags(writer, itemTags, name -> Registry.MATERIAL_REGISTRY.get(name).getNumericalId());
+        writeTags(writer, fluidTags, name -> Registry.FLUID_REGISTRY.get(name).getNumericalId());
+        writeTags(writer, entityTags, name -> Registry.ENTITY_TYPE_REGISTRY.get(name).getNumericalId()); // Not defaulted, so can be null.
     }
 
     @Override

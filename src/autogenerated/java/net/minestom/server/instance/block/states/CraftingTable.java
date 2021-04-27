@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class CraftingTable {
   public static final BlockState CRAFTING_TABLE_0 = new BlockState(NamespaceID.from("minecraft:crafting_table_0"), (short) 3356, Block.CRAFTING_TABLE);
 
   static {
-    Registries.registerBlockState(CRAFTING_TABLE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CRAFTING_TABLE_0);
   }
 
   public static void initStates() {

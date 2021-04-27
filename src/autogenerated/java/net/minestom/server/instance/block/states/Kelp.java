@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -67,32 +67,32 @@ public final class Kelp {
   public static final BlockState KELP_25 = new BlockState(NamespaceID.from("minecraft:kelp_25"), (short) 9499, Block.KELP, "age=25");
 
   static {
-    Registries.registerBlockState(KELP_0);
-    Registries.registerBlockState(KELP_1);
-    Registries.registerBlockState(KELP_2);
-    Registries.registerBlockState(KELP_3);
-    Registries.registerBlockState(KELP_4);
-    Registries.registerBlockState(KELP_5);
-    Registries.registerBlockState(KELP_6);
-    Registries.registerBlockState(KELP_7);
-    Registries.registerBlockState(KELP_8);
-    Registries.registerBlockState(KELP_9);
-    Registries.registerBlockState(KELP_10);
-    Registries.registerBlockState(KELP_11);
-    Registries.registerBlockState(KELP_12);
-    Registries.registerBlockState(KELP_13);
-    Registries.registerBlockState(KELP_14);
-    Registries.registerBlockState(KELP_15);
-    Registries.registerBlockState(KELP_16);
-    Registries.registerBlockState(KELP_17);
-    Registries.registerBlockState(KELP_18);
-    Registries.registerBlockState(KELP_19);
-    Registries.registerBlockState(KELP_20);
-    Registries.registerBlockState(KELP_21);
-    Registries.registerBlockState(KELP_22);
-    Registries.registerBlockState(KELP_23);
-    Registries.registerBlockState(KELP_24);
-    Registries.registerBlockState(KELP_25);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_0);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_1);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_2);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_3);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_4);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_5);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_6);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_7);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_8);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_9);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_10);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_11);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_12);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_13);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_14);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_15);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_16);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_17);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_18);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_19);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_20);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_21);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_22);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_23);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_24);
+    Registry.BLOCK_STATE_REGISTRY.register(KELP_25);
   }
 
   public static void initStates() {

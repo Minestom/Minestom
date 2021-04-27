@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class CrimsonNylium {
   public static final BlockState CRIMSON_NYLIUM_0 = new BlockState(NamespaceID.from("minecraft:crimson_nylium_0"), (short) 14995, Block.CRIMSON_NYLIUM);
 
   static {
-    Registries.registerBlockState(CRIMSON_NYLIUM_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_NYLIUM_0);
   }
 
   public static void initStates() {

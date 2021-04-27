@@ -6,7 +6,7 @@ import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.sound.Sound;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -2018,12 +2018,17 @@ public class SoundEvent implements Keyed, Sound.Type {
   }
 
   public int getNumericalId() {
-    return Registries.getSoundEventId(this);
+    return Registry.SOUND_EVENT_REGISTRY.getId(this);
   }
 
   @Nullable
   public static SoundEvent fromId(int id) {
-    return Registries.getSoundEvent(id);
+    return Registry.SOUND_EVENT_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static SoundEvent fromId(Key id) {
+    return Registry.SOUND_EVENT_REGISTRY.get(id);
   }
 
   @NotNull
@@ -2034,6 +2039,6 @@ public class SoundEvent implements Keyed, Sound.Type {
 
   @NotNull
   public static List<SoundEvent> values() {
-    return Registries.getSoundEvents();
+    return Registry.SOUND_EVENT_REGISTRY.values();
   }
 }

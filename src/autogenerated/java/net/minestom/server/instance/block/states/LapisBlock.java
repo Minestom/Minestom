@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class LapisBlock {
   public static final BlockState LAPIS_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:lapis_block_0"), (short) 233, Block.LAPIS_BLOCK);
 
   static {
-    Registries.registerBlockState(LAPIS_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(LAPIS_BLOCK_0);
   }
 
   public static void initStates() {

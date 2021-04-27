@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class CoarseDirt {
   public static final BlockState COARSE_DIRT_0 = new BlockState(NamespaceID.from("minecraft:coarse_dirt_0"), (short) 11, Block.COARSE_DIRT);
 
   static {
-    Registries.registerBlockState(COARSE_DIRT_0);
+    Registry.BLOCK_STATE_REGISTRY.register(COARSE_DIRT_0);
   }
 
   public static void initStates() {

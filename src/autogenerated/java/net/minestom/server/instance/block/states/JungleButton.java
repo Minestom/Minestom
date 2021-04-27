@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -63,30 +63,30 @@ public final class JungleButton {
   public static final BlockState JUNGLE_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:jungle_button_23"), (short) 6445, Block.JUNGLE_BUTTON, "face=CEILING","facing=east","powered=false");
 
   static {
-    Registries.registerBlockState(JUNGLE_BUTTON_0);
-    Registries.registerBlockState(JUNGLE_BUTTON_1);
-    Registries.registerBlockState(JUNGLE_BUTTON_2);
-    Registries.registerBlockState(JUNGLE_BUTTON_3);
-    Registries.registerBlockState(JUNGLE_BUTTON_4);
-    Registries.registerBlockState(JUNGLE_BUTTON_5);
-    Registries.registerBlockState(JUNGLE_BUTTON_6);
-    Registries.registerBlockState(JUNGLE_BUTTON_7);
-    Registries.registerBlockState(JUNGLE_BUTTON_8);
-    Registries.registerBlockState(JUNGLE_BUTTON_9);
-    Registries.registerBlockState(JUNGLE_BUTTON_10);
-    Registries.registerBlockState(JUNGLE_BUTTON_11);
-    Registries.registerBlockState(JUNGLE_BUTTON_12);
-    Registries.registerBlockState(JUNGLE_BUTTON_13);
-    Registries.registerBlockState(JUNGLE_BUTTON_14);
-    Registries.registerBlockState(JUNGLE_BUTTON_15);
-    Registries.registerBlockState(JUNGLE_BUTTON_16);
-    Registries.registerBlockState(JUNGLE_BUTTON_17);
-    Registries.registerBlockState(JUNGLE_BUTTON_18);
-    Registries.registerBlockState(JUNGLE_BUTTON_19);
-    Registries.registerBlockState(JUNGLE_BUTTON_20);
-    Registries.registerBlockState(JUNGLE_BUTTON_21);
-    Registries.registerBlockState(JUNGLE_BUTTON_22);
-    Registries.registerBlockState(JUNGLE_BUTTON_23);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_0);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_1);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_2);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_3);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_4);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_5);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_6);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_7);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_8);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_9);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_10);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_11);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_12);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_13);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_14);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_15);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_16);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_17);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_18);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_19);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_20);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_21);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_22);
+    Registry.BLOCK_STATE_REGISTRY.register(JUNGLE_BUTTON_23);
   }
 
   public static void initStates() {

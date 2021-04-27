@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class OakSapling {
   public static final BlockState OAK_SAPLING_1 = new BlockState(NamespaceID.from("minecraft:oak_sapling_1"), (short) 22, Block.OAK_SAPLING, "stage=1");
 
   static {
-    Registries.registerBlockState(OAK_SAPLING_0);
-    Registries.registerBlockState(OAK_SAPLING_1);
+    Registry.BLOCK_STATE_REGISTRY.register(OAK_SAPLING_0);
+    Registry.BLOCK_STATE_REGISTRY.register(OAK_SAPLING_1);
   }
 
   public static void initStates() {

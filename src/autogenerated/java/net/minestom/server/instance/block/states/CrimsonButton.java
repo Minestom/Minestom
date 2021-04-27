@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -63,30 +63,30 @@ public final class CrimsonButton {
   public static final BlockState CRIMSON_BUTTON_23 = new BlockState(NamespaceID.from("minecraft:crimson_button_23"), (short) 15510, Block.CRIMSON_BUTTON, "face=CEILING","facing=east","powered=false");
 
   static {
-    Registries.registerBlockState(CRIMSON_BUTTON_0);
-    Registries.registerBlockState(CRIMSON_BUTTON_1);
-    Registries.registerBlockState(CRIMSON_BUTTON_2);
-    Registries.registerBlockState(CRIMSON_BUTTON_3);
-    Registries.registerBlockState(CRIMSON_BUTTON_4);
-    Registries.registerBlockState(CRIMSON_BUTTON_5);
-    Registries.registerBlockState(CRIMSON_BUTTON_6);
-    Registries.registerBlockState(CRIMSON_BUTTON_7);
-    Registries.registerBlockState(CRIMSON_BUTTON_8);
-    Registries.registerBlockState(CRIMSON_BUTTON_9);
-    Registries.registerBlockState(CRIMSON_BUTTON_10);
-    Registries.registerBlockState(CRIMSON_BUTTON_11);
-    Registries.registerBlockState(CRIMSON_BUTTON_12);
-    Registries.registerBlockState(CRIMSON_BUTTON_13);
-    Registries.registerBlockState(CRIMSON_BUTTON_14);
-    Registries.registerBlockState(CRIMSON_BUTTON_15);
-    Registries.registerBlockState(CRIMSON_BUTTON_16);
-    Registries.registerBlockState(CRIMSON_BUTTON_17);
-    Registries.registerBlockState(CRIMSON_BUTTON_18);
-    Registries.registerBlockState(CRIMSON_BUTTON_19);
-    Registries.registerBlockState(CRIMSON_BUTTON_20);
-    Registries.registerBlockState(CRIMSON_BUTTON_21);
-    Registries.registerBlockState(CRIMSON_BUTTON_22);
-    Registries.registerBlockState(CRIMSON_BUTTON_23);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_6);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_7);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_8);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_9);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_10);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_11);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_12);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_13);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_14);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_15);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_16);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_17);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_18);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_19);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_20);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_21);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_22);
+    Registry.BLOCK_STATE_REGISTRY.register(CRIMSON_BUTTON_23);
   }
 
   public static void initStates() {

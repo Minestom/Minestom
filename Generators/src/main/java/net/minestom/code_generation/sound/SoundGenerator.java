@@ -20,7 +20,7 @@ import java.util.Objects;
 public final class SoundGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT + "/json", "sounds.json");
+    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "sounds.json");
     private final File soundsFile;
     private final File outputFolder;
 
@@ -50,6 +50,7 @@ public final class SoundGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray sounds;
         try {
@@ -99,10 +100,7 @@ public final class SoundGenerator extends MinestomCodeGenerator {
         soundClass.addMethod(
                 MethodSpec.methodBuilder("getNumericalId")
                         .returns(TypeName.INT)
-                        .addStatement(
-                                "return $T.getSoundEventId(this)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.SOUND_EVENT_REGISTRY.getId(this)", registryClassName)
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -112,10 +110,17 @@ public final class SoundGenerator extends MinestomCodeGenerator {
                         .returns(soundClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.INT, "id")
-                        .addStatement(
-                                "return $T.getSoundEvent(id)",
-                                ClassName.get("net.minestom.server.registry", "Registries")
-                        )
+                        .addStatement("return $T.SOUND_EVENT_REGISTRY.get((short) id)", registryClassName)
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        soundClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(soundClassName)
+                        .addAnnotation(NotNull.class)
+                        .addParameter(ClassName.get("net.kyori.adventure.key", "Key"), "id")
+                        .addStatement("return $T.SOUND_EVENT_REGISTRY.get(id)", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -135,7 +140,7 @@ public final class SoundGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("values")
                         .addAnnotation(NotNull.class)
                         .returns(ParameterizedTypeName.get(ClassName.get(List.class), soundClassName))
-                        .addStatement("return $T.getSoundEvents()", ClassName.get("net.minestom.server.registry", "Registries"))
+                        .addStatement("return $T.SOUND_EVENT_REGISTRY.values()", registryClassName)
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
@@ -159,7 +164,7 @@ public final class SoundGenerator extends MinestomCodeGenerator {
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.
-            staticBlock.addStatement("$T.registerSound($N)", ClassName.get("net.minestom.server.registry", "Registries"), soundName);
+            staticBlock.addStatement("$T.SOUND_EVENT_REGISTRY.register($N)", registryClassName, soundName);
         }
 
         // Write files to outputFolder

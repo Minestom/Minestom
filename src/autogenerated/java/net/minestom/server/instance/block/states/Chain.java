@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -27,12 +27,12 @@ public final class Chain {
   public static final BlockState CHAIN_5 = new BlockState(NamespaceID.from("minecraft:chain_5"), (short) 4734, Block.CHAIN, "axis=z","waterlogged=false");
 
   static {
-    Registries.registerBlockState(CHAIN_0);
-    Registries.registerBlockState(CHAIN_1);
-    Registries.registerBlockState(CHAIN_2);
-    Registries.registerBlockState(CHAIN_3);
-    Registries.registerBlockState(CHAIN_4);
-    Registries.registerBlockState(CHAIN_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CHAIN_5);
   }
 
   public static void initStates() {

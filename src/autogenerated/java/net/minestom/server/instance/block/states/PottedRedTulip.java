@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class PottedRedTulip {
   public static final BlockState POTTED_RED_TULIP_0 = new BlockState(NamespaceID.from("minecraft:potted_red_tulip_0"), (short) 6322, Block.POTTED_RED_TULIP);
 
   static {
-    Registries.registerBlockState(POTTED_RED_TULIP_0);
+    Registry.BLOCK_STATE_REGISTRY.register(POTTED_RED_TULIP_0);
   }
 
   public static void initStates() {

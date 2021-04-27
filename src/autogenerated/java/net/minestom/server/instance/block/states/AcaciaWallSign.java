@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -31,14 +31,14 @@ public final class AcaciaWallSign {
   public static final BlockState ACACIA_WALL_SIGN_7 = new BlockState(NamespaceID.from("minecraft:acacia_wall_sign_7"), (short) 3766, Block.ACACIA_WALL_SIGN, "facing=east","waterlogged=false");
 
   static {
-    Registries.registerBlockState(ACACIA_WALL_SIGN_0);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_1);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_2);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_3);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_4);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_5);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_6);
-    Registries.registerBlockState(ACACIA_WALL_SIGN_7);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_4);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_5);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_6);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_WALL_SIGN_7);
   }
 
   public static void initStates() {

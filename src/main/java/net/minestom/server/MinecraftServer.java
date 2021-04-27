@@ -38,7 +38,7 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.raw_data.DataInitializer;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.sound.SoundEvent;
@@ -77,6 +77,7 @@ public final class MinecraftServer {
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
+    public static final String THREAD_NAME_TICK_SCHEDULER = "Ms-TickScheduler";
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
@@ -160,7 +161,7 @@ public final class MinecraftServer {
         // TODO: automate (probably with code generation)
         // Load Registry
         try {
-            Class.forName(Registries.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(Registry.class.getName(), true, MinecraftServer.class.getClassLoader());
         } catch (ClassNotFoundException e) {
             LOGGER.error("An error happened while loading the registry. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
         }

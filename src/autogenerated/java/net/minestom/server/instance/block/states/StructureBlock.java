@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class StructureBlock {
   public static final BlockState STRUCTURE_BLOCK_3 = new BlockState(NamespaceID.from("minecraft:structure_block_3"), (short) 15746, Block.STRUCTURE_BLOCK, "mode=DATA");
 
   static {
-    Registries.registerBlockState(STRUCTURE_BLOCK_0);
-    Registries.registerBlockState(STRUCTURE_BLOCK_1);
-    Registries.registerBlockState(STRUCTURE_BLOCK_2);
-    Registries.registerBlockState(STRUCTURE_BLOCK_3);
+    Registry.BLOCK_STATE_REGISTRY.register(STRUCTURE_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(STRUCTURE_BLOCK_1);
+    Registry.BLOCK_STATE_REGISTRY.register(STRUCTURE_BLOCK_2);
+    Registry.BLOCK_STATE_REGISTRY.register(STRUCTURE_BLOCK_3);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.command.builder.arguments.minecraft.registry;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentBlockState extends ArgumentRegistry<Block> {
@@ -14,7 +14,7 @@ public class ArgumentBlockState extends ArgumentRegistry<Block> {
 
     @Override
     public Block getRegistry(@NotNull String value) {
-        return Registries.getBlock(value);
+        return Registry.BLOCK_REGISTRY.get(value);
     }
 
     @Override
@@ -23,5 +23,10 @@ public class ArgumentBlockState extends ArgumentRegistry<Block> {
         argumentNode.parser = "minecraft:block_state";
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    }
+
+    @Override
+    public String toString() {
+        return String.format("BlockState<%s>", getId());
     }
 }

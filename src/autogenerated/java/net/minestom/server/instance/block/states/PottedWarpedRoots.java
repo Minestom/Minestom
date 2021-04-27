@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class PottedWarpedRoots {
   public static final BlockState POTTED_WARPED_ROOTS_0 = new BlockState(NamespaceID.from("minecraft:potted_warped_roots_0"), (short) 15845, Block.POTTED_WARPED_ROOTS);
 
   static {
-    Registries.registerBlockState(POTTED_WARPED_ROOTS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(POTTED_WARPED_ROOTS_0);
   }
 
   public static void initStates() {

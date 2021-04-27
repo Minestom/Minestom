@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -47,22 +47,22 @@ public final class Lectern {
   public static final BlockState LECTERN_15 = new BlockState(NamespaceID.from("minecraft:lectern_15"), (short) 14852, Block.LECTERN, "facing=east","has_book=false","powered=false");
 
   static {
-    Registries.registerBlockState(LECTERN_0);
-    Registries.registerBlockState(LECTERN_1);
-    Registries.registerBlockState(LECTERN_2);
-    Registries.registerBlockState(LECTERN_3);
-    Registries.registerBlockState(LECTERN_4);
-    Registries.registerBlockState(LECTERN_5);
-    Registries.registerBlockState(LECTERN_6);
-    Registries.registerBlockState(LECTERN_7);
-    Registries.registerBlockState(LECTERN_8);
-    Registries.registerBlockState(LECTERN_9);
-    Registries.registerBlockState(LECTERN_10);
-    Registries.registerBlockState(LECTERN_11);
-    Registries.registerBlockState(LECTERN_12);
-    Registries.registerBlockState(LECTERN_13);
-    Registries.registerBlockState(LECTERN_14);
-    Registries.registerBlockState(LECTERN_15);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_0);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_1);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_2);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_3);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_4);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_5);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_6);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_7);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_8);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_9);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_10);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_11);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_12);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_13);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_14);
+    Registry.BLOCK_STATE_REGISTRY.register(LECTERN_15);
   }
 
   public static void initStates() {

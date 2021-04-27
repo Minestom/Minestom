@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class DeadBush {
   public static final BlockState DEAD_BUSH_0 = new BlockState(NamespaceID.from("minecraft:dead_bush_0"), (short) 1344, Block.DEAD_BUSH);
 
   static {
-    Registries.registerBlockState(DEAD_BUSH_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DEAD_BUSH_0);
   }
 
   public static void initStates() {

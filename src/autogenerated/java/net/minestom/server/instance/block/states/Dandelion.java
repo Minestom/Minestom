@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class Dandelion {
   public static final BlockState DANDELION_0 = new BlockState(NamespaceID.from("minecraft:dandelion_0"), (short) 1412, Block.DANDELION);
 
   static {
-    Registries.registerBlockState(DANDELION_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DANDELION_0);
   }
 
   public static void initStates() {

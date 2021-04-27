@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -63,30 +63,30 @@ public final class BeeNest {
   public static final BlockState BEE_NEST_23 = new BlockState(NamespaceID.from("minecraft:bee_nest_23"), (short) 15807, Block.BEE_NEST, "facing=east","honey_level=5");
 
   static {
-    Registries.registerBlockState(BEE_NEST_0);
-    Registries.registerBlockState(BEE_NEST_1);
-    Registries.registerBlockState(BEE_NEST_2);
-    Registries.registerBlockState(BEE_NEST_3);
-    Registries.registerBlockState(BEE_NEST_4);
-    Registries.registerBlockState(BEE_NEST_5);
-    Registries.registerBlockState(BEE_NEST_6);
-    Registries.registerBlockState(BEE_NEST_7);
-    Registries.registerBlockState(BEE_NEST_8);
-    Registries.registerBlockState(BEE_NEST_9);
-    Registries.registerBlockState(BEE_NEST_10);
-    Registries.registerBlockState(BEE_NEST_11);
-    Registries.registerBlockState(BEE_NEST_12);
-    Registries.registerBlockState(BEE_NEST_13);
-    Registries.registerBlockState(BEE_NEST_14);
-    Registries.registerBlockState(BEE_NEST_15);
-    Registries.registerBlockState(BEE_NEST_16);
-    Registries.registerBlockState(BEE_NEST_17);
-    Registries.registerBlockState(BEE_NEST_18);
-    Registries.registerBlockState(BEE_NEST_19);
-    Registries.registerBlockState(BEE_NEST_20);
-    Registries.registerBlockState(BEE_NEST_21);
-    Registries.registerBlockState(BEE_NEST_22);
-    Registries.registerBlockState(BEE_NEST_23);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_0);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_1);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_2);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_3);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_4);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_5);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_6);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_7);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_8);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_9);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_10);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_11);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_12);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_13);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_14);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_15);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_16);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_17);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_18);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_19);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_20);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_21);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_22);
+    Registry.BLOCK_STATE_REGISTRY.register(BEE_NEST_23);
   }
 
   public static void initStates() {

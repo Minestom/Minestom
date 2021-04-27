@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class DarkOakPlanks {
   public static final BlockState DARK_OAK_PLANKS_0 = new BlockState(NamespaceID.from("minecraft:dark_oak_planks_0"), (short) 20, Block.DARK_OAK_PLANKS);
 
   static {
-    Registries.registerBlockState(DARK_OAK_PLANKS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DARK_OAK_PLANKS_0);
   }
 
   public static void initStates() {

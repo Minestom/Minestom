@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class NetherBrickFence {
   public static final BlockState NETHER_BRICK_FENCE_31 = new BlockState(NamespaceID.from("minecraft:nether_brick_fence_31"), (short) 5051, Block.NETHER_BRICK_FENCE, "east=false","north=false","south=false","waterlogged=false","west=false");
 
   static {
-    Registries.registerBlockState(NETHER_BRICK_FENCE_0);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_1);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_2);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_3);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_4);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_5);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_6);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_7);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_8);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_9);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_10);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_11);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_12);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_13);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_14);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_15);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_16);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_17);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_18);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_19);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_20);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_21);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_22);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_23);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_24);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_25);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_26);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_27);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_28);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_29);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_30);
-    Registries.registerBlockState(NETHER_BRICK_FENCE_31);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_16);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_17);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_18);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_19);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_20);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_21);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_22);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_23);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_24);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_25);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_26);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_27);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_28);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_29);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_30);
+    Registry.BLOCK_STATE_REGISTRY.register(NETHER_BRICK_FENCE_31);
   }
 
   public static void initStates() {

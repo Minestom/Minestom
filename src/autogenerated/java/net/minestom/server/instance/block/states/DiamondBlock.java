@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class DiamondBlock {
   public static final BlockState DIAMOND_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:diamond_block_0"), (short) 3355, Block.DIAMOND_BLOCK);
 
   static {
-    Registries.registerBlockState(DIAMOND_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(DIAMOND_BLOCK_0);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class HoneycombBlock {
   public static final BlockState HONEYCOMB_BLOCK_0 = new BlockState(NamespaceID.from("minecraft:honeycomb_block_0"), (short) 15833, Block.HONEYCOMB_BLOCK);
 
   static {
-    Registries.registerBlockState(HONEYCOMB_BLOCK_0);
+    Registry.BLOCK_STATE_REGISTRY.register(HONEYCOMB_BLOCK_0);
   }
 
   public static void initStates() {

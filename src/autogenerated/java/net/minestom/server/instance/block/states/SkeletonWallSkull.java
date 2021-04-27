@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class SkeletonWallSkull {
   public static final BlockState SKELETON_WALL_SKULL_3 = new BlockState(NamespaceID.from("minecraft:skeleton_wall_skull_3"), (short) 6513, Block.SKELETON_WALL_SKULL, "facing=east");
 
   static {
-    Registries.registerBlockState(SKELETON_WALL_SKULL_0);
-    Registries.registerBlockState(SKELETON_WALL_SKULL_1);
-    Registries.registerBlockState(SKELETON_WALL_SKULL_2);
-    Registries.registerBlockState(SKELETON_WALL_SKULL_3);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_WALL_SKULL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_WALL_SKULL_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_WALL_SKULL_2);
+    Registry.BLOCK_STATE_REGISTRY.register(SKELETON_WALL_SKULL_3);
   }
 
   public static void initStates() {

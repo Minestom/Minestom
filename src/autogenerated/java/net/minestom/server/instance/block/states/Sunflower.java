@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class Sunflower {
   public static final BlockState SUNFLOWER_1 = new BlockState(NamespaceID.from("minecraft:sunflower_1"), (short) 7890, Block.SUNFLOWER, "half=lower");
 
   static {
-    Registries.registerBlockState(SUNFLOWER_0);
-    Registries.registerBlockState(SUNFLOWER_1);
+    Registry.BLOCK_STATE_REGISTRY.register(SUNFLOWER_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SUNFLOWER_1);
   }
 
   public static void initStates() {

@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -79,38 +79,38 @@ public final class Campfire {
   public static final BlockState CAMPFIRE_31 = new BlockState(NamespaceID.from("minecraft:campfire_31"), (short) 14929, Block.CAMPFIRE, "facing=east","lit=false","signal_fire=false","waterlogged=false");
 
   static {
-    Registries.registerBlockState(CAMPFIRE_0);
-    Registries.registerBlockState(CAMPFIRE_1);
-    Registries.registerBlockState(CAMPFIRE_2);
-    Registries.registerBlockState(CAMPFIRE_3);
-    Registries.registerBlockState(CAMPFIRE_4);
-    Registries.registerBlockState(CAMPFIRE_5);
-    Registries.registerBlockState(CAMPFIRE_6);
-    Registries.registerBlockState(CAMPFIRE_7);
-    Registries.registerBlockState(CAMPFIRE_8);
-    Registries.registerBlockState(CAMPFIRE_9);
-    Registries.registerBlockState(CAMPFIRE_10);
-    Registries.registerBlockState(CAMPFIRE_11);
-    Registries.registerBlockState(CAMPFIRE_12);
-    Registries.registerBlockState(CAMPFIRE_13);
-    Registries.registerBlockState(CAMPFIRE_14);
-    Registries.registerBlockState(CAMPFIRE_15);
-    Registries.registerBlockState(CAMPFIRE_16);
-    Registries.registerBlockState(CAMPFIRE_17);
-    Registries.registerBlockState(CAMPFIRE_18);
-    Registries.registerBlockState(CAMPFIRE_19);
-    Registries.registerBlockState(CAMPFIRE_20);
-    Registries.registerBlockState(CAMPFIRE_21);
-    Registries.registerBlockState(CAMPFIRE_22);
-    Registries.registerBlockState(CAMPFIRE_23);
-    Registries.registerBlockState(CAMPFIRE_24);
-    Registries.registerBlockState(CAMPFIRE_25);
-    Registries.registerBlockState(CAMPFIRE_26);
-    Registries.registerBlockState(CAMPFIRE_27);
-    Registries.registerBlockState(CAMPFIRE_28);
-    Registries.registerBlockState(CAMPFIRE_29);
-    Registries.registerBlockState(CAMPFIRE_30);
-    Registries.registerBlockState(CAMPFIRE_31);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_1);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_2);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_3);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_4);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_5);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_6);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_7);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_8);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_9);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_10);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_11);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_12);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_13);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_14);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_15);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_16);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_17);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_18);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_19);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_20);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_21);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_22);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_23);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_24);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_25);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_26);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_27);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_28);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_29);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_30);
+    Registry.BLOCK_STATE_REGISTRY.register(CAMPFIRE_31);
   }
 
   public static void initStates() {

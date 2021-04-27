@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class Grass {
   public static final BlockState GRASS_0 = new BlockState(NamespaceID.from("minecraft:grass_0"), (short) 1342, Block.GRASS);
 
   static {
-    Registries.registerBlockState(GRASS_0);
+    Registry.BLOCK_STATE_REGISTRY.register(GRASS_0);
   }
 
   public static void initStates() {

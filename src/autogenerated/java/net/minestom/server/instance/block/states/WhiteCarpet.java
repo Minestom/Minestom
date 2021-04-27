@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class WhiteCarpet {
   public static final BlockState WHITE_CARPET_0 = new BlockState(NamespaceID.from("minecraft:white_carpet_0"), (short) 7870, Block.WHITE_CARPET);
 
   static {
-    Registries.registerBlockState(WHITE_CARPET_0);
+    Registry.BLOCK_STATE_REGISTRY.register(WHITE_CARPET_0);
   }
 
   public static void initStates() {

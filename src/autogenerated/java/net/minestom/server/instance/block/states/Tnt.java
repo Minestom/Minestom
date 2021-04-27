@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -19,8 +19,8 @@ public final class Tnt {
   public static final BlockState TNT_1 = new BlockState(NamespaceID.from("minecraft:tnt_1"), (short) 1431, Block.TNT, "unstable=false");
 
   static {
-    Registries.registerBlockState(TNT_0);
-    Registries.registerBlockState(TNT_1);
+    Registry.BLOCK_STATE_REGISTRY.register(TNT_0);
+    Registry.BLOCK_STATE_REGISTRY.register(TNT_1);
   }
 
   public static void initStates() {

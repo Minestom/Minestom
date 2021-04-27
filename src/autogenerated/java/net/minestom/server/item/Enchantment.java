@@ -6,7 +6,7 @@ import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.raw_data.RawEnchantmentData;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -92,44 +92,44 @@ public class Enchantment implements Keyed {
   public static final Enchantment VANISHING_CURSE = new Enchantment(NamespaceID.from("minecraft:vanishing_curse"));
 
   static {
-    Registries.registerEnchantment(ALL_DAMAGE_PROTECTION);
-    Registries.registerEnchantment(FIRE_PROTECTION);
-    Registries.registerEnchantment(FALL_PROTECTION);
-    Registries.registerEnchantment(BLAST_PROTECTION);
-    Registries.registerEnchantment(PROJECTILE_PROTECTION);
-    Registries.registerEnchantment(RESPIRATION);
-    Registries.registerEnchantment(AQUA_AFFINITY);
-    Registries.registerEnchantment(THORNS);
-    Registries.registerEnchantment(DEPTH_STRIDER);
-    Registries.registerEnchantment(FROST_WALKER);
-    Registries.registerEnchantment(BINDING_CURSE);
-    Registries.registerEnchantment(SOUL_SPEED);
-    Registries.registerEnchantment(SHARPNESS);
-    Registries.registerEnchantment(SMITE);
-    Registries.registerEnchantment(BANE_OF_ARTHROPODS);
-    Registries.registerEnchantment(KNOCKBACK);
-    Registries.registerEnchantment(FIRE_ASPECT);
-    Registries.registerEnchantment(MOB_LOOTING);
-    Registries.registerEnchantment(SWEEPING_EDGE);
-    Registries.registerEnchantment(BLOCK_EFFICIENCY);
-    Registries.registerEnchantment(SILK_TOUCH);
-    Registries.registerEnchantment(UNBREAKING);
-    Registries.registerEnchantment(BLOCK_FORTUNE);
-    Registries.registerEnchantment(POWER_ARROWS);
-    Registries.registerEnchantment(PUNCH_ARROWS);
-    Registries.registerEnchantment(FLAMING_ARROWS);
-    Registries.registerEnchantment(INFINITY_ARROWS);
-    Registries.registerEnchantment(FISHING_LUCK);
-    Registries.registerEnchantment(FISHING_SPEED);
-    Registries.registerEnchantment(LOYALTY);
-    Registries.registerEnchantment(IMPALING);
-    Registries.registerEnchantment(RIPTIDE);
-    Registries.registerEnchantment(CHANNELING);
-    Registries.registerEnchantment(MULTISHOT);
-    Registries.registerEnchantment(QUICK_CHARGE);
-    Registries.registerEnchantment(PIERCING);
-    Registries.registerEnchantment(MENDING);
-    Registries.registerEnchantment(VANISHING_CURSE);
+    Registry.ENCHANTMENT_REGISTRY.register(ALL_DAMAGE_PROTECTION);
+    Registry.ENCHANTMENT_REGISTRY.register(FIRE_PROTECTION);
+    Registry.ENCHANTMENT_REGISTRY.register(FALL_PROTECTION);
+    Registry.ENCHANTMENT_REGISTRY.register(BLAST_PROTECTION);
+    Registry.ENCHANTMENT_REGISTRY.register(PROJECTILE_PROTECTION);
+    Registry.ENCHANTMENT_REGISTRY.register(RESPIRATION);
+    Registry.ENCHANTMENT_REGISTRY.register(AQUA_AFFINITY);
+    Registry.ENCHANTMENT_REGISTRY.register(THORNS);
+    Registry.ENCHANTMENT_REGISTRY.register(DEPTH_STRIDER);
+    Registry.ENCHANTMENT_REGISTRY.register(FROST_WALKER);
+    Registry.ENCHANTMENT_REGISTRY.register(BINDING_CURSE);
+    Registry.ENCHANTMENT_REGISTRY.register(SOUL_SPEED);
+    Registry.ENCHANTMENT_REGISTRY.register(SHARPNESS);
+    Registry.ENCHANTMENT_REGISTRY.register(SMITE);
+    Registry.ENCHANTMENT_REGISTRY.register(BANE_OF_ARTHROPODS);
+    Registry.ENCHANTMENT_REGISTRY.register(KNOCKBACK);
+    Registry.ENCHANTMENT_REGISTRY.register(FIRE_ASPECT);
+    Registry.ENCHANTMENT_REGISTRY.register(MOB_LOOTING);
+    Registry.ENCHANTMENT_REGISTRY.register(SWEEPING_EDGE);
+    Registry.ENCHANTMENT_REGISTRY.register(BLOCK_EFFICIENCY);
+    Registry.ENCHANTMENT_REGISTRY.register(SILK_TOUCH);
+    Registry.ENCHANTMENT_REGISTRY.register(UNBREAKING);
+    Registry.ENCHANTMENT_REGISTRY.register(BLOCK_FORTUNE);
+    Registry.ENCHANTMENT_REGISTRY.register(POWER_ARROWS);
+    Registry.ENCHANTMENT_REGISTRY.register(PUNCH_ARROWS);
+    Registry.ENCHANTMENT_REGISTRY.register(FLAMING_ARROWS);
+    Registry.ENCHANTMENT_REGISTRY.register(INFINITY_ARROWS);
+    Registry.ENCHANTMENT_REGISTRY.register(FISHING_LUCK);
+    Registry.ENCHANTMENT_REGISTRY.register(FISHING_SPEED);
+    Registry.ENCHANTMENT_REGISTRY.register(LOYALTY);
+    Registry.ENCHANTMENT_REGISTRY.register(IMPALING);
+    Registry.ENCHANTMENT_REGISTRY.register(RIPTIDE);
+    Registry.ENCHANTMENT_REGISTRY.register(CHANNELING);
+    Registry.ENCHANTMENT_REGISTRY.register(MULTISHOT);
+    Registry.ENCHANTMENT_REGISTRY.register(QUICK_CHARGE);
+    Registry.ENCHANTMENT_REGISTRY.register(PIERCING);
+    Registry.ENCHANTMENT_REGISTRY.register(MENDING);
+    Registry.ENCHANTMENT_REGISTRY.register(VANISHING_CURSE);
   }
 
   @NotNull
@@ -154,12 +154,17 @@ public class Enchantment implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getEnchantmentId(this);
+    return Registry.ENCHANTMENT_REGISTRY.getId(this);
   }
 
   @Nullable
   public static Enchantment fromId(int id) {
-    return Registries.getEnchantment(id);
+    return Registry.ENCHANTMENT_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static Enchantment fromId(Key id) {
+    return Registry.ENCHANTMENT_REGISTRY.get(id);
   }
 
   @NotNull
@@ -175,6 +180,6 @@ public class Enchantment implements Keyed {
 
   @NotNull
   public static List<Enchantment> values() {
-    return Registries.getEnchantments();
+    return Registry.ENCHANTMENT_REGISTRY.values();
   }
 }

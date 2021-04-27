@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class CyanWool {
   public static final BlockState CYAN_WOOL_0 = new BlockState(NamespaceID.from("minecraft:cyan_wool_0"), (short) 1393, Block.CYAN_WOOL);
 
   static {
-    Registries.registerBlockState(CYAN_WOOL_0);
+    Registry.BLOCK_STATE_REGISTRY.register(CYAN_WOOL_0);
   }
 
   public static void initStates() {

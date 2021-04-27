@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -23,10 +23,10 @@ public final class ZombieWallHead {
   public static final BlockState ZOMBIE_WALL_HEAD_3 = new BlockState(NamespaceID.from("minecraft:zombie_wall_head_3"), (short) 6553, Block.ZOMBIE_WALL_HEAD, "facing=east");
 
   static {
-    Registries.registerBlockState(ZOMBIE_WALL_HEAD_0);
-    Registries.registerBlockState(ZOMBIE_WALL_HEAD_1);
-    Registries.registerBlockState(ZOMBIE_WALL_HEAD_2);
-    Registries.registerBlockState(ZOMBIE_WALL_HEAD_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_WALL_HEAD_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_WALL_HEAD_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_WALL_HEAD_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ZOMBIE_WALL_HEAD_3);
   }
 
   public static void initStates() {

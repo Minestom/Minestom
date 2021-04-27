@@ -83,4 +83,9 @@ public class ArgumentRelativeVec3 extends ArgumentRelative<RelativeVec> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("RelativeVec3<%s>", getId());
+    }
 }

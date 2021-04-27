@@ -6,7 +6,7 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,19 +41,19 @@ public class Attribute implements Keyed {
   public static final Attribute JUMP_STRENGTH = new ClampedAttribute(NamespaceID.from("minecraft:horse.jump_strength"), true, 0.7, 0.0, 2.0);
 
   static {
-    Registries.registerAttribute(MAX_HEALTH);
-    Registries.registerAttribute(FOLLOW_RANGE);
-    Registries.registerAttribute(KNOCKBACK_RESISTANCE);
-    Registries.registerAttribute(MOVEMENT_SPEED);
-    Registries.registerAttribute(FLYING_SPEED);
-    Registries.registerAttribute(ATTACK_DAMAGE);
-    Registries.registerAttribute(ATTACK_KNOCKBACK);
-    Registries.registerAttribute(ATTACK_SPEED);
-    Registries.registerAttribute(ARMOR);
-    Registries.registerAttribute(ARMOR_TOUGHNESS);
-    Registries.registerAttribute(LUCK);
-    Registries.registerAttribute(SPAWN_REINFORCEMENTS_CHANCE);
-    Registries.registerAttribute(JUMP_STRENGTH);
+    Registry.ATTRIBUTE_REGISTRY.register(MAX_HEALTH);
+    Registry.ATTRIBUTE_REGISTRY.register(FOLLOW_RANGE);
+    Registry.ATTRIBUTE_REGISTRY.register(KNOCKBACK_RESISTANCE);
+    Registry.ATTRIBUTE_REGISTRY.register(MOVEMENT_SPEED);
+    Registry.ATTRIBUTE_REGISTRY.register(FLYING_SPEED);
+    Registry.ATTRIBUTE_REGISTRY.register(ATTACK_DAMAGE);
+    Registry.ATTRIBUTE_REGISTRY.register(ATTACK_KNOCKBACK);
+    Registry.ATTRIBUTE_REGISTRY.register(ATTACK_SPEED);
+    Registry.ATTRIBUTE_REGISTRY.register(ARMOR);
+    Registry.ATTRIBUTE_REGISTRY.register(ARMOR_TOUGHNESS);
+    Registry.ATTRIBUTE_REGISTRY.register(LUCK);
+    Registry.ATTRIBUTE_REGISTRY.register(SPAWN_REINFORCEMENTS_CHANCE);
+    Registry.ATTRIBUTE_REGISTRY.register(JUMP_STRENGTH);
   }
 
   @NotNull
@@ -95,7 +95,7 @@ public class Attribute implements Keyed {
 
   @NotNull
   public static List<Attribute> values() {
-    return Registries.getAttributes();
+    return Registry.ATTRIBUTE_REGISTRY.values();
   }
 
   @NotNull

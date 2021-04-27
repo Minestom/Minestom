@@ -5,7 +5,7 @@ import java.lang.String;
 import java.util.List;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,13 +29,13 @@ public class VillagerType implements Keyed {
   public static final VillagerType TAIGA = new VillagerType(NamespaceID.from("minecraft:taiga"));
 
   static {
-    Registries.registerVillagerType(DESERT);
-    Registries.registerVillagerType(JUNGLE);
-    Registries.registerVillagerType(PLAINS);
-    Registries.registerVillagerType(SAVANNA);
-    Registries.registerVillagerType(SNOW);
-    Registries.registerVillagerType(SWAMP);
-    Registries.registerVillagerType(TAIGA);
+    Registry.VILLAGER_TYPE_REGISTRY.register(DESERT);
+    Registry.VILLAGER_TYPE_REGISTRY.register(JUNGLE);
+    Registry.VILLAGER_TYPE_REGISTRY.register(PLAINS);
+    Registry.VILLAGER_TYPE_REGISTRY.register(SAVANNA);
+    Registry.VILLAGER_TYPE_REGISTRY.register(SNOW);
+    Registry.VILLAGER_TYPE_REGISTRY.register(SWAMP);
+    Registry.VILLAGER_TYPE_REGISTRY.register(TAIGA);
   }
 
   @NotNull
@@ -57,12 +57,17 @@ public class VillagerType implements Keyed {
   }
 
   public int getNumericalId() {
-    return Registries.getVillagerTypeId(this);
+    return Registry.VILLAGER_TYPE_REGISTRY.getId(this);
   }
 
   @Nullable
   public static VillagerType fromId(int id) {
-    return Registries.getVillagerType(id);
+    return Registry.VILLAGER_TYPE_REGISTRY.get((short) id);
+  }
+
+  @NotNull
+  public static VillagerType fromId(Key id) {
+    return Registry.VILLAGER_TYPE_REGISTRY.get(id);
   }
 
   @NotNull
@@ -73,6 +78,6 @@ public class VillagerType implements Keyed {
 
   @NotNull
   public static List<VillagerType> values() {
-    return Registries.getVillagerTypes();
+    return Registry.VILLAGER_TYPE_REGISTRY.values();
   }
 }

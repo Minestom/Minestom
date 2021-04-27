@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/template_shulker_box",
-  "textures": {
-    "particle": "minecraft:block/gray_shulker_box"
-  }
-}

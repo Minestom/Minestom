@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -43,20 +43,20 @@ public final class AcaciaLeaves {
   public static final BlockState ACACIA_LEAVES_13 = new BlockState(NamespaceID.from("minecraft:acacia_leaves_13"), (short) 214, Block.ACACIA_LEAVES, "distance=7","persistent=false");
 
   static {
-    Registries.registerBlockState(ACACIA_LEAVES_0);
-    Registries.registerBlockState(ACACIA_LEAVES_1);
-    Registries.registerBlockState(ACACIA_LEAVES_2);
-    Registries.registerBlockState(ACACIA_LEAVES_3);
-    Registries.registerBlockState(ACACIA_LEAVES_4);
-    Registries.registerBlockState(ACACIA_LEAVES_5);
-    Registries.registerBlockState(ACACIA_LEAVES_6);
-    Registries.registerBlockState(ACACIA_LEAVES_7);
-    Registries.registerBlockState(ACACIA_LEAVES_8);
-    Registries.registerBlockState(ACACIA_LEAVES_9);
-    Registries.registerBlockState(ACACIA_LEAVES_10);
-    Registries.registerBlockState(ACACIA_LEAVES_11);
-    Registries.registerBlockState(ACACIA_LEAVES_12);
-    Registries.registerBlockState(ACACIA_LEAVES_13);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_0);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_1);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_2);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_3);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_4);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_5);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_6);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_7);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_8);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_9);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_10);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_11);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_12);
+    Registry.BLOCK_STATE_REGISTRY.register(ACACIA_LEAVES_13);
   }
 
   public static void initStates() {

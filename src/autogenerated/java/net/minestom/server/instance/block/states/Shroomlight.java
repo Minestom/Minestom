@@ -3,7 +3,7 @@ package net.minestom.server.instance.block.states;
 import java.lang.Deprecated;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 
 /**
@@ -17,7 +17,7 @@ public final class Shroomlight {
   public static final BlockState SHROOMLIGHT_0 = new BlockState(NamespaceID.from("minecraft:shroomlight_0"), (short) 14997, Block.SHROOMLIGHT);
 
   static {
-    Registries.registerBlockState(SHROOMLIGHT_0);
+    Registry.BLOCK_STATE_REGISTRY.register(SHROOMLIGHT_0);
   }
 
   public static void initStates() {
