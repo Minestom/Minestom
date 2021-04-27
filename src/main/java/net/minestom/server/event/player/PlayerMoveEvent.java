@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
 
-    private Position newPosition;
+    private final Position newPosition;
 
     private boolean cancelled;
 
@@ -36,7 +36,7 @@ public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
      * @param newPosition the new target position
      */
     public void setNewPosition(@NotNull Position newPosition) {
-        this.newPosition = newPosition;
+        this.newPosition.set(newPosition);
     }
 
     @Override

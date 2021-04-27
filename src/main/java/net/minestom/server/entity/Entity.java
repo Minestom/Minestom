@@ -65,30 +65,40 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
     protected Instance instance;
     protected final Position position;
-    protected double lastX, lastY, lastZ;
-    protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
-    protected float lastYaw, lastPitch;
-    protected float cacheYaw, cachePitch;
+    /**
+     * Used to check if any change made to the {@link Entity#position} field since
+     * the last packets sent
+     */
+    protected final Position lastSyncedPosition;
+    /**
+     * Used to compute delta movement, updated every tick
+     */
+    protected final Position lastPosition;
+    /**
+     * Used only in {@link #tick(long)} method, but extracted to avoid instantiating
+     * {@link Position} every tick, this results in less heap usage and slightly faster
+     * execution speed
+     */
+    private final Position positionAtTickStart = new Position();
     protected boolean onGround;
 
     private BoundingBox boundingBox;
 
     protected Entity vehicle;
 
-    // Velocity
+    // Movement
     protected Vector velocity = new Vector(); // Movement velocity in blocks per tick
     protected boolean isVelocityDirty = false;
     protected boolean hasPhysics = true;
 
+    /**
+     * Minimum velocity that can be sent in a {@link EntityPositionPacket}
+     */
+    private static final double minimumVelocity = 1/8E3;
+
     protected double gravityDragPerTick;
     protected double gravityAcceleration;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
-    /*
-    true if the gravity values are the same as in vanilla,
-    in that case we don't send velocity change packets every
-    tick since the client should be aware of it
-     */
-    private boolean hasVanillaGravity = false;
 
     private boolean autoViewable;
     private final int id;
@@ -98,7 +108,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
-    private boolean isActive; // False if entity has only been instanced without being added somewhere
+    /**
+     * Used to immediately return from {@link #tick(long)} if {@code true}
+     * <p>
+     * {@code false} if the entity has no instance set or if it's a {@link Player} and
+     * didn't received the spawning chunks
+     */
+    private boolean isActive;
     private boolean removed;
     private boolean shouldRemove;
     private long scheduledRemoveTime;
@@ -107,7 +123,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
     // Network synchronization, send the absolute position of the entity each X milliseconds
-    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
+    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1, TimeUnit.MINUTE);
     private UpdateOption customSynchronizationCooldown;
     private long lastAbsoluteSynchronizationTime;
 
@@ -127,6 +143,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
+    private final boolean isNettyClient;
+
     /**
      * Lock used to support #switchEntityType
      */
@@ -137,6 +155,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         this.entityType = entityType;
         this.uuid = uuid;
         this.position = new Position();
+        this.lastSyncedPosition = new Position();
+        this.lastPosition = new Position();
 
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
 
@@ -144,6 +164,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         setAutoViewable(true);
         setGravity(entityType.getGravityDrag(), entityType.getGravityAcceleration());
+
+        this.isNettyClient = PlayerUtils.isNettyClient(this);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
@@ -157,9 +179,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this(entityType, uuid);
         this.position.set(spawnPosition);
-        this.lastX = spawnPosition.getX();
-        this.lastY = spawnPosition.getY();
-        this.lastZ = spawnPosition.getZ();
+        this.lastPosition.set(spawnPosition);
     }
 
     @Deprecated
@@ -234,6 +254,13 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     /**
+     * Should be only used by Minestom internals.
+     */
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
+    }
+
+    /**
      * Gets metadata of this entity.
      * You may want to cast it to specific implementation.
      *
@@ -243,6 +270,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public EntityMeta getEntityMeta() {
         return this.entityMeta;
     }
+
+    //region position
 
     /**
      * Teleports the entity only if the chunk at {@code position} is loaded or if
@@ -258,19 +287,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
-        final Position teleportPosition = position.clone(); // Prevent synchronization issue
-
         final ChunkCallback endCallback = (chunk) -> {
-            refreshPosition(teleportPosition);
-            refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
+            refreshPosition(position);
+            refreshView(position.getYaw(), position.getPitch());
 
-            sendSynchronization();
+            sendTeleportPacket();
 
             OptionalCallback.execute(callback);
         };
 
         if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(teleportPosition, endCallback);
+            instance.loadOptionalChunk(position, endCallback);
         } else {
             ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
         }
@@ -284,15 +311,152 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         teleport(position, null);
     }
 
+
+    /**
+     * Used to refresh the entity and its passengers position
+     * - put the entity in the right instance chunk
+     * - update the viewable chunks (load and unload)
+     * - add/remove players from the viewers list if {@link #isAutoViewable()} is enabled
+     * <p>
+     * WARNING: unsafe, should only be used internally in Minestom. Use {@link #teleport(Position)} instead.
+     *
+     * @param x new position X
+     * @param y new position Y
+     * @param z new position Z
+     */
+    public void refreshPosition(final double x, final double y, final double z) {
+        position.setX(x);
+        position.setY(y);
+        position.setZ(z);
+        lastSyncedPosition.setX(x);
+        lastSyncedPosition.setY(y);
+        lastSyncedPosition.setZ(z);
+
+        refreshPosition();
+    }
+
+    /**
+     * Originally was {@link #refreshPosition(double, double, double)}
+     * now it uses the {@link #position} field and doesn't update the
+     * {@link #lastSyncedPosition} field, for that use the original
+     * {@link #refreshPosition(double, double, double)} method
+     */
+    public void refreshPosition() {
+        if (hasPassenger()) {
+            for (Entity passenger : getPassengers()) {
+                passenger.refreshPosition(position);
+            }
+        }
+
+        final Instance instance = getInstance();
+        if (instance != null) {
+            final Chunk lastChunk = instance.getChunkAt(lastPosition);
+            final Chunk newChunk = instance.getChunkAt(position.getX(), position.getZ());
+
+            Check.notNull(lastChunk, "The entity {0} was in an unloaded chunk at {1}", getEntityId(), lastPosition);
+            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), position);
+
+            if (lastChunk != newChunk) {
+                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
+                if (this instanceof Player) {
+                    // Refresh player view
+                    final Player player = (Player) this;
+                    player.refreshVisibleChunks(newChunk);
+                    player.refreshVisibleEntities(newChunk);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param position the new position
+     * @see #refreshPosition(double, double, double)
+     */
+    public void refreshPosition(@NotNull final Position position) {
+        refreshPosition(position.getX(), position.getY(), position.getZ());
+    }
+
+    /**
+     * Sends the correct packets to update the entity's position, should be called
+     * every tick. The movement is checked inside the method!
+     * <p>
+     *     The following packets are sent to viewers (check are performed in this order):
+     *     <ol>
+     *         <li>{@link EntityTeleportPacket} if <pre>distanceX > 8 || distanceY > 8 || distanceZ > 8</pre>
+     *          <i>(performed using {@link #sendTeleportPacket()})</i></li>
+     *         <li>{@link EntityPositionAndRotationPacket} if <pre>positionChange && viewChange</pre></li>
+     *         <li>{@link EntityPositionPacket} if <pre>positionChange</pre></li>
+     *         <li>{@link EntityRotationPacket} if <pre>viewChange</pre>
+     *          <i>(performed using {@link #setView(float, float)})</i></li>
+     *     </ol>
+     *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
+     *     is sent to self.
+     */
+    protected void sendPositionUpdate() {
+        final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
+        final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
+        final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
+        final double distanceZ = Math.abs(position.getZ()-lastSyncedPosition.getZ());
+        final boolean positionChange = (distanceX+distanceY+distanceZ) > 0;
+
+        if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
+            sendTeleportPacket();
+            // #sendTeleportPacket sets sync fields, it's safe to return
+            return;
+        } else if (positionChange && viewChange) {
+            EntityPositionAndRotationPacket positionAndRotationPacket = EntityPositionAndRotationPacket
+                    .getPacket(getEntityId(), position, lastSyncedPosition, isOnGround());
+            sendPacketToViewers(positionAndRotationPacket);
+
+            // Fix head rotation
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            sendPacketToViewersAndSelf(entityHeadLookPacket);
+        } else if (positionChange) {
+            final EntityPositionPacket entityPositionPacket = EntityPositionPacket
+                    .getPacket(getEntityId(), position, lastSyncedPosition, onGround);
+            sendPacketToViewers(entityPositionPacket);
+        } else if (viewChange) {
+            setView(position.getYaw(), position.getPitch());
+            /*
+            #setView indirectly sets last sync field and it appears that EntityRotation packet
+            can be used for players as well, so it's safe to return
+             */
+            return;
+        } else {
+            // Nothing changed, return
+            return;
+        }
+
+        /*
+        Position or view changed by the server, but since the vanilla server trusts (or at least doesn't modify)
+        the client's position other than teleportation it seems that the most appropriate packet would be the
+        PlayerPositionAndLook packet (0x34 S2C) which contains both the position and the view.
+        The position is sent as a relative value, while the view is sent as an absolute value.
+         */
+        if (isNettyClient) {
+            final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
+            playerPositionAndLookPacket.flags = 0b111;
+            playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
+            playerPositionAndLookPacket.teleportId = ((Player)this).getNextTeleportId();
+            sendPacketToSelf(playerPositionAndLookPacket);
+        }
+
+        lastSyncedPosition.set(position);
+    }
+
+    //endregion position
+
+    //region view
+
     /**
      * Changes the view of the entity.
      *
      * @param yaw   the new yaw
      * @param pitch the new pitch
      */
-    public void setView(float yaw, float pitch) {
-        refreshView(yaw, pitch);
-
+    public void setView(final float yaw, final float pitch) {
         EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
         entityRotationPacket.entityId = getEntityId();
         entityRotationPacket.yaw = yaw;
@@ -305,6 +469,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         sendPacketToViewersAndSelf(entityHeadLookPacket);
         sendPacketToViewersAndSelf(entityRotationPacket);
+
+        // Update fields
+        refreshView(yaw, pitch);
     }
 
     /**
@@ -316,6 +483,23 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void setView(@NotNull Position position) {
         setView(position.getYaw(), position.getPitch());
     }
+
+    /**
+     * Updates the entity view internally. Used by packet listeners.
+     * <p>
+     * Warning: you probably want to use {@link #setView(float, float)}.
+     *
+     * @param yaw   the yaw
+     * @param pitch the pitch
+     */
+    public void refreshView(final float yaw, final float pitch) {
+        position.setYaw(yaw);
+        position.setPitch(pitch);
+        lastSyncedPosition.setYaw(yaw);
+        lastSyncedPosition.setPitch(pitch);
+    }
+
+    //endregion view
 
     /**
      * When set to true, the entity will automatically get new viewers when they come too close.
@@ -445,35 +629,40 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     /**
      * Updates the entity, called every tick.
      * <p>
-     * Ignored if {@link #getInstance()} returns null.
+     * Ignored if {@link #isActive} is {@code false}.
      *
      * @param time the update time in milliseconds
      */
     public void tick(long time) {
-        if (instance == null)
-            return;
+        // Tick conditions
+        {
+            if (!isActive)
+                return;
 
-        // Scheduled remove
-        if (scheduledRemoveTime != 0) {
-            final boolean finished = time >= scheduledRemoveTime;
-            if (finished) {
+            // Scheduled remove
+            if (scheduledRemoveTime != 0) {
+                final boolean finished = time >= scheduledRemoveTime;
+                if (finished) {
+                    remove();
+                    return;
+                }
+            }
+
+            // Instant remove
+            if (shouldRemove()) {
                 remove();
+                return;
+            }
+
+            // Check if the entity chunk is loaded
+            final Chunk currentChunk = getChunk();
+            if (!ChunkUtils.isLoaded(currentChunk)) {
+                // No update for entities in unloaded chunk
                 return;
             }
         }
 
-        // Instant remove
-        if (shouldRemove()) {
-            remove();
-            return;
-        }
-
-        // Check if the entity chunk is loaded
-        final Chunk currentChunk = getChunk();
-        if (!ChunkUtils.isLoaded(currentChunk)) {
-            // No update for entities in unloaded chunk
-            return;
-        }
+        positionAtTickStart.set(position);
 
         // scheduled tasks
         if (!nextTick.isEmpty()) {
@@ -481,52 +670,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             while ((callback = nextTick.poll()) != null) {
                 callback.accept(this);
             }
-        }
-
-        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
-        final Position posAtTickStart = position.clone();
-
-        // Synchronization with updated fields in #getPosition()
-        {
-            final boolean positionChange = cacheX != position.getX() ||
-                    cacheY != position.getY() ||
-                    cacheZ != position.getZ();
-            final boolean viewChange = cacheYaw != position.getYaw() ||
-                    cachePitch != position.getPitch();
-            final double distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
-
-            if (distance >= 8 || (positionChange && isNettyClient)) {
-                // Teleport has the priority over everything else
-                teleport(position);
-            } else if (positionChange && viewChange) {
-                EntityPositionAndRotationPacket positionAndRotationPacket =
-                        EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                                position, new Position(cacheX, cacheY, cacheZ), isOnGround());
-
-                sendPacketToViewersAndSelf(positionAndRotationPacket);
-
-                refreshPosition(position.clone());
-
-                // Fix head rotation
-                EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-                entityHeadLookPacket.entityId = getEntityId();
-                entityHeadLookPacket.yaw = position.getYaw();
-
-                sendPacketToViewersAndSelf(entityHeadLookPacket);
-
-            } else if (positionChange) {
-                EntityPositionPacket entityPositionPacket = EntityPositionPacket.getPacket(getEntityId(),
-                        position, new Position(cacheX, cacheY, cacheZ), isOnGround());
-
-                sendPacketToViewersAndSelf(entityPositionPacket);
-
-                refreshPosition(position.clone());
-
-            } else if (viewChange) {
-                // Yaw/Pitch
-                setView(position);
-            }
-
         }
 
         // Entity tick
@@ -544,26 +687,16 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 gravityTickCount = 0;
             }
 
-            // Velocity
-            boolean applyVelocity;
-            // Non-player entities with either velocity or gravity enabled
-            applyVelocity = !isNettyClient && (hasVelocity() || !hasNoGravity());
-            // Players with a velocity applied (client is responsible for gravity)
-            applyVelocity |= isNettyClient && hasVelocity();
-
-            if (applyVelocity) {
-                final double newX = position.getX() + velocity.getX();
-                final double newY = position.getY() + velocity.getY();
-                final double newZ = position.getZ() + velocity.getZ();
-                Position newPosition = new Position(newX, newY, newZ);
-
+            // Movement
+            {
+                final Position newPosition = position.clone();
                 if (this.hasPhysics) {
-                    this.onGround = CollisionUtils.handlePhysics(this, velocity.clone(), newPosition, velocity);
+                    CollisionUtils.handlePhysics(this, newPosition);
                 }
 
                 // World border collision
-                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = instance.getChunkAt(finalVelocityPosition);
+                position.set(CollisionUtils.applyWorldBorder(instance, position, newPosition));
+                final Chunk finalChunk = instance.getChunkAt(newPosition);
 
                 // Entity shouldn't be updated when moving in an unloaded chunk
                 if (!ChunkUtils.isLoaded(finalChunk)) {
@@ -571,21 +704,26 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 }
 
                 // Apply the position if changed
-                if (!newPosition.isSimilar(position)) {
-                    refreshPosition(finalVelocityPosition);
+                if (!newPosition.isSimilar(positionAtTickStart)) {
+                    position.set(newPosition);
+                    refreshPosition();
                 }
 
-                // Update velocity
+                // Scheduled synchronization
+                if (!CooldownUtils.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
+                    sendTeleportPacket();
+                } else {
+                    // Only calculate possible packets if an absolute sync isn't sent
+                    sendPositionUpdate();
+                }
+
+                // Velocity
                 {
                     if (!hasNoGravity()) {
                         this.velocity.setY(velocity.getY() - gravityAcceleration);
                     }
 
-                    float drag;
-                    // set to true if it's not vanilla drag, in that case
-                    // we should send velocity updates, otherwise it's
-                    // handled on client side
-                    final boolean notVanillaDrag;
+                    final float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
                         final CustomBlock customBlock = finalChunk.getCustomBlock(
@@ -595,28 +733,27 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                         if (customBlock != null) {
                             // Custom drag
                             drag = customBlock.getDrag(instance, blockPosition);
-                            notVanillaDrag = true;
+                            if (velocity.getX() != 0 || velocity.getZ() != 0)
+                                this.isVelocityDirty = true;
                         } else {
                             // Default ground drag
                             drag = 0.546f;
-                            notVanillaDrag = false;
                         }
                     } else {
                         drag = 0.91f; // air drag
-                        notVanillaDrag = false;
                     }
 
-                    // Prevent infinitely decreasing velocity, check it every 20 tick
-                    if (ticks % 20 == 0) {
-                        if (velocity.getX() != 0 && Math.abs(velocity.getX()) < Vector.getEpsilon()) {
+                    // Prevent infinitely decreasing velocity
+                    {
+                        if (velocity.getX() != 0 && Math.abs(velocity.getX()) < minimumVelocity) {
                             this.velocity.setX(0);
                             this.isVelocityDirty = true;
                         }
-                        if (velocity.getY() != 0 && Math.abs(velocity.getY()) < Vector.getEpsilon()) {
+                        if (velocity.getY() != 0 && Math.abs(velocity.getY()) < minimumVelocity) {
                             this.velocity.setY(0);
                             this.isVelocityDirty = true;
                         }
-                        if (velocity.getZ() != 0 && Math.abs(velocity.getZ()) < Vector.getEpsilon()) {
+                        if (velocity.getZ() != 0 && Math.abs(velocity.getZ()) < minimumVelocity) {
                             this.velocity.setZ(0);
                             this.isVelocityDirty = true;
                         }
@@ -624,17 +761,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                     // Apply drag
                     this.velocity.setX(velocity.getX() * drag);
-                    this.velocity.setY(velocity.getY() * (1 - (hasNoGravity() ? 0 : gravityDragPerTick)));
                     this.velocity.setZ(velocity.getZ() * drag);
-
-                    if (notVanillaDrag || !hasVanillaGravity) {
-                        this.isVelocityDirty = true;
-                    }
-                }
-
-                // Synchronization and packets...
-                if (!isNettyClient && !posAtTickStart.equals(position)) {
-                    sendSynchronization();
+                    if (!hasNoGravity()) this.velocity.setY(velocity.getY() * (1 - gravityDragPerTick));
                 }
             }
 
@@ -696,19 +824,18 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             }
         }
 
-        // Scheduled synchronization
-        if (!CooldownUtils.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
-            this.lastAbsoluteSynchronizationTime = time;
-            sendSynchronization();
-        }
-
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
+
+        lastPosition.set(positionAtTickStart);
     }
 
     /**
      * Applies knockback to the entity
+     * <p>
+     * The value 0.017453292 in the parameters' description is PI/180 i.e 1 deg in rad.
+     *
      * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
      * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * 0.017453292)</pre>
      * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * 0.017453292)</pre>
@@ -798,12 +925,22 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     /**
-     * Returns false just after instantiation, set to true after calling {@link #setInstance(Instance)}.
+     * Returns false just after instantiation or if it's a player who didn't received the spawning
+     * chunks, set to true after calling {@link #setInstance(Instance)}.
      *
      * @return true if the entity has been linked to an instance, false otherwise
      */
     public boolean isActive() {
         return isActive;
+    }
+
+    /**
+     * Used to toggle entity ticking
+     *
+     * @param active set to {@code true} to allow ticking
+     */
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     /**
@@ -865,9 +1002,10 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
+     * @param setActive     sets {@link #isActive} field to this value
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+    protected void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition, boolean setActive) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
 
@@ -876,18 +1014,24 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         }
 
         this.position.set(spawnPosition);
-        this.lastX = this.position.getX();
-        this.lastY = this.position.getY();
-        this.lastZ = this.position.getZ();
-        this.lastYaw = this.position.getYaw();
-        this.lastPitch = this.position.getPitch();
+        this.lastPosition.set(position);
+        this.positionAtTickStart.set(position);
+        this.lastSyncedPosition.set(position);
 
-        this.isActive = true;
         this.instance = instance;
+        this.isActive = setActive;
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
+    }
+
+    /**
+     * Sets the instance and sets {@link #isActive} to {@code true}
+     * @see #setInstance(Instance, Position, boolean)
+     */
+    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+        setInstance(instance, spawnPosition, true);
     }
 
     /**
@@ -972,8 +1116,9 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;
         this.gravityAcceleration = gravityAcceleration;
-        this.hasVanillaGravity = entityType.getGravityAcceleration() == gravityAcceleration &&
-                entityType.getGravityDrag() == gravityDragPerTick;
+        // Initial gravity velocity
+        if (hasNoGravity()) return;
+        this.velocity.setY((velocity.getY() - gravityAcceleration) * (1 - gravityDragPerTick));
     }
 
     /**
@@ -1302,81 +1447,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     /**
-     * Used to refresh the entity and its passengers position
-     * - put the entity in the right instance chunk
-     * - update the viewable chunks (load and unload)
-     * - add/remove players from the viewers list if {@link #isAutoViewable()} is enabled
-     * <p>
-     * WARNING: unsafe, should only be used internally in Minestom. Use {@link #teleport(Position)} instead.
-     *
-     * @param x new position X
-     * @param y new position Y
-     * @param z new position Z
-     */
-    public void refreshPosition(double x, double y, double z) {
-        position.setX(x);
-        position.setY(y);
-        position.setZ(z);
-        this.cacheX = x;
-        this.cacheY = y;
-        this.cacheZ = z;
-
-        if (hasPassenger()) {
-            for (Entity passenger : getPassengers()) {
-                passenger.refreshPosition(x, y, z);
-            }
-        }
-
-        final Instance instance = getInstance();
-        if (instance != null) {
-            final Chunk lastChunk = instance.getChunkAt(lastX, lastZ);
-            final Chunk newChunk = instance.getChunkAt(x, z);
-
-            Check.notNull(lastChunk, "The entity {0} was in an unloaded chunk at {1};{2}", getEntityId(), lastX, lastZ);
-            Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
-
-            if (lastChunk != newChunk) {
-                instance.UNSAFE_switchEntityChunk(this, lastChunk, newChunk);
-                if (this instanceof Player) {
-                    // Refresh player view
-                    final Player player = (Player) this;
-                    player.refreshVisibleChunks(newChunk);
-                    player.refreshVisibleEntities(newChunk);
-                }
-            }
-        }
-
-        this.lastX = position.getX();
-        this.lastY = position.getY();
-        this.lastZ = position.getZ();
-    }
-
-    /**
-     * @param position the new position
-     * @see #refreshPosition(double, double, double)
-     */
-    public void refreshPosition(@NotNull Position position) {
-        refreshPosition(position.getX(), position.getY(), position.getZ());
-    }
-
-    /**
-     * Updates the entity view internally.
-     * <p>
-     * Warning: you probably want to use {@link #setView(float, float)}.
-     *
-     * @param yaw   the yaw
-     * @param pitch the pitch
-     */
-    public void refreshView(float yaw, float pitch) {
-        this.lastYaw = position.getYaw();
-        this.lastPitch = position.getPitch();
-        position.setYaw(yaw);
-        position.setPitch(pitch);
-        this.cacheYaw = yaw;
-        this.cachePitch = pitch;
-    }
-
-    /**
      * Gets the entity position.
      *
      * @return the current position of the entity
@@ -1528,12 +1598,21 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         return metaDataPacket;
     }
 
-    protected void sendSynchronization() {
+    /**
+     * Sends a {@link EntityTeleportPacket} to {@link #viewers}, updates
+     * {@link #lastSyncedPosition} and {@link #lastAbsoluteSynchronizationTime} field.
+     * {@link Player} overrides this in order to send {@link PlayerPositionAndLookPacket}
+     * to themselves.
+     */
+    protected void sendTeleportPacket() {
         EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = getPosition().clone();
+        entityTeleportPacket.position = getPosition();
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
+
+        lastSyncedPosition.set(entityTeleportPacket.position);
+        lastAbsoluteSynchronizationTime = System.currentTimeMillis();
     }
 
     /**
@@ -1550,6 +1629,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      */
     public void setCustomSynchronizationCooldown(@Nullable UpdateOption cooldown) {
         this.customSynchronizationCooldown = cooldown;
+    }
+
+    /**
+     * Indicates if this entity is a real player or not.
+     * <p>
+     * Used for packet conditions.
+     *
+     * @return {@code true} if this entity is a netty client i.e {@link Player}
+     */
+    public boolean isNettyClient() {
+        return isNettyClient;
     }
 
     @Override
