@@ -7,7 +7,6 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
-import net.minestom.server.color.Color;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
@@ -33,10 +32,6 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.particle.Particle;
-import net.minestom.server.particle.data.ParticleData;
-import net.minestom.server.particle.shapes.*;
-import net.minestom.server.particle.shapes.builder.CircleBuilder;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -293,53 +288,6 @@ public class PlayerInit {
                 //player.getInstance().unloadChunk(chunk);
             }
         });
-
-        // PARTICLE TEST
-
-        //MultiPolygon shape = ParticleShape.cube(new Position(0, 41, 0), 10, 5, 14);
-        /*MultiPolygon shape = ParticleShape.multiPolygon()
-                .lineStart(new Position(0, 41, 0))
-                .lineTo(new Position(-1.5, 43.5, 0))
-                .lineTo(new Position(0, 45, 0))
-                .lineTo(new Position(1.5, 43.5, 0))
-
-                .lineTo(new Position(0, 41, 0))
-                .lineTo(new Position(0, 43.5, -1.5))
-                .lineTo(new Position(0, 45, 0))
-                .lineTo(new Position(0, 43.5, 1.5))
-                .lineTo(new Position(0, 41, 0))
-
-                .jumpTo(new Position(-1.5, 43.5, 0))
-                .lineTo(new Position(0, 43.5, -1.5))
-                .lineTo(new Position(1.5, 43.5, 0))
-                .lineTo(new Position(0, 43.5, 1.5))
-                .lineTo(new Position(-1.5, 43.5, 0))
-
-                .build();*/
-        //BezierLine shape = ParticleShape.bezier(new Position(0, 41, 0), new Position(10, 45, 5))
-        //        .addControlPoint(new Position(-5, 50, 2))
-        //        .addControlPoint(new Position(3, 45, -3))
-        //        .step(0.02)
-        //        .build();
-        CircleBuilder circleBuilder = ParticleShape.circle(new Position(0, 45, 0)).radius(3);
-
-        ParticleShape shape = ParticleShape.multiPolygon()
-                .addShape(circleBuilder.facing(ParticleCircle.Facing.X).build())
-                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Y).build())
-                //.addShape(circleBuilder.facing(ParticleCircle.Facing.Z).build())
-                .build();
-
-        var ref = new Object() {
-            LinePattern linePattern = LinePattern.of("-              ");
-        };
-
-        ShapeOptions.Builder shapeOptionsBuilder = ShapeOptions.builder(Particle.FLAME).particleCount(60);
-
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            ref.linePattern = ref.linePattern.withOffset(1);
-
-            shape.iterator(shapeOptionsBuilder.linePattern(ref.linePattern).build()).draw(instanceContainer, new Position(0, 0, 0));
-        }).repeat(3, TimeUnit.TICK).schedule();
     }
 
 

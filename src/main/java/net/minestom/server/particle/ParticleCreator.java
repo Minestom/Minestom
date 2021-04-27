@@ -3,19 +3,19 @@ package net.minestom.server.particle;
 import net.minestom.server.network.packet.server.play.ParticlePacket;
 import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.utils.binary.BinaryWriter;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Small utils class to create particle packet
  */
 public class ParticleCreator {
 
-    public static ParticlePacket createParticlePacket(Particle particleType, boolean distance,
+    public static ParticlePacket createParticlePacket(@NotNull ParticleData particleData, boolean distance,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
-                                                      float speed, int count, @Nullable ParticleData data) {
+                                                      float speed, int count) {
         ParticlePacket particlePacket = new ParticlePacket();
-        particlePacket.particleId = particleType.getId();
+        particlePacket.particleId = particleData.getParticle().getId();
         particlePacket.longDistance = distance;
 
         particlePacket.x = x;
@@ -29,24 +29,20 @@ public class ParticleCreator {
         particlePacket.speed = speed;
         particlePacket.particleCount = count;
 
-        if(data != null) {
-            BinaryWriter writer = new BinaryWriter();
-            data.write(writer);
-            particlePacket.data = writer.toByteArray();
-        } else {
-            particlePacket.data = new byte[0];
-        }
+        BinaryWriter writer = new BinaryWriter();
+        particleData.write(writer);
+        particlePacket.data = writer.toByteArray();
 
         return particlePacket;
     }
 
-    public static ParticlePacket createParticlePacket(Particle particleType,
+    public static ParticlePacket createParticlePacket(@NotNull ParticleData particleData,
                                                       double x, double y, double z,
                                                       float offsetX, float offsetY, float offsetZ,
                                                       int count) {
-        return createParticlePacket(particleType, false,
+        return createParticlePacket(particleData, false,
                 x, y, z,
                 offsetX, offsetY, offsetZ,
-                0, count, null);
+                0, count);
     }
 }

@@ -12,6 +12,10 @@ public abstract class ArgumentRegistry<T> extends Argument<T> {
         super(id);
     }
 
+    public ArgumentRegistry(String id, boolean allowSpace) {
+        super(id, allowSpace);
+    }
+
     public abstract T getRegistry(@NotNull String value);
 
     @NotNull

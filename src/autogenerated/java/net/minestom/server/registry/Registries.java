@@ -9,11 +9,13 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.data.ParticleData;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.utils.NamespaceID;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,27 +180,34 @@ public final class Registries {
     }
 
     /**
-     * Returns the corresponding Particle matching the given id. Returns null if none match.
+     * Returns the corresponding ParticleData matching the given string. Returns null if none match.
      */
     @Nullable
-    public static Particle getParticle(String id) {
-        return getParticle(NamespaceID.from(id));
+    public static ParticleData getParticle(String particle) {
+        String[] split = particle.split(StringUtils.SPACE, 2);
+
+        String data = null;
+        if (split.length > 1) {
+            data = split[1];
+        }
+
+        return getParticle(NamespaceID.from(split[0]), data);
     }
 
     /**
-     * Returns the corresponding Particle matching the given id. Returns null if none match.
+     * Returns the corresponding ParticleData matching the given id and data. Returns null if none match.
      */
     @Nullable
-    public static Particle getParticle(NamespaceID id) {
-        return particles.get(id);
+    public static ParticleData getParticle(NamespaceID id, @Nullable String data) {
+        return ParticleData.fromString(particles.get(id), data);
     }
 
     /**
-     * Returns the corresponding Particle matching the given key. Returns null if none match.
+     * Returns the corresponding ParticleData matching the given key and data. Returns null if none match.
      */
     @Nullable
-    public static Particle getParticle(Key key) {
-        return getParticle(NamespaceID.from(key));
+    public static ParticleData getParticle(Key key, @Nullable String data) {
+        return getParticle(NamespaceID.from(key), data);
     }
 
     /**
