@@ -57,10 +57,11 @@ public class InventoryClickProcessor {
 
         if (cursorRule.canBeStacked(cursor, clicked)) {
             final int totalAmount = cursorRule.getAmount(cursor) + clickedRule.getAmount(clicked);
+            final int maxSize = cursorRule.getMaxSize(cursor);
 
             if (!clickedRule.canApply(clicked, totalAmount)) {
-                resultCursor = cursorRule.apply(cursor, totalAmount - cursorRule.getMaxSize());
-                resultClicked = clickedRule.apply(clicked, clickedRule.getMaxSize());
+                resultCursor = cursorRule.apply(cursor, totalAmount - maxSize);
+                resultClicked = clickedRule.apply(clicked, maxSize);
             } else {
                 resultCursor = cursorRule.apply(cursor, 0);
                 resultClicked = clickedRule.apply(clicked, totalAmount);
@@ -185,8 +186,12 @@ public class InventoryClickProcessor {
             return null;
 
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
-            InventoryClickResult result = startCondition(inventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            return !result.isCancel();
+            InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            if(result.isCancel()){
+                clickResult.setRefresh(true);
+                return false;
+            }
+            return true;
         });
 
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
@@ -208,8 +213,12 @@ public class InventoryClickProcessor {
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (index == slot) // Prevent item lose/duplication
                 return false;
-            InventoryClickResult result = startCondition(null, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            return !result.isCancel();
+            InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
+            if(result.isCancel()){
+                clickResult.setRefresh(true);
+                return false;
+            }
+            return true;
         }, start, end, step);
 
         ItemStack itemResult = TransactionOption.ALL.fill(targetInventory, pair.left(), pair.right());
@@ -256,7 +265,7 @@ public class InventoryClickProcessor {
                         break;
                     StackingRule slotItemRule = slotItem.getStackingRule();
 
-                    final int maxSize = stackingRule.getMaxSize();
+                    final int maxSize = stackingRule.getMaxSize(cursor);
                     if (stackingRule.canBeStacked(cursor, slotItem)) {
                         final int amount = slotItemRule.getAmount(slotItem);
                         if (stackingRule.canApply(slotItem, amount + slotSize)) {
@@ -351,7 +360,13 @@ public class InventoryClickProcessor {
 
         final StackingRule cursorRule = cursor.getStackingRule();
         final int amount = cursorRule.getAmount(cursor);
-        final int remainingAmount = cursorRule.getMaxSize() - amount;
+        final int maxSize = cursorRule.getMaxSize(cursor);
+        final int remainingAmount = maxSize - amount;
+
+        if (remainingAmount == 0) {
+            // Item is already full
+            return clickResult;
+        }
 
         ItemStack remain = cursorRule.apply(cursor, remainingAmount);
 
@@ -386,9 +401,15 @@ public class InventoryClickProcessor {
             remain = func.apply(playerInventory, remain);
         }
 
-        final int tookAmount = remainingAmount - cursorRule.getAmount(remain);
+        ItemStack resultCursor;
+        if (remain.isAir()) {
+            // Item has been filled
+            resultCursor = cursorRule.apply(cursor, maxSize);
+        } else {
+            final int tookAmount = remainingAmount - cursorRule.getAmount(remain);
+            resultCursor = cursorRule.apply(cursor, amount + tookAmount);
+        }
 
-        ItemStack resultCursor = cursorRule.apply(cursor, amount + tookAmount);
         clickResult.setCursor(resultCursor);
         return clickResult;
     }
@@ -532,6 +553,13 @@ public class InventoryClickProcessor {
                                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         return startCondition(clickResult, inventory, player, slot, clickType);
+    }
+
+    @NotNull
+    private InventoryClickResult startCondition(@Nullable AbstractInventory inventory, @NotNull Player player, int slot,
+                                                @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        return startCondition(inventory instanceof Inventory ? (Inventory) inventory : null,
+                player, slot, clickType, clicked, cursor);
     }
 
     private void callClickEvent(@NotNull Player player, @Nullable Inventory inventory, int slot,

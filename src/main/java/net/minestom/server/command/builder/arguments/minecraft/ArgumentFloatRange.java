@@ -62,4 +62,9 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("FloatRange<%s>", getId());
+    }
 }

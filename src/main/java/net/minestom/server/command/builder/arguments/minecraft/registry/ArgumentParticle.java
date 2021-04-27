@@ -27,4 +27,9 @@ public class ArgumentParticle extends ArgumentRegistry<Particle> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("Particle<%s>", getId());
+    }
 }

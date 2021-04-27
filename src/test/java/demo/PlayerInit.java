@@ -1,10 +1,8 @@
 package demo;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.ColoredText;
@@ -32,8 +30,8 @@ import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
+import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -42,13 +40,12 @@ import net.minestom.server.world.DimensionType;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Random;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInit {
-
-    private static final InstanceContainer instanceContainer;
 
     private static final Inventory inventory;
 
@@ -57,9 +54,12 @@ public class PlayerInit {
         //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
-        instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+
+        for (int i = 0; i < 4; i++) {
+            InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+            instanceContainer.enableAutoChunkLoad(true);
+            instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        }
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -91,14 +91,14 @@ public class PlayerInit {
 
     }
 
-    private static AtomicDouble LAST_TICK_TIME = new AtomicDouble();
+    private static AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public static void init() {
         ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
 
         MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
-                LAST_TICK_TIME.set(tickMonitor.getTickTime()));
+                LAST_TICK.set(tickMonitor));
 
         MinecraftServer.getSchedulerManager().buildTask(() -> {
 
@@ -110,9 +110,13 @@ public class PlayerInit {
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
 
+            TickMonitor tickMonitor = LAST_TICK.get();
+
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
                     .append(Component.newline())
-                    .append(Component.text("TICK TIME: " + MathUtils.round(LAST_TICK_TIME.get(), 2) + "ms"));
+                    .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
+                    .append(Component.newline())
+                    .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
 
@@ -183,7 +187,7 @@ public class PlayerInit {
             final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
             final Block block = Block.fromStateId(blockStateId);
             player.sendMessage("You clicked at the block " + block + " " + customBlock);
-            player.sendMessage("CHUNK COUNT " + instanceContainer.getChunks().size());
+            player.sendMessage("CHUNK COUNT " + player.getInstance().getChunks().size());
         });
 
         globalEventHandler.addEventCallback(PickupItemEvent.class, event -> {
@@ -214,11 +218,12 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
-            player.sendMessage("test");
 
-            event.setSpawningInstance(instanceContainer);
-            int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
-            int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 1000 - 250;
+            var instances = MinecraftServer.getInstanceManager().getInstances();
+            Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
+            event.setSpawningInstance(instance);
+            int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
+            int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
             player.setRespawnPoint(new Position(0, 42f, 0));
 
             player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -288,7 +293,7 @@ public class PlayerInit {
 
             // Unload the chunk (save memory) if it has no remaining viewer
             if (chunk.getViewers().isEmpty()) {
-                //player.getInstance().unloadChunk(chunk);
+                player.getInstance().unloadChunk(chunk);
             }
         });
     }

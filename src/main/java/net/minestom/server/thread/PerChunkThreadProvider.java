@@ -4,17 +4,21 @@ import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Uses a single thread for all chunks.
+ * Each {@link Chunk} gets assigned to a random thread.
  */
-public class SingleThreadProvider extends ThreadProvider {
+public class PerChunkThreadProvider extends ThreadProvider {
 
-    public SingleThreadProvider() {
-        super(1);
+    public PerChunkThreadProvider(int threadCount) {
+        super(threadCount);
+    }
+
+    public PerChunkThreadProvider() {
+        super();
     }
 
     @Override
     public long findThread(@NotNull Chunk chunk) {
-        return 0;
+        return chunk.hashCode();
     }
 
     @Override

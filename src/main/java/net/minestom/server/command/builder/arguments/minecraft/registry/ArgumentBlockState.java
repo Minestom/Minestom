@@ -24,4 +24,9 @@ public class ArgumentBlockState extends ArgumentRegistry<Block> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("BlockState<%s>", getId());
+    }
 }

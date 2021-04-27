@@ -57,4 +57,8 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    @Override
+    public String toString() {
+        return String.format("Float<%s>", getId());
+    }
 }

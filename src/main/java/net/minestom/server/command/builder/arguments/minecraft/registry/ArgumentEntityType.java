@@ -29,4 +29,9 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("EntityType<%s>", getId());
+    }
 }

@@ -269,6 +269,20 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         return onlyPlayers;
     }
 
+    @Override
+    public String toString() {
+        if (onlySingleEntity) {
+            if (onlyPlayers) {
+                return String.format("Player<%s>", getId());
+            }
+            return String.format("Entity<%s>", getId());
+        }
+        if (onlyPlayers) {
+            return String.format("Players<%s>", getId());
+        }
+        return String.format("Entities<%s>", getId());
+    }
+
     private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {
         if (selectorVariable.equals("@p"))
             return EntityFinder.TargetSelector.NEAREST_PLAYER;
