@@ -35,12 +35,15 @@ class IterableAudienceProvider implements AudienceProvider<Iterable<? extends Au
 
     @Override
     public @NotNull Iterable<? extends Audience> players() {
-        return (Iterable<? extends Audience>) MinecraftServer.getConnectionManager().getOnlinePlayers().unwrap().iterator();
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().unwrap().collect(Collectors.toList());
     }
 
     @Override
     public @NotNull Iterable<? extends Audience> players(@NotNull Predicate<Acquirable<Player>> filter) {
-        return (Iterable<? extends Audience>) MinecraftServer.getConnectionManager().getOnlinePlayers().stream().filter(filter).iterator();
+        return MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+                .filter(filter)
+                .map(Acquirable::unwrap)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -19,6 +19,8 @@ import net.minestom.server.network.packet.server.play.TitlePacket;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.stream.Collectors;
+
 /**
  * An audience implementation that sends grouped packets if possible.
  */
@@ -96,6 +98,6 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default @NotNull Iterable<? extends Audience> audiences() {
-        return (Iterable<? extends Audience>) this.getPlayers().unwrap().iterator();
+        return this.getPlayers().unwrap().collect(Collectors.toList());
     }
 }
