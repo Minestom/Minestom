@@ -60,5 +60,5 @@ gradle-app.setting
 /.mixin.out/
 
 # When compiling we get a docs folder
-/docs
+**/docs/
 .mixin.out/

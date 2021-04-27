@@ -72,7 +72,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
         );
         itemClass.addField(
-                FieldSpec.builder(TypeName.BYTE, "defaultStackSize")
+                FieldSpec.builder(TypeName.BYTE, "maxDefaultStackSize")
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
         itemClass.addField(
@@ -85,9 +85,9 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
-                        .addParameter(TypeName.BYTE, "defaultStackSize")
+                        .addParameter(TypeName.BYTE, "maxDefaultStackSize")
                         .addStatement("this.id = id")
-                        .addStatement("this.defaultStackSize = defaultStackSize")
+                        .addStatement("this.maxDefaultStackSize = maxDefaultStackSize")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -127,11 +127,11 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
-        // getDefaultStackSize
+        // getMaxDefaultStackSize
         itemClass.addMethod(
-                MethodSpec.methodBuilder("getDefaultStackSize")
+                MethodSpec.methodBuilder("getMaxDefaultStackSize")
                         .returns(TypeName.BYTE)
-                        .addStatement("return this.defaultStackSize")
+                        .addStatement("return this.maxDefaultStackSize")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );

@@ -2950,14 +2950,14 @@ public class Material implements Keyed {
   @NotNull
   private final NamespaceID id;
 
-  private final byte defaultStackSize;
+  private final byte maxDefaultStackSize;
 
   @NotNull
   private final RawMaterialData materialData = new RawMaterialData();
 
-  protected Material(@NotNull NamespaceID id, byte defaultStackSize) {
+  protected Material(@NotNull NamespaceID id, byte maxDefaultStackSize) {
     this.id = id;
-    this.defaultStackSize = defaultStackSize;
+    this.maxDefaultStackSize = maxDefaultStackSize;
   }
 
   @Override
@@ -2980,8 +2980,8 @@ public class Material implements Keyed {
     return Registry.MATERIAL_REGISTRY.getId(this);
   }
 
-  public byte getDefaultStackSize() {
-    return this.defaultStackSize;
+  public byte getMaxDefaultStackSize() {
+    return this.maxDefaultStackSize;
   }
 
   @NotNull
