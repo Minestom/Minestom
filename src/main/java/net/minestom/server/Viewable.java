@@ -87,15 +87,6 @@ public interface Viewable {
     }
 
     /**
-     * Sends a packet to the player, if it's a player.
-     *
-     * @param packet the packet to send
-     */
-    default void sendPacketToSelf(@NotNull ServerPacket packet) {
-
-    }
-
-    /**
      * Gets the result of {@link #getViewers()} as an Adventure Audience.
      *
      * @return the audience

@@ -605,11 +605,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.sendPacketToViewersAndSelf(packet);
     }
 
-    @Override
-    public void sendPacketToSelf(@NotNull ServerPacket packet) {
-        this.playerConnection.sendPacket(packet);
-    }
-
     /**
      * Changes the player instance and load surrounding chunks if needed.
      * <p>

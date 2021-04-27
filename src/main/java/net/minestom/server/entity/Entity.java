@@ -440,7 +440,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             playerPositionAndLookPacket.flags = 0b111;
             playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
             playerPositionAndLookPacket.teleportId = ((Player)this).getNextTeleportId();
-            sendPacketToSelf(playerPositionAndLookPacket);
+            ((Player) this).getPlayerConnection().sendPacket(playerPositionAndLookPacket);
         }
 
         lastSyncedPosition.set(position);
