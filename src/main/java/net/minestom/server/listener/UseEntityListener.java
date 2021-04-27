@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.item.ItemEntityInteractEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.item.ItemStack;
@@ -34,7 +35,12 @@ public class UseEntityListener {
 
             // Trigger an item event if the player has an item.
             if (!player.getItemInHand(packet.hand).equals(ItemStack.AIR)) {
-                ItemEvents.callEventOnItem(player.getItemInHand(packet.hand), PlayerEntityInteractEvent.class, playerEntityInteractEvent);
+                ItemEntityInteractEvent itemEntityInteractEvent = new ItemEntityInteractEvent(
+                        player.getItemInHand(packet.hand),
+                        player, entity, packet.hand
+                );
+
+                ItemEvents.callEventOnItem(player.getItemInHand(packet.hand), ItemEntityInteractEvent.class, itemEntityInteractEvent);
             }
 
         } else {

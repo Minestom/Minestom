@@ -1,6 +1,8 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.item.ItemAnimationEvent;
+import net.minestom.server.event.item.ItemUseEvent;
 import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
@@ -17,11 +19,23 @@ public class UseItemListener {
         final Player.Hand hand = packet.hand;
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         //itemStack.onRightClick(player, hand);
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
-        ItemEvents.callEventOnItem(itemStack, PlayerUseItemEvent.class, useItemEvent);
-        player.callEvent(PlayerUseItemEvent.class, useItemEvent);
+
+        PlayerUseItemEvent plauerUseItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
+        player.callEvent(PlayerUseItemEvent.class, plauerUseItemEvent);
 
         final PlayerInventory playerInventory = player.getInventory();
+        if (plauerUseItemEvent.isCancelled()) {
+            playerInventory.update();
+            return;
+        }
+
+        ItemUseEvent useItemEvent = new ItemUseEvent(
+                plauerUseItemEvent.getPlayer(),
+                plauerUseItemEvent.getHand(),
+                plauerUseItemEvent.getItemStack()
+        );
+
+        ItemEvents.callEventOnItem(itemStack, ItemUseEvent.class, useItemEvent);
         if (useItemEvent.isCancelled()) {
             playerInventory.update();
             return;
@@ -69,10 +83,20 @@ public class UseItemListener {
         }
 
         if (itemAnimationType != null) {
+
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
+
+            PlayerItemAnimationEvent.ItemAnimationType finalItemAnimationType = itemAnimationType;
+
             player.callCancellableEvent(PlayerItemAnimationEvent.class, playerItemAnimationEvent, () -> {
 
-                boolean cancelled = ItemEvents.callEventOnItem(useItemEvent.getItemStack(), PlayerItemAnimationEvent.class, playerItemAnimationEvent);
+                ItemAnimationEvent itemAnimationEvent = new ItemAnimationEvent(
+                        playerItemAnimationEvent.getPlayer().getItemInHand(hand),
+                        player,
+                        finalItemAnimationType
+                );
+
+                boolean cancelled = ItemEvents.callEventOnItem(useItemEvent.getItemStack(), ItemAnimationEvent.class, itemAnimationEvent);
 
                 if (cancelled) return;
 
