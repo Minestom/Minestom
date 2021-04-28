@@ -40,7 +40,7 @@ public final class Registry {
 
     public static final IdCrossMapRegistry<VillagerType> VILLAGER_TYPE_REGISTRY = new IdCrossMapRegistry<>();
 
-    public static final IdCrossMapRegistry<Particle> PARTICLE_REGISTRY = new IdCrossMapRegistry<>();
+    public static final IdCrossMapRegistry<Particle<?>> PARTICLE_REGISTRY = new IdCrossMapRegistry<>();
 
     public static final MapRegistry.Defaulted<PotionType> POTION_TYPE_REGISTRY = new MapRegistry.Defaulted<>(() -> PotionType.EMPTY);
 
