@@ -713,7 +713,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     final Chunk chunk = instance.getChunkAt(position);
 
                     // Entity shouldn't be updated when moving in an unloaded chunk
-                    if (!ChunkUtils.isLoaded(position)) {
+                    if (!ChunkUtils.isLoaded(chunk)) {
                         return;
                     }
                 }
