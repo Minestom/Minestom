@@ -54,6 +54,8 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.particle.ParticleCreator;
+import net.minestom.server.particle.data.Particle;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -63,6 +65,7 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -945,6 +948,41 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         StopSoundPacket stopSoundPacket = new StopSoundPacket();
         stopSoundPacket.flags = 0x00;
         playerConnection.sendPacket(stopSoundPacket);
+    }
+
+    public void sendParticle(@NotNull Particle particle, boolean longDistance, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float speed, int count) {
+        ParticlePacket particlePacket = new ParticlePacket();
+        particlePacket.particleId = particle.getParticle().getNumericalId();
+        particlePacket.longDistance = longDistance;
+
+        particlePacket.x = x;
+        particlePacket.y = y;
+        particlePacket.z = z;
+
+        particlePacket.offsetX = offsetX;
+        particlePacket.offsetY = offsetY;
+        particlePacket.offsetZ = offsetZ;
+
+        particlePacket.speed = speed;
+        particlePacket.particleCount = count;
+
+        BinaryWriter writer = new BinaryWriter();
+        particle.write(writer);
+        particlePacket.data = writer.toByteArray();
+
+        playerConnection.sendPacket(particlePacket);
+    }
+
+    public void sendParticle(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float speed, int count) {
+        sendParticle(particle, true, x, y, z, offsetX, offsetY, offsetZ, speed, count);
+    }
+
+    public void sendParticle(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, int count) {
+        sendParticle(particle, true, x, y, z, offsetX, offsetY, offsetZ, 0, count);
+    }
+
+    public void sendParticle(@NotNull Particle particle, double x, double y, double z, int count) {
+        sendParticle(particle, true, x, y, z, 0, 0, 0, 0, count);
     }
 
     /**
