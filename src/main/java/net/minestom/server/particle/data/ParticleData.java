@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.BiFunction;
 
 public class ParticleData {
-    public static final BiFunction<Particle<ParticleData>, String, ParticleData> READER =
+    public static final BiFunction<Particle<ParticleData>, @Nullable String, ParticleData> READER =
             (particle, data) -> ParticleData.of(particle);
 
     private final Particle<?> particle;

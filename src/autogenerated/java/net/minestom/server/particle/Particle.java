@@ -242,10 +242,10 @@ public class Particle<T extends ParticleData> implements Keyed {
   private final NamespaceID id;
 
   @NotNull
-  private final BiFunction<Particle<T>, String, T> dataReader;
+  private final BiFunction<Particle<T>, @Nullable String, T> dataReader;
 
   protected Particle(@NotNull NamespaceID id,
-      @NotNull BiFunction<Particle<T>, String, T> dataReader) {
+      @NotNull BiFunction<Particle<T>, @Nullable String, T> dataReader) {
     this.id = id;
     this.dataReader = dataReader;
   }
@@ -261,8 +261,8 @@ public class Particle<T extends ParticleData> implements Keyed {
     return this.id;
   }
 
-  @NotNull
-  public T readData(String data) {
+  @Nullable
+  public T readData(@Nullable String data) {
     return this.dataReader.apply(this, data);
   }
 

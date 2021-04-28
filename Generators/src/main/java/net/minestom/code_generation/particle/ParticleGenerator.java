@@ -73,10 +73,10 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         // Type variable (ParticleData)
         TypeVariableName typeVariable = TypeVariableName.get("T", particleDataClassName);
 
-        // BiFunction<Particle<T>, String, T>
+        // BiFunction<Particle<T>, @Nullable String, T>
         ParameterizedTypeName dataReaderType = ParameterizedTypeName.get(
                 ClassName.get(BiFunction.class), ParameterizedTypeName.get(particleClassName, typeVariable),
-                TypeName.get(String.class), typeVariable
+                TypeName.get(String.class).annotated(AnnotationSpec.builder(Nullable.class).build()), typeVariable
         );
 
         // Particle<?>
@@ -128,8 +128,8 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         particleClass.addMethod(
                 MethodSpec.methodBuilder("readData")
                         .returns(typeVariable)
-                        .addAnnotation(NotNull.class)
-                        .addParameter(String.class, "data")
+                        .addAnnotation(Nullable.class)
+                        .addParameter(ParameterSpec.builder(String.class, "data").addAnnotation(Nullable.class).build())
                         .addStatement("return this.dataReader.apply(this, data)")
                         .addModifiers(Modifier.PUBLIC)
                         .build()

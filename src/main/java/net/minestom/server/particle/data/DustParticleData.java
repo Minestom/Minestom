@@ -2,15 +2,17 @@ package net.minestom.server.particle.data;
 
 import net.minestom.server.color.Color;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
 public class DustParticleData extends ParticleData {
-    public static final BiFunction<Particle<DustParticleData>, String,DustParticleData> READER = (particle, data) -> {
+    public static final BiFunction<Particle<DustParticleData>, @Nullable String, DustParticleData> READER = (particle, data) -> {
+        if (data == null) return null;
+
         String[] numbers = data.split(StringUtils.SPACE);
         if (numbers.length != 4) {
             return null;
