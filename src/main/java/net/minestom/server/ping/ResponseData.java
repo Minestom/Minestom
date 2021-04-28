@@ -2,6 +2,10 @@ package net.minestom.server.ping;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -11,23 +15,15 @@ import java.util.UUID;
 /**
  * Represents the data sent to the player when refreshing the server list.
  *
- * <p>Filled by {@link ResponseDataConsumer} and specified in {@link
- * net.minestom.server.MinecraftServer#start(String, int, ResponseDataConsumer)}.
+ * <p>Edited by listening to the {@link net.minestom.server.event.server.ServerListPingEvent}.
  */
 public class ResponseData {
-
-    private final JsonObject jsonObject;
-
-    private final JsonObject versionObject;
-    private final JsonObject playersObject;
-    private final JsonArray sampleArray;
-    private final JsonObject descriptionObject;
     private final List<PingPlayer> pingPlayers;
-    private String name;
+    private String version;
     private int protocol;
     private int maxPlayer;
     private int online;
-    private String description;
+    private Component description;
 
     private String favicon;
 
@@ -35,11 +31,6 @@ public class ResponseData {
      * Constructs a new {@link ResponseData}.
      */
     public ResponseData() {
-        this.jsonObject = new JsonObject();
-        this.versionObject = new JsonObject();
-        this.playersObject = new JsonObject();
-        this.sampleArray = new JsonArray();
-        this.descriptionObject = new JsonObject();
         this.pingPlayers = new ArrayList<>();
     }
 
@@ -47,9 +38,29 @@ public class ResponseData {
      * Sets the name for the response.
      *
      * @param name The name for the response data.
+     * @deprecated Use {@link #setVersion(String)}
      */
+    @Deprecated
     public void setName(String name) {
-        this.name = name;
+        this.setVersion(name);
+    }
+
+    /**
+     * Sets the version name for the response.
+     *
+     * @param version The version name for the response data.
+     */
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    /**
+     * Get the version name for the response.
+     *
+     * @return the version name for the response.
+     */
+    public String getVersion() {
+        return version;
     }
 
     /**
@@ -62,12 +73,30 @@ public class ResponseData {
     }
 
     /**
+     * Get the response protocol version.
+     *
+     * @return the response protocol version.
+     */
+    public int getProtocol() {
+        return protocol;
+    }
+
+    /**
      * Sets the response maximum player count.
      *
      * @param maxPlayer The maximum player count for the response data.
      */
     public void setMaxPlayer(int maxPlayer) {
         this.maxPlayer = maxPlayer;
+    }
+
+    /**
+     * Get the response maximum player count.
+     *
+     * @return the response maximum player count.
+     */
+    public int getMaxPlayer() {
+        return maxPlayer;
     }
 
     /**
@@ -80,15 +109,54 @@ public class ResponseData {
     }
 
     /**
+     * Get the response online count.
+     *
+     * @return the response online count.
+     */
+    public int getOnline() {
+        return online;
+    }
+
+    /**
+     * Adds some players to the response.
+     *
+     * @param players the players
+     */
+    public void addPlayer(Iterable<Player> players) {
+        for (Player player : players) {
+            this.addPlayer(player);
+        }
+    }
+
+    /**
+     * Adds a player to the response.
+     *
+     * @param player the player
+     */
+    public void addPlayer(Player player) {
+        this.addPlayer(player.getUsername(), player.getUuid());
+    }
+
+    /**
      * Adds a player to the response.
      *
      * @param name The name of the player.
      * @param uuid The unique identifier of the player.
      */
     public void addPlayer(String name, UUID uuid) {
-        PingPlayer pingPlayer = new PingPlayer();
-        pingPlayer.name = name;
-        pingPlayer.uuid = uuid;
+        PingPlayer pingPlayer = PingPlayer.of(name, uuid);
+        this.pingPlayers.add(pingPlayer);
+    }
+
+    /**
+     * Adds a player to the response.
+     * <p>
+     * {@link UUID#randomUUID()} is used as the player's UUID.
+     *
+     * @param name The name of the player.
+     */
+    public void addPlayer(String name) {
+        PingPlayer pingPlayer = PingPlayer.of(name, UUID.randomUUID());
         this.pingPlayers.add(pingPlayer);
     }
 
@@ -101,16 +169,47 @@ public class ResponseData {
     }
 
     /**
+     * Get the list of the response players.
+     *
+     * @return the list of the response players.
+     */
+    public List<PingPlayer> getPlayers() {
+        return pingPlayers;
+    }
+
+    /**
+     * Sets the response description.
+     *
+     * @param description The description for the response data.
+     * @deprecated Use {@link #setDescription(Component)}
+     */
+    @Deprecated
+    public void setDescription(String description) {
+        this.description = LegacyComponentSerializer.legacySection().deserialize(description);
+    }
+
+    /**
      * Sets the response description.
      *
      * @param description The description for the response data.
      */
-    public void setDescription(String description) {
+    public void setDescription(Component description) {
         this.description = description;
     }
 
     /**
+     * Get the response description
+     *
+     * @return the response description
+     */
+    public Component getDescription() {
+        return description;
+    }
+
+    /**
      * Sets the response favicon.
+     * <p>
+     * MUST start with "data:image/png;base64,"
      *
      * @param favicon The favicon for the response data.
      */
@@ -119,19 +218,35 @@ public class ResponseData {
     }
 
     /**
+     * Get the response favicon.
+     *
+     * @return the response favicon.
+     */
+    public String getFavicon() {
+        return favicon;
+    }
+
+
+    /**
      * Converts the response data into a {@link JsonObject}.
      *
      * @return The converted response data as a json tree.
      */
     @NotNull
     public JsonObject build() {
-        versionObject.addProperty("name", name);
-        versionObject.addProperty("protocol", protocol);
+        // version
+        final JsonObject versionObject = new JsonObject();
+        versionObject.addProperty("name", this.version);
+        versionObject.addProperty("protocol", this.protocol);
 
-        playersObject.addProperty("max", maxPlayer);
-        playersObject.addProperty("online", online);
+        // players info
+        final JsonObject playersObject = new JsonObject();
+        playersObject.addProperty("max", this.maxPlayer);
+        playersObject.addProperty("online", this.online);
 
-        for (PingPlayer pingPlayer : pingPlayers) {
+        // individual players
+        final JsonArray sampleArray = new JsonArray();
+        for (PingPlayer pingPlayer : this.pingPlayers) {
             JsonObject pingPlayerObject = new JsonObject();
             pingPlayerObject.addProperty("name", pingPlayer.name);
             pingPlayerObject.addProperty("id", pingPlayer.uuid.toString());
@@ -139,20 +254,40 @@ public class ResponseData {
         }
         playersObject.add("sample", sampleArray);
 
-        descriptionObject.addProperty("text", description);
+        final JsonObject descriptionObject = GsonComponentSerializer.gson().serializer()
+                .toJsonTree(this.description).getAsJsonObject();
 
+        final JsonObject jsonObject = new JsonObject();
         jsonObject.add("version", versionObject);
         jsonObject.add("players", playersObject);
         jsonObject.add("description", descriptionObject);
-        jsonObject.addProperty("favicon", favicon);
+        jsonObject.addProperty("favicon", this.favicon);
         return jsonObject;
     }
 
     /**
      * Represents a player line in the server list hover.
      */
-    private static class PingPlayer {
-        private String name;
-        private UUID uuid;
+    public static class PingPlayer {
+
+        private static @NotNull PingPlayer of(@NotNull String name, @NotNull UUID uuid) {
+            return new PingPlayer(name, uuid);
+        }
+
+        private final String name;
+        private final UUID uuid;
+
+        private PingPlayer(@NotNull String name, @NotNull UUID uuid) {
+            this.name = name;
+            this.uuid = uuid;
+        }
+
+        public @NotNull String getName() {
+            return name;
+        }
+
+        public @NotNull UUID getUuid() {
+            return uuid;
+        }
     }
 }

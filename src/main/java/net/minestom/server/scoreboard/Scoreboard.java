@@ -1,7 +1,5 @@
 package net.minestom.server.scoreboard;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;

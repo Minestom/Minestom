@@ -121,14 +121,14 @@ public class Section implements PublicCloneable<Section> {
      *
      * @param newBitsPerEntry the new bits per entry count
      */
-    private void resize(int newBitsPerEntry) {
+    public void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
 
         Section section = new Section(newBitsPerEntry, bitsIncrement);
         section.paletteBlockMap = paletteBlockMap;
         section.blockPaletteMap = blockPaletteMap;
 
-        for (int y = 0; y < Chunk.CHUNK_SIZE_Y; y++) {
+        for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                     final short blockId = getBlockAt(x, y, z);

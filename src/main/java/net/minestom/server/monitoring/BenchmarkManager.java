@@ -1,4 +1,4 @@
-package net.minestom.server.benchmark;
+package net.minestom.server.monitoring;
 
 import it.unimi.dsi.fastutil.longs.Long2LongMap;
 import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap;
@@ -41,6 +41,7 @@ public final class BenchmarkManager {
 
         THREADS.add(THREAD_NAME_BLOCK_BATCH);
         THREADS.add(THREAD_NAME_SCHEDULER);
+        THREADS.add(THREAD_NAME_TICK_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK);
     }
 

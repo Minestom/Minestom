@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +25,10 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
     public Position position;
     public UUID uuid;
 
+    public ChatMessagePacket() {
+        this(Component.empty(), Position.CHAT);
+    }
+
     public ChatMessagePacket(Component message, Position position, UUID uuid) {
         this.message = message;
         this.position = position;
@@ -39,6 +44,13 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
         writer.writeComponent(message);
         writer.writeByte((byte) position.ordinal());
         writer.writeUuid(uuid);
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        message = reader.readComponent(Integer.MAX_VALUE);
+        position = Position.values()[reader.readByte()];
+        uuid = reader.readUuid();
     }
 
     @Override

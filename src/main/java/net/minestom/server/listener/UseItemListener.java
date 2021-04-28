@@ -1,7 +1,6 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
@@ -16,7 +15,7 @@ public class UseItemListener {
         final PlayerInventory inventory = player.getInventory();
         final Player.Hand hand = packet.hand;
         ItemStack itemStack = hand == Player.Hand.MAIN ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        itemStack.onRightClick(player, hand);
+        //itemStack.onRightClick(player, hand);
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack);
         player.callEvent(PlayerUseItemEvent.class, useItemEvent);
 
@@ -63,8 +62,8 @@ public class UseItemListener {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.EAT;
 
             // Eating code, contains the eating time customisation
-            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, player.getDefaultEatingTime());
-            player.callCancellableEvent(PlayerPreEatEvent.class, playerPreEatEvent, () -> player.refreshEating(true, playerPreEatEvent.getEatingTime()));
+            PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, player.getDefaultEatingTime());
+            player.callCancellableEvent(PlayerPreEatEvent.class, playerPreEatEvent, () -> player.refreshEating(hand, playerPreEatEvent.getEatingTime()));
         }
 
         if (itemAnimationType != null) {

@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.InventoryModifier;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
@@ -48,12 +48,12 @@ public class FakePlayerController {
      */
     public void clickWindow(boolean playerInventory, short slot, byte button, short action, int mode) {
         Inventory inventory = playerInventory ? null : fakePlayer.getOpenInventory();
-        InventoryModifier inventoryModifier = inventory == null ? fakePlayer.getInventory() : inventory;
-        playerInventory = inventoryModifier instanceof PlayerInventory;
+        AbstractInventory abstractInventory = inventory == null ? fakePlayer.getInventory() : inventory;
+        playerInventory = abstractInventory instanceof PlayerInventory;
 
         slot = playerInventory ? (short) PlayerInventoryUtils.convertToPacketSlot(slot) : slot;
 
-        ItemStack itemStack = inventoryModifier.getItemStack(slot);
+        ItemStack itemStack = abstractInventory.getItemStack(slot);
 
         ClientClickWindowPacket clickWindowPacket = new ClientClickWindowPacket();
         clickWindowPacket.windowId = playerInventory ? 0 : inventory.getWindowId();
@@ -71,7 +71,7 @@ public class FakePlayerController {
     public void closeWindow() {
         Inventory openInventory = fakePlayer.getOpenInventory();
 
-        ClientCloseWindow closeWindow = new ClientCloseWindow();
+        ClientCloseWindowPacket closeWindow = new ClientCloseWindowPacket();
         closeWindow.windowId = openInventory == null ? 0 : openInventory.getWindowId();
         addToQueue(closeWindow);
     }

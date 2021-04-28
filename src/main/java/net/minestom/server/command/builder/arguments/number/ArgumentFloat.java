@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments.number;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentFloat extends ArgumentNumber<Float> {
@@ -45,15 +46,19 @@ public class ArgumentFloat extends ArgumentNumber<Float> {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
 
         argumentNode.parser = "brigadier:float";
-        argumentNode.properties = packetWriter -> {
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 packetWriter.writeFloat(this.getMin());
             if (this.hasMax())
                 packetWriter.writeFloat(this.getMax());
-        };
+        });
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    @Override
+    public String toString() {
+        return String.format("Float<%s>", getId());
+    }
 }

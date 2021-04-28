@@ -17,11 +17,11 @@ public class AlternativesEntry extends LootTable.Entry {
 
     @Override
     public void generate(List<ItemStack> output, Data arguments) {
-        for(LootTable.Entry c : children) {
+        for (LootTable.Entry c : children) {
             int previousSize = output.size();
             c.generateStacks(output, arguments);
             int newSize = output.size();
-            if(newSize != previousSize) { // an entry managed to generate, stop here
+            if (newSize != previousSize) { // an entry managed to generate, stop here
                 return;
             }
         }

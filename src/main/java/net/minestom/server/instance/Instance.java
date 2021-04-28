@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.google.common.collect.Queues;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.data.Data;
@@ -30,7 +31,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -53,9 +54,9 @@ import java.util.function.Consumer;
  * WARNING: when making your own implementation registering the instance manually is required
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link UpdateManager} of the changes using
- * {@link UpdateManager#signalChunkLoad(Instance, int, int)} and {@link UpdateManager#signalChunkUnload(Instance, int, int)}.
+ * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockModifier, EventHandler, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -252,7 +253,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
      * Could be read from disk, or generated from scratch.
      * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, int, int)} and to cache
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
      * that this chunk has been loaded.
      * <p>
      * WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.
@@ -266,7 +267,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
     /**
      * Called to generated a new {@link Chunk} from scratch.
      * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, int, int)} and to cache
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
      * that this chunk has been loaded.
      * <p>
      * This is where you can put your chunk generation code.
@@ -485,10 +486,9 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
-    @NotNull
-    public Set<Entity> getChunkEntities(Chunk chunk) {
+    public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
-            return new HashSet<>();
+            return Collections.emptySet();
 
         final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         final Set<Entity> entities = getEntitiesInChunk(index);
@@ -869,6 +869,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             if (isPlayer) {
                 final Player player = (Player) entity;
                 getWorldBorder().init(player);
+                player.getPlayerConnection().sendPacket(createTimePacket());
             }
 
             // Send all visible entities
@@ -1010,6 +1011,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
      *
      * @param time the tick time in milliseconds
      */
+    @Override
     public void tick(long time) {
         // Scheduled tasks
         if (!nextTick.isEmpty()) {
@@ -1026,7 +1028,7 @@ public abstract class Instance implements BlockModifier, EventHandler, DataConta
             this.time += timeRate;
 
             // time needs to be send to players
-            if (timeUpdate != null && !CooldownUtils.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
+            if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
                 this.lastTimeUpdate = time;
             }

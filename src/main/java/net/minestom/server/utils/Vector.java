@@ -482,15 +482,6 @@ public class Vector implements PublicCloneable<Vector> {
                 '}';
     }
 
-    /**
-     * @deprecated use {@link #clone()}
-     */
-    @Deprecated
-    @NotNull
-    public Vector copy() {
-        return clone();
-    }
-
     @NotNull
     @Override
     public Vector clone() {

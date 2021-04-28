@@ -1,12 +1,15 @@
 package net.minestom.server.entity;
 
+import com.google.common.annotations.Beta;
 import com.google.common.collect.Queues;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
+import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
@@ -37,10 +40,11 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,13 +61,14 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     protected Instance instance;
+    protected Chunk currentChunk;
     protected final Position position;
     /**
      * Used to check if any change made to the {@link Entity#position} field since
@@ -142,6 +147,8 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     // Tick related
     private long ticks;
     private final EntityTickEvent tickEvent = new EntityTickEvent(this);
+
+    private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
     private final boolean isNettyClient;
 
@@ -533,7 +540,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         }
     }
 
-    public boolean addViewer0(@NotNull Player player) {
+    protected boolean addViewer0(@NotNull Player player) {
         if (!this.viewers.add(player)) {
             return false;
         }
@@ -569,7 +576,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
         }
     }
 
-    public boolean removeViewer0(@NotNull Player player) {
+    protected boolean removeViewer0(@NotNull Player player) {
         if (!viewers.remove(player)) {
             return false;
         }
@@ -633,6 +640,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @param time the update time in milliseconds
      */
+    @Override
     public void tick(long time) {
         // Tick conditions
         {
@@ -654,8 +662,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                 return;
             }
 
+            // Fix current chunk being null if the entity has been spawned before
+            if (currentChunk == null) {
+                refreshCurrentChunk(instance.getChunkAt(position));
+            }
+
             // Check if the entity chunk is loaded
-            final Chunk currentChunk = getChunk();
             if (!ChunkUtils.isLoaded(currentChunk)) {
                 // No update for entities in unloaded chunk
                 return;
@@ -696,21 +708,23 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
                 // World border collision
                 position.set(CollisionUtils.applyWorldBorder(instance, position, newPosition));
-                final Chunk finalChunk = instance.getChunkAt(newPosition);
 
-                // Entity shouldn't be updated when moving in an unloaded chunk
-                if (!ChunkUtils.isLoaded(finalChunk)) {
-                    return;
+                if (!ChunkUtils.same(position, positionAtTickStart)) {
+                    final Chunk chunk = instance.getChunkAt(position);
+
+                    // Entity shouldn't be updated when moving in an unloaded chunk
+                    if (!ChunkUtils.isLoaded(position)) {
+                        return;
+                    }
                 }
 
                 // Apply the position if changed
                 if (!newPosition.isSimilar(positionAtTickStart)) {
-                    position.set(newPosition);
                     refreshPosition();
                 }
 
                 // Scheduled synchronization
-                if (!CooldownUtils.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
+                if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
                     sendTeleportPacket();
                 } else {
                     // Only calculate possible packets if an absolute sync isn't sent
@@ -726,7 +740,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
                     final float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
-                        final CustomBlock customBlock = finalChunk.getCustomBlock(
+                        final CustomBlock customBlock = currentChunk.getCustomBlock(
                                 blockPosition.getX(),
                                 blockPosition.getY(),
                                 blockPosition.getZ());
@@ -778,9 +792,12 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = instance.getChunkAt(x, z);
-                        if (!ChunkUtils.isLoaded(chunk))
-                            continue;
+                        Chunk chunk = currentChunk;
+                        if (!ChunkUtils.same(currentChunk, x, z)) {
+                            chunk = instance.getChunkAt(x, z);
+                            if (!ChunkUtils.isLoaded(chunk))
+                                continue;
+                        }
 
                         final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
@@ -806,7 +823,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
             callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
 
             // remove expired effects
-            {
+            if (!effects.isEmpty()) {
                 this.effects.removeIf(timedPotion -> {
                     final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
                     // Remove if the potion should be expired
@@ -982,9 +999,14 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity chunk, can be null even if unlikely
      */
-    @Nullable
-    public Chunk getChunk() {
-        return instance.getChunkAt(position.getX(), position.getZ());
+    public @Nullable Chunk getChunk() {
+        return currentChunk;
+    }
+
+    @ApiStatus.Internal
+    protected void refreshCurrentChunk(Chunk currentChunk) {
+        this.currentChunk = currentChunk;
+        MinecraftServer.getUpdateManager().getThreadProvider().updateEntity(this);
     }
 
     /**
@@ -992,8 +1014,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @return the entity instance, can be null if the entity doesn't have an instance yet
      */
-    @Nullable
-    public Instance getInstance() {
+    public @Nullable Instance getInstance() {
         return instance;
     }
 
@@ -1020,6 +1041,7 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
 
         this.instance = instance;
         this.isActive = setActive;
+        refreshCurrentChunk(instance.getChunkAt(position.getX(), position.getZ()));
         instance.UNSAFE_addEntity(this);
         spawn();
         EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
@@ -1354,7 +1376,6 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      *
      * @param pose the new entity pose
      */
-    @NotNull
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
     }
@@ -1528,6 +1549,10 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
      * WARNING: this does not trigger {@link EntityDeathEvent}.
      */
     public void remove() {
+        if (isRemoved())
+            return;
+
+        MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
@@ -1648,10 +1673,17 @@ public class Entity implements Viewable, EventHandler, DataContainer, Permission
     }
 
     private UpdateOption getSynchronizationCooldown() {
-        if (this.customSynchronizationCooldown != null) {
-            return this.customSynchronizationCooldown;
-        }
-        return SYNCHRONIZATION_COOLDOWN;
+        return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
+    }
+
+    @Beta
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
+    @Beta
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
+        return (Acquirable<T>) acquirable;
     }
 
     public enum Pose {

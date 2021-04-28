@@ -27,19 +27,19 @@ public class TagEntry extends LootTable.Entry {
     @Override
     public void generate(List<ItemStack> output, Data arguments) {
         Set<NamespaceID> values = tag.getValues();
-        if(values.isEmpty())
+        if (values.isEmpty())
             return;
         Material[] asArrayOfItems = new Material[values.size()];
         int ptr = 0;
         for (NamespaceID id : values) {
             asArrayOfItems[ptr++] = Registries.getMaterial(id);
         }
-        if(expand) {
-            Material selectedItem = asArrayOfItems[rng.nextInt(asArrayOfItems.length)];
-            output.add(new ItemStack(selectedItem, (byte) 1));
+        if (expand) {
+            Material selectedMaterial = asArrayOfItems[rng.nextInt(asArrayOfItems.length)];
+            output.add(ItemStack.of(selectedMaterial));
         } else {
-            for(Material item : asArrayOfItems) {
-                output.add(new ItemStack(item, (byte) 1));
+            for (Material material : asArrayOfItems) {
+                output.add(ItemStack.of(material));
             }
         }
     }

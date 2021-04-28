@@ -2,7 +2,6 @@ package net.minestom.server.entity.hologram;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.type.decoration.EntityArmorStand;

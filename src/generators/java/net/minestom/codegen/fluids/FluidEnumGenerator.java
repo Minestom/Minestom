@@ -1,7 +1,6 @@
 package net.minestom.codegen.fluids;
 
 import net.minestom.codegen.BasicEnumGenerator;
-import net.minestom.codegen.stats.StatsEnumGenerator;
 import net.minestom.server.registry.ResourceGatherer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
@@ -7,12 +8,16 @@ import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Represents a command which has suggestion/auto-completion.
@@ -40,6 +45,7 @@ public class Command {
 
     private final String name;
     private final String[] aliases;
+    private final String[] names;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
@@ -57,6 +63,7 @@ public class Command {
     public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
         this.aliases = aliases;
+        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
 
         this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
@@ -157,14 +164,14 @@ public class Command {
 
             // the 'args' array starts by all the required arguments, followed by the optional ones
             List<Argument<?>> requiredArguments = new ArrayList<>();
-            Map<String, Object> defaultValuesMap = new HashMap<>();
+            Map<String, Supplier<Object>> defaultValuesMap = new HashMap<>();
             boolean optionalBranch = false;
             int i = 0;
             for (Argument<?> argument : args) {
                 final boolean isLast = ++i == args.length;
                 if (argument.isOptional()) {
                     // Set default value
-                    defaultValuesMap.put(argument.getId(), argument.getDefaultValue());
+                    defaultValuesMap.put(argument.getId(), (Supplier<Object>) argument.getDefaultValue());
 
                     if (!optionalBranch && !requiredArguments.isEmpty()) {
                         // First optional argument, create a syntax with current cached arguments
@@ -198,9 +205,22 @@ public class Command {
      *
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
-    @NotNull
-    public Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
         return addConditionalSyntax(null, executor, args);
+    }
+
+    /**
+     * Creates a syntax from a formatted string.
+     * <p>
+     * Currently in beta as the format is not final.
+     *
+     * @param executor the syntax executor
+     * @param format   the syntax format
+     * @return the newly created {@link CommandSyntax syntaxes}.
+     */
+    @Beta
+    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
+        return addSyntax(executor, ArgumentType.generate(format));
     }
 
     /**
@@ -208,8 +228,7 @@ public class Command {
      *
      * @return the main command's name
      */
-    @NotNull
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
@@ -218,9 +237,19 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    @Nullable
-    public String[] getAliases() {
+    public @Nullable String[] getAliases() {
         return aliases;
+    }
+
+    /**
+     * Gets all the possible names for this command.
+     * <p>
+     * Include {@link #getName()} and {@link #getAliases()}.
+     *
+     * @return this command names
+     */
+    public @NotNull String[] getNames() {
+        return names;
     }
 
     /**
@@ -251,8 +280,7 @@ public class Command {
      * @return a collection containing all this command syntaxes
      * @see #addSyntax(CommandExecutor, Argument[])
      */
-    @NotNull
-    public Collection<CommandSyntax> getSyntaxes() {
+    public @NotNull Collection<CommandSyntax> getSyntaxes() {
         return syntaxes;
     }
 
@@ -265,8 +293,7 @@ public class Command {
      * @param text   the whole player's text
      * @return the array containing all the suggestion for the current arg (split SPACE), can be null
      */
-    @Nullable
-    public String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
+    public @Nullable String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
         return null;
     }
 
@@ -285,15 +312,29 @@ public class Command {
     public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
     }
 
+    @Beta
+    public @NotNull Set<String> getSyntaxesStrings() {
+        Set<String> syntaxes = new HashSet<>();
+
+        Consumer<String> syntaxConsumer = syntaxString -> {
+            for (String name : getNames()) {
+                final String syntax = name + StringUtils.SPACE + syntaxString;
+                syntaxes.add(syntax);
+            }
+        };
+
+        this.subcommands.forEach(subcommand -> subcommand.getSyntaxesStrings().forEach(syntaxConsumer));
+
+        this.syntaxes.forEach(commandSyntax -> syntaxConsumer.accept(commandSyntax.getSyntaxString()));
+
+        return syntaxes;
+    }
+
     public static boolean isValidName(@NotNull Command command, @NotNull String name) {
-        if (command.getName().equals(name))
-            return true;
-        final String[] aliases = command.getAliases();
-        if (aliases == null)
-            return false;
-        for (String alias : aliases) {
-            if (alias.equals(name))
+        for (String commandName : command.getNames()) {
+            if (commandName.equals(name)) {
                 return true;
+            }
         }
         return false;
     }

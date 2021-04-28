@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,10 +11,20 @@ public class ChangeGameStatePacket implements ServerPacket {
     public Reason reason;
     public float value;
 
+    public ChangeGameStatePacket() {
+        reason = Reason.NO_RESPAWN_BLOCK;
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) reason.ordinal());
         writer.writeFloat(value);
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        reason = Reason.values()[reader.readByte()];
+        value = reader.readFloat();
     }
 
     @Override

@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments.number;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentLong extends ArgumentNumber<Long> {
@@ -38,13 +39,13 @@ public class ArgumentLong extends ArgumentNumber<Long> {
         // TODO maybe use ArgumentLiteral/ArgumentWord and impose long restriction server side?
 
         argumentNode.parser = "brigadier:integer";
-        argumentNode.properties = packetWriter -> {
+        argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
                 packetWriter.writeInt(this.getMin().intValue());
             if (this.hasMax())
                 packetWriter.writeInt(this.getMax().intValue());
-        };
+        });
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }

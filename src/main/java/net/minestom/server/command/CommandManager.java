@@ -5,7 +5,6 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
@@ -17,28 +16,24 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Manager used to register {@link Command} and {@link CommandProcessor}.
+ * Manager used to register {@link Command commands}.
  * <p>
  * It is also possible to simulate a command using {@link #execute(CommandSender, String)}.
  */
 public final class CommandManager {
 
     public static final String COMMAND_PREFIX = "/";
-
-    private volatile boolean running = true;
 
     private final ServerSender serverSender = new ServerSender();
     private final ConsoleSender consoleSender = new ConsoleSender();
@@ -49,15 +44,6 @@ public final class CommandManager {
     private CommandCallback unknownCommandCallback;
 
     public CommandManager() {
-    }
-
-    /**
-     * Stops the console responsible for the console commands processing.
-     * <p>
-     * WARNING: it cannot be re-run later.
-     */
-    public void stopConsoleThread() {
-        running = false;
     }
 
     /**
@@ -246,43 +232,6 @@ public final class CommandManager {
     }
 
     /**
-     * Starts the thread responsible for executing commands from the console.
-     */
-    public void startConsoleThread() {
-        Thread consoleThread = new Thread(() -> {
-            BufferedReader bi = new BufferedReader(new InputStreamReader(System.in));
-            while (running) {
-
-                try {
-
-                    if (bi.ready()) {
-                        final String command = bi.readLine();
-                        execute(consoleSender, command);
-                    }
-                } catch (IOException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    continue;
-                }
-
-                // Prevent permanent looping
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
-
-            }
-            try {
-                bi.close();
-            } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-        }, "ConsoleCommand-Thread");
-        consoleThread.setDaemon(true);
-        consoleThread.start();
-    }
-
-    /**
      * Gets the {@link DeclareCommandsPacket} for a specific player.
      * <p>
      * Can be used to update a player auto-completion list.
@@ -379,7 +328,7 @@ public final class CommandManager {
                         true, false, tracking);
                 tabNode.name = tracking ? "tab_completion" : "args";
                 tabNode.parser = "brigadier:string";
-                tabNode.properties = packetWriter -> packetWriter.writeVarInt(2); // Greedy phrase
+                tabNode.properties = BinaryWriter.makeArray(packetWriter -> packetWriter.writeVarInt(2)); // Greedy phrase
                 tabNode.children = new int[0];
                 if (tracking) {
                     tabNode.suggestionsType = "minecraft:ask_server";
@@ -597,7 +546,6 @@ public final class CommandManager {
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
         return literalNode;
-
     }
 
     @NotNull

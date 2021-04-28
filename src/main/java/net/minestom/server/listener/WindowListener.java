@@ -7,10 +7,12 @@ import net.minestom.server.inventory.InventoryClickHandler;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
-import net.minestom.server.network.packet.client.play.ClientCloseWindow;
+import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientWindowConfirmationPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
+
+import java.util.Objects;
 
 public class WindowListener {
 
@@ -86,7 +88,17 @@ public class WindowListener {
         }
 
         // Prevent the player from picking a ghost item in cursor
-        refreshCursorItem(player, inventory);
+        if (Objects.equals(player.getOpenInventory(), inventory)) {
+            refreshCursorItem(player, inventory);
+        }
+
+        // Prevent ghost item when the click is cancelled
+        if (!successful) {
+            player.getInventory().update();
+            if (inventory != null) {
+                inventory.update(player);
+            }
+        }
 
         WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
         windowConfirmationPacket.windowId = windowId;
@@ -96,7 +108,7 @@ public class WindowListener {
         player.getPlayerConnection().sendPacket(windowConfirmationPacket);
     }
 
-    public static void closeWindowListener(ClientCloseWindow packet, Player player) {
+    public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
         player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);

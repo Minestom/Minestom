@@ -2,6 +2,7 @@ package net.minestom.server.utils.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.RemovalListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,10 +23,11 @@ public class TemporaryCache<T> {
      *
      * @param duration the time before considering an object unused
      */
-    public TemporaryCache(long duration, TimeUnit timeUnit) {
+    public TemporaryCache(long duration, TimeUnit timeUnit, RemovalListener<UUID, T> removalListener) {
         this.cache = CacheBuilder.newBuilder()
                 .expireAfterWrite(duration, timeUnit)
                 .softValues()
+                .removalListener(removalListener)
                 .build();
     }
 
@@ -37,6 +39,10 @@ public class TemporaryCache<T> {
      */
     public void cache(@NotNull UUID identifier, T value) {
         this.cache.put(identifier, value);
+    }
+
+    public void invalidate(@NotNull UUID identifier) {
+        this.cache.invalidate(identifier);
     }
 
     /**

@@ -18,7 +18,7 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
 
     @NotNull
     public ItemStack getFireworkInfo() {
-        return super.metadata.getIndex((byte) 7, ItemStack.getAirItem());
+        return super.metadata.getIndex((byte) 7, ItemStack.AIR);
     }
 
     public void setFireworkInfo(@NotNull ItemStack value) {

@@ -6,6 +6,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,7 +20,7 @@ import java.util.function.UnaryOperator;
  */
 public class CombatEventPacket implements ComponentHoldingServerPacket {
 
-    private EventType type;
+    private EventType type = EventType.ENTER_COMBAT;
     private int duration;
     private int opponent;
     private int playerID;
@@ -68,6 +69,27 @@ public class CombatEventPacket implements ComponentHoldingServerPacket {
                 writer.writeVarInt(playerID);
                 writer.writeInt(opponent);
                 writer.writeComponent(deathMessage);
+                break;
+        }
+    }
+
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        type = EventType.values()[reader.readVarInt()];
+        switch (type) {
+            case ENTER_COMBAT:
+                // nothing to add
+                break;
+
+            case END_COMBAT:
+                duration = reader.readVarInt();
+                opponent = reader.readInt();
+                break;
+
+            case DEATH:
+                playerID = reader.readVarInt();
+                opponent = reader.readInt();
+                deathMessage = reader.readComponent(Integer.MAX_VALUE);
                 break;
         }
     }

@@ -3,11 +3,13 @@ package net.minestom.server.command.builder;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * Represents a syntax in {@link Command}
@@ -18,14 +20,14 @@ public class CommandSyntax {
     private CommandCondition commandCondition;
     private CommandExecutor executor;
 
-    private final Map<String, Object> defaultValuesMap;
+    private final Map<String, Supplier<Object>> defaultValuesMap;
     private final Argument<?>[] args;
 
     private final boolean suggestion;
 
     protected CommandSyntax(@Nullable CommandCondition commandCondition,
                             @NotNull CommandExecutor commandExecutor,
-                            @Nullable Map<String, Object> defaultValuesMap,
+                            @Nullable Map<String, Supplier<Object>> defaultValuesMap,
                             @NotNull Argument<?>... args) {
         this.commandCondition = commandCondition;
         this.executor = commandExecutor;
@@ -85,7 +87,7 @@ public class CommandSyntax {
     }
 
     @Nullable
-    protected Map<String, Object> getDefaultValuesMap() {
+    protected Map<String, Supplier<Object>> getDefaultValuesMap() {
         return defaultValuesMap;
     }
 
@@ -101,5 +103,14 @@ public class CommandSyntax {
 
     public boolean hasSuggestion() {
         return suggestion;
+    }
+
+    public @NotNull String getSyntaxString() {
+        StringBuilder builder = new StringBuilder();
+        for (Argument<?> argument : args) {
+            builder.append(argument.toString())
+                    .append(StringUtils.SPACE);
+        }
+        return builder.toString().trim();
     }
 }

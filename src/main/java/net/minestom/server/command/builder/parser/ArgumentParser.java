@@ -46,7 +46,12 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("BlockState", ArgumentBlockState::new);
         ARGUMENT_FUNCTION_MAP.put("IntRange", ArgumentIntRange::new);
         ARGUMENT_FUNCTION_MAP.put("FloatRange", ArgumentFloatRange::new);
-        ARGUMENT_FUNCTION_MAP.put("Entity", ArgumentEntity::new);
+
+        ARGUMENT_FUNCTION_MAP.put("Entity", s -> new ArgumentEntity(s).singleEntity(true));
+        ARGUMENT_FUNCTION_MAP.put("Entities", ArgumentEntity::new);
+        ARGUMENT_FUNCTION_MAP.put("Player", s -> new ArgumentEntity(s).singleEntity(true).onlyPlayers(true));
+        ARGUMENT_FUNCTION_MAP.put("Players", s -> new ArgumentEntity(s).onlyPlayers(true));
+
         ARGUMENT_FUNCTION_MAP.put("ItemStack", ArgumentItemStack::new);
         ARGUMENT_FUNCTION_MAP.put("Component", ArgumentComponent::new);
         ARGUMENT_FUNCTION_MAP.put("UUID", ArgumentUUID::new);
@@ -77,10 +82,14 @@ public class ArgumentParser {
 
             // No state
             if (state == 0) {
-                if (c == ' ')
-                    continue;
-
-                if (c == '<') {
+                if (c == ' ') {
+                    // Use literal as the default argument
+                    final String argument = builder.toString();
+                    if (argument.length() != 0) {
+                        result.add(new ArgumentLiteral(argument));
+                        builder = new StringBuilder();
+                    }
+                } else if (c == '<') {
                     // Retrieve argument type
                     final String argument = builder.toString();
                     argumentFunction = ARGUMENT_FUNCTION_MAP.get(argument);
@@ -115,6 +124,14 @@ public class ArgumentParser {
                 continue;
             }
 
+        }
+
+        // Use remaining as literal if present
+        if (state == 0) {
+            final String argument = builder.toString();
+            if (argument.length() != 0) {
+                result.add(new ArgumentLiteral(argument));
+            }
         }
 
         return result.toArray(Argument[]::new);

@@ -23,7 +23,7 @@ public class MooshroomMeta extends CowMeta {
 
     public enum Variant {
         RED,
-        BROWN;
+        BROWN
     }
 
 }

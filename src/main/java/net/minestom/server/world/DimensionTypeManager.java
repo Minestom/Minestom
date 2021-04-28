@@ -1,6 +1,8 @@
 package net.minestom.server.world;
 
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
@@ -41,6 +43,33 @@ public final class DimensionTypeManager {
     public boolean removeDimension(@NotNull DimensionType dimensionType) {
         dimensionType.registered = false;
         return dimensionTypes.remove(dimensionType);
+    }
+
+    /**
+     * @param namespaceID The dimension name
+     * @return true if the dimension is registered
+     */
+    public boolean isRegistered(@NotNull NamespaceID namespaceID) {
+        return isRegistered(getDimension(namespaceID));
+    }
+
+    /**
+     * @param dimensionType dimension to check if is registered
+     * @return true if the dimension is registered
+     */
+    public boolean isRegistered(@Nullable DimensionType dimensionType) {
+        return dimensionType != null && dimensionTypes.contains(dimensionType) && dimensionType.isRegistered();
+    }
+
+    /**
+     * Return to a @{@link DimensionType} only if present and registered
+     *
+     * @param namespaceID The Dimension Name
+     * @return an a DimensionType if it present and registered
+     */
+    @Nullable
+    public DimensionType getDimension(@NotNull NamespaceID namespaceID) {
+        return unmodifiableList().stream().filter(dimensionType -> dimensionType.getName().equals(namespaceID)).filter(DimensionType::isRegistered).findFirst().orElse(null);
     }
 
     /**

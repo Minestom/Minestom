@@ -12,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.AdvancementTab;
@@ -58,8 +59,8 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.sound.SoundCategory;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -67,7 +68,8 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
@@ -78,7 +80,6 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
@@ -129,7 +130,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private DimensionType dimensionType;
     private GameMode gameMode;
     // Chunks that the player can view
-    protected final Set<Chunk> viewableChunks = new CopyOnWriteArraySet<>();
+    protected final Set<Chunk> viewableChunks = ConcurrentHashMap.newKeySet();
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
@@ -154,7 +155,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private long startEatingTime;
     private long defaultEatingTime = 1000L;
     private long eatingTime;
-    private boolean isEating;
+    private Hand eatingHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -176,8 +177,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private float lastPlayerSyncYaw, lastPlayerSyncPitch;
 
     // Experience orb pickup
-    protected UpdateOption experiencePickupCooldown = new UpdateOption(10, TimeUnit.TICK);
-    private long lastExperiencePickupCheckTime;
+    protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
 
     private BelowNameTag belowNameTag;
 
@@ -392,9 +392,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Experience orb pickup
-        if (!CooldownUtils.hasCooldown(time, lastExperiencePickupCheckTime, experiencePickupCooldown)) {
-            this.lastExperiencePickupCheckTime = time;
-
+        if (experiencePickupCooldown.isReady(time)) {
+            experiencePickupCooldown.refreshLastUpdate(time);
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
             final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
@@ -417,10 +416,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Eating animation
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
-                refreshEating(false);
-
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true, eatingHand);
 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
@@ -432,9 +429,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 final boolean isFood = foodItem.getMaterial().isFood();
 
                 if (isFood) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem);
+                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
                     callEvent(PlayerEatEvent.class, playerEatEvent);
                 }
+
+                refreshEating(null);
             }
         }
 
@@ -525,6 +524,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void remove() {
+        if (isRemoved())
+            return;
+
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
 
         super.remove();
@@ -554,14 +556,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         }
 
-        // Item ownership cache
-        {
-            ItemStack[] itemStacks = inventory.getItemStacks();
-            for (ItemStack itemStack : itemStacks) {
-                ItemStack.DATA_OWNERSHIP.clearCache(itemStack.getIdentifier());
-            }
-        }
-
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
@@ -574,7 +568,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean addViewer0(@NotNull Player player) {
+    protected boolean addViewer0(@NotNull Player player) {
         if (player == this) {
             return false;
         }
@@ -584,7 +578,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean removeViewer0(@NotNull Player player) {
+    protected boolean removeViewer0(@NotNull Player player) {
         if (player == this || !super.removeViewer0(player)) {
             return false;
         }
@@ -620,9 +614,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Send spawn point information
         final SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
-        spawnPositionPacket.x = (int) spawnPosition.getX();
-        spawnPositionPacket.y = (int) spawnPosition.getY();
-        spawnPositionPacket.z = (int) spawnPosition.getZ();
+        spawnPositionPacket.x = (int) respawnPoint.getX();
+        spawnPositionPacket.y = (int) respawnPoint.getY();
+        spawnPositionPacket.z = (int) respawnPoint.getZ();
         playerConnection.sendPacket(spawnPositionPacket);
 
         super.setInstance(instance, spawnPosition, false);
@@ -735,7 +729,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param text      the text with the legacy color formatting
      * @param colorChar the color character
-     *
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
@@ -748,7 +741,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
      *
      * @param text the text with the legacy color formatting
-     *
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
@@ -762,7 +754,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Deprecated
     public void sendJsonMessage(@NotNull String json) {
-        this.sendMessage(json);
+        this.sendMessage(GsonComponentSerializer.gson().deserialize(json));
     }
 
     @Override
@@ -910,6 +902,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Sends a {@link StopSoundPacket} packet.
+     *
      * @deprecated Use {@link #stopSound(SoundStop)} with {@link SoundStop#all()}
      */
     @Deprecated
@@ -924,7 +917,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param header the header text, null to set empty
      * @param footer the footer text, null to set empty
-     *
      * @deprecated Use {@link #sendPlayerListHeaderAndFooter(Component, Component)}
      */
     @Deprecated
@@ -945,7 +937,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param text   the text of the title
      * @param action the action of the title (where to show it)
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
      */
     @Deprecated
@@ -960,7 +951,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param title    the title message
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)}
      */
     @Deprecated
@@ -973,7 +963,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param title the title message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)}
      */
     @Deprecated
@@ -986,7 +975,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param subtitle the subtitle message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #showTitle(Title)}
      */
     @Deprecated
@@ -999,7 +987,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param actionBar the action bar message
      * @see #sendTitleTime(int, int, int) to specify the display time
-     *
      * @deprecated Use {@link #sendActionBar(Component)}
      */
     @Deprecated
@@ -1028,7 +1015,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param fadeIn  ticks to spend fading in
      * @param stay    ticks to keep the title displayed
      * @param fadeOut ticks to spend out, not when to start fading out
-     *
      * @deprecated Use {@link #showTitle(Title)}. Note that this will overwrite the
      * existing title. This is expected behavior and will be the case in 1.17.
      */
@@ -1040,6 +1026,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Hides the previous title.
+     *
      * @deprecated Use {@link #clearTitle()}
      */
     @Deprecated
@@ -1070,43 +1057,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         MinecraftServer.getBossBarManager().removeBossBar(this, bar);
     }
 
-    /**
-     * Opens a book ui for the player with the given book metadata.
-     *
-     * @param bookMeta The metadata of the book to open
-     *
-     * @deprecated Use {@link #openBook(Book)}
-     */
-    @Deprecated
-    public void openBook(@NotNull WrittenBookMeta bookMeta) {
-        // Set book in offhand
-        final ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(bookMeta);
-        final SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = 0;
-        setSlotPacket.slot = 45;
-        setSlotPacket.itemStack = writtenBook;
-        this.playerConnection.sendPacket(setSlotPacket);
-
-        // Open the book
-        final OpenBookPacket openBookPacket = new OpenBookPacket();
-        openBookPacket.hand = Hand.OFF;
-        this.playerConnection.sendPacket(openBookPacket);
-
-        // Update inventory to remove book (which the actual inventory does not have)
-        this.inventory.update();
-    }
-
     @Override
     public void openBook(@NotNull Book book) {
-        // make the book
-        ItemStack writtenBook = new ItemStack(Material.WRITTEN_BOOK, (byte) 1);
-        writtenBook.setItemMeta(WrittenBookMeta.fromAdventure(book, this));
+        ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
+                .meta(WrittenBookMeta.fromAdventure(book, this))
+                .build();
 
         // Set book in offhand
         SetSlotPacket setBookPacket = new SetSlotPacket();
         setBookPacket.windowId = 0;
-        setBookPacket.slot = 45;
+        setBookPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         setBookPacket.itemStack = writtenBook;
         playerConnection.sendPacket(setBookPacket);
 
@@ -1118,7 +1078,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Restore the item in offhand
         SetSlotPacket restoreItemPacket = new SetSlotPacket();
         restoreItemPacket.windowId = 0;
-        restoreItemPacket.slot = 45;
+        restoreItemPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
         restoreItemPacket.itemStack = getItemInOffHand();
         playerConnection.sendPacket(restoreItemPacket);
     }
@@ -1200,7 +1160,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return true if the player is eating, false otherwise
      */
     public boolean isEating() {
-        return isEating;
+        return eatingHand != null;
     }
 
     /**
@@ -1807,7 +1767,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Kicks the player with a reason.
      *
      * @param text the kick reason
-     *
      * @deprecated Use {@link #kick(Component)}
      */
     @Deprecated
@@ -1819,7 +1778,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Kicks the player with a reason.
      *
      * @param message the kick reason
-     *
      * @deprecated Use {@link #kick(Component)}
      */
     @Deprecated
@@ -1930,9 +1888,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
-
-            if (getOpenInventory() != null) {
-                getOpenInventory().removeViewer(this);
+            Inventory openInventory = getOpenInventory();
+            if (openInventory != null) {
+                openInventory.removeViewer(this);
             }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();
@@ -1942,10 +1900,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 return;
             }
 
-            OpenWindowPacket openWindowPacket = new OpenWindowPacket();
+            OpenWindowPacket openWindowPacket = new OpenWindowPacket(newInventory.getTitle());
             openWindowPacket.windowId = newInventory.getWindowId();
             openWindowPacket.windowType = newInventory.getInventoryType().getWindowType();
-            openWindowPacket.title = newInventory.getTitle();
             playerConnection.sendPacket(openWindowPacket);
             newInventory.addViewer(this);
             this.openInventory = newInventory;
@@ -1966,10 +1923,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ItemStack cursorItem;
         if (openInventory == null) {
             cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.getAirItem());
+            getInventory().setCursorItem(ItemStack.AIR);
         } else {
             cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.getAirItem());
+            openInventory.setCursorItem(this, ItemStack.AIR);
         }
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
@@ -2328,12 +2285,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.heldSlot = slot;
         syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
 
-        refreshEating(false);
+        refreshEating(null);
     }
 
-    public void refreshEating(boolean isEating, long eatingTime) {
-        this.isEating = isEating;
-        if (isEating) {
+    public void refreshEating(@Nullable Hand eatingHand, long eatingTime) {
+        this.eatingHand = eatingHand;
+        if (eatingHand != null) {
             this.startEatingTime = System.currentTimeMillis();
             this.eatingTime = eatingTime;
         } else {
@@ -2341,8 +2298,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
     }
 
-    public void refreshEating(boolean isEating) {
-        refreshEating(isEating, defaultEatingTime);
+    public void refreshEating(@Nullable Hand eatingHand) {
+        refreshEating(eatingHand, defaultEatingTime);
     }
 
     /**
@@ -2353,23 +2310,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    @Nullable
-    public ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood) {
-        final Material mainHandMat = getItemInMainHand().getMaterial();
-        final Material offHandMat = getItemInOffHand().getMaterial();
-        final boolean isOffhand = offHandMat.hasState();
-
-        final ItemStack updatedItem = isOffhand ? getItemInOffHand() :
-                mainHandMat.hasState() ? getItemInMainHand() : null;
-        if (updatedItem == null) // No item with state, cancel
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
+        if (hand == null)
             return null;
 
+        final ItemStack updatedItem = getItemInHand(hand);
         final boolean isFood = updatedItem.getMaterial().isFood();
 
         if (isFood && !allowFood)
             return null;
 
-        final Hand hand = isOffhand ? Hand.OFF : Hand.MAIN;
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
@@ -2441,10 +2391,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int playerRange = getSettings().viewDistance;
         if (playerRange < 1) {
             // Didn't receive settings packet yet (is the case on login)
-            // In this case we send the smallest amount of chunks possible
+            // In this case we send an arbitrary number of chunks
             // Will be updated in PlayerSettings#refresh.
             // Non-compliant clients might also be stuck with this view
-            return 3;
+            return 7;
         } else {
             final int serverRange = MinecraftServer.getChunkViewDistance();
             return Math.min(playerRange, serverRange);
@@ -2632,6 +2582,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.identity = Identity.identity(uuid);
     }
 
+    @Override
+    public boolean isPlayer() {
+        return true;
+    }
+
+    @Override
+    public Player asPlayer() {
+        return this;
+    }
+
     /**
      * Represents the main or off hand of the player.
      */
@@ -2669,8 +2629,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
-
-        private boolean firstRefresh = true;
 
         /**
          * The player game language.
@@ -2746,8 +2704,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
 
             metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
-
-            this.firstRefresh = false;
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

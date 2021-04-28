@@ -1,9 +1,14 @@
 package net.minestom.server.utils;
 
+import com.velocitypowered.natives.compression.VelocityCompressor;
+import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
@@ -16,9 +21,9 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.util.Collection;
-import java.util.zip.Deflater;
+import java.util.zip.DataFormatException;
 
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuf}
@@ -27,10 +32,43 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<Deflater> DEFLATER = ThreadLocal.withInitial(Deflater::new);
+    private static final ThreadLocal<VelocityCompressor> COMPRESSOR = ThreadLocal.withInitial(() -> Natives.compress.get().create(4));
 
     private PacketUtils() {
 
+    }
+
+    /**
+     * Sends a packet to an audience. This method performs the following steps in the
+     * following order:
+     * <ol>
+     *     <li>If {@code audience} is a {@link Player}, send the packet to them.</li>
+     *     <li>Otherwise, if {@code audience} is a {@link PacketGroupingAudience}, call
+     *     {@link #sendGroupedPacket(Collection, ServerPacket)} on the players that the
+     *     grouping audience contains.</li>
+     *     <li>Otherwise, if {@code audience} is a {@link ForwardingAudience.Single},
+     *     call this method on the single audience inside the forwarding audience.</li>
+     *     <li>Otherwise, if {@code audience} is a {@link ForwardingAudience}, call this
+     *     method for each audience member of the forwarding audience.</li>
+     *     <li>Otherwise, do nothing.</li>
+     * </ol>
+     *
+     * @param audience the audience
+     * @param packet the packet
+     */
+    @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
+    public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
+        if (audience instanceof Player) {
+            ((Player) audience).getPlayerConnection().sendPacket(packet);
+        } else if (audience instanceof PacketGroupingAudience) {
+            PacketUtils.sendGroupedPacket(((PacketGroupingAudience) audience).getPlayers(), packet);
+        } else if (audience instanceof ForwardingAudience.Single) {
+            PacketUtils.sendPacket(((ForwardingAudience.Single) audience).audience(), packet);
+        } else if (audience instanceof ForwardingAudience) {
+            for (Audience member : ((ForwardingAudience) audience).audiences()) {
+                PacketUtils.sendPacket(member, packet);
+            }
+        }
     }
 
     /**
@@ -162,35 +200,27 @@ public final class PacketUtils {
      * <p>
      * {@code packetBuffer} needs to be the packet content without any header (if you want to use it to write a Minecraft packet).
      *
-     * @param deflater          the deflater for zlib compression
+     * @param compressor        the deflater for zlib compression
      * @param packetBuffer      the buffer containing all the packet fields
      * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
      */
-    public static void compressBuffer(@NotNull Deflater deflater, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
+    public static void compressBuffer(@NotNull VelocityCompressor compressor, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
         final boolean compression = packetLength > MinecraftServer.getCompressionThreshold();
         Utils.writeVarIntBuf(compressionTarget, compression ? packetLength : 0);
         if (compression) {
-            compress(deflater, packetBuffer, compressionTarget);
+            compress(compressor, packetBuffer, compressionTarget);
         } else {
             compressionTarget.writeBytes(packetBuffer);
         }
     }
 
-    private static void compress(@NotNull Deflater deflater, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
-        deflater.setInput(uncompressed.nioBuffer());
-        deflater.finish();
-
-        while (!deflater.finished()) {
-            ByteBuffer nioBuffer = compressed.nioBuffer(compressed.writerIndex(), compressed.writableBytes());
-            compressed.writerIndex(deflater.deflate(nioBuffer) + compressed.writerIndex());
-
-            if (compressed.writableBytes() == 0) {
-                compressed.ensureWritable(8192);
-            }
+    private static void compress(@NotNull VelocityCompressor compressor, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
+        try {
+            compressor.deflate(uncompressed, compressed);
+        } catch (DataFormatException e) {
+            e.printStackTrace();
         }
-
-        deflater.reset();
     }
 
     public static void writeFramedPacket(@NotNull ByteBuf buffer,
@@ -199,7 +229,7 @@ public final class PacketUtils {
         final boolean compression = compressionThreshold > 0;
 
         if (compression) {
-            // Dummy varint
+            // Dummy var-int
             final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
@@ -212,11 +242,11 @@ public final class PacketUtils {
             if (packetSize >= compressionThreshold) {
                 // Packet large enough
 
-                final Deflater deflater = DEFLATER.get();
+                final VelocityCompressor compressor = COMPRESSOR.get();
                 // Compress id + payload
                 ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
                 buffer.writerIndex(contentIndex);
-                compress(deflater, uncompressedCopy, buffer);
+                compress(compressor, uncompressedCopy, buffer);
                 uncompressedCopy.release();
 
                 final int totalPacketLength = buffer.writerIndex() - contentIndex + Utils.VARINT_HEADER_SIZE;
@@ -233,13 +263,13 @@ public final class PacketUtils {
         } else {
             // No compression
 
-            // Write dummy varint
+            // Write dummy var-int
             final int index = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet id + payload
             writePacket(buffer, serverPacket);
 
-            // Rewrite dummy varint to packet length
+            // Rewrite dummy var-int to packet length
             final int afterIndex = buffer.writerIndex();
             final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
             Utils.overrideVarIntHeader(buffer, index, packetSize);

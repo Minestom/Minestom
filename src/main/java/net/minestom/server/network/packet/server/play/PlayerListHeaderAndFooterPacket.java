@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,10 @@ public class PlayerListHeaderAndFooterPacket implements ComponentHoldingServerPa
     public Component header;
     public Component footer;
 
+    public PlayerListHeaderAndFooterPacket() {
+        this(null, null);
+    }
+
     public PlayerListHeaderAndFooterPacket(@Nullable Component header, @Nullable Component footer) {
         this.header = header;
         this.footer = footer;
@@ -27,11 +32,6 @@ public class PlayerListHeaderAndFooterPacket implements ComponentHoldingServerPa
     public void write(@NotNull BinaryWriter writer) {
         writer.writeComponent(Objects.requireNonNullElseGet(header, Component::empty));
         writer.writeComponent(Objects.requireNonNullElseGet(footer, Component::empty));
-    }
-
-    @Override
-    public int getId() {
-        return ServerPacketIdentifier.PLAYER_LIST_HEADER_AND_FOOTER;
     }
 
     @Override
@@ -49,5 +49,15 @@ public class PlayerListHeaderAndFooterPacket implements ComponentHoldingServerPa
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         return new PlayerListHeaderAndFooterPacket(header == null ? null : operator.apply(header), footer == null ? null : operator.apply(footer));
+    }
+
+    public void read(@NotNull BinaryReader reader) {
+        header = reader.readComponent(Integer.MAX_VALUE);
+        footer = reader.readComponent(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public int getId() {
+        return ServerPacketIdentifier.PLAYER_LIST_HEADER_AND_FOOTER;
     }
 }

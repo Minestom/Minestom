@@ -16,6 +16,7 @@ import java.util.Objects;
  * Examples are {@link ColoredText} and {@link RichMessage}.
  *
  * @see <a href="https://wiki.vg/Chat">Chat Format</a>
+ * @deprecated Use {@link Component}
  */
 @Deprecated
 public abstract class JsonMessage implements ComponentLike {

@@ -2,10 +2,26 @@ package net.minestom.server.utils.time;
 
 import org.jetbrains.annotations.NotNull;
 
-public final class CooldownUtils {
+public final class Cooldown {
 
-    private CooldownUtils() {
+    private UpdateOption updateOption;
+    private long lastUpdate;
 
+    public Cooldown(@NotNull UpdateOption updateOption) {
+        this.updateOption = updateOption;
+        this.lastUpdate = System.currentTimeMillis();
+    }
+
+    public UpdateOption getUpdateOption() {
+        return this.updateOption;
+    }
+
+    public void refreshLastUpdate(long lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public boolean isReady(long time) {
+        return !hasCooldown(time, lastUpdate, updateOption.getTimeUnit(), updateOption.getValue());
     }
 
     /**

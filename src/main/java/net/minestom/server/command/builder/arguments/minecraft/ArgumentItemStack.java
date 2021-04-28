@@ -7,7 +7,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -34,20 +33,31 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     @NotNull
     @Override
     public ItemStack parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+        argumentNode.parser = "minecraft:item_stack";
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    }
+
+    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("{");
 
         if (nbtIndex == 0)
             throw new ArgumentSyntaxException("The item needs a material", input, NO_MATERIAL);
 
         if (nbtIndex == -1) {
-            // Only item name
+            // Only material name
             final Material material = Registries.getMaterial(input);
-            return new ItemStack(material, (byte) 1);
+            return ItemStack.of(material);
         } else {
+            // Material plus additional NBT
             final String materialName = input.substring(0, nbtIndex);
             final Material material = Registries.getMaterial(materialName);
-
-            ItemStack itemStack = new ItemStack(material, (byte) 1);
 
             final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
 
@@ -58,17 +68,12 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 throw new ArgumentSyntaxException("Item NBT is invalid", input, INVALID_NBT);
             }
 
-            NBTUtils.loadDataIntoItem(itemStack, compound);
-
-            return itemStack;
+            return ItemStack.fromNBT(material, compound);
         }
     }
 
     @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:item_stack";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    public String toString() {
+        return String.format("ItemStack<%s>", getId());
     }
 }
