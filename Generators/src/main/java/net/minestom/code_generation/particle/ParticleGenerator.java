@@ -205,8 +205,6 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
                 particleType = ParameterizedTypeName.get(particleClassName, currentParticleDataClassName);
             }
 
-            ParameterizedTypeName shortHandParticleType = ParameterizedTypeName.get(particleClassName);
-
             particleClass.addField(
                     FieldSpec.builder(
                             particleType,

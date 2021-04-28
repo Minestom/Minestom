@@ -11,7 +11,6 @@ import java.util.function.BiFunction;
 
 public class DustParticleData extends ParticleData {
     public static final BiFunction<Particle<DustParticleData>, String,DustParticleData> READER = (particle, data) -> {
-        //TODO better block state parsing, also required for ArgumentBlockState
         String[] numbers = data.split(StringUtils.SPACE);
         if (numbers.length != 4) {
             return null;
