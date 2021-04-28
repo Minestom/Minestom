@@ -54,7 +54,6 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.particle.ParticleCreator;
 import net.minestom.server.particle.data.Particle;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
