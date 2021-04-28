@@ -488,6 +488,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // isSolid method
         blockStateClass.addMethod(
                 MethodSpec.methodBuilder("isSolid")
                         .returns(TypeName.BOOLEAN)
@@ -495,10 +496,19 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // isLiquid method
         blockStateClass.addMethod(
                 MethodSpec.methodBuilder("isLiquid")
                         .returns(TypeName.BOOLEAN)
                         .addStatement("return this.blockStateData.liquid")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // breaksInstantaneously method
+        blockStateClass.addMethod(
+                MethodSpec.methodBuilder("breaksInstantaneously")
+                        .returns(TypeName.BOOLEAN)
+                        .addStatement("return this.blockStateData.destroySpeed == 0")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );

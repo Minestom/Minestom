@@ -15,7 +15,6 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
@@ -58,7 +57,7 @@ public class PlayerDiggingListener {
             }
 
             final boolean instantBreak = player.isCreative() ||
-                    player.isInstantBreak(); //|| Block.fromStateId(blockStateId).breaksInstantaneously();
+                    player.isInstantBreak() || BlockState.fromId(blockStateId).breaksInstantaneously();
 
             if (instantBreak) {
                 // No need to check custom block
