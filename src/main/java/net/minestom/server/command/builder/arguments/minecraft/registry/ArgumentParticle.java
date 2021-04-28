@@ -23,6 +23,8 @@ public class ArgumentParticle extends ArgumentRegistry<ParticleData> {
 
         Particle<?> particle = Registry.PARTICLE_REGISTRY.get(split[0]);
 
+        if (particle == null) return null;
+
         if (split.length == 1) {
             return particle.readData(null);
         } else {
