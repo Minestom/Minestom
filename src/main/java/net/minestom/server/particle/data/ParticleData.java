@@ -45,14 +45,4 @@ public class ParticleData {
     public static @NotNull ItemParticleData item(@NotNull ItemStack item) {
         return new ItemParticleData(item);
     }
-
-    public static @Nullable ParticleData fromString(@Nullable Particle<?> particle, @Nullable String data) {
-        if (particle == null) {
-            return null;
-        } else if (data == null) {
-            return ParticleData.of((Particle<ParticleData>) particle);
-        } else {
-            return particle.readData(data);
-        }
-    }
 }
