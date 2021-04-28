@@ -106,5 +106,7 @@ public class AllGenerators {
                 new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_map_colors.json"),
                 outputFolder
         ).generate();
+        System.out.println("Finished generating code");
+        System.out.println("Please make sure to run the task 'spotlessApply' before committing.");
     }
 }
