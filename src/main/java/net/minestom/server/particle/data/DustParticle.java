@@ -23,7 +23,8 @@ public class DustParticle extends Particle {
                     (int) Float.parseFloat(numbers[0]) * 255,
                     (int) Float.parseFloat(numbers[1]) * 255,
                     (int) Float.parseFloat(numbers[2]) * 255),
-                    Integer.parseInt(numbers[3]));
+                    Integer.parseInt(numbers[3]),
+                    true, 0, 0, 0, 0, 1);
         } catch (NumberFormatException e) {
             return null;
         }
@@ -31,6 +32,15 @@ public class DustParticle extends Particle {
 
     private final float red, green, blue;
     private final float scale;
+
+    public DustParticle(@NotNull Color color, float scale, boolean longDistance,
+                        float offsetX, float offsetY, float offsetZ, float speed, int count) {
+        super(ParticleType.DUST, longDistance, offsetX, offsetY, offsetZ, speed, count);
+        this.red = color.getRed() / 255F;
+        this.green = color.getGreen() / 255F;
+        this.blue = color.getBlue() / 255F;
+        this.scale = scale;
+    }
 
     public DustParticle(@NotNull Color color, float scale) {
         super(ParticleType.DUST);

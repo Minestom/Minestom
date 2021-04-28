@@ -19,6 +19,19 @@ public class BlockParticle extends Particle {
 
     private final short blockstateID;
 
+    public BlockParticle(@NotNull ParticleType<BlockParticle> particleType, short blockstateID,
+                         boolean longDistance, float offsetX, float offsetY, float offsetZ,
+                         float speed, int count) {
+        super(particleType, longDistance, offsetX, offsetY, offsetZ, speed, count);
+        this.blockstateID = blockstateID;
+    }
+
+    public BlockParticle(@NotNull ParticleType<BlockParticle> particleType, @NotNull BlockState state,
+                         boolean longDistance, float offsetX, float offsetY, float offsetZ,
+                         float speed, int count) {
+        this(particleType, state.getId(), longDistance, offsetX, offsetY, offsetZ, speed, count);
+    }
+
     public BlockParticle(@NotNull ParticleType<BlockParticle> particleType, short blockstateID) {
         super(particleType);
         this.blockstateID = blockstateID;

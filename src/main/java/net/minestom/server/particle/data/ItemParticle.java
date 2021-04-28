@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.ParticleType;
 import net.minestom.server.utils.binary.BinaryWriter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
@@ -14,7 +15,8 @@ public class ItemParticle extends Particle {
         if (data == null) return null;
 
         try {
-            return new ItemParticle(ArgumentItemStack.staticParse(data));
+            return new ItemParticle(ArgumentItemStack.staticParse(data),
+                    true, 0, 0, 0, 0, 1);
         } catch (ArgumentSyntaxException e) {
             return null;
         }
@@ -22,7 +24,13 @@ public class ItemParticle extends Particle {
 
     private final ItemStack stack;
 
-    public ItemParticle(ItemStack stack) {
+    public ItemParticle(@NotNull ItemStack stack, boolean longDistance,
+                        float offsetX, float offsetY, float offsetZ, float speed, int count) {
+        super(ParticleType.ITEM, longDistance, offsetX, offsetY, offsetZ, speed, count);
+        this.stack = stack;
+    }
+
+    public ItemParticle(@NotNull ItemStack stack) {
         super(ParticleType.ITEM);
         this.stack = stack;
     }
