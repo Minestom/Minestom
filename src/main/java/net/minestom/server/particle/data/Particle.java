@@ -1,10 +1,12 @@
 package net.minestom.server.particle.data;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.color.Color;
 import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.ParticleType;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,7 +15,7 @@ import java.util.function.BiFunction;
 /**
  * Holds a particle type and its (optional) data.
  */
-public class Particle {
+public class Particle implements PublicCloneable<Particle> {
     public static final BiFunction<ParticleType<Particle>, @Nullable String, Particle> READER =
             (particle, data) -> Particle.of(particle);
 
@@ -74,6 +76,10 @@ public class Particle {
 
     public void write(BinaryWriter writer) {}
 
+    public static @NotNull ParticleBuilder builder() {
+        return new ParticleBuilder();
+    }
+
     /**
      * Creates a {@link Particle} without data.
      *
@@ -123,5 +129,15 @@ public class Particle {
      */
     public static @NotNull ItemParticle item(@NotNull ItemStack item) {
         return new ItemParticle(item);
+    }
+
+    @Override
+    public @NotNull Particle clone() {
+        try {
+            return (Particle) super.clone();
+        } catch (CloneNotSupportedException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            return null;
+        }
     }
 }
