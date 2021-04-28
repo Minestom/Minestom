@@ -10,7 +10,7 @@ import net.minestom.code_generation.fluid.FluidGenerator;
 import net.minestom.code_generation.item.EnchantmentGenerator;
 import net.minestom.code_generation.item.MaterialGenerator;
 import net.minestom.code_generation.map.MapColorsGenerator;
-import net.minestom.code_generation.particle.ParticleGenerator;
+import net.minestom.code_generation.particle.ParticleTypeGenerator;
 import net.minestom.code_generation.potion.PotionEffectGenerator;
 import net.minestom.code_generation.potion.PotionTypeGenerator;
 import net.minestom.code_generation.sound.SoundGenerator;
@@ -77,7 +77,7 @@ public class AllGenerators {
                 outputFolder
         ).generate();
         // Generate particles
-        new ParticleGenerator(
+        new ParticleTypeGenerator(
                 new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_particles.json"),
                 outputFolder
         ).generate();

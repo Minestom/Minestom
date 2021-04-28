@@ -10,7 +10,7 @@ import net.minestom.server.instance.block.BlockEntity;
 import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleType;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.sound.SoundEvent;
@@ -40,7 +40,7 @@ public final class Registry {
 
     public static final IdCrossMapRegistry<VillagerType> VILLAGER_TYPE_REGISTRY = new IdCrossMapRegistry<>();
 
-    public static final IdCrossMapRegistry<Particle<?>> PARTICLE_REGISTRY = new IdCrossMapRegistry<>();
+    public static final IdCrossMapRegistry<ParticleType<?>> PARTICLE_REGISTRY = new IdCrossMapRegistry<>();
 
     public static final MapRegistry.Defaulted<PotionType> POTION_TYPE_REGISTRY = new MapRegistry.Defaulted<>(() -> PotionType.EMPTY);
 

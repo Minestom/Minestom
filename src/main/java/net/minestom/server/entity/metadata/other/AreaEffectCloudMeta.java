@@ -36,11 +36,11 @@ public class AreaEffectCloudMeta extends EntityMeta {
     }
 
 //    public ParticleWrapper getParticle() {
-//        return super.metadata.getIndex((byte) 10, new ParticleWrapper(Particle.EFFECT, null));
+//        return super.metadata.getIndex((byte) 10, new ParticleWrapper(ParticleType.EFFECT, null));
 //    }
 //
 //    public void setParticle(ParticleWrapper value) {
-//        super.metadata.setIndex((byte) 11, Metadata.Particle(value));
+//        super.metadata.setIndex((byte) 11, Metadata.ParticleType(value));
 //    }
 
 }

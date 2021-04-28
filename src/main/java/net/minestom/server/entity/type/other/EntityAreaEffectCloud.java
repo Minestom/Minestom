@@ -2,7 +2,7 @@ package net.minestom.server.entity.type.other;
 
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ObjectEntity;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleType;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryWriter;
 
@@ -18,14 +18,14 @@ public class EntityAreaEffectCloud extends ObjectEntity {
     private float radius;
     private int color;
     private boolean ignoreRadius;
-    private Particle particleType;
+    private ParticleType<?> particleType;
 
     public EntityAreaEffectCloud(Position spawnPosition) {
         super(EntityType.AREA_EFFECT_CLOUD, spawnPosition);
         setRadius(0.5f);
         setColor(0);
         setIgnoreRadius(false);
-        setParticle(Particle.EFFECT);
+        setParticle(ParticleType.EFFECT);
         setParticleDataConsumer(packetWriter -> {
         });
     }
@@ -98,11 +98,11 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         //sendMetadataIndex(9);
     }
 
-    public Particle getParticle() {
+    public ParticleType<?> getParticle() {
         return particleType;
     }
 
-    public void setParticle(Particle particleType) {
+    public void setParticle(ParticleType<?> particleType) {
         this.particleType = particleType;
         //sendMetadataIndex(10);
     }
@@ -115,7 +115,7 @@ public class EntityAreaEffectCloud extends ObjectEntity {
      * Used to add data to the particle
      *
      * @param particleDataConsumer the particle data consumer
-     * @see <a href="https://wiki.vg/Data_types#Particle">Particle data</a>
+     * @see <a href="https://wiki.vg/Data_types#Particle">ParticleType data</a>
      */
     public void setParticleDataConsumer(Consumer<BinaryWriter> particleDataConsumer) {
         this.particleDataConsumer = particleDataConsumer;

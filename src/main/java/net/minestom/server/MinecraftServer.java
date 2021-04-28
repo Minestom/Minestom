@@ -32,7 +32,7 @@ import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleType;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
@@ -178,7 +178,7 @@ public final class MinecraftServer {
             Class.forName(PotionType.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(PotionEffect.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(SoundEvent.class.getName(), true, MinecraftServer.class.getClassLoader());
-            Class.forName(Particle.class.getName(), true, MinecraftServer.class.getClassLoader());
+            Class.forName(ParticleType.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(Attribute.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(StatisticType.class.getName(), true, MinecraftServer.class.getClassLoader());
         } catch (ClassNotFoundException e) {

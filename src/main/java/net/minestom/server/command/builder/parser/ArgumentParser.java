@@ -39,7 +39,7 @@ public class ArgumentParser {
         ARGUMENT_FUNCTION_MAP.put("Color", ArgumentColor::new);
         ARGUMENT_FUNCTION_MAP.put("Time", ArgumentTime::new);
         ARGUMENT_FUNCTION_MAP.put("Enchantment", ArgumentEnchantment::new);
-        ARGUMENT_FUNCTION_MAP.put("Particle", ArgumentParticle::new);
+        ARGUMENT_FUNCTION_MAP.put("ParticleType", ArgumentParticle::new);
         ARGUMENT_FUNCTION_MAP.put("ResourceLocation", ArgumentResourceLocation::new);
         ARGUMENT_FUNCTION_MAP.put("Potion", ArgumentPotionEffect::new);
         ARGUMENT_FUNCTION_MAP.put("EntityType", ArgumentEntityType::new);

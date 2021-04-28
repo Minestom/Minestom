@@ -1,7 +1,7 @@
 package net.minestom.server.particle.data;
 
 import net.minestom.server.instance.block.BlockState;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.particle.ParticleType;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -9,23 +9,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
-public class BlockParticleData extends ParticleData {
-    public static final BiFunction<Particle<BlockParticleData>, @Nullable String, BlockParticleData> READER = (particle, data) -> {
+public class BlockParticle extends Particle {
+    public static final BiFunction<ParticleType<BlockParticle>, @Nullable String, BlockParticle> READER = (particle, data) -> {
         if (data == null) return null;
 
         //TODO better block state parsing, also required for ArgumentBlockState
-        return new BlockParticleData(particle, Registry.BLOCK_REGISTRY.get(data).getDefaultBlockStateId());
+        return new BlockParticle(particle, Registry.BLOCK_REGISTRY.get(data).getDefaultBlockStateId());
     };
 
     private final short blockstateID;
 
-    public BlockParticleData(@NotNull Particle<BlockParticleData> particle, short blockstateID) {
-        super(particle);
+    public BlockParticle(@NotNull ParticleType<BlockParticle> particleType, short blockstateID) {
+        super(particleType);
         this.blockstateID = blockstateID;
     }
 
-    public BlockParticleData(@NotNull Particle<BlockParticleData> particle, @NotNull BlockState state) {
-        this(particle, state.getId());
+    public BlockParticle(@NotNull ParticleType<BlockParticle> particleType, @NotNull BlockState state) {
+        this(particleType, state.getId());
     }
 
     @Override
