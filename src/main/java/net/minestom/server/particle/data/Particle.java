@@ -10,6 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.BiFunction;
 
+/**
+ * Holds a particle type and its (optional) data.
+ */
 public class Particle {
     public static final BiFunction<ParticleType<Particle>, @Nullable String, Particle> READER =
             (particle, data) -> Particle.of(particle);
@@ -26,22 +29,53 @@ public class Particle {
         return particleType;
     }
 
+    /**
+     * Creates a {@link Particle} without data.
+     *
+     * @param particleType the type of the particle
+     * @return the {@link Particle} formed from the particle type
+     */
     public static @NotNull Particle of(@NotNull ParticleType<Particle> particleType) {
         return new Particle(particleType);
     }
 
+    /**
+     * Creates a {@link BlockParticle} with type block.
+     *
+     * @param state the blockstate for the particle
+     * @return the block particle with its data
+     */
     public static @NotNull BlockParticle block(BlockState state) {
         return new BlockParticle(ParticleType.BLOCK, state);
     }
 
+    /**
+     * Creates a {@link BlockParticle} with type falling dust.
+     *
+     * @param state the blockstate for the particle
+     * @return the falling dust particle with its data
+     */
     public static @NotNull BlockParticle fallingDust(BlockState state) {
         return new BlockParticle(ParticleType.FALLING_DUST, state);
     }
 
+    /**
+     * Creates a {@link DustParticle}.
+     *
+     * @param color the color of the dust
+     * @param scale the scale of the dust (default is 1.0)
+     * @return the dust particle with its data
+     */
     public static @NotNull DustParticle dust(@NotNull Color color, float scale) {
         return new DustParticle(color, scale);
     }
 
+    /**
+     * Creates a {@link ItemParticle}
+     *
+     * @param item the item for the particle
+     * @return the item particle with its data
+     */
     public static @NotNull ItemParticle item(@NotNull ItemStack item) {
         return new ItemParticle(item);
     }
