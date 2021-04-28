@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 public class ArgumentParticle extends ArgumentRegistry<ParticleData> {
 
     public ArgumentParticle(String id) {
-        super(id);
+        super(id, true);
     }
 
     @Override
