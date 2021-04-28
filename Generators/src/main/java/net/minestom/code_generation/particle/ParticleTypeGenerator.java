@@ -23,7 +23,6 @@ public final class ParticleTypeGenerator extends MinestomCodeGenerator {
     private final File particlesFile;
     private final File outputFolder;
 
-    //TODO maybe not hardcoded?
     private static final Map<String, String> PARTICLE_DATA = new HashMap<>() {{
         put("BLOCK", "BlockParticle");
         put("FALLING_DUST", "BlockParticle");

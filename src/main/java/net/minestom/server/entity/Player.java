@@ -952,33 +952,26 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Sends the given particle to this player.
      *
-     * @param particle     the particle to send
-     * @param longDistance whether the client should force this particle to show, even when it is far away
-     * @param x            x position of the particle
-     * @param y            y position of the particle
-     * @param z            z position of the particle
-     * @param offsetX      random x offset of the particle
-     * @param offsetY      random y offset of the particle
-     * @param offsetZ      random z offset of the particle
-     * @param speed        speed of the particle
-     * @param count        amount of times this particle is shown
+     * @param particle the particle to send
+     * @param x        x position of the particle
+     * @param y        y position of the particle
+     * @param z        z position of the particle
      */
-    public void sendParticle(@NotNull Particle particle, boolean longDistance, double x, double y, double z,
-                             float offsetX, float offsetY, float offsetZ, float speed, int count) {
+    public void sendParticle(@NotNull Particle particle, double x, double y, double z) {
         ParticlePacket particlePacket = new ParticlePacket();
-        particlePacket.particleId = particle.getParticle().getNumericalId();
-        particlePacket.longDistance = longDistance;
+        particlePacket.particleId = particle.getType().getNumericalId();
+        particlePacket.longDistance = particle.isLongDistance();
 
         particlePacket.x = x;
         particlePacket.y = y;
         particlePacket.z = z;
 
-        particlePacket.offsetX = offsetX;
-        particlePacket.offsetY = offsetY;
-        particlePacket.offsetZ = offsetZ;
+        particlePacket.offsetX = particle.getOffsetX();
+        particlePacket.offsetY = particle.getOffsetY();
+        particlePacket.offsetZ = particle.getOffsetZ();
 
-        particlePacket.speed = speed;
-        particlePacket.particleCount = count;
+        particlePacket.speed = particle.getSpeed();
+        particlePacket.particleCount = particle.getCount();
 
         BinaryWriter writer = new BinaryWriter();
         particle.write(writer);
@@ -990,49 +983,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Sends the given particle to this player.
      *
-     * @param particle     the particle to send
-     * @param x            x position of the particle
-     * @param y            y position of the particle
-     * @param z            z position of the particle
-     * @param offsetX      random x offset of the particle
-     * @param offsetY      random y offset of the particle
-     * @param offsetZ      random z offset of the particle
-     * @param speed        speed of the particle
-     * @param count        amount of times this particle is shown
+     * @param particle the particle to send
+     * @param position position of the particle
      */
-    public void sendParticle(@NotNull Particle particle, double x, double y, double z,
-                             float offsetX, float offsetY, float offsetZ, float speed, int count) {
-        sendParticle(particle, true, x, y, z, offsetX, offsetY, offsetZ, speed, count);
-    }
-
-    /**
-     * Sends the given particle to this player.
-     *
-     * @param particle     the particle to send
-     * @param x            x position of the particle
-     * @param y            y position of the particle
-     * @param z            z position of the particle
-     * @param offsetX      random x offset of the particle
-     * @param offsetY      random y offset of the particle
-     * @param offsetZ      random z offset of the particle
-     * @param count        amount of times this particle is shown
-     */
-    public void sendParticle(@NotNull Particle particle, double x, double y, double z,
-                             float offsetX, float offsetY, float offsetZ, int count) {
-        sendParticle(particle, true, x, y, z, offsetX, offsetY, offsetZ, 0, count);
-    }
-
-    /**
-     * Sends the given particle to this player.
-     *
-     * @param particle     the particle to send
-     * @param x            x position of the particle
-     * @param y            y position of the particle
-     * @param z            z position of the particle
-     * @param count        amount of times this particle is shown
-     */
-    public void sendParticle(@NotNull Particle particle, double x, double y, double z, int count) {
-        sendParticle(particle, true, x, y, z, 0, 0, 0, 0, count);
+    public void sendParticle(@NotNull Particle particle, Position position) {
+        sendParticle(particle, position.getX(), position.getY(), position.getZ());
     }
 
     /**

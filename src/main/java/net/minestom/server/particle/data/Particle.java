@@ -19,15 +19,92 @@ public class Particle {
 
     private final ParticleType<?> particleType;
 
+    private boolean longDistance = true;
+    private float offsetX, offsetY, offsetZ = 0;
+    private float speed = 0;
+    private int count = 1;
+
     protected Particle(@NotNull ParticleType<?> particleType) {
         this.particleType = particleType;
     }
 
-    public void write(BinaryWriter writer) {}
+    /**
+     * Sets whether the client should force this particle to show, even when it is far away
+     *
+     * @param longDistance if the client should force show this particle
+     * @return this
+     */
+    public @NotNull Particle longDistance(boolean longDistance) {
+        this.longDistance = longDistance;
+        return this;
+    }
 
-    public ParticleType<?> getParticle() {
+    /**
+     * Sets the random offset of this particle
+     *
+     * @param offsetX random x offset
+     * @param offsetY random y offset
+     * @param offsetZ random z offset
+     * @return this
+     */
+    public @NotNull Particle offset(float offsetX, float offsetY, float offsetZ) {
+        this.offsetX = offsetX;
+        this.offsetY = offsetY;
+        this.offsetZ = offsetZ;
+        return this;
+    }
+
+    /**
+     * Sets the speed of this particle
+     *
+     * @param speed speed of this particle
+     * @return this
+     */
+    public @NotNull Particle speed(float speed) {
+        this.speed = speed;
+        return this;
+    }
+
+    /**
+     * Sets the amount of times this particle is shown.
+     *
+     * @param count the amount of times this particle is shown
+     * @return this
+     */
+    public @NotNull Particle count(int count) {
+        this.count = count;
+        return this;
+    }
+
+    public ParticleType<?> getType() {
         return particleType;
     }
+
+    public boolean isLongDistance() {
+        return longDistance;
+    }
+
+    public float getOffsetX() {
+        return offsetX;
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
+
+    public float getOffsetZ() {
+        return offsetZ;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void write(BinaryWriter writer) {}
 
     /**
      * Creates a {@link Particle} without data.

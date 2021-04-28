@@ -24,8 +24,6 @@ public class ParticleCommand extends Command {
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         Player player = sender.asPlayer();
 
-        player.sendParticle(context.get(particle),
-                player.getPosition().getX(), player.getPosition().getY() + 3, player.getPosition().getZ(),
-                0, 0, 0, 1);
+        player.sendParticle(context.get(particle), player.getPosition().add(0, 3, 0));
     }
 }
