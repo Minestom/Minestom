@@ -11,7 +11,7 @@ public class ItemEventRegistry<T> {
     private final HashMap<T, ItemEventIdentifierHandler<T>> identifierHandlerHashMap = new HashMap<>();
     private final ItemTag<T> tag;
 
-    ItemEventRegistry(ItemTag<T> tag) {
+    ItemEventRegistry(@NotNull ItemTag<T> tag) {
         this.tag = tag;
     }
 
@@ -22,7 +22,7 @@ public class ItemEventRegistry<T> {
      *
      * @return The found ItemEventIdentifierHandler with a new instance if none were found.
      */
-    public @NotNull ItemEventIdentifierHandler<T> identifierOrNew(T identifier) {
+    public @NotNull ItemEventIdentifierHandler<T> identifierOrNew(@Nullable T identifier) {
         return identifierHandlerHashMap.computeIfAbsent(identifier, key -> new ItemEventIdentifierHandler<>());
     }
 
@@ -33,7 +33,7 @@ public class ItemEventRegistry<T> {
      *
      * @return The found ItemEventIdentifierHandler, null of none
      */
-    public @Nullable ItemEventIdentifierHandler<T> identifier(T identifier) {
+    public @Nullable ItemEventIdentifierHandler<T> identifier(@Nullable T identifier) {
         return identifierHandlerHashMap.get(identifier);
     }
 }

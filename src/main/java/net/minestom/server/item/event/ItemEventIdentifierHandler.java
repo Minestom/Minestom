@@ -19,15 +19,13 @@ public class ItemEventIdentifierHandler<T> implements EventHandler {
     private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
     private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
 
-    @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
+    public @NotNull Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
         return eventCallbacks;
     }
 
-    @NotNull
     @Override
-    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
+    public @NotNull Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
         return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
     }
 
