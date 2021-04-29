@@ -27,4 +27,9 @@ public class ArgumentPotionEffect extends ArgumentRegistry<PotionEffect> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("Potion<%s>", getId());
+    }
 }

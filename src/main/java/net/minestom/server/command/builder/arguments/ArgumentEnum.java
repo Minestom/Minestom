@@ -68,4 +68,8 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         }
     }
 
+    @Override
+    public String toString() {
+        return String.format("Enum<%s>", getId());
+    }
 }

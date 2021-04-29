@@ -61,16 +61,14 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final static int INITIAL_BUFFER_SIZE = 65_535; // 2^16-1
-    private final ByteBuf tickBuffer = BufUtils.getBuffer(true);
+    private final Object tickBufferLock = new Object();
+    private volatile ByteBuf tickBuffer = BufUtils.getBuffer(true);
     private volatile boolean writable = true;
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
         this.channel = channel;
         this.remoteAddress = channel.remoteAddress();
-
-        this.tickBuffer.ensureWritable(INITIAL_BUFFER_SIZE);
     }
 
     /**
@@ -120,7 +118,7 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (getPlayer() != null) {
                 // Flush happen during #update()
                 if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    synchronized (tickBuffer) {
+                    synchronized (tickBufferLock) {
                         if (tickBuffer.refCnt() == 0)
                             return;
                         CacheablePacket.writeCache(tickBuffer, serverPacket);
@@ -142,7 +140,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void write(@NotNull Object message, boolean skipTranslating) {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
-            synchronized (tickBuffer) {
+            synchronized (tickBufferLock) {
                 if (tickBuffer.refCnt() == 0)
                     return;
                 final ByteBuf body = framedPacket.getBody();
@@ -156,14 +154,14 @@ public class NettyPlayerConnection extends PlayerConnection {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component -> AdventureSerializer.translate(component, getPlayer()));
             }
 
-            synchronized (tickBuffer) {
+            synchronized (tickBufferLock) {
                 if (tickBuffer.refCnt() == 0)
                     return;
                 PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
             }
             return;
         } else if (message instanceof ByteBuf) {
-            synchronized (tickBuffer) {
+            synchronized (tickBufferLock) {
                 if (tickBuffer.refCnt() == 0)
                     return;
                 tickBuffer.writeBytes((ByteBuf) message);
@@ -194,11 +192,11 @@ public class NettyPlayerConnection extends PlayerConnection {
 
         // Retrieve safe copy
         final ByteBuf copy;
-        synchronized (tickBuffer) {
+        synchronized (tickBufferLock) {
             if (tickBuffer.refCnt() == 0)
                 return;
-            copy = tickBuffer.copy();
-            tickBuffer.clear();
+            copy = tickBuffer;
+            tickBuffer = tickBuffer.alloc().buffer(tickBuffer.writerIndex());
         }
 
         // Write copied buffer to netty
@@ -380,10 +378,10 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-
-    @NotNull
-    public ByteBuf getTickBuffer() {
-        return tickBuffer;
+    public void releaseTickBuffer() {
+        synchronized (tickBufferLock) {
+            tickBuffer.release();
+        }
     }
 
     public boolean isWritable() {

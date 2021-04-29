@@ -37,20 +37,17 @@ public class CollisionUtils {
         final BoundingBox boundingBox = entity.getBoundingBox();
 
         Vector intermediaryPosition = new Vector();
-        final boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
+        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
                 intermediaryPosition,
-                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace()
-        );
+                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
 
-        final boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
+        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
                 intermediaryPosition,
-                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace()
-        );
+                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
 
-        final boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
+        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
                 intermediaryPosition,
-                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace()
-        );
+                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
         positionOut.setX(intermediaryPosition.getX());
         positionOut.setY(intermediaryPosition.getY());

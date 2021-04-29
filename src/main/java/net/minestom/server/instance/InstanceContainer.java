@@ -506,7 +506,7 @@ public class InstanceContainer extends Instance {
     protected void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
         final boolean loaded = chunkLoader.loadChunk(this, chunkX, chunkZ, chunk -> {
             cacheChunk(chunk);
-            UPDATE_MANAGER.signalChunkLoad(this, chunk);
+            UPDATE_MANAGER.signalChunkLoad(chunk);
             // Execute callback and event in the instance thread
             scheduleNextTick(instance -> {
                 callChunkLoadEvent(chunkX, chunkZ);
@@ -544,7 +544,7 @@ public class InstanceContainer extends Instance {
             OptionalCallback.execute(callback, chunk);
         }
 
-        UPDATE_MANAGER.signalChunkLoad(this, chunk);
+        UPDATE_MANAGER.signalChunkLoad(chunk);
         callChunkLoadEvent(chunkX, chunkZ);
     }
 
@@ -641,7 +641,7 @@ public class InstanceContainer extends Instance {
             final Chunk copiedChunk = chunk.copy(copiedInstance, chunkX, chunkZ);
 
             copiedInstance.cacheChunk(copiedChunk);
-            UPDATE_MANAGER.signalChunkLoad(copiedInstance, copiedChunk);
+            UPDATE_MANAGER.signalChunkLoad(copiedChunk);
         }
 
         return copiedInstance;
@@ -682,7 +682,7 @@ public class InstanceContainer extends Instance {
      * Adds a {@link Chunk} to the internal instance map.
      * <p>
      * WARNING: the chunk will not automatically be sent to players and
-     * {@link net.minestom.server.UpdateManager#signalChunkLoad(Instance, Chunk)} must be called manually.
+     * {@link net.minestom.server.UpdateManager#signalChunkLoad(Chunk)} must be called manually.
      *
      * @param chunk the chunk to cache
      */
@@ -823,7 +823,7 @@ public class InstanceContainer extends Instance {
 
                 chunk.unload();
 
-                UPDATE_MANAGER.signalChunkUnload(this, chunk);
+                UPDATE_MANAGER.signalChunkUnload(chunk);
             }
             this.scheduledChunksToRemove.clear();
         }

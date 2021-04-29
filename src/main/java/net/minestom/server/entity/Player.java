@@ -583,6 +583,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void remove() {
+        if (isRemoved())
+            return;
+
         callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
 
         super.remove();
@@ -621,7 +624,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean addViewer0(@NotNull Player player) {
+    protected boolean addViewer0(@NotNull Player player) {
         if (player == this) {
             return false;
         }
@@ -631,7 +634,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public boolean removeViewer0(@NotNull Player player) {
+    protected boolean removeViewer0(@NotNull Player player) {
         if (player == this || !super.removeViewer0(player)) {
             return false;
         }
@@ -1989,9 +1992,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
-
-            if (getOpenInventory() != null) {
-                getOpenInventory().removeViewer(this);
+            Inventory openInventory = getOpenInventory();
+            if (openInventory != null) {
+                openInventory.removeViewer(this);
             }
 
             Inventory newInventory = inventoryOpenEvent.getInventory();

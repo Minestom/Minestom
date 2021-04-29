@@ -55,7 +55,7 @@ import java.util.function.Consumer;
  * WARNING: when making your own implementation registering the instance manually is required
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link UpdateManager} of the changes using
- * {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and {@link UpdateManager#signalChunkUnload(Instance, Chunk)}.
+ * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
 public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
 
@@ -254,7 +254,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
      * Could be read from disk, or generated from scratch.
      * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and to cache
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
      * that this chunk has been loaded.
      * <p>
      * WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.
@@ -268,7 +268,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     /**
      * Called to generated a new {@link Chunk} from scratch.
      * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Instance, Chunk)} and to cache
+     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
      * that this chunk has been loaded.
      * <p>
      * This is where you can put your chunk generation code.

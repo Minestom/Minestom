@@ -41,8 +41,7 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
-        this.stackingRule = Objects.requireNonNullElseGet(stackingRule,
-                () -> new VanillaStackingRule(64));
+        this.stackingRule = Objects.requireNonNullElseGet(stackingRule, VanillaStackingRule::new);
     }
 
     @Contract(value = "_ -> new", pure = true)

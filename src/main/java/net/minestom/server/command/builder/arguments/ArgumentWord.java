@@ -60,7 +60,7 @@ public class ArgumentWord extends Argument<String> {
         // Check restrictions (acting as literal)
         if (hasRestrictions()) {
             for (String r : restrictions) {
-                if (input.equalsIgnoreCase(r))
+                if (input.equals(r))
                     return input;
             }
             throw new ArgumentSyntaxException("Word needs to be in the restriction list", input, RESTRICTION_ERROR);
@@ -115,5 +115,10 @@ public class ArgumentWord extends Argument<String> {
     @Nullable
     public String[] getRestrictions() {
         return restrictions;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Word<%s>", getId());
     }
 }

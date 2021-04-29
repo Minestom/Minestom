@@ -579,6 +579,8 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     protected void unload() {
         this.loaded = false;
+        ChunkDataPacket.CACHE.invalidate(getIdentifier());
+        UpdateLightPacket.CACHE.invalidate(getIdentifier());
     }
 
     /**
