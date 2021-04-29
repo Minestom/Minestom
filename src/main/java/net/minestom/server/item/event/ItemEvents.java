@@ -37,7 +37,7 @@ public class ItemEvents {
      * @return An ItemEventRegistry instance. Will create a new one if none were found.
      */
     public static <T> @NotNull ItemEventRegistry<T> registryOrNew(@NotNull ItemTag<T> tag) {
-        return events.computeIfAbsent(tag, key -> new ItemEventRegistry<>(tag));
+        return events.computeIfAbsent(tag, key -> new ItemEventRegistry<>());
     }
 
     /**
