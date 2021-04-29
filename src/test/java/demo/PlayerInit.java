@@ -237,7 +237,7 @@ public class PlayerInit {
 
         {
             // add an item event
-            var registry = ItemEvents.getRegistryOrNew(ItemTag.String("item-drop"));
+            var registry = ItemEvents.registryOrNew(ItemTag.String("item-drop"));
 
             registry.identifierOrNew("stone").addEventCallback(ItemDropEvent.class, dropEvent -> {
                 dropEvent.getPlayer().sendMessage("You dropped the stone!");
