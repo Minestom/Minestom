@@ -23,6 +23,7 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.event.ItemEventManager;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -119,6 +120,7 @@ public final class MinecraftServer {
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
     private static BossBarManager bossBarManager;
+    private static ItemEventManager itemEventManager;
 
     private static ExtensionManager extensionManager;
 
@@ -185,6 +187,7 @@ public final class MinecraftServer {
         biomeManager = new BiomeManager();
         advancementManager = new AdvancementManager();
         bossBarManager = new BossBarManager();
+        itemEventManager = new ItemEventManager();
 
         updateManager = new UpdateManager();
 
@@ -440,6 +443,16 @@ public final class MinecraftServer {
     public static BossBarManager getBossBarManager() {
         checkInitStatus(bossBarManager);
         return bossBarManager;
+    }
+
+    /**
+     * Gets the item event manager
+     *
+     * @return the item event manager.
+     */
+    public static ItemEventManager getItemEventManager() {
+        checkInitStatus(itemEventManager);
+        return itemEventManager;
     }
 
     /**

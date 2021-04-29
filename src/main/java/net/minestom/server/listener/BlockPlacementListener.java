@@ -9,7 +9,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemUseOnBlockEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
-import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -21,7 +20,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.event.ItemEvents;
+import net.minestom.server.item.event.ItemEventManager;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.BlockPosition;
@@ -193,7 +192,7 @@ public class BlockPlacementListener {
             player.callEvent(PlayerUseItemOnBlockEvent.class, event);
 
             ItemUseOnBlockEvent itemEvent = new ItemUseOnBlockEvent(player, hand, usedItem, usePosition, direction);
-            ItemEvents.callEventOnItem(itemEvent.getItemStack(), ItemUseOnBlockEvent.class, itemEvent);
+            MinecraftServer.getItemEventManager().callEventOnItem(itemEvent.getItemStack(), ItemUseOnBlockEvent.class, itemEvent);
             refreshChunk = true;
         }
 

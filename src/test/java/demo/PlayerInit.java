@@ -28,7 +28,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.event.ItemEvents;
+import net.minestom.server.item.event.ItemEventManager;
 import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
@@ -237,7 +237,7 @@ public class PlayerInit {
 
         {
             // add an item event
-            var registry = ItemEvents.registryOrNew(ItemTag.String("item-drop"));
+            var registry = MinecraftServer.getItemEventManager().registryOrNew(ItemTag.String("item-drop"));
 
             registry.identifierOrNew("stone").addEventCallback(ItemDropEvent.class, dropEvent -> {
                 dropEvent.getPlayer().sendMessage("You dropped the stone!");

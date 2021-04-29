@@ -1,14 +1,14 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemEntityInteractEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
-import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.event.ItemEvents;
+import net.minestom.server.item.event.ItemEventManager;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 
 public class UseEntityListener {
@@ -40,7 +40,7 @@ public class UseEntityListener {
                         player, entity, packet.hand
                 );
 
-                ItemEvents.callEventOnItem(player.getItemInHand(packet.hand), ItemEntityInteractEvent.class, itemEntityInteractEvent);
+                MinecraftServer.getItemEventManager().callEventOnItem(player.getItemInHand(packet.hand), ItemEntityInteractEvent.class, itemEntityInteractEvent);
             }
 
         } else {

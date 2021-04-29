@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemAnimationEvent;
 import net.minestom.server.event.item.ItemUseEvent;
@@ -9,7 +10,7 @@ import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.event.ItemEvents;
+import net.minestom.server.item.event.ItemEventManager;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 
 public class UseItemListener {
@@ -35,7 +36,7 @@ public class UseItemListener {
                 plauerUseItemEvent.getItemStack()
         );
 
-        ItemEvents.callEventOnItem(itemStack, ItemUseEvent.class, useItemEvent);
+        MinecraftServer.getItemEventManager().callEventOnItem(itemStack, ItemUseEvent.class, useItemEvent);
         if (useItemEvent.isCancelled()) {
             playerInventory.update();
             return;
@@ -96,7 +97,7 @@ public class UseItemListener {
                         finalItemAnimationType
                 );
 
-                boolean cancelled = ItemEvents.callEventOnItem(useItemEvent.getItemStack(), ItemAnimationEvent.class, itemAnimationEvent);
+                boolean cancelled = MinecraftServer.getItemEventManager().callEventOnItem(useItemEvent.getItemStack(), ItemAnimationEvent.class, itemAnimationEvent);
 
                 if (cancelled) return;
 

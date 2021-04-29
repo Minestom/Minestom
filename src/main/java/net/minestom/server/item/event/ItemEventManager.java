@@ -20,11 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * <br />
  * And an identifier is used as the value to check in that ItemTag.
  */
-public class ItemEvents {
+public class ItemEventManager {
 
-    private static final ConcurrentHashMap<ItemTag<?>, ItemEventRegistry> events = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<ItemTag<?>, ItemEventRegistry> events = new ConcurrentHashMap<>();
 
-    private ItemEvents() {
+    public ItemEventManager() {
 
     }
 
@@ -36,7 +36,7 @@ public class ItemEvents {
      *
      * @return An ItemEventRegistry instance. Will create a new one if none were found.
      */
-    public static <T> @NotNull ItemEventRegistry<T> registryOrNew(@NotNull ItemTag<T> tag) {
+    public <T> @NotNull ItemEventRegistry<T> registryOrNew(@NotNull ItemTag<T> tag) {
         return events.computeIfAbsent(tag, key -> new ItemEventRegistry<>());
     }
 
@@ -48,7 +48,7 @@ public class ItemEvents {
      *
      * @return An ItemEventRegistry instance. Will return null if not found.
      */
-    public static <T> @Nullable ItemEventRegistry<T> registry(@NotNull ItemTag<T> tag) {
+    public <T> @Nullable ItemEventRegistry<T> registry(@NotNull ItemTag<T> tag) {
         return events.get(tag);
     }
 
@@ -62,7 +62,7 @@ public class ItemEvents {
      *
      * @return If the event was cancelled or not.
      */
-    public static <E extends Event> boolean callEventOnItem(@NotNull ItemStack itemStack, @NotNull Class<E> eventClass, @NotNull E event) {
+    public <E extends Event> boolean callEventOnItem(@NotNull ItemStack itemStack, @NotNull Class<E> eventClass, @NotNull E event) {
 
         boolean cancelled = false;
 
