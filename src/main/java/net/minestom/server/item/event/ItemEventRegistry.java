@@ -23,13 +23,7 @@ public class ItemEventRegistry<T> {
      * @return The found ItemEventIdentifierHandler with a new instance if none were found.
      */
     public @NotNull ItemEventIdentifierHandler<T> identifierOrNew(T identifier) {
-        if (identifierHandlerHashMap.containsKey(identifier)) return identifierHandlerHashMap.get(identifier);
-
-        ItemEventIdentifierHandler<T> itemEventIdentifierHandler = new ItemEventIdentifierHandler<>();
-
-        identifierHandlerHashMap.put(identifier, itemEventIdentifierHandler);
-
-        return itemEventIdentifierHandler;
+        return identifierHandlerHashMap.computeIfAbsent(identifier, key -> new ItemEventIdentifierHandler<>());
     }
 
     /**
