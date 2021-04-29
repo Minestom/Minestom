@@ -195,11 +195,7 @@ public abstract class Argument<T> {
         return this;
     }
 
-    /**
-     * @deprecated use {@link #setDefaultValue(Supplier)}
-     */
     @NotNull
-    @Deprecated
     public Argument<T> setDefaultValue(@Nullable T defaultValue) {
         this.defaultValue = () -> defaultValue;
         return this;
