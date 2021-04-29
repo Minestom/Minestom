@@ -1,6 +1,5 @@
 package net.minestom.server.item.event;
 
-import net.minestom.server.item.ItemTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
