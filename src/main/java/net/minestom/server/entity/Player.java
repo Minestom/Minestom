@@ -149,8 +149,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Position synchronization with viewers
-    private double lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ;
-    private float lastPlayerSyncYaw, lastPlayerSyncPitch;
+    private final Position lastSyncedPlayerPosition;
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
@@ -188,6 +187,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
         setRespawnPoint(new Position(0, 0, 0));
+        this.lastSyncedPlayerPosition = new Position();
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -424,11 +424,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Multiplayer sync
         if (!viewers.isEmpty()) {
-            final boolean positionChanged = position.getX() != lastPlayerSyncX ||
-                    position.getY() != lastPlayerSyncY ||
-                    position.getZ() != lastPlayerSyncZ;
-            final boolean viewChanged = position.getYaw() != lastPlayerSyncYaw ||
-                    position.getPitch() != lastPlayerSyncPitch;
+            final boolean positionChanged = !position.isSimilar(lastSyncedPlayerPosition);
+            final boolean viewChanged = !position.hasSimilarView(lastSyncedPlayerPosition);
 
             if (positionChanged || viewChanged) {
                 // Player moved since last time
@@ -437,10 +434,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 ServerPacket optionalUpdatePacket = null;
                 if (positionChanged && viewChanged) {
                     updatePacket = EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                            position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
+                            position, lastSyncedPlayerPosition, onGround);
                 } else if (positionChanged) {
                     updatePacket = EntityPositionPacket.getPacket(getEntityId(),
-                            position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
+                            position, lastSyncedPlayerPosition, onGround);
                 } else {
                     // View changed
                     updatePacket = EntityRotationPacket.getPacket(getEntityId(),
@@ -465,15 +462,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             // Update sync data
-            if (positionChanged) {
-                lastPlayerSyncX = position.getX();
-                lastPlayerSyncY = position.getY();
-                lastPlayerSyncZ = position.getZ();
-            }
-            if (viewChanged) {
-                lastPlayerSyncYaw = position.getYaw();
-                lastPlayerSyncPitch = position.getPitch();
-            }
+            lastSyncedPlayerPosition.set(position);
         }
 
     }
