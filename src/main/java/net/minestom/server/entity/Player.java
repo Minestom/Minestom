@@ -63,7 +63,6 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -715,7 +714,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
-            sendTeleportPacket(); // So the player doesn't get stuck
+            synchronizePosition(); // So the player doesn't get stuck
             this.inventory.update();
         }
 
@@ -2021,18 +2020,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * @see Entity#sendTeleportPacket()
+     * @see Entity#synchronizePosition()
      */
     @Override
     @ApiStatus.Internal
-    protected void sendTeleportPacket() {
+    protected void synchronizePosition() {
         final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position.clone();
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = teleportId.incrementAndGet();
         playerConnection.sendPacket(positionAndLookPacket);
 
-        super.sendTeleportPacket();
+        super.synchronizePosition();
     }
 
     /**
