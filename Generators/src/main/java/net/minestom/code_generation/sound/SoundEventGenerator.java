@@ -17,22 +17,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public final class SoundGenerator extends MinestomCodeGenerator {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SoundGenerator.class);
+public final class SoundEventGenerator extends MinestomCodeGenerator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SoundEventGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "sounds.json");
     private final File soundsFile;
     private final File outputFolder;
 
-    public SoundGenerator() {
+    public SoundEventGenerator() {
         this(null, null);
     }
 
-    public SoundGenerator(@Nullable File itemsFile) {
+    public SoundEventGenerator(@Nullable File itemsFile) {
         this(itemsFile, null);
     }
 
-    public SoundGenerator(@Nullable File itemsFile, @Nullable File outputFolder) {
+    public SoundEventGenerator(@Nullable File itemsFile, @Nullable File outputFolder) {
         this.soundsFile = Objects.requireNonNullElse(itemsFile, DEFAULT_INPUT_FILE);
         this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
     }

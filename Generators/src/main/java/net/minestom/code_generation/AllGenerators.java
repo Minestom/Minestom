@@ -13,7 +13,7 @@ import net.minestom.code_generation.map.MapColorsGenerator;
 import net.minestom.code_generation.particle.ParticleGenerator;
 import net.minestom.code_generation.potion.PotionEffectGenerator;
 import net.minestom.code_generation.potion.PotionTypeGenerator;
-import net.minestom.code_generation.sound.SoundGenerator;
+import net.minestom.code_generation.sound.SoundEventGenerator;
 import net.minestom.code_generation.statistics.StatisticGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,7 +86,7 @@ public class AllGenerators {
                 outputFolder
         ).generate();
         // Generate sounds
-        new SoundGenerator(
+        new SoundEventGenerator(
                 new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_sounds.json"),
                 outputFolder
         ).generate();
