@@ -111,7 +111,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
     // Network synchronization, send the absolute position of the entity each X milliseconds
-    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1500, TimeUnit.MILLISECOND);
+    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1, TimeUnit.MINUTE);
     private UpdateOption customSynchronizationCooldown;
     private long lastAbsoluteSynchronizationTime;
 
@@ -269,7 +269,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             refreshPosition(teleportPosition);
             refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
-            sendSynchronization();
+            synchronizePosition();
 
             OptionalCallback.execute(callback);
         };
@@ -634,7 +634,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
                 // Synchronization and packets...
                 if (!isNettyClient) {
-                    sendSynchronization();
+                    synchronizePosition();
                 }
                 // Verify if velocity packet has to be sent
                 if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
@@ -705,8 +705,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
-            this.lastAbsoluteSynchronizationTime = time;
-            sendSynchronization();
+            synchronizePosition();
         }
 
         if (shouldRemove() && !MinecraftServer.isStopping()) {
@@ -1539,12 +1538,23 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         return metaDataPacket;
     }
 
-    protected void sendSynchronization() {
-        EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
+    /**
+     * Used to synchronize entity position with viewers by sending an
+     * {@link EntityTeleportPacket} to viewers, in case of a player this is
+     * overridden in order to send an additional {@link PlayerPositionAndLookPacket}
+     * to itself.
+     */
+    @ApiStatus.Internal
+    protected void synchronizePosition() {
+        final Position pos = position.clone();
+        final EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = getPosition().clone();
+        entityTeleportPacket.position = pos;
         entityTeleportPacket.onGround = isOnGround();
         sendPacketToViewers(entityTeleportPacket);
+
+        this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
+        this.lastSyncedPosition.set(pos);
     }
 
     /**

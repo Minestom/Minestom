@@ -63,7 +63,6 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -74,6 +73,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -714,7 +714,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
-            updatePlayerPosition(); // So the player doesn't get stuck
+            synchronizePosition(); // So the player doesn't get stuck
             this.inventory.update();
         }
 
@@ -1665,27 +1665,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     }
 
-    @Override
-    public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
-        super.teleport(position, chunks, () -> {
-            updatePlayerPosition();
-            OptionalCallback.execute(callback);
-        });
-    }
-
-    @Override
-    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
-        final boolean sameChunk = getPosition().inSameChunk(position);
-        final long[] chunks = sameChunk ? null :
-                ChunkUtils.getChunksInRange(position, getChunkRange());
-        teleport(position, chunks, callback);
-    }
-
-    @Override
-    public void teleport(@NotNull Position position) {
-        teleport(position, null);
-    }
-
     /**
      * Gets the player connection.
      * <p>
@@ -2041,14 +2020,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used for synchronization purpose, mainly for teleportation
+     * @see Entity#synchronizePosition()
      */
-    protected void updatePlayerPosition() {
-        PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-        positionAndLookPacket.position = position.clone(); // clone needed to prevent synchronization issue
+    @Override
+    @ApiStatus.Internal
+    protected void synchronizePosition() {
+        final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
+        positionAndLookPacket.position = position.clone();
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = teleportId.incrementAndGet();
         playerConnection.sendPacket(positionAndLookPacket);
+
+        super.synchronizePosition();
     }
 
     /**
