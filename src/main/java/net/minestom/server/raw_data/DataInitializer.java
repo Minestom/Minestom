@@ -9,6 +9,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
+import net.minestom.server.map.MapColor;
 import net.minestom.server.map.MapColors;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.registry.Registry;
@@ -21,9 +22,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-public class DataInitializer {
+public final class DataInitializer {
     private static final Logger LOGGER = LoggerFactory.getLogger(DataInitializer.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+
+    private DataInitializer() {
+
+    }
 
     public static void runDataInitializer(File inputFolder, String version) {
         LOGGER.info("Attempting to initialize external data...");
@@ -42,6 +47,7 @@ public class DataInitializer {
             LOGGER.error("Stopped raw data engine for blocks.");
             return;
         }
+        MapColor[] mapColors = MapColors.values();
         JsonArray blocksJson;
         try {
             blocksJson = GSON.fromJson(new JsonReader(new FileReader(blocksFile)), JsonArray.class);
@@ -98,7 +104,7 @@ public class DataInitializer {
                 blockStateData.replaceable = blockStateJson.get("isReplaceable").getAsBoolean();
                 blockStateData.solid = blockStateJson.get("isSolid").getAsBoolean();
                 blockStateData.solidBlocking = blockStateJson.get("isSolidBlocking").getAsBoolean();
-                blockStateData.mapColor = MapColors.values()[blockStateJson.get("mapColorId").getAsInt()];
+                blockStateData.mapColor = mapColors[blockStateJson.get("mapColorId").getAsInt()];
                 blockStateData.boundingBox = blockStateJson.get("boundingBox").getAsString();
             }
         }

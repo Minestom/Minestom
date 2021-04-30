@@ -5,7 +5,7 @@ import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
-public class RawMaterialData {
+public final class RawMaterialData {
     public boolean damageable;
     public int maxDurability;
     public boolean edible;

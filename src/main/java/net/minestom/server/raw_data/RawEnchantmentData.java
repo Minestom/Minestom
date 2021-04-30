@@ -1,6 +1,6 @@
 package net.minestom.server.raw_data;
 
-public class RawEnchantmentData {
+public final class RawEnchantmentData {
     public int maxLevel;
     public int minLevel;
     public String rarity; // TODO: Dedicated object?

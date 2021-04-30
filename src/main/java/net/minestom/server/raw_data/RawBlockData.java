@@ -2,7 +2,7 @@ package net.minestom.server.raw_data;
 
 import net.minestom.server.item.Material;
 
-public class RawBlockData {
+public final class RawBlockData {
     public double explosionResistance;
     public Material item;
     public double friction;

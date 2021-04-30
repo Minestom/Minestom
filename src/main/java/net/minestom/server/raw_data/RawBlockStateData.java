@@ -2,7 +2,7 @@ package net.minestom.server.raw_data;
 
 import net.minestom.server.map.MapColor;
 
-public class RawBlockStateData {
+public final class RawBlockStateData {
     public double destroySpeed;
     public int lightEmission;
     public boolean occluding;
