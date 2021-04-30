@@ -269,7 +269,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             refreshPosition(teleportPosition);
             refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
-            sendTeleportPacket(teleportPosition);
+            sendTeleportPacket();
 
             OptionalCallback.execute(callback);
         };
@@ -634,7 +634,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
                 // Synchronization and packets...
                 if (!isNettyClient) {
-                    sendTeleportPacket(position.clone());
+                    sendTeleportPacket();
                 }
                 // Verify if velocity packet has to be sent
                 if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
@@ -705,7 +705,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
-            sendTeleportPacket(position.clone());
+            sendTeleportPacket();
         }
 
         if (shouldRemove() && !MinecraftServer.isStopping()) {
@@ -1540,11 +1540,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
     /**
      * Used to synchronize entity position with viewers
-     *
-     * @param pos   Should be {@link Entity#position#clone()}
      */
     @ApiStatus.Internal
-    protected void sendTeleportPacket(final Position pos) {
+    protected void sendTeleportPacket() {
+        final Position pos = position.clone();
         final EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
         entityTeleportPacket.position = pos;

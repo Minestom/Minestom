@@ -715,7 +715,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
-            sendTeleportPacket(position.clone()); // So the player doesn't get stuck
+            sendTeleportPacket(); // So the player doesn't get stuck
             this.inventory.update();
         }
 
@@ -2021,19 +2021,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * @see Entity#sendTeleportPacket(Position)
-     * @param pos   Should be {@link Entity#position#clone()}
+     * @see Entity#sendTeleportPacket()
      */
     @Override
     @ApiStatus.Internal
-    protected void sendTeleportPacket(final Position pos) {
+    protected void sendTeleportPacket() {
         final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-        positionAndLookPacket.position = pos;
+        positionAndLookPacket.position = position.clone();
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = teleportId.incrementAndGet();
         playerConnection.sendPacket(positionAndLookPacket);
 
-        super.sendTeleportPacket(pos);
+        super.sendTeleportPacket();
     }
 
     /**
