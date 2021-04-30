@@ -1,11 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registry;
@@ -43,15 +39,15 @@ public class TagsPacket implements ServerPacket {
         writeTags(writer, blockTags, name -> Registry.BLOCK_REGISTRY.get(name).getNumericalId());
         writeTags(writer, itemTags, name -> Registry.MATERIAL_REGISTRY.get(name).getNumericalId());
         writeTags(writer, fluidTags, name -> Registry.FLUID_REGISTRY.get(name).getNumericalId());
-        writeTags(writer, entityTags, name -> Registry.ENTITY_TYPE_REGISTRY.get(name).getNumericalId()); // Not defaulted, so can be null.
+        writeTags(writer, entityTags, name -> Registry.ENTITY_TYPE_REGISTRY.get(name).getNumericalId()); // Not defaulted therefore nullable.
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        readTags(reader, blockTags, id -> Block.values().get(id).getId());
-        readTags(reader, itemTags, id -> Material.values().get(id).getId());
-        readTags(reader, fluidTags, id -> Fluid.values().get(id).getId());
-        readTags(reader, entityTags, id -> EntityType.values().get(id).getId());
+        readTags(reader, blockTags, id -> Registry.BLOCK_REGISTRY.get(id.shortValue()).getId());
+        readTags(reader, itemTags, id -> Registry.MATERIAL_REGISTRY.get(id.shortValue()).getId());
+        readTags(reader, fluidTags, id -> Registry.FLUID_REGISTRY.get(id.shortValue()).getId());
+        readTags(reader, entityTags, id -> Registry.ENTITY_TYPE_REGISTRY.get(id.shortValue()).getId()); // Not defaulted therefore nullable.
     }
 
     private void writeTags(BinaryWriter writer, List<Tag> tags, Function<NamespaceID, Integer> idSupplier) {
