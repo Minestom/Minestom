@@ -15,14 +15,18 @@ import net.minestom.code_generation.potion.PotionEffectGenerator;
 import net.minestom.code_generation.potion.PotionTypeGenerator;
 import net.minestom.code_generation.sound.SoundGenerator;
 import net.minestom.code_generation.statistics.StatisticGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 
 public class AllGenerators {
+    private static final Logger LOGGER = LoggerFactory.getLogger(AllGenerators.class);
+
     public static void main(String[] args) {
         String targetVersion;
         if (args.length < 1) {
-            System.err.println("Usage: <MC version> [target folder]");
+            LOGGER.error("Usage: <MC version> [target folder]");
             return;
         }
         targetVersion = args[0];
@@ -106,7 +110,7 @@ public class AllGenerators {
                 new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_map_colors.json"),
                 outputFolder
         ).generate();
-        System.out.println("Finished generating code");
-        System.out.println("Please make sure to run the task 'spotlessApply' before committing.");
+        LOGGER.info("Finished generating code");
+        LOGGER.info("Please make sure to run the task 'spotlessApply' before committing.");
     }
 }
