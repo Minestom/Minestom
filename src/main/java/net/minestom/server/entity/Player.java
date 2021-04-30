@@ -200,7 +200,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionType = DimensionType.OVERWORLD; // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1f);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
         // FakePlayer init its connection there
         playerConnectionInit();

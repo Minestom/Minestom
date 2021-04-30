@@ -11,7 +11,7 @@ import java.util.UUID;
  */
 public class AttributeModifier {
 
-    private final float amount;
+    private final double amount;
     private final String name;
     private final AttributeOperation operation;
     private final UUID id;
@@ -23,7 +23,7 @@ public class AttributeModifier {
      * @param amount    the value of this modifier
      * @param operation the operation to apply this modifier with
      */
-    public AttributeModifier(@NotNull String name, float amount, @NotNull AttributeOperation operation) {
+    public AttributeModifier(@NotNull String name, double amount, @NotNull AttributeOperation operation) {
         this(UniqueIdUtils.createRandomUUID(ThreadLocalRandom.current()), name, amount, operation);
     }
 
@@ -35,7 +35,7 @@ public class AttributeModifier {
      * @param amount    the value of this modifier
      * @param operation the operation to apply this modifier with
      */
-    public AttributeModifier(@NotNull UUID id, @NotNull String name, float amount, @NotNull AttributeOperation operation) {
+    public AttributeModifier(@NotNull UUID id, @NotNull String name, double amount, @NotNull AttributeOperation operation) {
         this.id = id;
         this.name = name;
         this.amount = amount;
@@ -67,7 +67,7 @@ public class AttributeModifier {
      *
      * @return the value of this modifier
      */
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 

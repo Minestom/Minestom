@@ -18,12 +18,12 @@ public class AttributeInstance {
     private final Map<UUID, AttributeModifier> modifiers = new HashMap<>();
     private final Consumer<AttributeInstance> propertyChangeListener;
     private double baseValue;
-    private double cachedValue = 0.0f;
+    private double cachedValue = 0.0;
 
     public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
         this.attribute = attribute;
         this.propertyChangeListener = listener;
-        this.baseValue = (float) attribute.getDefaultValue();
+        this.baseValue = attribute.getDefaultValue();
         refreshCachedValue();
     }
 
@@ -41,7 +41,7 @@ public class AttributeInstance {
      * The base value of this instance without modifiers
      *
      * @return the instance base value
-     * @see #setBaseValue(float)
+     * @see #setBaseValue(double)
      */
     public double getBaseValue() {
         return baseValue;
@@ -53,7 +53,7 @@ public class AttributeInstance {
      * @param baseValue the new base value
      * @see #getBaseValue()
      */
-    public void setBaseValue(float baseValue) {
+    public void setBaseValue(double baseValue) {
         if (this.baseValue != baseValue) {
             this.baseValue = baseValue;
             refreshCachedValue();
@@ -118,7 +118,7 @@ public class AttributeInstance {
             result += (base * modifier.getAmount());
         }
         for (var modifier : modifiers.stream().filter(mod -> mod.getOperation() == AttributeOperation.MULTIPLY_TOTAL).toArray(AttributeModifier[]::new)) {
-            result *= (1.0f + modifier.getAmount());
+            result *= (1.0 + modifier.getAmount());
         }
         double v = result;
         if (attribute instanceof ClampedAttribute) {
