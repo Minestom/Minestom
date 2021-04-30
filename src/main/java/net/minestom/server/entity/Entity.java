@@ -70,10 +70,15 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     protected Instance instance;
     protected Chunk currentChunk;
     protected final Position position;
-    protected double lastX, lastY, lastZ;
-    protected double cacheX, cacheY, cacheZ; // Used to synchronize with #getPosition
-    protected float lastYaw, lastPitch;
-    protected float cacheYaw, cachePitch;
+    /**
+     * Used to calculate delta movement
+     */
+    protected final Position lastPosition;
+    /**
+     * Used to check if any change made to the {@link Entity#position} field since
+     * the last packets sent
+     */
+    protected final Position lastSyncedPosition;
     protected boolean onGround;
 
     private BoundingBox boundingBox;
@@ -138,6 +143,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.entityType = entityType;
         this.uuid = uuid;
         this.position = new Position();
+        this.lastPosition = new Position();
+        this.lastSyncedPosition = new Position();
 
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
 
@@ -157,9 +164,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         this(entityType, uuid);
         this.position.set(spawnPosition);
-        this.lastX = spawnPosition.getX();
-        this.lastY = spawnPosition.getY();
-        this.lastZ = spawnPosition.getZ();
+        this.lastPosition.set(spawnPosition);
     }
 
     @Deprecated
@@ -492,12 +497,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Synchronization with updated fields in #getPosition()
         {
-            final boolean positionChange = cacheX != position.getX() ||
-                    cacheY != position.getY() ||
-                    cacheZ != position.getZ();
-            final boolean viewChange = cacheYaw != position.getYaw() ||
-                    cachePitch != position.getPitch();
-            final double distance = positionChange ? position.getDistance(cacheX, cacheY, cacheZ) : 0;
+            final boolean positionChange = !position.isSimilar(lastSyncedPosition);
+            final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
+            final double distance = positionChange ? position.getDistance(lastSyncedPosition) : 0;
 
             if (distance >= 8 || (positionChange && isNettyClient)) {
                 // Teleport has the priority over everything else
@@ -505,7 +507,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             } else if (positionChange && viewChange) {
                 EntityPositionAndRotationPacket positionAndRotationPacket =
                         EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                                position, new Position(cacheX, cacheY, cacheZ), isOnGround());
+                                position, lastSyncedPosition, isOnGround());
 
                 sendPacketToViewersAndSelf(positionAndRotationPacket);
 
@@ -520,7 +522,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
             } else if (positionChange) {
                 EntityPositionPacket entityPositionPacket = EntityPositionPacket.getPacket(getEntityId(),
-                        position, new Position(cacheX, cacheY, cacheZ), isOnGround());
+                        position, lastSyncedPosition, isOnGround());
 
                 sendPacketToViewersAndSelf(entityPositionPacket);
 
@@ -869,11 +871,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
 
         this.position.set(spawnPosition);
-        this.lastX = this.position.getX();
-        this.lastY = this.position.getY();
-        this.lastZ = this.position.getZ();
-        this.lastYaw = this.position.getYaw();
-        this.lastPitch = this.position.getPitch();
+        this.lastPosition.set(position);
 
         this.isActive = true;
         this.instance = instance;
@@ -1320,9 +1318,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         position.setX(x);
         position.setY(y);
         position.setZ(z);
-        this.cacheX = x;
-        this.cacheY = y;
-        this.cacheZ = z;
+        lastSyncedPosition.setX(x);
+        lastSyncedPosition.setY(y);
+        lastSyncedPosition.setZ(z);
 
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
@@ -1355,9 +1353,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             }
         }
 
-        this.lastX = position.getX();
-        this.lastY = position.getY();
-        this.lastZ = position.getZ();
+        this.lastPosition.setX(position.getX());
+        this.lastPosition.setY(position.getY());
+        this.lastPosition.setZ(position.getZ());
     }
 
     /**
@@ -1377,12 +1375,12 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param pitch the pitch
      */
     public void refreshView(float yaw, float pitch) {
-        this.lastYaw = position.getYaw();
-        this.lastPitch = position.getPitch();
+        this.lastPosition.setYaw(position.getYaw());
+        this.lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
         position.setPitch(pitch);
-        this.cacheYaw = yaw;
-        this.cachePitch = pitch;
+        this.lastSyncedPosition.setYaw(yaw);
+        this.lastSyncedPosition.setPitch(pitch);
     }
 
     /**
