@@ -68,6 +68,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -180,6 +181,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super(EntityType.PLAYER, uuid);
         this.username = username;
         this.playerConnection = playerConnection;
+        this.isNettyClient = PlayerUtils.isNettyClient(this);
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
