@@ -704,6 +704,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         super.setInstance(instance, spawnPosition);
+        this.lastSyncedPlayerPosition.set(position);
 
         if (!position.isSimilar(spawnPosition) && !firstSpawn) {
             // Player changed instance at a different position
