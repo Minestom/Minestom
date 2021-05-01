@@ -138,7 +138,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     private final Object entityTypeLock = new Object();
 
-    private final boolean isNettyClient;
+    protected boolean isNettyClient;
 
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
@@ -153,8 +153,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
         setAutoViewable(true);
-
-        isNettyClient = PlayerUtils.isNettyClient(this);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
@@ -497,7 +495,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             }
         }
 
-        sendPositionUpdate();
+        sendPositionUpdate(true);
 
         // Entity tick
         {
@@ -692,8 +690,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *     </ol>
      *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
      *     is sent to self.
+     *
+     * @param notFromListener {@code true} if the client triggered this action
      */
-    protected void sendPositionUpdate() {
+    protected void sendPositionUpdate(final boolean notFromListener) {
         final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
         final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
         final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
@@ -710,7 +710,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             sendPacketToViewers(positionAndRotationPacket);
 
             // Fix head rotation
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            final EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
             entityHeadLookPacket.entityId = getEntityId();
             entityHeadLookPacket.yaw = position.getYaw();
             sendPacketToViewersAndSelf(entityHeadLookPacket);
@@ -719,18 +719,29 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     .getPacket(getEntityId(), position, lastSyncedPosition, onGround);
             sendPacketToViewers(entityPositionPacket);
         } else if (viewChange) {
-            setView(position.getYaw(), position.getPitch());
-            /*
-            #setView indirectly sets last sync field and it appears that EntityRotation packet
-            can be used for players as well, so it's safe to return
-             */
-            return;
+            final EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
+            entityRotationPacket.entityId = getEntityId();
+            entityRotationPacket.yaw = position.getYaw();
+            entityRotationPacket.pitch = position.getPitch();
+            entityRotationPacket.onGround = onGround;
+
+            final EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+
+            if (notFromListener) {
+                sendPacketToViewersAndSelf(entityHeadLookPacket);
+                sendPacketToViewersAndSelf(entityRotationPacket);
+            } else {
+                sendPacketToViewers(entityHeadLookPacket);
+                sendPacketToViewers(entityRotationPacket);
+            }
         } else {
             // Nothing changed, return
             return;
         }
 
-        if (isNettyClient) {
+        if (isNettyClient && notFromListener) {
             final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
             playerPositionAndLookPacket.flags = 0b111;
             playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
@@ -1345,9 +1356,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         position.setX(x);
         position.setY(y);
         position.setZ(z);
-        lastSyncedPosition.setX(x);
-        lastSyncedPosition.setY(y);
-        lastSyncedPosition.setZ(z);
+
+        sendPositionUpdate(false);
 
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
@@ -1406,8 +1416,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
         position.setPitch(pitch);
-        this.lastSyncedPosition.setYaw(yaw);
-        this.lastSyncedPosition.setPitch(pitch);
+
+        sendPositionUpdate(false);
     }
 
     /**
