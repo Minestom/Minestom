@@ -138,6 +138,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     private final Object entityTypeLock = new Object();
 
+    private final boolean isNettyClient;
+
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -151,6 +153,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
         setAutoViewable(true);
+
+        isNettyClient = PlayerUtils.isNettyClient(this);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
@@ -493,47 +497,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             }
         }
 
-        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
-
-        // Synchronization with updated fields in #getPosition()
-        {
-            final boolean positionChange = !position.isSimilar(lastSyncedPosition);
-            final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
-            final double distance = positionChange ? position.getDistance(lastSyncedPosition) : 0;
-
-            if (distance >= 8 || (positionChange && isNettyClient)) {
-                // Teleport has the priority over everything else
-                teleport(position);
-            } else if (positionChange && viewChange) {
-                EntityPositionAndRotationPacket positionAndRotationPacket =
-                        EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                                position, lastSyncedPosition, isOnGround());
-
-                sendPacketToViewersAndSelf(positionAndRotationPacket);
-
-                refreshPosition(position.clone());
-
-                // Fix head rotation
-                EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-                entityHeadLookPacket.entityId = getEntityId();
-                entityHeadLookPacket.yaw = position.getYaw();
-
-                sendPacketToViewersAndSelf(entityHeadLookPacket);
-
-            } else if (positionChange) {
-                EntityPositionPacket entityPositionPacket = EntityPositionPacket.getPacket(getEntityId(),
-                        position, lastSyncedPosition, isOnGround());
-
-                sendPacketToViewersAndSelf(entityPositionPacket);
-
-                refreshPosition(position.clone());
-
-            } else if (viewChange) {
-                // Yaw/Pitch
-                setView(position);
-            }
-
-        }
+        sendPositionUpdate();
 
         // Entity tick
         {
@@ -711,6 +675,70 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
+    }
+
+    /**
+     * Sends the correct packets to update the entity's position, should be called
+     * every tick. The movement is checked inside the method!
+     * <p>
+     *     The following packets are sent to viewers (check are performed in this order):
+     *     <ol>
+     *         <li>{@link EntityTeleportPacket} if <pre>distanceX > 8 || distanceY > 8 || distanceZ > 8</pre>
+     *          <i>(performed using {@link #synchronizePosition()})</i></li>
+     *         <li>{@link EntityPositionAndRotationPacket} if <pre>positionChange && viewChange</pre></li>
+     *         <li>{@link EntityPositionPacket} if <pre>positionChange</pre></li>
+     *         <li>{@link EntityRotationPacket} if <pre>viewChange</pre>
+     *          <i>(performed using {@link #setView(float, float)})</i></li>
+     *     </ol>
+     *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
+     *     is sent to self.
+     */
+    protected void sendPositionUpdate() {
+        final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
+        final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
+        final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
+        final double distanceZ = Math.abs(position.getZ()-lastSyncedPosition.getZ());
+        final boolean positionChange = (distanceX+distanceY+distanceZ) > 0;
+
+        if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
+            synchronizePosition();
+            // #synchronizePosition sets sync fields, it's safe to return
+            return;
+        } else if (positionChange && viewChange) {
+            EntityPositionAndRotationPacket positionAndRotationPacket = EntityPositionAndRotationPacket
+                    .getPacket(getEntityId(), position, lastSyncedPosition, isOnGround());
+            sendPacketToViewers(positionAndRotationPacket);
+
+            // Fix head rotation
+            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            sendPacketToViewersAndSelf(entityHeadLookPacket);
+        } else if (positionChange) {
+            final EntityPositionPacket entityPositionPacket = EntityPositionPacket
+                    .getPacket(getEntityId(), position, lastSyncedPosition, onGround);
+            sendPacketToViewers(entityPositionPacket);
+        } else if (viewChange) {
+            setView(position.getYaw(), position.getPitch());
+            /*
+            #setView indirectly sets last sync field and it appears that EntityRotation packet
+            can be used for players as well, so it's safe to return
+             */
+            return;
+        } else {
+            // Nothing changed, return
+            return;
+        }
+
+        if (isNettyClient) {
+            final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
+            playerPositionAndLookPacket.flags = 0b111;
+            playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
+            playerPositionAndLookPacket.teleportId = ((Player)this).getNextTeleportId();
+            ((Player) this).getPlayerConnection().sendPacket(playerPositionAndLookPacket);
+        }
+
+        lastSyncedPosition.set(position);
     }
 
     /**
