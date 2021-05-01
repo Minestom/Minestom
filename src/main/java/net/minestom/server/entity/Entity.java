@@ -693,7 +693,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *
      * @param notFromListener {@code true} if the client triggered this action
      */
-    protected void sendPositionUpdate(final boolean notFromListener) {
+    @ApiStatus.Internal
+    public void sendPositionUpdate(final boolean notFromListener) {
         final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
         final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
         final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
@@ -1357,8 +1358,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         position.setY(y);
         position.setZ(z);
 
-        sendPositionUpdate(false);
-
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
                 passenger.refreshPosition(x, y, z);
@@ -1416,8 +1415,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
         position.setPitch(pitch);
-
-        sendPositionUpdate(false);
     }
 
     /**
