@@ -138,8 +138,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     private final Object entityTypeLock = new Object();
 
-    protected boolean isNettyClient;
-
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -496,6 +494,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
 
         sendPositionUpdate(true);
+        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
 
         // Entity tick
         {
@@ -742,7 +741,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             return;
         }
 
-        if (isNettyClient && notFromListener) {
+        if (PlayerUtils.isNettyClient(this) && notFromListener) {
             final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
             playerPositionAndLookPacket.flags = 0b111;
             playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
