@@ -690,7 +690,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
      *     is sent to self.
      *
-     * @param notFromListener {@code true} if the client triggered this action
+     * @param notFromListener {@code false} if the client triggered this action
      */
     @ApiStatus.Internal
     public void sendPositionUpdate(final boolean notFromListener) {
