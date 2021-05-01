@@ -267,7 +267,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         final ChunkCallback endCallback = (chunk) -> {
             refreshPosition(teleportPosition);
-            refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
             synchronizePosition();
 
@@ -552,7 +551,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 }
 
                 // Apply the position if changed
-                if (!newPosition.isSimilar(position)) {
+                if (!finalVelocityPosition.isSimilar(position)) {
                     refreshPosition(finalVelocityPosition);
                 }
 
@@ -692,8 +691,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *
      * @param notFromListener {@code false} if the client triggered this action
      */
-    @ApiStatus.Internal
-    public void sendPositionUpdate(final boolean notFromListener) {
+    protected void sendPositionUpdate(final boolean notFromListener) {
         final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
         final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
         final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
@@ -1352,7 +1350,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param y new position Y
      * @param z new position Z
      */
-    public void refreshPosition(double x, double y, double z) {
+    private void refreshPosition(double x, double y, double z) {
         position.setX(x);
         position.setY(y);
         position.setZ(z);
@@ -1394,11 +1392,20 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     /**
-     * @param position the new position
+     * Updates internal fields and sends updates
+     *
+     * @param position      the new position
+     *
      * @see #refreshPosition(double, double, double)
+     * @see #refreshView(float, float)
+     * @see #sendPositionUpdate(boolean)
      */
-    public void refreshPosition(@NotNull Position position) {
-        refreshPosition(position.getX(), position.getY(), position.getZ());
+    @ApiStatus.Internal
+    public void refreshPosition(@NotNull final Position position) {
+        if (!position.isSimilar(this.position))
+            refreshPosition(position.getX(), position.getY(), position.getZ());
+        refreshView(position.getYaw(), position.getPitch());
+        sendPositionUpdate(false);
     }
 
     /**
@@ -1409,9 +1416,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param yaw   the yaw
      * @param pitch the pitch
      */
-    public void refreshView(float yaw, float pitch) {
-        this.lastPosition.setYaw(position.getYaw());
-        this.lastPosition.setPitch(position.getPitch());
+    private void refreshView(final float yaw, final float pitch) {
+        lastPosition.setYaw(position.getYaw());
+        lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
         position.setPitch(pitch);
     }

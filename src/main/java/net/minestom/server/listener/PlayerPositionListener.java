@@ -87,10 +87,8 @@ public class PlayerPositionListener {
                 player.teleport(newPosition);
             }
             // Change the internal data
-            player.refreshPosition(newPosition.getX(), newPosition.getY(), newPosition.getZ());
-            player.refreshView(newPosition.getYaw(), newPosition.getPitch());
+            player.refreshPosition(newPosition);
             player.refreshOnGround(onGround);
-            player.sendPositionUpdate(false);
         } else {
             player.teleport(player.getPosition());
         }
