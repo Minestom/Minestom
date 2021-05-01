@@ -90,6 +90,7 @@ public class PlayerPositionListener {
             player.refreshPosition(newPosition.getX(), newPosition.getY(), newPosition.getZ());
             player.refreshView(newPosition.getYaw(), newPosition.getPitch());
             player.refreshOnGround(onGround);
+            player.sendPositionUpdate(false);
         } else {
             player.teleport(player.getPosition());
         }

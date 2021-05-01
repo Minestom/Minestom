@@ -181,7 +181,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super(EntityType.PLAYER, uuid);
         this.username = username;
         this.playerConnection = playerConnection;
-        this.isNettyClient = PlayerUtils.isNettyClient(this);
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 

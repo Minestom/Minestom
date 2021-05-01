@@ -138,8 +138,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     private final Object entityTypeLock = new Object();
 
-    protected boolean isNettyClient;
-
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
         this.entityType = entityType;
@@ -496,6 +494,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
 
         sendPositionUpdate(true);
+        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
 
         // Entity tick
         {
@@ -691,9 +690,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
      *     is sent to self.
      *
-     * @param notFromListener {@code true} if the client triggered this action
+     * @param notFromListener {@code false} if the client triggered this action
      */
-    protected void sendPositionUpdate(final boolean notFromListener) {
+    @ApiStatus.Internal
+    public void sendPositionUpdate(final boolean notFromListener) {
         final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
         final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
         final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
@@ -741,7 +741,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             return;
         }
 
-        if (isNettyClient && notFromListener) {
+        if (PlayerUtils.isNettyClient(this) && notFromListener) {
             final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
             playerPositionAndLookPacket.flags = 0b111;
             playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
@@ -1357,8 +1357,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         position.setY(y);
         position.setZ(z);
 
-        sendPositionUpdate(false);
-
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
                 passenger.refreshPosition(x, y, z);
@@ -1416,8 +1414,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
         position.setPitch(pitch);
-
-        sendPositionUpdate(false);
     }
 
     /**
