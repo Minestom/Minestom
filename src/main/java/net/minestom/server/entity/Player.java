@@ -1640,18 +1640,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
 
         // Manage already viewable entities
-        this.viewableEntities.forEach(entity -> {
-            final double distance = entity.getDistance(this);
-            if (distance > maximalDistance) {
-                // Entity shouldn't be viewable anymore
-                if (isAutoViewable()) {
-                    entity.removeViewer(this);
-                }
-                if (entity instanceof Player && entity.isAutoViewable()) {
-                    removeViewer((Player) entity);
-                }
-            }
-        });
+        this.viewableEntities.stream()
+                .filter(entity -> entity.getDistance(this) > maximalDistance)
+                .forEach(entity -> {
+                    // Entity shouldn't be viewable anymore
+                    if (isAutoViewable()) {
+                        entity.removeViewer(this);
+                    }
+                    if (entity instanceof Player && entity.isAutoViewable()) {
+                        removeViewer((Player) entity);
+                    }
+                });
 
         // Manage entities in unchecked chunks
         EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
