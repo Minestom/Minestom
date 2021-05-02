@@ -141,7 +141,7 @@ dependencies {
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
-    api 'com.github.Articdive:Jnoise:1.0.0'
+    api 'com.github.Articdive:Jnoise:2.1.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
     api 'org.rocksdb:rocksdbjni:6.16.4'
