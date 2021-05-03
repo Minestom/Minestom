@@ -37,29 +37,17 @@ public class CollisionUtils {
         final BoundingBox boundingBox = entity.getBoundingBox();
 
         Vector intermediaryPosition = new Vector();
-        boolean yCollision = false;
-        if (deltaPosition.getY() != 0) {
-            yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
-                    intermediaryPosition,
-                    deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace()
-            );
-        }
+        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
+                intermediaryPosition,
+                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
 
-        boolean xCollision = false;
-        if (deltaPosition.getX() != 0) {
-            xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
-                    intermediaryPosition,
-                    deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace()
-            );
-        }
+        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
+                intermediaryPosition,
+                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
 
-        boolean zCollision = false;
-        if (deltaPosition.getZ() != 0) {
-            zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
-                    intermediaryPosition,
-                    deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace()
-            );
-        }
+        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
+                intermediaryPosition,
+                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
         positionOut.setX(intermediaryPosition.getX());
         positionOut.setY(intermediaryPosition.getY());

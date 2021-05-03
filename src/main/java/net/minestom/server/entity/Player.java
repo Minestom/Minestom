@@ -63,7 +63,6 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -74,6 +73,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -149,8 +149,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Position synchronization with viewers
-    private double lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ;
-    private float lastPlayerSyncYaw, lastPlayerSyncPitch;
+    private final Position lastSyncedPlayerPosition;
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
@@ -188,6 +187,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
         setRespawnPoint(new Position(0, 0, 0));
+        this.lastSyncedPlayerPosition = new Position();
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -424,11 +424,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Multiplayer sync
         if (!viewers.isEmpty()) {
-            final boolean positionChanged = position.getX() != lastPlayerSyncX ||
-                    position.getY() != lastPlayerSyncY ||
-                    position.getZ() != lastPlayerSyncZ;
-            final boolean viewChanged = position.getYaw() != lastPlayerSyncYaw ||
-                    position.getPitch() != lastPlayerSyncPitch;
+            final boolean positionChanged = !position.isSimilar(lastSyncedPlayerPosition);
+            final boolean viewChanged = !position.hasSimilarView(lastSyncedPlayerPosition);
 
             if (positionChanged || viewChanged) {
                 // Player moved since last time
@@ -437,10 +434,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 ServerPacket optionalUpdatePacket = null;
                 if (positionChanged && viewChanged) {
                     updatePacket = EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                            position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
+                            position, lastSyncedPlayerPosition, onGround);
                 } else if (positionChanged) {
                     updatePacket = EntityPositionPacket.getPacket(getEntityId(),
-                            position, new Position(lastPlayerSyncX, lastPlayerSyncY, lastPlayerSyncZ), onGround);
+                            position, lastSyncedPlayerPosition, onGround);
                 } else {
                     // View changed
                     updatePacket = EntityRotationPacket.getPacket(getEntityId(),
@@ -465,15 +462,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             // Update sync data
-            if (positionChanged) {
-                lastPlayerSyncX = position.getX();
-                lastPlayerSyncY = position.getY();
-                lastPlayerSyncZ = position.getZ();
-            }
-            if (viewChanged) {
-                lastPlayerSyncYaw = position.getYaw();
-                lastPlayerSyncPitch = position.getPitch();
-            }
+            lastSyncedPlayerPosition.set(position);
         }
 
     }
@@ -715,6 +704,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         super.setInstance(instance, spawnPosition);
+        this.lastSyncedPlayerPosition.set(position);
 
         if (!position.isSimilar(spawnPosition) && !firstSpawn) {
             // Player changed instance at a different position
@@ -725,7 +715,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
-            updatePlayerPosition(); // So the player doesn't get stuck
+            synchronizePosition(); // So the player doesn't get stuck
             this.inventory.update();
         }
 
@@ -1650,18 +1640,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
 
         // Manage already viewable entities
-        this.viewableEntities.forEach(entity -> {
-            final double distance = entity.getDistance(this);
-            if (distance > maximalDistance) {
-                // Entity shouldn't be viewable anymore
-                if (isAutoViewable()) {
-                    entity.removeViewer(this);
-                }
-                if (entity instanceof Player && entity.isAutoViewable()) {
-                    removeViewer((Player) entity);
-                }
-            }
-        });
+        this.viewableEntities.stream()
+                .filter(entity -> entity.getDistance(this) > maximalDistance)
+                .forEach(entity -> {
+                    // Entity shouldn't be viewable anymore
+                    if (isAutoViewable()) {
+                        entity.removeViewer(this);
+                    }
+                    if (entity instanceof Player && entity.isAutoViewable()) {
+                        removeViewer((Player) entity);
+                    }
+                });
 
         // Manage entities in unchecked chunks
         EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
@@ -1674,27 +1663,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
         });
 
-    }
-
-    @Override
-    public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
-        super.teleport(position, chunks, () -> {
-            updatePlayerPosition();
-            OptionalCallback.execute(callback);
-        });
-    }
-
-    @Override
-    public void teleport(@NotNull Position position, @Nullable Runnable callback) {
-        final boolean sameChunk = getPosition().inSameChunk(position);
-        final long[] chunks = sameChunk ? null :
-                ChunkUtils.getChunksInRange(position, getChunkRange());
-        teleport(position, chunks, callback);
-    }
-
-    @Override
-    public void teleport(@NotNull Position position) {
-        teleport(position, null);
     }
 
     /**
@@ -2052,14 +2020,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used for synchronization purpose, mainly for teleportation
+     * @see Entity#synchronizePosition()
      */
-    protected void updatePlayerPosition() {
-        PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-        positionAndLookPacket.position = position.clone(); // clone needed to prevent synchronization issue
+    @Override
+    @ApiStatus.Internal
+    protected void synchronizePosition() {
+        final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
+        positionAndLookPacket.position = position.clone();
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = teleportId.incrementAndGet();
         playerConnection.sendPacket(positionAndLookPacket);
+
+        super.synchronizePosition();
     }
 
     /**
