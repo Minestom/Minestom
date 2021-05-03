@@ -62,3 +62,8 @@ gradle-app.setting
 # When compiling we get a docs folder
 **/docs/
 .mixin.out/
+
+# MinestomDataGenerator
+**/work/
+# Ignore the EULA check, we don't want to be accepting this for people.
+/MinestomDataGenerator/eula.txt

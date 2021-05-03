@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" strict="true" name="Minestom">
+    <Appenders>
+        <Appender type="Console" name="ServerGuiConsole">
+            <Layout type="PatternLayout" pattern="[%t] [%d{HH:mm:ss}] [%p] - %m%n"/>
+        </Appender>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ServerGuiConsole" level="info"/>
+        </Root>
+    </Loggers>
+</Configuration>
