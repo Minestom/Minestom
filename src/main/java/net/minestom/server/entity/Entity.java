@@ -492,7 +492,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             }
         }
 
-        sendPositionUpdate(true);
+        sendPositionUpdate(false);
         final boolean isNettyClient = PlayerUtils.isNettyClient(this);
 
         // Entity tick
@@ -689,9 +689,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
      *     is sent to self.
      *
-     * @param notFromListener {@code false} if the client triggered this action
+     * @param clientSide {@code true} if the client triggered this action
      */
-    protected void sendPositionUpdate(final boolean notFromListener) {
+    protected void sendPositionUpdate(final boolean clientSide) {
         final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
         final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
         final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
@@ -727,19 +727,19 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             entityHeadLookPacket.entityId = getEntityId();
             entityHeadLookPacket.yaw = position.getYaw();
 
-            if (notFromListener) {
-                sendPacketToViewersAndSelf(entityHeadLookPacket);
-                sendPacketToViewersAndSelf(entityRotationPacket);
-            } else {
+            if (clientSide) {
                 sendPacketToViewers(entityHeadLookPacket);
                 sendPacketToViewers(entityRotationPacket);
+            } else {
+                sendPacketToViewersAndSelf(entityHeadLookPacket);
+                sendPacketToViewersAndSelf(entityRotationPacket);
             }
         } else {
             // Nothing changed, return
             return;
         }
 
-        if (PlayerUtils.isNettyClient(this) && notFromListener) {
+        if (PlayerUtils.isNettyClient(this) && !clientSide) {
             final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
             playerPositionAndLookPacket.flags = 0b111;
             playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
@@ -1405,7 +1405,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         if (!position.isSimilar(this.position))
             refreshPosition(position.getX(), position.getY(), position.getZ());
         refreshView(position.getYaw(), position.getPitch());
-        sendPositionUpdate(false);
+        sendPositionUpdate(true);
     }
 
     /**
