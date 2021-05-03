@@ -61,7 +61,13 @@ public class DataImpl extends Data {
     @NotNull
     @Override
     public DataImpl clone() {
-        return (DataImpl) super.clone();
+        DataImpl newData = new DataImpl();
+        
+        // Copy over all existing values to new data impl
+        newData.data.putAll(this.data);
+        newData.dataType.putAll(this.dataType);
+        
+        return newData;
     }
 
     @Override
