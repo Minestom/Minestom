@@ -23,10 +23,8 @@ public class PlayerVehicleListener {
         if (vehicle == null)
             return;
 
-        final Position newPosition = new Position((float) packet.x, (float) packet.y, (float) packet.z);
+        final Position newPosition = new Position((float) packet.x, (float) packet.y, (float) packet.z, packet.yaw, packet.pitch);
         vehicle.refreshPosition(newPosition);
-        vehicle.refreshView(packet.yaw, packet.pitch);
-        vehicle.askSynchronization();
 
         // This packet causes weird screen distortion
         /*VehicleMovePacket vehicleMovePacket = new VehicleMovePacket();

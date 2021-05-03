@@ -267,7 +267,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         final ChunkCallback endCallback = (chunk) -> {
             refreshPosition(teleportPosition);
-            refreshView(teleportPosition.getYaw(), teleportPosition.getPitch());
 
             synchronizePosition();
 
@@ -493,47 +492,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             }
         }
 
+        sendPositionUpdate(false);
         final boolean isNettyClient = PlayerUtils.isNettyClient(this);
-
-        // Synchronization with updated fields in #getPosition()
-        {
-            final boolean positionChange = !position.isSimilar(lastSyncedPosition);
-            final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
-            final double distance = positionChange ? position.getDistance(lastSyncedPosition) : 0;
-
-            if (distance >= 8 || (positionChange && isNettyClient)) {
-                // Teleport has the priority over everything else
-                teleport(position);
-            } else if (positionChange && viewChange) {
-                EntityPositionAndRotationPacket positionAndRotationPacket =
-                        EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                                position, lastSyncedPosition, isOnGround());
-
-                sendPacketToViewersAndSelf(positionAndRotationPacket);
-
-                refreshPosition(position.clone());
-
-                // Fix head rotation
-                EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-                entityHeadLookPacket.entityId = getEntityId();
-                entityHeadLookPacket.yaw = position.getYaw();
-
-                sendPacketToViewersAndSelf(entityHeadLookPacket);
-
-            } else if (positionChange) {
-                EntityPositionPacket entityPositionPacket = EntityPositionPacket.getPacket(getEntityId(),
-                        position, lastSyncedPosition, isOnGround());
-
-                sendPacketToViewersAndSelf(entityPositionPacket);
-
-                refreshPosition(position.clone());
-
-            } else if (viewChange) {
-                // Yaw/Pitch
-                setView(position);
-            }
-
-        }
 
         // Entity tick
         {
@@ -591,7 +551,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 }
 
                 // Apply the position if changed
-                if (!newPosition.isSimilar(position)) {
+                if (!finalVelocityPosition.isSimilar(position)) {
                     refreshPosition(finalVelocityPosition);
                 }
 
@@ -711,6 +671,83 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
         }
+    }
+
+    /**
+     * Sends the correct packets to update the entity's position, should be called
+     * every tick. The movement is checked inside the method!
+     * <p>
+     *     The following packets are sent to viewers (check are performed in this order):
+     *     <ol>
+     *         <li>{@link EntityTeleportPacket} if <pre>distanceX > 8 || distanceY > 8 || distanceZ > 8</pre>
+     *          <i>(performed using {@link #synchronizePosition()})</i></li>
+     *         <li>{@link EntityPositionAndRotationPacket} if <pre>positionChange && viewChange</pre></li>
+     *         <li>{@link EntityPositionPacket} if <pre>positionChange</pre></li>
+     *         <li>{@link EntityRotationPacket} if <pre>viewChange</pre>
+     *          <i>(performed using {@link #setView(float, float)})</i></li>
+     *     </ol>
+     *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
+     *     is sent to self.
+     *
+     * @param clientSide {@code true} if the client triggered this action
+     */
+    protected void sendPositionUpdate(final boolean clientSide) {
+        final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
+        final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
+        final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
+        final double distanceZ = Math.abs(position.getZ()-lastSyncedPosition.getZ());
+        final boolean positionChange = (distanceX+distanceY+distanceZ) > 0;
+
+        if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
+            synchronizePosition();
+            // #synchronizePosition sets sync fields, it's safe to return
+            return;
+        } else if (positionChange && viewChange) {
+            EntityPositionAndRotationPacket positionAndRotationPacket = EntityPositionAndRotationPacket
+                    .getPacket(getEntityId(), position, lastSyncedPosition, isOnGround());
+            sendPacketToViewers(positionAndRotationPacket);
+
+            // Fix head rotation
+            final EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+            sendPacketToViewersAndSelf(entityHeadLookPacket);
+        } else if (positionChange) {
+            final EntityPositionPacket entityPositionPacket = EntityPositionPacket
+                    .getPacket(getEntityId(), position, lastSyncedPosition, onGround);
+            sendPacketToViewers(entityPositionPacket);
+        } else if (viewChange) {
+            final EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
+            entityRotationPacket.entityId = getEntityId();
+            entityRotationPacket.yaw = position.getYaw();
+            entityRotationPacket.pitch = position.getPitch();
+            entityRotationPacket.onGround = onGround;
+
+            final EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
+            entityHeadLookPacket.entityId = getEntityId();
+            entityHeadLookPacket.yaw = position.getYaw();
+
+            if (clientSide) {
+                sendPacketToViewers(entityHeadLookPacket);
+                sendPacketToViewers(entityRotationPacket);
+            } else {
+                sendPacketToViewersAndSelf(entityHeadLookPacket);
+                sendPacketToViewersAndSelf(entityRotationPacket);
+            }
+        } else {
+            // Nothing changed, return
+            return;
+        }
+
+        if (PlayerUtils.isNettyClient(this) && !clientSide) {
+            final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
+            playerPositionAndLookPacket.flags = 0b111;
+            playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
+            playerPositionAndLookPacket.teleportId = ((Player)this).getNextTeleportId();
+            ((Player) this).getPlayerConnection().sendPacket(playerPositionAndLookPacket);
+        }
+
+        lastSyncedPosition.set(position);
     }
 
     /**
@@ -1313,13 +1350,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param y new position Y
      * @param z new position Z
      */
-    public void refreshPosition(double x, double y, double z) {
+    private void refreshPosition(double x, double y, double z) {
         position.setX(x);
         position.setY(y);
         position.setZ(z);
-        lastSyncedPosition.setX(x);
-        lastSyncedPosition.setY(y);
-        lastSyncedPosition.setZ(z);
 
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
@@ -1358,11 +1392,20 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     /**
-     * @param position the new position
+     * Updates internal fields and sends updates
+     *
+     * @param position      the new position
+     *
      * @see #refreshPosition(double, double, double)
+     * @see #refreshView(float, float)
+     * @see #sendPositionUpdate(boolean)
      */
-    public void refreshPosition(@NotNull Position position) {
-        refreshPosition(position.getX(), position.getY(), position.getZ());
+    @ApiStatus.Internal
+    public void refreshPosition(@NotNull final Position position) {
+        if (!position.isSimilar(this.position))
+            refreshPosition(position.getX(), position.getY(), position.getZ());
+        refreshView(position.getYaw(), position.getPitch());
+        sendPositionUpdate(true);
     }
 
     /**
@@ -1373,13 +1416,11 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param yaw   the yaw
      * @param pitch the pitch
      */
-    public void refreshView(float yaw, float pitch) {
-        this.lastPosition.setYaw(position.getYaw());
-        this.lastPosition.setPitch(position.getPitch());
+    private void refreshView(final float yaw, final float pitch) {
+        lastPosition.setYaw(position.getYaw());
+        lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
         position.setPitch(pitch);
-        this.lastSyncedPosition.setYaw(yaw);
-        this.lastSyncedPosition.setPitch(pitch);
     }
 
     /**

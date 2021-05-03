@@ -68,6 +68,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -148,9 +149,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Only used if multi player breaking is disabled, contains only this player
     private final Set<Player> targetBreakers = Collections.singleton(this);
 
-    // Position synchronization with viewers
-    private final Position lastSyncedPlayerPosition;
-
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
 
@@ -187,7 +185,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
         setRespawnPoint(new Position(0, 0, 0));
-        this.lastSyncedPlayerPosition = new Position();
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -421,50 +418,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Tick event
         callEvent(PlayerTickEvent.class, playerTickEvent);
-
-        // Multiplayer sync
-        if (!viewers.isEmpty()) {
-            final boolean positionChanged = !position.isSimilar(lastSyncedPlayerPosition);
-            final boolean viewChanged = !position.hasSimilarView(lastSyncedPlayerPosition);
-
-            if (positionChanged || viewChanged) {
-                // Player moved since last time
-
-                ServerPacket updatePacket;
-                ServerPacket optionalUpdatePacket = null;
-                if (positionChanged && viewChanged) {
-                    updatePacket = EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                            position, lastSyncedPlayerPosition, onGround);
-                } else if (positionChanged) {
-                    updatePacket = EntityPositionPacket.getPacket(getEntityId(),
-                            position, lastSyncedPlayerPosition, onGround);
-                } else {
-                    // View changed
-                    updatePacket = EntityRotationPacket.getPacket(getEntityId(),
-                            position.getYaw(), position.getPitch(), onGround);
-                }
-
-                if (viewChanged) {
-                    // Yaw from the rotation packet seems to be ignored, which is why this is required
-                    EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-                    entityHeadLookPacket.entityId = getEntityId();
-                    entityHeadLookPacket.yaw = position.getYaw();
-                    optionalUpdatePacket = entityHeadLookPacket;
-                }
-
-                // Send the update packet
-                if (optionalUpdatePacket != null) {
-                    sendPacketsToViewers(updatePacket, optionalUpdatePacket);
-                } else {
-                    sendPacketToViewers(updatePacket);
-                }
-
-            }
-
-            // Update sync data
-            lastSyncedPlayerPosition.set(position);
-        }
-
     }
 
     @Override
@@ -704,7 +657,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         super.setInstance(instance, spawnPosition);
-        this.lastSyncedPlayerPosition.set(position);
 
         if (!position.isSimilar(spawnPosition) && !firstSpawn) {
             // Player changed instance at a different position
@@ -2005,6 +1957,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         updateViewPositionPacket.chunkX = chunkX;
         updateViewPositionPacket.chunkZ = chunkZ;
         playerConnection.sendPacket(updateViewPositionPacket);
+    }
+
+    public int getNextTeleportId() {
+        return teleportId.getAndIncrement();
     }
 
     public int getLastSentTeleportId() {
