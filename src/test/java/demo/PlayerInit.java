@@ -11,6 +11,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.Event;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -135,6 +136,16 @@ public class PlayerInit {
         // EVENT REGISTERING
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+
+        connectionManager.addPlayerInitialization(player -> {
+
+            var listener = Event.player(PlayerChatEvent.class)
+                    .filter(playerChatEvent -> player.isCreative())
+                    .handler(playerChatEvent -> Audiences.players().sendMessage(Component.text("Listener is working!")))
+                    .build();
+            listener.attachTo(player);
+
+        });
 
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
