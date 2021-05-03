@@ -54,7 +54,7 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.particle.data.Particle;
+import net.minestom.server.particle.data.ParticleEffect;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -950,44 +950,44 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Sends the given particle to this player.
+     * Sends the given particleEffect to this player.
      *
-     * @param particle the particle to send
-     * @param x        x position of the particle
-     * @param y        y position of the particle
-     * @param z        z position of the particle
+     * @param particleEffect the particleEffect to send
+     * @param x        x position of the particleEffect
+     * @param y        y position of the particleEffect
+     * @param z        z position of the particleEffect
      */
-    public void sendParticle(@NotNull Particle particle, double x, double y, double z) {
+    public void sendParticle(@NotNull ParticleEffect particleEffect, double x, double y, double z) {
         ParticlePacket particlePacket = new ParticlePacket();
-        particlePacket.particleId = particle.getType().getNumericalId();
-        particlePacket.longDistance = particle.isLongDistance();
+        particlePacket.particleId = particleEffect.getType().getNumericalId();
+        particlePacket.longDistance = particleEffect.isLongDistance();
 
         particlePacket.x = x;
         particlePacket.y = y;
         particlePacket.z = z;
 
-        particlePacket.offsetX = particle.getOffsetX();
-        particlePacket.offsetY = particle.getOffsetY();
-        particlePacket.offsetZ = particle.getOffsetZ();
+        particlePacket.offsetX = particleEffect.getOffsetX();
+        particlePacket.offsetY = particleEffect.getOffsetY();
+        particlePacket.offsetZ = particleEffect.getOffsetZ();
 
-        particlePacket.speed = particle.getSpeed();
-        particlePacket.particleCount = particle.getCount();
+        particlePacket.speed = particleEffect.getSpeed();
+        particlePacket.particleCount = particleEffect.getCount();
 
         BinaryWriter writer = new BinaryWriter();
-        particle.write(writer);
+        particleEffect.write(writer);
         particlePacket.data = writer.toByteArray();
 
         playerConnection.sendPacket(particlePacket);
     }
 
     /**
-     * Sends the given particle to this player.
+     * Sends the given particleEffect to this player.
      *
-     * @param particle the particle to send
-     * @param position position of the particle
+     * @param particleEffect the particleEffect to send
+     * @param position position of the particleEffect
      */
-    public void sendParticle(@NotNull Particle particle, Position position) {
-        sendParticle(particle, position.getX(), position.getY(), position.getZ());
+    public void sendParticle(@NotNull ParticleEffect particleEffect, Position position) {
+        sendParticle(particleEffect, position.getX(), position.getY(), position.getZ());
     }
 
     /**

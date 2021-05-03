@@ -3,7 +3,7 @@ package net.minestom.server.particle.data;
 import net.minestom.server.color.Color;
 import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.particle.ParticleType;
+import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 
 public class ParticleBuilder {
@@ -61,53 +61,53 @@ public class ParticleBuilder {
     }
 
     /**
-     * Creates a {@link Particle} without data.
+     * Creates a {@link ParticleEffect} without data.
      *
-     * @param particleType the type of the particle
-     * @return the {@link Particle} formed from the particle type
+     * @param particle the type of the particle
+     * @return the {@link ParticleEffect} formed from the particle type
      */
-    public @NotNull Particle build(@NotNull ParticleType<Particle> particleType) {
-        return new Particle(particleType, longDistance, offsetX, offsetY, offsetZ, speed, count);
+    public @NotNull ParticleEffect build(@NotNull Particle<ParticleEffect> particle) {
+        return new ParticleEffect(particle, longDistance, offsetX, offsetY, offsetZ, speed, count);
     }
 
     /**
-     * Creates a {@link BlockParticle} with type block.
+     * Creates a {@link BlockParticleEffect} with type block.
      *
      * @param state the blockstate for the particle
      * @return the block particle with its data
      */
-    public @NotNull BlockParticle buildBlock(BlockState state) {
-        return new BlockParticle(ParticleType.BLOCK, state, longDistance, offsetX, offsetY, offsetZ, speed, count);
+    public @NotNull BlockParticleEffect buildBlock(BlockState state) {
+        return new BlockParticleEffect(Particle.BLOCK, state, longDistance, offsetX, offsetY, offsetZ, speed, count);
     }
 
     /**
-     * Creates a {@link BlockParticle} with type falling dust.
+     * Creates a {@link BlockParticleEffect} with type falling dust.
      *
      * @param state the blockstate for the particle
      * @return the falling dust particle with its data
      */
-    public @NotNull BlockParticle buildFallingDust(BlockState state) {
-        return new BlockParticle(ParticleType.FALLING_DUST, state, longDistance, offsetX, offsetY, offsetZ, speed, count);
+    public @NotNull BlockParticleEffect buildFallingDust(BlockState state) {
+        return new BlockParticleEffect(Particle.FALLING_DUST, state, longDistance, offsetX, offsetY, offsetZ, speed, count);
     }
 
     /**
-     * Creates a {@link DustParticle}.
+     * Creates a {@link DustParticleEffect}.
      *
      * @param color the color of the dust
      * @param scale the scale of the dust (default is 1.0)
      * @return the dust particle with its data
      */
-    public @NotNull DustParticle buildDust(@NotNull Color color, float scale) {
-        return new DustParticle(color, scale, longDistance, offsetX, offsetY, offsetZ, speed, count);
+    public @NotNull DustParticleEffect buildDust(@NotNull Color color, float scale) {
+        return new DustParticleEffect(color, scale, longDistance, offsetX, offsetY, offsetZ, speed, count);
     }
 
     /**
-     * Creates a {@link ItemParticle}
+     * Creates a {@link ItemParticleEffect}
      *
      * @param item the item for the particle
      * @return the item particle with its data
      */
-    public @NotNull ItemParticle buildItem(@NotNull ItemStack item) {
-        return new ItemParticle(item, longDistance, offsetX, offsetY, offsetZ, speed, count);
+    public @NotNull ItemParticleEffect buildItem(@NotNull ItemStack item) {
+        return new ItemParticleEffect(item, longDistance, offsetX, offsetY, offsetZ, speed, count);
     }
 }
