@@ -10,8 +10,4 @@ public class ParticleEffect {
     public @Nullable ParticleEffect read(@Nullable String data) {
         return this;
     }
-
-    public static @NotNull ParticleBuilder builder() {
-        return new ParticleBuilder();
-    }
 }
