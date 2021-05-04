@@ -679,11 +679,11 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * <p>
      *     The following packets are sent to viewers (check are performed in this order):
      *     <ol>
-     *         <li>{@link EntityTeleportPacket} if <pre>distanceX > 8 || distanceY > 8 || distanceZ > 8</pre>
+     *         <li>{@link EntityTeleportPacket} if {@code distanceX > 8 || distanceY > 8 || distanceZ > 8}
      *          <i>(performed using {@link #synchronizePosition()})</i></li>
-     *         <li>{@link EntityPositionAndRotationPacket} if <pre>positionChange && viewChange</pre></li>
-     *         <li>{@link EntityPositionPacket} if <pre>positionChange</pre></li>
-     *         <li>{@link EntityRotationPacket} if <pre>viewChange</pre>
+     *         <li>{@link EntityPositionAndRotationPacket} if {@code positionChange && viewChange}</li>
+     *         <li>{@link EntityPositionPacket} if {@code positionChange}</li>
+     *         <li>{@link EntityRotationPacket} if {@code viewChange}
      *          <i>(performed using {@link #setView(float, float)})</i></li>
      *     </ol>
      *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
