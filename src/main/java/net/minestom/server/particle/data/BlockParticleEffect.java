@@ -6,6 +6,9 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
 public class BlockParticleEffect extends ParticleEffect {
 
     private final short blockstateID;
@@ -19,15 +22,19 @@ public class BlockParticleEffect extends ParticleEffect {
     }
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(blockstateID);
     }
 
     @Override
-    public @Nullable BlockParticleEffect read(@Nullable String data) {
+    public @Nullable BlockParticleEffect read(@Nullable Scanner data) {
         if (data == null) return null;
 
-        //TODO better block state parsing, also required for ArgumentBlockState
-        return new BlockParticleEffect(Registry.BLOCK_REGISTRY.get(data).getDefaultBlockStateId());
+        try {
+            //TODO better block state parsing, also required for ArgumentBlockState
+            return new BlockParticleEffect(Registry.BLOCK_REGISTRY.get(data.next()).getDefaultBlockStateId());
+        } catch (NoSuchElementException e) {
+            return null;
+        }
     }
 }

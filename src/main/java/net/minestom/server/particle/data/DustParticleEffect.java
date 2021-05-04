@@ -2,9 +2,11 @@ package net.minestom.server.particle.data;
 
 import net.minestom.server.color.Color;
 import net.minestom.server.utils.binary.BinaryWriter;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 public class DustParticleEffect extends ParticleEffect {
 
@@ -19,7 +21,7 @@ public class DustParticleEffect extends ParticleEffect {
     }
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeFloat(red);
         writer.writeFloat(green);
         writer.writeFloat(blue);
@@ -27,21 +29,17 @@ public class DustParticleEffect extends ParticleEffect {
     }
 
     @Override
-    public @Nullable DustParticleEffect read(@Nullable String data) {
+    public @Nullable DustParticleEffect read(@Nullable Scanner data) {
         if (data == null) return null;
 
-        String[] numbers = data.split(StringUtils.SPACE);
-        if (numbers.length != 4) {
-            return null;
-        }
-
         try {
-            return new DustParticleEffect(new Color(
-                    (int) Float.parseFloat(numbers[0]) * 255,
-                    (int) Float.parseFloat(numbers[1]) * 255,
-                    (int) Float.parseFloat(numbers[2]) * 255),
-                    Integer.parseInt(numbers[3]));
-        } catch (NumberFormatException e) {
+            int red = (int) (data.nextFloat() * 255);
+            int green = (int) (data.nextFloat() * 255);
+            int blue = (int) (data.nextFloat() * 255);
+            float scale = data.nextFloat();
+
+            return new DustParticleEffect(new Color(red, green, blue), scale);
+        } catch (NoSuchElementException e) {
             return null;
         }
     }

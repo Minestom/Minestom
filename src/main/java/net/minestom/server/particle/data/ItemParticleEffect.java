@@ -7,6 +7,9 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+
 public class ItemParticleEffect extends ParticleEffect {
 
     private final ItemStack stack;
@@ -16,17 +19,17 @@ public class ItemParticleEffect extends ParticleEffect {
     }
 
     @Override
-    public void write(BinaryWriter writer) {
+    public void write(@NotNull BinaryWriter writer) {
         writer.writeItemStack(stack);
     }
 
     @Override
-    public @Nullable ItemParticleEffect read(@Nullable String data) {
+    public @Nullable ItemParticleEffect read(@Nullable Scanner data) {
         if (data == null) return null;
 
         try {
-            return new ItemParticleEffect(ArgumentItemStack.staticParse(data));
-        } catch (ArgumentSyntaxException e) {
+            return new ItemParticleEffect(ArgumentItemStack.staticParse(data.next()));
+        } catch (ArgumentSyntaxException | NoSuchElementException e) {
             return null;
         }
     }
