@@ -365,26 +365,33 @@ public class Command {
                 }
             };
 
+            // true if all following arguments are not part of
+            // the branching plant (literals)
+            boolean branched = false;
             for (Argument<?> argument : syntax.getArguments()) {
-                if (argument instanceof ArgumentLiteral) {
-                    final String literal = argument.getId();
-
-                    addArguments.accept(node, arguments);
-                    arguments = new ArrayList<>();
-
-                    node = findNode.apply(node, Collections.singleton(literal));
-                } else if (argument instanceof ArgumentWord) {
-                    ArgumentWord argumentWord = (ArgumentWord) argument;
-                    if (argumentWord.hasRestrictions()) {
+                if (!branched) {
+                    if (argument instanceof ArgumentLiteral) {
+                        final String literal = argument.getId();
 
                         addArguments.accept(node, arguments);
                         arguments = new ArrayList<>();
 
-                        node = findNode.apply(node, Set.of(argumentWord.getRestrictions()));
+                        node = findNode.apply(node, Collections.singleton(literal));
+                        continue;
+                    } else if (argument instanceof ArgumentWord) {
+                        ArgumentWord argumentWord = (ArgumentWord) argument;
+                        if (argumentWord.hasRestrictions()) {
+
+                            addArguments.accept(node, arguments);
+                            arguments = new ArrayList<>();
+
+                            node = findNode.apply(node, Set.of(argumentWord.getRestrictions()));
+                            continue;
+                        }
                     }
-                } else {
-                    arguments.add(argument.toString());
                 }
+                branched = true;
+                arguments.add(argument.toString());
             }
             addArguments.accept(node, arguments);
         };
