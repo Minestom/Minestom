@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Object which can be listened to by an {@link EventHandler}.
@@ -55,14 +55,14 @@ public class Event {
 
             private final Class<T> eventType;
 
-            private List<Function<T, Boolean>> filters = new ArrayList<>();
+            private List<Predicate<T>> filters = new ArrayList<>();
             private Consumer<T> handler;
 
             private Builder(Class<T> eventType) {
                 this.eventType = eventType;
             }
 
-            public Builder<T> filter(Function<T, Boolean> filter) {
+            public Builder<T> filter(Predicate<T> filter) {
                 this.filters.add(filter);
                 return this;
             }
@@ -76,7 +76,7 @@ public class Event {
                 return new Listener<>(eventType, event -> {
                     // Filtering
                     if (!filters.isEmpty()) {
-                        if (filters.stream().anyMatch(tBooleanFunction -> !tBooleanFunction.apply(event))) {
+                        if (filters.stream().anyMatch(filter -> !filter.test(event))) {
                             // Cancelled
                             return;
                         }
