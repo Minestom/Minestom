@@ -420,26 +420,19 @@ public class Command {
                 jsonObject.add(s, array);
             }
         };
-
         // Names
-        {
-            processor.accept("names", array -> node.names.forEach(array::add));
-        }
+        processor.accept("names", array -> node.names.forEach(array::add));
         // Nodes
-        {
-            processor.accept("nodes", array ->
-                    node.nodes.forEach(n -> {
-                        JsonObject nodeObject = new JsonObject();
-                        processNode(n, nodeObject);
-                        array.add(nodeObject);
-                    }));
-        }
+        processor.accept("nodes", array ->
+                node.nodes.forEach(n -> {
+                    JsonObject nodeObject = new JsonObject();
+                    processNode(n, nodeObject);
+                    array.add(nodeObject);
+                }));
         // Arguments
-        {
-            processor.accept("arguments", array ->
-                    node.arguments.forEach(arguments ->
-                            array.add(String.join(StringUtils.SPACE, arguments))));
-        }
+        processor.accept("arguments", array ->
+                node.arguments.forEach(arguments ->
+                        array.add(String.join(StringUtils.SPACE, arguments))));
     }
 
     private static final class Node {
