@@ -84,7 +84,16 @@ public class ItemTag<T> {
 
     public static @NotNull ItemTag<NBT> NBT(@NotNull String key) {
         return new ItemTag<>(key,
-                nbt -> nbt.get(key).deepClone(),
+                nbt -> {
+                    var currentNBT = nbt.get(key);
+
+                    // Avoid a NPE when cloning a null variable.
+                    if (currentNBT == null) {
+                        return null;
+                    }
+
+                    return currentNBT.deepClone();
+                },
                 ((nbt, value) -> nbt.set(key, value.deepClone())));
     }
 
