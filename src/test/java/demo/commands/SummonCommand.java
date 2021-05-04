@@ -28,6 +28,7 @@ public class SummonCommand extends Command {
         pos = ArgumentType.RelativeVec3("pos");
         entityClass = ArgumentType.Enum("class", EntityClass.class);
         entityClass.setFormat(ArgumentEnum.Format.LOWER_CASED);
+        entityClass.setDefaultValue(EntityClass.CREATURE);
         addSyntax(this::execute, entity, pos, entityClass);
         setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
     }
