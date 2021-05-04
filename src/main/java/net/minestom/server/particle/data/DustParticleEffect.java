@@ -1,6 +1,7 @@
 package net.minestom.server.particle.data;
 
 import net.minestom.server.color.Color;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,5 +43,15 @@ public class DustParticleEffect extends ParticleEffect {
         } catch (NoSuchElementException e) {
             return null;
         }
+    }
+
+    @Override
+    public @Nullable ParticleEffect read(@NotNull BinaryReader reader) {
+        int red = (int) (reader.readFloat() * 255);
+        int green = (int) (reader.readFloat() * 255);
+        int blue = (int) (reader.readFloat() * 255);
+        float scale = reader.readFloat();
+
+        return new DustParticleEffect(new Color(red, green, blue), scale);
     }
 }

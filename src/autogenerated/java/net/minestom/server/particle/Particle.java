@@ -11,6 +11,7 @@ import net.minestom.server.particle.data.*;
 import net.minestom.server.particle.data.ParticleEffect;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -325,6 +326,11 @@ public class Particle implements Keyed, PublicCloneable<Particle> {
         return with(effect.read(scanner));
     }
 
+    @Nullable
+    public Particle read(@NotNull BinaryReader reader) {
+        return with(effect.read(reader));
+    }
+
     public int getNumericalId() {
         return Registry.PARTICLE_REGISTRY.getId(this);
     }
@@ -337,6 +343,34 @@ public class Particle implements Keyed, PublicCloneable<Particle> {
     @NotNull
     public static Particle fromId(Key id) {
         return Registry.PARTICLE_REGISTRY.get(id);
+    }
+
+    public @NotNull ParticleEffect getEffect() {
+        return effect;
+    }
+
+    public boolean isLongDistance() {
+        return longDistance;
+    }
+
+    public float getOffsetX() {
+        return offsetX;
+    }
+
+    public float getOffsetY() {
+        return offsetY;
+    }
+
+    public float getOffsetZ() {
+        return offsetZ;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public int getCount() {
+        return count;
     }
 
     @NotNull

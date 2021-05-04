@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.other;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 
 public class AreaEffectCloudMeta extends EntityMeta {
@@ -35,12 +36,12 @@ public class AreaEffectCloudMeta extends EntityMeta {
         super.metadata.setIndex((byte) 9, Metadata.Boolean(value));
     }
 
-//    public ParticleWrapper getParticle() {
-//        return super.metadata.getIndex((byte) 10, new ParticleWrapper(Particle.EFFECT, null));
-//    }
-//
-//    public void setParticle(ParticleWrapper value) {
-//        super.metadata.setIndex((byte) 11, Metadata.Particle(value));
-//    }
+    public Particle getParticle() {
+        return super.metadata.getIndex((byte) 10, Particle.EFFECT);
+    }
+
+    public void setParticle(Particle value) {
+        super.metadata.setIndex((byte) 11, Metadata.Particle(value));
+    }
 
 }

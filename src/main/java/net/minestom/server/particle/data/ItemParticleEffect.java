@@ -3,6 +3,7 @@ package net.minestom.server.particle.data;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentItemStack;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,5 +33,10 @@ public class ItemParticleEffect extends ParticleEffect {
         } catch (ArgumentSyntaxException | NoSuchElementException e) {
             return null;
         }
+    }
+
+    @Override
+    public @Nullable ParticleEffect read(@NotNull BinaryReader reader) {
+        return new ItemParticleEffect(reader.readItemStack());
     }
 }

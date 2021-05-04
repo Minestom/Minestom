@@ -2,6 +2,7 @@ package net.minestom.server.particle.data;
 
 import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,5 +37,11 @@ public class BlockParticleEffect extends ParticleEffect {
         } catch (NoSuchElementException e) {
             return null;
         }
+    }
+
+    @Override
+    public @Nullable BlockParticleEffect read(@NotNull BinaryReader reader) {
+        short id = (short) reader.readVarInt();
+        return new BlockParticleEffect(Registry.BLOCK_REGISTRY.get(id).getDefaultBlockStateId());
     }
 }

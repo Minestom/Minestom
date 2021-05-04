@@ -14,11 +14,10 @@ import java.util.function.Consumer;
 @Deprecated
 public class EntityAreaEffectCloud extends ObjectEntity {
 
-    public Consumer<BinaryWriter> particleDataConsumer;
     private float radius;
     private int color;
     private boolean ignoreRadius;
-    private Particle<?> particle;
+    private Particle particle;
 
     public EntityAreaEffectCloud(Position spawnPosition) {
         super(EntityType.AREA_EFFECT_CLOUD, spawnPosition);
@@ -26,8 +25,6 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         setColor(0);
         setIgnoreRadius(false);
         setParticle(Particle.EFFECT);
-        setParticleDataConsumer(packetWriter -> {
-        });
     }
 
     /*@NotNull
@@ -98,26 +95,12 @@ public class EntityAreaEffectCloud extends ObjectEntity {
         //sendMetadataIndex(9);
     }
 
-    public Particle<?> getParticle() {
+    public Particle getParticle() {
         return particle;
     }
 
-    public void setParticle(Particle<?> particle) {
+    public void setParticle(Particle particle) {
         this.particle = particle;
         //sendMetadataIndex(10);
-    }
-
-    public Consumer<BinaryWriter> getParticleDataConsumer() {
-        return particleDataConsumer;
-    }
-
-    /**
-     * Used to add data to the particle
-     *
-     * @param particleDataConsumer the particle data consumer
-     * @see <a href="https://wiki.vg/Data_types#Particle">Particle data</a>
-     */
-    public void setParticleDataConsumer(Consumer<BinaryWriter> particleDataConsumer) {
-        this.particleDataConsumer = particleDataConsumer;
     }
 }
