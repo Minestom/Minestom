@@ -2346,17 +2346,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * based on which one is the lowest
      */
     public int getChunkRange() {
-        final int playerRange = getSettings().viewDistance;
-        if (playerRange < 1) {
-            // Didn't receive settings packet yet (is the case on login)
-            // In this case we send an arbitrary number of chunks
-            // Will be updated in PlayerSettings#refresh.
-            // Non-compliant clients might also be stuck with this view
-            return 7;
-        } else {
-            final int serverRange = MinecraftServer.getChunkViewDistance();
-            return Math.min(playerRange, serverRange);
-        }
+        return Math.min(getSettings().viewDistance, MinecraftServer.getChunkViewDistance());
     }
 
     /**
@@ -2587,6 +2577,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
+
+        public PlayerSettings() {
+            viewDistance = -1;
+        }
 
         /**
          * The player game language.
