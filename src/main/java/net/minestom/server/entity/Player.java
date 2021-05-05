@@ -38,12 +38,15 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.message.ChatPosition;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
+import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -69,7 +72,6 @@ import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -739,8 +741,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket(message, ChatMessagePacket.Position.fromMessageType(type), source.uuid());
-        playerConnection.sendPacket(chatMessagePacket);
+        Messenger.sendMessage(this, message, ChatPosition.fromMessageType(type), source.uuid());
     }
 
     /**
@@ -2599,6 +2600,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         RIGHT
     }
 
+    /**
+     * @deprecated See {@link ChatMessageType}
+     */
+    @Deprecated
     public enum ChatMode {
         ENABLED,
         COMMANDS_ONLY,
@@ -2609,7 +2614,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         private String locale;
         private byte viewDistance;
-        private ChatMode chatMode;
+        private ChatMessageType chatMessageType;
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
@@ -2638,7 +2643,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          * @return the player chat mode
          */
         public ChatMode getChatMode() {
-            return chatMode;
+            return ChatMode.values()[chatMessageType.ordinal()];
+        }
+
+        /**
+         * Gets the messages this player wants to receive.
+         *
+         * @return the messages
+         */
+        public @NotNull ChatMessageType getChatMessageType() {
+            return chatMessageType;
         }
 
         /**
@@ -2670,19 +2684,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @param locale             the player locale
          * @param viewDistance       the player view distance
-         * @param chatMode           the player chat mode
-         * @param chatColors         the player chat colors
+         * @param chatMessageType       the chat messages the player wishes to receive
+         * @param chatColors         if chat colors should be displayed
          * @param displayedSkinParts the player displayed skin parts
          * @param mainHand           the player main hand
          */
-        public void refresh(String locale, byte viewDistance, ChatMode chatMode, boolean chatColors,
+        public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
                             byte displayedSkinParts, MainHand mainHand) {
 
             final boolean viewDistanceChanged = this.viewDistance != viewDistance;
 
             this.locale = locale;
             this.viewDistance = viewDistance;
-            this.chatMode = chatMode;
+            this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
