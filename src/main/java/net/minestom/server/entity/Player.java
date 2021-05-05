@@ -66,6 +66,7 @@ import net.minestom.server.utils.*;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -90,12 +91,13 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
     private String username;
+    private Component usernameComponent;
     protected final PlayerConnection playerConnection;
     // All the entities that this player can see
     protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
@@ -180,6 +182,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
         this.username = username;
+        this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
@@ -1275,12 +1278,26 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the player username.
+     * Gets the player's name as a component. This will either return the display name
+     * (if set) or a component holding the username.
      *
-     * @return the player username
+     * @return the name
      */
-    @NotNull
-    public String getUsername() {
+    @Override
+    public @NotNull Component getName() {
+        if (this.displayName != null) {
+            return this.displayName;
+        } else {
+            return this.usernameComponent;
+        }
+    }
+
+    /**
+     * Gets the player's username.
+     *
+     * @return the player's username
+     */
+    public @NotNull String getUsername() {
         return username;
     }
 
@@ -1292,6 +1309,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setUsernameField(@NotNull String username) {
         this.username = username;
+        this.usernameComponent = Component.text(username);
     }
 
     private void sendChangeGameStatePacket(@NotNull ChangeGameStatePacket.Reason reason, float value) {
@@ -1415,7 +1433,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-        getInventory().update();
 
         sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
 
@@ -1424,6 +1441,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacketToViewersAndSelf(getMetadataPacket());
         sendPacketToViewersAndSelf(getPropertiesPacket());
         sendPacketToViewersAndSelf(getEquipmentsPacket());
+
+        getInventory().update();
 
         {
             // Send new chunks
