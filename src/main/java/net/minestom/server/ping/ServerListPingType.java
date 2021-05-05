@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,9 @@ import java.util.function.Function;
  * An enum containing the different types of server list ping responses.
  *
  * @see <a href="https://wiki.vg/Server_List_Ping">https://wiki.vg/Server_List_Ping</a>
+ * @see ServerListPingEvent
  */
-public enum ServerListPingVersion {
+public enum ServerListPingType {
     /**
      * The client is on version 1.16 or higher and supports full RGB with JSON text formatting.
      */
@@ -35,18 +37,18 @@ public enum ServerListPingVersion {
     /**
      * The client is on version 1.5 or lower and supports a description and the player count.
      */
-    LEGACY(data -> getLegacyPingResponse(data, false)),
+    LEGACY_UNVERSIONED(data -> getLegacyPingResponse(data, false)),
 
     /**
      * The ping that is sent when {@link OpenToLAN} is enabled and sending packets.
      * Only the description formatted as a legacy string is sent.
      * Ping events with this ping version are <b>not</b> cancellable.
      */
-    OPEN_TO_LAN(ServerListPingVersion::getOpenToLANPing);
+    OPEN_TO_LAN(ServerListPingType::getOpenToLANPing);
 
     private final Function<ResponseData, String> pingResponseCreator;
 
-    ServerListPingVersion(@NotNull Function<ResponseData, String> pingResponseCreator) {
+    ServerListPingType(@NotNull Function<ResponseData, String> pingResponseCreator) {
         this.pingResponseCreator = pingResponseCreator;
     }
 
@@ -145,7 +147,7 @@ public enum ServerListPingVersion {
      * @param version the protocol version
      * @return the corresponding server list ping version
      */
-    public static @NotNull ServerListPingVersion fromModernProtocolVersion(int version) {
+    public static @NotNull ServerListPingType fromModernProtocolVersion(int version) {
         if (version >= 713) {
             return MODERN_FULL_RGB;
         } else {

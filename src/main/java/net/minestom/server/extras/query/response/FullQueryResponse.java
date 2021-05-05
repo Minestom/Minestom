@@ -109,7 +109,7 @@ public class FullQueryResponse implements QueryResponse {
      * @param players the players
      */
     public void setPlayers(@NotNull List<String> players) {
-        this.players = Objects.requireNonNull(players, "players)");
+        this.players = Objects.requireNonNull(players, "players");
     }
 
     /**

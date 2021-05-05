@@ -7,7 +7,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.ping.ServerListPingVersion;
+import net.minestom.server.ping.ServerListPingType;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.charset.StandardCharsets;
@@ -39,12 +39,12 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
                 switch (length) {
                     case 0:
-                        if (trySendResponse(ServerListPingVersion.LEGACY, ctx)) return;
+                        if (trySendResponse(ServerListPingType.LEGACY_UNVERSIONED, ctx)) return;
                         break;
                     case 1:
                         if (buf.readUnsignedByte() != 1) return;
 
-                        if (trySendResponse(ServerListPingVersion.LEGACY_VERSIONED, ctx)) return;
+                        if (trySendResponse(ServerListPingType.LEGACY_VERSIONED, ctx)) return;
                         break;
                     default:
                         if (buf.readUnsignedByte() != 0x01 || buf.readUnsignedByte() != 0xFA) return;
@@ -114,7 +114,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
 
         this.buf = null;
 
-        trySendResponse(ServerListPingVersion.LEGACY_VERSIONED, ctx);
+        trySendResponse(ServerListPingType.LEGACY_VERSIONED, ctx);
     }
 
     private void removeHandler(ChannelHandlerContext ctx) {
@@ -141,7 +141,7 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
      * @param ctx the context
      * @return {@code true} if the response was cancelled, {@code false} otherwise
      */
-    private static boolean trySendResponse(@NotNull ServerListPingVersion version, @NotNull ChannelHandlerContext ctx) {
+    private static boolean trySendResponse(@NotNull ServerListPingType version, @NotNull ChannelHandlerContext ctx) {
         final ServerListPingEvent event = new ServerListPingEvent(version);
         MinecraftServer.getGlobalEventHandler().callEvent(ServerListPingEvent.class, event);
 

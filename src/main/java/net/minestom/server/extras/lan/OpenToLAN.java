@@ -10,10 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
-import static net.minestom.server.ping.ServerListPingVersion.OPEN_TO_LAN;
+import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
 
 /**
  * Utility class to manage opening the server to LAN. Note that this <b>doesn't</b> actually
@@ -51,6 +55,8 @@ public class OpenToLAN {
      * @return {@code true} if it was opened successfully, {@code false} otherwise
      */
     public static boolean open(@NotNull OpenToLANConfig config) {
+        Objects.requireNonNull(config, "config");
+
         if (socket != null) {
             return false;
         } else {

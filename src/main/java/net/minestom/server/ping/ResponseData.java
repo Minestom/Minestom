@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Represents the data sent to the player when refreshing the server list.
+ * Represents the data sent to the player when responding to a ping event.
  *
  * @see ServerListPingEvent
  */
@@ -47,7 +47,7 @@ public class ResponseData {
      * Sets the name for the response.
      *
      * @param name The name for the response data.
-     * @deprecated Use {@link #setVersion(String)}
+     * @deprecated This is named incorrectly, use {@link #setVersion(String)} instead
      */
     @Deprecated
     public void setName(String name) {
@@ -130,7 +130,7 @@ public class ResponseData {
      * Adds some players to the response.
      *
      * @param players the players
-     * @deprecated See {@link #addEntries(Collection)}}
+     * @deprecated Use {@link #addEntries(Collection)}}
      */
     @Deprecated
     public void addPlayer(Iterable<Player> players) {
@@ -143,7 +143,7 @@ public class ResponseData {
      * Adds a player to the response.
      *
      * @param player the player
-     * @deprecated See {@link #addEntry(NamedAndIdentified)}
+     * @deprecated Use {@link #addEntry(NamedAndIdentified)}
      */
     @Deprecated
     public void addPlayer(Player player) {
@@ -155,7 +155,7 @@ public class ResponseData {
      *
      * @param name The name of the player.
      * @param uuid The unique identifier of the player.
-     * @deprecated See {@link #addEntry(NamedAndIdentified)} using {@link NamedAndIdentified#of(String, UUID)}
+     * @deprecated Use {@link #addEntry(NamedAndIdentified)} with {@link NamedAndIdentified#of(String, UUID)}
      */
     @Deprecated
     public void addPlayer(String name, UUID uuid) {
@@ -168,7 +168,7 @@ public class ResponseData {
      * {@link UUID#randomUUID()} is used as the player's UUID.
      *
      * @param name The name of the player.
-     * @deprecated See {@link #addEntry(NamedAndIdentified)} using {@link NamedAndIdentified#named(String)}
+     * @deprecated Use {@link #addEntry(NamedAndIdentified)} with {@link NamedAndIdentified#named(String)}
      */
     @Deprecated
     public void addPlayer(String name) {
@@ -179,7 +179,7 @@ public class ResponseData {
      * Removes all of the ping players from this {@link #entries}. The {@link #entries} list
      * will be empty this call returns.
      *
-     * @deprecated See {@link #clearEntries()}
+     * @deprecated Use {@link #clearEntries()}
      */
     @Deprecated
     public void clearPlayers() {
@@ -190,7 +190,7 @@ public class ResponseData {
      * Get the list of the response players.
      *
      * @return the list of the response players.
-     * @deprecated See {@link #getEntries()}. This return value is now unmodifiable and this operation is incredibly costly.
+     * @deprecated Use {@link #getEntries()}. This return value is now unmodifiable and this operation is incredibly costly.
      */
     @Deprecated(forRemoval = true) // to throw an error for people using it - this method is *horrible*
     public List<PingPlayer> getPlayers() {
@@ -298,11 +298,11 @@ public class ResponseData {
      * Converts the response data into a {@link JsonObject}.
      *
      * @return The converted response data as a json tree.
-     * @deprecated Use {@link ServerListPingVersion#getPingResponse(ResponseData)}
+     * @deprecated Use {@link ServerListPingType#getPingResponse(ResponseData)}
      */
     @Deprecated
     public @NotNull JsonObject build() {
-        return ServerListPingVersion.getModernPingResponse(this, true);
+        return ServerListPingType.getModernPingResponse(this, true);
     }
 
     /**

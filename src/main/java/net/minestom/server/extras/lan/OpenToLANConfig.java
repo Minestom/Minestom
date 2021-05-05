@@ -1,15 +1,16 @@
 package net.minestom.server.extras.lan;
 
-import java.util.Objects;
-
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * Configuration for opening the server to LAN.
+ *
  * @see OpenToLAN#open(OpenToLANConfig)
  */
 public class OpenToLANConfig {

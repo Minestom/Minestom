@@ -6,7 +6,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.ping.ServerListPingVersion;
+import net.minestom.server.ping.ServerListPingType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +18,7 @@ import java.util.Objects;
  */
 public class ServerListPingEvent extends Event implements CancellableEvent {
     private final PlayerConnection connection;
-    private final ServerListPingVersion version;
+    private final ServerListPingType type;
 
     private boolean cancelled = false;
     private ResponseData responseData;
@@ -26,19 +26,19 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     /**
      * Creates a new server list ping event with no player connection.
      *
-     * @param version the ping version to respond with
+     * @param type the ping type to respond with
      */
-    public ServerListPingEvent(@NotNull ServerListPingVersion version) {
-        this(null, version);
+    public ServerListPingEvent(@NotNull ServerListPingType type) {
+        this(null, type);
     }
 
     /**
      * Creates a new server list ping event.
      *
-     * @param connection the player connection, if the ping version is modern
-     * @param version the ping version to respond with
+     * @param connection the player connection, if the ping type is modern
+     * @param type the ping type to respond with
      */
-    public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingVersion version) {
+    public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingType type) {
         //noinspection deprecation we need to continue doing this until the consumer is removed - todo remove
         ResponseDataConsumer consumer = MinecraftServer.getResponseDataConsumer();
         this.responseData = new ResponseData();
@@ -48,7 +48,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
         }
 
         this.connection = connection;
-        this.version = version;
+        this.type = type;
     }
 
     /**
@@ -81,13 +81,12 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     }
 
     /**
-     * Gets the ping version that the client is pinging with.
+     * Gets the ping type that the client is pinging with.
      *
-     * @return the ping version
-     * @see ServerListPingVersion
+     * @return the ping type
      */
-    public @NotNull ServerListPingVersion getPingVersion() {
-       return version;
+    public @NotNull ServerListPingType getPingType() {
+       return type;
     }
 
     @Override
@@ -97,7 +96,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
 
     /**
      * Cancelling this event will cause the server to appear offline in the vanilla server list.
-     * Note that this will have no effect if the ping version is {@link ServerListPingVersion#OPEN_TO_LAN}.
+     * Note that this will have no effect if the ping version is {@link ServerListPingType#OPEN_TO_LAN}.
      *
      * @param cancel true if the event should be cancelled, false otherwise
      */
