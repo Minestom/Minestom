@@ -163,18 +163,45 @@ public final class ChunkUtils {
      */
     @NotNull
     public static long[] getChunksInRange(@NotNull Position position, int range) {
-        range = range * 2;
-        long[] visibleChunks = new long[MathUtils.square(range + 1)];
-        final int startLoop = -(range / 2);
-        final int endLoop = range / 2 + 1;
-        int counter = 0;
-        for (int x = startLoop; x < endLoop; x++) {
-            for (int z = startLoop; z < endLoop; z++) {
-                final int chunkX = getChunkCoordinate(position.getX() + Chunk.CHUNK_SIZE_X * x);
-                final int chunkZ = getChunkCoordinate(position.getZ() + Chunk.CHUNK_SIZE_Z * z);
-                visibleChunks[counter++] = getChunkIndex(chunkX, chunkZ);
+        long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
+
+        int xDistance = 0;
+        int xDirection = 1;
+        int zDistance = 0;
+        int zDirection = -1;
+        int len = 1;
+        int corner = 0;
+
+        for (int i = 0; i < visibleChunks.length; i++) {
+            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + position.getX());
+            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + position.getZ());
+            visibleChunks[i] = getChunkIndex(chunkX, chunkZ);
+
+            if (corner % 2 == 0) {
+                // step on X axis
+                xDistance += xDirection;
+
+                if (Math.abs(xDistance) == len) {
+                    // hit corner
+                    corner++;
+                    xDirection = -xDirection;
+                }
+            } else {
+                // step on Z axis
+                zDistance += zDirection;
+
+                if (Math.abs(zDistance) == len) {
+                    // hit corner
+                    corner++;
+                    zDirection = -zDirection;
+
+                    if (corner % 4 == 0) {
+                        len++;
+                    }
+                }
             }
         }
+
         return visibleChunks;
     }
 
