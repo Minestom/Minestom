@@ -612,13 +612,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback = chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
+            final ChunkCallback endCallback = chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange);
 
             ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
+            spawnPlayer(instance, spawnPosition, false,  false);
         }
     }
 
@@ -645,21 +645,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param firstSpawn    true if this is the player first spawn
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
-                             boolean firstSpawn, boolean updateChunks, boolean dimensionChange) {
+                             boolean firstSpawn, boolean dimensionChange) {
         // Clear previous instance elements
         if (!firstSpawn) {
             this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
+        final boolean differentSpawnPos = !position.isSimilar(spawnPosition);
 
         super.setInstance(instance, spawnPosition);
 
-        if (!position.isSimilar(spawnPosition) && !firstSpawn) {
+        if (differentSpawnPos && !firstSpawn) {
             // Player changed instance at a different position
             teleport(spawnPosition);
-        } else if (updateChunks) {
-            // Send newly visible chunks to player once spawned in the instance
-            refreshVisibleChunks();
         }
 
         if (dimensionChange || firstSpawn) {
