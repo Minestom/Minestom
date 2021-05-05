@@ -3,6 +3,7 @@ package net.minestom.server.extras.query.response;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.query.Query;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -10,7 +11,7 @@ import java.util.Objects;
 /**
  * A basic query response containing a fixed set of responses.
  */
-public class BasicQueryResponse implements QueryResponse {
+public class BasicQueryResponse implements Writeable {
     private String motd, gametype, map, numPlayers, maxPlayers;
 
     /**

@@ -5,6 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extras.query.Query;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * A full query response containing a dynamic set of responses.
  */
-public class FullQueryResponse implements QueryResponse {
+public class FullQueryResponse implements Writeable {
     private static final PlainComponentSerializer PLAIN = PlainComponentSerializer.plain();
     private static final byte[] PADDING_10 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
             PADDING_11 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};

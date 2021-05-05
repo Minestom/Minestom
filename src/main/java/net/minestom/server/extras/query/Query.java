@@ -8,10 +8,10 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.event.FullQueryEvent;
-import net.minestom.server.extras.query.response.QueryResponse;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.NetworkUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.binary.Writeable;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -202,7 +202,7 @@ public class Query {
         }
     }
 
-    private static void sendResponse(@NotNull QueryResponse queryResponse, int sessionID, @NotNull SocketAddress sender) {
+    private static void sendResponse(@NotNull Writeable queryResponse, int sessionID, @NotNull SocketAddress sender) {
         // header
         BinaryWriter response = new BinaryWriter();
         response.writeByte((byte) 0);
