@@ -2578,10 +2578,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private byte displayedSkinParts;
         private MainHand mainHand;
 
-        public PlayerSettings() {
-            viewDistance = -1;
-        }
-
         /**
          * The player game language.
          *
