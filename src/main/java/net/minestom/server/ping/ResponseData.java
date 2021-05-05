@@ -1,44 +1,53 @@
 package net.minestom.server.ping;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * Represents the data sent to the player when refreshing the server list.
+ * Represents the data sent to the player when responding to a ping event.
  *
- * <p>Edited by listening to the {@link net.minestom.server.event.server.ServerListPingEvent}.
+ * @see ServerListPingEvent
  */
 public class ResponseData {
-    private final List<PingPlayer> pingPlayers;
+    private static final Component DEFAULT_DESCRIPTION = Component.text("Minestom Server");
+
+    private final List<NamedAndIdentified> entries;
+
     private String version;
     private int protocol;
     private int maxPlayer;
     private int online;
     private Component description;
-
     private String favicon;
 
     /**
      * Constructs a new {@link ResponseData}.
      */
     public ResponseData() {
-        this.pingPlayers = new ArrayList<>();
+        this.entries = new ArrayList<>();
+        this.version = MinecraftServer.VERSION_NAME;
+        this.protocol = MinecraftServer.PROTOCOL_VERSION;
+        this.online = MinecraftServer.getConnectionManager().getOnlinePlayers().size();
+        this.maxPlayer = this.online + 1;
+        this.description = DEFAULT_DESCRIPTION;
+        this.favicon = "";
     }
 
     /**
      * Sets the name for the response.
      *
      * @param name The name for the response data.
-     * @deprecated Use {@link #setVersion(String)}
+     * @deprecated This is named incorrectly, use {@link #setVersion(String)} instead
      */
     @Deprecated
     public void setName(String name) {
@@ -121,7 +130,9 @@ public class ResponseData {
      * Adds some players to the response.
      *
      * @param players the players
+     * @deprecated Use {@link #addEntries(Collection)}}
      */
+    @Deprecated
     public void addPlayer(Iterable<Player> players) {
         for (Player player : players) {
             this.addPlayer(player);
@@ -132,9 +143,11 @@ public class ResponseData {
      * Adds a player to the response.
      *
      * @param player the player
+     * @deprecated Use {@link #addEntry(NamedAndIdentified)}
      */
+    @Deprecated
     public void addPlayer(Player player) {
-        this.addPlayer(player.getUsername(), player.getUuid());
+        this.addEntry(player);
     }
 
     /**
@@ -142,10 +155,11 @@ public class ResponseData {
      *
      * @param name The name of the player.
      * @param uuid The unique identifier of the player.
+     * @deprecated Use {@link #addEntry(NamedAndIdentified)} with {@link NamedAndIdentified#of(String, UUID)}
      */
+    @Deprecated
     public void addPlayer(String name, UUID uuid) {
-        PingPlayer pingPlayer = PingPlayer.of(name, uuid);
-        this.pingPlayers.add(pingPlayer);
+        this.addEntry(NamedAndIdentified.of(name, uuid));
     }
 
     /**
@@ -154,27 +168,35 @@ public class ResponseData {
      * {@link UUID#randomUUID()} is used as the player's UUID.
      *
      * @param name The name of the player.
+     * @deprecated Use {@link #addEntry(NamedAndIdentified)} with {@link NamedAndIdentified#named(String)}
      */
+    @Deprecated
     public void addPlayer(String name) {
-        PingPlayer pingPlayer = PingPlayer.of(name, UUID.randomUUID());
-        this.pingPlayers.add(pingPlayer);
+        this.addEntry(NamedAndIdentified.named(name));
     }
 
     /**
-     * Removes all of the ping players from this {@link #pingPlayers}. The {@link #pingPlayers} list
+     * Removes all of the ping players from this {@link #entries}. The {@link #entries} list
      * will be empty this call returns.
+     *
+     * @deprecated Use {@link #clearEntries()}
      */
+    @Deprecated
     public void clearPlayers() {
-        this.pingPlayers.clear();
+        this.clearEntries();
     }
 
     /**
      * Get the list of the response players.
      *
      * @return the list of the response players.
+     * @deprecated Use {@link #getEntries()}. This return value is now unmodifiable and this operation is incredibly costly.
      */
+    @Deprecated(forRemoval = true) // to throw an error for people using it - this method is *horrible*
     public List<PingPlayer> getPlayers() {
-        return pingPlayers;
+        return this.entries.stream()
+                .map(entry -> PingPlayer.of(PlainComponentSerializer.plain().serialize(entry.getName()), entry.getUuid()))
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -226,48 +248,68 @@ public class ResponseData {
         return favicon;
     }
 
+    /**
+     * Adds an entry to the response data sample. This can be a player or a custom object.
+     *
+     * @param entry the entry
+     * @see NamedAndIdentified
+     */
+    public void addEntry(@NotNull NamedAndIdentified entry) {
+        this.entries.add(entry);
+    }
+
+    /**
+     * Adds a series of entries to the response data sample. These can be players or a custom object.
+     *
+     * @param entries the entries
+     * @see NamedAndIdentified
+     */
+    public void addEntries(@NotNull NamedAndIdentified... entries) {
+        this.addEntries(Arrays.asList(entries));
+    }
+
+    /**
+     * Adds a series of entries to the response data sample. These can be players or a custom object.
+     *
+     * @param entries the entries
+     * @see NamedAndIdentified
+     */
+    public void addEntries(@NotNull Collection<? extends NamedAndIdentified> entries) {
+        this.entries.addAll(entries);
+    }
+
+    /**
+     * Clears the entries.
+     */
+    public void clearEntries() {
+        this.entries.clear();
+    }
+
+    /**
+     * Gets a modifiable collection of the current entries.
+     *
+     * @return the entries
+     */
+    public @NotNull Collection<NamedAndIdentified> getEntries() {
+        return this.entries;
+    }
 
     /**
      * Converts the response data into a {@link JsonObject}.
      *
      * @return The converted response data as a json tree.
+     * @deprecated Use {@link ServerListPingType#getPingResponse(ResponseData)}
      */
-    @NotNull
-    public JsonObject build() {
-        // version
-        final JsonObject versionObject = new JsonObject();
-        versionObject.addProperty("name", this.version);
-        versionObject.addProperty("protocol", this.protocol);
-
-        // players info
-        final JsonObject playersObject = new JsonObject();
-        playersObject.addProperty("max", this.maxPlayer);
-        playersObject.addProperty("online", this.online);
-
-        // individual players
-        final JsonArray sampleArray = new JsonArray();
-        for (PingPlayer pingPlayer : this.pingPlayers) {
-            JsonObject pingPlayerObject = new JsonObject();
-            pingPlayerObject.addProperty("name", pingPlayer.name);
-            pingPlayerObject.addProperty("id", pingPlayer.uuid.toString());
-            sampleArray.add(pingPlayerObject);
-        }
-        playersObject.add("sample", sampleArray);
-
-        final JsonObject descriptionObject = GsonComponentSerializer.gson().serializer()
-                .toJsonTree(this.description).getAsJsonObject();
-
-        final JsonObject jsonObject = new JsonObject();
-        jsonObject.add("version", versionObject);
-        jsonObject.add("players", playersObject);
-        jsonObject.add("description", descriptionObject);
-        jsonObject.addProperty("favicon", this.favicon);
-        return jsonObject;
+    @Deprecated
+    public @NotNull JsonObject build() {
+        return ServerListPingType.getModernPingResponse(this, true);
     }
 
     /**
      * Represents a player line in the server list hover.
+     * @deprecated See {@link NamedAndIdentified}
      */
+    @Deprecated
     public static class PingPlayer {
 
         private static @NotNull PingPlayer of(@NotNull String name, @NotNull UUID uuid) {

@@ -17,6 +17,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -174,6 +175,17 @@ public class BinaryWriter extends OutputStream {
         final int utf8Bytes = ByteBufUtil.utf8Bytes(string);
         writeVarInt(utf8Bytes);
         buffer.writeCharSequence(string, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Writes a null terminated string to the buffer. This method adds the null character
+     * to the end of the string before writing.
+     *
+     * @param string the string to write
+     * @param charset the charset to encode in
+     */
+    public void writeNullTerminatedString(@NotNull String string, @NotNull Charset charset) {
+        buffer.writeCharSequence(string + '\0', charset);
     }
 
     /**
