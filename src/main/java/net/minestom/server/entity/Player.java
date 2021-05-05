@@ -606,19 +606,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 sendDimension(instanceDimensionType);
             }
 
-            // Load all the required chunks
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, getChunkRange());
+            // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback = chunk -> {
-                // This is the last chunk to be loaded , spawn player
-                spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
-            };
+            final ChunkCallback endCallback = chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
 
-            // Chunk 0;0 always needs to be loaded
-            instance.loadChunk(0, 0, chunk ->
-                    // Load all the required chunks
-                    ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback));
-
+            ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
