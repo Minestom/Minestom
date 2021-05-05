@@ -105,7 +105,7 @@ public class Main {
         //MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
-        OpenToLAN.open(new OpenToLANConfig().setDelayBetweenEventCalls(new UpdateOption(1, TimeUnit.DAY)));
+        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(new UpdateOption(1, TimeUnit.DAY)));
 
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
