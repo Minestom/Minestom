@@ -99,13 +99,15 @@ public class BlockPlacementListener {
         blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
-            //Send a block change with AIR as block to keep the client in sync,
-            //using refreshChunk results in the client not being in sync
-            //after rapid invalid block placements
-            BlockChangePacket blockChangePacket = new BlockChangePacket();
-            blockChangePacket.blockPosition = blockPosition;
-            blockChangePacket.blockStateId = Block.AIR.getBlockId();
-            player.getPlayerConnection().sendPacket(blockChangePacket);
+            if (usedItem.getMaterial().isBlock()) {
+                //Send a block change with AIR as block to keep the client in sync,
+                //using refreshChunk results in the client not being in sync
+                //after rapid invalid block placements
+                BlockChangePacket blockChangePacket = new BlockChangePacket();
+                blockChangePacket.blockPosition = blockPosition;
+                blockChangePacket.blockStateId = Block.AIR.getBlockId();
+                player.getPlayerConnection().sendPacket(blockChangePacket);
+            }
             return;
         }
 
