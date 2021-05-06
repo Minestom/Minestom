@@ -1547,26 +1547,24 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
+        // Update client render distance
+        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
+
         // Unload old chunks
         for (int index : oldChunks) {
             final long chunkIndex = lastVisibleChunks[index];
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            // TODO prevent the client from getting lag spikes when re-loading large chunks
-            // Probably by having a distinction between visible and loaded (cache) chunks
-            /*UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+            final UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);*/
+            playerConnection.sendPacket(unloadChunkPacket);
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null)
                 chunk.removeViewer(this);
         }
-
-        // Update client render distance
-        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
 
         // Load new chunks
         for (int index : newChunks) {
