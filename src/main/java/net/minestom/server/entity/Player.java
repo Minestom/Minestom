@@ -2641,7 +2641,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          * Gets the player chat mode.
          *
          * @return the player chat mode
+         * @deprecated Use {@link #getChatMessageType()}
          */
+        @Deprecated
         public ChatMode getChatMode() {
             return ChatMode.values()[chatMessageType.ordinal()];
         }
@@ -2651,7 +2653,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @return the messages
          */
-        public @NotNull ChatMessageType getChatMessageType() {
+        public @Nullable ChatMessageType getChatMessageType() {
             return chatMessageType;
         }
 

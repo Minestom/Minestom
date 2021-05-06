@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public class Messenger {
      * @return if the message was sent
      */
     public static boolean sendMessage(@NotNull Player player, @NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
-        if (player.getSettings().getChatMessageType().accepts(position)) {
+        if (getChatMessageType(player).accepts(position)) {
             player.getPlayerConnection().sendPacket(new ChatMessagePacket(message, position, uuid));
             return true;
         }
@@ -56,7 +57,7 @@ public class Messenger {
         final Set<Player> sentTo = new HashSet<>();
 
         for (Player player : players) {
-            if (player.getSettings().getChatMessageType().accepts(position)) {
+            if (getChatMessageType(player).accepts(position)) {
                 sentTo.add(player);
             }
         }
@@ -72,7 +73,7 @@ public class Messenger {
      * @return if the server should receive messages from them
      */
     public static boolean canReceiveMessage(@NotNull Player player) {
-        return player.getSettings().getChatMessageType() == ChatMessageType.FULL;
+        return getChatMessageType(player) == ChatMessageType.FULL;
     }
 
     /**
@@ -97,7 +98,7 @@ public class Messenger {
      * @return if the server should receive commands from them
      */
     public static boolean canReceiveCommand(@NotNull Player player) {
-        return player.getSettings().getChatMessageType() != ChatMessageType.NONE;
+        return getChatMessageType(player) != ChatMessageType.NONE;
     }
 
     /**
@@ -121,6 +122,16 @@ public class Messenger {
      * @param player the player
      */
     public static void sendRejectionMessage(@NotNull Player player) {
-        player.getPlayerConnection().sendPacket(CANNOT_SEND_PACKET);
+        player.getPlayerConnection().sendPacket(CANNOT_SEND_PACKET, false);
+    }
+
+    /**
+     * Gets the chat message type for a player, returning {@link ChatMessageType#FULL} if not set.
+     *
+     * @param player the player
+     * @return the chat message type
+     */
+    private static @NotNull ChatMessageType getChatMessageType(@NotNull Player player) {
+        return Objects.requireNonNullElse(player.getSettings().getChatMessageType(), ChatMessageType.FULL);
     }
 }
