@@ -99,7 +99,7 @@ public class BlockPlacementListener {
         blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
-            if (usedItem.getMaterial().isBlock()) {
+            if (useMaterial.isBlock()) {
                 //Send a block change with AIR as block to keep the client in sync,
                 //using refreshChunk results in the client not being in sync
                 //after rapid invalid block placements
