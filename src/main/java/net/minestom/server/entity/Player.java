@@ -2610,7 +2610,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public @NotNull ForwardingWeatherManager getWeatherManager() {
+    public @NotNull WeatherManager getWeatherManager() {
         return this.weatherManager;
     }
 

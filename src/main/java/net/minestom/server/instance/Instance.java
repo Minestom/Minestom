@@ -37,6 +37,7 @@ import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.weather.WeatherContainer;
 import net.minestom.server.weather.manager.ForwardingWeatherManager;
+import net.minestom.server.weather.manager.WeatherManager;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -1117,7 +1118,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     }
 
     @Override
-    public @NotNull ForwardingWeatherManager getWeatherManager() {
+    public @NotNull WeatherManager getWeatherManager() {
         return this.weatherManager;
     }
 }
