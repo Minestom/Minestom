@@ -6,6 +6,7 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Collections;
 
 /**
  * A weather manager for a player.
@@ -19,7 +20,7 @@ public class PlayerWeatherManager extends ForwardingWeatherManager {
      * @param player the player
      */
     public PlayerWeatherManager(@NotNull Player player) {
-        super(player::getInstance);
+        super(Collections::emptyList);
         this.player = player;
     }
 

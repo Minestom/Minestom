@@ -75,7 +75,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.weather.Weather;
-import net.minestom.server.weather.container.ChildWeatherContainer;
+import net.minestom.server.weather.WeatherContainer;
 import net.minestom.server.weather.manager.ForwardingWeatherManager;
 import net.minestom.server.weather.manager.PlayerWeatherManager;
 import net.minestom.server.weather.manager.WeatherManager;
@@ -96,7 +96,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified, ChildWeatherContainer {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified, WeatherContainer {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;

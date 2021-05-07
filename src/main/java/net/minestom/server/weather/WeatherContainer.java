@@ -1,6 +1,5 @@
-package net.minestom.server.weather.container;
+package net.minestom.server.weather;
 
-import net.minestom.server.weather.Weather;
 import net.minestom.server.weather.manager.WeatherManager;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,5 +38,15 @@ public interface WeatherContainer {
      */
     default void resetWeather() {
         this.getWeatherManager().resetWeather();
+    }
+
+    /**
+     * Checks if this weather container has weather set that is overriding the weather of
+     * its parent container, it is has one.
+     *
+     * @return {@code true} if it does
+     */
+    default boolean hasWeather() {
+        return this.getWeatherManager().hasWeather();
     }
 }

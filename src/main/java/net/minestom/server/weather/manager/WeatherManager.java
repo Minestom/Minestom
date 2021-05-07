@@ -69,6 +69,15 @@ public abstract class WeatherManager {
     }
 
     /**
+     * Checks if this weather manager has its own weather set.
+     *
+     * @return {@code true} if it does
+     */
+    public boolean hasWeather() {
+        return this.weather != null;
+    }
+
+    /**
      * Sets the weather back to it's default.
      */
     public abstract void resetWeather();

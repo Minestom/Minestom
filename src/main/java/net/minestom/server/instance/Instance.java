@@ -35,9 +35,8 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
-import net.minestom.server.weather.container.ChildWeatherContainer;
+import net.minestom.server.weather.WeatherContainer;
 import net.minestom.server.weather.manager.ForwardingWeatherManager;
-import net.minestom.server.weather.manager.InstanceWeatherManager;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -59,7 +58,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience, ChildWeatherContainer {
+public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience, WeatherContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -110,7 +109,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     // Weather
-    private final ForwardingWeatherManager weatherManager = new InstanceWeatherManager(this);
+    private final ForwardingWeatherManager weatherManager = new ForwardingWeatherManager(this::getPlayers);
 
     /**
      * Creates a new instance.
