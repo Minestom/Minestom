@@ -106,6 +106,9 @@ public final class UpdateManager {
      * @param tickStart the time of the tick in milliseconds
      */
     private void serverTick(long tickStart) {
+        // Weather tick
+        MinecraftServer.getGlobalWeatherManager().checkWeatherExpiration();
+
         // Tick all instances
         MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
                 instance.tick(tickStart));

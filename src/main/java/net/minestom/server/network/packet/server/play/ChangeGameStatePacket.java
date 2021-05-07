@@ -15,6 +15,11 @@ public class ChangeGameStatePacket implements ServerPacket {
         reason = Reason.NO_RESPAWN_BLOCK;
     }
 
+    public ChangeGameStatePacket(@NotNull Reason reason, float value) {
+        this.reason = reason;
+        this.value = value;
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte((byte) reason.ordinal());
@@ -23,7 +28,7 @@ public class ChangeGameStatePacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        reason = Reason.values()[reader.readByte()];
+        reason = Reason.VALUES[reader.readByte()];
         value = reader.readFloat();
     }
 
@@ -44,7 +49,8 @@ public class ChangeGameStatePacket implements ServerPacket {
         THUNDER_LEVEL_CHANGE,
         PLAY_PUFFERFISH_STING_SOUND,
         PLAYER_ELDER_GUARDIAN_MOB_APPEARANCE,
-        ENABLE_RESPAWN_SCREEN
-    }
+        ENABLE_RESPAWN_SCREEN;
 
+        private static final Reason[] VALUES = Reason.values();
+    }
 }

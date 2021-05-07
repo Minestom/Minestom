@@ -102,4 +102,8 @@ public final class MathUtils {
             return null;
         }
     }
+
+    public static boolean equals(float a, float b) {
+        return Float.compare(a, b) == 0;
+    }
 }

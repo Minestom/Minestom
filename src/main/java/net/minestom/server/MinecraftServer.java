@@ -48,6 +48,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.weather.manager.GlobalWeatherManager;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionTypeManager;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -119,6 +120,7 @@ public final class MinecraftServer {
     private static BiomeManager biomeManager;
     private static AdvancementManager advancementManager;
     private static BossBarManager bossBarManager;
+    private static GlobalWeatherManager globalWeatherManager;
 
     private static ExtensionManager extensionManager;
 
@@ -167,6 +169,7 @@ public final class MinecraftServer {
         StatisticType.values();
         Fluid.values();
 
+        globalWeatherManager = new GlobalWeatherManager();
         connectionManager = new ConnectionManager();
         // Networking
         packetProcessor = new PacketProcessor();
@@ -440,6 +443,16 @@ public final class MinecraftServer {
     public static BossBarManager getBossBarManager() {
         checkInitStatus(bossBarManager);
         return bossBarManager;
+    }
+
+    /**
+     * Gets the global weather manager.
+     *
+     * @return the global weather manager
+     */
+    public static GlobalWeatherManager getGlobalWeatherManager() {
+        checkInitStatus(globalWeatherManager);
+        return globalWeatherManager;
     }
 
     /**
