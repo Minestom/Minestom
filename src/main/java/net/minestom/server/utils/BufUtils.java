@@ -10,8 +10,4 @@ public class BufUtils {
     public static ByteBuf direct() {
         return alloc.ioBuffer();
     }
-
-    public static ByteBuf getBuffer(int initialCapacity) {
-        return alloc.heapBuffer(initialCapacity);
-    }
 }
