@@ -12,8 +12,8 @@ import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.weather.Weather;
 import net.minestom.server.weather.Weather.Type;
-import net.minestom.server.weather.container.ChildWeatherContainer;
-import net.minestom.server.weather.container.WeatherContainer;
+import net.minestom.server.weather.WeatherContainer;
+import net.minestom.server.weather.manager.GlobalWeatherManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,10 +97,8 @@ public class WeatherCommand extends Command {
         if (container == null) {
             sender.sendMessage(text("Could not find the weather container!", RED));
         } else {
-            if (container instanceof ChildWeatherContainer) {
-                var child = (ChildWeatherContainer) container;
-
-                if (!child.hasWeather()) {
+            if (!(container.getWeatherManager() instanceof GlobalWeatherManager)) {
+                if (!container.hasWeather()) {
                     sender.sendMessage(text("The container is a child without any weather. However, it has the weather of it's parent."));
                 }
             }

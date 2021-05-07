@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.netty.packet.FramedPacket;
 import net.minestom.server.weather.Weather;
-import net.minestom.server.weather.container.WeatherContainer;
+import net.minestom.server.weather.WeatherContainer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -54,6 +54,11 @@ public class GlobalWeatherManager extends WeatherManager implements WeatherConta
     @Override
     public void resetWeather() {
         this.setWeather(Weather.infinite(this.defaultWeatherType));
+    }
+
+    @Override
+    public boolean hasWeather() {
+        return true;
     }
 
     @Override
