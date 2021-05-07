@@ -316,7 +316,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         getInventory().update();
 
         // if the instance has some weather, give it to the player
-        if (spawnInstance.hasWeather() && playerConnection instanceof NettyPlayerConnection) {
+        if ((spawnInstance.hasWeather() || MinecraftServer.getGlobalWeatherManager().getWeather().getType() != Weather.Type.CLEAR)
+                && playerConnection instanceof NettyPlayerConnection) {
             final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
 
             for (FramedPacket packet : WeatherManager.createWeatherPackets(Weather.clear(), spawnInstance.getWeather())) {
