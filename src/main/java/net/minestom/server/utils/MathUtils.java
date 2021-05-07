@@ -102,4 +102,8 @@ public final class MathUtils {
         Check.argCondition(n < 1, "n must be greater than 0");
         return Integer.SIZE - Integer.numberOfLeadingZeros(n);
     }
+
+    public static boolean equals(float a, float b) {
+        return Float.compare(a, b) == 0;
+    }
 }

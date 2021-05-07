@@ -30,6 +30,9 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.weather.container.ChildWeatherContainer;
+import net.minestom.server.weather.manager.ForwardingWeatherManager;
+import net.minestom.server.weather.manager.InstanceWeatherManager;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +55,7 @@ import java.util.stream.Collectors;
  * with {@link InstanceManager#registerInstance(Instance)}, and
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
-public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience {
+public abstract class Instance implements Block.Getter, Block.Setter, Tickable, Schedulable, TagHandler, PacketGroupingAudience,  ChildWeatherContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
@@ -90,6 +93,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
 
     // Pathfinder
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
+
+    // Weather
+    private final ForwardingWeatherManager weatherManager = new InstanceWeatherManager(this);
 
     // Adventure
     private final Pointers pointers;
@@ -677,5 +683,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Tickable, 
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    @Override
+    public @NotNull ForwardingWeatherManager getWeatherManager() {
+        return this.weatherManager;
     }
 }
