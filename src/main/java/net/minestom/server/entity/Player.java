@@ -655,6 +655,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.setInstance(instance, spawnPosition);
 
+        refreshVisibleChunks();
+
         if (differentSpawnPos && !firstSpawn) {
             // Player changed instance at a different position
             teleport(spawnPosition);
@@ -2592,6 +2594,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
+
+        public PlayerSettings() {
+            viewDistance = 2;
+        }
 
         /**
          * The player game language.
