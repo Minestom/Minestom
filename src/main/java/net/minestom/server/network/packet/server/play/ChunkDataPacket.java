@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -13,7 +14,6 @@ import net.minestom.server.instance.palette.Section;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -82,7 +82,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         writer.writeBoolean(fullChunk);
 
         int mask = 0;
-        ByteBuf blocks = BufUtils.getBuffer(MAX_BUFFER_SIZE);
+        ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
         for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
             if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 final Section section = paletteStorage.getSections()[i];

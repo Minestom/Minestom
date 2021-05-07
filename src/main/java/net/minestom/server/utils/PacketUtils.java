@@ -21,7 +21,6 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
@@ -287,7 +286,7 @@ public final class PacketUtils {
      */
     @NotNull
     public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+        ByteBuf packetBuf = directBuffer ? BufUtils.direct() : Unpooled.buffer();
         writeFramedPacket(packetBuf, serverPacket);
         return packetBuf;
     }
