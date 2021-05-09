@@ -161,10 +161,8 @@ public final class ChunkUtils {
      * @param range    how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    @NotNull
-    public static long[] getChunksInRange(@NotNull Position position, int range) {
+    public static @NotNull long[] getChunksInRange(@NotNull Position position, int range) {
         long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
-
         int xDistance = 0;
         int xDirection = 1;
         int zDistance = 0;
@@ -201,7 +199,6 @@ public final class ChunkUtils {
                 }
             }
         }
-
         return visibleChunks;
     }
 
