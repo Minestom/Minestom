@@ -69,7 +69,6 @@ import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -612,13 +611,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback = chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange);
+            final ChunkCallback endCallback =
+                    chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
 
             ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false,  false);
+            spawnPlayer(instance, spawnPosition, false, false, false);
         }
     }
 
@@ -643,21 +643,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
+     * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
+     *                      chunks
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
-                             boolean firstSpawn, boolean dimensionChange) {
-        // Clear previous instance elements
+                             boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
+            // Player instance changed, clear current viewable collections
             this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
-        final boolean differentSpawnPos = !position.isSimilar(spawnPosition);
 
         super.setInstance(instance, spawnPosition);
 
-        refreshVisibleChunks();
-
-        if (differentSpawnPos && !firstSpawn) {
+        if (updateChunks) {
+            refreshVisibleChunks();
+        } else if (!position.isSimilar(spawnPosition)) {
             // Player changed instance at a different position
             teleport(spawnPosition);
         }
