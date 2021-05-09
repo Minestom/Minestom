@@ -683,8 +683,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *          <i>(performed using {@link #synchronizePosition()})</i></li>
      *         <li>{@link EntityPositionAndRotationPacket} if {@code positionChange && viewChange}</li>
      *         <li>{@link EntityPositionPacket} if {@code positionChange}</li>
-     *         <li>{@link EntityRotationPacket} if {@code viewChange}
-     *          <i>(performed using {@link #setView(float, float)})</i></li>
+     *         <li>{@link EntityRotationPacket} and {@link EntityHeadLookPacket} if {@code viewChange}</li>
      *     </ol>
      *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
      *     is sent to self.
