@@ -19,6 +19,11 @@ public class ClientSetRecipeBookStatePacket extends ClientPlayPacket {
     }
 
     @Override
+    public int getId() {
+        return 0x1E;
+    }
+
+    @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(type.ordinal());
         writer.writeBoolean(bookOpen);

@@ -18,4 +18,9 @@ public class ClientSetDisplayedRecipePacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(recipeId);
     }
+
+    @Override
+    public int getId() {
+        return 0x1F;
+    }
 }

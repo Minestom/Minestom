@@ -73,6 +73,11 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
         flags = reader.readByte();
     }
 
+    @Override
+    public int getId() {
+        return 0x2A;
+    }
+
     /**
      * Update action, <code>UPDATE_DATA</code> indicates nothing special.
      */
