@@ -36,23 +36,70 @@ public class CollisionUtils {
         final Position currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        Vector intermediaryPosition = new Vector();
-        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
-                intermediaryPosition,
-                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+        Vector intermediaryPosition = currentPosition.toVector();
 
-        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
-                intermediaryPosition,
-                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+        double length = deltaPosition.length();
+        int stepsPerBlock = 4;
+        int steps = (int)(length * stepsPerBlock); // TODO: customize step length?
 
-        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
-                intermediaryPosition,
-                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+        float stepLength = 1.0f / stepsPerBlock;
+        double remainingX = Math.abs(deltaPosition.getX());
+        double remainingY = Math.abs(deltaPosition.getY());
+        double remainingZ = Math.abs(deltaPosition.getZ());
 
-        positionOut.setX(intermediaryPosition.getX());
-        positionOut.setY(intermediaryPosition.getY());
-        positionOut.setZ(intermediaryPosition.getZ());
-        velocityOut.copy(deltaPosition);
+        boolean xCollision = false;
+        boolean yCollision = false;
+        boolean zCollision = false;
+
+        double deltaXSign = Math.signum(deltaPosition.getX());
+        double deltaYSign = Math.signum(deltaPosition.getY());
+        double deltaZSign = Math.signum(deltaPosition.getZ());
+
+        for (int i = 0; i < steps; i++) {
+            if(!yCollision && remainingY >= stepLength) {
+                yCollision = stepAxis(instance, originChunk, intermediaryPosition, Y_AXIS, stepLength*deltaYSign,
+                        intermediaryPosition,
+                        deltaYSign > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+                remainingY -= stepLength;
+            }
+
+            if(!xCollision && remainingX >= stepLength) {
+                xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, stepLength*deltaXSign,
+                        intermediaryPosition,
+                        deltaXSign < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+                remainingX -= stepLength;
+            }
+
+            if(!zCollision && remainingZ >= stepLength) {
+                zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, stepLength*deltaZSign,
+                        intermediaryPosition,
+                        deltaZSign > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+                remainingZ -= stepLength;
+            }
+
+            if(xCollision && yCollision && zCollision) {
+                break;
+            }
+        }
+
+        if(!yCollision && remainingY >= 0.0f) {
+            yCollision = stepAxis(instance, originChunk, intermediaryPosition, Y_AXIS, remainingY*deltaYSign,
+                    intermediaryPosition,
+                    deltaYSign > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+        }
+
+        if(!xCollision && remainingX >= 0.0f) {
+            xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, remainingX*deltaXSign,
+                    intermediaryPosition,
+                    deltaXSign < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+        }
+
+        if(!zCollision && remainingZ >= 0.0f) {
+            zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, remainingZ*deltaZSign,
+                    intermediaryPosition,
+                    deltaZSign > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+        }
+
         if (xCollision) {
             velocityOut.setX(0f);
         }
@@ -62,6 +109,10 @@ public class CollisionUtils {
         if (zCollision) {
             velocityOut.setZ(0f);
         }
+        positionOut.setX(intermediaryPosition.getX());
+        positionOut.setY(intermediaryPosition.getY());
+        positionOut.setZ(intermediaryPosition.getZ());
+        velocityOut.copy(deltaPosition);
 
         return yCollision && deltaPosition.getY() < 0;
     }
@@ -125,7 +176,6 @@ public class CollisionUtils {
             }
         }
 
-        positionOut.copy(startPosition);
         positionOut.add(smallestDisplacement * axis.getX() * sign, smallestDisplacement * axis.getY() * sign, smallestDisplacement * axis.getZ() * sign);
         return collisionFound;
     }

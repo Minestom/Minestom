@@ -26,7 +26,7 @@ public class TestCollisions {
         Instance instance = MinecraftServer.getInstanceManager().createInstanceContainer();
         instance.loadChunk(0, 0);
         // corner
-        instance.setBlock(0, 0, 1, Block.BEDROCK);
+        instance.setBlock(0, 1, 1, Block.BEDROCK);
 
         /* Starting position (A: air, E: entity, B: bedrock)
 
@@ -52,9 +52,10 @@ public class TestCollisions {
 
         Position outPosition = new Position();
         Vector outVelocity = new Vector();
-        CollisionUtils.handlePhysics(entity, new Vector(1, 0, 1), outPosition, outVelocity);
+        CollisionUtils.handlePhysics(entity, new Vector(1, 0.5, 1), outPosition, outVelocity);
 
-        assertEquals(1, outPosition.getX(), 0.5);
-        assertEquals(0, outPosition.getZ(), 0.5);
+        assertEquals(1.5, outPosition.getX(), 0.15);
+        //assertEquals(0.5, outPosition.getY(), 0.15);
+        assertEquals(0.5, outPosition.getZ(), 0.15);
     }
 }
