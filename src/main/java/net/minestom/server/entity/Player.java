@@ -658,9 +658,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         if (updateChunks) {
             refreshVisibleChunks();
-        } else if (!position.isSimilar(spawnPosition)) {
-            // Player changed instance at a different position
-            teleport(spawnPosition);
         }
 
         if (dimensionChange || firstSpawn) {
