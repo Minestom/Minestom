@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -26,45 +27,44 @@ public class ArgumentParser {
     private static final Map<String, Function<String, Argument<?>>> ARGUMENT_FUNCTION_MAP = new ConcurrentHashMap<>();
 
     static {
-        ARGUMENT_FUNCTION_MAP.put("Literal", ArgumentLiteral::new);
-        ARGUMENT_FUNCTION_MAP.put("Boolean", ArgumentBoolean::new);
-        ARGUMENT_FUNCTION_MAP.put("Integer", ArgumentInteger::new);
-        ARGUMENT_FUNCTION_MAP.put("Double", ArgumentDouble::new);
-        ARGUMENT_FUNCTION_MAP.put("Float", ArgumentFloat::new);
-        ARGUMENT_FUNCTION_MAP.put("String", ArgumentString::new);
-        ARGUMENT_FUNCTION_MAP.put("Word", ArgumentWord::new);
-        ARGUMENT_FUNCTION_MAP.put("StringArray", ArgumentStringArray::new);
-        ARGUMENT_FUNCTION_MAP.put("Command", ArgumentCommand::new);
+        ARGUMENT_FUNCTION_MAP.put("literal", ArgumentLiteral::new);
+        ARGUMENT_FUNCTION_MAP.put("boolean", ArgumentBoolean::new);
+        ARGUMENT_FUNCTION_MAP.put("integer", ArgumentInteger::new);
+        ARGUMENT_FUNCTION_MAP.put("double", ArgumentDouble::new);
+        ARGUMENT_FUNCTION_MAP.put("float", ArgumentFloat::new);
+        ARGUMENT_FUNCTION_MAP.put("string", ArgumentString::new);
+        ARGUMENT_FUNCTION_MAP.put("word", ArgumentWord::new);
+        ARGUMENT_FUNCTION_MAP.put("stringarray", ArgumentStringArray::new);
+        ARGUMENT_FUNCTION_MAP.put("command", ArgumentCommand::new);
         // TODO enum
-        ARGUMENT_FUNCTION_MAP.put("Color", ArgumentColor::new);
-        ARGUMENT_FUNCTION_MAP.put("Time", ArgumentTime::new);
-        ARGUMENT_FUNCTION_MAP.put("Enchantment", ArgumentEnchantment::new);
-        ARGUMENT_FUNCTION_MAP.put("Particle", ArgumentParticle::new);
-        ARGUMENT_FUNCTION_MAP.put("ResourceLocation", ArgumentResourceLocation::new);
-        ARGUMENT_FUNCTION_MAP.put("Potion", ArgumentPotionEffect::new);
-        ARGUMENT_FUNCTION_MAP.put("EntityType", ArgumentEntityType::new);
-        ARGUMENT_FUNCTION_MAP.put("BlockState", ArgumentBlockState::new);
-        ARGUMENT_FUNCTION_MAP.put("IntRange", ArgumentIntRange::new);
-        ARGUMENT_FUNCTION_MAP.put("FloatRange", ArgumentFloatRange::new);
+        ARGUMENT_FUNCTION_MAP.put("color", ArgumentColor::new);
+        ARGUMENT_FUNCTION_MAP.put("time", ArgumentTime::new);
+        ARGUMENT_FUNCTION_MAP.put("enchantment", ArgumentEnchantment::new);
+        ARGUMENT_FUNCTION_MAP.put("particle", ArgumentParticle::new);
+        ARGUMENT_FUNCTION_MAP.put("resourceLocation", ArgumentResourceLocation::new);
+        ARGUMENT_FUNCTION_MAP.put("potion", ArgumentPotionEffect::new);
+        ARGUMENT_FUNCTION_MAP.put("entityType", ArgumentEntityType::new);
+        ARGUMENT_FUNCTION_MAP.put("blockState", ArgumentBlockState::new);
+        ARGUMENT_FUNCTION_MAP.put("intrange", ArgumentIntRange::new);
+        ARGUMENT_FUNCTION_MAP.put("floatrange", ArgumentFloatRange::new);
 
-        ARGUMENT_FUNCTION_MAP.put("Entity", s -> new ArgumentEntity(s).singleEntity(true));
-        ARGUMENT_FUNCTION_MAP.put("Entities", ArgumentEntity::new);
-        ARGUMENT_FUNCTION_MAP.put("Player", s -> new ArgumentEntity(s).singleEntity(true).onlyPlayers(true));
-        ARGUMENT_FUNCTION_MAP.put("Players", s -> new ArgumentEntity(s).onlyPlayers(true));
+        ARGUMENT_FUNCTION_MAP.put("entity", s -> new ArgumentEntity(s).singleEntity(true));
+        ARGUMENT_FUNCTION_MAP.put("entities", ArgumentEntity::new);
+        ARGUMENT_FUNCTION_MAP.put("player", s -> new ArgumentEntity(s).singleEntity(true).onlyPlayers(true));
+        ARGUMENT_FUNCTION_MAP.put("players", s -> new ArgumentEntity(s).onlyPlayers(true));
 
-        ARGUMENT_FUNCTION_MAP.put("ItemStack", ArgumentItemStack::new);
-        ARGUMENT_FUNCTION_MAP.put("Component", ArgumentComponent::new);
-        ARGUMENT_FUNCTION_MAP.put("UUID", ArgumentUUID::new);
-        ARGUMENT_FUNCTION_MAP.put("NBT", ArgumentNbtTag::new);
-        ARGUMENT_FUNCTION_MAP.put("NbtCompound", ArgumentNbtCompoundTag::new);
-        ARGUMENT_FUNCTION_MAP.put("RelativeBlockPosition", ArgumentRelativeBlockPosition::new);
-        ARGUMENT_FUNCTION_MAP.put("RelativeVec3", ArgumentRelativeVec3::new);
-        ARGUMENT_FUNCTION_MAP.put("RelativeVec2", ArgumentRelativeVec2::new);
+        ARGUMENT_FUNCTION_MAP.put("itemstack", ArgumentItemStack::new);
+        ARGUMENT_FUNCTION_MAP.put("component", ArgumentComponent::new);
+        ARGUMENT_FUNCTION_MAP.put("uuid", ArgumentUUID::new);
+        ARGUMENT_FUNCTION_MAP.put("nbt", ArgumentNbtTag::new);
+        ARGUMENT_FUNCTION_MAP.put("nbtcompound", ArgumentNbtCompoundTag::new);
+        ARGUMENT_FUNCTION_MAP.put("relativeblockposition", ArgumentRelativeBlockPosition::new);
+        ARGUMENT_FUNCTION_MAP.put("relativevec3", ArgumentRelativeVec3::new);
+        ARGUMENT_FUNCTION_MAP.put("relativevec2", ArgumentRelativeVec2::new);
     }
 
     @Beta
-    @NotNull
-    public static Argument<?>[] generate(@NotNull String format) {
+    public static @NotNull Argument<?>[] generate(@NotNull String format) {
         List<Argument<?>> result = new ArrayList<>();
 
         // 0 = no state
@@ -92,7 +92,7 @@ public class ArgumentParser {
                 } else if (c == '<') {
                     // Retrieve argument type
                     final String argument = builder.toString();
-                    argumentFunction = ARGUMENT_FUNCTION_MAP.get(argument);
+                    argumentFunction = ARGUMENT_FUNCTION_MAP.get(argument.toLowerCase(Locale.ROOT));
                     if (argumentFunction == null) {
                         throw new IllegalArgumentException("error invalid argument name: " + argument);
                     }

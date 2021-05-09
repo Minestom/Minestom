@@ -25,42 +25,34 @@ public final class Utils {
                 ? 4 : 5;
     }
 
-    public static void writeVarIntBuf(ByteBuf buffer, int value) {
-        do {
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) {
-                temp |= 0b10000000;
+    public static void writeVarIntBuf(ByteBuf buf, int value) {
+        // Took from velocity
+        if ((value & (0xFFFFFFFF << 7)) == 0) {
+            buf.writeByte(value);
+        } else if ((value & (0xFFFFFFFF << 14)) == 0) {
+            int w = (value & 0x7F | 0x80) << 8 | (value >>> 7);
+            buf.writeShort(w);
+        } else if ((value & (0xFFFFFFFF << 21)) == 0) {
+            int w = (value & 0x7F | 0x80) << 16 | ((value >>> 7) & 0x7F | 0x80) << 8 | (value >>> 14);
+            buf.writeMedium(w);
+        } else {
+            // Naive loop
+            while (true) {
+                if ((value & 0xFFFFFF80) == 0) {
+                    buf.writeByte(value);
+                    return;
+                }
+                buf.writeByte(value & 0x7F | 0x80);
+                value >>>= 7;
             }
-            buffer.writeByte(temp);
-        } while (value != 0);
-    }
-
-    public static void writeVarInt(BinaryWriter writer, int value) {
-        do {
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0) {
-                temp |= 0b10000000;
-            }
-            writer.writeByte(temp);
-        } while (value != 0);
+        }
     }
 
     public static void overrideVarIntHeader(@NotNull ByteBuf buffer, int startIndex, int value) {
         final int indexCache = buffer.writerIndex();
         buffer.writerIndex(startIndex);
-
-        for (int i = 0; i < VARINT_HEADER_SIZE; i++) {
-            byte temp = (byte) (value & 0b01111111);
-            value >>>= 7;
-            if (value != 0 || i != VARINT_HEADER_SIZE - 1) {
-                temp |= 0b10000000;
-            }
-
-            buffer.writeByte(temp);
-        }
-
+        final int w = (value & 0x7F | 0x80) << 16 | ((value >>> 7) & 0x7F | 0x80) << 8 | (value >>> 14);
+        buffer.writeMedium(w);
         buffer.writerIndex(indexCache);
     }
 

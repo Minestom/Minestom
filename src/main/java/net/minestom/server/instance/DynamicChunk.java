@@ -26,6 +26,7 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.SoftReference;
 import java.util.Set;
 
 /**
@@ -59,7 +60,7 @@ public class DynamicChunk extends Chunk {
 
     private long lastChangeTime;
 
-    private ChunkDataPacket cachedPacket;
+    private SoftReference<ChunkDataPacket> cachedPacket = new SoftReference<>(null);
     private long cachedPacketTime;
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ,
@@ -386,22 +387,22 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
-        if (cachedPacket != null && cachedPacketTime == getLastChangeTime()) {
-            return cachedPacket;
+        ChunkDataPacket packet = cachedPacket.get();
+        if (packet != null && cachedPacketTime == getLastChangeTime()) {
+            return packet;
         }
-        ChunkDataPacket fullDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
-        fullDataPacket.biomes = biomes;
-        fullDataPacket.chunkX = chunkX;
-        fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.paletteStorage = blockPalette.clone();
-        fullDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
-        fullDataPacket.blockEntities = blockEntities.clone();
-        fullDataPacket.blocksData = blocksData.clone();
+        packet = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
+        packet.biomes = biomes;
+        packet.chunkX = chunkX;
+        packet.chunkZ = chunkZ;
+        packet.paletteStorage = blockPalette.clone();
+        packet.customBlockPaletteStorage = customBlockPalette.clone();
+        packet.blockEntities = blockEntities.clone();
+        packet.blocksData = blocksData.clone();
 
         this.cachedPacketTime = getLastChangeTime();
-        this.cachedPacket = fullDataPacket;
-
-        return fullDataPacket;
+        this.cachedPacket = new SoftReference<>(packet);
+        return packet;
     }
 
     @NotNull

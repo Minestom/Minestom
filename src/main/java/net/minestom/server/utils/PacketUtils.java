@@ -3,7 +3,6 @@ package net.minestom.server.utils;
 import com.velocitypowered.natives.compression.VelocityCompressor;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
@@ -21,7 +20,6 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
@@ -35,7 +33,6 @@ public final class PacketUtils {
     private static final ThreadLocal<VelocityCompressor> COMPRESSOR = ThreadLocal.withInitial(() -> Natives.compress.get().create(4));
 
     private PacketUtils() {
-
     }
 
     /**
@@ -54,7 +51,7 @@ public final class PacketUtils {
      * </ol>
      *
      * @param audience the audience
-     * @param packet the packet
+     * @param packet   the packet
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
@@ -96,7 +93,7 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                final ByteBuf finalBuffer = createFramedPacket(packet, true);
+                final ByteBuf finalBuffer = createFramedPacket(packet);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
                 // Send packet to all players
@@ -282,14 +279,10 @@ public final class PacketUtils {
      * <p>
      * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
      * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
-     *
-     * @param serverPacket the server packet to write
      */
-    @NotNull
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+    public static @NotNull ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
+        ByteBuf packetBuf = BufUtils.direct();
         writeFramedPacket(packetBuf, serverPacket);
         return packetBuf;
     }
-
 }
