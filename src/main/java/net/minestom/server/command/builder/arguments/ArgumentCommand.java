@@ -74,4 +74,9 @@ public class ArgumentCommand extends Argument<CommandResult> {
         this.shortcut = shortcut;
         return this;
     }
+
+    @Override
+    public String toString() {
+        return String.format("Command<%s>", getId());
+    }
 }

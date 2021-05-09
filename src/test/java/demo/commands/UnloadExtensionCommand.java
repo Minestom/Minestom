@@ -5,13 +5,11 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentString;
+import net.minestom.server.command.builder.arguments.ArgumentMap;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -20,14 +18,20 @@ import java.nio.charset.StandardCharsets;
 
 public class UnloadExtensionCommand extends Command {
 
-    private final ArgumentString extensionName;
+    private final ArgumentMap<String, Extension> extensionName;
 
     public UnloadExtensionCommand() {
         super("unload");
 
         setDefaultExecutor(this::usage);
 
-        extensionName = ArgumentType.String("extensionName");
+        extensionName = ArgumentType.String("extensionName").map((input) -> {
+            Extension extension = MinecraftServer.getExtensionManager().getExtension(input);
+
+            if (extension == null) throw new ArgumentSyntaxException("The specified extension was not found", input, 1);
+
+            return extension;
+        });
 
         setArgumentCallback(this::extensionCallback, extensionName);
 
@@ -39,29 +43,25 @@ public class UnloadExtensionCommand extends Command {
     }
 
     private void execute(CommandSender sender, CommandContext context) {
-        final String name = context.get(extensionName);
-        sender.sendMessage(Component.text("extensionName = " + name + "...."));
+        final Extension ext = context.get(extensionName);
+        sender.sendMessage(Component.text("extensionName = " + ext.getOrigin().getName() + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
-        Extension ext = extensionManager.getExtension(name);
-        if (ext != null) {
+
+        try {
+            extensionManager.unloadExtension(ext.getOrigin().getName());
+        } catch (Throwable t) {
             try {
-                extensionManager.unloadExtension(name);
-            } catch (Throwable t) {
-                try {
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    t.printStackTrace();
-                    t.printStackTrace(new PrintStream(baos));
-                    baos.flush();
-                    baos.close();
-                    String contents = baos.toString(StandardCharsets.UTF_8);
-                    contents.lines().map(Component::text).forEach(sender::sendMessage);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                t.printStackTrace();
+                t.printStackTrace(new PrintStream(baos));
+                baos.flush();
+                baos.close();
+                String contents = baos.toString(StandardCharsets.UTF_8);
+                contents.lines().map(Component::text).forEach(sender::sendMessage);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } else {
-            sender.sendMessage(Component.text("Extension '" + name + "' does not exist."));
         }
     }
 

@@ -117,6 +117,40 @@ public abstract class PlayerConnection {
     @NotNull
     public abstract SocketAddress getRemoteAddress();
 
+
+    /**
+     * Gets protocol version of client.
+     *
+     * @return the protocol version
+     */
+    public int getProtocolVersion() {
+        return MinecraftServer.PROTOCOL_VERSION;
+    }
+
+    /**
+     * Gets the server address that the client used to connect.
+     * <p>
+     * WARNING: it is given by the client, it is possible for it to be wrong.
+     *
+     * @return the server address used
+     */
+    public @Nullable String getServerAddress() {
+        return MinecraftServer.getNettyServer().getAddress();
+    }
+
+
+    /**
+     * Gets the server port that the client used to connect.
+     * <p>
+     * WARNING: it is given by the client, it is possible for it to be wrong.
+     *
+     * @return the server port used
+     */
+    public int getServerPort() {
+        return MinecraftServer.getNettyServer().getPort();
+    }
+
+
     /**
      * Forcing the player to disconnect.
      */

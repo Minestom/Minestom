@@ -17,7 +17,7 @@ public class ClientNameItemPacket extends ClientPlayPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         if(itemName.length() > Short.MAX_VALUE) {
-            throw new IllegalArgumentException("Item name cannot be longer than Short.MAX_VALUE characters!");
+            throw new IllegalArgumentException("ItemStack name cannot be longer than Short.MAX_VALUE characters!");
         }
         writer.writeSizedString(itemName);
     }

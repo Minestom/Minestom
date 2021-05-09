@@ -48,7 +48,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
                 // Velocity
                 if (VelocityProxy.isEnabled() && channel.equals(VelocityProxy.PLAYER_INFO_CHANNEL)) {
-                    if (data != null) {
+                    if (data != null && data.length > 0) {
                         BinaryReader reader = new BinaryReader(data);
                         success = VelocityProxy.checkIntegrity(reader);
                         if (success) {
@@ -103,7 +103,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
         writer.writeVarInt(messageId);
         writer.writeBoolean(successful);
 
-        if(successful) {
+        if (successful) {
             writer.writeBytes(data);
         }
     }

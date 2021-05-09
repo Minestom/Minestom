@@ -77,7 +77,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             // Found, load from result bytes
             BinaryReader reader = new BinaryReader(bytes);
             // Create the chunk object using the instance's ChunkSupplier to support multiple implementations
-            Chunk chunk = instanceContainer.getChunkSupplier().createChunk(null, chunkX, chunkZ);
+            Chunk chunk = instanceContainer.getChunkSupplier().createChunk(instance, null, chunkX, chunkZ);
             // Execute the callback once all blocks are placed (allow for multithreaded implementations)
             chunk.readChunk(reader, callback);
             return true;

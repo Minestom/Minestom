@@ -11,10 +11,12 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerEatEvent extends PlayerEvent {
 
     private final ItemStack foodItem;
+    private final Player.Hand hand;
 
-    public PlayerEatEvent(@NotNull Player player, @NotNull ItemStack foodItem) {
+    public PlayerEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull Player.Hand hand) {
         super(player);
         this.foodItem = foodItem;
+        this.hand = hand;
     }
 
     /**
@@ -22,8 +24,11 @@ public class PlayerEatEvent extends PlayerEvent {
      *
      * @return the food item
      */
-    @NotNull
-    public ItemStack getFoodItem() {
+    public @NotNull ItemStack getFoodItem() {
         return foodItem;
+    }
+
+    public @NotNull Player.Hand getHand() {
+        return hand;
     }
 }

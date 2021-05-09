@@ -79,10 +79,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
-                mask += 1;
+                mask |= 0x01;
             }
             if (this.isOnlyPlayers()) {
-                mask += 2;
+                mask |= 0x02;
             }
             packetWriter.writeByte(mask);
         });
@@ -267,6 +267,20 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     public boolean isOnlyPlayers() {
         return onlyPlayers;
+    }
+
+    @Override
+    public String toString() {
+        if (onlySingleEntity) {
+            if (onlyPlayers) {
+                return String.format("Player<%s>", getId());
+            }
+            return String.format("Entity<%s>", getId());
+        }
+        if (onlyPlayers) {
+            return String.format("Players<%s>", getId());
+        }
+        return String.format("Entities<%s>", getId());
     }
 
     private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {

@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -13,18 +14,15 @@ import net.minestom.server.instance.palette.Section;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.BufUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryCache;
-import net.minestom.server.utils.cache.TimedBuffer;
+import net.minestom.server.utils.cache.TemporaryPacketCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
@@ -35,8 +33,7 @@ import java.util.concurrent.TimeUnit;
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    private static final TemporaryCache<TimedBuffer> CACHE = new TemporaryCache<>(5, TimeUnit.MINUTES,
-            notification -> notification.getValue().getBuffer().release());
+    public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
     public boolean fullChunk;
     public Biome[] biomes;
@@ -85,7 +82,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         writer.writeBoolean(fullChunk);
 
         int mask = 0;
-        ByteBuf blocks = BufUtils.getBuffer(MAX_BUFFER_SIZE);
+        ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
         for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
             if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 final Section section = paletteStorage.getSections()[i];
@@ -234,9 +231,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         return ServerPacketIdentifier.CHUNK_DATA;
     }
 
-    @NotNull
     @Override
-    public TemporaryCache<TimedBuffer> getCache() {
+    public @NotNull TemporaryPacketCache getCache() {
         return CACHE;
     }
 

@@ -32,24 +32,22 @@ public class CollisionUtils {
                                         @NotNull Vector velocityOut) {
         // TODO handle collisions with nearby entities (should it be done here?)
         final Instance instance = entity.getInstance();
+        final Chunk originChunk = entity.getChunk();
         final Position currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
         Vector intermediaryPosition = new Vector();
-        final boolean yCollision = stepAxis(instance, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
+        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
                 intermediaryPosition,
-                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace()
-        );
+                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
 
-        final boolean xCollision = stepAxis(instance, intermediaryPosition, X_AXIS, deltaPosition.getX(),
+        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
                 intermediaryPosition,
-                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace()
-        );
+                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
 
-        final boolean zCollision = stepAxis(instance, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
+        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
                 intermediaryPosition,
-                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace()
-        );
+                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
         positionOut.setX(intermediaryPosition.getX());
         positionOut.setY(intermediaryPosition.getY());
@@ -80,7 +78,11 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return true if a collision has been found
      */
-    private static boolean stepAxis(Instance instance, Vector startPosition, Vector axis, double stepAmount, Vector positionOut, Vector... corners) {
+    private static boolean stepAxis(Instance instance,
+                                    Chunk originChunk,
+                                    Vector startPosition, Vector axis,
+                                    double stepAmount, Vector positionOut,
+                                    Vector... corners) {
         positionOut.copy(startPosition);
         if (corners.length == 0)
             return false; // avoid degeneracy in following computations
@@ -99,7 +101,7 @@ public class CollisionUtils {
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            if (!stepOnce(instance, axis, sign, cornersCopy, cornerPositions)) {
+            if (!stepOnce(instance, originChunk, axis, sign, cornersCopy, cornerPositions)) {
                 collisionFound = true;
             }
             if (collisionFound) {
@@ -111,7 +113,7 @@ public class CollisionUtils {
         if (!collisionFound) {
             Vector direction = new Vector();
             direction.copy(axis);
-            collisionFound = !stepOnce(instance, direction, remainingLength, cornersCopy, cornerPositions);
+            collisionFound = !stepOnce(instance, originChunk, direction, remainingLength, cornersCopy, cornerPositions);
         }
 
         // find the corner which moved the least
@@ -138,7 +140,9 @@ public class CollisionUtils {
      * @param cornerPositions the corners, converted to BlockPosition (mutable)
      * @return false if this method encountered a collision
      */
-    private static boolean stepOnce(Instance instance, Vector axis, double amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
+    private static boolean stepOnce(Instance instance,
+                                    Chunk originChunk,
+                                    Vector axis, double amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
         final double sign = Math.signum(amount);
         for (int cornerIndex = 0; cornerIndex < cornersCopy.length; cornerIndex++) {
             Vector corner = cornersCopy[cornerIndex];
@@ -148,10 +152,13 @@ public class CollisionUtils {
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
 
-            final Chunk chunk = instance.getChunkAt(blockPos);
-            if (!ChunkUtils.isLoaded(chunk)) {
-                // Collision at chunk border
-                return false;
+            Chunk chunk = originChunk;
+            if (!ChunkUtils.same(originChunk, blockPos.getX(), blockPos.getZ())) {
+                chunk = instance.getChunkAt(blockPos);
+                if (!ChunkUtils.isLoaded(chunk)) {
+                    // Collision at chunk border
+                    return false;
+                }
             }
 
             final short blockStateId = chunk.getBlockStateId(blockPos.getX(), blockPos.getY(), blockPos.getZ());

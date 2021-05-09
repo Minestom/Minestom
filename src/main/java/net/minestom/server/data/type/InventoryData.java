@@ -1,5 +1,6 @@
 package net.minestom.server.data.type;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.data.DataType;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -15,7 +16,7 @@ public class InventoryData extends DataType<Inventory> {
         final int size = inventoryType.getSize();
 
         // Inventory title & type
-        writer.writeSizedString(value.getTitle());
+        writer.writeComponent(value.getTitle());
         writer.writeSizedString(inventoryType.name());
 
         // Write all item stacks
@@ -27,7 +28,7 @@ public class InventoryData extends DataType<Inventory> {
     @NotNull
     @Override
     public Inventory decode(@NotNull BinaryReader reader) {
-        final String title = reader.readSizedString(Integer.MAX_VALUE);
+        final Component title = reader.readComponent(Integer.MAX_VALUE);
         final InventoryType inventoryType = InventoryType.valueOf(reader.readSizedString(Integer.MAX_VALUE));
         final int size = inventoryType.getSize();
 

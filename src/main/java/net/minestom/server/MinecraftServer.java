@@ -2,7 +2,6 @@ package net.minestom.server;
 
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.benchmark.BenchmarkManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
@@ -25,6 +24,7 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
+import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ServerSidePacketProcessor;
 import net.minestom.server.network.netty.NettyServer;
@@ -42,6 +42,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
+import net.minestom.server.terminal.MinestomTerminal;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -73,16 +74,19 @@ public final class MinecraftServer {
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
 
+    public static final String THREAD_NAME_TICK_SCHEDULER = "Ms-TickScheduler";
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
-    public static final int THREAD_COUNT_BLOCK_BATCH = 4;
+    public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
+            Runtime.getRuntime().availableProcessors() / 2);
 
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
-    public static final int THREAD_COUNT_SCHEDULER = 1;
+    public static final int THREAD_COUNT_SCHEDULER = getThreadCount("minestom.scheduler-thread-count",
+            Runtime.getRuntime().availableProcessors() / 2);
 
     public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
-    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
+    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = getThreadCount("minestom.save-thread-count", 2);
 
     // Config
     // Can be modified at performance cost when increased
@@ -616,7 +620,9 @@ public final class MinecraftServer {
      * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
+     * @deprecated listen to the {@link net.minestom.server.event.server.ServerListPingEvent} instead
      */
+    @Deprecated
     public static ResponseDataConsumer getResponseDataConsumer() {
         checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
@@ -742,15 +748,30 @@ public final class MinecraftServer {
      * @param port                 the server port
      * @param responseDataConsumer the response data consumer, can be null
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
+     * @deprecated use {@link #start(String, int)} and listen to the {@link net.minestom.server.event.server.ServerListPingEvent} event instead of ResponseDataConsumer
      */
+    @Deprecated
     public void start(@NotNull String address, int port, @Nullable ResponseDataConsumer responseDataConsumer) {
+        MinecraftServer.responseDataConsumer = responseDataConsumer;
+        start(address, port);
+    }
+
+    /**
+     * Starts the server.
+     * <p>
+     * It should be called after {@link #init()} and probably your own initialization code.
+     *
+     * @param address the server address
+     * @param port    the server port
+     * @throws IllegalStateException if called before {@link #init()} or if the server is already running
+     */
+    public void start(@NotNull String address, int port) {
         Check.stateCondition(!initialized, "#start can only be called after #init");
         Check.stateCondition(started, "The server is already started");
 
         MinecraftServer.started = true;
 
         LOGGER.info("Starting Minestom server.");
-        MinecraftServer.responseDataConsumer = responseDataConsumer;
 
         updateManager.start();
 
@@ -775,18 +796,7 @@ public final class MinecraftServer {
 
         LOGGER.info("Minestom server started successfully.");
 
-        commandManager.startConsoleThread();
-    }
-
-    /**
-     * Starts the server.
-     *
-     * @param address the server address
-     * @param port    the server port
-     * @see #start(String, int, ResponseDataConsumer)
-     */
-    public void start(@NotNull String address, int port) {
-        start(address, port, null);
+        MinestomTerminal.start();
     }
 
     /**
@@ -805,7 +815,7 @@ public final class MinecraftServer {
         extensionManager.shutdown();
         LOGGER.info("Shutting down all thread pools.");
         benchmarkManager.disable();
-        commandManager.stopConsoleThread();
+        MinestomTerminal.stop();
         MinestomThread.shutdownAll();
         LOGGER.info("Minestom server stopped successfully.");
         started = false;
@@ -818,5 +828,9 @@ public final class MinecraftServer {
         /*Check.stateCondition(Objects.isNull(object),
                 "You cannot access the manager before MinecraftServer#init, " +
                         "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
+    }
+
+    private static int getThreadCount(@NotNull String property, int count) {
+        return Integer.getInteger(property, Math.min(1, count));
     }
 }

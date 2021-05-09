@@ -1,19 +1,24 @@
 package net.minestom.server.command.builder;
 
+import com.google.common.annotations.Beta;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.arguments.Argument;
-import net.minestom.server.command.builder.arguments.ArgumentDynamicStringArray;
-import net.minestom.server.command.builder.arguments.ArgumentDynamicWord;
-import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * Represents a command which has suggestion/auto-completion.
@@ -41,6 +46,7 @@ public class Command {
 
     private final String name;
     private final String[] aliases;
+    private final String[] names;
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
@@ -58,6 +64,7 @@ public class Command {
     public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
         this.aliases = aliases;
+        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
 
         this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
@@ -199,9 +206,22 @@ public class Command {
      *
      * @see #addConditionalSyntax(CommandCondition, CommandExecutor, Argument[])
      */
-    @NotNull
-    public Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
+    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull Argument<?>... args) {
         return addConditionalSyntax(null, executor, args);
+    }
+
+    /**
+     * Creates a syntax from a formatted string.
+     * <p>
+     * Currently in beta as the format is not final.
+     *
+     * @param executor the syntax executor
+     * @param format   the syntax format
+     * @return the newly created {@link CommandSyntax syntaxes}.
+     */
+    @Beta
+    public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
+        return addSyntax(executor, ArgumentType.generate(format));
     }
 
     /**
@@ -209,8 +229,7 @@ public class Command {
      *
      * @return the main command's name
      */
-    @NotNull
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
@@ -219,9 +238,19 @@ public class Command {
      *
      * @return the command aliases, can be null or empty
      */
-    @Nullable
-    public String[] getAliases() {
+    public @Nullable String[] getAliases() {
         return aliases;
+    }
+
+    /**
+     * Gets all the possible names for this command.
+     * <p>
+     * Include {@link #getName()} and {@link #getAliases()}.
+     *
+     * @return this command names
+     */
+    public @NotNull String[] getNames() {
+        return names;
     }
 
     /**
@@ -252,8 +281,7 @@ public class Command {
      * @return a collection containing all this command syntaxes
      * @see #addSyntax(CommandExecutor, Argument[])
      */
-    @NotNull
-    public Collection<CommandSyntax> getSyntaxes() {
+    public @NotNull Collection<CommandSyntax> getSyntaxes() {
         return syntaxes;
     }
 
@@ -266,8 +294,7 @@ public class Command {
      * @param text   the whole player's text
      * @return the array containing all the suggestion for the current arg (split SPACE), can be null
      */
-    @Nullable
-    public String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
+    public @Nullable String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
         return null;
     }
 
@@ -286,17 +313,139 @@ public class Command {
     public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
     }
 
+    @Beta
+    public @NotNull Set<String> getSyntaxesStrings() {
+        Set<String> syntaxes = new HashSet<>();
+
+        Consumer<String> syntaxConsumer = syntaxString -> {
+            for (String name : getNames()) {
+                final String syntax = name + StringUtils.SPACE + syntaxString;
+                syntaxes.add(syntax);
+            }
+        };
+
+        this.subcommands.forEach(subcommand -> subcommand.getSyntaxesStrings().forEach(syntaxConsumer));
+
+        this.syntaxes.forEach(commandSyntax -> syntaxConsumer.accept(commandSyntax.getSyntaxString()));
+
+        return syntaxes;
+    }
+
+    @Beta
+    public @NotNull String getSyntaxesTree() {
+        Node commandNode = new Node();
+        commandNode.names.addAll(Arrays.asList(getNames()));
+
+        // current node, literal = returned node
+        BiFunction<Node, Set<String>, Node> findNode = (currentNode, literals) -> {
+
+            for (Node node : currentNode.nodes) {
+                final var names = node.names;
+
+                // Verify if at least one literal is shared
+                final boolean shared = names.stream().anyMatch(literals::contains);
+                if (shared) {
+                    names.addAll(literals);
+                    return node;
+                }
+            }
+
+            // Create a new node
+            Node node = new Node();
+            node.names.addAll(literals);
+            currentNode.nodes.add(node);
+            return node;
+        };
+
+        BiConsumer<CommandSyntax, Node> syntaxProcessor = (syntax, node) -> {
+            List<String> arguments = new ArrayList<>();
+            BiConsumer<Node, List<String>> addArguments = (n, args) -> {
+                if (!args.isEmpty()) {
+                    n.arguments.add(args);
+                }
+            };
+
+            // true if all following arguments are not part of
+            // the branching plant (literals)
+            boolean branched = false;
+            for (Argument<?> argument : syntax.getArguments()) {
+                if (!branched) {
+                    if (argument instanceof ArgumentLiteral) {
+                        final String literal = argument.getId();
+
+                        addArguments.accept(node, arguments);
+                        arguments = new ArrayList<>();
+
+                        node = findNode.apply(node, Collections.singleton(literal));
+                        continue;
+                    } else if (argument instanceof ArgumentWord) {
+                        ArgumentWord argumentWord = (ArgumentWord) argument;
+                        if (argumentWord.hasRestrictions()) {
+
+                            addArguments.accept(node, arguments);
+                            arguments = new ArrayList<>();
+
+                            node = findNode.apply(node, Set.of(argumentWord.getRestrictions()));
+                            continue;
+                        }
+                    }
+                }
+                branched = true;
+                arguments.add(argument.toString());
+            }
+            addArguments.accept(node, arguments);
+        };
+
+        // Subcommands
+        this.subcommands.forEach(command -> {
+            final Node node = findNode.apply(commandNode, Set.of(command.getNames()));
+            command.getSyntaxes().forEach(syntax -> syntaxProcessor.accept(syntax, node));
+        });
+
+        // Syntaxes
+        this.syntaxes.forEach(syntax -> syntaxProcessor.accept(syntax, commandNode));
+
+        JsonObject jsonObject = new JsonObject();
+        processNode(commandNode, jsonObject);
+        return jsonObject.toString();
+    }
+
     public static boolean isValidName(@NotNull Command command, @NotNull String name) {
-        if (command.getName().equals(name))
-            return true;
-        final String[] aliases = command.getAliases();
-        if (aliases == null)
-            return false;
-        for (String alias : aliases) {
-            if (alias.equals(name))
+        for (String commandName : command.getNames()) {
+            if (commandName.equals(name)) {
                 return true;
+            }
         }
         return false;
+    }
+
+    private void processNode(@NotNull Node node, @NotNull JsonObject jsonObject) {
+        BiConsumer<String, Consumer<JsonArray>> processor = (s, consumer) -> {
+            JsonArray array = new JsonArray();
+            consumer.accept(array);
+            if (array.size() != 0) {
+                jsonObject.add(s, array);
+            }
+        };
+        // Names
+        processor.accept("names", array -> node.names.forEach(array::add));
+        // Nodes
+        processor.accept("nodes", array ->
+                node.nodes.forEach(n -> {
+                    JsonObject nodeObject = new JsonObject();
+                    processNode(n, nodeObject);
+                    array.add(nodeObject);
+                }));
+        // Arguments
+        processor.accept("arguments", array ->
+                node.arguments.forEach(arguments ->
+                        array.add(String.join(StringUtils.SPACE, arguments))));
+    }
+
+    private static final class Node {
+        private final Set<String> names = new HashSet<>();
+        private final Set<Node> nodes = new HashSet<>();
+        private final List<List<String>> arguments = new ArrayList<>();
     }
 
 }

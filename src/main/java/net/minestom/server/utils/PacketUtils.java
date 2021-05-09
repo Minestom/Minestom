@@ -3,9 +3,11 @@ package net.minestom.server.utils;
 import com.velocitypowered.natives.compression.VelocityCompressor;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.netty.packet.FramedPacket;
@@ -32,7 +34,39 @@ public final class PacketUtils {
     private static final ThreadLocal<VelocityCompressor> COMPRESSOR = ThreadLocal.withInitial(() -> Natives.compress.get().create(4));
 
     private PacketUtils() {
+    }
 
+    /**
+     * Sends a packet to an audience. This method performs the following steps in the
+     * following order:
+     * <ol>
+     *     <li>If {@code audience} is a {@link Player}, send the packet to them.</li>
+     *     <li>Otherwise, if {@code audience} is a {@link PacketGroupingAudience}, call
+     *     {@link #sendGroupedPacket(Collection, ServerPacket)} on the players that the
+     *     grouping audience contains.</li>
+     *     <li>Otherwise, if {@code audience} is a {@link ForwardingAudience.Single},
+     *     call this method on the single audience inside the forwarding audience.</li>
+     *     <li>Otherwise, if {@code audience} is a {@link ForwardingAudience}, call this
+     *     method for each audience member of the forwarding audience.</li>
+     *     <li>Otherwise, do nothing.</li>
+     * </ol>
+     *
+     * @param audience the audience
+     * @param packet   the packet
+     */
+    @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
+    public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
+        if (audience instanceof Player) {
+            ((Player) audience).getPlayerConnection().sendPacket(packet);
+        } else if (audience instanceof PacketGroupingAudience) {
+            PacketUtils.sendGroupedPacket(((PacketGroupingAudience) audience).getPlayers(), packet);
+        } else if (audience instanceof ForwardingAudience.Single) {
+            PacketUtils.sendPacket(((ForwardingAudience.Single) audience).audience(), packet);
+        } else if (audience instanceof ForwardingAudience) {
+            for (Audience member : ((ForwardingAudience) audience).audiences()) {
+                PacketUtils.sendPacket(member, packet);
+            }
+        }
     }
 
     /**
@@ -60,7 +94,7 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                final ByteBuf finalBuffer = createFramedPacket(packet, true);
+                final ByteBuf finalBuffer = createFramedPacket(packet);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
                 // Send packet to all players
@@ -193,7 +227,7 @@ public final class PacketUtils {
         final boolean compression = compressionThreshold > 0;
 
         if (compression) {
-            // Dummy varint
+            // Dummy var-int
             final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
             final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
@@ -227,13 +261,13 @@ public final class PacketUtils {
         } else {
             // No compression
 
-            // Write dummy varint
+            // Write dummy var-int
             final int index = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet id + payload
             writePacket(buffer, serverPacket);
 
-            // Rewrite dummy varint to packet length
+            // Rewrite dummy var-int to packet length
             final int afterIndex = buffer.writerIndex();
             final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
             Utils.overrideVarIntHeader(buffer, index, packetSize);
@@ -246,14 +280,10 @@ public final class PacketUtils {
      * <p>
      * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
      * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
-     *
-     * @param serverPacket the server packet to write
      */
-    @NotNull
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+    public static @NotNull ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
+        ByteBuf packetBuf = BufUtils.direct();
         writeFramedPacket(packetBuf, serverPacket);
         return packetBuf;
     }
-
 }

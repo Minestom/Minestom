@@ -37,7 +37,7 @@ public class BlockEntityDataPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        blockPosition = reader.readBlockPosition();;
+        blockPosition = reader.readBlockPosition();
         action = reader.readByte();
         try {
             NBT tag = reader.readTag();

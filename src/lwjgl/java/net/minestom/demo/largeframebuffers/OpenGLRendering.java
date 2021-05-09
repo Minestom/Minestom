@@ -12,7 +12,6 @@ import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.stream.Collectors;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 public final  class OpenGLRendering {

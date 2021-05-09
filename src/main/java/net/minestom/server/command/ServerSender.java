@@ -2,7 +2,6 @@ package net.minestom.server.command;
 
 import net.minestom.server.command.builder.CommandContext;
 import net.kyori.adventure.audience.Audience;
-import net.minestom.server.command.builder.Arguments;
 import net.minestom.server.permission.Permission;
 import org.jetbrains.annotations.NotNull;
 

@@ -19,13 +19,14 @@ import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.SoftReference;
 import java.util.Set;
 
 /**
@@ -59,18 +60,18 @@ public class DynamicChunk extends Chunk {
 
     private long lastChangeTime;
 
-    private ChunkDataPacket cachedPacket;
+    private SoftReference<ChunkDataPacket> cachedPacket = new SoftReference<>(null);
     private long cachedPacketTime;
 
-    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ,
+    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ,
                         @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
-        super(biomes, chunkX, chunkZ, true);
+        super(instance, biomes, chunkX, chunkZ, true);
         this.blockPalette = blockPalette;
         this.customBlockPalette = customBlockPalette;
     }
 
-    public DynamicChunk(@Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        this(biomes, chunkX, chunkZ,
+    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
+        this(instance, biomes, chunkX, chunkZ,
                 new PaletteStorage(8, 2),
                 new PaletteStorage(8, 2));
     }
@@ -131,7 +132,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void tick(long time, @NotNull Instance instance) {
+    public void tick(long time) {
         if (updatableBlocks.isEmpty())
             return;
 
@@ -145,7 +146,7 @@ public class DynamicChunk extends Chunk {
             final UpdateOption updateOption = customBlock.getUpdateOption();
             if (updateOption != null) {
                 final long lastUpdate = updatableBlocksLastUpdate.get(index);
-                final boolean hasCooldown = CooldownUtils.hasCooldown(time, lastUpdate, updateOption);
+                final boolean hasCooldown = Cooldown.hasCooldown(time, lastUpdate, updateOption);
                 if (hasCooldown)
                     continue;
 
@@ -386,28 +387,28 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
-        if (cachedPacket != null && cachedPacketTime == getLastChangeTime()) {
-            return cachedPacket;
+        ChunkDataPacket packet = cachedPacket.get();
+        if (packet != null && cachedPacketTime == getLastChangeTime()) {
+            return packet;
         }
-        ChunkDataPacket fullDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
-        fullDataPacket.biomes = biomes;
-        fullDataPacket.chunkX = chunkX;
-        fullDataPacket.chunkZ = chunkZ;
-        fullDataPacket.paletteStorage = blockPalette.clone();
-        fullDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
-        fullDataPacket.blockEntities = blockEntities.clone();
-        fullDataPacket.blocksData = blocksData.clone();
+        packet = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
+        packet.biomes = biomes;
+        packet.chunkX = chunkX;
+        packet.chunkZ = chunkZ;
+        packet.paletteStorage = blockPalette.clone();
+        packet.customBlockPaletteStorage = customBlockPalette.clone();
+        packet.blockEntities = blockEntities.clone();
+        packet.blocksData = blocksData.clone();
 
         this.cachedPacketTime = getLastChangeTime();
-        this.cachedPacket = fullDataPacket;
-
-        return fullDataPacket;
+        this.cachedPacket = new SoftReference<>(packet);
+        return packet;
     }
 
     @NotNull
     @Override
-    public Chunk copy(int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(biomes.clone(), chunkX, chunkZ);
+    public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
+        DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
         dynamicChunk.blockPalette = blockPalette.clone();
         dynamicChunk.customBlockPalette = customBlockPalette.clone();
         dynamicChunk.blocksData.putAll(blocksData);

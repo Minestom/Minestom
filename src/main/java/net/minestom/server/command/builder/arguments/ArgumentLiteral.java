@@ -31,4 +31,9 @@ public class ArgumentLiteral extends Argument<String> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{literalNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("Literal<%s>", getId());
+    }
 }

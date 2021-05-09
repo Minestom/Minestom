@@ -77,4 +77,8 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    @Override
+    public String toString() {
+        return String.format("RelativeVec2<%s>", getId());
+    }
 }

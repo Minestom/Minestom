@@ -92,7 +92,6 @@ public class HandshakePacket implements ClientPreplayPacket {
 
                     nettyPlayerConnection.UNSAFE_setBungeeUuid(playerUuid);
                     nettyPlayerConnection.UNSAFE_setBungeeSkin(playerSkin);
-
                 } else {
                     nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
                     nettyPlayerConnection.disconnect();
@@ -104,6 +103,11 @@ public class HandshakePacket implements ClientPreplayPacket {
             }
         }
 
+        if (connection instanceof NettyPlayerConnection) {
+            // Give to the connection the server info that the client used
+            ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort, protocolVersion);
+        }
+
         switch (nextState) {
             case 1:
                 connection.setConnectionState(ConnectionState.STATUS);
@@ -111,11 +115,6 @@ public class HandshakePacket implements ClientPreplayPacket {
             case 2:
                 if (protocolVersion == MinecraftServer.PROTOCOL_VERSION) {
                     connection.setConnectionState(ConnectionState.LOGIN);
-
-                    if (connection instanceof NettyPlayerConnection) {
-                        // Give to the connection the server info that the client used
-                        ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort);
-                    }
                 } else {
                     // Incorrect client version
                     connection.sendPacket(new LoginDisconnectPacket(INVALID_VERSION_TEXT));

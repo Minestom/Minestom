@@ -7,8 +7,9 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.entity.type.projectile.EntityProjectile;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.CooldownUtils;
+import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,6 +19,8 @@ import java.util.function.Function;
  * Allows entity to perform both melee and ranged attacks.
  */
 public class CombinedAttackGoal extends GoalSelector {
+
+    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
 
     private final int meleeRangeSquared;
     private final int meleeDelay;
@@ -90,6 +93,10 @@ public class CombinedAttackGoal extends GoalSelector {
         Check.argCondition(desirableRange > rangedRange, "Desirable range can not exceed ranged range!");
     }
 
+    public Cooldown getCooldown() {
+        return this.cooldown;
+    }
+
     public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = projectileGenerator;
     }
@@ -122,12 +129,12 @@ public class CombinedAttackGoal extends GoalSelector {
         boolean comeClose = false;
         // First of all, checking if to perform melee or ranged attack depending on the distance to target.
         if (distanceSquared <= this.meleeRangeSquared) {
-            if (!CooldownUtils.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
                 this.entityCreature.attack(target, true);
                 this.lastAttack = time;
             }
         } else if (distanceSquared <= this.rangedRangeSquared) {
-            if (!CooldownUtils.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     // If target is on line of entity sight, ranged attack can be performed
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
@@ -159,7 +166,10 @@ public class CombinedAttackGoal extends GoalSelector {
         // Otherwise going to the target.
         Position targetPosition = target.getPosition();
         if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
-            navigator.setPathTo(targetPosition);
+            if (this.cooldown.isReady(time)) {
+                this.cooldown.refreshLastUpdate(time);
+                navigator.setPathTo(targetPosition);
+            }
         }
     }
 

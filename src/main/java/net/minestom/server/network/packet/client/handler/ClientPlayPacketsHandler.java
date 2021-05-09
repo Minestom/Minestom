@@ -36,8 +36,8 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler<ClientPlayPac
         register(0x1B, ClientPlayerDiggingPacket::new);
         register(0x1C, ClientEntityActionPacket::new);
         register(0x1D, ClientSteerVehiclePacket::new);
-        register(0x1E, ClientRecipeBookData::new);
-        register(0x1F, ClientRecipeBookData::new);
+        register(0x1E, ClientSetRecipeBookStatePacket::new);
+        register(0x1F, ClientSetDisplayedRecipePacket::new);
 
 
         register(0x20, ClientNameItemPacket::new);
@@ -50,7 +50,7 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler<ClientPlayPac
         register(0x27, ClientUpdateCommandBlockMinecartPacket::new);
         register(0x28, ClientCreativeInventoryActionPacket::new);
         //Update Jigsaw Block??
-        //Update Structure Block??
+        register(0x2A, ClientUpdateStructureBlockPacket::new);
         register(0x2B, ClientUpdateSignPacket::new);
         register(0x2C, ClientAnimationPacket::new);
         register(0x2D, ClientSpectatePacket::new);

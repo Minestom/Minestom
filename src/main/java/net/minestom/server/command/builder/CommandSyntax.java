@@ -3,6 +3,7 @@ package net.minestom.server.command.builder;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -102,5 +103,14 @@ public class CommandSyntax {
 
     public boolean hasSuggestion() {
         return suggestion;
+    }
+
+    public @NotNull String getSyntaxString() {
+        StringBuilder builder = new StringBuilder();
+        for (Argument<?> argument : args) {
+            builder.append(argument.toString())
+                    .append(StringUtils.SPACE);
+        }
+        return builder.toString().trim();
     }
 }

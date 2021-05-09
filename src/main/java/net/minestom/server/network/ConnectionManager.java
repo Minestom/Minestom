@@ -2,12 +2,10 @@ package net.minestom.server.network;
 
 import io.netty.channel.Channel;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -48,6 +46,7 @@ public final class ConnectionManager {
 
     private final Queue<Player> waitingPlayers = new ConcurrentLinkedQueue<>();
     private final Set<Player> players = new CopyOnWriteArraySet<>();
+    private final Set<Player> unmodifiablePlayers = Collections.unmodifiableSet(players);
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
 
     // All the consumers to call once a packet is received
@@ -78,9 +77,8 @@ public final class ConnectionManager {
      *
      * @return an unmodifiable collection containing all the online players
      */
-    @NotNull
-    public Collection<Player> getOnlinePlayers() {
-        return Collections.unmodifiableCollection(players);
+    public @NotNull Collection<@NotNull Player> getOnlinePlayers() {
+        return unmodifiablePlayers;
     }
 
     /**
@@ -90,8 +88,7 @@ public final class ConnectionManager {
      * @param username the player username (can be partial)
      * @return the closest match, null if no players are online
      */
-    @Nullable
-    public Player findPlayer(@NotNull String username) {
+    public @Nullable Player findPlayer(@NotNull String username) {
         Player exact = getPlayer(username);
         if (exact != null) return exact;
 
@@ -147,7 +144,6 @@ public final class ConnectionManager {
      *
      * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
      * @param condition   the condition to receive the message
-     *
      * @deprecated Use {@link Audiences#players(Predicate)}
      */
     @Deprecated
@@ -317,7 +313,6 @@ public final class ConnectionManager {
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
-     *
      * @deprecated Use {@link #getShutdownText()}
      */
     @Deprecated

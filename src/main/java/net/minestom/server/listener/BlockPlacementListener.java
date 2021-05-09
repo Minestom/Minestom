@@ -52,7 +52,8 @@ public class BlockPlacementListener {
         final ItemStack usedItem = player.getItemInHand(hand);
 
         // Interact at block
-        final boolean cancel = usedItem.onUseOnBlock(player, hand, blockPosition, direction);
+        // FIXME: onUseOnBlock
+        final boolean cancel = false;//usedItem.onUseOnBlock(player, hand, blockPosition, direction);
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
         playerBlockInteractEvent.setCancelled(cancel);
         playerBlockInteractEvent.setBlockingItemUse(cancel);
@@ -85,7 +86,8 @@ public class BlockPlacementListener {
                 canPlaceBlock = false; //Spectators can't place blocks
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the block can placed on the block
-                canPlaceBlock = usedItem.canPlaceOn(instance.getBlock(blockPosition).getName());
+                Block placeBlock = instance.getBlock(blockPosition);
+                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(placeBlock);
             }
         }
 
@@ -97,13 +99,15 @@ public class BlockPlacementListener {
         blockPosition.add(offsetX, offsetY, offsetZ);
 
         if (!canPlaceBlock) {
-            //Send a block change with AIR as block to keep the client in sync,
-            //using refreshChunk results in the client not being in sync
-            //after rapid invalid block placements
-            BlockChangePacket blockChangePacket = new BlockChangePacket();
-            blockChangePacket.blockPosition = blockPosition;
-            blockChangePacket.blockStateId = Block.AIR.getBlockId();
-            player.getPlayerConnection().sendPacket(blockChangePacket);
+            if (useMaterial.isBlock()) {
+                //Send a block change with AIR as block to keep the client in sync,
+                //using refreshChunk results in the client not being in sync
+                //after rapid invalid block placements
+                BlockChangePacket blockChangePacket = new BlockChangePacket();
+                blockChangePacket.blockPosition = blockPosition;
+                blockChangePacket.blockStateId = Block.AIR.getBlockId();
+                player.getPlayerConnection().sendPacket(blockChangePacket);
+            }
             return;
         }
 
@@ -166,11 +170,8 @@ public class BlockPlacementListener {
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand
-                                final ItemStack newUsedItem = usedItem.consume(1);
-
-                                if (newUsedItem != null) {
-                                    playerInventory.setItemInHand(hand, newUsedItem);
-                                }
+                                final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
+                                playerInventory.setItemInHand(hand, newUsedItem);
                             }
                         } else {
                             refreshChunk = true;
@@ -196,8 +197,6 @@ public class BlockPlacementListener {
         if (refreshChunk) {
             chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(blockPosition.getY()), player);
         }
-
-        player.getInventory().refreshSlot(player.getHeldSlot());
     }
 
 }

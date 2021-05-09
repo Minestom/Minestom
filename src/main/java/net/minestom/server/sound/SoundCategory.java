@@ -1,6 +1,5 @@
 package net.minestom.server.sound;
 
-import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 
 import static net.kyori.adventure.sound.Sound.*;

@@ -67,4 +67,9 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
+
+    @Override
+    public String toString() {
+        return String.format("IntRange<%s>", getId());
+    }
 }

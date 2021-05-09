@@ -5,11 +5,7 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class VanillaStackingRule extends StackingRule {
-
-    public VanillaStackingRule(int maxSize) {
-        super(maxSize);
-    }
+public class VanillaStackingRule implements StackingRule {
 
     @Override
     public boolean canBeStacked(@NotNull ItemStack item1, @NotNull ItemStack item2) {
@@ -18,21 +14,23 @@ public class VanillaStackingRule extends StackingRule {
 
     @Override
     public boolean canApply(@NotNull ItemStack item, int newAmount) {
-        return MathUtils.isBetween(newAmount, 0, getMaxSize());
+        return MathUtils.isBetween(newAmount, 0, getMaxSize(item));
     }
 
-    @NotNull
     @Override
-    public ItemStack apply(@NotNull ItemStack item, int newAmount) {
-        if (newAmount <= 0)
-            return ItemStack.getAirItem();
-
-        item.setAmount((byte) newAmount);
-        return item;
+    public @NotNull ItemStack apply(@NotNull ItemStack item, int amount) {
+        if (amount > 0)
+            return item.withAmount(amount);
+        return ItemStack.AIR;
     }
 
     @Override
     public int getAmount(@NotNull ItemStack itemStack) {
         return itemStack.getAmount();
+    }
+
+    @Override
+    public int getMaxSize(@NotNull ItemStack itemStack) {
+        return itemStack.getMaterial().getMaxDefaultStackSize();
     }
 }

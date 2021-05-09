@@ -7,8 +7,8 @@ import java.util.concurrent.CompletableFuture;
 
 public final class AsyncUtils {
 
-    public static void runAsync(@NotNull Runnable runnable) {
-        CompletableFuture.runAsync(() -> {
+    public static @NotNull CompletableFuture<Void> runAsync(@NotNull Runnable runnable) {
+        return CompletableFuture.runAsync(() -> {
             try {
                 runnable.run();
             } catch (Exception e) {

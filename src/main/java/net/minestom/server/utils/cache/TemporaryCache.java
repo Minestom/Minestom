@@ -41,6 +41,10 @@ public class TemporaryCache<T> {
         this.cache.put(identifier, value);
     }
 
+    public void invalidate(@NotNull UUID identifier) {
+        this.cache.invalidate(identifier);
+    }
+
     /**
      * Retrieves an object from cache.
      *

@@ -17,7 +17,8 @@ public class MultiBlockChangePacket implements ServerPacket {
     public boolean suppressLightUpdates = true;
     public BlockChange[] blockChanges = new BlockChange[0];
 
-    public MultiBlockChangePacket() {}
+    public MultiBlockChangePacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -27,7 +28,7 @@ public class MultiBlockChangePacket implements ServerPacket {
             final int length = blockChanges.length;
             writer.writeVarInt(length);
             for (final BlockChange blockChange : blockChanges) {
-                writer.writeVarLong(blockChange.newBlockId << 12 | getLocalBlockPosAsShort(blockChange.positionX, blockChange.positionY, blockChange.positionZ));
+                writer.writeVarLong((long) blockChange.newBlockId << 12 | getLocalBlockPosAsShort(blockChange.positionX, blockChange.positionY, blockChange.positionZ));
             }
         } else {
             writer.writeVarInt(0);

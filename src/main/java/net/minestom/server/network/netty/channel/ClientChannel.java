@@ -71,10 +71,7 @@ public class ClientChannel extends SimpleChannelInboundHandler<InboundPacket> {
 
             // Release tick buffer
             if (playerConnection instanceof NettyPlayerConnection) {
-                final ByteBuf tickBuffer = ((NettyPlayerConnection) playerConnection).getTickBuffer();
-                synchronized (tickBuffer) {
-                    tickBuffer.release();
-                }
+                ((NettyPlayerConnection) playerConnection).releaseTickBuffer();
             }
         }
     }
