@@ -84,7 +84,6 @@ public final class PacketUtils {
 
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
-
         if (AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
             needsTranslating = AdventureSerializer.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
@@ -98,15 +97,11 @@ public final class PacketUtils {
 
                 // Send packet to all players
                 for (Player player : players) {
-
                     if (!player.isOnline())
                         continue;
-
                     // Verify if the player should receive the packet
                     if (playerValidator != null && !playerValidator.isValid(player))
                         continue;
-
-                    finalBuffer.retain();
 
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
@@ -115,15 +110,12 @@ public final class PacketUtils {
                     } else {
                         playerConnection.sendPacket(packet);
                     }
-
-                    finalBuffer.release();
                 }
                 finalBuffer.release(); // Release last reference
             }
         } else {
             // Write the same packet for each individual players
             for (Player player : players) {
-
                 // Verify if the player should receive the packet
                 if (playerValidator != null && !playerValidator.isValid(player))
                     continue;
