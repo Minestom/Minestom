@@ -336,7 +336,7 @@ public class ColoredText extends JsonMessage {
     /**
      * Converts a legacy text to our format which can be used by {@link #of(String)} etc...
      * <p>
-     * eg: "&fHey" -> "{#white}Hey"
+     * eg: "&amp;&amp;fHey" -> "{#white}Hey"
      *
      * @param message   the legacy text
      * @param colorChar the char used before the color code
