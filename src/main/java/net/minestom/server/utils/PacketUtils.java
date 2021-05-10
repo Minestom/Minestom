@@ -223,24 +223,22 @@ public final class PacketUtils {
     public static void writeFramedPacket(@NotNull ByteBuf buffer,
                                          @NotNull ServerPacket serverPacket) {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
-        final boolean compressionEnabled = compressionThreshold > 0;
 
         // Index of the var-int containing the complete packet length
         final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-        if (compressionEnabled) {
+        if (compressionThreshold > 0) {
             // Index of the uncompressed payload length
             final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet
             final int contentIndex = buffer.writerIndex();
             writePacket(buffer, serverPacket);
-            final int packetSize = (buffer.writerIndex() - dataLengthIndex) - Utils.VARINT_HEADER_SIZE;
+            final int packetSize = buffer.writerIndex() - contentIndex;
 
-            int uncompressedLength = 0;
-            if (packetSize >= compressionThreshold) {
+            final int uncompressedLength = packetSize >= compressionThreshold ? packetSize : 0;
+            Utils.overrideVarIntHeader(buffer, dataLengthIndex, uncompressedLength);
+            if (uncompressedLength > 0) {
                 // Packet large enough, compress
-                uncompressedLength = packetSize;
-
                 final VelocityCompressor compressor = COMPRESSOR.get();
                 // Compress id + payload
                 ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
@@ -248,19 +246,13 @@ public final class PacketUtils {
                 compress(compressor, uncompressedCopy, buffer);
                 uncompressedCopy.release();
             }
-
-            // Fill header
-            final int totalPacketLength = buffer.writerIndex() - packetLengthIndex - Utils.VARINT_HEADER_SIZE;
-            Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
-            Utils.overrideVarIntHeader(buffer, dataLengthIndex, uncompressedLength);
         } else {
             // No compression, write packet id + payload
             writePacket(buffer, serverPacket);
-
-            // Rewrite dummy var-int to packet length
-            final int packetSize = (buffer.writerIndex() - packetLengthIndex) - Utils.VARINT_HEADER_SIZE;
-            Utils.overrideVarIntHeader(buffer, packetLengthIndex, packetSize);
         }
+        // Total length
+        final int totalPacketLength = buffer.writerIndex() - packetLengthIndex - Utils.VARINT_HEADER_SIZE;
+        Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
     }
 
     /**
