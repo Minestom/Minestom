@@ -234,11 +234,12 @@ public final class PacketUtils {
             // Write packet
             final int contentIndex = buffer.writerIndex();
             writePacket(buffer, serverPacket);
-            final int afterIndex = buffer.writerIndex();
-            final int packetSize = (afterIndex - dataLengthIndex) - Utils.VARINT_HEADER_SIZE;
+            final int packetSize = (buffer.writerIndex() - dataLengthIndex) - Utils.VARINT_HEADER_SIZE;
 
+            int uncompressedLength = 0;
             if (packetSize >= compressionThreshold) {
-                // Packet large enough
+                // Packet large enough, compress
+                uncompressedLength = packetSize;
 
                 final VelocityCompressor compressor = COMPRESSOR.get();
                 // Compress id + payload
@@ -246,18 +247,12 @@ public final class PacketUtils {
                 buffer.writerIndex(contentIndex);
                 compress(compressor, uncompressedCopy, buffer);
                 uncompressedCopy.release();
-
-                final int totalPacketLength = buffer.writerIndex() - contentIndex + Utils.VARINT_HEADER_SIZE;
-
-                // Update header values
-                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
-                Utils.overrideVarIntHeader(buffer, dataLengthIndex, packetSize);
-            } else {
-                // Packet too small, just override header values
-                final int totalPacketLength = packetSize + Utils.VARINT_HEADER_SIZE;
-                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
-                Utils.overrideVarIntHeader(buffer, dataLengthIndex, 0); // -> Uncompressed
             }
+
+            // Fill header
+            final int totalPacketLength = buffer.writerIndex() - packetLengthIndex - Utils.VARINT_HEADER_SIZE;
+            Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+            Utils.overrideVarIntHeader(buffer, dataLengthIndex, uncompressedLength);
         } else {
             // No compression, write packet id + payload
             writePacket(buffer, serverPacket);
