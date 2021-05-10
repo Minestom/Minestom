@@ -239,11 +239,9 @@ public final class PacketUtils {
             Utils.overrideVarIntHeader(buffer, dataLengthIndex, uncompressedLength);
             if (uncompressedLength > 0) {
                 // Packet large enough, compress
-                final VelocityCompressor compressor = COMPRESSOR.get();
-                // Compress id + payload
                 ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
                 buffer.writerIndex(contentIndex);
-                compress(compressor, uncompressedCopy, buffer);
+                compress(COMPRESSOR.get(), uncompressedCopy, buffer);
                 uncompressedCopy.release();
             }
         } else {
