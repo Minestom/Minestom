@@ -223,11 +223,12 @@ public final class PacketUtils {
     public static void writeFramedPacket(@NotNull ByteBuf buffer,
                                          @NotNull ServerPacket serverPacket) {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
-        final boolean compression = compressionThreshold > 0;
+        final boolean compressionEnabled = compressionThreshold > 0;
 
-        if (compression) {
-            // Dummy var-int
-            final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+        // Index of the var-int containing the complete packet length
+        final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+        if (compressionEnabled) {
+            // Index of the uncompressed payload length
             final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
 
             // Write packet
@@ -258,18 +259,12 @@ public final class PacketUtils {
                 Utils.overrideVarIntHeader(buffer, dataLengthIndex, 0); // -> Uncompressed
             }
         } else {
-            // No compression
-
-            // Write dummy var-int
-            final int index = Utils.writeEmptyVarIntHeader(buffer);
-
-            // Write packet id + payload
+            // No compression, write packet id + payload
             writePacket(buffer, serverPacket);
 
             // Rewrite dummy var-int to packet length
-            final int afterIndex = buffer.writerIndex();
-            final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
-            Utils.overrideVarIntHeader(buffer, index, packetSize);
+            final int packetSize = (buffer.writerIndex() - packetLengthIndex) - Utils.VARINT_HEADER_SIZE;
+            Utils.overrideVarIntHeader(buffer, packetLengthIndex, packetSize);
         }
     }
 
