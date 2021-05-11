@@ -1,6 +1,6 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.item.attribute.AttributeSlot;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,21 +18,6 @@ public enum EquipmentSlot {
 
     public boolean isArmor() {
         return !isHand();
-    }
-
-    @NotNull
-    public static EquipmentSlot fromArmorSlot(ArmorEquipEvent.ArmorSlot armorSlot) {
-        switch (armorSlot) {
-            case HELMET:
-                return HELMET;
-            case CHESTPLATE:
-                return CHESTPLATE;
-            case LEGGINGS:
-                return LEGGINGS;
-            case BOOTS:
-                return BOOTS;
-        }
-        throw new IllegalStateException("Something weird happened");
     }
 
     @NotNull

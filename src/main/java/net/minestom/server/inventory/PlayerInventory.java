@@ -2,7 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
@@ -170,33 +170,27 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
                 "The slot {0} does not exist for player", slot);
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
 
-        EquipmentSlot equipmentSlot;
+        EquipmentSlot equipmentSlot = null;
 
         if (slot == player.getHeldSlot()) {
             equipmentSlot = EquipmentSlot.MAIN_HAND;
         } else if (slot == OFFHAND_SLOT) {
             equipmentSlot = EquipmentSlot.OFF_HAND;
-        } else {
-            ArmorEquipEvent armorEquipEvent = null;
+        } else if (slot == HELMET_SLOT) {
+            equipmentSlot = EquipmentSlot.HELMET;
+        } else if (slot == CHESTPLATE_SLOT) {
+            equipmentSlot = EquipmentSlot.CHESTPLATE;
+        } else if (slot == LEGGINGS_SLOT) {
+            equipmentSlot = EquipmentSlot.LEGGINGS;
+        } else if (slot == BOOTS_SLOT) {
+            equipmentSlot = EquipmentSlot.BOOTS;
+        }
 
-            if (slot == HELMET_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
-            } else if (slot == CHESTPLATE_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
-            } else if (slot == LEGGINGS_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
-            } else if (slot == BOOTS_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
-            }
+        if (equipmentSlot != null) {
+            EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
 
-            if (armorEquipEvent != null) {
-                ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
-                equipmentSlot = EquipmentSlot.fromArmorSlot(armorSlot);
-                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                itemStack = armorEquipEvent.getArmorItem();
-            } else {
-                equipmentSlot = null;
-            }
+            player.callEvent(EntityEquipEvent.class, entityEquipEvent);
+            itemStack = entityEquipEvent.getArmorItem();
         }
 
         this.itemStacks[slot] = itemStack;

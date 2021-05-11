@@ -1,20 +1,21 @@
 package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ArmorEquipEvent extends Event {
+public class EntityEquipEvent extends Event {
 
     private final Entity entity;
     private ItemStack armorItem;
-    private final ArmorSlot armorSlot;
+    private final EquipmentSlot slot;
 
-    public ArmorEquipEvent(@NotNull Entity entity, @NotNull ItemStack armorItem, @NotNull ArmorSlot armorSlot) {
+    public EntityEquipEvent(@NotNull Entity entity, @NotNull ItemStack armorItem, @NotNull EquipmentSlot slot) {
         this.entity = entity;
         this.armorItem = armorItem;
-        this.armorSlot = armorSlot;
+        this.slot = slot;
     }
 
     @NotNull
@@ -32,14 +33,7 @@ public class ArmorEquipEvent extends Event {
     }
 
     @NotNull
-    public ArmorSlot getArmorSlot() {
-        return armorSlot;
-    }
-
-    public enum ArmorSlot {
-        HELMET,
-        CHESTPLATE,
-        LEGGINGS,
-        BOOTS
+    public EquipmentSlot getSlot() {
+        return slot;
     }
 }
