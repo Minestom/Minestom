@@ -69,11 +69,8 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     @Override
     public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        itemStack = getEquipmentItem(itemStack, EquipmentSlot.MAIN_HAND);
-        if (itemStack != null) {
-            this.mainHandItem = itemStack;
-            syncEquipment(EquipmentSlot.MAIN_HAND);
-        }
+        this.mainHandItem = getEquipmentItem(itemStack, EquipmentSlot.MAIN_HAND);
+        syncEquipment(EquipmentSlot.MAIN_HAND);
     }
 
     @NotNull
@@ -84,11 +81,8 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     @Override
     public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        itemStack = getEquipmentItem(itemStack, EquipmentSlot.OFF_HAND);
-        if (itemStack != null) {
-            this.offHandItem = itemStack;
-            syncEquipment(EquipmentSlot.OFF_HAND);
-        }
+        this.offHandItem = getEquipmentItem(itemStack, EquipmentSlot.OFF_HAND);
+        syncEquipment(EquipmentSlot.OFF_HAND);
     }
 
     @NotNull
@@ -99,11 +93,8 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     @Override
     public void setHelmet(@NotNull ItemStack itemStack) {
-        itemStack = getEquipmentItem(itemStack, EquipmentSlot.HELMET);
-        if (itemStack != null) {
-            this.helmet = itemStack;
-            syncEquipment(EquipmentSlot.HELMET);
-        }
+        this.helmet = getEquipmentItem(itemStack, EquipmentSlot.HELMET);
+        syncEquipment(EquipmentSlot.HELMET);
     }
 
     @NotNull
@@ -114,11 +105,8 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     @Override
     public void setChestplate(@NotNull ItemStack itemStack) {
-        itemStack = getEquipmentItem(itemStack, EquipmentSlot.CHESTPLATE);
-        if (itemStack != null) {
-            this.chestplate = itemStack;
-            syncEquipment(EquipmentSlot.CHESTPLATE);
-        }
+        this.chestplate = getEquipmentItem(itemStack, EquipmentSlot.CHESTPLATE);
+        syncEquipment(EquipmentSlot.CHESTPLATE);
     }
 
     @NotNull
@@ -129,11 +117,8 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     @Override
     public void setLeggings(@NotNull ItemStack itemStack) {
-        itemStack = getEquipmentItem(itemStack, EquipmentSlot.LEGGINGS);
-        if (itemStack != null) {
-            this.leggings = itemStack;
-            syncEquipment(EquipmentSlot.LEGGINGS);
-        }
+        this.leggings = getEquipmentItem(itemStack, EquipmentSlot.LEGGINGS);
+        syncEquipment(EquipmentSlot.LEGGINGS);
     }
 
     @NotNull
@@ -144,11 +129,8 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
-        itemStack = getEquipmentItem(itemStack, EquipmentSlot.BOOTS);
-        if (itemStack != null) {
-            this.boots = itemStack;
-            syncEquipment(EquipmentSlot.BOOTS);
-        }
+        this.boots = getEquipmentItem(itemStack, EquipmentSlot.BOOTS);
+        syncEquipment(EquipmentSlot.BOOTS);
     }
 
     public boolean isSmall() {
@@ -256,6 +238,6 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
         callEvent(EntityEquipEvent.class, entityEquipEvent);
-        return entityEquipEvent.isCancelled() ? null : entityEquipEvent.getEquippedItem();
+        return entityEquipEvent.getEquippedItem();
     }
 }

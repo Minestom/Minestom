@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.item.attribute.AttributeSlot;
 import org.jetbrains.annotations.NotNull;
 
