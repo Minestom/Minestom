@@ -11,7 +11,7 @@ sourceSets {
 }
 
 dependencies {
-    // netty
+    // netty - client/server communications
     val nettyVersion = "4.1.63.Final"
     api("io.netty", "netty-handler", nettyVersion)
     api("io.netty", "netty-codec", nettyVersion)
@@ -19,36 +19,36 @@ dependencies {
     api("io.netty", "netty-transport-native-kqueue", nettyVersion, "", "osx-x86_64")
     api("io.netty.incubator", "netty-incubator-transport-native-io_uring", "0.0.5.Final", "", "linux-x86_64")
 
-    // commons-text
+    // commons-text - util methods for text
     compileOnly("org.apache.commons", "commons-text", "1.9")
 
-    // fastutil
+    // fastutil - faster type-specific collections
     api("it.unimi.dsi", "fastutil", "8.5.4")
 
-    // google gson
+    // gson - writing/reading json
     api("com.google.code.gson", "gson", "2.8.6")
 
-    // jnoise for terrain generation
+    // jnoise - terrain generation
     api("com.github.Articdive", "Jnoise", "2.1.0")
 
-    // rocksdb
+    // rocksdb - file storage
     api("org.rocksdb", "rocksdbjni", "6.16.4")
 
-    // log4j
+    // log4j - logging framework
     val log4jVersion = "2.14.0"
     api("org.apache.logging.log4j", "log4j-core", log4jVersion)
     api("org.apache.logging.log4j", "log4j-slf4j-impl", log4jVersion)
 
-    // jline
+    // jline - console input and formatting
     implementation("org.jline", "jline", "3.20.0")
 
-    // guava
+    // guava - google common utilities
     api("com.google.guava", "guava", "30.1-jre")
 
-    // mojang authlib
+    // authlib - online mode authentication
     api("com.mojang", "authlib", "1.5.21")
 
-    // asm
+    // asm - bytecode generation and analysis
     val asmVersion = "9.0"
     api("org.ow2.asm", "asm", asmVersion)
     api("org.ow2.asm", "asm-tree", asmVersion)
@@ -56,13 +56,13 @@ dependencies {
     api("org.ow2.asm", "asm-util", asmVersion)
     api("org.ow2.asm", "asm-commons", asmVersion)
 
-    // sponge mixin
+    // mixin - allows extensions to modify internal code
     api("org.spongepowered", "mixin", "0.8.1")
 
-    // velocity native compression
+    // velocity native - networking compression
     implementation("com.velocitypowered", "velocity-native", "1.1.0-SNAPSHOT")
 
-    // hydrazine path finding
+    // hydrazine - path finding
     api("com.github.MadMartian", "hydrazine-path-finding", "1.6.0")
 
     // kotlin
@@ -70,7 +70,7 @@ dependencies {
     api("org.jetbrains.kotlin", "kotlin-stdlib-jdk8", kotlinVersion)
     api("org.jetbrains.kotlin", "kotlin-reflect", kotlinVersion)
 
-    // hephaistos nbt
+    // hephaistos - nbt reading/writing
     val hephaistosVersion = "v1.1.8"
     api("com.github.jglrxavpok", "Hephaistos", hephaistosVersion)
     api("com.github.jglrxavpok", "Hephaistos", hephaistosVersion, "", "gson")
@@ -80,16 +80,16 @@ dependencies {
         }
     }
 
-    // dependency getter
+    // dependency getter - download extension dependencies
     api("com.github.Minestom", "DependencyGetter", "v1.0.1")
 
-    // adventure
+    // adventure - user interface api
     val adventureVersion = "4.7.0"
     api("net.kyori", "adventure-api", adventureVersion)
     api("net.kyori", "adventure-text-serializer-gson", adventureVersion)
     api("net.kyori", "adventure-text-serializer-legacy", adventureVersion)
     api("net.kyori", "adventure-text-serializer-plain", adventureVersion)
 
-    // javapoet
+    // javapoet - generate java code for data generator
     implementation("com.squareup", "javapoet", "1.13.0")
 }

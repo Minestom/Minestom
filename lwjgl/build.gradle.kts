@@ -23,10 +23,9 @@ val lwjglNativesVersion = when {
 }
 
 dependencies {
-    // minestom
     compileOnly(projects.minestomCore)
 
-    // lwjgl
+    // lwjgl - java game library for graphics rendering
     val lwjglVersion = "3.2.3"
     api("org.lwjgl", "lwjgl", lwjglVersion)
     api("org.lwjgl", "lwjgl-egl", lwjglVersion)
@@ -34,12 +33,12 @@ dependencies {
     api("org.lwjgl", "lwjgl-opengles", lwjglVersion)
     api("org.lwjgl", "lwjgl-glfw", lwjglVersion)
 
-    // lwjgl natives
+    // lwjgl natives - native implementations of lwjgl
     runtimeOnly("org.lwjgl", "lwjgl", "", "", lwjglNativesVersion)
     runtimeOnly("org.lwjgl", "lwjgl-opengl", "", "", lwjglNativesVersion)
     runtimeOnly("org.lwjgl", "lwjgl-opengles", "", "", lwjglNativesVersion)
     runtimeOnly("org.lwjgl", "lwjgl-glfw", "", "", lwjglNativesVersion)
 
-    // joml
+    // joml - math lib for opengl rendering
     api("org.joml", "joml", "1.9.25")
 }
