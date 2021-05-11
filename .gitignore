@@ -1,9 +1,3 @@
-# Registry files
-/minecraft_data/
-/.minestom_tmp/
-
-/chunks/
-
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 # Compiled class file
@@ -32,7 +26,8 @@ hs_err_pid*
 
 ### Gradle template
 .gradle
-/build/
+**/build/
+!src/**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -46,15 +41,14 @@ gradle-app.setting
 # IDEA files
 .idea/
 
-# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
-# gradle/wrapper/gradle-wrapper.properties
-
 /src/main/java/com/mcecraft/
 
-# When running the demo we generate the extensions folder
-/extensions/
-/.mixin.out/
+# Minestom server directories created when running the demo
+demo/minecraft_data/
+demo/.minestom_tmp/
+demo/extensions/
+demo/.mixin.out/
+demo/chunks/
 
 # When compiling we get a docs folder
 /docs
-.mixin.out/
