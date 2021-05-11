@@ -1,12 +1,12 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ArmorEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.MathUtils;
@@ -170,12 +170,12 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
                 "The slot {0} does not exist for player", slot);
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
 
-        EntityEquipmentPacket.Slot equipmentSlot;
+        EquipmentSlot equipmentSlot;
 
         if (slot == player.getHeldSlot()) {
-            equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
+            equipmentSlot = EquipmentSlot.MAIN_HAND;
         } else if (slot == OFFHAND_SLOT) {
-            equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
+            equipmentSlot = EquipmentSlot.OFF_HAND;
         } else {
             ArmorEquipEvent armorEquipEvent = null;
 
@@ -191,7 +191,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
 
             if (armorEquipEvent != null) {
                 ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
-                equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
+                equipmentSlot = EquipmentSlot.fromArmorSlot(armorSlot);
                 player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
                 itemStack = armorEquipEvent.getArmorItem();
             } else {

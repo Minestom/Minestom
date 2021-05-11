@@ -2256,7 +2256,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
-        syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+        syncEquipment(EquipmentSlot.MAIN_HAND);
 
         refreshEating(null);
     }
