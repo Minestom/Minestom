@@ -1,13 +1,15 @@
 import net.kyori.indra.IndraExtension
 
 plugins {
-    // indra
-    val indraVersion = "2.0.2"
+    // indra - common utilities for building/publishing
+    val indraVersion = "2.0.3"
     id("net.kyori.indra") version indraVersion apply false
     id("net.kyori.indra.publishing") version indraVersion apply false
 
-    // misc
+    // aggregate javadoc - combines module javadoc into one jar/website
     id("io.freefair.aggregate-javadoc-jar") version "5.3.3.3"
+
+    // versions - provides dependencyUpdates task to check for dependency updates
     id("com.github.ben-manes.versions") version "0.38.0"
 }
 
@@ -21,16 +23,17 @@ tasks.aggregateJavadoc.configure {
 
     // module exclusions
     val exclusions = listOf("minestom-demo").map {
-        project(":$it").tasks.named("javadoc", Javadoc::class).get().classpath
+        project(":$it").projectDir.toPath().toAbsolutePath()
     }
     exclude {
-        exclusions.find { collection -> collection.contains(it.file) } != null
+        exclusions.find { exclusion -> it.file.toPath().toAbsolutePath().startsWith(exclusion) } != null
     }
 
     // javadoc options
     (options as? StandardJavadocDocletOptions)?.apply {
         options.encoding = "UTF-8"
 
+        // links to external javadocs
         links("https://docs.oracle.com/en/java/javase/11/docs/api/")
 
         addBooleanOption("html5", true)
