@@ -22,26 +22,31 @@ public class MinestomTerminal {
 
     @ApiStatus.Internal
     public static void start() {
-        try {
-            terminal = TerminalBuilder.terminal();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        LineReader reader = LineReaderBuilder.builder()
-                .terminal(terminal)
-                .build();
-        running = true;
-        while (running) {
-            String command;
+        final Thread thread = new Thread(null, () -> {
             try {
-                command = reader.readLine(PROMPT);
-                COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender(), command);
-            } catch (UserInterruptException e) {
-                // Ignore
-            } catch (EndOfFileException e) {
-                return;
+                terminal = TerminalBuilder.terminal();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        }
+            LineReader reader = LineReaderBuilder.builder()
+                    .terminal(terminal)
+                    .build();
+            running = true;
+
+            while (running) {
+                String command;
+                try {
+                    command = reader.readLine(PROMPT);
+                    COMMAND_MANAGER.execute(COMMAND_MANAGER.getConsoleSender(), command);
+                } catch (UserInterruptException e) {
+                    // Ignore
+                } catch (EndOfFileException e) {
+                    return;
+                }
+            }
+        }, "Jline");
+        thread.setDaemon(true);
+        thread.start();
     }
 
     @ApiStatus.Internal

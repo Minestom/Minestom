@@ -5,7 +5,7 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'net.ltgt.apt' version '0.10'
-    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
     id 'checkstyle'
 }
 
@@ -141,7 +141,7 @@ dependencies {
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
-    api 'com.github.Articdive:Jnoise:1.0.0'
+    api 'com.github.Articdive:Jnoise:2.1.0'
 
     // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
     api 'org.rocksdb:rocksdbjni:6.16.4'
@@ -152,7 +152,7 @@ dependencies {
     api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
 
     // https://mvnrepository.com/artifact/org.jline/jline
-    implementation group: 'org.jline', name: 'jline', version: '3.19.0'
+    implementation group: 'org.jline', name: 'jline', version: '3.20.0'
 
     // Guava 21.0+ required for Mixin, but Authlib imports 17.0
     api 'com.google.guava:guava:30.1-jre'

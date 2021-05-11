@@ -1,29 +1,59 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
+import net.minestom.server.ping.ResponseDataConsumer;
+import net.minestom.server.ping.ServerListPingType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 /**
  * Called when a {@link PlayerConnection} sends a status packet,
  * usually to display information on the server list.
  */
 public class ServerListPingEvent extends Event implements CancellableEvent {
-    private boolean cancelled = false;
-
-    private final ResponseData responseData;
     private final PlayerConnection connection;
+    private final ServerListPingType type;
 
+    private boolean cancelled = false;
+    private ResponseData responseData;
 
-    public ServerListPingEvent(ResponseData responseData, PlayerConnection connection) {
-        this.responseData = responseData;
-        this.connection = connection;
+    /**
+     * Creates a new server list ping event with no player connection.
+     *
+     * @param type the ping type to respond with
+     */
+    public ServerListPingEvent(@NotNull ServerListPingType type) {
+        this(null, type);
     }
 
     /**
-     * ResponseData being returned.
+     * Creates a new server list ping event.
+     *
+     * @param connection the player connection, if the ping type is modern
+     * @param type the ping type to respond with
+     */
+    public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingType type) {
+        //noinspection deprecation we need to continue doing this until the consumer is removed - todo remove
+        ResponseDataConsumer consumer = MinecraftServer.getResponseDataConsumer();
+        this.responseData = new ResponseData();
+
+        if (consumer != null) {
+            consumer.accept(connection, responseData);
+        }
+
+        this.connection = connection;
+        this.type = type;
+    }
+
+    /**
+     * Gets the response data that is sent to the client.
+     * This is mutable and can be modified to change what is returned.
      *
      * @return the response data being returned
      */
@@ -32,16 +62,32 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     }
 
     /**
-     * PlayerConnection of received packet.
+     * Sets the response data, overwriting the exiting data.
      *
-     * Note that the player has not joined the server at this time.
+     * @param responseData the new data
+     */
+    public void setResponseData(@NotNull ResponseData responseData) {
+        this.responseData = Objects.requireNonNull(responseData);
+    }
+
+    /**
+     * PlayerConnection of received packet. Note that the player has not joined the server
+     * at this time. This will <b>only</b> be non-null for modern server list pings.
      *
      * @return the playerConnection.
      */
-    public @NotNull PlayerConnection getConnection() {
+    public @Nullable PlayerConnection getConnection() {
         return connection;
     }
 
+    /**
+     * Gets the ping type that the client is pinging with.
+     *
+     * @return the ping type
+     */
+    public @NotNull ServerListPingType getPingType() {
+       return type;
+    }
 
     @Override
     public boolean isCancelled() {
@@ -49,7 +95,8 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     }
 
     /**
-     * Cancelling this event will cause you server to appear offline in the vanilla server list.
+     * Cancelling this event will cause the server to appear offline in the vanilla server list.
+     * Note that this will have no effect if the ping version is {@link ServerListPingType#OPEN_TO_LAN}.
      *
      * @param cancel true if the event should be cancelled, false otherwise
      */
@@ -57,5 +104,4 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }
-
 }

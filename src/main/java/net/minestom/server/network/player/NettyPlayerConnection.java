@@ -62,7 +62,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private PlayerSkin bungeeSkin;
 
     private final Object tickBufferLock = new Object();
-    private volatile ByteBuf tickBuffer = BufUtils.getBuffer(true);
+    private volatile ByteBuf tickBuffer = BufUtils.direct();
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();

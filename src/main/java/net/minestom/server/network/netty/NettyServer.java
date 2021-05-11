@@ -13,8 +13,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.traffic.GlobalChannelTrafficShapingHandler;
-import io.netty.handler.traffic.TrafficCounter;
 import io.netty.incubator.channel.uring.IOUring;
 import io.netty.incubator.channel.uring.IOUringEventLoopGroup;
 import io.netty.incubator.channel.uring.IOUringServerSocketChannel;
@@ -22,7 +20,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.*;
-import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,22 +27,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 public final class NettyServer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
+    public static final int BUFFER_SIZE = Integer.getInteger("minestom.channel-buffer-size", 65535);
+
     private static final WriteBufferWaterMark SERVER_WRITE_MARK = new WriteBufferWaterMark(1 << 20,
             1 << 21);
 
-    private static final long DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT = 600_000L;
-    private static final long DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT = 100_000L;
-
-    private static final long DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT = 15_000_000L;
-    private static final long DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT = 1_000_000L;
-
-    public static final String TRAFFIC_LIMITER_HANDLER_NAME = "traffic-limiter"; // Read/write
     public static final String LEGACY_PING_HANDLER_NAME = "legacy-ping"; // Read
 
     public static final String ENCRYPT_HANDLER_NAME = "encrypt"; // Write
@@ -63,7 +53,6 @@ public final class NettyServer {
     private boolean initialized = false;
 
     private final PacketProcessor packetProcessor;
-    private final GlobalChannelTrafficShapingHandler globalTrafficHandler;
 
     private EventLoopGroup boss, worker;
     private ServerBootstrap bootstrap;
@@ -73,27 +62,14 @@ public final class NettyServer {
     private String address;
     private int port;
 
-    /**
-     * Scheduler used by {@code globalTrafficHandler}.
-     */
-    private final ScheduledExecutorService trafficScheduler = Executors.newScheduledThreadPool(1);
-
     public NettyServer(@NotNull PacketProcessor packetProcessor) {
         this.packetProcessor = packetProcessor;
-
-        this.globalTrafficHandler = new GlobalChannelTrafficShapingHandler(trafficScheduler, 1000) {
-            @Override
-            protected void doAccounting(TrafficCounter counter) {
-                // TODO proper monitoring API
-                //System.out.println("data " + counter.getRealWriteThroughput() / 1e6);
-            }
-        };
     }
 
     /**
      * Inits the server by choosing which transport layer to use, number of threads, pipeline order, etc...
      * <p>
-     * Called just before {@link #start(String, int)} in {@link MinecraftServer#start(String, int, ResponseDataConsumer)}.
+     * Called just before {@link #start(String, int)}.
      */
     public void init() {
         Check.stateCondition(initialized, "Netty server has already been initialized!");
@@ -146,13 +122,10 @@ public final class NettyServer {
                 ChannelConfig config = ch.config();
                 config.setOption(ChannelOption.TCP_NODELAY, true);
                 config.setOption(ChannelOption.SO_KEEPALIVE, true);
-                config.setOption(ChannelOption.SO_SNDBUF, 262_144);
+                config.setOption(ChannelOption.SO_SNDBUF, BUFFER_SIZE);
                 config.setAllocator(ByteBufAllocator.DEFAULT);
 
                 ChannelPipeline pipeline = ch.pipeline();
-
-                // TODO enable when properly implemented (dynamic limit based on the number of clients)
-                //pipeline.addLast(TRAFFIC_LIMITER_HANDLER_NAME, globalTrafficHandler);
 
                 // First check should verify if the packet is a legacy ping (from 1.6 version and earlier)
                 // Removed from the pipeline later in LegacyPingHandler if unnecessary (>1.6)
@@ -184,18 +157,6 @@ public final class NettyServer {
     public void start(@NotNull String address, int port) {
         this.address = address;
         this.port = port;
-
-        // Setup traffic limiter
-        {
-            final boolean compression = MinecraftServer.getCompressionThreshold() != 0;
-            if (compression) {
-                this.globalTrafficHandler.setWriteChannelLimit(DEFAULT_COMPRESSED_CHANNEL_WRITE_LIMIT);
-                this.globalTrafficHandler.setReadChannelLimit(DEFAULT_COMPRESSED_CHANNEL_READ_LIMIT);
-            } else {
-                this.globalTrafficHandler.setWriteChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_WRITE_LIMIT);
-                this.globalTrafficHandler.setReadChannelLimit(DEFAULT_UNCOMPRESSED_CHANNEL_READ_LIMIT);
-            }
-        }
 
         // Bind address
         try {
@@ -231,25 +192,15 @@ public final class NettyServer {
     }
 
     /**
-     * Gets the traffic handler, used to control channel and global bandwidth.
-     * <p>
-     * The object can be modified as specified by Netty documentation.
-     *
-     * @return the global traffic handler
-     */
-    @NotNull
-    public GlobalChannelTrafficShapingHandler getGlobalTrafficHandler() {
-        return globalTrafficHandler;
-    }
-
-    /**
-     * Stops the server and the various services.
+     * Stops the server.
      */
     public void stop() {
-        this.worker.shutdownGracefully();
-        this.boss.shutdownGracefully();
-
-        this.trafficScheduler.shutdown();
-        this.globalTrafficHandler.release();
+        try {
+            this.boss.shutdownGracefully().sync();
+            this.worker.shutdownGracefully().sync();
+            this.serverChannel.closeFuture().sync();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
