@@ -12,6 +12,14 @@ public enum EquipmentSlot {
     CHESTPLATE,
     HELMET;
 
+    public boolean isHand() {
+        return this == MAIN_HAND || this == OFF_HAND;
+    }
+
+    public boolean isArmor() {
+        return !isHand();
+    }
+
     @NotNull
     public static EquipmentSlot fromArmorSlot(ArmorEquipEvent.ArmorSlot armorSlot) {
         switch (armorSlot) {
