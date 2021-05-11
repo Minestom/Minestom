@@ -186,11 +186,17 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
             equipmentSlot = EquipmentSlot.BOOTS;
         }
 
+        boolean cancel = false;
         if (equipmentSlot != null) {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
 
             player.callEvent(EntityEquipEvent.class, entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
+            cancel = entityEquipEvent.isCancelled();
+        }
+
+        if (cancel) {
+            return;
         }
 
         this.itemStacks[slot] = itemStack;
