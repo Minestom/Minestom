@@ -10,11 +10,7 @@ import java.util.UUID;
 
 public final class Utils {
 
-    // Do NOT modify
-    public static final int VARINT_HEADER_SIZE = 3;
-
     private Utils() {
-
     }
 
     public static int getVarIntSize(int input) {
@@ -25,7 +21,7 @@ public final class Utils {
                 ? 4 : 5;
     }
 
-    public static void writeVarIntBuf(ByteBuf buf, int value) {
+    public static void writeVarInt(@NotNull ByteBuf buf, int value) {
         // Took from velocity
         if ((value & (0xFFFFFFFF << 7)) == 0) {
             buf.writeByte(value);
@@ -36,19 +32,14 @@ public final class Utils {
             int w = (value & 0x7F | 0x80) << 16 | ((value >>> 7) & 0x7F | 0x80) << 8 | (value >>> 14);
             buf.writeMedium(w);
         } else {
-            // Naive loop
-            while (true) {
-                if ((value & 0xFFFFFF80) == 0) {
-                    buf.writeByte(value);
-                    return;
-                }
-                buf.writeByte(value & 0x7F | 0x80);
-                value >>>= 7;
-            }
+            int w = (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
+                    | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80);
+            buf.writeInt(w);
+            buf.writeByte(value >>> 28);
         }
     }
 
-    public static void overrideVarIntHeader(@NotNull ByteBuf buffer, int startIndex, int value) {
+    public static void write3BytesVarInt(@NotNull ByteBuf buffer, int startIndex, int value) {
         final int indexCache = buffer.writerIndex();
         buffer.writerIndex(startIndex);
         final int w = (value & 0x7F | 0x80) << 16 | ((value >>> 7) & 0x7F | 0x80) << 8 | (value >>> 14);
@@ -56,31 +47,26 @@ public final class Utils {
         buffer.writerIndex(indexCache);
     }
 
-    public static int writeEmptyVarIntHeader(@NotNull ByteBuf buffer) {
+    public static int writeEmpty3BytesVarInt(@NotNull ByteBuf buffer) {
         final int index = buffer.writerIndex();
         buffer.writeMedium(0);
         return index;
     }
 
-    public static int readVarInt(ByteBuf buffer) {
-        int numRead = 0;
-        int result = 0;
-        byte read;
-        do {
-            read = buffer.readByte();
-            int value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 5) {
-                throw new RuntimeException("VarInt is too big");
+    public static int readVarInt(ByteBuf buf) {
+        int i = 0;
+        final int maxRead = Math.min(5, buf.readableBytes());
+        for (int j = 0; j < maxRead; j++) {
+            final int k = buf.readByte();
+            i |= (k & 0x7F) << j * 7;
+            if ((k & 0x80) != 128) {
+                return i;
             }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
+        }
+        throw new RuntimeException("VarInt is too big");
     }
 
-    public static long readVarLong(ByteBuf buffer) {
+    public static long readVarLong(@NotNull ByteBuf buffer) {
         int numRead = 0;
         long result = 0;
         byte read;
@@ -148,14 +134,14 @@ public final class Utils {
         if (bitsPerEntry < 9) {
             // Palette has to exist
             final Short2ShortLinkedOpenHashMap paletteBlockMap = section.getPaletteBlockMap();
-            writeVarIntBuf(buffer, paletteBlockMap.size());
+            writeVarInt(buffer, paletteBlockMap.size());
             for (short paletteValue : paletteBlockMap.values()) {
-                writeVarIntBuf(buffer, paletteValue);
+                writeVarInt(buffer, paletteValue);
             }
         }
 
         final long[] blocks = section.getBlocks();
-        writeVarIntBuf(buffer, blocks.length);
+        writeVarInt(buffer, blocks.length);
         for (long datum : blocks) {
             buffer.writeLong(datum);
         }

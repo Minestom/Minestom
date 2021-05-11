@@ -152,7 +152,7 @@ public class BinaryWriter extends OutputStream {
      * @param i the int to write
      */
     public void writeVarInt(int i) {
-        Utils.writeVarIntBuf(buffer, i);
+        Utils.writeVarInt(buffer, i);
     }
 
     /**

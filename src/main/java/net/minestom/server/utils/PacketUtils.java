@@ -143,7 +143,7 @@ public final class PacketUtils {
      * @param packet the packet to write into {@code buf}
      */
     public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
-        Utils.writeVarIntBuf(buf, packet.getId());
+        Utils.writeVarInt(buf, packet.getId());
         writePacketPayload(buf, packet);
     }
 
@@ -173,14 +173,13 @@ public final class PacketUtils {
     public static void frameBuffer(@NotNull ByteBuf packetBuffer, @NotNull ByteBuf frameTarget) {
         final int packetSize = packetBuffer.readableBytes();
         final int headerSize = Utils.getVarIntSize(packetSize);
-
         if (headerSize > 3) {
             throw new IllegalStateException("Unable to fit " + headerSize + " into 3");
         }
 
         frameTarget.ensureWritable(packetSize + headerSize);
 
-        Utils.writeVarIntBuf(frameTarget, packetSize);
+        Utils.writeVarInt(frameTarget, packetSize);
         frameTarget.writeBytes(packetBuffer, packetBuffer.readerIndex(), packetSize);
     }
 
@@ -196,7 +195,7 @@ public final class PacketUtils {
     public static void compressBuffer(@NotNull VelocityCompressor compressor, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
         final boolean compression = packetLength > MinecraftServer.getCompressionThreshold();
-        Utils.writeVarIntBuf(compressionTarget, compression ? packetLength : 0);
+        Utils.writeVarInt(compressionTarget, compression ? packetLength : 0);
         if (compression) {
             compress(compressor, packetBuffer, compressionTarget);
         } else {
@@ -217,10 +216,11 @@ public final class PacketUtils {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
 
         // Index of the var-int containing the complete packet length
-        final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+        final int packetLengthIndex = Utils.writeEmpty3BytesVarInt(buffer);
+        final int startIndex = buffer.writerIndex(); // Index where the content starts (after length)
         if (compressionThreshold > 0) {
             // Index of the uncompressed payload length
-            final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+            final int dataLengthIndex = Utils.writeEmpty3BytesVarInt(buffer);
 
             // Write packet
             final int contentIndex = buffer.writerIndex();
@@ -228,7 +228,7 @@ public final class PacketUtils {
             final int packetSize = buffer.writerIndex() - contentIndex;
 
             final int uncompressedLength = packetSize >= compressionThreshold ? packetSize : 0;
-            Utils.overrideVarIntHeader(buffer, dataLengthIndex, uncompressedLength);
+            Utils.write3BytesVarInt(buffer, dataLengthIndex, uncompressedLength);
             if (uncompressedLength > 0) {
                 // Packet large enough, compress
                 ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
@@ -241,8 +241,8 @@ public final class PacketUtils {
             writePacket(buffer, serverPacket);
         }
         // Total length
-        final int totalPacketLength = buffer.writerIndex() - packetLengthIndex - Utils.VARINT_HEADER_SIZE;
-        Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+        final int totalPacketLength = buffer.writerIndex() - startIndex;
+        Utils.write3BytesVarInt(buffer, packetLengthIndex, totalPacketLength);
     }
 
     /**
