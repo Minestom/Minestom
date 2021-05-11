@@ -194,7 +194,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
         callEvent(EntityEquipEvent.class, entityEquipEvent);
-        return entityEquipEvent.getArmorItem();
+        return entityEquipEvent.getEquippedItem();
     }
 
     @Override

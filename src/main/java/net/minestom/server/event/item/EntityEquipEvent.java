@@ -9,12 +9,12 @@ import org.jetbrains.annotations.NotNull;
 public class EntityEquipEvent extends Event {
 
     private final Entity entity;
-    private ItemStack armorItem;
+    private ItemStack equippedItem;
     private final EquipmentSlot slot;
 
-    public EntityEquipEvent(@NotNull Entity entity, @NotNull ItemStack armorItem, @NotNull EquipmentSlot slot) {
+    public EntityEquipEvent(@NotNull Entity entity, @NotNull ItemStack equippedItem, @NotNull EquipmentSlot slot) {
         this.entity = entity;
-        this.armorItem = armorItem;
+        this.equippedItem = equippedItem;
         this.slot = slot;
     }
 
@@ -24,12 +24,12 @@ public class EntityEquipEvent extends Event {
     }
 
     @NotNull
-    public ItemStack getArmorItem() {
-        return armorItem;
+    public ItemStack getEquippedItem() {
+        return equippedItem;
     }
 
-    public void setArmorItem(@NotNull ItemStack armorItem) {
-        this.armorItem = armorItem;
+    public void setEquippedItem(@NotNull ItemStack armorItem) {
+        this.equippedItem = armorItem;
     }
 
     @NotNull

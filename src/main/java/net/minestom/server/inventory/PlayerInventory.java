@@ -190,7 +190,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
 
             player.callEvent(EntityEquipEvent.class, entityEquipEvent);
-            itemStack = entityEquipEvent.getArmorItem();
+            itemStack = entityEquipEvent.getEquippedItem();
         }
 
         this.itemStacks[slot] = itemStack;
