@@ -2,7 +2,7 @@ package net.minestom.demo.largeframebuffers;
 
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.opengl.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.stream.Collectors;
-
-import static org.lwjgl.opengl.GL20.*;
 
 public final  class OpenGLRendering {
 
