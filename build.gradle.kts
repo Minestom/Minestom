@@ -72,7 +72,7 @@ subprojects {
             testWith(11, 16)
         }
 
-        github("Minestom", "Minstom") {
+        github("Minestom", "Minestom") {
             ci(true)
         }
 
