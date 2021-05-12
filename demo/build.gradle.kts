@@ -16,3 +16,8 @@ dependencies {
     implementation(projects.minestomCore)
     implementation(projects.minestomExtrasLwjgl)
 }
+
+// prevent publishing the demo
+tasks.withType<AbstractPublishToMaven>().configureEach {
+    onlyIf { false }
+}
