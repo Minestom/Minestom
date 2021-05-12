@@ -75,10 +75,15 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     protected final Position lastPosition;
     /**
+     * Updated to {@code System.nanoTime()} whenever {@link #lastPosition} is changed <b>internally</b>.
+     */
+    protected long lastPositionChange;
+    /**
      * Used to check if any change made to the {@link Entity#position} field since
      * the last packets sent
      */
     protected final Position lastSyncedPosition;
+    protected final Position positionAtTickStart;
     protected boolean onGround;
 
     private BoundingBox boundingBox;
@@ -144,7 +149,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.uuid = uuid;
         this.position = new Position();
         this.lastPosition = new Position();
+        this.lastPositionChange = System.nanoTime();
         this.lastSyncedPosition = new Position();
+        this.positionAtTickStart = new Position();
 
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
 
@@ -484,6 +491,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             return;
         }
 
+        positionAtTickStart.set(position);
+
         // scheduled tasks
         if (!nextTick.isEmpty()) {
             Consumer<Entity> callback;
@@ -662,6 +671,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 });
             }
         }
+
+        lastPositionChange = System.nanoTime();
+        lastPosition.set(positionAtTickStart);
 
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
@@ -906,6 +918,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
 
         this.position.set(spawnPosition);
+        this.lastPositionChange = System.nanoTime();
         this.lastPosition.set(position);
 
         this.isActive = true;
@@ -1350,6 +1363,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param z new position Z
      */
     private void refreshPosition(double x, double y, double z) {
+        lastPositionChange = System.nanoTime();
+        lastPosition.setX(position.getX());
+        lastPosition.setY(position.getY());
+        lastPosition.setZ(position.getZ());
         position.setX(x);
         position.setY(y);
         position.setZ(z);
@@ -1384,10 +1401,6 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 refreshCurrentChunk(newChunk);
             }
         }
-
-        this.lastPosition.setX(position.getX());
-        this.lastPosition.setY(position.getY());
-        this.lastPosition.setZ(position.getZ());
     }
 
     /**
@@ -1416,6 +1429,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * @param pitch the pitch
      */
     private void refreshView(final float yaw, final float pitch) {
+        lastPositionChange = System.nanoTime();
         lastPosition.setYaw(position.getYaw());
         lastPosition.setPitch(position.getPitch());
         position.setYaw(yaw);
