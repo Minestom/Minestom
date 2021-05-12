@@ -42,6 +42,9 @@ dependencies {
     // jline - console input and formatting
     implementation("org.jline", "jline", "3.20.0")
 
+    // jansi - ansi colorization on windows terminals
+    implementation("org.fusesource.jansi", "jansi", "2.3.2")
+
     // guava - google common utilities
     api("com.google.guava", "guava", "30.1-jre")
 
