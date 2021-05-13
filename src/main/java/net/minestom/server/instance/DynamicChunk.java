@@ -16,7 +16,6 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.block.CustomBlockUtils;
-import net.minestom.server.utils.cache.CachedObject;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -27,6 +26,7 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.SoftReference;
 import java.util.Set;
 
 /**
@@ -60,7 +60,8 @@ public class DynamicChunk extends Chunk {
 
     private long lastChangeTime;
 
-    private CachedObject<ChunkDataPacket> cachedPacket = new CachedObject<>();
+    private SoftReference<ChunkDataPacket> cachedPacket = new SoftReference<>(null);
+    private long cachedPacketTime;
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ,
                         @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
@@ -386,17 +387,22 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     protected ChunkDataPacket createFreshPacket() {
-        return cachedPacket.getUpdatedCache(() -> {
-            ChunkDataPacket chunkDataPacket = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
-            chunkDataPacket.biomes = biomes;
-            chunkDataPacket.chunkX = chunkX;
-            chunkDataPacket.chunkZ = chunkZ;
-            chunkDataPacket.paletteStorage = blockPalette.clone();
-            chunkDataPacket.customBlockPaletteStorage = customBlockPalette.clone();
-            chunkDataPacket.blockEntities = blockEntities.clone();
-            chunkDataPacket.blocksData = blocksData.clone();
-            return chunkDataPacket;
-        }, getLastChangeTime());
+        ChunkDataPacket packet = cachedPacket.get();
+        if (packet != null && cachedPacketTime == getLastChangeTime()) {
+            return packet;
+        }
+        packet = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
+        packet.biomes = biomes;
+        packet.chunkX = chunkX;
+        packet.chunkZ = chunkZ;
+        packet.paletteStorage = blockPalette.clone();
+        packet.customBlockPaletteStorage = customBlockPalette.clone();
+        packet.blockEntities = blockEntities.clone();
+        packet.blocksData = blocksData.clone();
+
+        this.cachedPacketTime = getLastChangeTime();
+        this.cachedPacket = new SoftReference<>(packet);
+        return packet;
     }
 
     @NotNull
