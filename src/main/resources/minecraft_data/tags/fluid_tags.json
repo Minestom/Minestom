@@ -1,0 +1,18 @@
+[
+  {
+    "replace": false,
+    "values": [
+      "minecraft:lava",
+      "minecraft:flowing_lava"
+    ],
+    "tagName": "lava"
+  },
+  {
+    "replace": false,
+    "values": [
+      "minecraft:water",
+      "minecraft:flowing_water"
+    ],
+    "tagName": "water"
+  }
+]

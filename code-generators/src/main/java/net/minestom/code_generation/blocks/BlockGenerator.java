@@ -1,8 +1,22 @@
 package net.minestom.code_generation.blocks;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ArrayTypeName;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import net.minestom.code_generation.util.NameUtil;
 import org.jetbrains.annotations.NotNull;
@@ -14,26 +28,20 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class BlockGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE_BLOCKS = new File(DEFAULT_SOURCE_FOLDER_ROOT, "blocks.json");
     private final File blocksFile;
     private final File outputFolder;
 
-    public BlockGenerator() {
-        this(null, null);
-    }
-
-    public BlockGenerator(@Nullable File blocksFile) {
-        this(blocksFile, null);
-    }
-
-    public BlockGenerator(@Nullable File blocksFile, @Nullable File outputFolder) {
-        this.blocksFile = Objects.requireNonNullElse(blocksFile, DEFAULT_INPUT_FILE_BLOCKS);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public BlockGenerator(@NotNull File blocksFile, @NotNull File outputFolder) {
+        this.blocksFile = blocksFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
@@ -79,15 +87,14 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
         blockClass.addField(
-                FieldSpec.builder(ParameterizedTypeName.get(ClassName.get("java.util", "List"), blockStateClassName), "blockStates")
-                        .initializer("new $T<>()", ClassName.get("java.util", "ArrayList"))
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                FieldSpec.builder(rawBlockDataClassName, "blockData")
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
         blockClass.addField(
-                FieldSpec.builder(rawBlockDataClassName, "blockData")
-                        .initializer("new $T()", rawBlockDataClassName)
+                FieldSpec.builder(ParameterizedTypeName.get(ClassName.get("java.util", "List"), blockStateClassName), "blockStates")
+                        .initializer("new $T<>()", ClassName.get("java.util", "ArrayList"))
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                         .addAnnotation(NotNull.class)
                         .build()
@@ -97,9 +104,11 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
                         .addParameter(TypeName.SHORT, "defaultBlockState")
+                        .addParameter(ParameterSpec.builder(rawBlockDataClassName, "blockData").addAnnotation(NotNull.class).build())
 
                         .addStatement("this.id = id")
                         .addStatement("this.defaultBlockState = defaultBlockState")
+                        .addStatement("this.blockData = blockData")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -181,6 +190,14 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(rawBlockDataClassName)
                         .addAnnotation(NotNull.class)
                         .addStatement("return this.blockData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
+        // setBlockData method
+        blockClass.addMethod(
+                MethodSpec.methodBuilder("setBlockData")
+                        .addParameter(ParameterSpec.builder(rawBlockDataClassName, "blockStateData").addAnnotation(NotNull.class).build())
+                        .addStatement("this.blockData = blockData")
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
@@ -338,8 +355,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         );
         blockStateClass.addField(
                 FieldSpec.builder(rawBlockStateDataClassName, "blockStateData")
-                        .initializer("new $T()", rawBlockStateDataClassName)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
@@ -362,6 +378,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "namespaceId").addAnnotation(NotNull.class).build())
                         .addParameter(TypeName.SHORT, "id")
                         .addParameter(ParameterSpec.builder(blockClassName, "block").addAnnotation(NotNull.class).build())
+                        .addParameter(ParameterSpec.builder(rawBlockStateDataClassName, "blockStateData").addAnnotation(NotNull.class).build())
                         .addParameter(
                                 ParameterSpec.builder(ArrayTypeName.of(String.class), "properties").addAnnotation(NotNull.class).build()
                         )
@@ -370,6 +387,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addStatement("this.namespaceId = namespaceId")
                         .addStatement("this.id = id")
                         .addStatement("this.block = block")
+                        .addStatement("this.blockStateData = blockStateData")
                         .addStatement("this.properties = properties")
 
                         .addModifiers(Modifier.PUBLIC)
@@ -478,7 +496,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );
-        // getBlockData method
+        // getBlockStateData method
         blockStateClass.addMethod(
                 MethodSpec.methodBuilder("getBlockStateData")
                         .returns(rawBlockStateDataClassName)
@@ -487,11 +505,18 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // setBlockStateData method
+        blockStateClass.addMethod(
+                MethodSpec.methodBuilder("setBlockStateData")
+                .addParameter(ParameterSpec.builder(rawBlockStateDataClassName, "blockStateData").addAnnotation(NotNull.class).build())
+                .addStatement("this.blockStateData = blockStateData")
+                .build()
+        );
         // isSolid method
         blockStateClass.addMethod(
                 MethodSpec.methodBuilder("isSolid")
                         .returns(TypeName.BOOLEAN)
-                        .addStatement("return this.blockStateData.solid")
+                        .addStatement("return this.blockStateData.isSolid()")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -499,7 +524,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         blockStateClass.addMethod(
                 MethodSpec.methodBuilder("isLiquid")
                         .returns(TypeName.BOOLEAN)
-                        .addStatement("return this.blockStateData.liquid")
+                        .addStatement("return this.blockStateData.isLiquid()")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -545,18 +570,27 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                             blockClassName,
                             blockName
                     ).initializer(
-                            "new $T($T.from($S), (short) $L)",
+                            "new $T($T.from($S), (short) $L, new $T($L, () -> $T.MATERIAL_REGISTRY.get($S), $L, $L, $L))",
                             blockClassName,
                             namespaceIDClassName,
                             block.get("id").getAsString(),
-                            block.get("defaultBlockState").getAsInt()
+                            block.get("defaultBlockState").getAsInt(),
+                            rawBlockDataClassName,
+
+                            block.get("explosionResistance").getAsDouble(),
+                            registryClassName,
+                            block.get("itemId").getAsString(),
+                            block.get("friction").getAsDouble(),
+                            block.get("speedFactor").getAsDouble(),
+                            block.get("jumpFactor").getAsDouble()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
 
             JsonArray states = block.get("states").getAsJsonArray();
             // States should be split into a maximum size of maxSize to not reach the java limit.
             // If we ever reach the java limit we can reduce this number, it does not change anything users should be using.
-            int maxSize = 800;
+            // Make sure to delete the entire states folder if you do change this number though.
+            int maxSize = 600;
 
             for (int i = 0; i < Math.ceil(states.size() / (double) maxSize); i++) {
                 String suffix = "";
@@ -605,14 +639,28 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         blockStateSpecificClass.addField(
                                 FieldSpec.builder(blockStateClassName, stateName)
                                         .initializer(
-                                                "new $T($T.from($S), (short) $L, $T.$N, **REPLACE**)"
+                                                "new $T($T.from($S), (short) $L, $T.$N, new $T($L, $L, $L, $S, $L, $L, $L, $L, $L, $L, $L, $S), **REPLACE**)"
                                                         .replace("**REPLACE**", propertiesStr.toString()),
                                                 blockStateClassName,
                                                 namespaceIDClassName,
                                                 block.get("id").getAsString() + "_" + j, // minecraft:stone_0
                                                 state.get("id").getAsString(),
                                                 blockClassName,
-                                                blockName
+                                                blockName,
+
+                                                rawBlockStateDataClassName,
+                                                state.get("destroySpeed").getAsDouble(),
+                                                state.get("lightEmission").getAsInt(),
+                                                state.get("doesOcclude").getAsBoolean(),
+                                                state.get("pushReaction").getAsString(),
+                                                state.get("blocksMotion").getAsBoolean(),
+                                                state.get("isFlammable").getAsBoolean(),
+                                                state.get("isLiquid").getAsBoolean(),
+                                                state.get("isReplaceable").getAsBoolean(),
+                                                state.get("isSolid").getAsBoolean(),
+                                                state.get("isSolidBlocking").getAsBoolean(),
+                                                state.get("mapColorId").getAsInt(),
+                                                state.get("boundingBox").getAsString()
                                         )
                                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                         .build()
@@ -622,13 +670,27 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         blockStateSpecificClass.addField(
                                 FieldSpec.builder(blockStateClassName, stateName)
                                         .initializer(
-                                                "new $T($T.from($S), (short) $L, $T.$N)",
+                                                "new $T($T.from($S), (short) $L, $T.$N, new $T($L, $L, $L, $S, $L, $L, $L, $L, $L, $L, $L, $S))",
                                                 blockStateClassName,
                                                 namespaceIDClassName,
                                                 block.get("id").getAsString() + "_" + j, // minecraft:stone_0
                                                 state.get("id").getAsString(),
                                                 blockClassName,
-                                                blockName
+                                                blockName,
+
+                                                rawBlockStateDataClassName,
+                                                state.get("destroySpeed").getAsDouble(),
+                                                state.get("lightEmission").getAsInt(),
+                                                state.get("doesOcclude").getAsBoolean(),
+                                                state.get("pushReaction").getAsString(),
+                                                state.get("blocksMotion").getAsBoolean(),
+                                                state.get("isFlammable").getAsBoolean(),
+                                                state.get("isLiquid").getAsBoolean(),
+                                                state.get("isReplaceable").getAsBoolean(),
+                                                state.get("isSolid").getAsBoolean(),
+                                                state.get("isSolidBlocking").getAsBoolean(),
+                                                state.get("mapColorId").getAsInt(),
+                                                state.get("boundingBox").getAsString()
                                         )
                                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                         .build()

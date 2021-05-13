@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,27 +14,18 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class BlockEntityGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockEntityGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "block_entities.json");
 
     private final File blockEntitiesFile;
     private final File outputFolder;
 
-    public BlockEntityGenerator() {
-        this(null, null);
-    }
 
-    public BlockEntityGenerator(@Nullable File blockEntitiesFile) {
-        this(blockEntitiesFile, null);
-    }
-
-    public BlockEntityGenerator(@Nullable File blockEntitiesFile, @Nullable File outputFolder) {
-        this.blockEntitiesFile = Objects.requireNonNullElse(blockEntitiesFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public BlockEntityGenerator(@NotNull File blockEntitiesFile, @NotNull File outputFolder) {
+        this.blockEntitiesFile = blockEntitiesFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

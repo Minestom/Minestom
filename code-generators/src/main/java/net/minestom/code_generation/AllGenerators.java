@@ -24,90 +24,86 @@ public class AllGenerators {
     private static final Logger LOGGER = LoggerFactory.getLogger(AllGenerators.class);
 
     public static void main(String[] args) {
-        String targetVersion;
-        if (args.length < 1) {
-            LOGGER.error("Usage: <MC version> [target folder]");
+        if (args.length < 3) {
+            LOGGER.error("Usage: <MC version> <source folder> <target folder>");
             return;
         }
-        targetVersion = args[0];
-
-        File outputFolder = null;
-        if (args.length >= 2) {
-            outputFolder = new File(args[1]);
-        }
+        String targetVersion = args[0];
+        File inputFolder = new File(args[1]);
+        File outputFolder = new File(args[2]);
         // Generate blocks
         new BlockGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_blocks.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_blocks.json"),
                 outputFolder
         ).generate();
         // Generate fluids
         new FluidGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_fluids.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_fluids.json"),
                 outputFolder
         ).generate();
         // Generate block entities
         new BlockEntityGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_block_entities.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_block_entities.json"),
                 outputFolder
         ).generate();
         // Generate entities
         new EntityTypeGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_entities.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_entities.json"),
                 outputFolder
         ).generate();
         // Generate items
         new MaterialGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_items.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_items.json"),
                 outputFolder
         ).generate();
         // Generate enchantments
         new EnchantmentGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_enchantments.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_enchantments.json"),
                 outputFolder
         ).generate();
         // Generate attributes
         new AttributeGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_attributes.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_attributes.json"),
                 outputFolder
         ).generate();
         // Generate potion effects
         new PotionEffectGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_potion_effects.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_potion_effects.json"),
                 outputFolder
         ).generate();
         // Generate potions
         new PotionTypeGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_potions.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_potions.json"),
                 outputFolder
         ).generate();
         // Generate particles
         new ParticleGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_particles.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_particles.json"),
                 outputFolder
         ).generate();
         // Generate sounds
         new SoundEventGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_sounds.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_sounds.json"),
                 outputFolder
         ).generate();
         // Generate villager professions
         new VillagerProfessionGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_villager_professions.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_villager_professions.json"),
                 outputFolder
         ).generate();
         // Generate villager types
         new VillagerTypeGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_villager_types.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_villager_types.json"),
                 outputFolder
         ).generate();
         // Generate statistics
         new StatisticGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_custom_statistics.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_custom_statistics.json"),
                 outputFolder
         ).generate();
         // Generate map colours
         new MapColorsGenerator(
-                new File(MinestomCodeGenerator.DEFAULT_SOURCE_FOLDER_ROOT, targetVersion.replaceAll("\\.", "_") + "_map_colors.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_map_colors.json"),
                 outputFolder
         ).generate();
         LOGGER.info("Finished generating code");

@@ -1,20 +1,8 @@
 package net.minestom.code_generation.item;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class EnchantmentGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnchantmentGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "enchantments.json");
     private final File enchantmentsFile;
     private final File outputFolder;
 
-    public EnchantmentGenerator() {
-        this(null, null);
-    }
-
-    public EnchantmentGenerator(@Nullable File enchantmentsFile) {
-        this(enchantmentsFile, null);
-    }
-
-    public EnchantmentGenerator(@Nullable File enchantmentsFile, @Nullable File outputFolder) {
-        this.enchantmentsFile = Objects.requireNonNullElse(enchantmentsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public EnchantmentGenerator(@NotNull File enchantmentsFile, @NotNull File outputFolder) {
+        this.enchantmentsFile = enchantmentsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
@@ -85,15 +63,16 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         );
         enchantmentClass.addField(
                 FieldSpec.builder(rawEnchantmentDataClassName, "enchantmentData")
-                        .initializer("new $T()", rawEnchantmentDataClassName)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
         enchantmentClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
+                        .addParameter(ParameterSpec.builder(rawEnchantmentDataClassName, "enchantmentData").addAnnotation(NotNull.class).build())
                         .addStatement("this.id = id")
+                        .addStatement("this.enchantmentData = enchantmentData")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -153,6 +132,14 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // setEnchantmentData method
+        enchantmentClass.addMethod(
+                MethodSpec.methodBuilder("setEnchantmentData")
+                        .addParameter(ParameterSpec.builder(rawEnchantmentDataClassName, "enchantmentData").addAnnotation(NotNull.class).build())
+                        .addStatement("this.enchantmentData = enchantmentData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
         // toString method
         enchantmentClass.addMethod(
                 MethodSpec.methodBuilder("toString")
@@ -177,19 +164,29 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         CodeBlock.Builder staticBlock = CodeBlock.builder();
         // Use data
         for (JsonElement e : enchantments) {
-            JsonObject item = e.getAsJsonObject();
+            JsonObject enchantment = e.getAsJsonObject();
 
-            String enchantmentName = item.get("name").getAsString();
+            String enchantmentName = enchantment.get("name").getAsString();
 
             enchantmentClass.addField(
                     FieldSpec.builder(
                             enchantmentClassName,
                             enchantmentName
                     ).initializer(
-                            "new $T($T.from($S))",
+                            "new $T($T.from($S), new $T($L, $L, $S, $L, $L, $L, $L, $S))",
                             enchantmentClassName,
                             namespaceIDClassName,
-                            item.get("id").getAsString()
+                            enchantment.get("id").getAsString(),
+
+                            rawEnchantmentDataClassName,
+                            enchantment.get("maxLevel").getAsInt(),
+                            enchantment.get("minLevel").getAsInt(),
+                            enchantment.get("rarity").getAsString(),
+                            enchantment.get("curse").getAsBoolean(),
+                            enchantment.get("discoverable").getAsBoolean(),
+                            enchantment.get("tradeable").getAsBoolean(),
+                            enchantment.get("treasureOnly").getAsBoolean(),
+                            enchantment.get("category").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.

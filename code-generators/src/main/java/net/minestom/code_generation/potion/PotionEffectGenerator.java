@@ -15,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class PotionEffectGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionEffectGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "potion_effects.json");
     private final File potionEffectsFile;
     private final File outputFolder;
 
-    public PotionEffectGenerator() {
-        this(null, null);
-    }
-
-    public PotionEffectGenerator(@Nullable File potionEffectsFile) {
-        this(potionEffectsFile, null);
-    }
-
-    public PotionEffectGenerator(@Nullable File potionEffectsFile, @Nullable File outputFolder) {
-        this.potionEffectsFile = Objects.requireNonNullElse(potionEffectsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public PotionEffectGenerator(@NotNull File potionEffectsFile, @NotNull File outputFolder) {
+        this.potionEffectsFile = potionEffectsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

@@ -1,11 +1,9 @@
 package net.minestom.server.gamedata.tags;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import net.minestom.server.MinecraftServer;
+import com.google.gson.*;
 import net.minestom.server.network.packet.server.play.TagsPacket;
-import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.NamespaceIDHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * Handles loading and caching of tags.
@@ -21,13 +20,14 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TagManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TagManager.class);
-    private final Gson gson;
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private final Map<NamespaceID, Tag> cache = new ConcurrentHashMap<>();
     private final List<RequiredTag> requiredTags = new LinkedList<>();
-
+    private final NamespaceIDHashMap<JsonObject> blockTags = new NamespaceIDHashMap<>();
+    private final NamespaceIDHashMap<JsonObject> entityTypeTags = new NamespaceIDHashMap<>();
+    private final NamespaceIDHashMap<JsonObject> fluidTags = new NamespaceIDHashMap<>();
+    private final NamespaceIDHashMap<JsonObject> itemTags = new NamespaceIDHashMap<>();
     public TagManager() {
-        gson = new GsonBuilder()
-                .create();
         addRequiredTag(Tag.BasicTypes.BLOCKS, NamespaceID.from("acacia_logs"));
         addRequiredTag(Tag.BasicTypes.BLOCKS, NamespaceID.from("anvil"));
         addRequiredTag(Tag.BasicTypes.BLOCKS, NamespaceID.from("bamboo_plantable_on"));
@@ -175,30 +175,9 @@ public class TagManager {
         addRequiredTag(Tag.BasicTypes.ITEMS, NamespaceID.from("wooden_stairs"));
         addRequiredTag(Tag.BasicTypes.ITEMS, NamespaceID.from("wooden_trapdoors"));
         addRequiredTag(Tag.BasicTypes.ITEMS, NamespaceID.from("wool"));
-    }
 
-    /**
-     * Loads a tag with the given name. This method attempts to read from "data/&lt;name.domain&gt;/tags/&lt;tagType&gt;/&lt;name.path&gt;.json" if the given name is not already present in cache
-     *
-     * @param name
-     * @param tagType the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
-     * @return
-     * @throws FileNotFoundException if the file does not exist
-     */
-    public Tag load(NamespaceID name, String tagType) throws FileNotFoundException {
-        return load(name, tagType, () -> new FileReader(new File(ResourceGatherer.DATA_FOLDER, MinecraftServer.VERSION_NAME.replaceAll("\\.", "_") + "_gen_data/data/" + name.getDomain() + "/tags/" + tagType + "/" + name.getPath() + ".json")));
-    }
-
-    /**
-     * Loads a tag with the given name. This method attempts to read from 'reader' if the given name is not already present in cache
-     *
-     * @param name
-     * @param tagType the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
-     * @param reader
-     * @return
-     */
-    public Tag load(NamespaceID name, String tagType, Reader reader) throws FileNotFoundException {
-        return load(name, tagType, () -> reader);
+        // TODO: Remove and replace with dedicated Tag objects.
+        loadTagsFromFileSystem();
     }
 
     /**
@@ -206,14 +185,69 @@ public class TagManager {
      *
      * @param name
      * @param tagType        the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
-     * @param readerSupplier
+     * @param objectSupplier
      * @return
      */
-    public Tag forceLoad(NamespaceID name, String tagType, ReaderSupplierWithFileNotFound readerSupplier) throws FileNotFoundException {
+    public Tag forceLoad(NamespaceID name, String tagType, Supplier<TagContainer> objectSupplier) {
         Tag prev = cache.getOrDefault(name, Tag.EMPTY);
-        Tag result = create(prev, name, tagType, readerSupplier);
+        Tag result = create(prev, name, tagType, objectSupplier);
         cache.put(name, result);
         return result;
+    }
+
+    private void loadTagsFromFileSystem() {
+        // Block tags
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/tags/block_tags.json");
+            if (a != null) {
+                JsonArray blockTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement bT : blockTags) {
+                    JsonObject blockTag = bT.getAsJsonObject();
+                    this.blockTags.put(NamespaceID.from(blockTag.get("tagName").getAsString()), blockTag);
+                }
+            } else {
+                LOGGER.error("Could not find block tags in JAR Resources.");
+            }
+        }
+        // Entity type tags
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/tags/entity_type_tags.json");
+            if (a != null) {
+                JsonArray entityTypeTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement etT : entityTypeTags) {
+                    JsonObject entityTypeTag = etT.getAsJsonObject();
+                    this.entityTypeTags.put(NamespaceID.from(entityTypeTag.get("tagName").getAsString()), entityTypeTag);
+                }
+            } else {
+                LOGGER.error("Could not find entity type tags in JAR Resources.");
+            }
+        }
+        // Fluid tags
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/tags/fluid_tags.json");
+            if (a != null) {
+                JsonArray fluidTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement fT : fluidTags) {
+                    JsonObject fluidTag = fT.getAsJsonObject();
+                    this.fluidTags.put(NamespaceID.from(fluidTag.get("tagName").getAsString()), fluidTag);
+                }
+            } else {
+                LOGGER.error("Could not find fluid tags in JAR Resources.");
+            }
+        }
+        // Item tags
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/tags/item_tags.json");
+            if (a != null) {
+                JsonArray itemTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement bT : itemTags) {
+                    JsonObject itemTag = bT.getAsJsonObject();
+                    this.itemTags.put(NamespaceID.from(itemTag.get("tagName").getAsString()), itemTag);
+                }
+            } else {
+                LOGGER.error("Could not find item tags in JAR Resources.");
+            }
+        }
     }
 
     /**
@@ -221,21 +255,21 @@ public class TagManager {
      *
      * @param name
      * @param tagType        the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)
-     * @param readerSupplier
+     * @param objectSupplier
      * @return
      */
-    public Tag load(NamespaceID name, String tagType, ReaderSupplierWithFileNotFound readerSupplier) throws FileNotFoundException {
+    public Tag load(NamespaceID name, String tagType, Supplier<TagContainer> objectSupplier) {
         Tag prev = cache.getOrDefault(name, Tag.EMPTY);
         Tag result = cache.get(name);
         if (result == null) {
-            result = create(prev, name, tagType, readerSupplier);
+            result = create(prev, name, tagType, objectSupplier);
             cache.put(name, result);
         }
         return result;
     }
 
-    private Tag create(Tag prev, NamespaceID name, String tagType, ReaderSupplierWithFileNotFound reader) throws FileNotFoundException {
-        TagContainer container = gson.fromJson(reader.get(), TagContainer.class);
+    private Tag create(Tag prev, NamespaceID name, String tagType, Supplier<TagContainer> tagContainerSupplier) {
+        TagContainer container = tagContainerSupplier.get();
         try {
             return new Tag(this, name, tagType, prev, container);
         } catch (FileNotFoundException e) {
@@ -251,7 +285,7 @@ public class TagManager {
      */
     public void addRequiredTagsToPacket(TagsPacket tags) {
         for (RequiredTag requiredTag : requiredTags) {
-            Tag tag = silentLoad(requiredTag.getName(), requiredTag.getType().name().toLowerCase());
+            Tag tag = silentLoad(requiredTag.getName(), requiredTag.getType());
             switch (requiredTag.getType()) {
                 case BLOCKS:
                     tags.blockTags.add(tag);
@@ -282,16 +316,42 @@ public class TagManager {
         requiredTags.add(new RequiredTag(type, name));
     }
 
-    private Tag silentLoad(NamespaceID name, String type) {
-        try {
-            return load(name, type);
-        } catch (FileNotFoundException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return Tag.EMPTY;
-        }
+    private Tag silentLoad(NamespaceID name, Tag.BasicTypes type) {
+        return load(name, type.name().toLowerCase());
     }
 
-    public interface ReaderSupplierWithFileNotFound {
-        Reader get() throws FileNotFoundException;
+    public Tag load(NamespaceID name, String type) {
+        Supplier<TagContainer> objectSupplier;
+        switch (type) {
+            case "entity_types": {
+                objectSupplier = () -> gson.fromJson(entityTypeTags.get(name), TagContainer.class);
+                break;
+            }
+            case "fluids": {
+                objectSupplier = () -> gson.fromJson(fluidTags.get(name), TagContainer.class);
+                break;
+            }
+            case "items": {
+                objectSupplier = () -> gson.fromJson(itemTags.get(name), TagContainer.class);
+                break;
+            }
+            case "blocks": {
+                objectSupplier = () -> gson.fromJson(blockTags.get(name), TagContainer.class);
+                break;
+            }
+            default: {
+                // TODO: This needs to be improved
+                objectSupplier = () -> {
+                    try {
+                        return gson.fromJson(new FileReader("./minecraft_data/data/" + name.getDomain() + "/tags/" + type + "/" + name.getPath() + ".json"), TagContainer.class);
+                    } catch (FileNotFoundException e) {
+                        LOGGER.error("Failed to find tag '{}'. An empty tag has been returned", name);
+                        // Empty tag
+                        return new TagContainer();
+                    }
+                };
+            }
+        }
+        return load(name, type, objectSupplier);
     }
 }

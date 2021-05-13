@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,26 +14,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class MaterialGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MaterialGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "items.json");
     private final File itemsFile;
     private final File outputFolder;
 
-    public MaterialGenerator() {
-        this(null, null);
-    }
-
-    public MaterialGenerator(@Nullable File itemsFile) {
-        this(itemsFile, null);
-    }
-
-    public MaterialGenerator(@Nullable File itemsFile, @Nullable File outputFolder) {
-        this.itemsFile = Objects.requireNonNullElse(itemsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public MaterialGenerator(@NotNull File itemsFile, @NotNull File outputFolder) {
+        this.itemsFile = itemsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
@@ -77,8 +66,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         );
         itemClass.addField(
                 FieldSpec.builder(rawMaterialDataClassName, "materialData")
-                        .initializer("new $T()", rawMaterialDataClassName)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
@@ -86,8 +74,10 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
                         .addParameter(TypeName.BYTE, "maxDefaultStackSize")
+                        .addParameter(ParameterSpec.builder(rawMaterialDataClassName, "materialData").addAnnotation(NotNull.class).build())
                         .addStatement("this.id = id")
                         .addStatement("this.maxDefaultStackSize = maxDefaultStackSize")
+                        .addStatement("this.materialData = materialData")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -164,11 +154,19 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // setMaterialData method
+        itemClass.addMethod(
+                MethodSpec.methodBuilder("setMaterialData")
+                        .addParameter(ParameterSpec.builder(rawMaterialDataClassName, "materialData").addAnnotation(NotNull.class).build())
+                        .addStatement("this.materialData = materialData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
         // isFood method
         itemClass.addMethod(
                 MethodSpec.methodBuilder("isFood")
                         .returns(TypeName.BOOLEAN)
-                        .addStatement("return this.materialData.edible")
+                        .addStatement("return this.materialData.isEdible()")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -189,7 +187,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("isBlock")
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
-                                "return this.materialData.block != $T.AIR",
+                                "return this.materialData.getBlock() != $T.AIR",
                                 ClassName.get("net.minestom.server.instance.block", "Block")
                         )
                         .addModifiers(Modifier.PUBLIC)
@@ -199,7 +197,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         itemClass.addMethod(
                 MethodSpec.methodBuilder("isArmor")
                         .returns(TypeName.BOOLEAN)
-                        .addStatement("return this.materialData.armorData != null")
+                        .addStatement("return this.materialData.getArmorData() != null")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -208,7 +206,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("isHelmet")
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
-                                "return this.isArmor() && this.materialData.armorData.slot == $T.HELMET",
+                                "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.HELMET",
                                 ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
                         )
                         .addModifiers(Modifier.PUBLIC)
@@ -219,7 +217,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("isChestplate")
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
-                                "return this.isArmor() && this.materialData.armorData.slot == $T.CHESTPLATE",
+                                "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.CHESTPLATE",
                                 ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
                         )
                         .addModifiers(Modifier.PUBLIC)
@@ -230,7 +228,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("isLeggings")
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
-                                "return this.isArmor() && this.materialData.armorData.slot == $T.LEGGINGS",
+                                "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.LEGGINGS",
                                 ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
                         )
                         .addModifiers(Modifier.PUBLIC)
@@ -241,7 +239,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("isBoots")
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
-                                "return this.isArmor() && this.materialData.armorData.slot == $T.BOOTS",
+                                "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.BOOTS",
                                 ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
                         )
                         .addModifiers(Modifier.PUBLIC)
@@ -252,7 +250,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("getBlock")
                         .addAnnotation(NotNull.class)
                         .returns(ClassName.get("net.minestom.server.instance.block", "Block"))
-                        .addStatement("return this.materialData.block")
+                        .addStatement("return this.materialData.getBlock()")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -283,19 +281,91 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
             JsonObject item = i.getAsJsonObject();
 
             String itemName = item.get("name").getAsString();
+            if (item.get("armorProperties") != null) {
+                JsonObject armor = item.get("armorProperties").getAsJsonObject();
 
-            itemClass.addField(
-                    FieldSpec.builder(
-                            itemClassName,
-                            itemName
-                    ).initializer(
-                            "new $T($T.from($S), (byte) $L)",
-                            itemClassName,
-                            namespaceIDClassName,
-                            item.get("id").getAsString(),
-                            item.get("maxStackSize").getAsInt()
-                    ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
-            );
+                String slot;
+                // set correct slot
+                switch (armor.get("slot").getAsString().toUpperCase()) {
+                    case "HEAD": {
+                        slot = "HELMET";
+                        break;
+                    }
+                    case "CHEST": {
+                        slot = "CHESTPLATE";
+                        break;
+                    }
+                    case "LEGS": {
+                        slot = "LEGGINGS";
+                        break;
+                    }
+                    case "FEET": {
+                        slot = "BOOTS";
+                        break;
+                    }
+                    default: {
+                        slot = "MAIN_HAND";
+                        break;
+                    }
+                }
+                itemClass.addField(
+                        FieldSpec.builder(
+                                itemClassName,
+                                itemName
+                        ).initializer(
+                                "new $T($T.from($S), (byte) $L, new $T($L, $L, $L, $L, () -> $T.BLOCK_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S), new $T($L, $L, $T.$N)))",
+                                itemClassName,
+                                namespaceIDClassName,
+                                item.get("id").getAsString(),
+                                item.get("maxStackSize").getAsInt(),
+
+                                rawMaterialDataClassName,
+                                item.get("depletes").getAsBoolean(),
+                                item.get("maxDamage").getAsInt(),
+                                item.get("edible").getAsBoolean(),
+                                item.get("fireResistant").getAsBoolean(),
+                                registryClassName,
+                                item.get("blockId").getAsString(),
+                                registryClassName,
+                                item.get("eatingSound").getAsString(),
+                                registryClassName,
+                                item.get("drinkingSound").getAsString(),
+                                ClassName.get("net.minestom.server.raw_data", "RawMaterialData", "RawArmorData"),
+                                armor.get("defense").getAsInt(),
+                                armor.get("toughness").getAsDouble(),
+                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot"),
+                                slot
+                        ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
+                );
+            } else {
+                itemClass.addField(
+                        FieldSpec.builder(
+                                itemClassName,
+                                itemName
+                        ).initializer(
+                                "new $T($T.from($S), (byte) $L, new $T($L, $L, $L, $L, () -> $T.BLOCK_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S),() -> $T.SOUND_EVENT_REGISTRY.get($S), null))",
+                                itemClassName,
+                                namespaceIDClassName,
+                                item.get("id").getAsString(),
+                                item.get("maxStackSize").getAsInt(),
+
+                                rawMaterialDataClassName,
+                                item.get("depletes").getAsBoolean(),
+                                item.get("maxDamage").getAsInt(),
+                                item.get("edible").getAsBoolean(),
+                                item.get("fireResistant").getAsBoolean(),
+                                registryClassName,
+                                item.get("blockId").getAsString(),
+                                registryClassName,
+                                item.get("eatingSound").getAsString(),
+                                registryClassName,
+                                item.get("drinkingSound").getAsString()
+
+                        ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
+                );
+            }
+
+
             // Add to static init.
             staticBlock.addStatement("$T.MATERIAL_REGISTRY.register($N)", registryClassName, itemName);
         }

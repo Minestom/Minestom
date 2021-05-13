@@ -19,8 +19,6 @@ jobs:
         java-version: 1.11
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Create eula.txt file to run data generator
-      run: echo 'eula=true' > /home/runner/work/Minestom/Minestom/MinestomDataGenerator/eula.txt
     - name: Setup gradle cache
       uses: burrunan/gradle-cache-action@v1
       with:

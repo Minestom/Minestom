@@ -1,20 +1,8 @@
 package net.minestom.code_generation.fluid;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class FluidGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FluidGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "fluids.json");
     private final File fluidsFile;
     private final File outputFolder;
 
-    public FluidGenerator() {
-        this(null, null);
-    }
-
-    public FluidGenerator(@Nullable File fluidsFile) {
-        this(fluidsFile, null);
-    }
-
-    public FluidGenerator(@Nullable File fluidsFile, @Nullable File outputFolder) {
-        this.fluidsFile = Objects.requireNonNullElse(fluidsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public FluidGenerator(@NotNull File fluidsFile, @NotNull File outputFolder) {
+        this.fluidsFile = fluidsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
@@ -85,15 +63,16 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         );
         fluidClass.addField(
                 FieldSpec.builder(rawFluidDataClassName, "fluidData")
-                        .initializer("new $T()", rawFluidDataClassName)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
         fluidClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
+                        .addParameter(ParameterSpec.builder(rawFluidDataClassName, "fluidData").addAnnotation(NotNull.class).build())
                         .addStatement("this.id = id")
+                        .addStatement("this.fluidData = fluidData")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -153,6 +132,14 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // setEnchantmentData method
+        fluidClass.addMethod(
+                MethodSpec.methodBuilder("setFluidData")
+                        .addParameter(ParameterSpec.builder(rawFluidDataClassName, "fluidData").addAnnotation(NotNull.class).build())
+                        .addStatement("this.fluidData = fluidData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
         // toString method
         fluidClass.addMethod(
                 MethodSpec.methodBuilder("toString")
@@ -186,10 +173,14 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                             fluidClassName,
                             fluidName
                     ).initializer(
-                            "new $T($T.from($S))",
+                            "new $T($T.from($S), new $T(() -> $T.MATERIAL_REGISTRY.get($S)))",
                             fluidClassName,
                             namespaceIDClassName,
-                            fluid.get("id").getAsString()
+                            fluid.get("id").getAsString(),
+
+                            rawFluidDataClassName,
+                            registryClassName,
+                            fluid.get("bucketId").getAsString()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.

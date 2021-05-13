@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,26 +15,16 @@ import java.io.FileReader;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Objects;
 
 public final class MapColorsGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MapColorsGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "map_colors.json");
     private final File mapColorsFile;
     private final File outputFolder;
 
-    public MapColorsGenerator() {
-        this(null, null);
-    }
-
-    public MapColorsGenerator(@Nullable File mapColorsFile) {
-        this(mapColorsFile, null);
-    }
-
-    public MapColorsGenerator(@Nullable File mapColorsFile, @Nullable File outputFolder) {
-        this.mapColorsFile = Objects.requireNonNullElse(mapColorsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public MapColorsGenerator(@NotNull File mapColorsFile, @NotNull File outputFolder) {
+        this.mapColorsFile = mapColorsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

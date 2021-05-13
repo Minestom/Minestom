@@ -15,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class SoundEventGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundEventGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "sounds.json");
     private final File soundsFile;
     private final File outputFolder;
 
-    public SoundEventGenerator() {
-        this(null, null);
-    }
-
-    public SoundEventGenerator(@Nullable File itemsFile) {
-        this(itemsFile, null);
-    }
-
-    public SoundEventGenerator(@Nullable File itemsFile, @Nullable File outputFolder) {
-        this.soundsFile = Objects.requireNonNullElse(itemsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public SoundEventGenerator(@NotNull File itemsFile, @NotNull File outputFolder) {
+        this.soundsFile = itemsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

@@ -36,10 +36,8 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.raw_data.DataInitializer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticType;
@@ -58,8 +56,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -211,14 +207,6 @@ public final class MinecraftServer {
 
         nettyServer = new NettyServer(packetProcessor);
 
-        // ResourceGatherer
-        try {
-            ResourceGatherer.ensureResourcesArePresent();
-        } catch (IOException e) {
-            LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
-        }
-        // DataInitializer
-        DataInitializer.runDataInitializer(ResourceGatherer.DATA_FOLDER, VERSION_NAME);
 
         initialized = true;
 

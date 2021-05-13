@@ -1,21 +1,22 @@
 package net.minestom.server.gamedata.loottables;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import net.minestom.server.MinecraftServer;
+import com.google.gson.*;
 import net.minestom.server.gamedata.Condition;
-import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.NamespaceIDHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.function.Function;
 
 /**
  * Handles loading and configuration of loot tables
  */
 public final class LootTableManager {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(LootTableManager.class);
     private NamespaceIDHashMap<JsonDeserializer<? extends Condition>> conditionDeserializers = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableType> tableTypes = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableEntryType> entryTypes = new NamespaceIDHashMap<>();
@@ -28,6 +29,73 @@ public final class LootTableManager {
                 .registerTypeAdapter(RangeContainer.class, new RangeContainer.Deserializer())
                 .registerTypeAdapter(ConditionContainer.class, new ConditionContainer.Deserializer(this))
                 .create();
+        // TODO:
+        // loadLoottablesFileSystem();
+    }
+
+    private void loadLoottablesFileSystem() {
+        // Block loot
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/loot_tables/block_loot_tables.json");
+            if (a != null) {
+                JsonArray blockLootTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement bLT : blockLootTags) {
+                    JsonObject blockLootTag = bLT.getAsJsonObject();
+                    NamespaceID id = NamespaceID.from(blockLootTag.get("blockId").getAsString());
+                    // Add the blocks/ prefix
+                    // Remove the minecraft: prefixing the blockId (so just the path)
+                    String path = "blocks/" + id.getPath();
+                    cache.put(NamespaceID.from("minecraft", path), gson.fromJson(blockLootTag, LootTableContainer.class).createTable(this));
+                }
+            } else {
+                LOGGER.error("Could not find block loot tables in JAR Resources.");
+            }
+        }
+        // Chest loot
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/loot_tables/chest_loot_tables.json");
+            if (a != null) {
+                JsonArray chestTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement cT : chestTags) {
+                    JsonObject chestTag = cT.getAsJsonObject();
+                    // Add the chests/ prefix
+                    String path = "chests/" + chestTag.get("chestType").getAsString();
+                    cache.put(NamespaceID.from("minecraft", path), gson.fromJson(chestTag, LootTableContainer.class).createTable(this));
+                }
+            } else {
+                LOGGER.error("Could not find chest loot tables in JAR Resources.");
+            }
+        }
+        // Entity loot
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/loot_tables/entity_loot_tables.json");
+            if (a != null) {
+                JsonArray entityTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement eT : entityTags) {
+                    JsonObject entityTag = eT.getAsJsonObject();
+                    // Add the chests/ prefix
+                    String path = "entities/" + entityTag.get("entityId").getAsString();
+                    cache.put(NamespaceID.from("minecraft", path), gson.fromJson(entityTag, LootTableContainer.class).createTable(this));
+                }
+            } else {
+                LOGGER.error("Could not find entity loot tables in JAR Resources.");
+            }
+        }
+        // Gameplay loot
+        {
+            InputStream a = getClass().getResourceAsStream("/minecraft_data/loot_tables/gameplay_loot_tables.json");
+            if (a != null) {
+                JsonArray gameplayTags = gson.fromJson(new BufferedReader(new InputStreamReader(a)), JsonArray.class);
+                for (JsonElement gT : gameplayTags) {
+                    JsonObject gameplayTag = gT.getAsJsonObject();
+                    // Add the chests/ prefix
+                    String path = "gameplay/" + gameplayTag.get("gameplayType").getAsString();
+                    cache.put(NamespaceID.from("minecraft", path), gson.fromJson(gameplayTag, LootTableContainer.class).createTable(this));
+                }
+            } else {
+                LOGGER.error("Could not find gameplay loot tables in JAR Resources.");
+            }
+        }
     }
 
     /**
@@ -70,28 +138,19 @@ public final class LootTableManager {
         functions.put(namespaceID, function);
     }
 
-    public LootTable load(NamespaceID name) throws FileNotFoundException {
-        return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, MinecraftServer.VERSION_NAME.replaceAll("\\.", "_") + "_gen_data/data/" + name.getDomain() + "/loot_tables/" + name.getPath() + ".json")));
-    }
-
     /**
      * Loads a loot table with the given name. Loot tables can be cached, so 'reader' is used only on cache misses
      *
      * @param name   the name to cache the loot table with
-     * @param reader the reader to read the loot table from, if none cached. **Will** be closed no matter the results of this call
+     * @param objectFunction the function to call to read the loot table from, if none cached.
      * @return
      */
-    public LootTable load(NamespaceID name, Reader reader) {
-        try (reader) {
-            return cache.computeIfAbsent(name, _name -> create(reader));
-        } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+    public LootTable load(NamespaceID name, Function<NamespaceID, JsonObject> objectFunction) {
+        return cache.computeIfAbsent(name, _name -> create(objectFunction.apply(_name)));
     }
 
-    private LootTable create(Reader reader) {
-        LootTableContainer container = gson.fromJson(reader, LootTableContainer.class);
+    private LootTable create(JsonObject jsonObject) {
+        LootTableContainer container = gson.fromJson(jsonObject, LootTableContainer.class);
         return container.createTable(this);
     }
 

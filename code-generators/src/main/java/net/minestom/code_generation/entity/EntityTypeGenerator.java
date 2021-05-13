@@ -20,7 +20,6 @@ import java.util.function.BiFunction;
 public final class EntityTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "particles.json");
     private static final Map<String, String> metadata = new HashMap<>() {{
         // Class's name (without the Meta suffix) <--> Package
         // UPDATE: Handle new entity metadata
@@ -174,17 +173,9 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
     private final File entitiesFile;
     private final File outputFolder;
 
-    public EntityTypeGenerator() {
-        this(null, null);
-    }
-
-    public EntityTypeGenerator(@Nullable File entitiesFile) {
-        this(entitiesFile, null);
-    }
-
-    public EntityTypeGenerator(@Nullable File entitiesFile, @Nullable File outputFolder) {
-        this.entitiesFile = Objects.requireNonNullElse(entitiesFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public EntityTypeGenerator(@NotNull File entitiesFile, @NotNull File outputFolder) {
+        this.entitiesFile = entitiesFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
@@ -254,8 +245,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         );
         entityClass.addField(
                 FieldSpec.builder(rawEntityDataClassName, "entityTypeData")
-                        .initializer("new $T()", rawEntityDataClassName)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
@@ -285,11 +275,13 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                                         .addAnnotation(NotNull.class)
                                         .build()
                         )
+                        .addParameter(ParameterSpec.builder(rawEntityDataClassName, "entityTypeData").addAnnotation(NotNull.class).build())
                         .addStatement("this.id = id")
                         .addStatement("this.width = width")
                         .addStatement("this.height = height")
                         .addStatement("this.metaConstructor = metaConstructor")
                         .addStatement("this.spawnType = spawnType")
+                        .addStatement("this.entityTypeData = entityTypeData")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -388,6 +380,14 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
+        // setntityData method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("setEntityTypeData")
+                        .addParameter(ParameterSpec.builder(rawEntityDataClassName, "entityTypeData").addAnnotation(NotNull.class).build())
+                        .addStatement("this.entityTypeData = entityTypeData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
         // toString method
         entityClass.addMethod(
                 MethodSpec.methodBuilder("toString")
@@ -445,7 +445,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                             entityClassName,
                             entityName
                     ).initializer(
-                            "new $T($T.from($S), $L, $L, $T::new, $T.$N)",
+                            "new $T($T.from($S), $L, $L, $T::new, $T.$N, new $T($L))",
                             entityClassName,
                             namespaceIDClassName,
                             entity.get("id").getAsString(),
@@ -453,7 +453,10 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                             entity.get("height").getAsDouble(),
                             ClassName.get(metadata.get(metaClassName), metaClassName + "Meta"),
                             ClassName.get("net.minestom.server.entity", "EntitySpawnType"),
-                            entity.get("packetType").getAsString().toUpperCase()
+                            entity.get("packetType").getAsString().toUpperCase(),
+
+                            rawEntityDataClassName,
+                            entity.get("fireImmune").getAsBoolean()
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
             // Add to static init.

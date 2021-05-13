@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,26 +14,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public final class AttributeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(AttributeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "attributes.json");
     private final File attributesFile;
     private final File outputFolder;
 
-    public AttributeGenerator() {
-        this(null, null);
-    }
-
-    public AttributeGenerator(@Nullable File attributesFile) {
-        this(attributesFile, null);
-    }
-
-    public AttributeGenerator(@Nullable File attributesFile, @Nullable File outputFolder) {
-        this.attributesFile = Objects.requireNonNullElse(attributesFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public AttributeGenerator(@NotNull File attributesFile, @NotNull File outputFolder) {
+        this.attributesFile = attributesFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

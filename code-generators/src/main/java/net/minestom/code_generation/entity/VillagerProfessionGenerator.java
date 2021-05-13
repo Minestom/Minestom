@@ -15,26 +15,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(VillagerProfessionGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "villager_professions.json");
     private final File villagerProfessionsFile;
     private final File outputFolder;
 
-    public VillagerProfessionGenerator() {
-        this(null, null);
-    }
 
-    public VillagerProfessionGenerator(@Nullable File villagerProfessionsFile) {
-        this(villagerProfessionsFile, null);
-    }
-
-    public VillagerProfessionGenerator(@Nullable File villagerProfessionsFile, @Nullable File outputFolder) {
-        this.villagerProfessionsFile = Objects.requireNonNullElse(villagerProfessionsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public VillagerProfessionGenerator(@NotNull File villagerProfessionsFile, @NotNull File outputFolder) {
+        this.villagerProfessionsFile = villagerProfessionsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
@@ -73,15 +64,16 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         );
         villagerProfessionClass.addField(
                 FieldSpec.builder(rawVillagerProfessionDataClassName, "villagerProfessionData")
-                        .initializer("new $T()", rawVillagerProfessionDataClassName)
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                        .addModifiers(Modifier.PRIVATE, Modifier.VOLATILE)
                         .addAnnotation(NotNull.class)
                         .build()
         );
         villagerProfessionClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
+                        .addParameter(ParameterSpec.builder(rawVillagerProfessionDataClassName, "villagerProfessionData").addAnnotation(NotNull.class).build())
                         .addStatement("this.id = id")
+                        .addStatement("this.villagerProfessionData = villagerProfessionData")
                         .addModifiers(Modifier.PROTECTED)
                         .build()
         );
@@ -110,6 +102,14 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
                         .returns(rawVillagerProfessionDataClassName)
                         .addAnnotation(NotNull.class)
                         .addStatement("return this.villagerProfessionData")
+                        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                        .build()
+        );
+        // setVillagerProfessionData method
+        villagerProfessionClass.addMethod(
+                MethodSpec.methodBuilder("setVillagerProfessionData")
+                        .addParameter(ParameterSpec.builder(rawVillagerProfessionDataClassName, "villagerProfessionData").addAnnotation(NotNull.class).build())
+                        .addStatement("this.villagerProfessionData = villagerProfessionData")
                         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                         .build()
         );
@@ -167,18 +167,39 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
             JsonObject villagerProfession = vp.getAsJsonObject();
 
             String villagerProfessionName = villagerProfession.get("name").getAsString();
+            JsonElement workSound = villagerProfession.get("workSound");
+            if (workSound == null) {
+                villagerProfessionClass.addField(
+                        FieldSpec.builder(
+                                villagerProfessionClassName,
+                                villagerProfessionName
+                        ).initializer(
+                                "new $T($T.from($S), new $T(() -> null))",
+                                villagerProfessionClassName,
+                                namespaceIDClassName,
+                                villagerProfession.get("id").getAsString(),
 
-            villagerProfessionClass.addField(
-                    FieldSpec.builder(
-                            villagerProfessionClassName,
-                            villagerProfessionName
-                    ).initializer(
-                            "new $T($T.from($S))",
-                            villagerProfessionClassName,
-                            namespaceIDClassName,
-                            villagerProfession.get("id").getAsString()
-                    ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
-            );
+                                rawVillagerProfessionDataClassName
+                        ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
+                );
+            } else {
+                villagerProfessionClass.addField(
+                        FieldSpec.builder(
+                                villagerProfessionClassName,
+                                villagerProfessionName
+                        ).initializer(
+                                "new $T($T.from($S), new $T(() -> $T.SOUND_EVENT_REGISTRY.get($S)))",
+                                villagerProfessionClassName,
+                                namespaceIDClassName,
+                                villagerProfession.get("id").getAsString(),
+
+                                rawVillagerProfessionDataClassName,
+                                registryClassName,
+                                workSound.getAsString()
+                        ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
+                );
+            }
+
             // Add to static init.
             staticBlock.addStatement("$T.VILLAGER_PROFESSION_REGISTRY.register($N)", registryClassName, villagerProfessionName);
         }

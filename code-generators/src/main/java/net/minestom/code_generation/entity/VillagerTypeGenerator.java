@@ -15,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class VillagerTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(VillagerTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "villager_types.json");
     private final File villagerTypesFile;
     private final File outputFolder;
 
-    public VillagerTypeGenerator() {
-        this(null, null);
-    }
-
-    public VillagerTypeGenerator(@Nullable File villagerTypesFile) {
-        this(villagerTypesFile, null);
-    }
-
-    public VillagerTypeGenerator(@Nullable File villagerTypesFile, @Nullable File outputFolder) {
-        this.villagerTypesFile = Objects.requireNonNullElse(villagerTypesFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public VillagerTypeGenerator(@NotNull File villagerTypesFile, @NotNull File outputFolder) {
+        this.villagerTypesFile = villagerTypesFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

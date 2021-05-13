@@ -1,20 +1,8 @@
 package net.minestom.code_generation.statistics;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class StatisticGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatisticGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "custom_statistics.json");
     private final File statisticsFile;
     private final File outputFolder;
 
-    public StatisticGenerator() {
-        this(null, null);
-    }
-
-    public StatisticGenerator(@Nullable File statisticsFile) {
-        this(statisticsFile, null);
-    }
-
-    public StatisticGenerator(@Nullable File statisticsFile, @Nullable File outputFolder) {
-        this.statisticsFile = Objects.requireNonNullElse(statisticsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public StatisticGenerator(@NotNull File statisticsFile, @NotNull File outputFolder) {
+        this.statisticsFile = statisticsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

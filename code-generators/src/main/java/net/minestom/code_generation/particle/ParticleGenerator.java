@@ -15,26 +15,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class ParticleGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticleGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "particles.json");
     private final File particlesFile;
     private final File outputFolder;
 
-    public ParticleGenerator() {
-        this(null, null);
-    }
-
-    public ParticleGenerator(@Nullable File particlesFile) {
-        this(particlesFile, null);
-    }
-
-    public ParticleGenerator(@Nullable File particlesFile, @Nullable File outputFolder) {
-        this.particlesFile = Objects.requireNonNullElse(particlesFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public ParticleGenerator(@NotNull File particlesFile, @NotNull File outputFolder) {
+        this.particlesFile = particlesFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override

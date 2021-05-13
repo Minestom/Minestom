@@ -5,7 +5,6 @@ import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.code_generation.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,26 +14,16 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public final class PotionTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionTypeGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final File DEFAULT_INPUT_FILE = new File(DEFAULT_SOURCE_FOLDER_ROOT, "potions.json");
     private final File potionsFile;
     private final File outputFolder;
 
-    public PotionTypeGenerator() {
-        this(null, null);
-    }
-
-    public PotionTypeGenerator(@Nullable File potionsFile) {
-        this(potionsFile, null);
-    }
-
-    public PotionTypeGenerator(@Nullable File potionsFile, @Nullable File outputFolder) {
-        this.potionsFile = Objects.requireNonNullElse(potionsFile, DEFAULT_INPUT_FILE);
-        this.outputFolder = Objects.requireNonNullElse(outputFolder, DEFAULT_OUTPUT_FOLDER);
+    public PotionTypeGenerator(@NotNull File potionsFile, @NotNull File outputFolder) {
+        this.potionsFile = potionsFile;
+        this.outputFolder = outputFolder;
     }
 
     @Override
