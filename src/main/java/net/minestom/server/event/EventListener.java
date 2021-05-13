@@ -10,7 +10,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class EventListener<T extends Event> {
+public class EventListener<T extends Event> implements ListenerAttach {
 
     private final Class<T> eventType;
     private final Set<EventHandler> attach = new CopyOnWriteArraySet<>();
@@ -21,6 +21,7 @@ public class EventListener<T extends Event> {
         this.combined = combined;
     }
 
+    @Override
     public void attachTo(@NotNull EventHandler handler) {
         final boolean success = this.attach.add(handler);
         if (success) {
@@ -28,6 +29,7 @@ public class EventListener<T extends Event> {
         }
     }
 
+    @Override
     public void detachFrom(@NotNull EventHandler handler) {
         final boolean success = this.attach.remove(handler);
         if (success) {
