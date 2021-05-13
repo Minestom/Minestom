@@ -63,7 +63,7 @@ public interface CacheablePacket {
 
             if (shouldUpdate) {
                 // Buffer freed by guava cache #removalListener
-                final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket, true);
+                final ByteBuf buffer = PacketUtils.createFramedPacket(serverPacket);
                 timedBuffer = new TimedBuffer(buffer, timestamp);
                 temporaryCache.cache(identifier, timedBuffer);
             }

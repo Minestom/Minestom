@@ -76,8 +76,8 @@ public final class BenchmarkManager {
 
             stop = false;
 
-        }, MinecraftServer.THREAD_NAME_BENCHMARK, 0L);
-
+        }, MinecraftServer.THREAD_NAME_BENCHMARK);
+        thread.setDaemon(true);
         thread.start();
 
         this.enabled = true;
