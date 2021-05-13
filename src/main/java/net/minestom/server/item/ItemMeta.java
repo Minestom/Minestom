@@ -6,6 +6,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.utils.cache.CachedObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,8 +34,8 @@ public class ItemMeta implements Writeable {
     private final NBTCompound nbt;
     private final ItemMetaBuilder emptyBuilder;
 
-    private String cachedSNBT;
-    private ByteBuf cachedBuffer;
+    private CachedObject<String> cachedSNBT = new CachedObject<>();
+    private CachedObject<ByteBuf> cachedBuffer = new CachedObject<>();
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
@@ -128,10 +129,7 @@ public class ItemMeta implements Writeable {
     }
 
     public @NotNull String toSNBT() {
-        if (cachedSNBT == null) {
-            this.cachedSNBT = nbt.toSNBT();
-        }
-        return cachedSNBT;
+        return cachedSNBT.getCache(nbt::toSNBT);
     }
 
     @Override
@@ -155,12 +153,12 @@ public class ItemMeta implements Writeable {
 
     @Override
     public synchronized void write(@NotNull BinaryWriter writer) {
-        if (cachedBuffer == null) {
+        final var buffer = cachedBuffer.getCache(() -> {
             BinaryWriter w = new BinaryWriter();
             w.writeNBT("", nbt);
-            this.cachedBuffer = w.getBuffer();
-        }
-        writer.write(cachedBuffer);
-        this.cachedBuffer.resetReaderIndex();
+            return w.getBuffer();
+        });
+        writer.write(buffer);
+        buffer.resetReaderIndex();
     }
 }
