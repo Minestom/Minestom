@@ -78,10 +78,10 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
-    public static final int THREAD_COUNT_BLOCK_BATCH = 4;
+    public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count", getHalfAvailableProcessors());
 
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
-    public static final int THREAD_COUNT_SCHEDULER = 1;
+    public static final int THREAD_COUNT_SCHEDULER = getThreadCount("minestom.scheduler-thread-count", getHalfAvailableProcessors());
 
     public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
     public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
@@ -823,4 +823,19 @@ public final class MinecraftServer {
                 "You cannot access the manager before MinecraftServer#init, " +
                         "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
     }
+
+    private static int getThreadCount(@NotNull String property, int count) {
+        return Integer.getInteger(property, Math.min(1, count));
+    }
+
+    /**
+     * Retrieves half of the available processors of the runtime.
+     *
+     * @return The half of the available processors.
+     */
+    private static int getHalfAvailableProcessors() {
+        int availableProcessors = Runtime.getRuntime().availableProcessors();
+        return availableProcessors >= 1 ? availableProcessors / 2 : availableProcessors;
+    }
+
 }
