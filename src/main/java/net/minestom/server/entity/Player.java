@@ -2223,6 +2223,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     public void refreshOnGround(boolean onGround) {
         this.onGround = onGround;
+        if(this.onGround && this.isFlyingWithElytra()) {
+            this.setFlyingWithElytra(false);
+        }
     }
 
     /**
