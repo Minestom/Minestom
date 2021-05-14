@@ -834,7 +834,7 @@ public final class MinecraftServer {
      */
     private static int getHalfAvailableProcessors() {
         int availableProcessors = Runtime.getRuntime().availableProcessors();
-        return availableProcessors >= 1 ? availableProcessors / 2 : availableProcessors;
+        return availableProcessors > 1 ? availableProcessors / 2 : availableProcessors;
     }
 
 }
