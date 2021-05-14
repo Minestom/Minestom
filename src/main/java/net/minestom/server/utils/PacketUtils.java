@@ -3,7 +3,6 @@ package net.minestom.server.utils;
 import com.velocitypowered.natives.compression.VelocityCompressor;
 import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
@@ -21,7 +20,6 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.zip.DataFormatException;
 
@@ -35,7 +33,6 @@ public final class PacketUtils {
     private static final ThreadLocal<VelocityCompressor> COMPRESSOR = ThreadLocal.withInitial(() -> Natives.compress.get().create(4));
 
     private PacketUtils() {
-
     }
 
     /**
@@ -54,7 +51,7 @@ public final class PacketUtils {
      * </ol>
      *
      * @param audience the audience
-     * @param packet the packet
+     * @param packet   the packet
      */
     @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
     public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
@@ -87,7 +84,6 @@ public final class PacketUtils {
 
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
-
         if (AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
             needsTranslating = AdventureSerializer.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
@@ -96,20 +92,16 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                final ByteBuf finalBuffer = createFramedPacket(packet, true);
+                final ByteBuf finalBuffer = createFramedPacket(packet);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
 
                 // Send packet to all players
                 for (Player player : players) {
-
                     if (!player.isOnline())
                         continue;
-
                     // Verify if the player should receive the packet
                     if (playerValidator != null && !playerValidator.isValid(player))
                         continue;
-
-                    finalBuffer.retain();
 
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
@@ -118,15 +110,12 @@ public final class PacketUtils {
                     } else {
                         playerConnection.sendPacket(packet);
                     }
-
-                    finalBuffer.release();
                 }
                 finalBuffer.release(); // Release last reference
             }
         } else {
             // Write the same packet for each individual players
             for (Player player : players) {
-
                 // Verify if the player should receive the packet
                 if (playerValidator != null && !playerValidator.isValid(player))
                     continue;
@@ -154,7 +143,7 @@ public final class PacketUtils {
      * @param packet the packet to write into {@code buf}
      */
     public static void writePacket(@NotNull ByteBuf buf, @NotNull ServerPacket packet) {
-        Utils.writeVarIntBuf(buf, packet.getId());
+        Utils.writeVarInt(buf, packet.getId());
         writePacketPayload(buf, packet);
     }
 
@@ -184,14 +173,13 @@ public final class PacketUtils {
     public static void frameBuffer(@NotNull ByteBuf packetBuffer, @NotNull ByteBuf frameTarget) {
         final int packetSize = packetBuffer.readableBytes();
         final int headerSize = Utils.getVarIntSize(packetSize);
-
         if (headerSize > 3) {
             throw new IllegalStateException("Unable to fit " + headerSize + " into 3");
         }
 
         frameTarget.ensureWritable(packetSize + headerSize);
 
-        Utils.writeVarIntBuf(frameTarget, packetSize);
+        Utils.writeVarInt(frameTarget, packetSize);
         frameTarget.writeBytes(packetBuffer, packetBuffer.readerIndex(), packetSize);
     }
 
@@ -207,7 +195,7 @@ public final class PacketUtils {
     public static void compressBuffer(@NotNull VelocityCompressor compressor, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
         final boolean compression = packetLength > MinecraftServer.getCompressionThreshold();
-        Utils.writeVarIntBuf(compressionTarget, compression ? packetLength : 0);
+        Utils.writeVarInt(compressionTarget, compression ? packetLength : 0);
         if (compression) {
             compress(compressor, packetBuffer, compressionTarget);
         } else {
@@ -226,54 +214,35 @@ public final class PacketUtils {
     public static void writeFramedPacket(@NotNull ByteBuf buffer,
                                          @NotNull ServerPacket serverPacket) {
         final int compressionThreshold = MinecraftServer.getCompressionThreshold();
-        final boolean compression = compressionThreshold > 0;
 
-        if (compression) {
-            // Dummy var-int
-            final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-            final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+        // Index of the var-int containing the complete packet length
+        final int packetLengthIndex = Utils.writeEmpty3BytesVarInt(buffer);
+        final int startIndex = buffer.writerIndex(); // Index where the content starts (after length)
+        if (compressionThreshold > 0) {
+            // Index of the uncompressed payload length
+            final int dataLengthIndex = Utils.writeEmpty3BytesVarInt(buffer);
 
             // Write packet
             final int contentIndex = buffer.writerIndex();
             writePacket(buffer, serverPacket);
-            final int afterIndex = buffer.writerIndex();
-            final int packetSize = (afterIndex - dataLengthIndex) - Utils.VARINT_HEADER_SIZE;
+            final int packetSize = buffer.writerIndex() - contentIndex;
 
-            if (packetSize >= compressionThreshold) {
-                // Packet large enough
-
-                final VelocityCompressor compressor = COMPRESSOR.get();
-                // Compress id + payload
+            final int uncompressedLength = packetSize >= compressionThreshold ? packetSize : 0;
+            Utils.write3BytesVarInt(buffer, dataLengthIndex, uncompressedLength);
+            if (uncompressedLength > 0) {
+                // Packet large enough, compress
                 ByteBuf uncompressedCopy = buffer.copy(contentIndex, packetSize);
                 buffer.writerIndex(contentIndex);
-                compress(compressor, uncompressedCopy, buffer);
+                compress(COMPRESSOR.get(), uncompressedCopy, buffer);
                 uncompressedCopy.release();
-
-                final int totalPacketLength = buffer.writerIndex() - contentIndex + Utils.VARINT_HEADER_SIZE;
-
-                // Update header values
-                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
-                Utils.overrideVarIntHeader(buffer, dataLengthIndex, packetSize);
-            } else {
-                // Packet too small, just override header values
-                final int totalPacketLength = packetSize + Utils.VARINT_HEADER_SIZE;
-                Utils.overrideVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
-                Utils.overrideVarIntHeader(buffer, dataLengthIndex, 0); // -> Uncompressed
             }
         } else {
-            // No compression
-
-            // Write dummy var-int
-            final int index = Utils.writeEmptyVarIntHeader(buffer);
-
-            // Write packet id + payload
+            // No compression, write packet id + payload
             writePacket(buffer, serverPacket);
-
-            // Rewrite dummy var-int to packet length
-            final int afterIndex = buffer.writerIndex();
-            final int packetSize = (afterIndex - index) - Utils.VARINT_HEADER_SIZE;
-            Utils.overrideVarIntHeader(buffer, index, packetSize);
         }
+        // Total length
+        final int totalPacketLength = buffer.writerIndex() - startIndex;
+        Utils.write3BytesVarInt(buffer, packetLengthIndex, totalPacketLength);
     }
 
     /**
@@ -282,14 +251,10 @@ public final class PacketUtils {
      * <p>
      * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
      * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
-     *
-     * @param serverPacket the server packet to write
      */
-    @NotNull
-    public static ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket, boolean directBuffer) {
-        ByteBuf packetBuf = directBuffer ? BufUtils.getBuffer(true) : Unpooled.buffer();
+    public static @NotNull ByteBuf createFramedPacket(@NotNull ServerPacket serverPacket) {
+        ByteBuf packetBuf = BufUtils.direct();
         writeFramedPacket(packetBuf, serverPacket);
         return packetBuf;
     }
-
 }

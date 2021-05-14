@@ -4,8 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.LockSupport;
@@ -50,10 +48,7 @@ public class TickThread extends Thread {
         private volatile boolean stop;
         private TickThread tickThread;
 
-        private volatile boolean inTick;
-        private final AtomicReference<CountDownLatch> countDownLatch = new AtomicReference<>();
-
-        private final Queue<Runnable> queue = new ConcurrentLinkedQueue<>();
+        private final AtomicReference<TickContext> tickContext = new AtomicReference<>();
 
         @Override
         public void run() {
@@ -62,41 +57,37 @@ public class TickThread extends Thread {
                 LockSupport.park(tickThread);
                 if (stop)
                     break;
-                CountDownLatch localCountDownLatch = this.countDownLatch.get();
-
-                // The latch is necessary to control the tick rates
-                if (localCountDownLatch == null) {
+                TickContext localContext = this.tickContext.get();
+                // The context is necessary to control the tick rates
+                if (localContext == null) {
                     continue;
                 }
 
-                this.inTick = true;
+                // Execute tick
+                localContext.runnable.run();
 
-                // Execute all pending runnable
-                Runnable runnable;
-                while ((runnable = queue.poll()) != null) {
-                    runnable.run();
-                }
-
-                localCountDownLatch.countDown();
-                this.countDownLatch.compareAndSet(localCountDownLatch, null);
-
-                // Wait for the next notify (game tick)
-                this.inTick = false;
+                localContext.countDownLatch.countDown();
+                this.tickContext.compareAndSet(localContext, null);
             }
         }
 
-        public void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
-            this.countDownLatch.set(countDownLatch);
-            this.queue.add(runnable);
+        protected void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
+            this.tickContext.set(new TickContext(countDownLatch, runnable));
             LockSupport.unpark(tickThread);
-        }
-
-        public boolean isInTick() {
-            return inTick;
         }
 
         private void setLinkedThread(TickThread tickThread) {
             this.tickThread = tickThread;
+        }
+    }
+
+    private static class TickContext {
+        private final CountDownLatch countDownLatch;
+        private final Runnable runnable;
+
+        private TickContext(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
+            this.countDownLatch = countDownLatch;
+            this.runnable = runnable;
         }
     }
 

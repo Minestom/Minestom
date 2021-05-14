@@ -66,6 +66,7 @@ import net.minestom.server.utils.*;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -89,12 +90,13 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
     private String username;
+    private Component usernameComponent;
     protected final PlayerConnection playerConnection;
     // All the entities that this player can see
     protected final Set<Entity> viewableEntities = ConcurrentHashMap.newKeySet();
@@ -148,9 +150,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     // Only used if multi player breaking is disabled, contains only this player
     private final Set<Player> targetBreakers = Collections.singleton(this);
 
-    // Position synchronization with viewers
-    private final Position lastSyncedPlayerPosition;
-
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
 
@@ -182,12 +181,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
         this.username = username;
+        this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
         setRespawnPoint(new Position(0, 0, 0));
-        this.lastSyncedPlayerPosition = new Position();
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -421,50 +420,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Tick event
         callEvent(PlayerTickEvent.class, playerTickEvent);
-
-        // Multiplayer sync
-        if (!viewers.isEmpty()) {
-            final boolean positionChanged = !position.isSimilar(lastSyncedPlayerPosition);
-            final boolean viewChanged = !position.hasSimilarView(lastSyncedPlayerPosition);
-
-            if (positionChanged || viewChanged) {
-                // Player moved since last time
-
-                ServerPacket updatePacket;
-                ServerPacket optionalUpdatePacket = null;
-                if (positionChanged && viewChanged) {
-                    updatePacket = EntityPositionAndRotationPacket.getPacket(getEntityId(),
-                            position, lastSyncedPlayerPosition, onGround);
-                } else if (positionChanged) {
-                    updatePacket = EntityPositionPacket.getPacket(getEntityId(),
-                            position, lastSyncedPlayerPosition, onGround);
-                } else {
-                    // View changed
-                    updatePacket = EntityRotationPacket.getPacket(getEntityId(),
-                            position.getYaw(), position.getPitch(), onGround);
-                }
-
-                if (viewChanged) {
-                    // Yaw from the rotation packet seems to be ignored, which is why this is required
-                    EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-                    entityHeadLookPacket.entityId = getEntityId();
-                    entityHeadLookPacket.yaw = position.getYaw();
-                    optionalUpdatePacket = entityHeadLookPacket;
-                }
-
-                // Send the update packet
-                if (optionalUpdatePacket != null) {
-                    sendPacketsToViewers(updatePacket, optionalUpdatePacket);
-                } else {
-                    sendPacketToViewers(updatePacket);
-                }
-
-            }
-
-            // Update sync data
-            lastSyncedPlayerPosition.set(position);
-        }
-
     }
 
     @Override
@@ -653,19 +608,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 sendDimension(instanceDimensionType);
             }
 
-            // Load all the required chunks
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, getChunkRange());
+            // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
+            final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback = chunk -> {
-                // This is the last chunk to be loaded , spawn player
-                spawnPlayer(instance, spawnPosition, firstSpawn, true, dimensionChange);
-            };
+            final ChunkCallback endCallback =
+                    chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
 
-            // Chunk 0;0 always needs to be loaded
-            instance.loadChunk(0, 0, chunk ->
-                    // Load all the required chunks
-                    ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback));
-
+            ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
@@ -694,23 +643,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
+     * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
+     *                      chunks
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
-                             boolean firstSpawn, boolean updateChunks, boolean dimensionChange) {
-        // Clear previous instance elements
+                             boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
+            // Player instance changed, clear current viewable collections
             this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
         super.setInstance(instance, spawnPosition);
-        this.lastSyncedPlayerPosition.set(position);
 
-        if (!position.isSimilar(spawnPosition) && !firstSpawn) {
-            // Player changed instance at a different position
-            teleport(spawnPosition);
-        } else if (updateChunks) {
-            // Send newly visible chunks to player once spawned in the instance
+        if (updateChunks) {
             refreshVisibleChunks();
         }
 
@@ -1330,12 +1276,26 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Gets the player username.
+     * Gets the player's name as a component. This will either return the display name
+     * (if set) or a component holding the username.
      *
-     * @return the player username
+     * @return the name
      */
-    @NotNull
-    public String getUsername() {
+    @Override
+    public @NotNull Component getName() {
+        if (this.displayName != null) {
+            return this.displayName;
+        } else {
+            return this.usernameComponent;
+        }
+    }
+
+    /**
+     * Gets the player's username.
+     *
+     * @return the player's username
+     */
+    public @NotNull String getUsername() {
         return username;
     }
 
@@ -1347,6 +1307,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setUsernameField(@NotNull String username) {
         this.username = username;
+        this.usernameComponent = Component.text(username);
     }
 
     private void sendChangeGameStatePacket(@NotNull ChangeGameStatePacket.Reason reason, float value) {
@@ -1470,7 +1431,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-        getInventory().update();
 
         sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
 
@@ -1479,6 +1439,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendPacketToViewersAndSelf(getMetadataPacket());
         sendPacketToViewersAndSelf(getPropertiesPacket());
         sendPacketToViewersAndSelf(getEquipmentsPacket());
+
+        getInventory().update();
 
         {
             // Send new chunks
@@ -1585,26 +1547,24 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
+        // Update client render distance
+        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
+
         // Unload old chunks
         for (int index : oldChunks) {
             final long chunkIndex = lastVisibleChunks[index];
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            // TODO prevent the client from getting lag spikes when re-loading large chunks
-            // Probably by having a distinction between visible and loaded (cache) chunks
-            /*UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
+            final UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);*/
+            playerConnection.sendPacket(unloadChunkPacket);
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null)
                 chunk.removeViewer(this);
         }
-
-        // Update client render distance
-        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
 
         // Load new chunks
         for (int index : newChunks) {
@@ -1640,18 +1600,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
 
         // Manage already viewable entities
-        this.viewableEntities.forEach(entity -> {
-            final double distance = entity.getDistance(this);
-            if (distance > maximalDistance) {
-                // Entity shouldn't be viewable anymore
-                if (isAutoViewable()) {
-                    entity.removeViewer(this);
-                }
-                if (entity instanceof Player && entity.isAutoViewable()) {
-                    removeViewer((Player) entity);
-                }
-            }
-        });
+        this.viewableEntities.stream()
+                .filter(entity -> entity.getDistance(this) > maximalDistance)
+                .forEach(entity -> {
+                    // Entity shouldn't be viewable anymore
+                    if (isAutoViewable()) {
+                        entity.removeViewer(this);
+                    }
+                    if (entity instanceof Player && entity.isAutoViewable()) {
+                        removeViewer((Player) entity);
+                    }
+                });
 
         // Manage entities in unchecked chunks
         EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
@@ -2006,6 +1965,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         updateViewPositionPacket.chunkX = chunkX;
         updateViewPositionPacket.chunkZ = chunkZ;
         playerConnection.sendPacket(updateViewPositionPacket);
+    }
+
+    public int getNextTeleportId() {
+        return teleportId.getAndIncrement();
     }
 
     public int getLastSentTeleportId() {
@@ -2398,17 +2361,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * based on which one is the lowest
      */
     public int getChunkRange() {
-        final int playerRange = getSettings().viewDistance;
-        if (playerRange < 1) {
-            // Didn't receive settings packet yet (is the case on login)
-            // In this case we send an arbitrary number of chunks
-            // Will be updated in PlayerSettings#refresh.
-            // Non-compliant clients might also be stuck with this view
-            return 7;
-        } else {
-            final int serverRange = MinecraftServer.getChunkViewDistance();
-            return Math.min(playerRange, serverRange);
-        }
+        return Math.min(getSettings().viewDistance, MinecraftServer.getChunkViewDistance());
     }
 
     /**
@@ -2639,6 +2592,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         private boolean chatColors;
         private byte displayedSkinParts;
         private MainHand mainHand;
+
+        public PlayerSettings() {
+            viewDistance = 2;
+        }
 
         /**
          * The player game language.

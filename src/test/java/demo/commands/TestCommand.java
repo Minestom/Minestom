@@ -11,7 +11,7 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        addSyntax((sender, context) -> System.out.println("executed"), "test get");
+        addSyntax((sender, context) -> System.out.println("executed"), "test Get integer<number>");
     }
 
     private void usage(CommandSender sender, CommandContext context) {

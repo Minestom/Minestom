@@ -84,13 +84,12 @@ public final class MinecraftServer {
     public static final int THREAD_COUNT_SCHEDULER = getThreadCount("minestom.scheduler-thread-count", getHalfAvailableProcessors());
 
     public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
-    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
+    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = getThreadCount("minestom.save-thread-count", 2);
 
     // Config
     // Can be modified at performance cost when increased
-    public static final int TICK_PER_SECOND = 20;
-    private static final int MS_TO_SEC = 1000;
-    public static final int TICK_MS = MS_TO_SEC / TICK_PER_SECOND;
+    public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
+    public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // Network monitoring
     private static int rateLimit = 300;

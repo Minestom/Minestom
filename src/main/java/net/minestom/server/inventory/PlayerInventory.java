@@ -272,38 +272,40 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
 
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertPlayerInventorySlot(slot, OFFSET));
+        final ItemStack clicked = getItemStack(convertedSlot);
 
-        final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, convertedSlot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
-        setItemStack(slot, OFFSET, clickResult.getClicked());
+        setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         if (!clickResult.isCancel())
-            callClickEvent(player, null, slot, ClickType.LEFT_CLICK, clicked, cursor);
+            callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
 
         return !clickResult.isCancel();
     }
 
     @Override
     public boolean rightClick(@NotNull Player player, int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack clicked = getItemStack(convertedSlot);
 
-        final InventoryClickResult clickResult = clickProcessor.rightClick(null, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.rightClick(null, player, convertedSlot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
-        setItemStack(slot, OFFSET, clickResult.getClicked());
+        setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         if (!clickResult.isCancel())
-            callClickEvent(player, null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
+            callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
 
         return !clickResult.isCancel();
     }

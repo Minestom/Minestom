@@ -7,20 +7,21 @@ import demo.commands.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.extras.lan.OpenToLAN;
+import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
+import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
-
-import java.util.UUID;
-
 
 public class Main {
 
@@ -66,37 +67,32 @@ public class Main {
 
         MinecraftServer.getGlobalEventHandler().addEventCallback(ServerListPingEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
-            responseData.setMaxPlayer(0);
-            responseData.setOnline(MinecraftServer.getConnectionManager().getOnlinePlayers().size());
-            responseData.addPlayer("The first line is separated from the others", UUID.randomUUID());
-            responseData.addPlayer("Could be a name, or a message", UUID.randomUUID());
-            responseData.addPlayer("IP test: " + event.getConnection().getRemoteAddress().toString(), UUID.randomUUID());
-            responseData.addPlayer("Use " + (char)0x00a7 + "7section characters", UUID.randomUUID());
-            responseData.addPlayer((char)0x00a7 + "7" + (char)0x00a7 + "ofor formatting" + (char)0x00a7 + "r: (" + (char)0x00a7 + "6char" + (char)0x00a7 + "r)" + (char)0x00a7 + "90x00a7", UUID.randomUUID());
+            responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
+            responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
 
-            responseData.addPlayer("Connection Info:");
-            String ip = event.getConnection().getServerAddress();
-            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7IP: " + (char)0x00a7 + "e" + (ip != null ? ip : "???"));
-            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7PORT: " + (char)0x00a7 + "e" + event.getConnection().getServerPort());
-            responseData.addPlayer((char)0x00a7 + "8-  " + (char)0x00a7 +"7VERSION: " + (char)0x00a7 + "e" + event.getConnection().getProtocolVersion());
+            // on modern versions, you can obtain the player connection directly from the event
+            if (event.getConnection() != null) {
+                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
 
-            // Check if client supports RGB color
-            if (event.getConnection().getProtocolVersion() >= 713) { // Snapshot 20w17a
-                responseData.setDescription(Component.text("You can do ")
-                        .append(Component.text("RGB", TextColor.color(0x66b3ff)))
-                        .append(Component.text(" color here")));
-            } else {
-                responseData.setDescription(Component.text("You can do ")
-                        .append(Component.text("RGB", NamedTextColor.nearestTo(TextColor.color(0x66b3ff))))
-                        .append(Component.text(" color here,"))
-                        .append(Component.newline())
-                        .append(Component.text("if you are on 1.16 or up"))
-                );
+                responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
+                String ip = event.getConnection().getServerAddress();
+                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                        .append(Component.text(" IP: ", NamedTextColor.GRAY))
+                        .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
+                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                        .append(Component.text(" PORT: ", NamedTextColor.GRAY))
+                        .append(Component.text(event.getConnection().getServerPort()))));
+                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
+                        .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
+                        .append(Component.text(event.getConnection().getProtocolVersion()))));
             }
 
+            // components will be converted the legacy section sign format so they are displayed in the client
+            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
 
-
-
+            // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
+            // on legacy versions, colors will be converted to the section format so it'll work there too
+            responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
         });
 
         PlayerInit.init();
@@ -108,8 +104,10 @@ public class Main {
 
         //MojangAuth.init();
 
+        // useful for testing - we don't need to worry about event calls so just set this to a long time
+        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(new UpdateOption(1, TimeUnit.DAY)));
+
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
-
 }
