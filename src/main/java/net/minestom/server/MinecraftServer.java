@@ -826,6 +826,6 @@ public final class MinecraftServer {
     }
 
     private static int getThreadCount(@NotNull String property, int count) {
-        return Integer.getInteger(property, Math.min(1, count));
+        return Integer.getInteger(property, Math.max(1, count));
     }
 }
