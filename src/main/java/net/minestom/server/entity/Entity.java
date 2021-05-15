@@ -268,7 +268,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         final ChunkCallback endCallback = (chunk) -> {
             refreshPosition(teleportPosition);
 
-            synchronizePosition();
+            synchronizePosition(true);
 
             OptionalCallback.execute(callback);
         };
@@ -594,7 +594,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
                 // Synchronization and packets...
                 if (!isNettyClient) {
-                    synchronizePosition();
+                    synchronizePosition(true);
                 }
                 // Verify if velocity packet has to be sent
                 if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
@@ -665,7 +665,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
-            synchronizePosition();
+            synchronizePosition(false);
         }
 
         if (shouldRemove() && !MinecraftServer.isStopping()) {
@@ -680,7 +680,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *     The following packets are sent to viewers (check are performed in this order):
      *     <ol>
      *         <li>{@link EntityTeleportPacket} if {@code distanceX > 8 || distanceY > 8 || distanceZ > 8}
-     *          <i>(performed using {@link #synchronizePosition()})</i></li>
+     *          <i>(performed using {@link #synchronizePosition(boolean)})</i></li>
      *         <li>{@link EntityPositionAndRotationPacket} if {@code positionChange && viewChange}</li>
      *         <li>{@link EntityPositionPacket} if {@code positionChange}</li>
      *         <li>{@link EntityRotationPacket} and {@link EntityHeadLookPacket} if {@code viewChange}</li>
@@ -698,7 +698,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         final boolean positionChange = (distanceX+distanceY+distanceZ) > 0;
 
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            synchronizePosition();
+            synchronizePosition(true);
             // #synchronizePosition sets sync fields, it's safe to return
             return;
         } else if (positionChange && viewChange) {
@@ -1583,9 +1583,11 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * {@link EntityTeleportPacket} to viewers, in case of a player this is
      * overridden in order to send an additional {@link PlayerPositionAndLookPacket}
      * to itself.
+     * @param includeSelf if {@code true} and this is a {@link Player} an additional {@link PlayerPositionAndLookPacket}
+     *                    will be sent to the player itself
      */
     @ApiStatus.Internal
-    protected void synchronizePosition() {
+    protected void synchronizePosition(boolean includeSelf) {
         final Position pos = position.clone();
         final EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
         entityTeleportPacket.entityId = getEntityId();
