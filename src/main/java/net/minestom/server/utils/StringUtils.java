@@ -25,8 +25,8 @@ public class StringUtils {
      * Applies the Jaro-Winkler distance algorithm to the given strings, providing information about the
      * similarity of them.
      *
-     * @param s1 The first string that gets compared. May be <code>null</node> or empty.
-     * @param s2 The second string that gets compared. May be <code>null</node> or empty.
+     * @param s1 The first string that gets compared. May be null or empty.
+     * @param s2 The second string that gets compared. May be null or empty.
      * @return The Jaro-Winkler score (between 0.0 and 1.0), with a higher value indicating larger similarity.
      * @author Thomas Trojer <thomas@trojer.net>
      */
