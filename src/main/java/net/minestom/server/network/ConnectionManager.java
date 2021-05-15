@@ -20,10 +20,10 @@ import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
-import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -83,7 +84,6 @@ public final class ConnectionManager {
 
     /**
      * Finds the closest player matching a given username.
-     * <p>
      *
      * @param username the player username (can be partial)
      * @return the closest match, null if no players are online
@@ -91,18 +91,17 @@ public final class ConnectionManager {
     public @Nullable Player findPlayer(@NotNull String username) {
         Player exact = getPlayer(username);
         if (exact != null) return exact;
+        final String username1 = username.toLowerCase(Locale.ROOT);
 
-        String lowercase = username.toLowerCase();
-        double currentDistance = 0;
-        for (Player player : getOnlinePlayers()) {
-            final JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
-            final double distance = jaroWinklerDistance.apply(lowercase, player.getUsername().toLowerCase());
-            if (distance > currentDistance) {
-                currentDistance = distance;
-                exact = player;
-            }
-        }
-        return exact;
+        Function<Player, Double> distanceFunction = player -> {
+            final String username2 = player.getUsername().toLowerCase(Locale.ROOT);
+            return StringUtils.jaroWinklerScore(username1, username2);
+        };
+        return getOnlinePlayers()
+                .stream()
+                .min(Comparator.comparingDouble(distanceFunction::apply))
+                .filter(player -> distanceFunction.apply(player) > 0)
+                .orElse(null);
     }
 
     /**

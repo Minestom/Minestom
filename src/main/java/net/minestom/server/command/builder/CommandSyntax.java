@@ -3,7 +3,7 @@ package net.minestom.server.command.builder;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.entity.Player;
-import org.apache.commons.lang3.StringUtils;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

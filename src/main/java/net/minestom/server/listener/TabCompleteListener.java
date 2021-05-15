@@ -11,7 +11,7 @@ import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientTabCompletePacket;
 import net.minestom.server.network.packet.server.play.TabCompletePacket;
-import org.apache.commons.lang3.StringUtils;
+import net.minestom.server.utils.StringUtils;
 
 import java.util.Arrays;
 
@@ -48,7 +48,7 @@ public class TabCompleteListener {
             final int inputLength = input.length();
 
             final int commandLength = Arrays.stream(split).map(String::length).reduce(0, Integer::sum) +
-                    StringUtils.countMatches(args, StringUtils.SPACE);
+                    StringUtils.countMatches(args, StringUtils.SPACE_CHAR);
             final int trailingSpaces = !input.isEmpty() ? text.length() - text.trim().length() : 0;
 
             final int start = commandLength - inputLength + 1 - trailingSpaces;
