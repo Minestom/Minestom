@@ -595,6 +595,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    public boolean isFlyingWithElytra() {
+        return this.entityMeta.isFlyingWithElytra();
+    }
+
+    public void setFlyingWithElytra(boolean isFlying) {
+        this.entityMeta.setFlyingWithElytra(isFlying);
+    }
+    
     /**
      * Used to change the {@code isDead} internal field.
      *
