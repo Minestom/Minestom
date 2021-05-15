@@ -160,7 +160,6 @@ dependencies {
 
     // Guava 21.0+ required for Mixin, but Authlib imports 17.0
     api 'com.google.guava:guava:30.1-jre'
-    api 'com.mojang:authlib:1.5.21'
 
     // Code modification
     api "org.ow2.asm:asm:${asmVersion}"
