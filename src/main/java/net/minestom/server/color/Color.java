@@ -2,7 +2,8 @@ package net.minestom.server.color;
 
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.chat.ChatColor;
-import org.apache.commons.lang3.Validate;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -38,17 +39,15 @@ public class Color implements RGBLike {
     /**
      * Creates a color from red, green, and blue components.
      *
-     * @param red the red component
+     * @param red   the red component
      * @param green the green component
-     * @param blue the blue component
-     *
+     * @param blue  the blue component
      * @throws IllegalArgumentException if any component value is not between 0-255 (inclusive)
      */
     public Color(int red, int green, int blue) {
-        Validate.isTrue(red >= 0 && red <= 255, "Red is not between 0-255: ", red);
-        Validate.isTrue(green >= 0 && green <= 255, "Green is not between 0-255: ", green);
-        Validate.isTrue(blue >= 0 && blue <= 255, "Blue is not between 0-255: ", blue);
-
+        Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
+        Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
+        Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
         this.red = red;
         this.green = green;
         this.blue = blue;
@@ -69,7 +68,7 @@ public class Color implements RGBLike {
      * @param red the red component, from 0 to 255
      */
     public void setRed(int red) {
-        Validate.isTrue(red >= 0 && red <= 255, "Red is not between 0-255: ", red);
+        Check.argCondition(!MathUtils.isBetween(red, 0, 255), "Red is not between 0-255: {0}", red);
         this.red = red;
     }
 
@@ -88,7 +87,7 @@ public class Color implements RGBLike {
      * @param green the red component, from 0 to 255
      */
     public void setGreen(int green) {
-        Validate.isTrue(green >= 0 && green <= 255, "Green is not between 0-255: ", green);
+        Check.argCondition(!MathUtils.isBetween(green, 0, 255), "Green is not between 0-255: {0}", green);
         this.green = green;
     }
 
@@ -107,7 +106,7 @@ public class Color implements RGBLike {
      * @param blue the red component, from 0 to 255
      */
     public void setBlue(int blue) {
-        Validate.isTrue(blue >= 0 && blue <= 255, "Blue is not between 0-255: ", blue);
+        Check.argCondition(!MathUtils.isBetween(blue, 0, 255), "Blue is not between 0-255: {0}", blue);
         this.blue = blue;
     }
 
@@ -132,8 +131,6 @@ public class Color implements RGBLike {
      * @param colors the colors
      */
     public void mixWith(@NotNull RGBLike... colors) {
-        Validate.noNullElements(colors, "Colors cannot be null");
-
         // store the current highest component
         int max = Math.max(Math.max(this.red, this.green), this.blue);
 

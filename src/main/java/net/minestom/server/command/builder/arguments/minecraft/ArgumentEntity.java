@@ -10,7 +10,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
-import org.apache.commons.lang3.StringUtils;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;

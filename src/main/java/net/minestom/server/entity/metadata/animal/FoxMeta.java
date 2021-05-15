@@ -3,8 +3,8 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.UUID;
 
 public class FoxMeta extends AnimalMeta {

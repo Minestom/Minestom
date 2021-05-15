@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import org.apache.commons.lang3.Validate;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -32,13 +32,13 @@ public class TitlePacket implements ComponentHoldingServerPacket {
     /**
      * Constructs a new title packet from an action that can take a component argument.
      *
-     * @param action the action
+     * @param action  the action
      * @param payload the payload
      * @throws IllegalArgumentException if the action is not {@link Action#SET_TITLE},
-     * {@link Action#SET_SUBTITLE} or {@link Action#SET_ACTION_BAR}
+     *                                  {@link Action#SET_SUBTITLE} or {@link Action#SET_ACTION_BAR}
      */
     public TitlePacket(@NotNull Action action, @NotNull Component payload) {
-        Validate.isTrue(action == SET_TITLE || action == SET_SUBTITLE || action == SET_ACTION_BAR, "Invalid action type");
+        Check.argCondition(action != SET_TITLE && action != SET_SUBTITLE && action != SET_ACTION_BAR, "Invalid action type");
         this.action = action;
         this.payload = payload;
     }
@@ -48,7 +48,7 @@ public class TitlePacket implements ComponentHoldingServerPacket {
      *
      * @param action the action
      * @throws IllegalArgumentException if the action is not {@link Action#RESET},
-     * or {@link Action#HIDE}
+     *                                  or {@link Action#HIDE}
      */
     public TitlePacket(@NotNull Action action) {
         this.action = action;
@@ -57,8 +57,8 @@ public class TitlePacket implements ComponentHoldingServerPacket {
     /**
      * Constructs a new title packet for {@link Action#SET_TIMES_AND_DISPLAY}.
      *
-     * @param fadeIn the fade in time
-     * @param stay the stay time
+     * @param fadeIn  the fade in time
+     * @param stay    the stay time
      * @param fadeOut the fade out time
      */
     public TitlePacket(int fadeIn, int stay, int fadeOut) {

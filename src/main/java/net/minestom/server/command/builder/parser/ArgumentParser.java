@@ -11,7 +11,7 @@ import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBl
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import org.apache.commons.lang3.StringUtils;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

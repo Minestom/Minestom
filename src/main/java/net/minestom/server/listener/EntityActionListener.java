@@ -1,10 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.player.PlayerStartSneakingEvent;
-import net.minestom.server.event.player.PlayerStartSprintingEvent;
-import net.minestom.server.event.player.PlayerStopSneakingEvent;
-import net.minestom.server.event.player.PlayerStopSprintingEvent;
+import net.minestom.server.event.player.*;
 import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
 
 public class EntityActionListener {
@@ -23,6 +20,9 @@ public class EntityActionListener {
                 break;
             case STOP_SPRINTING:
                 EntityActionListener.setSprinting(player, false);
+                break;
+            case START_FLYING_ELYTRA:
+                EntityActionListener.startFlyingElytra(player);
                 break;
             // TODO do remaining actions
         }
@@ -54,5 +54,10 @@ public class EntityActionListener {
                 player.callEvent(PlayerStopSprintingEvent.class, new PlayerStopSprintingEvent(player));
             }
         }
+    }
+
+    private static void startFlyingElytra(Player player) {
+        player.setFlyingWithElytra(true);
+        player.callEvent(PlayerStartFlyingWithElytraEvent.class, new PlayerStartFlyingWithElytraEvent(player));
     }
 }

@@ -10,7 +10,7 @@ import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.command.builder.parser.CommandSuggestionHolder;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
-import org.apache.commons.lang3.StringUtils;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
