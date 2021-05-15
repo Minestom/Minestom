@@ -44,10 +44,16 @@ public class CommandContext {
     }
 
     public <T> T get(@NotNull String identifier) {
-        return (T) args.computeIfAbsent(identifier, s -> {
-            throw new NullPointerException(
-                    "The argument with the id '" + identifier + "' has no value assigned, be sure to check your arguments id, your syntax, and that you do not change the argument id dynamically.");
-        });
+        return (T) args.get(identifier);
+    }
+
+    public <T> T getOrDefault(@NotNull Argument<T> argument, T defaultValue) {
+        return getOrDefault(argument.getId(), defaultValue);
+    }
+
+    public <T> T getOrDefault(@NotNull String identifier, T defaultValue) {
+        T value;
+        return (value = get(identifier)) != null ? value : defaultValue;
     }
 
     public boolean has(@NotNull Argument<?> argument) {
