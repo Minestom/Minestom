@@ -33,7 +33,6 @@ switch (OperatingSystem.current()) {
 allprojects {
     repositories {
         mavenCentral()
-        maven { url 'https://libraries.minecraft.net' }
         maven { url 'https://jitpack.io' }
         maven {
             name 'sponge'
@@ -158,7 +157,7 @@ dependencies {
     // https://search.maven.org/artifact/org.fusesource.jansi/jansi/2.3.2/jar
     implementation 'org.fusesource.jansi:jansi:2.3.2'
 
-    // Guava 21.0+ required for Mixin, but Authlib imports 17.0
+    // Guava 21.0+ required for Mixin
     api 'com.google.guava:guava:30.1-jre'
 
     // Code modification

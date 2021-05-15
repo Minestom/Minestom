@@ -65,7 +65,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                     InputStream gameProfileStream = new URL(
                             "https://sessionserver.mojang.com/session/minecraft/hasJoined?"
                                     + "username=" + loginUsername + "&"
-                            + "serverId=" + serverId
+                                    + "serverId=" + serverId
                             // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
                     ).openStream();
 
@@ -95,11 +95,11 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
         ByteArrayData.encodeByteArray(writer, verifyToken);
     }
 
-    public SecretKey getSecretKey() {
+    private SecretKey getSecretKey() {
         return MojangCrypt.decryptByteToSecretKey(MojangAuth.getKeyPair().getPrivate(), sharedSecret);
     }
 
-    public byte[] getNonce() {
+    private byte[] getNonce() {
         return MojangAuth.getKeyPair().getPrivate() == null ?
                 this.verifyToken : MojangCrypt.decryptUsingKey(MojangAuth.getKeyPair().getPrivate(), this.verifyToken);
     }
