@@ -28,7 +28,7 @@ public class StringUtils {
      * @param s1 The first string that gets compared. May be null or empty.
      * @param s2 The second string that gets compared. May be null or empty.
      * @return The Jaro-Winkler score (between 0.0 and 1.0), with a higher value indicating larger similarity.
-     * @author Thomas Trojer <thomas@trojer.net>
+     * @author Thomas Trojer thomas@trojer.net
      */
     public static double jaroWinklerScore(final String s1, final String s2) {
         // lowest score on empty strings
