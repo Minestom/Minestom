@@ -661,7 +661,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
-            synchronizePosition(); // So the player doesn't get stuck
+            synchronizePosition(true); // So the player doesn't get stuck
             this.inventory.update();
         }
 
@@ -1984,18 +1984,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * @see Entity#synchronizePosition()
+     * @see Entity#synchronizePosition(boolean)
+     * @param includeSelf
      */
     @Override
     @ApiStatus.Internal
-    protected void synchronizePosition() {
+    protected void synchronizePosition(boolean includeSelf) {
         final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
         positionAndLookPacket.position = position.clone();
         positionAndLookPacket.flags = 0x00;
         positionAndLookPacket.teleportId = teleportId.incrementAndGet();
         playerConnection.sendPacket(positionAndLookPacket);
 
-        super.synchronizePosition();
+        super.synchronizePosition(includeSelf);
     }
 
     /**
