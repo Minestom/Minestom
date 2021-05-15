@@ -108,22 +108,27 @@ public interface EventHandler extends IExtensionObserver {
      */
     default <E extends Event> void callEvent(@NotNull Class<E> eventClass, @NotNull E event) {
 
-        // Global listeners
-        if (!(this instanceof GlobalEventHandler)) {
-            final GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
-            runEvent(globalEventHandler.getEventCallbacks(eventClass), event);
-        }
+        try {
 
-        // Local listeners
-        final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
-        runEvent(eventCallbacks, event);
-
-        // Call the same event for the current entity instance
-        if (this instanceof Entity) {
-            final Instance instance = ((Entity) this).getInstance();
-            if (instance != null) {
-                runEvent(instance.getEventCallbacks(eventClass), event);
+            // Global listeners
+            if (!(this instanceof GlobalEventHandler)) {
+                final GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
+                runEvent(globalEventHandler.getEventCallbacks(eventClass), event);
             }
+
+            // Local listeners
+            final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
+            runEvent(eventCallbacks, event);
+
+            // Call the same event for the current entity instance
+            if (this instanceof Entity) {
+                final Instance instance = ((Entity) this).getInstance();
+                if (instance != null) {
+                    runEvent(instance.getEventCallbacks(eventClass), event);
+                }
+            }
+        } catch (Exception exception) {
+            MinecraftServer.getExceptionManager().handleException(exception);
         }
     }
 
