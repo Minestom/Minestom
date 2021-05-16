@@ -1,6 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
@@ -139,7 +140,7 @@ public interface EquipmentHandler {
      * @param slot the equipment to get the item from
      * @return the equipment {@link ItemStack}
      */
-    default @NotNull ItemStack getEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
+    default @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
         switch (slot) {
             case MAIN_HAND:
                 return getItemInMainHand();
@@ -157,7 +158,7 @@ public interface EquipmentHandler {
         throw new IllegalStateException("Something weird happened");
     }
 
-    default void setEquipment(@NotNull EntityEquipmentPacket.Slot slot, @NotNull ItemStack itemStack) {
+    default void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
         switch (slot) {
             case MAIN_HAND:
                 setItemInMainHand(itemStack);
@@ -187,7 +188,7 @@ public interface EquipmentHandler {
      *
      * @param slot the slot of the equipment
      */
-    default void syncEquipment(@NotNull EntityEquipmentPacket.Slot slot) {
+    default void syncEquipment(@NotNull EquipmentSlot slot) {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
@@ -196,7 +197,7 @@ public interface EquipmentHandler {
 
         EntityEquipmentPacket entityEquipmentPacket = new EntityEquipmentPacket();
         entityEquipmentPacket.entityId = entity.getEntityId();
-        entityEquipmentPacket.slots = new EntityEquipmentPacket.Slot[]{slot};
+        entityEquipmentPacket.slots = new EquipmentSlot[]{slot};
         entityEquipmentPacket.itemStacks = new ItemStack[]{itemStack};
 
         entity.sendPacketToViewers(entityEquipmentPacket);
@@ -213,12 +214,12 @@ public interface EquipmentHandler {
 
         final Entity entity = (Entity) this;
 
-        final EntityEquipmentPacket.Slot[] slots = EntityEquipmentPacket.Slot.values();
+        final EquipmentSlot[] slots = EquipmentSlot.values();
 
         List<ItemStack> itemStacks = new ArrayList<>(slots.length);
 
         // Fill items
-        for (EntityEquipmentPacket.Slot slot : slots) {
+        for (EquipmentSlot slot : slots) {
             final ItemStack equipment = getEquipment(slot);
             itemStacks.add(equipment);
         }

@@ -2,6 +2,7 @@ package readwritepackets;
 
 import com.google.common.reflect.ClassPath;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -67,7 +68,7 @@ public class ReadWritePackets {
                             // requires at least one slot and one item
                             EntityEquipmentPacket p = new EntityEquipmentPacket();
                             p.itemStacks = new ItemStack[]{ItemStack.AIR};
-                            p.slots = new EntityEquipmentPacket.Slot[]{EntityEquipmentPacket.Slot.MAIN_HAND};
+                            p.slots = new EquipmentSlot[]{EquipmentSlot.MAIN_HAND};
                             packet = (T) p;
                         } else {
                             packet = (T) constructor.newInstance();
