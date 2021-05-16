@@ -6,13 +6,13 @@ public class BlockProperty<T> {
 
     private final String name;
     private final T defaultValue;
-    private final T[] values;
+    private final T[] possibleValues;
 
     @SafeVarargs
-    public BlockProperty(@NotNull String name, @NotNull T defaultValue, @NotNull T... values) {
+    public BlockProperty(@NotNull String name, @NotNull T defaultValue, @NotNull T... possibleValues) {
         this.name = name;
         this.defaultValue = defaultValue;
-        this.values = values;
+        this.possibleValues = possibleValues;
     }
 
     public @NotNull String getName() {
@@ -23,7 +23,7 @@ public class BlockProperty<T> {
         return defaultValue;
     }
 
-    public @NotNull T[] getValues() {
-        return values;
+    public @NotNull T[] getPossibleValues() {
+        return possibleValues;
     }
 }
