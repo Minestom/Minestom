@@ -2,28 +2,25 @@ package net.minestom.server.instance.block.incubator;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BlockProperty<T> {
 
     private final String name;
-    private final T defaultValue;
-    private final T[] possibleValues;
+    private final List<T> possibleValues;
 
     @SafeVarargs
-    public BlockProperty(@NotNull String name, @NotNull T defaultValue, @NotNull T... possibleValues) {
+    public BlockProperty(@NotNull String name, @NotNull T... possibleValues) {
         this.name = name;
-        this.defaultValue = defaultValue;
-        this.possibleValues = possibleValues;
+        this.possibleValues = Arrays.asList(possibleValues);
     }
 
     public @NotNull String getName() {
         return name;
     }
 
-    public @NotNull T getDefaultValue() {
-        return defaultValue;
-    }
-
-    public @NotNull T[] getPossibleValues() {
+    public @NotNull List<T> getPossibleValues() {
         return possibleValues;
     }
 }

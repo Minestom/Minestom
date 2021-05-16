@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.incubator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 class BlockImpl implements BlockType {
@@ -27,7 +28,10 @@ class BlockImpl implements BlockType {
             return this;
         }
 
-        return null;
+        // Create property
+        LinkedHashMap<BlockProperty<?>, T> map = new LinkedHashMap<>();
+        properties.forEach(prop -> map.put(prop, prop.equals(property) ? value : null));
+        return new BlockStateImpl(this, map);
     }
 
     @Override
