@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block.incubator;
 
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ class BlockStateImpl implements BlockType {
     protected BlockStateImpl(BlockImpl original, LinkedHashMap<BlockProperty<?>, ?> properties) {
         this.original = original;
         this.properties = properties;
-        this.id = computeId(properties);
+        this.id = computeId(original.getProtocolId(), properties);
     }
 
     @Override
@@ -37,12 +38,16 @@ class BlockStateImpl implements BlockType {
     }
 
     @Override
+    public @NotNull NamespaceID getNamespaceId() {
+        return original.getNamespaceId();
+    }
+
+    @Override
     public short getProtocolId() {
         return id;
     }
 
-    private static short computeId(LinkedHashMap<BlockProperty<?>, ?> properties) {
-        short id = 0;
+    private static short computeId(short id, LinkedHashMap<BlockProperty<?>, ?> properties) {
         var reverse = reverse(properties);
         int factor = 1;
         for (var entry : reverse.entrySet()) {

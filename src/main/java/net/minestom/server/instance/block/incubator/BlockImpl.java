@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block.incubator;
 
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -8,10 +9,12 @@ import java.util.List;
 
 class BlockImpl implements BlockType {
 
+    private final NamespaceID namespaceID;
     private final short id;
     private final List<BlockProperty<?>> properties;
 
-    protected BlockImpl(short id, BlockProperty<?>... properties) {
+    protected BlockImpl(NamespaceID namespaceID, short id, BlockProperty<?>... properties) {
+        this.namespaceID = namespaceID;
         this.id = id;
         this.properties = Arrays.asList(properties);
     }
@@ -37,6 +40,11 @@ class BlockImpl implements BlockType {
     @Override
     public @NotNull BlockType getDefaultBlock() {
         return this;
+    }
+
+    @Override
+    public @NotNull NamespaceID getNamespaceId() {
+        return namespaceID;
     }
 
     @Override
