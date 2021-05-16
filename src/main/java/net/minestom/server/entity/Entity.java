@@ -552,7 +552,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
                 // Apply the position if changed
                 if (!finalVelocityPosition.isSimilar(position)) {
-                    refreshPosition(finalVelocityPosition);
+                    refreshPosition(finalVelocityPosition.getX(),
+                            finalVelocityPosition.getY(),
+                            finalVelocityPosition.getZ());
+                    sendPositionUpdate(true);
                 }
 
 
@@ -677,25 +680,25 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * Sends the correct packets to update the entity's position, should be called
      * every tick. The movement is checked inside the method!
      * <p>
-     *     The following packets are sent to viewers (check are performed in this order):
-     *     <ol>
-     *         <li>{@link EntityTeleportPacket} if {@code distanceX > 8 || distanceY > 8 || distanceZ > 8}
-     *          <i>(performed using {@link #synchronizePosition(boolean)})</i></li>
-     *         <li>{@link EntityPositionAndRotationPacket} if {@code positionChange && viewChange}</li>
-     *         <li>{@link EntityPositionPacket} if {@code positionChange}</li>
-     *         <li>{@link EntityRotationPacket} and {@link EntityHeadLookPacket} if {@code viewChange}</li>
-     *     </ol>
-     *     In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
-     *     is sent to self.
+     * The following packets are sent to viewers (check are performed in this order):
+     * <ol>
+     *     <li>{@link EntityTeleportPacket} if {@code distanceX > 8 || distanceY > 8 || distanceZ > 8}
+     *      <i>(performed using {@link #synchronizePosition(boolean)})</i></li>
+     *     <li>{@link EntityPositionAndRotationPacket} if {@code positionChange && viewChange}</li>
+     *     <li>{@link EntityPositionPacket} if {@code positionChange}</li>
+     *     <li>{@link EntityRotationPacket} and {@link EntityHeadLookPacket} if {@code viewChange}</li>
+     * </ol>
+     * In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
+     * is sent to self.
      *
      * @param clientSide {@code true} if the client triggered this action
      */
     protected void sendPositionUpdate(final boolean clientSide) {
         final boolean viewChange = !position.hasSimilarView(lastSyncedPosition);
-        final double distanceX = Math.abs(position.getX()-lastSyncedPosition.getX());
-        final double distanceY = Math.abs(position.getY()-lastSyncedPosition.getY());
-        final double distanceZ = Math.abs(position.getZ()-lastSyncedPosition.getZ());
-        final boolean positionChange = (distanceX+distanceY+distanceZ) > 0;
+        final double distanceX = Math.abs(position.getX() - lastSyncedPosition.getX());
+        final double distanceY = Math.abs(position.getY() - lastSyncedPosition.getY());
+        final double distanceZ = Math.abs(position.getZ() - lastSyncedPosition.getZ());
+        final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
 
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
             synchronizePosition(true);
@@ -742,7 +745,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
             playerPositionAndLookPacket.flags = 0b111;
             playerPositionAndLookPacket.position = position.clone().subtract(lastSyncedPosition.getX(), lastSyncedPosition.getY(), lastSyncedPosition.getZ());
-            playerPositionAndLookPacket.teleportId = ((Player)this).getNextTeleportId();
+            playerPositionAndLookPacket.teleportId = ((Player) this).getNextTeleportId();
             ((Player) this).getPlayerConnection().sendPacket(playerPositionAndLookPacket);
         }
 
@@ -1393,8 +1396,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     /**
      * Updates internal fields and sends updates
      *
-     * @param position      the new position
-     *
+     * @param position the new position
      * @see #refreshPosition(double, double, double)
      * @see #refreshView(float, float)
      * @see #sendPositionUpdate(boolean)
@@ -1583,6 +1585,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      * {@link EntityTeleportPacket} to viewers, in case of a player this is
      * overridden in order to send an additional {@link PlayerPositionAndLookPacket}
      * to itself.
+     *
      * @param includeSelf if {@code true} and this is a {@link Player} an additional {@link PlayerPositionAndLookPacket}
      *                    will be sent to the player itself
      */
