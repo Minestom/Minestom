@@ -11,11 +11,11 @@ public class BlockImpl implements BlockType {
 
     private final NamespaceID namespaceID;
     private final short minStateId, stateId;
-    private final List<BlockProperty> properties;
+    private final List<BlockProperty<?>> properties;
 
-    private LinkedHashMap<BlockProperty, Object> propertiesMap;
+    private LinkedHashMap<BlockProperty<?>, Object> propertiesMap;
 
-    private BlockImpl(NamespaceID namespaceID, short minStateId, short stateId, List<BlockProperty> properties) {
+    private BlockImpl(NamespaceID namespaceID, short minStateId, short stateId, List<BlockProperty<?>> properties) {
         this.namespaceID = namespaceID;
         this.minStateId = minStateId;
         this.stateId = stateId;
@@ -23,7 +23,7 @@ public class BlockImpl implements BlockType {
     }
 
     protected static BlockImpl create(NamespaceID namespaceID, short minStateId, short stateId,
-                                      List<BlockProperty> properties) {
+                                      List<BlockProperty<?>> properties) {
         var block = new BlockImpl(namespaceID, minStateId, stateId, properties);
         block.original = block;
         block.propertiesMap = computeMap(stateId, properties);
@@ -43,14 +43,14 @@ public class BlockImpl implements BlockType {
         }
 
         // Find properties map
-        LinkedHashMap<BlockProperty, Object> map;
+        LinkedHashMap<BlockProperty<?>, Object> map;
         if (propertiesMap == null) {
             // Represents the first id, create a new map
             map = new LinkedHashMap<>();
             properties.forEach(prop -> map.put(prop, prop.equals(property) ? value : null));
         } else {
             // Change property
-            map = (LinkedHashMap<BlockProperty, Object>) propertiesMap.clone();
+            map = (LinkedHashMap<BlockProperty<?>, Object>) propertiesMap.clone();
             map.put(property, value);
         }
 
@@ -75,8 +75,8 @@ public class BlockImpl implements BlockType {
         return stateId;
     }
 
-    private static short computeId(short id, List<BlockProperty> properties,
-                                   LinkedHashMap<BlockProperty, Object> propertiesMap) {
+    private static short computeId(short id, List<BlockProperty<?>> properties,
+                                   LinkedHashMap<BlockProperty<?>, Object> propertiesMap) {
         int[] factors = computeFactors(properties);
         int index = 0;
         for (var entry : propertiesMap.entrySet()) {
@@ -90,8 +90,8 @@ public class BlockImpl implements BlockType {
         return id;
     }
 
-    private static LinkedHashMap<BlockProperty, Object> computeMap(short deltaId, List<BlockProperty> properties) {
-        LinkedHashMap<BlockProperty, Object> result = new LinkedHashMap<>();
+    private static LinkedHashMap<BlockProperty<?>, Object> computeMap(short deltaId, List<BlockProperty<?>> properties) {
+        LinkedHashMap<BlockProperty<?>, Object> result = new LinkedHashMap<>();
         int[] factors = computeFactors(properties);
         int index = 0;
         for (var property : properties) {
@@ -105,7 +105,7 @@ public class BlockImpl implements BlockType {
     }
 
     static {
-        List<BlockProperty> list = new ArrayList<>();
+        List<BlockProperty<?>> list = new ArrayList<>();
         list.add(BlockProperties.BED_PART);
         list.add(BlockProperties.BED_PART);
         list.add(BlockProperties.CHEST_TYPE);
@@ -120,11 +120,11 @@ public class BlockImpl implements BlockType {
     public static void test() {
     }
 
-    public static int[] computeFactors(List<BlockProperty> properties) {
+    public static int[] computeFactors(List<BlockProperty<?>> properties) {
         final int size = properties.size();
         int[] result = new int[size];
         int factor = 1;
-        ListIterator<BlockProperty> li = properties.listIterator(properties.size());
+        ListIterator<BlockProperty<?>> li = properties.listIterator(properties.size());
         // Iterate in reverse.
         int i = size;
         while (li.hasPrevious()) {
