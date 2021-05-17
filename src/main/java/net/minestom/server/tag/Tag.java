@@ -1,5 +1,6 @@
 package net.minestom.server.tag;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -16,14 +17,15 @@ import java.util.function.Supplier;
  *
  * @param <T> the tag type
  */
-public final class Tag<T> {
+@ApiStatus.NonExtendable
+public class Tag<T> {
 
     private final String key;
     private final Function<NBTCompound, T> readFunction;
     private final BiConsumer<NBTCompound, T> writeConsumer;
     private volatile Supplier<T> defaultValue;
 
-    private Tag(@NotNull String key,
+    protected Tag(@NotNull String key,
                 @NotNull Function<NBTCompound, T> readFunction,
                 @NotNull BiConsumer<NBTCompound, T> writeConsumer) {
         this.key = key;

@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
@@ -14,7 +16,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ItemMeta implements Writeable {
+public class ItemMeta implements TagReader, Writeable {
 
     private final int damage;
     private final boolean unbreakable;
@@ -110,7 +112,7 @@ public class ItemMeta implements Writeable {
     }
 
     @Contract(pure = true)
-    public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
+    public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
         var key = tag.getKey();
         if (nbt.containsKey(key)) {
             return tag.read(toNBT());
@@ -119,8 +121,18 @@ public class ItemMeta implements Writeable {
         }
     }
 
-    public <T> @Nullable T get(@NotNull ItemTag<T> tag) {
-        return tag.read(toNBT());
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbt);
+    }
+
+    @Override
+    public boolean hasTag(@NotNull Tag<?> tag) {
+        return nbt.containsKey(tag.getKey());
+    }
+
+    public <T> @Nullable T get(@NotNull Tag<T> tag) {
+        return getTag(tag);
     }
 
     public @NotNull NBTCompound toNBT() {
