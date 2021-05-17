@@ -5,6 +5,8 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.Contract;
@@ -16,7 +18,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class ItemMetaBuilder {
+public abstract class ItemMetaBuilder implements TagWritable {
 
     protected NBTCompound nbt = new NBTCompound();
 
@@ -183,12 +185,13 @@ public abstract class ItemMetaBuilder {
         return canDestroy(Set.of(blocks));
     }
 
-    public <T> @NotNull ItemMetaBuilder set(@NotNull ItemTag<T> tag, @Nullable T value) {
-        if (value != null) {
-            tag.write(nbt, value);
-        } else {
-            this.nbt.removeTag(tag.getKey());
-        }
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        tag.write(nbt, value);
+    }
+
+    public <T> @NotNull ItemMetaBuilder set(@NotNull Tag<T> tag, @Nullable T value) {
+        setTag(tag, value);
         return this;
     }
 

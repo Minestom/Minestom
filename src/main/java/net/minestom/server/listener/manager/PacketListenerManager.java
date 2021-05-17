@@ -84,7 +84,12 @@ public final class PacketListenerManager {
 
         // Finally execute the listener
         if (packetListenerConsumer != null) {
-            packetListenerConsumer.accept(packet, player);
+            try {
+                packetListenerConsumer.accept(packet, player);
+            } catch (Exception e) {
+                // Packet is likely invalid
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
         }
     }
 

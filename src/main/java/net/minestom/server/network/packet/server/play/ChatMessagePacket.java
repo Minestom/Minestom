@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.message.ChatPosition;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
 
@@ -22,21 +23,19 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
     private static final UUID NULL_UUID = new UUID(0, 0);
 
     public Component message;
-    public Position position;
+    public ChatPosition position;
     public UUID uuid;
 
     public ChatMessagePacket() {
-        this(Component.empty(), Position.CHAT);
+        this.message = Component.empty();
+        this.position = ChatPosition.SYSTEM_MESSAGE;
+        this.uuid = NULL_UUID;
     }
 
-    public ChatMessagePacket(Component message, Position position, UUID uuid) {
+    public ChatMessagePacket(@NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
         this.message = message;
         this.position = position;
-        this.uuid = uuid;
-    }
-
-    public ChatMessagePacket(Component message, Position position) {
-        this(message, position, NULL_UUID);
+        this.uuid = Objects.requireNonNullElse(uuid, NULL_UUID);
     }
 
     @Override
@@ -49,7 +48,7 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         message = reader.readComponent(Integer.MAX_VALUE);
-        position = Position.values()[reader.readByte()];
+        position = ChatPosition.fromPacketID(reader.readByte());
         uuid = reader.readUuid();
     }
 
@@ -66,42 +65,5 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
         return new ChatMessagePacket(operator.apply(message), position, uuid);
-    }
-
-    public enum Position {
-        CHAT(MessageType.CHAT),
-        SYSTEM_MESSAGE(MessageType.SYSTEM),
-        GAME_INFO(null);
-
-        private final MessageType messageType;
-
-        Position(MessageType messageType) {
-            this.messageType = messageType;
-        }
-
-        /**
-         * Gets the Adventure message type from this position. Note that there is no
-         * message type for {@link #GAME_INFO}, as Adventure uses the title methods for this.
-         *
-         * @return the message type, if any
-         */
-        public @Nullable MessageType getMessageType() {
-            return this.messageType;
-        }
-
-        /**
-         * Gets a position from an Adventure message type.
-         *
-         * @param messageType the message type
-         *
-         * @return the position
-         */
-        public static @NotNull Position fromMessageType(@NotNull MessageType messageType) {
-            switch (messageType) {
-                case CHAT: return CHAT;
-                case SYSTEM: return SYSTEM_MESSAGE;
-            }
-            throw new IllegalArgumentException("Cannot get position from message type!");
-        }
     }
 }
