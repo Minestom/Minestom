@@ -34,6 +34,7 @@ public class AllGenerators {
         // Generate blocks
         new BlockGenerator(
                 new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_blocks.json"),
+                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_block_properties.json"),
                 outputFolder
         ).generate();
         // Generate fluids

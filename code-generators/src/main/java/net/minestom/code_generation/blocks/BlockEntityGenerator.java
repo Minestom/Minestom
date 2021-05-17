@@ -18,7 +18,6 @@ import java.util.List;
 public final class BlockEntityGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockEntityGenerator.class);
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-
     private final File blockEntitiesFile;
     private final File outputFolder;
 
