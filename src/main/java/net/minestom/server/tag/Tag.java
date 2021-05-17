@@ -133,4 +133,25 @@ public class Tag<T> {
                 nbtCompound -> nbtCompound.getLongArray(key),
                 (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
+
+    public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+        return new Tag<>(key,
+                nbtCompound -> serializer.read(new TagReader() {
+                    @Override
+                    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+                        return tag.read(nbtCompound);
+                    }
+
+                    @Override
+                    public boolean hasTag(@NotNull Tag<?> tag) {
+                        return nbtCompound.containsKey(tag.key);
+                    }
+                }),
+                (nbtCompound, value) -> new TagWriter() {
+                    @Override
+                    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+                        tag.write(nbtCompound, value);
+                    }
+                });
+    }
 }
