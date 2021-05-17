@@ -14,6 +14,7 @@ import net.minestom.server.network.packet.server.play.TabCompletePacket;
 import net.minestom.server.utils.StringUtils;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 public class TabCompleteListener {
 
@@ -23,8 +24,7 @@ public class TabCompleteListener {
         String commandString = packet.text.replaceFirst(CommandManager.COMMAND_PREFIX, "");
         String[] split = commandString.split(StringUtils.SPACE);
         String commandName = split[0];
-
-        String args = commandString.replaceFirst(commandName, "");
+        String args = commandString.replaceFirst(Pattern.quote(commandName), "");
 
         final CommandQueryResult commandQueryResult = CommandParser.findCommand(commandString);
         if (commandQueryResult == null) {
