@@ -9,7 +9,14 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class Tag<T> {
+/**
+ * Represents a key to retrieve or change a value.
+ * <p>
+ * All tags are serializable.
+ *
+ * @param <T> the tag type
+ */
+public final class Tag<T> {
 
     private final String key;
     private final Function<NBTCompound, T> readFunction;

@@ -4,11 +4,34 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+/**
+ * Represents an element which can read {@link Tag tags}.
+ */
 public interface TagReader {
+
+    /**
+     * Reads the specified tag.
+     *
+     * @param tag the tag to read
+     * @param <T> the tag type
+     * @return the read tag, null if not present
+     */
     <T> @Nullable T getTag(@NotNull Tag<T> tag);
 
+    /**
+     * Returns if a tag is present.
+     *
+     * @param tag the tag to check
+     * @return true if the tag is present, false otherwise
+     */
     boolean hasTag(@NotNull Tag<?> tag);
 
+    /**
+     * Converts an nbt compound to a tag reader.
+     *
+     * @param compound the compound to convert
+     * @return a {@link TagReader} capable of reading {@code compound}
+     */
     static @NotNull TagReader fromCompound(@NotNull NBTCompound compound) {
         return new TagReader() {
             @Override
