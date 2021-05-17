@@ -4,6 +4,8 @@ import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
@@ -13,8 +15,9 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class ItemMeta implements Writeable {
+public class ItemMeta implements TagReadable, Writeable {
 
     private final int damage;
     private final boolean unbreakable;
@@ -109,18 +112,14 @@ public class ItemMeta implements Writeable {
         return Collections.unmodifiableSet(canPlaceOn);
     }
 
-    @Contract(pure = true)
-    public <T> T getOrDefault(@NotNull ItemTag<T> tag, @Nullable T defaultValue) {
-        var key = tag.getKey();
-        if (nbt.containsKey(key)) {
-            return tag.read(toNBT());
-        } else {
-            return defaultValue;
-        }
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbt);
     }
 
-    public <T> @Nullable T get(@NotNull ItemTag<T> tag) {
-        return tag.read(toNBT());
+    @Override
+    public boolean hasTag(@NotNull Tag<?> tag) {
+        return nbt.containsKey(tag.getKey());
     }
 
     public @NotNull NBTCompound toNBT() {
@@ -162,5 +161,27 @@ public class ItemMeta implements Writeable {
         }
         writer.write(cachedBuffer);
         this.cachedBuffer.resetReaderIndex();
+    }
+
+    /**
+     * @deprecated use {@link #getTag(Tag)} with {@link Tag#defaultValue(Supplier)}
+     */
+    @Deprecated
+    @Contract(pure = true)
+    public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
+        var key = tag.getKey();
+        if (nbt.containsKey(key)) {
+            return tag.read(toNBT());
+        } else {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * @deprecated use {@link #getTag(Tag)}
+     */
+    @Deprecated
+    public <T> @Nullable T get(@NotNull Tag<T> tag) {
+        return getTag(tag);
     }
 }
