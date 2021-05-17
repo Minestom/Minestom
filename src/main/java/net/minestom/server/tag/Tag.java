@@ -43,12 +43,20 @@ public class Tag<T> {
         return defaultValue;
     }
 
-    protected T read(@NotNull NBTCompound nbtCompound) {
-        return readFunction.apply(nbtCompound);
+    public @Nullable T read(@NotNull NBTCompound nbtCompound) {
+        if (nbtCompound.containsKey(key)) {
+            return readFunction.apply(nbtCompound);
+        } else {
+            return defaultValue != null ? defaultValue.get() : null;
+        }
     }
 
-    protected void write(@NotNull NBTCompound nbtCompound, @NotNull T value) {
-        this.writeConsumer.accept(nbtCompound, value);
+    public void write(@NotNull NBTCompound nbtCompound, @Nullable T value) {
+        if (value != null) {
+            this.writeConsumer.accept(nbtCompound, value);
+        } else {
+            nbtCompound.removeTag(key);
+        }
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
