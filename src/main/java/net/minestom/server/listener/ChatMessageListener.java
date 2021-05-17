@@ -29,7 +29,9 @@ public class ChatMessageListener {
             final String command = message.replaceFirst(cmdPrefix, "");
 
             // check if we can receive commands
-            Messenger.receiveCommand(player, () -> COMMAND_MANAGER.execute(player, command));
+            if (Messenger.canReceiveCommand(player)) {
+                COMMAND_MANAGER.execute(player, command);
+            }
 
             // Do not call chat event
             return;
