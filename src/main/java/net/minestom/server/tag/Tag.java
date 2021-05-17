@@ -21,8 +21,7 @@ public final class Tag<T> {
     private final String key;
     private final Function<NBTCompound, T> readFunction;
     private final BiConsumer<NBTCompound, T> writeConsumer;
-
-    protected volatile Supplier<T> defaultValue;
+    private volatile Supplier<T> defaultValue;
 
     private Tag(@NotNull String key,
                 @NotNull Function<NBTCompound, T> readFunction,
@@ -46,15 +45,12 @@ public final class Tag<T> {
         return this;
     }
 
-    public @Nullable Supplier<@Nullable T> getDefaultValue() {
-        return defaultValue;
-    }
-
     public @Nullable T read(@NotNull NBTCompound nbtCompound) {
         if (nbtCompound.containsKey(key)) {
             return readFunction.apply(nbtCompound);
         } else {
-            return defaultValue != null ? defaultValue.get() : null;
+            final var supplier = defaultValue;
+            return supplier != null ? supplier.get() : null;
         }
     }
 
