@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagReader;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.Contract;
@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ItemMeta implements TagReader, Writeable {
+public class ItemMeta implements TagReadable, Writeable {
 
     private final int damage;
     private final boolean unbreakable;

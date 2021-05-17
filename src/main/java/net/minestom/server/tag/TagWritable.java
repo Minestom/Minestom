@@ -7,7 +7,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 /**
  * Represents an element which can write {@link Tag tags}.
  */
-public interface TagWriter {
+public interface TagWritable {
 
     /**
      * Writes the specified type.
@@ -22,10 +22,10 @@ public interface TagWriter {
      * Converts an nbt compound to a tag writer.
      *
      * @param compound the compound to convert
-     * @return a {@link TagWriter} capable of writing {@code compound}
+     * @return a {@link TagWritable} capable of writing {@code compound}
      */
-    static @NotNull TagWriter fromCompound(@NotNull NBTCompound compound) {
-        return new TagWriter() {
+    static @NotNull TagWritable fromCompound(@NotNull NBTCompound compound) {
+        return new TagWritable() {
             @Override
             public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
                 tag.write(compound, value);

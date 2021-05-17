@@ -7,7 +7,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 /**
  * Represents an element which can read {@link Tag tags}.
  */
-public interface TagReader {
+public interface TagReadable {
 
     /**
      * Reads the specified tag.
@@ -30,10 +30,10 @@ public interface TagReader {
      * Converts an nbt compound to a tag reader.
      *
      * @param compound the compound to convert
-     * @return a {@link TagReader} capable of reading {@code compound}
+     * @return a {@link TagReadable} capable of reading {@code compound}
      */
-    static @NotNull TagReader fromCompound(@NotNull NBTCompound compound) {
-        return new TagReader() {
+    static @NotNull TagReadable fromCompound(@NotNull NBTCompound compound) {
+        return new TagReadable() {
             @Override
             public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
                 return tag.read(compound);

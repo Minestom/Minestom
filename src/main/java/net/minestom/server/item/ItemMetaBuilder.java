@@ -6,7 +6,7 @@ import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.tag.TagWriter;
+import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.Utils;
 import org.jetbrains.annotations.Contract;
@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public abstract class ItemMetaBuilder implements TagWriter {
+public abstract class ItemMetaBuilder implements TagWritable {
 
     protected NBTCompound nbt = new NBTCompound();
 

@@ -11,18 +11,18 @@ import org.jetbrains.annotations.Nullable;
 public interface TagSerializer<T> {
 
     /**
-     * Reads the custom tag from a {@link TagReader}.
+     * Reads the custom tag from a {@link TagReadable}.
      *
      * @param reader the reader
      * @return the deserialized value
      */
-    @Nullable T read(@NotNull TagReader reader);
+    @Nullable T read(@NotNull TagReadable reader);
 
     /**
-     * Writes the custom tag to a {@link TagWriter}.
+     * Writes the custom tag to a {@link TagWritable}.
      *
      * @param writer the writer
      * @param value  the value to serialize
      */
-    void write(@NotNull TagWriter writer, @NotNull T value);
+    void write(@NotNull TagWritable writer, @NotNull T value);
 }

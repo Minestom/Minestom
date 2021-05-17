@@ -141,7 +141,7 @@ public class Tag<T> {
 
     public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
-                nbtCompound -> serializer.read(TagReader.fromCompound(nbtCompound)),
-                (nbtCompound, value) -> serializer.write(TagWriter.fromCompound(nbtCompound), value));
+                nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
+                (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
     }
 }
