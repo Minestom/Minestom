@@ -31,6 +31,8 @@ public class ChatMessageListener {
             // check if we can receive commands
             if (Messenger.canReceiveCommand(player)) {
                 COMMAND_MANAGER.execute(player, command);
+            } else {
+                Messenger.sendRejectionMessage(player);
             }
 
             // Do not call chat event
