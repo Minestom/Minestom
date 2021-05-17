@@ -3,9 +3,11 @@ package net.minestom.server.instance.block.incubator;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.ListIterator;
 
-public class BlockImpl implements BlockType {
+class BlockImpl implements BlockType {
 
     protected BlockImpl original = null;
 
@@ -104,23 +106,7 @@ public class BlockImpl implements BlockType {
         return result;
     }
 
-    static {
-        List<BlockProperty<?>> list = new ArrayList<>();
-        list.add(BlockProperties.BED_PART);
-        list.add(BlockProperties.BED_PART);
-        list.add(BlockProperties.CHEST_TYPE);
-
-        var test = computeFactors(list);
-        System.out.println("array " + Arrays.toString(test));
-
-        var block = Blocks.STONE.withProperty(BlockProperties.BED_PART, "FOOT");
-        System.out.println("test " + block.getProtocolId());
-    }
-
-    public static void test() {
-    }
-
-    public static int[] computeFactors(List<BlockProperty<?>> properties) {
+    private static int[] computeFactors(List<BlockProperty<?>> properties) {
         final int size = properties.size();
         int[] result = new int[size];
         int factor = 1;
