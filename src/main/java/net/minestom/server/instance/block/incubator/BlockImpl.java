@@ -5,41 +5,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-class BlockImpl implements BlockType {
+public class BlockImpl implements BlockType {
 
     protected BlockImpl original = null;
 
     private final NamespaceID namespaceID;
     private final short minStateId, stateId;
-    private final List<BlockProperty<Object>> properties;
+    private final List<BlockProperty> properties;
 
-    private LinkedHashMap<BlockProperty<Object>, Object> propertiesMap;
+    private LinkedHashMap<BlockProperty, Object> propertiesMap;
 
-    private BlockImpl(NamespaceID namespaceID, short minStateId, short stateId, List<BlockProperty<Object>> properties) {
+    private BlockImpl(NamespaceID namespaceID, short minStateId, short stateId, List<BlockProperty> properties) {
         this.namespaceID = namespaceID;
         this.minStateId = minStateId;
         this.stateId = stateId;
         this.properties = properties;
     }
 
-    protected static BlockImpl firstBlock(NamespaceID namespaceID, short id, List<BlockProperty<Object>> properties) {
-        var block = new BlockImpl(namespaceID, id, id, properties);
-        block.original = block;
-        return block;
-    }
-
-    protected static BlockImpl defaultBlock(NamespaceID namespaceID, short minStateId, short stateId,
-                                            List<BlockProperty<Object>> properties) {
+    protected static BlockImpl create(NamespaceID namespaceID, short minStateId, short stateId,
+                                      List<BlockProperty> properties) {
         var block = new BlockImpl(namespaceID, minStateId, stateId, properties);
         block.original = block;
-        return block;
-    }
-
-    protected static BlockImpl defaultBlock(NamespaceID namespaceID, short minStateId,
-                                            List<BlockProperty<Object>> properties,
-                                            LinkedHashMap<BlockProperty<Object>, Object> propertiesMap) {
-        var block = new BlockImpl(namespaceID, minStateId, computeId(minStateId, propertiesMap), properties);
-        block.original = block;
+        block.propertiesMap = computeMap(stateId, properties);
         return block;
     }
 
@@ -56,18 +43,18 @@ class BlockImpl implements BlockType {
         }
 
         // Find properties map
-        LinkedHashMap<BlockProperty<Object>, Object> map;
+        LinkedHashMap<BlockProperty, Object> map;
         if (propertiesMap == null) {
             // Represents the first id, create a new map
             map = new LinkedHashMap<>();
             properties.forEach(prop -> map.put(prop, prop.equals(property) ? value : null));
         } else {
             // Change property
-            map = (LinkedHashMap<BlockProperty<Object>, Object>) propertiesMap.clone();
-            map.put((BlockProperty<Object>) property, value);
+            map = (LinkedHashMap<BlockProperty, Object>) propertiesMap.clone();
+            map.put(property, value);
         }
 
-        var block = new BlockImpl(namespaceID, minStateId, computeId(minStateId, map), properties);
+        var block = new BlockImpl(namespaceID, minStateId, computeId(minStateId, properties, map), properties);
         block.original = original;
         block.propertiesMap = map;
         return block;
@@ -88,28 +75,64 @@ class BlockImpl implements BlockType {
         return stateId;
     }
 
-    private static short computeId(short id, LinkedHashMap<BlockProperty<Object>, Object> properties) {
-        var reverse = reverse(properties);
-        int factor = 1;
-        for (var entry : reverse.entrySet()) {
+    private static short computeId(short id, List<BlockProperty> properties,
+                                   LinkedHashMap<BlockProperty, Object> propertiesMap) {
+        int[] factors = computeFactors(properties);
+        int index = 0;
+        for (var entry : propertiesMap.entrySet()) {
             var property = entry.getKey();
             var value = entry.getValue();
-            var values = property.getPossibleValues();
             if (value != null) {
-                id += values.indexOf(value) * factor;
+                var values = property.getPossibleValues();
+                id += values.indexOf(value) * factors[index++];
             }
-            factor *= values.size();
         }
         return id;
     }
 
-    private static <K, V> LinkedHashMap<K, V> reverse(LinkedHashMap<K, V> map) {
-        LinkedHashMap<K, V> reversedMap = new LinkedHashMap<>();
-        ListIterator<Map.Entry<K, V>> it = new ArrayList<>(map.entrySet()).listIterator(map.entrySet().size());
-        while (it.hasPrevious()) {
-            Map.Entry<K, V> el = it.previous();
-            reversedMap.put(el.getKey(), el.getValue());
+    private static LinkedHashMap<BlockProperty, Object> computeMap(short deltaId, List<BlockProperty> properties) {
+        LinkedHashMap<BlockProperty, Object> result = new LinkedHashMap<>();
+        int[] factors = computeFactors(properties);
+        int index = 0;
+        for (var property : properties) {
+            final int factor = factors[index++];
+            final int valueIndex = deltaId / factor;
+            final var possibilities = property.getPossibleValues();
+            final var value = possibilities.get(valueIndex);
+            result.put(property, value);
         }
-        return reversedMap;
+        return result;
+    }
+
+    static {
+        List<BlockProperty> list = new ArrayList<>();
+        list.add(BlockProperties.BED_PART);
+        list.add(BlockProperties.BED_PART);
+        list.add(BlockProperties.CHEST_TYPE);
+
+        var test = computeFactors(list);
+        System.out.println("array " + Arrays.toString(test));
+
+        var block = Blocks.STONE.withProperty(BlockProperties.BED_PART, "FOOT");
+        System.out.println("test " + block.getProtocolId());
+    }
+
+    public static void test() {
+    }
+
+    public static int[] computeFactors(List<BlockProperty> properties) {
+        final int size = properties.size();
+        int[] result = new int[size];
+        int factor = 1;
+        ListIterator<BlockProperty> li = properties.listIterator(properties.size());
+        // Iterate in reverse.
+        int i = size;
+        while (li.hasPrevious()) {
+            var property = li.previous();
+            result[--i] = factor;
+            factor *= property.getPossibleValues().size();
+        }
+
+        return result;
     }
 }
