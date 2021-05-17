@@ -1,17 +1,21 @@
 package net.minestom.server.tag;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Tag<T> {
 
     private final String key;
     private final Function<NBTCompound, T> readFunction;
     private final BiConsumer<NBTCompound, T> writeConsumer;
+
+    protected volatile Supplier<T> defaultValue;
 
     private Tag(@NotNull String key,
                 @NotNull Function<NBTCompound, T> readFunction,
@@ -23,6 +27,20 @@ public class Tag<T> {
 
     public @NotNull String getKey() {
         return key;
+    }
+
+    public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
+    }
+
+    public Tag<T> defaultValue(@NotNull T defaultValue) {
+        defaultValue(() -> defaultValue);
+        return this;
+    }
+
+    public @Nullable Supplier<@Nullable T> getDefaultValue() {
+        return defaultValue;
     }
 
     protected T read(@NotNull NBTCompound nbtCompound) {
