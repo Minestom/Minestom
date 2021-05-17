@@ -15,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ItemMeta implements TagReader, Writeable {
 
@@ -111,16 +112,6 @@ public class ItemMeta implements TagReader, Writeable {
         return Collections.unmodifiableSet(canPlaceOn);
     }
 
-    @Contract(pure = true)
-    public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
-        var key = tag.getKey();
-        if (nbt.containsKey(key)) {
-            return tag.read(toNBT());
-        } else {
-            return defaultValue;
-        }
-    }
-
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return tag.read(nbt);
@@ -129,10 +120,6 @@ public class ItemMeta implements TagReader, Writeable {
     @Override
     public boolean hasTag(@NotNull Tag<?> tag) {
         return nbt.containsKey(tag.getKey());
-    }
-
-    public <T> @Nullable T get(@NotNull Tag<T> tag) {
-        return getTag(tag);
     }
 
     public @NotNull NBTCompound toNBT() {
@@ -174,5 +161,27 @@ public class ItemMeta implements TagReader, Writeable {
         }
         writer.write(cachedBuffer);
         this.cachedBuffer.resetReaderIndex();
+    }
+
+    /**
+     * @deprecated use {@link #getTag(Tag)} with {@link Tag#defaultValue(Supplier)}
+     */
+    @Deprecated
+    @Contract(pure = true)
+    public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
+        var key = tag.getKey();
+        if (nbt.containsKey(key)) {
+            return tag.read(toNBT());
+        } else {
+            return defaultValue;
+        }
+    }
+
+    /**
+     * @deprecated use {@link #getTag(Tag)}
+     */
+    @Deprecated
+    public <T> @Nullable T get(@NotNull Tag<T> tag) {
+        return getTag(tag);
     }
 }
