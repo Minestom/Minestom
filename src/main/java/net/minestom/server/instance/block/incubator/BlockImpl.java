@@ -1,11 +1,15 @@
 package net.minestom.server.instance.block.incubator;
 
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 
 class BlockImpl implements BlockType {
 
@@ -14,21 +18,33 @@ class BlockImpl implements BlockType {
     private final NamespaceID namespaceID;
     private final short minStateId, stateId;
     private final List<BlockProperty<?>> properties;
-
     private LinkedHashMap<BlockProperty<?>, Object> propertiesMap;
+    private NBTCompound compound;
 
-    private BlockImpl(NamespaceID namespaceID, short minStateId, short stateId, List<BlockProperty<?>> properties) {
+    private BlockImpl(NamespaceID namespaceID,
+                      short minStateId, short stateId,
+                      List<BlockProperty<?>> properties,
+                      LinkedHashMap<BlockProperty<?>, Object> propertiesMap,
+                      NBTCompound compound) {
         this.namespaceID = namespaceID;
         this.minStateId = minStateId;
         this.stateId = stateId;
         this.properties = properties;
+        this.propertiesMap = propertiesMap;
+        this.compound = compound;
+    }
+
+    private BlockImpl(NamespaceID namespaceID,
+                      short minStateId, short stateId,
+                      List<BlockProperty<?>> properties,
+                      LinkedHashMap<BlockProperty<?>, Object> propertiesMap) {
+        this(namespaceID, minStateId, stateId, properties, propertiesMap, null);
     }
 
     protected static BlockImpl create(NamespaceID namespaceID, short minStateId, short stateId,
                                       List<BlockProperty<?>> properties) {
-        var block = new BlockImpl(namespaceID, minStateId, stateId, properties);
+        var block = new BlockImpl(namespaceID, minStateId, stateId, properties, computeMap(stateId, properties));
         block.original = block;
-        block.propertiesMap = computeMap(stateId, properties);
         return block;
     }
 
@@ -56,9 +72,37 @@ class BlockImpl implements BlockType {
             map.put(property, value);
         }
 
-        var block = new BlockImpl(namespaceID, minStateId, computeId(minStateId, properties, map), properties);
+        var block = new BlockImpl(namespaceID, minStateId, computeId(minStateId, properties, map), properties, map);
         block.original = original;
-        block.propertiesMap = map;
+        return block;
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(compound);
+    }
+
+    @Override
+    public boolean hasTag(@NotNull Tag<?> tag) {
+        return compound.containsKey(tag.getKey());
+    }
+
+    @Override
+    public @NotNull <T> BlockType withTag(@NotNull Tag<T> tag, @Nullable T value) {
+        if ((compound == null || compound.getKeys().isEmpty()) && value == null) {
+            // No change
+            return this;
+        }
+
+        // Apply tag
+        NBTCompound compound = Objects.requireNonNullElseGet(this.compound, NBTCompound::new);
+        tag.write(compound, value);
+        if (compound.getKeys().isEmpty()) {
+            compound = null;
+        }
+
+        var block = new BlockImpl(namespaceID, minStateId, stateId, properties, propertiesMap, compound);
+        block.original = original;
         return block;
     }
 
