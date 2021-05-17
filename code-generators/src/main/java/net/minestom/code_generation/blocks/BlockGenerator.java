@@ -48,8 +48,6 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             LOGGER.error("Output folder for code generation does not exist and could not be created.");
             return;
         }
-        List<JavaFile> filesToWrite = new ArrayList<>();
-
         // Important classes we use alot
         ClassName namespaceIDCN = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName blockPropertyCN = ClassName.get("net.minestom.server.instance.block.incubator", "BlockProperty");
@@ -250,13 +248,6 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             }
         }
 
-
-        filesToWrite.add(
-                JavaFile.builder("net.minestom.server.instance.block.incubator", blocksClass.build())
-                        .indent("    ")
-                        .skipJavaLangImports(true)
-                        .build()
-        );
         writeFiles(
                 Collections.singletonList(
                         JavaFile.builder("net.minestom.server.instance.block.incubator", blockPropertiesClass.build())
@@ -266,8 +257,14 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 ),
                 outputFolder
         );
-
-        // Write files to outputFolder
-        writeFiles(filesToWrite, outputFolder);
+        writeFiles(
+                Collections.singletonList(
+                        JavaFile.builder("net.minestom.server.instance.block.incubator", blocksClass.build())
+                                .indent("    ")
+                                .skipJavaLangImports(true)
+                                .build()
+                ),
+                outputFolder
+        );
     }
 }
