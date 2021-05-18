@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -49,14 +50,13 @@ public class ParsedCommand {
         // Condition is respected
         if (executor != null) {
             // An executor has been found
-
             if (syntax != null) {
                 // The executor is from a syntax
                 final CommandCondition commandCondition = syntax.getCommandCondition();
                 if (commandCondition == null || commandCondition.canUse(source, commandString)) {
                     context.retrieveDefaultValues(syntax.getDefaultValuesMap());
                     try {
-                        executor.apply(source, context);
+                        executeCommand(executor, command, source);
                     } catch (Exception exception) {
                         MinecraftServer.getExceptionManager().handleException(exception);
                     }
@@ -64,7 +64,7 @@ public class ParsedCommand {
             } else {
                 // The executor is probably the default one
                 try {
-                    executor.apply(source, context);
+                    executeCommand(executor, command, source);
                 } catch (Exception exception) {
                     MinecraftServer.getExceptionManager().handleException(exception);
                 }
@@ -81,6 +81,21 @@ public class ParsedCommand {
         }
 
         return context.getReturnData();
+    }
+
+    private void executeCommand(CommandExecutor executor, Command command, @NotNull CommandSender source) {
+        if (command.getPermission() == null) {
+            executor.apply(source, context);
+        } else {
+            if (source.hasPermission(command.getPermission())) {
+                executor.apply(source, context);
+            } else {
+                CommandManager manager = MinecraftServer.getCommandManager();
+                if (manager.getNotEnoughPermissionCallback() != null) {
+                    manager.getNotEnoughPermissionCallback().apply(source, command.getName());
+                }
+            }
+        }
     }
 
     @NotNull

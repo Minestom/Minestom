@@ -48,6 +48,8 @@ public class Command {
     private final String[] aliases;
     private final String[] names;
 
+    private String permission;
+
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
 
@@ -273,6 +275,24 @@ public class Command {
      */
     public void setDefaultExecutor(@Nullable CommandExecutor executor) {
         this.defaultExecutor = executor;
+    }
+
+    /**
+     * Gets the default permission
+     *
+     * @return  permission the default permission, null if not any
+     */
+    public @Nullable String getPermission() {
+        return permission;
+    }
+
+    /**
+     * Sets the default permission
+     *
+     * @param permission the new default permission, null to remove it
+     */
+    public void setPermission(@Nullable String permission) {
+        this.permission = permission;
     }
 
     /**
