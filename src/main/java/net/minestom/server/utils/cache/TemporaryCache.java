@@ -26,7 +26,6 @@ public class TemporaryCache<T> {
     public TemporaryCache(long duration, TimeUnit timeUnit, RemovalListener<UUID, T> removalListener) {
         this.cache = CacheBuilder.newBuilder()
                 .expireAfterWrite(duration, timeUnit)
-                .softValues()
                 .removalListener(removalListener)
                 .build();
     }
