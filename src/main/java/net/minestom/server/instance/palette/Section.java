@@ -53,6 +53,8 @@ public class Section implements PublicCloneable<Section> {
     private int valuesPerLong;
     private boolean hasPalette;
 
+    private short blockCount = 0;
+
     protected Section(int bitsPerEntry, int bitsIncrement) {
         this.bitsPerEntry = bitsPerEntry;
         this.bitsIncrement = bitsIncrement;
@@ -74,6 +76,9 @@ public class Section implements PublicCloneable<Section> {
             blocks = new long[getSize(valuesPerLong)];
         }
 
+        // Check if the new block is air, used for counting none air blocks.
+        final boolean isAir = Block.fromStateId(blockId).isAir();
+
         // Change to palette value
         blockId = getPaletteIndex(blockId);
 
@@ -90,6 +95,13 @@ public class Section implements PublicCloneable<Section> {
             block |= clear << bitIndex;
             block ^= clear << bitIndex;
             block |= (long) blockId << bitIndex;
+
+            boolean isCurrentAir = Block.fromStateId(getBlockAt(x, y, z)).isAir();
+            if (!isCurrentAir && isAir) { // The old block isn't air & the new block is.
+                this.blockCount--;
+            } else if (isCurrentAir && !isAir) { // The old block is air & the new block isn't.
+                this.blockCount++;
+            } // If both block are air or not air then don't change the value.
 
             blocks[index] = block;
         }
@@ -143,6 +155,7 @@ public class Section implements PublicCloneable<Section> {
         this.hasPalette = section.hasPalette;
 
         this.blocks = section.blocks;
+        this.blockCount = section.blockCount;
     }
 
     /**
@@ -171,10 +184,20 @@ public class Section implements PublicCloneable<Section> {
         this.blocks = new long[0];
         this.paletteBlockMap = createPaletteBlockMap();
         this.blockPaletteMap = createBlockPaletteMap();
+        this.blockCount = 0;
     }
 
     public long[] getBlocks() {
         return blocks;
+    }
+
+    /**
+     * Get the amount of non air blocks in this section.
+     *
+     * @return The amount of blocks in this section.
+     */
+    public short getBlockCount() {
+        return blockCount;
     }
 
     public Short2ShortLinkedOpenHashMap getPaletteBlockMap() {
@@ -288,6 +311,7 @@ public class Section implements PublicCloneable<Section> {
             section.blocks = blocks.clone();
             section.paletteBlockMap = paletteBlockMap.clone();
             section.blockPaletteMap = blockPaletteMap.clone();
+            section.blockCount = blockCount;
             return section;
         } catch (CloneNotSupportedException e) {
             MinecraftServer.getExceptionManager().handleException(e);
