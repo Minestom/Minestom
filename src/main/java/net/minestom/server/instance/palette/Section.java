@@ -96,7 +96,7 @@ public class Section implements PublicCloneable<Section> {
             block ^= clear << bitIndex;
             block |= (long) blockId << bitIndex;
 
-            boolean isCurrentAir = Block.fromStateId(getBlockAt(x, y, z)).isAir();
+            final boolean isCurrentAir = Block.fromStateId(getBlockAt(x, y, z)).isAir();
             if (!isCurrentAir && isAir) { // The old block isn't air & the new block is.
                 this.blockCount--;
             } else if (isCurrentAir && !isAir) { // The old block is air & the new block isn't.
