@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -98,7 +98,7 @@ public class Section implements PublicCloneable<Section> {
     public short getBlockAt(int x, int y, int z) {
         if (blocks.length == 0) {
             // Section is not loaded, can only be air
-            return Block.AIR.getBlockId();
+            return Blocks.AIR.getProtocolId();
         }
 
         final int sectionIdentifier = getSectionIndex(x, y, z);

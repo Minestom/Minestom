@@ -20,7 +20,10 @@ import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.*;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockEntity;
+import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
@@ -164,7 +167,6 @@ public final class MinecraftServer {
         }
         try {
             Class.forName(Block.class.getName(), true, MinecraftServer.class.getClassLoader());
-            Class.forName(BlockState.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(Fluid.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(BlockEntity.class.getName(), true, MinecraftServer.class.getClassLoader());
             Class.forName(EntityType.class.getName(), true, MinecraftServer.class.getClassLoader());

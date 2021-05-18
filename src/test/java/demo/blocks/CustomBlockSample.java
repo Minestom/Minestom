@@ -3,7 +3,7 @@ package demo.blocks;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.TimeUnit;
@@ -18,7 +18,7 @@ public class CustomBlockSample extends CustomBlock {
     private static final UpdateOption UPDATE_OPTION = new UpdateOption(3, TimeUnit.TICK);
 
     public CustomBlockSample() {
-        super(Block.GOLD_BLOCK, "custom_block");
+        super(Blocks.GOLD_BLOCK, "custom_block");
     }
 
     @Override
@@ -31,12 +31,12 @@ public class CustomBlockSample extends CustomBlock {
         BlockPosition above = blockPosition.clone().add(0, 1, 0);
         CustomBlock blockAbove = instance.getCustomBlock(above);
         if (blockAbove == this) {
-            instance.setBlock(above, Block.AIR);
-            instance.setBlock(blockPosition, Block.AIR); // this should NOT create a stack overflow simply because we are trying to remove this same block
+            instance.setBlock(above, Blocks.AIR);
+            instance.setBlock(blockPosition, Blocks.AIR); // this should NOT create a stack overflow simply because we are trying to remove this same block
         }
 
-        System.out.println("position "+blockPosition);
-        instance.setBlock(blockPosition, Block.DIAMOND_BLOCK);
+        System.out.println("position " + blockPosition);
+        instance.setBlock(blockPosition, Blocks.DIAMOND_BLOCK);
     }
 
     @Override

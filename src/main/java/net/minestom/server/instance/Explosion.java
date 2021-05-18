@@ -1,6 +1,6 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
@@ -69,7 +69,7 @@ public abstract class Explosion {
         packet.records = new byte[3 * blocks.size()];
         for (int i = 0; i < blocks.size(); i++) {
             final BlockPosition pos = blocks.get(i);
-            instance.setBlock(pos, Block.AIR);
+            instance.setBlock(pos, Blocks.AIR);
             final byte x = (byte) (pos.getX() - Math.floor(getCenterX()));
             final byte y = (byte) (pos.getY() - Math.floor(getCenterY()));
             final byte z = (byte) (pos.getZ() - Math.floor(getCenterZ()));

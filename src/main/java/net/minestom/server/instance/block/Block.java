@@ -24,6 +24,10 @@ public interface Block extends Keyed, TagReadable, BlockOld {
         return getNamespaceId();
     }
 
+    default @NotNull String getName() {
+        return getNamespaceId().asString();
+    }
+
     short getProtocolId();
 
 }

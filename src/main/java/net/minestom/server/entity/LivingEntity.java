@@ -720,7 +720,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             BlockPosition position = it.next();
-            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) blocks.add(position);
+            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Blocks.AIR) blocks.add(position);
         }
         return blocks;
     }
@@ -759,7 +759,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             BlockPosition position = it.next();
-            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
+            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Blocks.AIR) return position;
         }
         return null;
     }

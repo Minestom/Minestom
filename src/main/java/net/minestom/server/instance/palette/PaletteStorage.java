@@ -2,7 +2,7 @@ package net.minestom.server.instance.palette;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.clone.CloneUtils;
@@ -63,7 +63,7 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
         final int sectionIndex = ChunkUtils.getSectionAt(y);
         final Section section = sections[sectionIndex];
         if (section == null) {
-            return Block.AIR.getBlockId();
+            return Blocks.AIR.getProtocolId();
         }
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);

@@ -11,10 +11,7 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.*;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -105,7 +102,7 @@ public class BlockPlacementListener {
                 //after rapid invalid block placements
                 BlockChangePacket blockChangePacket = new BlockChangePacket();
                 blockChangePacket.blockPosition = blockPosition;
-                blockChangePacket.blockStateId = Block.AIR.getBlockId();
+                blockChangePacket.blockStateId = Blocks.AIR.getProtocolId();
                 player.getPlayerConnection().sendPacket(blockChangePacket);
             }
             return;
