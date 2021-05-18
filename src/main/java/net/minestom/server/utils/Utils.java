@@ -118,16 +118,13 @@ public final class Utils {
     }
 
     public static void writeSectionBlocks(ByteBuf buffer, Section section) {
-        /*short count = 0;
-        for (short id : blocksId)
-            if (id != 0)
-                count++;*/
+
+        final short sectionBlockCount = section.getBlockCount();
+
+        buffer.writeShort(sectionBlockCount);
 
         final int bitsPerEntry = section.getBitsPerEntry();
 
-        //buffer.writeShort(count);
-        // TODO count blocks
-        buffer.writeShort(200);
         buffer.writeByte((byte) bitsPerEntry);
 
         // Palette

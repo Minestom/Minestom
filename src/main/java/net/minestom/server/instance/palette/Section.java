@@ -53,6 +53,8 @@ public class Section implements PublicCloneable<Section> {
     private int valuesPerLong;
     private boolean hasPalette;
 
+    private short blockCount;
+
     protected Section(int bitsPerEntry, int bitsIncrement) {
         this.bitsPerEntry = bitsPerEntry;
         this.bitsIncrement = bitsIncrement;
@@ -91,8 +93,18 @@ public class Section implements PublicCloneable<Section> {
             block ^= clear << bitIndex;
             block |= (long) blockId << bitIndex;
 
+            if (getBlockAt(x, y, z) != 0 && blockId == 0) {
+                blockCount--;
+            } else {
+                blockCount++;
+            }
+
             blocks[index] = block;
         }
+    }
+
+    public short getBlockCount() {
+        return blockCount;
     }
 
     public short getBlockAt(int x, int y, int z) {
