@@ -68,7 +68,7 @@ public class BlockManager {
      */
     @Nullable
     public BlockPlacementRule getBlockPlacementRule(short blockStateId) {
-        final Block block = Block.fromStateId(blockStateId); // Convert block alternative
+        final Block block = Block.REGISTRY.fromStateId(blockStateId); // Convert block alternative
         return getBlockPlacementRule(block);
     }
 

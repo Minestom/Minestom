@@ -417,10 +417,10 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask          = 0b111111111111111111;
-        updateLightPacket.emptySkyLightMask     = 0b000000000000000000;
-        updateLightPacket.blockLightMask        = 0b000000000000000000;
-        updateLightPacket.emptyBlockLightMask   = 0b111111111111111111;
+        updateLightPacket.skyLightMask = 0b111111111111111111;
+        updateLightPacket.emptySkyLightMask = 0b000000000000000000;
+        updateLightPacket.blockLightMask = 0b000000000000000000;
+        updateLightPacket.emptyBlockLightMask = 0b111111111111111111;
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
         final List<byte[]> temp = new ArrayList<>(18);
@@ -599,7 +599,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      * @return true if {@code blockStateId} represents a block entity
      */
     protected boolean isBlockEntity(short blockStateId) {
-        final Block block = Block.fromStateId(blockStateId);
+        final Block block = Block.REGISTRY.fromStateId(blockStateId);
         return block.hasBlockEntity();
     }
 

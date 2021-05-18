@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -65,8 +65,8 @@ public final class EntityUtils {
             final short blockStateId = chunk.getBlockStateId(blockPosition.getX(),
                     blockPosition.getY(),
                     blockPosition.getZ());
-            final BlockState blockState = BlockState.fromId(blockStateId);
-            return blockState.isSolid();
+            final Block block = Block.REGISTRY.fromStateId(blockStateId);
+            return block.isSolid();
         } catch (NullPointerException e) {
             // Probably an entity at the border of an unloaded chunk
             return false;

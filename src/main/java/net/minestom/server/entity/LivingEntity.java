@@ -13,10 +13,14 @@ import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.CollectItemPacket;
+import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
+import net.minestom.server.network.packet.server.play.EntityPropertiesPacket;
+import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
@@ -601,7 +605,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void setFlyingWithElytra(boolean isFlying) {
         this.entityMeta.setFlyingWithElytra(isFlying);
     }
-    
+
     /**
      * Used to change the {@code isDead} internal field.
      *
@@ -720,7 +724,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             BlockPosition position = it.next();
-            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Blocks.AIR) blocks.add(position);
+            if (Block.REGISTRY.fromStateId(getInstance().getBlockStateId(position)) != Blocks.AIR) blocks.add(position);
         }
         return blocks;
     }
@@ -741,7 +745,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
-            Block block = Block.fromStateId(getInstance().getBlockStateId(it.next()));
+            Block block = Block.REGISTRY.fromStateId(getInstance().getBlockStateId(it.next()));
             if (!block.isAir() && !block.isLiquid()) {
                 return false;
             }

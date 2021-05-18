@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
-import net.minestom.server.instance.block.BlockState;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -162,7 +162,7 @@ public class CollisionUtils {
             }
 
             final short blockStateId = chunk.getBlockStateId(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            final BlockState blockState = BlockState.fromId(blockStateId);
+            final Block blockState = Block.REGISTRY.fromStateId(blockStateId);
 
             // TODO: blockState collision boxes
             // TODO: for the moment, always consider a full blockState

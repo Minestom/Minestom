@@ -682,7 +682,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      */
     public void sendBlockAction(@NotNull BlockPosition blockPosition, byte actionId, byte actionParam) {
         final short blockStateId = getBlockStateId(blockPosition);
-        final Block block = Block.fromStateId(blockStateId);
+        final Block block = Block.REGISTRY.fromStateId(blockStateId);
 
         BlockActionPacket blockActionPacket = new BlockActionPacket();
         blockActionPacket.blockPosition = blockPosition;

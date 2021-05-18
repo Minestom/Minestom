@@ -44,7 +44,7 @@ public class BlockUtils {
     }
 
     public Block getBlock() {
-        return Block.fromStateId(instance.getBlockStateId(position));
+        return Block.REGISTRY.fromStateId(instance.getBlockStateId(position));
     }
 
     public boolean equals(Block block) {

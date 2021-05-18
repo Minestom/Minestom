@@ -228,7 +228,7 @@ public class InstanceContainer extends Instance {
     }
 
     private void setAlreadyChanged(@NotNull BlockPosition blockPosition, short blockStateId) {
-        currentlyChangingBlocks.put(blockPosition, Block.fromStateId(blockStateId));
+        currentlyChangingBlocks.put(blockPosition, Block.REGISTRY.fromStateId(blockStateId));
     }
 
     /**

@@ -7,7 +7,6 @@ import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -57,7 +56,7 @@ public class PlayerDiggingListener {
             }
 
             final boolean instantBreak = player.isCreative() ||
-                    player.isInstantBreak() || BlockState.fromId(blockStateId).breaksInstantaneously();
+                    player.isInstantBreak() || Block.REGISTRY.fromStateId(blockStateId).breaksInstantaneously();
 
             if (instantBreak) {
                 // No need to check custom block
@@ -184,7 +183,7 @@ public class PlayerDiggingListener {
                 status, result);
 
         if (!result) {
-            final boolean solid = BlockState.fromId((short) blockStateId).isSolid();
+            final boolean solid = Block.REGISTRY.fromStateId((short) blockStateId).isSolid();
             if (solid) {
                 final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
 
