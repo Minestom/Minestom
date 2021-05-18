@@ -98,7 +98,7 @@ public class Section implements PublicCloneable<Section> {
     public short getBlockAt(int x, int y, int z) {
         if (blocks.length == 0) {
             // Section is not loaded, can only be air
-            return Blocks.AIR.getProtocolId();
+            return Blocks.AIR.getStateId();
         }
 
         final int sectionIdentifier = getSectionIndex(x, y, z);

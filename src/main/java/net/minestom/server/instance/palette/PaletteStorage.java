@@ -63,7 +63,7 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
         final int sectionIndex = ChunkUtils.getSectionAt(y);
         final Section section = sections[sectionIndex];
         if (section == null) {
-            return Blocks.AIR.getProtocolId();
+            return Blocks.AIR.getStateId();
         }
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);

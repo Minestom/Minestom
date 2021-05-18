@@ -102,7 +102,7 @@ public class BlockPlacementListener {
                 //after rapid invalid block placements
                 BlockChangePacket blockChangePacket = new BlockChangePacket();
                 blockChangePacket.blockPosition = blockPosition;
-                blockChangePacket.blockStateId = Blocks.AIR.getProtocolId();
+                blockChangePacket.blockStateId = Blocks.AIR.getStateId();
                 player.getPlayerConnection().sendPacket(blockChangePacket);
             }
             return;

@@ -35,7 +35,9 @@ public interface Block extends Keyed, TagReadable, BlockOld {
         return getNamespaceId().asString();
     }
 
-    short getProtocolId();
+    short getBlockId();
+
+    short getStateId();
 
     class Registry {
 

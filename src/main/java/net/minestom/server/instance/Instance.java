@@ -520,7 +520,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @param block the new visual block
      */
     public void refreshBlockId(int x, int y, int z, @NotNull Block block) {
-        refreshBlockStateId(x, y, z, block.getProtocolId());
+        refreshBlockStateId(x, y, z, block.getStateId());
     }
 
     /**
@@ -532,7 +532,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @param block         the new visual block
      */
     public void refreshBlockId(@NotNull BlockPosition blockPosition, @NotNull Block block) {
-        refreshBlockStateId(blockPosition, block.getProtocolId());
+        refreshBlockStateId(blockPosition, block.getStateId());
     }
 
     /**

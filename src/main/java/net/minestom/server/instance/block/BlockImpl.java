@@ -16,17 +16,20 @@ class BlockImpl implements Block {
     protected BlockImpl original = null;
 
     private final NamespaceID namespaceID;
+    private final short blockId;
     private final short minStateId, stateId;
     private final List<BlockProperty<?>> properties;
     private LinkedHashMap<BlockProperty<?>, Object> propertiesMap;
     private NBTCompound compound;
 
     private BlockImpl(NamespaceID namespaceID,
+                      short blockId,
                       short minStateId, short stateId,
                       List<BlockProperty<?>> properties,
                       LinkedHashMap<BlockProperty<?>, Object> propertiesMap,
                       NBTCompound compound) {
         this.namespaceID = namespaceID;
+        this.blockId = blockId;
         this.minStateId = minStateId;
         this.stateId = stateId;
         this.properties = properties;
@@ -35,15 +38,15 @@ class BlockImpl implements Block {
     }
 
     private BlockImpl(NamespaceID namespaceID,
-                      short minStateId, short stateId,
+                      short blockId, short minStateId, short stateId,
                       List<BlockProperty<?>> properties,
                       LinkedHashMap<BlockProperty<?>, Object> propertiesMap) {
-        this(namespaceID, minStateId, stateId, properties, propertiesMap, null);
+        this(namespaceID, blockId, minStateId, stateId, properties, propertiesMap, null);
     }
 
-    protected static BlockImpl create(NamespaceID namespaceID, short minStateId, short stateId,
+    protected static BlockImpl create(NamespaceID namespaceID, short blockId, short minStateId, short stateId,
                                       List<BlockProperty<?>> properties) {
-        var block = new BlockImpl(namespaceID, minStateId, stateId, properties, computeMap(stateId, properties));
+        var block = new BlockImpl(namespaceID, blockId, minStateId, stateId, properties, computeMap(stateId, properties));
         block.original = block;
         return block;
     }
@@ -72,7 +75,7 @@ class BlockImpl implements Block {
             map.put(property, value);
         }
 
-        var block = new BlockImpl(namespaceID, minStateId, computeId(minStateId, properties, map), properties, map);
+        var block = new BlockImpl(namespaceID, blockId, minStateId, computeId(minStateId, properties, map), properties, map);
         block.original = original;
         return block;
     }
@@ -101,7 +104,7 @@ class BlockImpl implements Block {
             compound = null;
         }
 
-        var block = new BlockImpl(namespaceID, minStateId, stateId, properties, propertiesMap, compound);
+        var block = new BlockImpl(namespaceID, blockId, minStateId, stateId, properties, propertiesMap, compound);
         block.original = original;
         return block;
     }
@@ -117,7 +120,12 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public short getProtocolId() {
+    public short getBlockId() {
+        return blockId;
+    }
+
+    @Override
+    public short getStateId() {
         return stateId;
     }
 

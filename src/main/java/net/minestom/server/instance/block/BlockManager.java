@@ -57,7 +57,7 @@ public class BlockManager {
      */
     @Nullable
     public BlockPlacementRule getBlockPlacementRule(@NotNull Block block) {
-        return this.placementRules[block.getProtocolId()];
+        return this.placementRules[block.getStateId()];
     }
 
     /**

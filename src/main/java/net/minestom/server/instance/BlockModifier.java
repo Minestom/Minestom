@@ -50,7 +50,7 @@ public interface BlockModifier {
      * Sets a {@link CustomBlock} at a position with a custom state id.
      * <p>
      * The custom block id should be the one returned by {@link CustomBlock#getCustomBlockId()},
-     * and the block state id can be anything you want, state id can be retrieved using {@link Block#getProtocolId()}.
+     * and the block state id can be anything you want, state id can be retrieved using {@link Block#getStateId()}.
      *
      * @param x             the block X
      * @param y             the block Y
@@ -66,7 +66,7 @@ public interface BlockModifier {
     }
 
     default void setBlock(int x, int y, int z, @NotNull Block block) {
-        setBlockStateId(x, y, z, block.getProtocolId(), null);
+        setBlockStateId(x, y, z, block.getStateId(), null);
     }
 
     default void setBlock(@NotNull BlockPosition blockPosition, @NotNull Block block) {
