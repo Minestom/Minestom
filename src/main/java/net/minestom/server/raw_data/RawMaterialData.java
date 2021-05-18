@@ -1,7 +1,7 @@
 package net.minestom.server.raw_data;
 
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -81,9 +81,9 @@ public final class RawMaterialData {
     public static class RawArmorData {
         public final int defense;
         public final double toughness;
-        public final EntityEquipmentPacket.Slot slot; // TODO: Maybe better class
+        public final EquipmentSlot slot;
 
-        public RawArmorData(int defense, double toughness, EntityEquipmentPacket.Slot slot) {
+        public RawArmorData(int defense, double toughness, EquipmentSlot slot) {
             this.defense = defense;
             this.toughness = toughness;
             this.slot = slot;
@@ -97,7 +97,7 @@ public final class RawMaterialData {
             return toughness;
         }
 
-        public EntityEquipmentPacket.Slot getSlot() {
+        public EquipmentSlot getSlot() {
             return slot;
         }
     }

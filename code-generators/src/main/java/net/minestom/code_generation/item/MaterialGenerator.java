@@ -207,7 +207,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
                                 "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.HELMET",
-                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                                ClassName.get("net.minestom.server.entity", "EquipmentSlot")
                         )
                         .addModifiers(Modifier.PUBLIC)
                         .build()
@@ -218,7 +218,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
                                 "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.CHESTPLATE",
-                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                                ClassName.get("net.minestom.server.entity", "EquipmentSlot")
                         )
                         .addModifiers(Modifier.PUBLIC)
                         .build()
@@ -229,7 +229,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
                                 "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.LEGGINGS",
-                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                                ClassName.get("net.minestom.server.entity", "EquipmentSlot")
                         )
                         .addModifiers(Modifier.PUBLIC)
                         .build()
@@ -240,7 +240,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                         .returns(TypeName.BOOLEAN)
                         .addStatement(
                                 "return this.isArmor() && this.materialData.getArmorData().getSlot() == $T.BOOTS",
-                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot")
+                                ClassName.get("net.minestom.server.entity", "EquipmentSlot")
                         )
                         .addModifiers(Modifier.PUBLIC)
                         .build()
@@ -333,7 +333,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                                 ClassName.get("net.minestom.server.raw_data", "RawMaterialData", "RawArmorData"),
                                 armor.get("defense").getAsInt(),
                                 armor.get("toughness").getAsDouble(),
-                                ClassName.get("net.minestom.server.network.packet.server.play", "EntityEquipmentPacket", "Slot"),
+                                ClassName.get("net.minestom.server.entity", "EquipmentSlot"),
                                 slot
                         ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
                 );
