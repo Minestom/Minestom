@@ -25,3 +25,4 @@ jobs:
         BRANCH: javadoc
         FOLDER: docs
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        CLEAR_GLOBS_FILE: ".github/javadoc-publish-clear"
