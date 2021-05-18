@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -54,7 +56,19 @@ public class ParsedCommand {
                 final CommandCondition commandCondition = syntax.getCommandCondition();
                 if (commandCondition == null || commandCondition.canUse(source, commandString)) {
                     context.retrieveDefaultValues(syntax.getDefaultValuesMap());
-                    executor.apply(source, context);
+                    if (command.getPermission() == null) {
+                        executor.apply(source, context);
+                    } else {
+                        if (source.hasPermission(command.getPermission())) {
+                            executor.apply(source, context);
+                        } else {
+                            // Handles not enough permission
+                            CommandManager commandManager = MinecraftServer.getCommandManager();
+                            if (commandManager.getNotEnoughPermissionCallback() != null) {
+                                commandManager.getNotEnoughPermissionCallback().apply(source, context.getCommandName());
+                            }
+                        }
+                    }
                 }
             } else {
                 // The executor is probably the default one

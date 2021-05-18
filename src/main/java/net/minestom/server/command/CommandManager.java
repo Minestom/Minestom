@@ -37,6 +37,7 @@ public final class CommandManager {
     private final CommandDispatcher dispatcher = new CommandDispatcher();
 
     private CommandCallback unknownCommandCallback;
+    private CommandCallback notEnoughPermissionCallback;
 
     public CommandManager() {
     }
@@ -153,6 +154,25 @@ public final class CommandManager {
      */
     public void setUnknownCommandCallback(@Nullable CommandCallback unknownCommandCallback) {
         this.unknownCommandCallback = unknownCommandCallback;
+    }
+
+    /**
+     * Gets the callback executed once command is run, but the sender does not have enough permission.
+     *
+     * @return the unknown command callback, null if not any
+     */
+    public @Nullable CommandCallback getNotEnoughPermissionCallback() {
+        return notEnoughPermissionCallback;
+    }
+
+    /**
+     * Sets the callback executed once an command is run, but the sender does not have enough permission.
+     *
+     * @param notEnoughPermissionCallback the new not enough permission callback,
+     *                                    setting it to null mean that nothing will be executed
+     */
+    public void setNotEnoughPermissionCallback(@Nullable CommandCallback notEnoughPermissionCallback) {
+        this.notEnoughPermissionCallback = notEnoughPermissionCallback;
     }
 
     /**

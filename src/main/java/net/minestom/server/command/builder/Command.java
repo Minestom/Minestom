@@ -48,6 +48,8 @@ public class Command {
     private final String[] aliases;
     private final String[] names;
 
+    private String permission;
+
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
 
@@ -234,6 +236,24 @@ public class Command {
     }
 
     /**
+     * Sets the default permission needed for the command.
+     *
+     * @param permission the new permission
+     */
+    public void setPermission(@Nullable String permission) {
+        this.permission = permission;
+    }
+
+    /**
+     * Gets the main command's permission.
+     *
+     * @return the command's permission
+     */
+    public @Nullable String getPermission() {
+        return permission;
+    }
+
+    /**
      * Gets the command's aliases.
      *
      * @return the command aliases, can be null or empty
@@ -310,7 +330,8 @@ public class Command {
      * @param context the UNCHECKED context of the command, some can be null even when unexpected
      * @param command the raw UNCHECKED received command
      */
-    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
+    public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String
+            command) {
     }
 
     @Beta
