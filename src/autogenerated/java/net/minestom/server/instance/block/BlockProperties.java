@@ -195,8 +195,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GRASS_BLOCK} can have:
-     * {@link BlockProperties#SNOWY}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GRASS_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SNOWY}</li>
+     * </ul>
      */
     public static final class GRASS_BLOCK {
         /**
@@ -210,8 +212,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PODZOL} can have:
-     * {@link BlockProperties#SNOWY}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PODZOL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SNOWY}</li>
+     * </ul>
      */
     public static final class PODZOL {
         /**
@@ -225,8 +229,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#OAK_SAPLING} can have:
-     * {@link BlockProperties#STAGE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#OAK_SAPLING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class OAK_SAPLING {
         /**
@@ -240,8 +246,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_SAPLING} can have:
-     * {@link BlockProperties#STAGE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SPRUCE_SAPLING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class SPRUCE_SAPLING {
         /**
@@ -255,8 +263,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BIRCH_SAPLING} can have:
-     * {@link BlockProperties#STAGE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BIRCH_SAPLING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class BIRCH_SAPLING {
         /**
@@ -270,8 +280,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_SAPLING} can have:
-     * {@link BlockProperties#STAGE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JUNGLE_SAPLING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class JUNGLE_SAPLING {
         /**
@@ -285,8 +297,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ACACIA_SAPLING} can have:
-     * {@link BlockProperties#STAGE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ACACIA_SAPLING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class ACACIA_SAPLING {
         /**
@@ -300,8 +314,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_SAPLING} can have:
-     * {@link BlockProperties#STAGE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DARK_OAK_SAPLING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class DARK_OAK_SAPLING {
         /**
@@ -315,8 +331,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WATER} can have:
-     * {@link BlockProperties#LEVEL}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WATER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LEVEL}</li>
+     * </ul>
      */
     public static final class WATER {
         /**
@@ -330,8 +348,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LAVA} can have:
-     * {@link BlockProperties#LEVEL}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LAVA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LEVEL}</li>
+     * </ul>
      */
     public static final class LAVA {
         /**
@@ -345,8 +365,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#OAK_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#OAK_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class OAK_LOG {
         /**
@@ -360,8 +382,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SPRUCE_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class SPRUCE_LOG {
         /**
@@ -375,8 +399,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BIRCH_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BIRCH_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class BIRCH_LOG {
         /**
@@ -390,8 +416,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JUNGLE_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class JUNGLE_LOG {
         /**
@@ -405,8 +433,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ACACIA_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ACACIA_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class ACACIA_LOG {
         /**
@@ -420,8 +450,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DARK_OAK_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class DARK_OAK_LOG {
         /**
@@ -435,8 +467,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_SPRUCE_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_SPRUCE_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_SPRUCE_LOG {
         /**
@@ -450,8 +484,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_BIRCH_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_BIRCH_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_BIRCH_LOG {
         /**
@@ -465,8 +501,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_JUNGLE_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_JUNGLE_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_JUNGLE_LOG {
         /**
@@ -480,8 +518,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_ACACIA_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_ACACIA_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_ACACIA_LOG {
         /**
@@ -495,8 +535,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_DARK_OAK_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_DARK_OAK_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_DARK_OAK_LOG {
         /**
@@ -510,8 +552,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_OAK_LOG} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_OAK_LOG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_OAK_LOG {
         /**
@@ -525,8 +569,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#OAK_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#OAK_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class OAK_WOOD {
         /**
@@ -540,8 +586,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SPRUCE_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class SPRUCE_WOOD {
         /**
@@ -555,8 +603,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BIRCH_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BIRCH_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class BIRCH_WOOD {
         /**
@@ -570,8 +620,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JUNGLE_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class JUNGLE_WOOD {
         /**
@@ -585,8 +637,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ACACIA_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ACACIA_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class ACACIA_WOOD {
         /**
@@ -600,8 +654,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DARK_OAK_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class DARK_OAK_WOOD {
         /**
@@ -615,8 +671,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_OAK_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_OAK_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_OAK_WOOD {
         /**
@@ -630,8 +688,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_SPRUCE_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_SPRUCE_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_SPRUCE_WOOD {
         /**
@@ -645,8 +705,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_BIRCH_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_BIRCH_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_BIRCH_WOOD {
         /**
@@ -660,8 +722,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_JUNGLE_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_JUNGLE_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_JUNGLE_WOOD {
         /**
@@ -675,8 +739,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_ACACIA_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_ACACIA_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_ACACIA_WOOD {
         /**
@@ -690,8 +756,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_DARK_OAK_WOOD} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_DARK_OAK_WOOD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_DARK_OAK_WOOD {
         /**
@@ -705,9 +773,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#OAK_LEAVES} can have:
-     * {@link BlockProperties#DISTANCE}
-     * {@link BlockProperties#PERSISTENT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#OAK_LEAVES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DISTANCE}</li>
+     * <li>{@link BlockProperties#PERSISTENT}</li>
+     * </ul>
      */
     public static final class OAK_LEAVES {
         /**
@@ -726,9 +796,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_LEAVES} can have:
-     * {@link BlockProperties#DISTANCE}
-     * {@link BlockProperties#PERSISTENT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SPRUCE_LEAVES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DISTANCE}</li>
+     * <li>{@link BlockProperties#PERSISTENT}</li>
+     * </ul>
      */
     public static final class SPRUCE_LEAVES {
         /**
@@ -747,9 +819,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_LEAVES} can have:
-     * {@link BlockProperties#DISTANCE}
-     * {@link BlockProperties#PERSISTENT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BIRCH_LEAVES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DISTANCE}</li>
+     * <li>{@link BlockProperties#PERSISTENT}</li>
+     * </ul>
      */
     public static final class BIRCH_LEAVES {
         /**
@@ -768,9 +842,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_LEAVES} can have:
-     * {@link BlockProperties#DISTANCE}
-     * {@link BlockProperties#PERSISTENT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#JUNGLE_LEAVES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DISTANCE}</li>
+     * <li>{@link BlockProperties#PERSISTENT}</li>
+     * </ul>
      */
     public static final class JUNGLE_LEAVES {
         /**
@@ -789,9 +865,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_LEAVES} can have:
-     * {@link BlockProperties#DISTANCE}
-     * {@link BlockProperties#PERSISTENT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ACACIA_LEAVES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DISTANCE}</li>
+     * <li>{@link BlockProperties#PERSISTENT}</li>
+     * </ul>
      */
     public static final class ACACIA_LEAVES {
         /**
@@ -810,9 +888,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_LEAVES} can have:
-     * {@link BlockProperties#DISTANCE}
-     * {@link BlockProperties#PERSISTENT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_LEAVES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DISTANCE}</li>
+     * <li>{@link BlockProperties#PERSISTENT}</li>
+     * </ul>
      */
     public static final class DARK_OAK_LEAVES {
         /**
@@ -831,9 +911,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DISPENSER} can have:
-     * {@link BlockProperties#FACING}
-     * {@link BlockProperties#TRIGGERED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DISPENSER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * <li>{@link BlockProperties#TRIGGERED}</li>
+     * </ul>
      */
     public static final class DISPENSER {
         /**
@@ -852,10 +934,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#NOTE_BLOCK} can have:
-     * {@link BlockProperties#NOTEBLOCK_INSTRUMENT}
-     * {@link BlockProperties#NOTE}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#NOTE_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#NOTEBLOCK_INSTRUMENT}</li>
+     * <li>{@link BlockProperties#NOTE}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class NOTE_BLOCK {
         /**
@@ -879,10 +963,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#WHITE_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#WHITE_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class WHITE_BED {
         /**
@@ -906,10 +992,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#ORANGE_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#ORANGE_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class ORANGE_BED {
         /**
@@ -933,10 +1021,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#MAGENTA_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#MAGENTA_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class MAGENTA_BED {
         /**
@@ -960,10 +1050,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#LIGHT_BLUE_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#LIGHT_BLUE_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class LIGHT_BLUE_BED {
         /**
@@ -987,10 +1079,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#YELLOW_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#YELLOW_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class YELLOW_BED {
         /**
@@ -1014,10 +1108,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#LIME_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#LIME_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class LIME_BED {
         /**
@@ -1041,10 +1137,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#PINK_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#PINK_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class PINK_BED {
         /**
@@ -1068,10 +1166,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#GRAY_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#GRAY_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class GRAY_BED {
         /**
@@ -1095,10 +1195,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#LIGHT_GRAY_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#LIGHT_GRAY_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class LIGHT_GRAY_BED {
         /**
@@ -1122,10 +1224,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#CYAN_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#CYAN_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class CYAN_BED {
         /**
@@ -1149,10 +1253,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#PURPLE_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#PURPLE_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class PURPLE_BED {
         /**
@@ -1176,10 +1282,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BLUE_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BLUE_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class BLUE_BED {
         /**
@@ -1203,10 +1311,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BROWN_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BROWN_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class BROWN_BED {
         /**
@@ -1230,10 +1340,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#GREEN_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#GREEN_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class GREEN_BED {
         /**
@@ -1257,10 +1369,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#RED_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#RED_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class RED_BED {
         /**
@@ -1284,10 +1398,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BLACK_BED} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#OCCUPIED}
-     * {@link BlockProperties#BED_PART}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BLACK_BED} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#OCCUPIED}</li>
+     * <li>{@link BlockProperties#BED_PART}</li>
+     * </ul>
      */
     public static final class BLACK_BED {
         /**
@@ -1311,9 +1427,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#POWERED_RAIL} can have:
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#RAIL_SHAPE_STRAIGHT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#POWERED_RAIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#RAIL_SHAPE_STRAIGHT}</li>
+     * </ul>
      */
     public static final class POWERED_RAIL {
         /**
@@ -1332,9 +1450,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DETECTOR_RAIL} can have:
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#RAIL_SHAPE_STRAIGHT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DETECTOR_RAIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#RAIL_SHAPE_STRAIGHT}</li>
+     * </ul>
      */
     public static final class DETECTOR_RAIL {
         /**
@@ -1353,9 +1473,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#STICKY_PISTON} can have:
-     * {@link BlockProperties#EXTENDED}
-     * {@link BlockProperties#FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#STICKY_PISTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EXTENDED}</li>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class STICKY_PISTON {
         /**
@@ -1374,8 +1496,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TALL_SEAGRASS} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TALL_SEAGRASS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class TALL_SEAGRASS {
         /**
@@ -1389,9 +1513,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#PISTON} can have:
-     * {@link BlockProperties#EXTENDED}
-     * {@link BlockProperties#FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#PISTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EXTENDED}</li>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class PISTON {
         /**
@@ -1410,10 +1536,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#PISTON_HEAD} can have:
-     * {@link BlockProperties#FACING}
-     * {@link BlockProperties#SHORT}
-     * {@link BlockProperties#PISTON_TYPE}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#PISTON_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * <li>{@link BlockProperties#SHORT}</li>
+     * <li>{@link BlockProperties#PISTON_TYPE}</li>
+     * </ul>
      */
     public static final class PISTON_HEAD {
         /**
@@ -1437,9 +1565,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#MOVING_PISTON} can have:
-     * {@link BlockProperties#FACING}
-     * {@link BlockProperties#PISTON_TYPE}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#MOVING_PISTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * <li>{@link BlockProperties#PISTON_TYPE}</li>
+     * </ul>
      */
     public static final class MOVING_PISTON {
         /**
@@ -1458,8 +1588,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TNT} can have:
-     * {@link BlockProperties#UNSTABLE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TNT} can have:
+     * <ul>
+     * <li>{@link BlockProperties#UNSTABLE}</li>
+     * </ul>
      */
     public static final class TNT {
         /**
@@ -1473,8 +1605,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WALL_TORCH} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WALL_TORCH} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class WALL_TORCH {
         /**
@@ -1488,13 +1622,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#FIRE} can have:
-     * {@link BlockProperties#AGE_15}
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WEST}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#FIRE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_15}</li>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class FIRE {
         /**
@@ -1533,11 +1669,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#OAK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#OAK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class OAK_STAIRS {
         /**
@@ -1566,10 +1704,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#CHEST} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#CHEST_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#CHEST} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#CHEST_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CHEST {
         /**
@@ -1593,12 +1733,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#REDSTONE_WIRE} can have:
-     * {@link BlockProperties#EAST_REDSTONE}
-     * {@link BlockProperties#NORTH_REDSTONE}
-     * {@link BlockProperties#POWER}
-     * {@link BlockProperties#SOUTH_REDSTONE}
-     * {@link BlockProperties#WEST_REDSTONE}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#REDSTONE_WIRE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_REDSTONE}</li>
+     * <li>{@link BlockProperties#NORTH_REDSTONE}</li>
+     * <li>{@link BlockProperties#POWER}</li>
+     * <li>{@link BlockProperties#SOUTH_REDSTONE}</li>
+     * <li>{@link BlockProperties#WEST_REDSTONE}</li>
+     * </ul>
      */
     public static final class REDSTONE_WIRE {
         /**
@@ -1632,8 +1774,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WHEAT} can have:
-     * {@link BlockProperties#AGE_7}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WHEAT} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_7}</li>
+     * </ul>
      */
     public static final class WHEAT {
         /**
@@ -1647,8 +1791,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#FARMLAND} can have:
-     * {@link BlockProperties#MOISTURE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#FARMLAND} can have:
+     * <ul>
+     * <li>{@link BlockProperties#MOISTURE}</li>
+     * </ul>
      */
     public static final class FARMLAND {
         /**
@@ -1662,9 +1808,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#FURNACE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LIT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#FURNACE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class FURNACE {
         /**
@@ -1683,9 +1831,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#OAK_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#OAK_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class OAK_SIGN {
         /**
@@ -1704,9 +1854,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SPRUCE_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SPRUCE_SIGN {
         /**
@@ -1725,9 +1877,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BIRCH_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BIRCH_SIGN {
         /**
@@ -1746,9 +1900,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ACACIA_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ACACIA_SIGN {
         /**
@@ -1767,9 +1923,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#JUNGLE_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class JUNGLE_SIGN {
         /**
@@ -1788,9 +1946,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_SIGN {
         /**
@@ -1809,12 +1969,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#OAK_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#OAK_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class OAK_DOOR {
         /**
@@ -1848,9 +2010,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#LADDER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#LADDER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class LADDER {
         /**
@@ -1869,8 +2033,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#RAIL} can have:
-     * {@link BlockProperties#RAIL_SHAPE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#RAIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#RAIL_SHAPE}</li>
+     * </ul>
      */
     public static final class RAIL {
         /**
@@ -1884,11 +2050,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#COBBLESTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#COBBLESTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class COBBLESTONE_STAIRS {
         /**
@@ -1917,9 +2085,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#OAK_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#OAK_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class OAK_WALL_SIGN {
         /**
@@ -1938,9 +2108,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SPRUCE_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SPRUCE_WALL_SIGN {
         /**
@@ -1959,9 +2131,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BIRCH_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BIRCH_WALL_SIGN {
         /**
@@ -1980,9 +2154,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ACACIA_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ACACIA_WALL_SIGN {
         /**
@@ -2001,9 +2177,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#JUNGLE_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class JUNGLE_WALL_SIGN {
         /**
@@ -2022,9 +2200,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_WALL_SIGN {
         /**
@@ -2043,10 +2223,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#LEVER} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#LEVER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class LEVER {
         /**
@@ -2070,8 +2252,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STONE_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STONE_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class STONE_PRESSURE_PLATE {
         /**
@@ -2085,12 +2269,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#IRON_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#IRON_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class IRON_DOOR {
         /**
@@ -2124,8 +2310,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#OAK_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#OAK_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class OAK_PRESSURE_PLATE {
         /**
@@ -2139,8 +2327,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SPRUCE_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class SPRUCE_PRESSURE_PLATE {
         /**
@@ -2154,8 +2344,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BIRCH_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BIRCH_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class BIRCH_PRESSURE_PLATE {
         /**
@@ -2169,8 +2361,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JUNGLE_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class JUNGLE_PRESSURE_PLATE {
         /**
@@ -2184,8 +2378,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ACACIA_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ACACIA_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class ACACIA_PRESSURE_PLATE {
         /**
@@ -2199,8 +2395,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DARK_OAK_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_PRESSURE_PLATE {
         /**
@@ -2214,8 +2412,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#REDSTONE_ORE} can have:
-     * {@link BlockProperties#LIT}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#REDSTONE_ORE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class REDSTONE_ORE {
         /**
@@ -2229,8 +2429,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#REDSTONE_TORCH} can have:
-     * {@link BlockProperties#LIT}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#REDSTONE_TORCH} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class REDSTONE_TORCH {
         /**
@@ -2244,9 +2446,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#REDSTONE_WALL_TORCH} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LIT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#REDSTONE_WALL_TORCH} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class REDSTONE_WALL_TORCH {
         /**
@@ -2265,10 +2469,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#STONE_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#STONE_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class STONE_BUTTON {
         /**
@@ -2292,8 +2498,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SNOW} can have:
-     * {@link BlockProperties#LAYERS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SNOW} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LAYERS}</li>
+     * </ul>
      */
     public static final class SNOW {
         /**
@@ -2307,8 +2515,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CACTUS} can have:
-     * {@link BlockProperties#AGE_15}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CACTUS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_15}</li>
+     * </ul>
      */
     public static final class CACTUS {
         /**
@@ -2322,8 +2532,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SUGAR_CANE} can have:
-     * {@link BlockProperties#AGE_15}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SUGAR_CANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_15}</li>
+     * </ul>
      */
     public static final class SUGAR_CANE {
         /**
@@ -2337,8 +2549,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JUKEBOX} can have:
-     * {@link BlockProperties#HAS_RECORD}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JUKEBOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HAS_RECORD}</li>
+     * </ul>
      */
     public static final class JUKEBOX {
         /**
@@ -2352,12 +2566,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#OAK_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#OAK_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class OAK_FENCE {
         /**
@@ -2391,8 +2607,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BASALT} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BASALT} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class BASALT {
         /**
@@ -2406,8 +2624,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#POLISHED_BASALT} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#POLISHED_BASALT} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class POLISHED_BASALT {
         /**
@@ -2421,8 +2641,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SOUL_WALL_TORCH} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SOUL_WALL_TORCH} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class SOUL_WALL_TORCH {
         /**
@@ -2436,8 +2658,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#NETHER_PORTAL} can have:
-     * {@link BlockProperties#HORIZONTAL_AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#NETHER_PORTAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_AXIS}</li>
+     * </ul>
      */
     public static final class NETHER_PORTAL {
         /**
@@ -2451,8 +2675,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CARVED_PUMPKIN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CARVED_PUMPKIN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class CARVED_PUMPKIN {
         /**
@@ -2466,8 +2692,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JACK_O_LANTERN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JACK_O_LANTERN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class JACK_O_LANTERN {
         /**
@@ -2481,8 +2709,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CAKE} can have:
-     * {@link BlockProperties#BITES}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CAKE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#BITES}</li>
+     * </ul>
      */
     public static final class CAKE {
         /**
@@ -2496,11 +2726,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#REPEATER} can have:
-     * {@link BlockProperties#DELAY}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LOCKED}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#REPEATER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DELAY}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LOCKED}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class REPEATER {
         /**
@@ -2529,12 +2761,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#OAK_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#OAK_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class OAK_TRAPDOOR {
         /**
@@ -2568,12 +2802,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#SPRUCE_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#SPRUCE_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SPRUCE_TRAPDOOR {
         /**
@@ -2607,12 +2843,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#BIRCH_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#BIRCH_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BIRCH_TRAPDOOR {
         /**
@@ -2646,12 +2884,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#JUNGLE_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#JUNGLE_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class JUNGLE_TRAPDOOR {
         /**
@@ -2685,12 +2925,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#ACACIA_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#ACACIA_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ACACIA_TRAPDOOR {
         /**
@@ -2724,12 +2966,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#DARK_OAK_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_TRAPDOOR {
         /**
@@ -2763,13 +3007,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#BROWN_MUSHROOM_BLOCK} can have:
-     * {@link BlockProperties#DOWN}
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WEST}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#BROWN_MUSHROOM_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOWN}</li>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class BROWN_MUSHROOM_BLOCK {
         /**
@@ -2808,13 +3054,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#RED_MUSHROOM_BLOCK} can have:
-     * {@link BlockProperties#DOWN}
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WEST}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#RED_MUSHROOM_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOWN}</li>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class RED_MUSHROOM_BLOCK {
         /**
@@ -2853,13 +3101,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#MUSHROOM_STEM} can have:
-     * {@link BlockProperties#DOWN}
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WEST}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#MUSHROOM_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOWN}</li>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class MUSHROOM_STEM {
         /**
@@ -2898,12 +3148,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#IRON_BARS} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#IRON_BARS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class IRON_BARS {
         /**
@@ -2937,9 +3189,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CHAIN} can have:
-     * {@link BlockProperties#AXIS}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CHAIN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CHAIN {
         /**
@@ -2958,12 +3212,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class GLASS_PANE {
         /**
@@ -2997,8 +3253,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ATTACHED_PUMPKIN_STEM} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ATTACHED_PUMPKIN_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class ATTACHED_PUMPKIN_STEM {
         /**
@@ -3012,8 +3270,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ATTACHED_MELON_STEM} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ATTACHED_MELON_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class ATTACHED_MELON_STEM {
         /**
@@ -3027,8 +3287,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PUMPKIN_STEM} can have:
-     * {@link BlockProperties#AGE_7}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PUMPKIN_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_7}</li>
+     * </ul>
      */
     public static final class PUMPKIN_STEM {
         /**
@@ -3042,8 +3304,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#MELON_STEM} can have:
-     * {@link BlockProperties#AGE_7}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#MELON_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_7}</li>
+     * </ul>
      */
     public static final class MELON_STEM {
         /**
@@ -3057,12 +3321,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#VINE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#VINE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class VINE {
         /**
@@ -3096,11 +3362,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#OAK_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#OAK_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class OAK_FENCE_GATE {
         /**
@@ -3129,11 +3397,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BRICK_STAIRS {
         /**
@@ -3162,11 +3432,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#STONE_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#STONE_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class STONE_BRICK_STAIRS {
         /**
@@ -3195,8 +3467,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#MYCELIUM} can have:
-     * {@link BlockProperties#SNOWY}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#MYCELIUM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SNOWY}</li>
+     * </ul>
      */
     public static final class MYCELIUM {
         /**
@@ -3210,12 +3484,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#NETHER_BRICK_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#NETHER_BRICK_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class NETHER_BRICK_FENCE {
         /**
@@ -3249,11 +3525,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#NETHER_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#NETHER_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class NETHER_BRICK_STAIRS {
         /**
@@ -3282,8 +3560,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#NETHER_WART} can have:
-     * {@link BlockProperties#AGE_3}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#NETHER_WART} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_3}</li>
+     * </ul>
      */
     public static final class NETHER_WART {
         /**
@@ -3297,10 +3577,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BREWING_STAND} can have:
-     * {@link BlockProperties#HAS_BOTTLE_0}
-     * {@link BlockProperties#HAS_BOTTLE_1}
-     * {@link BlockProperties#HAS_BOTTLE_2}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BREWING_STAND} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HAS_BOTTLE_0}</li>
+     * <li>{@link BlockProperties#HAS_BOTTLE_1}</li>
+     * <li>{@link BlockProperties#HAS_BOTTLE_2}</li>
+     * </ul>
      */
     public static final class BREWING_STAND {
         /**
@@ -3324,8 +3606,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CAULDRON} can have:
-     * {@link BlockProperties#LEVEL_CAULDRON}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CAULDRON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LEVEL_CAULDRON}</li>
+     * </ul>
      */
     public static final class CAULDRON {
         /**
@@ -3339,9 +3623,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#END_PORTAL_FRAME} can have:
-     * {@link BlockProperties#EYE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#END_PORTAL_FRAME} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EYE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class END_PORTAL_FRAME {
         /**
@@ -3360,8 +3646,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#REDSTONE_LAMP} can have:
-     * {@link BlockProperties#LIT}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#REDSTONE_LAMP} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class REDSTONE_LAMP {
         /**
@@ -3375,9 +3663,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#COCOA} can have:
-     * {@link BlockProperties#AGE_2}
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#COCOA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_2}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class COCOA {
         /**
@@ -3396,11 +3686,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SANDSTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SANDSTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SANDSTONE_STAIRS {
         /**
@@ -3429,9 +3721,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ENDER_CHEST} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ENDER_CHEST} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ENDER_CHEST {
         /**
@@ -3450,10 +3744,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#TRIPWIRE_HOOK} can have:
-     * {@link BlockProperties#ATTACHED}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#TRIPWIRE_HOOK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACHED}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class TRIPWIRE_HOOK {
         /**
@@ -3477,14 +3773,16 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 7 BlockState properties that {@link Blocks#TRIPWIRE} can have:
-     * {@link BlockProperties#ATTACHED}
-     * {@link BlockProperties#DISARMED}
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WEST}
+     * Represents the 7 {@link BlockProperty properties} that {@link Blocks#TRIPWIRE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACHED}</li>
+     * <li>{@link BlockProperties#DISARMED}</li>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class TRIPWIRE {
         /**
@@ -3528,11 +3826,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SPRUCE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SPRUCE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SPRUCE_STAIRS {
         /**
@@ -3561,11 +3861,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#BIRCH_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#BIRCH_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BIRCH_STAIRS {
         /**
@@ -3594,11 +3896,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#JUNGLE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#JUNGLE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class JUNGLE_STAIRS {
         /**
@@ -3627,9 +3931,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#COMMAND_BLOCK} can have:
-     * {@link BlockProperties#CONDITIONAL}
-     * {@link BlockProperties#FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#COMMAND_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#CONDITIONAL}</li>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class COMMAND_BLOCK {
         /**
@@ -3648,13 +3954,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#COBBLESTONE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#COBBLESTONE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class COBBLESTONE_WALL {
         /**
@@ -3693,13 +4001,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#MOSSY_COBBLESTONE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#MOSSY_COBBLESTONE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class MOSSY_COBBLESTONE_WALL {
         /**
@@ -3738,8 +4048,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CARROTS} can have:
-     * {@link BlockProperties#AGE_7}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CARROTS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_7}</li>
+     * </ul>
      */
     public static final class CARROTS {
         /**
@@ -3753,8 +4065,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#POTATOES} can have:
-     * {@link BlockProperties#AGE_7}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#POTATOES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_7}</li>
+     * </ul>
      */
     public static final class POTATOES {
         /**
@@ -3768,10 +4082,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#OAK_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#OAK_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class OAK_BUTTON {
         /**
@@ -3795,10 +4111,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#SPRUCE_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#SPRUCE_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class SPRUCE_BUTTON {
         /**
@@ -3822,10 +4140,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BIRCH_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BIRCH_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class BIRCH_BUTTON {
         /**
@@ -3849,10 +4169,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#JUNGLE_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#JUNGLE_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class JUNGLE_BUTTON {
         /**
@@ -3876,10 +4198,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#ACACIA_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#ACACIA_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class ACACIA_BUTTON {
         /**
@@ -3903,10 +4227,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#DARK_OAK_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_BUTTON {
         /**
@@ -3930,8 +4256,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SKELETON_SKULL} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SKELETON_SKULL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class SKELETON_SKULL {
         /**
@@ -3945,8 +4273,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SKELETON_WALL_SKULL} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SKELETON_WALL_SKULL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class SKELETON_WALL_SKULL {
         /**
@@ -3960,8 +4290,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WITHER_SKELETON_SKULL} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WITHER_SKELETON_SKULL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class WITHER_SKELETON_SKULL {
         /**
@@ -3975,8 +4307,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WITHER_SKELETON_WALL_SKULL} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WITHER_SKELETON_WALL_SKULL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class WITHER_SKELETON_WALL_SKULL {
         /**
@@ -3990,8 +4324,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ZOMBIE_HEAD} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ZOMBIE_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class ZOMBIE_HEAD {
         /**
@@ -4005,8 +4341,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ZOMBIE_WALL_HEAD} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ZOMBIE_WALL_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class ZOMBIE_WALL_HEAD {
         /**
@@ -4020,8 +4358,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PLAYER_HEAD} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PLAYER_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class PLAYER_HEAD {
         /**
@@ -4035,8 +4375,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PLAYER_WALL_HEAD} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PLAYER_WALL_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class PLAYER_WALL_HEAD {
         /**
@@ -4050,8 +4392,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CREEPER_HEAD} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CREEPER_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class CREEPER_HEAD {
         /**
@@ -4065,8 +4409,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CREEPER_WALL_HEAD} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CREEPER_WALL_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class CREEPER_WALL_HEAD {
         /**
@@ -4080,8 +4426,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DRAGON_HEAD} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DRAGON_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class DRAGON_HEAD {
         /**
@@ -4095,8 +4443,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DRAGON_WALL_HEAD} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DRAGON_WALL_HEAD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class DRAGON_WALL_HEAD {
         /**
@@ -4110,8 +4460,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ANVIL} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ANVIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class ANVIL {
         /**
@@ -4125,8 +4477,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CHIPPED_ANVIL} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CHIPPED_ANVIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class CHIPPED_ANVIL {
         /**
@@ -4140,8 +4494,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DAMAGED_ANVIL} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DAMAGED_ANVIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class DAMAGED_ANVIL {
         /**
@@ -4155,10 +4511,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#TRAPPED_CHEST} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#CHEST_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#TRAPPED_CHEST} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#CHEST_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class TRAPPED_CHEST {
         /**
@@ -4182,8 +4540,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_WEIGHTED_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWER}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_WEIGHTED_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWER}</li>
+     * </ul>
      */
     public static final class LIGHT_WEIGHTED_PRESSURE_PLATE {
         /**
@@ -4197,8 +4557,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#HEAVY_WEIGHTED_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWER}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#HEAVY_WEIGHTED_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWER}</li>
+     * </ul>
      */
     public static final class HEAVY_WEIGHTED_PRESSURE_PLATE {
         /**
@@ -4212,10 +4574,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#COMPARATOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#MODE_COMPARATOR}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#COMPARATOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#MODE_COMPARATOR}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class COMPARATOR {
         /**
@@ -4239,9 +4603,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DAYLIGHT_DETECTOR} can have:
-     * {@link BlockProperties#INVERTED}
-     * {@link BlockProperties#POWER}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DAYLIGHT_DETECTOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#INVERTED}</li>
+     * <li>{@link BlockProperties#POWER}</li>
+     * </ul>
      */
     public static final class DAYLIGHT_DETECTOR {
         /**
@@ -4260,9 +4626,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#HOPPER} can have:
-     * {@link BlockProperties#ENABLED}
-     * {@link BlockProperties#FACING_HOPPER}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#HOPPER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ENABLED}</li>
+     * <li>{@link BlockProperties#FACING_HOPPER}</li>
+     * </ul>
      */
     public static final class HOPPER {
         /**
@@ -4281,8 +4649,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#QUARTZ_PILLAR} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#QUARTZ_PILLAR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class QUARTZ_PILLAR {
         /**
@@ -4296,11 +4666,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#QUARTZ_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#QUARTZ_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class QUARTZ_STAIRS {
         /**
@@ -4329,9 +4701,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ACTIVATOR_RAIL} can have:
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#RAIL_SHAPE_STRAIGHT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ACTIVATOR_RAIL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#RAIL_SHAPE_STRAIGHT}</li>
+     * </ul>
      */
     public static final class ACTIVATOR_RAIL {
         /**
@@ -4350,9 +4724,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DROPPER} can have:
-     * {@link BlockProperties#FACING}
-     * {@link BlockProperties#TRIGGERED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DROPPER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * <li>{@link BlockProperties#TRIGGERED}</li>
+     * </ul>
      */
     public static final class DROPPER {
         /**
@@ -4371,12 +4747,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#WHITE_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#WHITE_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class WHITE_STAINED_GLASS_PANE {
         /**
@@ -4410,12 +4788,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#ORANGE_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#ORANGE_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class ORANGE_STAINED_GLASS_PANE {
         /**
@@ -4449,12 +4829,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#MAGENTA_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#MAGENTA_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class MAGENTA_STAINED_GLASS_PANE {
         /**
@@ -4488,12 +4870,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#LIGHT_BLUE_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#LIGHT_BLUE_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class LIGHT_BLUE_STAINED_GLASS_PANE {
         /**
@@ -4527,12 +4911,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#YELLOW_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#YELLOW_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class YELLOW_STAINED_GLASS_PANE {
         /**
@@ -4566,12 +4952,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#LIME_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#LIME_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class LIME_STAINED_GLASS_PANE {
         /**
@@ -4605,12 +4993,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#PINK_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#PINK_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class PINK_STAINED_GLASS_PANE {
         /**
@@ -4644,12 +5034,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#GRAY_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#GRAY_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class GRAY_STAINED_GLASS_PANE {
         /**
@@ -4683,12 +5075,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#LIGHT_GRAY_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#LIGHT_GRAY_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class LIGHT_GRAY_STAINED_GLASS_PANE {
         /**
@@ -4722,12 +5116,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#CYAN_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#CYAN_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class CYAN_STAINED_GLASS_PANE {
         /**
@@ -4761,12 +5157,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#PURPLE_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#PURPLE_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class PURPLE_STAINED_GLASS_PANE {
         /**
@@ -4800,12 +5198,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#BLUE_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#BLUE_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class BLUE_STAINED_GLASS_PANE {
         /**
@@ -4839,12 +5239,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#BROWN_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#BROWN_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class BROWN_STAINED_GLASS_PANE {
         /**
@@ -4878,12 +5280,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#GREEN_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#GREEN_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class GREEN_STAINED_GLASS_PANE {
         /**
@@ -4917,12 +5321,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#RED_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#RED_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class RED_STAINED_GLASS_PANE {
         /**
@@ -4956,12 +5362,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#BLACK_STAINED_GLASS_PANE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#BLACK_STAINED_GLASS_PANE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class BLACK_STAINED_GLASS_PANE {
         /**
@@ -4995,11 +5403,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#ACACIA_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#ACACIA_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ACACIA_STAIRS {
         /**
@@ -5028,11 +5438,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#DARK_OAK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_STAIRS {
         /**
@@ -5061,12 +5473,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#IRON_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#IRON_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class IRON_TRAPDOOR {
         /**
@@ -5100,11 +5514,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#PRISMARINE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#PRISMARINE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PRISMARINE_STAIRS {
         /**
@@ -5133,11 +5549,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#PRISMARINE_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#PRISMARINE_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PRISMARINE_BRICK_STAIRS {
         /**
@@ -5166,11 +5584,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#DARK_PRISMARINE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#DARK_PRISMARINE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_PRISMARINE_STAIRS {
         /**
@@ -5199,9 +5619,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#PRISMARINE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#PRISMARINE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PRISMARINE_SLAB {
         /**
@@ -5220,9 +5642,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#PRISMARINE_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#PRISMARINE_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PRISMARINE_BRICK_SLAB {
         /**
@@ -5241,9 +5665,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DARK_PRISMARINE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DARK_PRISMARINE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_PRISMARINE_SLAB {
         /**
@@ -5262,8 +5688,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#HAY_BLOCK} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#HAY_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class HAY_BLOCK {
         /**
@@ -5277,8 +5705,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SUNFLOWER} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SUNFLOWER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class SUNFLOWER {
         /**
@@ -5292,8 +5722,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LILAC} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LILAC} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class LILAC {
         /**
@@ -5307,8 +5739,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ROSE_BUSH} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ROSE_BUSH} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class ROSE_BUSH {
         /**
@@ -5322,8 +5756,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PEONY} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PEONY} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class PEONY {
         /**
@@ -5337,8 +5773,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TALL_GRASS} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TALL_GRASS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class TALL_GRASS {
         /**
@@ -5352,8 +5790,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LARGE_FERN} can have:
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LARGE_FERN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * </ul>
      */
     public static final class LARGE_FERN {
         /**
@@ -5367,8 +5807,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WHITE_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WHITE_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class WHITE_BANNER {
         /**
@@ -5382,8 +5824,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ORANGE_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ORANGE_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class ORANGE_BANNER {
         /**
@@ -5397,8 +5841,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#MAGENTA_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class MAGENTA_BANNER {
         /**
@@ -5412,8 +5858,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_BLUE_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class LIGHT_BLUE_BANNER {
         /**
@@ -5427,8 +5875,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#YELLOW_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#YELLOW_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class YELLOW_BANNER {
         /**
@@ -5442,8 +5892,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIME_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIME_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class LIME_BANNER {
         /**
@@ -5457,8 +5909,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PINK_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PINK_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class PINK_BANNER {
         /**
@@ -5472,8 +5926,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GRAY_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GRAY_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class GRAY_BANNER {
         /**
@@ -5487,8 +5943,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_GRAY_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class LIGHT_GRAY_BANNER {
         /**
@@ -5502,8 +5960,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CYAN_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CYAN_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class CYAN_BANNER {
         /**
@@ -5517,8 +5977,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PURPLE_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PURPLE_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class PURPLE_BANNER {
         /**
@@ -5532,8 +5994,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLUE_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLUE_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class BLUE_BANNER {
         /**
@@ -5547,8 +6011,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BROWN_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BROWN_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class BROWN_BANNER {
         /**
@@ -5562,8 +6028,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GREEN_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GREEN_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class GREEN_BANNER {
         /**
@@ -5577,8 +6045,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#RED_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#RED_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class RED_BANNER {
         /**
@@ -5592,8 +6062,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLACK_BANNER} can have:
-     * {@link BlockProperties#ROTATION_16}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLACK_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * </ul>
      */
     public static final class BLACK_BANNER {
         /**
@@ -5607,8 +6079,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WHITE_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WHITE_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class WHITE_WALL_BANNER {
         /**
@@ -5622,8 +6096,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ORANGE_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ORANGE_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class ORANGE_WALL_BANNER {
         /**
@@ -5637,8 +6113,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#MAGENTA_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class MAGENTA_WALL_BANNER {
         /**
@@ -5652,8 +6130,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_BLUE_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LIGHT_BLUE_WALL_BANNER {
         /**
@@ -5667,8 +6147,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#YELLOW_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#YELLOW_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class YELLOW_WALL_BANNER {
         /**
@@ -5682,8 +6164,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIME_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIME_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LIME_WALL_BANNER {
         /**
@@ -5697,8 +6181,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PINK_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PINK_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class PINK_WALL_BANNER {
         /**
@@ -5712,8 +6198,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GRAY_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GRAY_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class GRAY_WALL_BANNER {
         /**
@@ -5727,8 +6215,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_GRAY_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LIGHT_GRAY_WALL_BANNER {
         /**
@@ -5742,8 +6232,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CYAN_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CYAN_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class CYAN_WALL_BANNER {
         /**
@@ -5757,8 +6249,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PURPLE_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PURPLE_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class PURPLE_WALL_BANNER {
         /**
@@ -5772,8 +6266,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLUE_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLUE_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class BLUE_WALL_BANNER {
         /**
@@ -5787,8 +6283,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BROWN_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BROWN_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class BROWN_WALL_BANNER {
         /**
@@ -5802,8 +6300,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GREEN_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GREEN_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class GREEN_WALL_BANNER {
         /**
@@ -5817,8 +6317,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#RED_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#RED_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class RED_WALL_BANNER {
         /**
@@ -5832,8 +6334,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLACK_WALL_BANNER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLACK_WALL_BANNER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class BLACK_WALL_BANNER {
         /**
@@ -5847,11 +6351,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#RED_SANDSTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#RED_SANDSTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class RED_SANDSTONE_STAIRS {
         /**
@@ -5880,9 +6386,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#OAK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#OAK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class OAK_SLAB {
         /**
@@ -5901,9 +6409,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SPRUCE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SPRUCE_SLAB {
         /**
@@ -5922,9 +6432,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BIRCH_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BIRCH_SLAB {
         /**
@@ -5943,9 +6455,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#JUNGLE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class JUNGLE_SLAB {
         /**
@@ -5964,9 +6478,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ACACIA_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ACACIA_SLAB {
         /**
@@ -5985,9 +6501,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_SLAB {
         /**
@@ -6006,9 +6524,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#STONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#STONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class STONE_SLAB {
         /**
@@ -6027,9 +6547,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_STONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SMOOTH_STONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_STONE_SLAB {
         /**
@@ -6048,9 +6570,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SANDSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SANDSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SANDSTONE_SLAB {
         /**
@@ -6069,9 +6593,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CUT_SANDSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CUT_SANDSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CUT_SANDSTONE_SLAB {
         /**
@@ -6090,9 +6616,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#PETRIFIED_OAK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#PETRIFIED_OAK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PETRIFIED_OAK_SLAB {
         /**
@@ -6111,9 +6639,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#COBBLESTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#COBBLESTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class COBBLESTONE_SLAB {
         /**
@@ -6132,9 +6662,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BRICK_SLAB {
         /**
@@ -6153,9 +6685,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#STONE_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#STONE_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class STONE_BRICK_SLAB {
         /**
@@ -6174,9 +6708,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#NETHER_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#NETHER_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class NETHER_BRICK_SLAB {
         /**
@@ -6195,9 +6731,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#QUARTZ_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#QUARTZ_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class QUARTZ_SLAB {
         /**
@@ -6216,9 +6754,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#RED_SANDSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#RED_SANDSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class RED_SANDSTONE_SLAB {
         /**
@@ -6237,9 +6777,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CUT_RED_SANDSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CUT_RED_SANDSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CUT_RED_SANDSTONE_SLAB {
         /**
@@ -6258,9 +6800,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#PURPUR_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#PURPUR_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PURPUR_SLAB {
         /**
@@ -6279,11 +6823,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SPRUCE_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SPRUCE_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class SPRUCE_FENCE_GATE {
         /**
@@ -6312,11 +6858,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#BIRCH_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#BIRCH_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class BIRCH_FENCE_GATE {
         /**
@@ -6345,11 +6893,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#JUNGLE_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#JUNGLE_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class JUNGLE_FENCE_GATE {
         /**
@@ -6378,11 +6928,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#ACACIA_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#ACACIA_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class ACACIA_FENCE_GATE {
         /**
@@ -6411,11 +6963,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#DARK_OAK_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_FENCE_GATE {
         /**
@@ -6444,12 +6998,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#SPRUCE_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#SPRUCE_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class SPRUCE_FENCE {
         /**
@@ -6483,12 +7039,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#BIRCH_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#BIRCH_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class BIRCH_FENCE {
         /**
@@ -6522,12 +7080,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#JUNGLE_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#JUNGLE_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class JUNGLE_FENCE {
         /**
@@ -6561,12 +7121,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#ACACIA_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#ACACIA_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class ACACIA_FENCE {
         /**
@@ -6600,12 +7162,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#DARK_OAK_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class DARK_OAK_FENCE {
         /**
@@ -6639,12 +7203,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#SPRUCE_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#SPRUCE_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class SPRUCE_DOOR {
         /**
@@ -6678,12 +7244,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#BIRCH_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#BIRCH_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class BIRCH_DOOR {
         /**
@@ -6717,12 +7285,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#JUNGLE_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#JUNGLE_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class JUNGLE_DOOR {
         /**
@@ -6756,12 +7326,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#ACACIA_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#ACACIA_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class ACACIA_DOOR {
         /**
@@ -6795,12 +7367,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#DARK_OAK_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#DARK_OAK_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class DARK_OAK_DOOR {
         /**
@@ -6834,8 +7408,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#END_ROD} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#END_ROD} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class END_ROD {
         /**
@@ -6849,13 +7425,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#CHORUS_PLANT} can have:
-     * {@link BlockProperties#DOWN}
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WEST}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#CHORUS_PLANT} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DOWN}</li>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class CHORUS_PLANT {
         /**
@@ -6894,8 +7472,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CHORUS_FLOWER} can have:
-     * {@link BlockProperties#AGE_5}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CHORUS_FLOWER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_5}</li>
+     * </ul>
      */
     public static final class CHORUS_FLOWER {
         /**
@@ -6909,8 +7489,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PURPUR_PILLAR} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PURPUR_PILLAR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class PURPUR_PILLAR {
         /**
@@ -6924,11 +7506,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#PURPUR_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#PURPUR_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class PURPUR_STAIRS {
         /**
@@ -6957,8 +7541,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BEETROOTS} can have:
-     * {@link BlockProperties#AGE_3}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BEETROOTS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_3}</li>
+     * </ul>
      */
     public static final class BEETROOTS {
         /**
@@ -6972,9 +7558,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#REPEATING_COMMAND_BLOCK} can have:
-     * {@link BlockProperties#CONDITIONAL}
-     * {@link BlockProperties#FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#REPEATING_COMMAND_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#CONDITIONAL}</li>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class REPEATING_COMMAND_BLOCK {
         /**
@@ -6993,9 +7581,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CHAIN_COMMAND_BLOCK} can have:
-     * {@link BlockProperties#CONDITIONAL}
-     * {@link BlockProperties#FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CHAIN_COMMAND_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#CONDITIONAL}</li>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class CHAIN_COMMAND_BLOCK {
         /**
@@ -7014,8 +7604,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#FROSTED_ICE} can have:
-     * {@link BlockProperties#AGE_3}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#FROSTED_ICE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_3}</li>
+     * </ul>
      */
     public static final class FROSTED_ICE {
         /**
@@ -7029,8 +7621,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BONE_BLOCK} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BONE_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class BONE_BLOCK {
         /**
@@ -7044,9 +7638,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#OBSERVER} can have:
-     * {@link BlockProperties#FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#OBSERVER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class OBSERVER {
         /**
@@ -7065,8 +7661,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class SHULKER_BOX {
         /**
@@ -7080,8 +7678,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WHITE_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WHITE_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class WHITE_SHULKER_BOX {
         /**
@@ -7095,8 +7695,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ORANGE_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ORANGE_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class ORANGE_SHULKER_BOX {
         /**
@@ -7110,8 +7712,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#MAGENTA_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class MAGENTA_SHULKER_BOX {
         /**
@@ -7125,8 +7729,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_BLUE_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class LIGHT_BLUE_SHULKER_BOX {
         /**
@@ -7140,8 +7746,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#YELLOW_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#YELLOW_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class YELLOW_SHULKER_BOX {
         /**
@@ -7155,8 +7763,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIME_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIME_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class LIME_SHULKER_BOX {
         /**
@@ -7170,8 +7780,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PINK_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PINK_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class PINK_SHULKER_BOX {
         /**
@@ -7185,8 +7797,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GRAY_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GRAY_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class GRAY_SHULKER_BOX {
         /**
@@ -7200,8 +7814,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_GRAY_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class LIGHT_GRAY_SHULKER_BOX {
         /**
@@ -7215,8 +7831,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CYAN_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CYAN_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class CYAN_SHULKER_BOX {
         /**
@@ -7230,8 +7848,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PURPLE_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PURPLE_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class PURPLE_SHULKER_BOX {
         /**
@@ -7245,8 +7865,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLUE_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLUE_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class BLUE_SHULKER_BOX {
         /**
@@ -7260,8 +7882,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BROWN_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BROWN_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class BROWN_SHULKER_BOX {
         /**
@@ -7275,8 +7899,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GREEN_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GREEN_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class GREEN_SHULKER_BOX {
         /**
@@ -7290,8 +7916,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#RED_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#RED_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class RED_SHULKER_BOX {
         /**
@@ -7305,8 +7933,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLACK_SHULKER_BOX} can have:
-     * {@link BlockProperties#FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLACK_SHULKER_BOX} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * </ul>
      */
     public static final class BLACK_SHULKER_BOX {
         /**
@@ -7320,8 +7950,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WHITE_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WHITE_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class WHITE_GLAZED_TERRACOTTA {
         /**
@@ -7335,8 +7967,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#ORANGE_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#ORANGE_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class ORANGE_GLAZED_TERRACOTTA {
         /**
@@ -7350,8 +7984,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#MAGENTA_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class MAGENTA_GLAZED_TERRACOTTA {
         /**
@@ -7365,8 +8001,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_BLUE_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LIGHT_BLUE_GLAZED_TERRACOTTA {
         /**
@@ -7380,8 +8018,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#YELLOW_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#YELLOW_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class YELLOW_GLAZED_TERRACOTTA {
         /**
@@ -7395,8 +8035,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIME_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIME_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LIME_GLAZED_TERRACOTTA {
         /**
@@ -7410,8 +8052,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PINK_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PINK_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class PINK_GLAZED_TERRACOTTA {
         /**
@@ -7425,8 +8069,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GRAY_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GRAY_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class GRAY_GLAZED_TERRACOTTA {
         /**
@@ -7440,8 +8086,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LIGHT_GRAY_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LIGHT_GRAY_GLAZED_TERRACOTTA {
         /**
@@ -7455,8 +8103,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CYAN_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CYAN_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class CYAN_GLAZED_TERRACOTTA {
         /**
@@ -7470,8 +8120,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#PURPLE_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#PURPLE_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class PURPLE_GLAZED_TERRACOTTA {
         /**
@@ -7485,8 +8137,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLUE_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLUE_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class BLUE_GLAZED_TERRACOTTA {
         /**
@@ -7500,8 +8154,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BROWN_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BROWN_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class BROWN_GLAZED_TERRACOTTA {
         /**
@@ -7515,8 +8171,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#GREEN_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#GREEN_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class GREEN_GLAZED_TERRACOTTA {
         /**
@@ -7530,8 +8188,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#RED_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#RED_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class RED_GLAZED_TERRACOTTA {
         /**
@@ -7545,8 +8205,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BLACK_GLAZED_TERRACOTTA} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BLACK_GLAZED_TERRACOTTA} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class BLACK_GLAZED_TERRACOTTA {
         /**
@@ -7560,8 +8222,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#KELP} can have:
-     * {@link BlockProperties#AGE_25}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#KELP} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_25}</li>
+     * </ul>
      */
     public static final class KELP {
         /**
@@ -7575,9 +8239,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#TURTLE_EGG} can have:
-     * {@link BlockProperties#EGGS}
-     * {@link BlockProperties#HATCH}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#TURTLE_EGG} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EGGS}</li>
+     * <li>{@link BlockProperties#HATCH}</li>
+     * </ul>
      */
     public static final class TURTLE_EGG {
         /**
@@ -7596,8 +8262,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_TUBE_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_TUBE_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_TUBE_CORAL {
         /**
@@ -7611,8 +8279,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_BRAIN_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_BRAIN_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_BRAIN_CORAL {
         /**
@@ -7626,8 +8296,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_BUBBLE_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_BUBBLE_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_BUBBLE_CORAL {
         /**
@@ -7641,8 +8313,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_FIRE_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_FIRE_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_FIRE_CORAL {
         /**
@@ -7656,8 +8330,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_HORN_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_HORN_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_HORN_CORAL {
         /**
@@ -7671,8 +8347,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TUBE_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TUBE_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class TUBE_CORAL {
         /**
@@ -7686,8 +8364,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BRAIN_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BRAIN_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BRAIN_CORAL {
         /**
@@ -7701,8 +8381,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BUBBLE_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BUBBLE_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BUBBLE_CORAL {
         /**
@@ -7716,8 +8398,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#FIRE_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#FIRE_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class FIRE_CORAL {
         /**
@@ -7731,8 +8415,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#HORN_CORAL} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#HORN_CORAL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class HORN_CORAL {
         /**
@@ -7746,8 +8432,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_TUBE_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_TUBE_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_TUBE_CORAL_FAN {
         /**
@@ -7761,8 +8449,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_BRAIN_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_BRAIN_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_BRAIN_CORAL_FAN {
         /**
@@ -7776,8 +8466,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_BUBBLE_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_BUBBLE_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_BUBBLE_CORAL_FAN {
         /**
@@ -7791,8 +8483,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_FIRE_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_FIRE_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_FIRE_CORAL_FAN {
         /**
@@ -7806,8 +8500,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#DEAD_HORN_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#DEAD_HORN_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_HORN_CORAL_FAN {
         /**
@@ -7821,8 +8517,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TUBE_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TUBE_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class TUBE_CORAL_FAN {
         /**
@@ -7836,8 +8534,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BRAIN_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BRAIN_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BRAIN_CORAL_FAN {
         /**
@@ -7851,8 +8551,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BUBBLE_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BUBBLE_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BUBBLE_CORAL_FAN {
         /**
@@ -7866,8 +8568,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#FIRE_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#FIRE_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class FIRE_CORAL_FAN {
         /**
@@ -7881,8 +8585,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#HORN_CORAL_FAN} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#HORN_CORAL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class HORN_CORAL_FAN {
         /**
@@ -7896,9 +8602,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DEAD_TUBE_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DEAD_TUBE_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_TUBE_CORAL_WALL_FAN {
         /**
@@ -7917,9 +8625,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DEAD_BRAIN_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DEAD_BRAIN_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_BRAIN_CORAL_WALL_FAN {
         /**
@@ -7938,9 +8648,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DEAD_BUBBLE_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DEAD_BUBBLE_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_BUBBLE_CORAL_WALL_FAN {
         /**
@@ -7959,9 +8671,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DEAD_FIRE_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DEAD_FIRE_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_FIRE_CORAL_WALL_FAN {
         /**
@@ -7980,9 +8694,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DEAD_HORN_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DEAD_HORN_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DEAD_HORN_CORAL_WALL_FAN {
         /**
@@ -8001,9 +8717,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#TUBE_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#TUBE_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class TUBE_CORAL_WALL_FAN {
         /**
@@ -8022,9 +8740,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BRAIN_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BRAIN_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BRAIN_CORAL_WALL_FAN {
         /**
@@ -8043,9 +8763,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BUBBLE_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BUBBLE_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BUBBLE_CORAL_WALL_FAN {
         /**
@@ -8064,9 +8786,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#FIRE_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#FIRE_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class FIRE_CORAL_WALL_FAN {
         /**
@@ -8085,9 +8809,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#HORN_CORAL_WALL_FAN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#HORN_CORAL_WALL_FAN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class HORN_CORAL_WALL_FAN {
         /**
@@ -8106,9 +8832,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SEA_PICKLE} can have:
-     * {@link BlockProperties#PICKLES}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SEA_PICKLE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#PICKLES}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SEA_PICKLE {
         /**
@@ -8127,8 +8855,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CONDUIT} can have:
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CONDUIT} can have:
+     * <ul>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CONDUIT {
         /**
@@ -8142,10 +8872,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BAMBOO} can have:
-     * {@link BlockProperties#AGE_1}
-     * {@link BlockProperties#BAMBOO_LEAVES}
-     * {@link BlockProperties#STAGE}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BAMBOO} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_1}</li>
+     * <li>{@link BlockProperties#BAMBOO_LEAVES}</li>
+     * <li>{@link BlockProperties#STAGE}</li>
+     * </ul>
      */
     public static final class BAMBOO {
         /**
@@ -8169,8 +8901,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#BUBBLE_COLUMN} can have:
-     * {@link BlockProperties#DRAG}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#BUBBLE_COLUMN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#DRAG}</li>
+     * </ul>
      */
     public static final class BUBBLE_COLUMN {
         /**
@@ -8184,11 +8918,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_GRANITE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#POLISHED_GRANITE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_GRANITE_STAIRS {
         /**
@@ -8217,11 +8953,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SMOOTH_RED_SANDSTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SMOOTH_RED_SANDSTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_RED_SANDSTONE_STAIRS {
         /**
@@ -8250,11 +8988,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#MOSSY_STONE_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#MOSSY_STONE_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class MOSSY_STONE_BRICK_STAIRS {
         /**
@@ -8283,11 +9023,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_DIORITE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#POLISHED_DIORITE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_DIORITE_STAIRS {
         /**
@@ -8316,11 +9058,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#MOSSY_COBBLESTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#MOSSY_COBBLESTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class MOSSY_COBBLESTONE_STAIRS {
         /**
@@ -8349,11 +9093,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#END_STONE_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#END_STONE_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class END_STONE_BRICK_STAIRS {
         /**
@@ -8382,11 +9128,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#STONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#STONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class STONE_STAIRS {
         /**
@@ -8415,11 +9163,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SMOOTH_SANDSTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SMOOTH_SANDSTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_SANDSTONE_STAIRS {
         /**
@@ -8448,11 +9198,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SMOOTH_QUARTZ_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SMOOTH_QUARTZ_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_QUARTZ_STAIRS {
         /**
@@ -8481,11 +9233,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#GRANITE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#GRANITE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class GRANITE_STAIRS {
         /**
@@ -8514,11 +9268,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#ANDESITE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#ANDESITE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ANDESITE_STAIRS {
         /**
@@ -8547,11 +9303,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#RED_NETHER_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#RED_NETHER_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class RED_NETHER_BRICK_STAIRS {
         /**
@@ -8580,11 +9338,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_ANDESITE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#POLISHED_ANDESITE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_ANDESITE_STAIRS {
         /**
@@ -8613,11 +9373,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#DIORITE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#DIORITE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DIORITE_STAIRS {
         /**
@@ -8646,9 +9408,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_GRANITE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#POLISHED_GRANITE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_GRANITE_SLAB {
         /**
@@ -8667,9 +9431,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_RED_SANDSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SMOOTH_RED_SANDSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_RED_SANDSTONE_SLAB {
         /**
@@ -8688,9 +9454,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#MOSSY_STONE_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#MOSSY_STONE_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class MOSSY_STONE_BRICK_SLAB {
         /**
@@ -8709,9 +9477,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_DIORITE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#POLISHED_DIORITE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_DIORITE_SLAB {
         /**
@@ -8730,9 +9500,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#MOSSY_COBBLESTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#MOSSY_COBBLESTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class MOSSY_COBBLESTONE_SLAB {
         /**
@@ -8751,9 +9523,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#END_STONE_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#END_STONE_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class END_STONE_BRICK_SLAB {
         /**
@@ -8772,9 +9546,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_SANDSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SMOOTH_SANDSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_SANDSTONE_SLAB {
         /**
@@ -8793,9 +9569,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_QUARTZ_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SMOOTH_QUARTZ_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SMOOTH_QUARTZ_SLAB {
         /**
@@ -8814,9 +9592,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#GRANITE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#GRANITE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class GRANITE_SLAB {
         /**
@@ -8835,9 +9615,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#ANDESITE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#ANDESITE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class ANDESITE_SLAB {
         /**
@@ -8856,9 +9638,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#RED_NETHER_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#RED_NETHER_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class RED_NETHER_BRICK_SLAB {
         /**
@@ -8877,9 +9661,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_ANDESITE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#POLISHED_ANDESITE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_ANDESITE_SLAB {
         /**
@@ -8898,9 +9684,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#DIORITE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#DIORITE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class DIORITE_SLAB {
         /**
@@ -8919,13 +9707,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class BRICK_WALL {
         /**
@@ -8964,13 +9754,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#PRISMARINE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#PRISMARINE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class PRISMARINE_WALL {
         /**
@@ -9009,13 +9801,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#RED_SANDSTONE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#RED_SANDSTONE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class RED_SANDSTONE_WALL {
         /**
@@ -9054,13 +9848,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#MOSSY_STONE_BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#MOSSY_STONE_BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class MOSSY_STONE_BRICK_WALL {
         /**
@@ -9099,13 +9895,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#GRANITE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#GRANITE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class GRANITE_WALL {
         /**
@@ -9144,13 +9942,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#STONE_BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#STONE_BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class STONE_BRICK_WALL {
         /**
@@ -9189,13 +9989,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#NETHER_BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#NETHER_BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class NETHER_BRICK_WALL {
         /**
@@ -9234,13 +10036,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#ANDESITE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#ANDESITE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class ANDESITE_WALL {
         /**
@@ -9279,13 +10083,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#RED_NETHER_BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#RED_NETHER_BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class RED_NETHER_BRICK_WALL {
         /**
@@ -9324,13 +10130,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#SANDSTONE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#SANDSTONE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class SANDSTONE_WALL {
         /**
@@ -9369,13 +10177,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#END_STONE_BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#END_STONE_BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class END_STONE_BRICK_WALL {
         /**
@@ -9414,13 +10224,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#DIORITE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#DIORITE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class DIORITE_WALL {
         /**
@@ -9459,10 +10271,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#SCAFFOLDING} can have:
-     * {@link BlockProperties#BOTTOM}
-     * {@link BlockProperties#STABILITY_DISTANCE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#SCAFFOLDING} can have:
+     * <ul>
+     * <li>{@link BlockProperties#BOTTOM}</li>
+     * <li>{@link BlockProperties#STABILITY_DISTANCE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SCAFFOLDING {
         /**
@@ -9486,8 +10300,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#LOOM} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#LOOM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class LOOM {
         /**
@@ -9501,9 +10317,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BARREL} can have:
-     * {@link BlockProperties#FACING}
-     * {@link BlockProperties#OPEN}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BARREL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#FACING}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * </ul>
      */
     public static final class BARREL {
         /**
@@ -9522,9 +10340,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SMOKER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LIT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SMOKER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class SMOKER {
         /**
@@ -9543,9 +10363,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BLAST_FURNACE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LIT}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BLAST_FURNACE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LIT}</li>
+     * </ul>
      */
     public static final class BLAST_FURNACE {
         /**
@@ -9564,9 +10386,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#GRINDSTONE} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#GRINDSTONE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class GRINDSTONE {
         /**
@@ -9585,10 +10409,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#LECTERN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HAS_BOOK}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#LECTERN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HAS_BOOK}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class LECTERN {
         /**
@@ -9612,8 +10438,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STONECUTTER} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STONECUTTER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * </ul>
      */
     public static final class STONECUTTER {
         /**
@@ -9627,10 +10455,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#BELL} can have:
-     * {@link BlockProperties#BELL_ATTACHMENT}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#BELL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#BELL_ATTACHMENT}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class BELL {
         /**
@@ -9654,9 +10484,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#LANTERN} can have:
-     * {@link BlockProperties#HANGING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#LANTERN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HANGING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class LANTERN {
         /**
@@ -9675,9 +10507,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#SOUL_LANTERN} can have:
-     * {@link BlockProperties#HANGING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#SOUL_LANTERN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HANGING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SOUL_LANTERN {
         /**
@@ -9696,11 +10530,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#CAMPFIRE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LIT}
-     * {@link BlockProperties#SIGNAL_FIRE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#CAMPFIRE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LIT}</li>
+     * <li>{@link BlockProperties#SIGNAL_FIRE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CAMPFIRE {
         /**
@@ -9729,11 +10565,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#SOUL_CAMPFIRE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LIT}
-     * {@link BlockProperties#SIGNAL_FIRE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#SOUL_CAMPFIRE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LIT}</li>
+     * <li>{@link BlockProperties#SIGNAL_FIRE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class SOUL_CAMPFIRE {
         /**
@@ -9762,8 +10600,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#SWEET_BERRY_BUSH} can have:
-     * {@link BlockProperties#AGE_3}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#SWEET_BERRY_BUSH} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_3}</li>
+     * </ul>
      */
     public static final class SWEET_BERRY_BUSH {
         /**
@@ -9777,8 +10617,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WARPED_STEM} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WARPED_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class WARPED_STEM {
         /**
@@ -9792,8 +10634,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_WARPED_STEM} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_WARPED_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_WARPED_STEM {
         /**
@@ -9807,8 +10651,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WARPED_HYPHAE} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WARPED_HYPHAE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class WARPED_HYPHAE {
         /**
@@ -9822,8 +10668,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_WARPED_HYPHAE} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_WARPED_HYPHAE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_WARPED_HYPHAE {
         /**
@@ -9837,8 +10685,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CRIMSON_STEM} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CRIMSON_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class CRIMSON_STEM {
         /**
@@ -9852,8 +10702,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_CRIMSON_STEM} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_CRIMSON_STEM} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_CRIMSON_STEM {
         /**
@@ -9867,8 +10719,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CRIMSON_HYPHAE} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CRIMSON_HYPHAE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class CRIMSON_HYPHAE {
         /**
@@ -9882,8 +10736,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_CRIMSON_HYPHAE} can have:
-     * {@link BlockProperties#AXIS}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRIPPED_CRIMSON_HYPHAE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AXIS}</li>
+     * </ul>
      */
     public static final class STRIPPED_CRIMSON_HYPHAE {
         /**
@@ -9897,8 +10753,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WEEPING_VINES} can have:
-     * {@link BlockProperties#AGE_25}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WEEPING_VINES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_25}</li>
+     * </ul>
      */
     public static final class WEEPING_VINES {
         /**
@@ -9912,8 +10770,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TWISTING_VINES} can have:
-     * {@link BlockProperties#AGE_25}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TWISTING_VINES} can have:
+     * <ul>
+     * <li>{@link BlockProperties#AGE_25}</li>
+     * </ul>
      */
     public static final class TWISTING_VINES {
         /**
@@ -9927,9 +10787,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CRIMSON_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CRIMSON_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CRIMSON_SLAB {
         /**
@@ -9948,9 +10810,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#WARPED_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#WARPED_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class WARPED_SLAB {
         /**
@@ -9969,8 +10833,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#CRIMSON_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#CRIMSON_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class CRIMSON_PRESSURE_PLATE {
         /**
@@ -9984,8 +10850,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#WARPED_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#WARPED_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class WARPED_PRESSURE_PLATE {
         /**
@@ -9999,12 +10867,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#CRIMSON_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#CRIMSON_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class CRIMSON_FENCE {
         /**
@@ -10038,12 +10908,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#WARPED_FENCE} can have:
-     * {@link BlockProperties#EAST}
-     * {@link BlockProperties#NORTH}
-     * {@link BlockProperties#SOUTH}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#WARPED_FENCE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST}</li>
+     * <li>{@link BlockProperties#NORTH}</li>
+     * <li>{@link BlockProperties#SOUTH}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST}</li>
+     * </ul>
      */
     public static final class WARPED_FENCE {
         /**
@@ -10077,12 +10949,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#CRIMSON_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#CRIMSON_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CRIMSON_TRAPDOOR {
         /**
@@ -10116,12 +10990,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#WARPED_TRAPDOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#WARPED_TRAPDOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class WARPED_TRAPDOOR {
         /**
@@ -10155,11 +11031,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#CRIMSON_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#CRIMSON_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class CRIMSON_FENCE_GATE {
         /**
@@ -10188,11 +11066,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#WARPED_FENCE_GATE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#IN_WALL}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#WARPED_FENCE_GATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#IN_WALL}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class WARPED_FENCE_GATE {
         /**
@@ -10221,11 +11101,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#CRIMSON_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#CRIMSON_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CRIMSON_STAIRS {
         /**
@@ -10254,11 +11136,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#WARPED_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#WARPED_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class WARPED_STAIRS {
         /**
@@ -10287,10 +11171,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#CRIMSON_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#CRIMSON_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class CRIMSON_BUTTON {
         /**
@@ -10314,10 +11200,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#WARPED_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#WARPED_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class WARPED_BUTTON {
         /**
@@ -10341,12 +11229,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#CRIMSON_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#CRIMSON_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class CRIMSON_DOOR {
         /**
@@ -10380,12 +11270,14 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 5 BlockState properties that {@link Blocks#WARPED_DOOR} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
-     * {@link BlockProperties#DOOR_HINGE}
-     * {@link BlockProperties#OPEN}
-     * {@link BlockProperties#POWERED}
+     * Represents the 5 {@link BlockProperty properties} that {@link Blocks#WARPED_DOOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#DOUBLE_BLOCK_HALF}</li>
+     * <li>{@link BlockProperties#DOOR_HINGE}</li>
+     * <li>{@link BlockProperties#OPEN}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class WARPED_DOOR {
         /**
@@ -10419,9 +11311,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CRIMSON_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CRIMSON_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CRIMSON_SIGN {
         /**
@@ -10440,9 +11334,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#WARPED_SIGN} can have:
-     * {@link BlockProperties#ROTATION_16}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#WARPED_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ROTATION_16}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class WARPED_SIGN {
         /**
@@ -10461,9 +11357,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#CRIMSON_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#CRIMSON_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class CRIMSON_WALL_SIGN {
         /**
@@ -10482,9 +11380,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#WARPED_WALL_SIGN} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#WARPED_WALL_SIGN} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class WARPED_WALL_SIGN {
         /**
@@ -10503,8 +11403,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#STRUCTURE_BLOCK} can have:
-     * {@link BlockProperties#STRUCTUREBLOCK_MODE}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#STRUCTURE_BLOCK} can have:
+     * <ul>
+     * <li>{@link BlockProperties#STRUCTUREBLOCK_MODE}</li>
+     * </ul>
      */
     public static final class STRUCTURE_BLOCK {
         /**
@@ -10518,8 +11420,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#JIGSAW} can have:
-     * {@link BlockProperties#ORIENTATION}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#JIGSAW} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ORIENTATION}</li>
+     * </ul>
      */
     public static final class JIGSAW {
         /**
@@ -10533,8 +11437,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#COMPOSTER} can have:
-     * {@link BlockProperties#LEVEL_COMPOSTER}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#COMPOSTER} can have:
+     * <ul>
+     * <li>{@link BlockProperties#LEVEL_COMPOSTER}</li>
+     * </ul>
      */
     public static final class COMPOSTER {
         /**
@@ -10548,8 +11454,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#TARGET} can have:
-     * {@link BlockProperties#POWER}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#TARGET} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWER}</li>
+     * </ul>
      */
     public static final class TARGET {
         /**
@@ -10563,9 +11471,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BEE_NEST} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LEVEL_HONEY}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BEE_NEST} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LEVEL_HONEY}</li>
+     * </ul>
      */
     public static final class BEE_NEST {
         /**
@@ -10584,9 +11494,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BEEHIVE} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#LEVEL_HONEY}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BEEHIVE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#LEVEL_HONEY}</li>
+     * </ul>
      */
     public static final class BEEHIVE {
         /**
@@ -10605,8 +11517,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#RESPAWN_ANCHOR} can have:
-     * {@link BlockProperties#RESPAWN_ANCHOR_CHARGES}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#RESPAWN_ANCHOR} can have:
+     * <ul>
+     * <li>{@link BlockProperties#RESPAWN_ANCHOR_CHARGES}</li>
+     * </ul>
      */
     public static final class RESPAWN_ANCHOR {
         /**
@@ -10620,11 +11534,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#BLACKSTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#BLACKSTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BLACKSTONE_STAIRS {
         /**
@@ -10653,13 +11569,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#BLACKSTONE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#BLACKSTONE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class BLACKSTONE_WALL {
         /**
@@ -10698,9 +11616,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#BLACKSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#BLACKSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class BLACKSTONE_SLAB {
         /**
@@ -10719,9 +11639,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BRICK_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_BRICK_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_BRICK_SLAB {
         /**
@@ -10740,11 +11662,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BRICK_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_BRICK_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_BRICK_STAIRS {
         /**
@@ -10773,13 +11697,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BRICK_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_BRICK_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_BRICK_WALL {
         /**
@@ -10818,11 +11744,13 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_STAIRS} can have:
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#HALF}
-     * {@link BlockProperties#STAIRS_SHAPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 4 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_STAIRS} can have:
+     * <ul>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#HALF}</li>
+     * <li>{@link BlockProperties#STAIRS_SHAPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_STAIRS {
         /**
@@ -10851,9 +11779,11 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_SLAB} can have:
-     * {@link BlockProperties#SLAB_TYPE}
-     * {@link BlockProperties#WATERLOGGED}
+     * Represents the 2 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_SLAB} can have:
+     * <ul>
+     * <li>{@link BlockProperties#SLAB_TYPE}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_SLAB {
         /**
@@ -10872,8 +11802,10 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 1 BlockState property that {@link Blocks#POLISHED_BLACKSTONE_PRESSURE_PLATE} can have:
-     * {@link BlockProperties#POWERED}
+     * Represents the 1 {@link BlockProperty property} that {@link Blocks#POLISHED_BLACKSTONE_PRESSURE_PLATE} can have:
+     * <ul>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_PRESSURE_PLATE {
         /**
@@ -10887,10 +11819,12 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 3 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BUTTON} can have:
-     * {@link BlockProperties#ATTACH_FACE}
-     * {@link BlockProperties#HORIZONTAL_FACING}
-     * {@link BlockProperties#POWERED}
+     * Represents the 3 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_BUTTON} can have:
+     * <ul>
+     * <li>{@link BlockProperties#ATTACH_FACE}</li>
+     * <li>{@link BlockProperties#HORIZONTAL_FACING}</li>
+     * <li>{@link BlockProperties#POWERED}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_BUTTON {
         /**
@@ -10914,13 +11848,15 @@ public final class BlockProperties {
     }
 
     /**
-     * Represents the 6 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_WALL} can have:
-     * {@link BlockProperties#EAST_WALL}
-     * {@link BlockProperties#NORTH_WALL}
-     * {@link BlockProperties#SOUTH_WALL}
-     * {@link BlockProperties#UP}
-     * {@link BlockProperties#WATERLOGGED}
-     * {@link BlockProperties#WEST_WALL}
+     * Represents the 6 {@link BlockProperty properties} that {@link Blocks#POLISHED_BLACKSTONE_WALL} can have:
+     * <ul>
+     * <li>{@link BlockProperties#EAST_WALL}</li>
+     * <li>{@link BlockProperties#NORTH_WALL}</li>
+     * <li>{@link BlockProperties#SOUTH_WALL}</li>
+     * <li>{@link BlockProperties#UP}</li>
+     * <li>{@link BlockProperties#WATERLOGGED}</li>
+     * <li>{@link BlockProperties#WEST_WALL}</li>
+     * </ul>
      */
     public static final class POLISHED_BLACKSTONE_WALL {
         /**

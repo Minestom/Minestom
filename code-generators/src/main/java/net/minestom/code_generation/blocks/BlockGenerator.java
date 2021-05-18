@@ -179,12 +179,13 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 TypeSpec.Builder subClass = TypeSpec.classBuilder(blockPropertiesCN.nestedClass(blockName))
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                         .addJavadoc(
-                                "Represents the $L BlockState $L that {@link $T#$N} can have:\n",
+                                "Represents the $L {@link $T $L} that {@link $T#$N} can have:\n",
                                 properties.size(),
+                                blockPropertyCN,
                                 properties.size() > 1 ? "properties" : "property",
                                 blocksCN,
                                 blockName
-                        );
+                        ).addJavadoc("<ul>\n");
 
                 // Store a list of values for the getProperties() method.
                 StringBuilder values = new StringBuilder();
@@ -212,8 +213,9 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                     subClass.addField(field.build());
 
                     values.append(propertyName).append(", ");
-                    subClass.addJavadoc("{@link $T#$N}\n", blockPropertiesCN, propertyName);
+                    subClass.addJavadoc("<li>{@link $T#$N}</li>\n", blockPropertiesCN, propertyName);
                 }
+                subClass.addJavadoc("</ul>");
                 // Delete final ', '
                 values.delete(values.lastIndexOf(","), values.length());
                 // Add a static method to get all the properties
