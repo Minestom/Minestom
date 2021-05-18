@@ -82,7 +82,9 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .build()
         );
         // This stores the classes of the field names, e.g. WATERLOGGED --> Boolean
-        Map<String, Class<?>> propertyMap = new HashMap<>();
+        Map<String, Class<?>> propertyClassMap = new HashMap<>();
+        Map<String, String> propertyKeyMap = new HashMap<>();
+        Map<String, String[]> propertyValueMap = new HashMap<>();
         // Use data
         for (JsonElement e : blockProperties) {
             JsonObject blockProperty = e.getAsJsonObject();
@@ -113,8 +115,11 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 // Delete final ', '
                 values.delete(values.lastIndexOf(","), values.length());
             }
+            String propertyKey = blockProperty.get("key").getAsString();
 
-            propertyMap.put(propertyName, type);
+            propertyKeyMap.put(propertyName, propertyKey);
+            propertyClassMap.put(propertyName, type);
+            propertyValueMap.put(propertyName, values.toString().split(", "));
             // Adds the field to the main class
             // e.g. BlockProperty<Boolean> WATERLOGGED = new BlockProperty<Boolean>("waterlogged", true, false)
             blockPropertiesClass.addField(
@@ -124,7 +129,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                     ).initializer(
                             "new $T<>($S, $L)",
                             blockPropertyCN,
-                            blockProperty.get("key").getAsString(),
+                            propertyKey,
                             values
                     ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
             );
@@ -172,24 +177,42 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 // Create a subclass called "blockName"
                 // e.g. subclass AIR in BlockProperties
                 TypeSpec.Builder subClass = TypeSpec.classBuilder(blockPropertiesCN.nestedClass(blockName))
-                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        .addJavadoc(
+                                "Represents the $L BlockState $L that {@link $T#$N} can have:\n",
+                                properties.size(),
+                                properties.size() > 1 ? "properties" : "property",
+                                blocksCN,
+                                blockName
+                        );
+
                 // Store a list of values for the getProperties() method.
                 StringBuilder values = new StringBuilder();
                 // Go through all properties the block has.
                 for (JsonElement property : properties) {
                     String propertyName = property.getAsString();
+
                     // Add a static field that delegates to the BlockProperties static definition
-                    subClass.addField(
-                            FieldSpec.builder(
-                                    ParameterizedTypeName.get(blockPropertyCN, TypeName.get(propertyMap.get(propertyName))),
-                                    propertyName
-                            ).initializer(
-                                    "$T.$N",
-                                    blockPropertiesCN,
-                                    propertyName
-                            ).addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL).build()
-                    );
+                    FieldSpec.Builder field = FieldSpec.builder(
+                            ParameterizedTypeName.get(blockPropertyCN, TypeName.get(propertyClassMap.get(propertyName))),
+                            propertyName)
+                            .initializer("$T.$N", blockPropertiesCN, propertyName)
+                            .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            .addJavadoc("Definition: \"$L\" = [", propertyKeyMap.get(propertyName));
+                    // Results in "key" = ["value1", "value2"...]
+                    String[] propertyVals = propertyValueMap.get(propertyName);
+                    for (int i = 0; i < propertyVals.length; i++) {
+                        if (i == propertyVals.length - 1) {
+                            field.addJavadoc("$L]", propertyVals[i].toLowerCase());
+                        } else {
+                            field.addJavadoc("$L, ", propertyVals[i].toLowerCase());
+                        }
+                    }
+                    // Add field to subclass
+                    subClass.addField(field.build());
+
                     values.append(propertyName).append(", ");
+                    subClass.addJavadoc("{@link $T#$N}\n", blockPropertiesCN, propertyName);
                 }
                 // Delete final ', '
                 values.delete(values.lastIndexOf(","), values.length());

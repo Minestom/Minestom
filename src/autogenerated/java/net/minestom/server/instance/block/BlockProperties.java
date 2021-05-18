@@ -194,7 +194,14 @@ public final class BlockProperties {
     private BlockProperties() {
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GRASS_BLOCK} can have:
+     * {@link BlockProperties#SNOWY}
+     */
     public static final class GRASS_BLOCK {
+        /**
+         * Definition: "snowy" = [true, false]
+         */
         public static final BlockProperty<Boolean> SNOWY = BlockProperties.SNOWY;
 
         static List<BlockProperty<?>> getProperties() {
@@ -202,7 +209,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PODZOL} can have:
+     * {@link BlockProperties#SNOWY}
+     */
     public static final class PODZOL {
+        /**
+         * Definition: "snowy" = [true, false]
+         */
         public static final BlockProperty<Boolean> SNOWY = BlockProperties.SNOWY;
 
         static List<BlockProperty<?>> getProperties() {
@@ -210,7 +224,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#OAK_SAPLING} can have:
+     * {@link BlockProperties#STAGE}
+     */
     public static final class OAK_SAPLING {
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -218,7 +239,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_SAPLING} can have:
+     * {@link BlockProperties#STAGE}
+     */
     public static final class SPRUCE_SAPLING {
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -226,7 +254,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BIRCH_SAPLING} can have:
+     * {@link BlockProperties#STAGE}
+     */
     public static final class BIRCH_SAPLING {
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -234,7 +269,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_SAPLING} can have:
+     * {@link BlockProperties#STAGE}
+     */
     public static final class JUNGLE_SAPLING {
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -242,7 +284,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ACACIA_SAPLING} can have:
+     * {@link BlockProperties#STAGE}
+     */
     public static final class ACACIA_SAPLING {
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -250,7 +299,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_SAPLING} can have:
+     * {@link BlockProperties#STAGE}
+     */
     public static final class DARK_OAK_SAPLING {
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -258,7 +314,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WATER} can have:
+     * {@link BlockProperties#LEVEL}
+     */
     public static final class WATER {
+        /**
+         * Definition: "level" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> LEVEL = BlockProperties.LEVEL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -266,7 +329,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LAVA} can have:
+     * {@link BlockProperties#LEVEL}
+     */
     public static final class LAVA {
+        /**
+         * Definition: "level" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> LEVEL = BlockProperties.LEVEL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -274,7 +344,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#OAK_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class OAK_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -282,7 +359,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class SPRUCE_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -290,7 +374,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BIRCH_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class BIRCH_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -298,7 +389,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class JUNGLE_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -306,7 +404,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ACACIA_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class ACACIA_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -314,7 +419,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class DARK_OAK_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -322,7 +434,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_SPRUCE_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_SPRUCE_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -330,7 +449,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_BIRCH_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_BIRCH_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -338,7 +464,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_JUNGLE_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_JUNGLE_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -346,7 +479,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_ACACIA_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_ACACIA_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -354,7 +494,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_DARK_OAK_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_DARK_OAK_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -362,7 +509,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_OAK_LOG} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_OAK_LOG {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -370,7 +524,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#OAK_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class OAK_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -378,7 +539,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class SPRUCE_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -386,7 +554,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BIRCH_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class BIRCH_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -394,7 +569,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class JUNGLE_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -402,7 +584,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ACACIA_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class ACACIA_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -410,7 +599,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class DARK_OAK_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -418,7 +614,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_OAK_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_OAK_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -426,7 +629,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_SPRUCE_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_SPRUCE_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -434,7 +644,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_BIRCH_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_BIRCH_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -442,7 +659,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_JUNGLE_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_JUNGLE_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -450,7 +674,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_ACACIA_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_ACACIA_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -458,7 +689,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_DARK_OAK_WOOD} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_DARK_OAK_WOOD {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -466,9 +704,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#OAK_LEAVES} can have:
+     * {@link BlockProperties#DISTANCE}
+     * {@link BlockProperties#PERSISTENT}
+     */
     public static final class OAK_LEAVES {
+        /**
+         * Definition: "distance" = [1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> DISTANCE = BlockProperties.DISTANCE;
 
+        /**
+         * Definition: "persistent" = [true, false]
+         */
         public static final BlockProperty<Boolean> PERSISTENT = BlockProperties.PERSISTENT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -476,9 +725,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_LEAVES} can have:
+     * {@link BlockProperties#DISTANCE}
+     * {@link BlockProperties#PERSISTENT}
+     */
     public static final class SPRUCE_LEAVES {
+        /**
+         * Definition: "distance" = [1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> DISTANCE = BlockProperties.DISTANCE;
 
+        /**
+         * Definition: "persistent" = [true, false]
+         */
         public static final BlockProperty<Boolean> PERSISTENT = BlockProperties.PERSISTENT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -486,9 +746,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_LEAVES} can have:
+     * {@link BlockProperties#DISTANCE}
+     * {@link BlockProperties#PERSISTENT}
+     */
     public static final class BIRCH_LEAVES {
+        /**
+         * Definition: "distance" = [1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> DISTANCE = BlockProperties.DISTANCE;
 
+        /**
+         * Definition: "persistent" = [true, false]
+         */
         public static final BlockProperty<Boolean> PERSISTENT = BlockProperties.PERSISTENT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -496,9 +767,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_LEAVES} can have:
+     * {@link BlockProperties#DISTANCE}
+     * {@link BlockProperties#PERSISTENT}
+     */
     public static final class JUNGLE_LEAVES {
+        /**
+         * Definition: "distance" = [1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> DISTANCE = BlockProperties.DISTANCE;
 
+        /**
+         * Definition: "persistent" = [true, false]
+         */
         public static final BlockProperty<Boolean> PERSISTENT = BlockProperties.PERSISTENT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -506,9 +788,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_LEAVES} can have:
+     * {@link BlockProperties#DISTANCE}
+     * {@link BlockProperties#PERSISTENT}
+     */
     public static final class ACACIA_LEAVES {
+        /**
+         * Definition: "distance" = [1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> DISTANCE = BlockProperties.DISTANCE;
 
+        /**
+         * Definition: "persistent" = [true, false]
+         */
         public static final BlockProperty<Boolean> PERSISTENT = BlockProperties.PERSISTENT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -516,9 +809,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_LEAVES} can have:
+     * {@link BlockProperties#DISTANCE}
+     * {@link BlockProperties#PERSISTENT}
+     */
     public static final class DARK_OAK_LEAVES {
+        /**
+         * Definition: "distance" = [1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> DISTANCE = BlockProperties.DISTANCE;
 
+        /**
+         * Definition: "persistent" = [true, false]
+         */
         public static final BlockProperty<Boolean> PERSISTENT = BlockProperties.PERSISTENT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -526,9 +830,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DISPENSER} can have:
+     * {@link BlockProperties#FACING}
+     * {@link BlockProperties#TRIGGERED}
+     */
     public static final class DISPENSER {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
+        /**
+         * Definition: "triggered" = [true, false]
+         */
         public static final BlockProperty<Boolean> TRIGGERED = BlockProperties.TRIGGERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -536,11 +851,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#NOTE_BLOCK} can have:
+     * {@link BlockProperties#NOTEBLOCK_INSTRUMENT}
+     * {@link BlockProperties#NOTE}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class NOTE_BLOCK {
+        /**
+         * Definition: "instrument" = ["harp", "basedrum", "snare", "hat", "bass", "flute", "bell", "guitar", "chime", "xylophone", "iron_xylophone", "cow_bell", "didgeridoo", "bit", "banjo", "pling"]
+         */
         public static final BlockProperty<String> NOTEBLOCK_INSTRUMENT = BlockProperties.NOTEBLOCK_INSTRUMENT;
 
+        /**
+         * Definition: "note" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]
+         */
         public static final BlockProperty<Integer> NOTE = BlockProperties.NOTE;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -548,11 +878,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#WHITE_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class WHITE_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -560,11 +905,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#ORANGE_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class ORANGE_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -572,11 +932,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#MAGENTA_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class MAGENTA_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -584,11 +959,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#LIGHT_BLUE_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class LIGHT_BLUE_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -596,11 +986,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#YELLOW_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class YELLOW_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -608,11 +1013,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#LIME_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class LIME_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -620,11 +1040,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#PINK_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class PINK_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -632,11 +1067,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#GRAY_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class GRAY_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -644,11 +1094,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#LIGHT_GRAY_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class LIGHT_GRAY_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -656,11 +1121,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#CYAN_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class CYAN_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -668,11 +1148,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#PURPLE_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class PURPLE_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -680,11 +1175,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BLUE_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class BLUE_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -692,11 +1202,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BROWN_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class BROWN_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -704,11 +1229,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#GREEN_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class GREEN_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -716,11 +1256,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#RED_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class RED_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -728,11 +1283,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BLACK_BED} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#OCCUPIED}
+     * {@link BlockProperties#BED_PART}
+     */
     public static final class BLACK_BED {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "occupied" = [true, false]
+         */
         public static final BlockProperty<Boolean> OCCUPIED = BlockProperties.OCCUPIED;
 
+        /**
+         * Definition: "part" = ["head", "foot"]
+         */
         public static final BlockProperty<String> BED_PART = BlockProperties.BED_PART;
 
         static List<BlockProperty<?>> getProperties() {
@@ -740,9 +1310,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#POWERED_RAIL} can have:
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#RAIL_SHAPE_STRAIGHT}
+     */
     public static final class POWERED_RAIL {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "shape" = ["north_south", "east_west", "ascending_east", "ascending_west", "ascending_north", "ascending_south"]
+         */
         public static final BlockProperty<String> RAIL_SHAPE_STRAIGHT = BlockProperties.RAIL_SHAPE_STRAIGHT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -750,9 +1331,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DETECTOR_RAIL} can have:
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#RAIL_SHAPE_STRAIGHT}
+     */
     public static final class DETECTOR_RAIL {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "shape" = ["north_south", "east_west", "ascending_east", "ascending_west", "ascending_north", "ascending_south"]
+         */
         public static final BlockProperty<String> RAIL_SHAPE_STRAIGHT = BlockProperties.RAIL_SHAPE_STRAIGHT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -760,9 +1352,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#STICKY_PISTON} can have:
+     * {@link BlockProperties#EXTENDED}
+     * {@link BlockProperties#FACING}
+     */
     public static final class STICKY_PISTON {
+        /**
+         * Definition: "extended" = [true, false]
+         */
         public static final BlockProperty<Boolean> EXTENDED = BlockProperties.EXTENDED;
 
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -770,7 +1373,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TALL_SEAGRASS} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class TALL_SEAGRASS {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -778,9 +1388,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#PISTON} can have:
+     * {@link BlockProperties#EXTENDED}
+     * {@link BlockProperties#FACING}
+     */
     public static final class PISTON {
+        /**
+         * Definition: "extended" = [true, false]
+         */
         public static final BlockProperty<Boolean> EXTENDED = BlockProperties.EXTENDED;
 
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -788,11 +1409,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#PISTON_HEAD} can have:
+     * {@link BlockProperties#FACING}
+     * {@link BlockProperties#SHORT}
+     * {@link BlockProperties#PISTON_TYPE}
+     */
     public static final class PISTON_HEAD {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
+        /**
+         * Definition: "short" = [true, false]
+         */
         public static final BlockProperty<Boolean> SHORT = BlockProperties.SHORT;
 
+        /**
+         * Definition: "type" = ["default", "sticky"]
+         */
         public static final BlockProperty<String> PISTON_TYPE = BlockProperties.PISTON_TYPE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -800,9 +1436,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#MOVING_PISTON} can have:
+     * {@link BlockProperties#FACING}
+     * {@link BlockProperties#PISTON_TYPE}
+     */
     public static final class MOVING_PISTON {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
+        /**
+         * Definition: "type" = ["default", "sticky"]
+         */
         public static final BlockProperty<String> PISTON_TYPE = BlockProperties.PISTON_TYPE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -810,7 +1457,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TNT} can have:
+     * {@link BlockProperties#UNSTABLE}
+     */
     public static final class TNT {
+        /**
+         * Definition: "unstable" = [true, false]
+         */
         public static final BlockProperty<Boolean> UNSTABLE = BlockProperties.UNSTABLE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -818,7 +1472,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WALL_TORCH} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class WALL_TORCH {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -826,17 +1487,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#FIRE} can have:
+     * {@link BlockProperties#AGE_15}
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WEST}
+     */
     public static final class FIRE {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> AGE_15 = BlockProperties.AGE_15;
 
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -844,13 +1532,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#OAK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class OAK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -858,11 +1565,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#CHEST} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#CHEST_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CHEST {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "type" = ["single", "left", "right"]
+         */
         public static final BlockProperty<String> CHEST_TYPE = BlockProperties.CHEST_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -870,15 +1592,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#REDSTONE_WIRE} can have:
+     * {@link BlockProperties#EAST_REDSTONE}
+     * {@link BlockProperties#NORTH_REDSTONE}
+     * {@link BlockProperties#POWER}
+     * {@link BlockProperties#SOUTH_REDSTONE}
+     * {@link BlockProperties#WEST_REDSTONE}
+     */
     public static final class REDSTONE_WIRE {
+        /**
+         * Definition: "east" = ["up", "side", "none"]
+         */
         public static final BlockProperty<String> EAST_REDSTONE = BlockProperties.EAST_REDSTONE;
 
+        /**
+         * Definition: "north" = ["up", "side", "none"]
+         */
         public static final BlockProperty<String> NORTH_REDSTONE = BlockProperties.NORTH_REDSTONE;
 
+        /**
+         * Definition: "power" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> POWER = BlockProperties.POWER;
 
+        /**
+         * Definition: "south" = ["up", "side", "none"]
+         */
         public static final BlockProperty<String> SOUTH_REDSTONE = BlockProperties.SOUTH_REDSTONE;
 
+        /**
+         * Definition: "west" = ["up", "side", "none"]
+         */
         public static final BlockProperty<String> WEST_REDSTONE = BlockProperties.WEST_REDSTONE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -886,7 +1631,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WHEAT} can have:
+     * {@link BlockProperties#AGE_7}
+     */
     public static final class WHEAT {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> AGE_7 = BlockProperties.AGE_7;
 
         static List<BlockProperty<?>> getProperties() {
@@ -894,7 +1646,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#FARMLAND} can have:
+     * {@link BlockProperties#MOISTURE}
+     */
     public static final class FARMLAND {
+        /**
+         * Definition: "moisture" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> MOISTURE = BlockProperties.MOISTURE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -902,9 +1661,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#FURNACE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LIT}
+     */
     public static final class FURNACE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -912,9 +1682,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#OAK_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class OAK_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -922,9 +1703,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SPRUCE_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -932,9 +1724,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BIRCH_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -942,9 +1745,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ACACIA_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -952,9 +1766,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class JUNGLE_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -962,9 +1787,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_OAK_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -972,15 +1808,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#OAK_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class OAK_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -988,9 +1847,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#LADDER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class LADDER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -998,7 +1868,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#RAIL} can have:
+     * {@link BlockProperties#RAIL_SHAPE}
+     */
     public static final class RAIL {
+        /**
+         * Definition: "shape" = ["north_south", "east_west", "ascending_east", "ascending_west", "ascending_north", "ascending_south", "south_east", "south_west", "north_west", "north_east"]
+         */
         public static final BlockProperty<String> RAIL_SHAPE = BlockProperties.RAIL_SHAPE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1006,13 +1883,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#COBBLESTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class COBBLESTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1020,9 +1916,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#OAK_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class OAK_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1030,9 +1937,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SPRUCE_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1040,9 +1958,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BIRCH_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1050,9 +1979,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ACACIA_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1060,9 +2000,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class JUNGLE_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1070,9 +2021,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_OAK_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1080,11 +2042,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#LEVER} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class LEVER {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1092,7 +2069,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STONE_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class STONE_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1100,15 +2084,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#IRON_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class IRON_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1116,7 +2123,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#OAK_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class OAK_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1124,7 +2138,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SPRUCE_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class SPRUCE_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1132,7 +2153,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BIRCH_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class BIRCH_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1140,7 +2168,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JUNGLE_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class JUNGLE_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1148,7 +2183,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ACACIA_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class ACACIA_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1156,7 +2198,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DARK_OAK_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class DARK_OAK_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1164,7 +2213,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#REDSTONE_ORE} can have:
+     * {@link BlockProperties#LIT}
+     */
     public static final class REDSTONE_ORE {
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1172,7 +2228,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#REDSTONE_TORCH} can have:
+     * {@link BlockProperties#LIT}
+     */
     public static final class REDSTONE_TORCH {
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1180,9 +2243,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#REDSTONE_WALL_TORCH} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LIT}
+     */
     public static final class REDSTONE_WALL_TORCH {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1190,11 +2264,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#STONE_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class STONE_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1202,7 +2291,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SNOW} can have:
+     * {@link BlockProperties#LAYERS}
+     */
     public static final class SNOW {
+        /**
+         * Definition: "layers" = [1, 2, 3, 4, 5, 6, 7, 8]
+         */
         public static final BlockProperty<Integer> LAYERS = BlockProperties.LAYERS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1210,7 +2306,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CACTUS} can have:
+     * {@link BlockProperties#AGE_15}
+     */
     public static final class CACTUS {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> AGE_15 = BlockProperties.AGE_15;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1218,7 +2321,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SUGAR_CANE} can have:
+     * {@link BlockProperties#AGE_15}
+     */
     public static final class SUGAR_CANE {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> AGE_15 = BlockProperties.AGE_15;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1226,7 +2336,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JUKEBOX} can have:
+     * {@link BlockProperties#HAS_RECORD}
+     */
     public static final class JUKEBOX {
+        /**
+         * Definition: "has_record" = [true, false]
+         */
         public static final BlockProperty<Boolean> HAS_RECORD = BlockProperties.HAS_RECORD;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1234,15 +2351,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#OAK_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class OAK_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1250,7 +2390,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BASALT} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class BASALT {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1258,7 +2405,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#POLISHED_BASALT} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class POLISHED_BASALT {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1266,7 +2420,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SOUL_WALL_TORCH} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class SOUL_WALL_TORCH {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1274,7 +2435,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#NETHER_PORTAL} can have:
+     * {@link BlockProperties#HORIZONTAL_AXIS}
+     */
     public static final class NETHER_PORTAL {
+        /**
+         * Definition: "axis" = ["x", "z"]
+         */
         public static final BlockProperty<String> HORIZONTAL_AXIS = BlockProperties.HORIZONTAL_AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1282,7 +2450,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CARVED_PUMPKIN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class CARVED_PUMPKIN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1290,7 +2465,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JACK_O_LANTERN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class JACK_O_LANTERN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1298,7 +2480,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CAKE} can have:
+     * {@link BlockProperties#BITES}
+     */
     public static final class CAKE {
+        /**
+         * Definition: "bites" = [0, 1, 2, 3, 4, 5, 6]
+         */
         public static final BlockProperty<Integer> BITES = BlockProperties.BITES;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1306,13 +2495,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#REPEATER} can have:
+     * {@link BlockProperties#DELAY}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LOCKED}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class REPEATER {
+        /**
+         * Definition: "delay" = [1, 2, 3, 4]
+         */
         public static final BlockProperty<Integer> DELAY = BlockProperties.DELAY;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "locked" = [true, false]
+         */
         public static final BlockProperty<Boolean> LOCKED = BlockProperties.LOCKED;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1320,15 +2528,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#OAK_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class OAK_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1336,15 +2567,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#SPRUCE_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SPRUCE_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1352,15 +2606,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#BIRCH_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BIRCH_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1368,15 +2645,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#JUNGLE_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class JUNGLE_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1384,15 +2684,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#ACACIA_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ACACIA_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1400,15 +2723,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#DARK_OAK_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_OAK_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1416,17 +2762,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#BROWN_MUSHROOM_BLOCK} can have:
+     * {@link BlockProperties#DOWN}
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WEST}
+     */
     public static final class BROWN_MUSHROOM_BLOCK {
+        /**
+         * Definition: "down" = [true, false]
+         */
         public static final BlockProperty<Boolean> DOWN = BlockProperties.DOWN;
 
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1434,17 +2807,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#RED_MUSHROOM_BLOCK} can have:
+     * {@link BlockProperties#DOWN}
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WEST}
+     */
     public static final class RED_MUSHROOM_BLOCK {
+        /**
+         * Definition: "down" = [true, false]
+         */
         public static final BlockProperty<Boolean> DOWN = BlockProperties.DOWN;
 
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1452,17 +2852,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#MUSHROOM_STEM} can have:
+     * {@link BlockProperties#DOWN}
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WEST}
+     */
     public static final class MUSHROOM_STEM {
+        /**
+         * Definition: "down" = [true, false]
+         */
         public static final BlockProperty<Boolean> DOWN = BlockProperties.DOWN;
 
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1470,15 +2897,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#IRON_BARS} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class IRON_BARS {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1486,9 +2936,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CHAIN} can have:
+     * {@link BlockProperties#AXIS}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CHAIN {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1496,15 +2957,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1512,7 +2996,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ATTACHED_PUMPKIN_STEM} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class ATTACHED_PUMPKIN_STEM {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1520,7 +3011,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ATTACHED_MELON_STEM} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class ATTACHED_MELON_STEM {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1528,7 +3026,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PUMPKIN_STEM} can have:
+     * {@link BlockProperties#AGE_7}
+     */
     public static final class PUMPKIN_STEM {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> AGE_7 = BlockProperties.AGE_7;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1536,7 +3041,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#MELON_STEM} can have:
+     * {@link BlockProperties#AGE_7}
+     */
     public static final class MELON_STEM {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> AGE_7 = BlockProperties.AGE_7;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1544,15 +3056,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#VINE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WEST}
+     */
     public static final class VINE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1560,13 +3095,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#OAK_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class OAK_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1574,13 +3128,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1588,13 +3161,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#STONE_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class STONE_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1602,7 +3194,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#MYCELIUM} can have:
+     * {@link BlockProperties#SNOWY}
+     */
     public static final class MYCELIUM {
+        /**
+         * Definition: "snowy" = [true, false]
+         */
         public static final BlockProperty<Boolean> SNOWY = BlockProperties.SNOWY;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1610,15 +3209,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#NETHER_BRICK_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class NETHER_BRICK_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1626,13 +3248,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#NETHER_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class NETHER_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1640,7 +3281,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#NETHER_WART} can have:
+     * {@link BlockProperties#AGE_3}
+     */
     public static final class NETHER_WART {
+        /**
+         * Definition: "age" = [0, 1, 2, 3]
+         */
         public static final BlockProperty<Integer> AGE_3 = BlockProperties.AGE_3;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1648,11 +3296,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BREWING_STAND} can have:
+     * {@link BlockProperties#HAS_BOTTLE_0}
+     * {@link BlockProperties#HAS_BOTTLE_1}
+     * {@link BlockProperties#HAS_BOTTLE_2}
+     */
     public static final class BREWING_STAND {
+        /**
+         * Definition: "has_bottle_0" = [true, false]
+         */
         public static final BlockProperty<Boolean> HAS_BOTTLE_0 = BlockProperties.HAS_BOTTLE_0;
 
+        /**
+         * Definition: "has_bottle_1" = [true, false]
+         */
         public static final BlockProperty<Boolean> HAS_BOTTLE_1 = BlockProperties.HAS_BOTTLE_1;
 
+        /**
+         * Definition: "has_bottle_2" = [true, false]
+         */
         public static final BlockProperty<Boolean> HAS_BOTTLE_2 = BlockProperties.HAS_BOTTLE_2;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1660,7 +3323,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CAULDRON} can have:
+     * {@link BlockProperties#LEVEL_CAULDRON}
+     */
     public static final class CAULDRON {
+        /**
+         * Definition: "level" = [0, 1, 2, 3]
+         */
         public static final BlockProperty<Integer> LEVEL_CAULDRON = BlockProperties.LEVEL_CAULDRON;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1668,9 +3338,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#END_PORTAL_FRAME} can have:
+     * {@link BlockProperties#EYE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class END_PORTAL_FRAME {
+        /**
+         * Definition: "eye" = [true, false]
+         */
         public static final BlockProperty<Boolean> EYE = BlockProperties.EYE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1678,7 +3359,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#REDSTONE_LAMP} can have:
+     * {@link BlockProperties#LIT}
+     */
     public static final class REDSTONE_LAMP {
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1686,9 +3374,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#COCOA} can have:
+     * {@link BlockProperties#AGE_2}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class COCOA {
+        /**
+         * Definition: "age" = [0, 1, 2]
+         */
         public static final BlockProperty<Integer> AGE_2 = BlockProperties.AGE_2;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1696,13 +3395,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SANDSTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SANDSTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1710,9 +3428,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ENDER_CHEST} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ENDER_CHEST {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1720,11 +3449,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#TRIPWIRE_HOOK} can have:
+     * {@link BlockProperties#ATTACHED}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class TRIPWIRE_HOOK {
+        /**
+         * Definition: "attached" = [true, false]
+         */
         public static final BlockProperty<Boolean> ATTACHED = BlockProperties.ATTACHED;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1732,19 +3476,50 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 7 BlockState properties that {@link Blocks#TRIPWIRE} can have:
+     * {@link BlockProperties#ATTACHED}
+     * {@link BlockProperties#DISARMED}
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WEST}
+     */
     public static final class TRIPWIRE {
+        /**
+         * Definition: "attached" = [true, false]
+         */
         public static final BlockProperty<Boolean> ATTACHED = BlockProperties.ATTACHED;
 
+        /**
+         * Definition: "disarmed" = [true, false]
+         */
         public static final BlockProperty<Boolean> DISARMED = BlockProperties.DISARMED;
 
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1752,13 +3527,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SPRUCE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SPRUCE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1766,13 +3560,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#BIRCH_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BIRCH_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1780,13 +3593,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#JUNGLE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class JUNGLE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1794,9 +3626,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#COMMAND_BLOCK} can have:
+     * {@link BlockProperties#CONDITIONAL}
+     * {@link BlockProperties#FACING}
+     */
     public static final class COMMAND_BLOCK {
+        /**
+         * Definition: "conditional" = [true, false]
+         */
         public static final BlockProperty<Boolean> CONDITIONAL = BlockProperties.CONDITIONAL;
 
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1804,17 +3647,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#COBBLESTONE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class COBBLESTONE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1822,17 +3692,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#MOSSY_COBBLESTONE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class MOSSY_COBBLESTONE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1840,7 +3737,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CARROTS} can have:
+     * {@link BlockProperties#AGE_7}
+     */
     public static final class CARROTS {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> AGE_7 = BlockProperties.AGE_7;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1848,7 +3752,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#POTATOES} can have:
+     * {@link BlockProperties#AGE_7}
+     */
     public static final class POTATOES {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> AGE_7 = BlockProperties.AGE_7;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1856,11 +3767,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#OAK_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class OAK_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1868,11 +3794,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#SPRUCE_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class SPRUCE_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1880,11 +3821,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BIRCH_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class BIRCH_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1892,11 +3848,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#JUNGLE_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class JUNGLE_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1904,11 +3875,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#ACACIA_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class ACACIA_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1916,11 +3902,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#DARK_OAK_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class DARK_OAK_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1928,7 +3929,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SKELETON_SKULL} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class SKELETON_SKULL {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1936,7 +3944,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SKELETON_WALL_SKULL} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class SKELETON_WALL_SKULL {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1944,7 +3959,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WITHER_SKELETON_SKULL} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class WITHER_SKELETON_SKULL {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1952,7 +3974,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WITHER_SKELETON_WALL_SKULL} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class WITHER_SKELETON_WALL_SKULL {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1960,7 +3989,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ZOMBIE_HEAD} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class ZOMBIE_HEAD {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1968,7 +4004,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ZOMBIE_WALL_HEAD} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class ZOMBIE_WALL_HEAD {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1976,7 +4019,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PLAYER_HEAD} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class PLAYER_HEAD {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1984,7 +4034,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PLAYER_WALL_HEAD} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class PLAYER_WALL_HEAD {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -1992,7 +4049,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CREEPER_HEAD} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class CREEPER_HEAD {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2000,7 +4064,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CREEPER_WALL_HEAD} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class CREEPER_WALL_HEAD {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2008,7 +4079,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DRAGON_HEAD} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class DRAGON_HEAD {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2016,7 +4094,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DRAGON_WALL_HEAD} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class DRAGON_WALL_HEAD {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2024,7 +4109,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ANVIL} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class ANVIL {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2032,7 +4124,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CHIPPED_ANVIL} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class CHIPPED_ANVIL {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2040,7 +4139,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DAMAGED_ANVIL} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class DAMAGED_ANVIL {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2048,11 +4154,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#TRAPPED_CHEST} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#CHEST_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class TRAPPED_CHEST {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "type" = ["single", "left", "right"]
+         */
         public static final BlockProperty<String> CHEST_TYPE = BlockProperties.CHEST_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2060,7 +4181,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_WEIGHTED_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWER}
+     */
     public static final class LIGHT_WEIGHTED_PRESSURE_PLATE {
+        /**
+         * Definition: "power" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> POWER = BlockProperties.POWER;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2068,7 +4196,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#HEAVY_WEIGHTED_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWER}
+     */
     public static final class HEAVY_WEIGHTED_PRESSURE_PLATE {
+        /**
+         * Definition: "power" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> POWER = BlockProperties.POWER;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2076,11 +4211,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#COMPARATOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#MODE_COMPARATOR}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class COMPARATOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "mode" = ["compare", "subtract"]
+         */
         public static final BlockProperty<String> MODE_COMPARATOR = BlockProperties.MODE_COMPARATOR;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2088,9 +4238,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DAYLIGHT_DETECTOR} can have:
+     * {@link BlockProperties#INVERTED}
+     * {@link BlockProperties#POWER}
+     */
     public static final class DAYLIGHT_DETECTOR {
+        /**
+         * Definition: "inverted" = [true, false]
+         */
         public static final BlockProperty<Boolean> INVERTED = BlockProperties.INVERTED;
 
+        /**
+         * Definition: "power" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> POWER = BlockProperties.POWER;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2098,9 +4259,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#HOPPER} can have:
+     * {@link BlockProperties#ENABLED}
+     * {@link BlockProperties#FACING_HOPPER}
+     */
     public static final class HOPPER {
+        /**
+         * Definition: "enabled" = [true, false]
+         */
         public static final BlockProperty<Boolean> ENABLED = BlockProperties.ENABLED;
 
+        /**
+         * Definition: "facing" = ["down", "north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> FACING_HOPPER = BlockProperties.FACING_HOPPER;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2108,7 +4280,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#QUARTZ_PILLAR} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class QUARTZ_PILLAR {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2116,13 +4295,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#QUARTZ_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class QUARTZ_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2130,9 +4328,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ACTIVATOR_RAIL} can have:
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#RAIL_SHAPE_STRAIGHT}
+     */
     public static final class ACTIVATOR_RAIL {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "shape" = ["north_south", "east_west", "ascending_east", "ascending_west", "ascending_north", "ascending_south"]
+         */
         public static final BlockProperty<String> RAIL_SHAPE_STRAIGHT = BlockProperties.RAIL_SHAPE_STRAIGHT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2140,9 +4349,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DROPPER} can have:
+     * {@link BlockProperties#FACING}
+     * {@link BlockProperties#TRIGGERED}
+     */
     public static final class DROPPER {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
+        /**
+         * Definition: "triggered" = [true, false]
+         */
         public static final BlockProperty<Boolean> TRIGGERED = BlockProperties.TRIGGERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2150,15 +4370,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#WHITE_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class WHITE_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2166,15 +4409,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#ORANGE_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class ORANGE_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2182,15 +4448,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#MAGENTA_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class MAGENTA_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2198,15 +4487,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#LIGHT_BLUE_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class LIGHT_BLUE_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2214,15 +4526,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#YELLOW_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class YELLOW_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2230,15 +4565,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#LIME_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class LIME_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2246,15 +4604,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#PINK_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class PINK_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2262,15 +4643,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#GRAY_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class GRAY_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2278,15 +4682,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#LIGHT_GRAY_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class LIGHT_GRAY_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2294,15 +4721,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#CYAN_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class CYAN_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2310,15 +4760,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#PURPLE_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class PURPLE_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2326,15 +4799,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#BLUE_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class BLUE_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2342,15 +4838,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#BROWN_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class BROWN_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2358,15 +4877,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#GREEN_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class GREEN_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2374,15 +4916,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#RED_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class RED_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2390,15 +4955,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#BLACK_STAINED_GLASS_PANE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class BLACK_STAINED_GLASS_PANE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2406,13 +4994,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#ACACIA_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ACACIA_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2420,13 +5027,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#DARK_OAK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_OAK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2434,15 +5060,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#IRON_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class IRON_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2450,13 +5099,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#PRISMARINE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PRISMARINE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2464,13 +5132,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#PRISMARINE_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PRISMARINE_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2478,13 +5165,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#DARK_PRISMARINE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_PRISMARINE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2492,9 +5198,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#PRISMARINE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PRISMARINE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2502,9 +5219,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#PRISMARINE_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PRISMARINE_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2512,9 +5240,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DARK_PRISMARINE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_PRISMARINE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2522,7 +5261,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#HAY_BLOCK} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class HAY_BLOCK {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2530,7 +5276,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SUNFLOWER} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class SUNFLOWER {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2538,7 +5291,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LILAC} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class LILAC {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2546,7 +5306,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ROSE_BUSH} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class ROSE_BUSH {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2554,7 +5321,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PEONY} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class PEONY {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2562,7 +5336,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TALL_GRASS} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class TALL_GRASS {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2570,7 +5351,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LARGE_FERN} can have:
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     */
     public static final class LARGE_FERN {
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2578,7 +5366,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WHITE_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class WHITE_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2586,7 +5381,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ORANGE_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class ORANGE_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2594,7 +5396,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class MAGENTA_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2602,7 +5411,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class LIGHT_BLUE_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2610,7 +5426,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#YELLOW_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class YELLOW_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2618,7 +5441,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIME_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class LIME_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2626,7 +5456,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PINK_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class PINK_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2634,7 +5471,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GRAY_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class GRAY_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2642,7 +5486,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class LIGHT_GRAY_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2650,7 +5501,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CYAN_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class CYAN_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2658,7 +5516,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PURPLE_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class PURPLE_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2666,7 +5531,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLUE_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class BLUE_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2674,7 +5546,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BROWN_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class BROWN_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2682,7 +5561,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GREEN_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class GREEN_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2690,7 +5576,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#RED_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class RED_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2698,7 +5591,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLACK_BANNER} can have:
+     * {@link BlockProperties#ROTATION_16}
+     */
     public static final class BLACK_BANNER {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2706,7 +5606,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WHITE_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class WHITE_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2714,7 +5621,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ORANGE_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class ORANGE_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2722,7 +5636,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class MAGENTA_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2730,7 +5651,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LIGHT_BLUE_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2738,7 +5666,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#YELLOW_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class YELLOW_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2746,7 +5681,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIME_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LIME_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2754,7 +5696,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PINK_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class PINK_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2762,7 +5711,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GRAY_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class GRAY_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2770,7 +5726,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LIGHT_GRAY_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2778,7 +5741,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CYAN_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class CYAN_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2786,7 +5756,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PURPLE_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class PURPLE_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2794,7 +5771,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLUE_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class BLUE_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2802,7 +5786,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BROWN_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class BROWN_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2810,7 +5801,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GREEN_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class GREEN_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2818,7 +5816,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#RED_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class RED_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2826,7 +5831,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLACK_WALL_BANNER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class BLACK_WALL_BANNER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2834,13 +5846,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#RED_SANDSTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class RED_SANDSTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2848,9 +5879,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#OAK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class OAK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2858,9 +5900,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SPRUCE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SPRUCE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2868,9 +5921,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BIRCH_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BIRCH_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2878,9 +5942,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#JUNGLE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class JUNGLE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2888,9 +5963,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ACACIA_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ACACIA_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2898,9 +5984,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DARK_OAK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DARK_OAK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2908,9 +6005,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#STONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class STONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2918,9 +6026,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_STONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_STONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2928,9 +6047,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SANDSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SANDSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2938,9 +6068,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CUT_SANDSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CUT_SANDSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2948,9 +6089,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#PETRIFIED_OAK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PETRIFIED_OAK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2958,9 +6110,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#COBBLESTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class COBBLESTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2968,9 +6131,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2978,9 +6152,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#STONE_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class STONE_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2988,9 +6173,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#NETHER_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class NETHER_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -2998,9 +6194,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#QUARTZ_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class QUARTZ_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3008,9 +6215,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#RED_SANDSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class RED_SANDSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3018,9 +6236,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CUT_RED_SANDSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CUT_RED_SANDSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3028,9 +6257,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#PURPUR_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PURPUR_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3038,13 +6278,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SPRUCE_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class SPRUCE_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3052,13 +6311,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#BIRCH_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class BIRCH_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3066,13 +6344,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#JUNGLE_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class JUNGLE_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3080,13 +6377,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#ACACIA_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class ACACIA_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3094,13 +6410,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#DARK_OAK_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class DARK_OAK_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3108,15 +6443,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#SPRUCE_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class SPRUCE_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3124,15 +6482,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#BIRCH_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class BIRCH_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3140,15 +6521,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#JUNGLE_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class JUNGLE_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3156,15 +6560,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#ACACIA_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class ACACIA_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3172,15 +6599,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#DARK_OAK_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class DARK_OAK_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3188,15 +6638,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#SPRUCE_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class SPRUCE_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3204,15 +6677,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#BIRCH_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class BIRCH_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3220,15 +6716,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#JUNGLE_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class JUNGLE_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3236,15 +6755,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#ACACIA_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class ACACIA_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3252,15 +6794,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#DARK_OAK_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class DARK_OAK_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3268,7 +6833,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#END_ROD} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class END_ROD {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3276,17 +6848,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#CHORUS_PLANT} can have:
+     * {@link BlockProperties#DOWN}
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WEST}
+     */
     public static final class CHORUS_PLANT {
+        /**
+         * Definition: "down" = [true, false]
+         */
         public static final BlockProperty<Boolean> DOWN = BlockProperties.DOWN;
 
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3294,7 +6893,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CHORUS_FLOWER} can have:
+     * {@link BlockProperties#AGE_5}
+     */
     public static final class CHORUS_FLOWER {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5]
+         */
         public static final BlockProperty<Integer> AGE_5 = BlockProperties.AGE_5;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3302,7 +6908,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PURPUR_PILLAR} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class PURPUR_PILLAR {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3310,13 +6923,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#PURPUR_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class PURPUR_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3324,7 +6956,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BEETROOTS} can have:
+     * {@link BlockProperties#AGE_3}
+     */
     public static final class BEETROOTS {
+        /**
+         * Definition: "age" = [0, 1, 2, 3]
+         */
         public static final BlockProperty<Integer> AGE_3 = BlockProperties.AGE_3;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3332,9 +6971,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#REPEATING_COMMAND_BLOCK} can have:
+     * {@link BlockProperties#CONDITIONAL}
+     * {@link BlockProperties#FACING}
+     */
     public static final class REPEATING_COMMAND_BLOCK {
+        /**
+         * Definition: "conditional" = [true, false]
+         */
         public static final BlockProperty<Boolean> CONDITIONAL = BlockProperties.CONDITIONAL;
 
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3342,9 +6992,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CHAIN_COMMAND_BLOCK} can have:
+     * {@link BlockProperties#CONDITIONAL}
+     * {@link BlockProperties#FACING}
+     */
     public static final class CHAIN_COMMAND_BLOCK {
+        /**
+         * Definition: "conditional" = [true, false]
+         */
         public static final BlockProperty<Boolean> CONDITIONAL = BlockProperties.CONDITIONAL;
 
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3352,7 +7013,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#FROSTED_ICE} can have:
+     * {@link BlockProperties#AGE_3}
+     */
     public static final class FROSTED_ICE {
+        /**
+         * Definition: "age" = [0, 1, 2, 3]
+         */
         public static final BlockProperty<Integer> AGE_3 = BlockProperties.AGE_3;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3360,7 +7028,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BONE_BLOCK} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class BONE_BLOCK {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3368,9 +7043,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#OBSERVER} can have:
+     * {@link BlockProperties#FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class OBSERVER {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3378,7 +7064,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3386,7 +7079,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WHITE_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class WHITE_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3394,7 +7094,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ORANGE_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class ORANGE_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3402,7 +7109,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class MAGENTA_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3410,7 +7124,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class LIGHT_BLUE_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3418,7 +7139,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#YELLOW_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class YELLOW_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3426,7 +7154,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIME_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class LIME_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3434,7 +7169,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PINK_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class PINK_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3442,7 +7184,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GRAY_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class GRAY_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3450,7 +7199,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class LIGHT_GRAY_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3458,7 +7214,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CYAN_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class CYAN_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3466,7 +7229,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PURPLE_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class PURPLE_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3474,7 +7244,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLUE_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class BLUE_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3482,7 +7259,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BROWN_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class BROWN_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3490,7 +7274,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GREEN_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class GREEN_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3498,7 +7289,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#RED_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class RED_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3506,7 +7304,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLACK_SHULKER_BOX} can have:
+     * {@link BlockProperties#FACING}
+     */
     public static final class BLACK_SHULKER_BOX {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3514,7 +7319,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WHITE_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class WHITE_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3522,7 +7334,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#ORANGE_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class ORANGE_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3530,7 +7349,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#MAGENTA_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class MAGENTA_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3538,7 +7364,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_BLUE_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LIGHT_BLUE_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3546,7 +7379,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#YELLOW_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class YELLOW_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3554,7 +7394,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIME_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LIME_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3562,7 +7409,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PINK_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class PINK_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3570,7 +7424,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GRAY_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class GRAY_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3578,7 +7439,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LIGHT_GRAY_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LIGHT_GRAY_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3586,7 +7454,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CYAN_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class CYAN_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3594,7 +7469,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#PURPLE_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class PURPLE_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3602,7 +7484,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLUE_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class BLUE_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3610,7 +7499,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BROWN_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class BROWN_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3618,7 +7514,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#GREEN_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class GREEN_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3626,7 +7529,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#RED_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class RED_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3634,7 +7544,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BLACK_GLAZED_TERRACOTTA} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class BLACK_GLAZED_TERRACOTTA {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3642,7 +7559,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#KELP} can have:
+     * {@link BlockProperties#AGE_25}
+     */
     public static final class KELP {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+         */
         public static final BlockProperty<Integer> AGE_25 = BlockProperties.AGE_25;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3650,9 +7574,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#TURTLE_EGG} can have:
+     * {@link BlockProperties#EGGS}
+     * {@link BlockProperties#HATCH}
+     */
     public static final class TURTLE_EGG {
+        /**
+         * Definition: "eggs" = [1, 2, 3, 4]
+         */
         public static final BlockProperty<Integer> EGGS = BlockProperties.EGGS;
 
+        /**
+         * Definition: "hatch" = [0, 1, 2]
+         */
         public static final BlockProperty<Integer> HATCH = BlockProperties.HATCH;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3660,7 +7595,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_TUBE_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_TUBE_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3668,7 +7610,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_BRAIN_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_BRAIN_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3676,7 +7625,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_BUBBLE_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_BUBBLE_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3684,7 +7640,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_FIRE_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_FIRE_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3692,7 +7655,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_HORN_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_HORN_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3700,7 +7670,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TUBE_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class TUBE_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3708,7 +7685,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BRAIN_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BRAIN_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3716,7 +7700,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BUBBLE_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BUBBLE_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3724,7 +7715,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#FIRE_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class FIRE_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3732,7 +7730,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#HORN_CORAL} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class HORN_CORAL {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3740,7 +7745,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_TUBE_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_TUBE_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3748,7 +7760,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_BRAIN_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_BRAIN_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3756,7 +7775,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_BUBBLE_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_BUBBLE_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3764,7 +7790,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_FIRE_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_FIRE_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3772,7 +7805,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#DEAD_HORN_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_HORN_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3780,7 +7820,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TUBE_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class TUBE_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3788,7 +7835,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BRAIN_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BRAIN_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3796,7 +7850,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BUBBLE_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BUBBLE_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3804,7 +7865,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#FIRE_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class FIRE_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3812,7 +7880,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#HORN_CORAL_FAN} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class HORN_CORAL_FAN {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3820,9 +7895,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DEAD_TUBE_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_TUBE_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3830,9 +7916,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DEAD_BRAIN_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_BRAIN_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3840,9 +7937,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DEAD_BUBBLE_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_BUBBLE_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3850,9 +7958,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DEAD_FIRE_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_FIRE_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3860,9 +7979,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DEAD_HORN_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DEAD_HORN_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3870,9 +8000,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#TUBE_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class TUBE_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3880,9 +8021,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BRAIN_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BRAIN_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3890,9 +8042,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BUBBLE_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BUBBLE_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3900,9 +8063,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#FIRE_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class FIRE_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3910,9 +8084,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#HORN_CORAL_WALL_FAN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class HORN_CORAL_WALL_FAN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3920,9 +8105,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SEA_PICKLE} can have:
+     * {@link BlockProperties#PICKLES}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SEA_PICKLE {
+        /**
+         * Definition: "pickles" = [1, 2, 3, 4]
+         */
         public static final BlockProperty<Integer> PICKLES = BlockProperties.PICKLES;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3930,7 +8126,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CONDUIT} can have:
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CONDUIT {
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3938,11 +8141,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BAMBOO} can have:
+     * {@link BlockProperties#AGE_1}
+     * {@link BlockProperties#BAMBOO_LEAVES}
+     * {@link BlockProperties#STAGE}
+     */
     public static final class BAMBOO {
+        /**
+         * Definition: "age" = [0, 1]
+         */
         public static final BlockProperty<Integer> AGE_1 = BlockProperties.AGE_1;
 
+        /**
+         * Definition: "leaves" = ["none", "small", "large"]
+         */
         public static final BlockProperty<String> BAMBOO_LEAVES = BlockProperties.BAMBOO_LEAVES;
 
+        /**
+         * Definition: "stage" = [0, 1]
+         */
         public static final BlockProperty<Integer> STAGE = BlockProperties.STAGE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3950,7 +8168,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#BUBBLE_COLUMN} can have:
+     * {@link BlockProperties#DRAG}
+     */
     public static final class BUBBLE_COLUMN {
+        /**
+         * Definition: "drag" = [true, false]
+         */
         public static final BlockProperty<Boolean> DRAG = BlockProperties.DRAG;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3958,13 +8183,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_GRANITE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_GRANITE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3972,13 +8216,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SMOOTH_RED_SANDSTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_RED_SANDSTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -3986,13 +8249,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#MOSSY_STONE_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class MOSSY_STONE_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4000,13 +8282,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_DIORITE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_DIORITE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4014,13 +8315,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#MOSSY_COBBLESTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class MOSSY_COBBLESTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4028,13 +8348,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#END_STONE_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class END_STONE_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4042,13 +8381,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#STONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class STONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4056,13 +8414,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SMOOTH_SANDSTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_SANDSTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4070,13 +8447,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SMOOTH_QUARTZ_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_QUARTZ_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4084,13 +8480,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#GRANITE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class GRANITE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4098,13 +8513,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#ANDESITE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ANDESITE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4112,13 +8546,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#RED_NETHER_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class RED_NETHER_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4126,13 +8579,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_ANDESITE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_ANDESITE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4140,13 +8612,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#DIORITE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DIORITE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4154,9 +8645,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_GRANITE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_GRANITE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4164,9 +8666,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_RED_SANDSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_RED_SANDSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4174,9 +8687,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#MOSSY_STONE_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class MOSSY_STONE_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4184,9 +8708,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_DIORITE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_DIORITE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4194,9 +8729,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#MOSSY_COBBLESTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class MOSSY_COBBLESTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4204,9 +8750,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#END_STONE_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class END_STONE_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4214,9 +8771,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_SANDSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_SANDSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4224,9 +8792,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SMOOTH_QUARTZ_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SMOOTH_QUARTZ_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4234,9 +8813,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#GRANITE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class GRANITE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4244,9 +8834,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#ANDESITE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class ANDESITE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4254,9 +8855,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#RED_NETHER_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class RED_NETHER_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4264,9 +8876,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_ANDESITE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_ANDESITE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4274,9 +8897,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#DIORITE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class DIORITE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4284,17 +8918,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4302,17 +8963,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#PRISMARINE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class PRISMARINE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4320,17 +9008,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#RED_SANDSTONE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class RED_SANDSTONE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4338,17 +9053,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#MOSSY_STONE_BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class MOSSY_STONE_BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4356,17 +9098,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#GRANITE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class GRANITE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4374,17 +9143,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#STONE_BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class STONE_BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4392,17 +9188,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#NETHER_BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class NETHER_BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4410,17 +9233,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#ANDESITE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class ANDESITE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4428,17 +9278,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#RED_NETHER_BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class RED_NETHER_BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4446,17 +9323,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#SANDSTONE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class SANDSTONE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4464,17 +9368,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#END_STONE_BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class END_STONE_BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4482,17 +9413,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#DIORITE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class DIORITE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4500,11 +9458,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#SCAFFOLDING} can have:
+     * {@link BlockProperties#BOTTOM}
+     * {@link BlockProperties#STABILITY_DISTANCE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SCAFFOLDING {
+        /**
+         * Definition: "bottom" = [true, false]
+         */
         public static final BlockProperty<Boolean> BOTTOM = BlockProperties.BOTTOM;
 
+        /**
+         * Definition: "distance" = [0, 1, 2, 3, 4, 5, 6, 7]
+         */
         public static final BlockProperty<Integer> STABILITY_DISTANCE = BlockProperties.STABILITY_DISTANCE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4512,7 +9485,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#LOOM} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class LOOM {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4520,9 +9500,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BARREL} can have:
+     * {@link BlockProperties#FACING}
+     * {@link BlockProperties#OPEN}
+     */
     public static final class BARREL {
+        /**
+         * Definition: "facing" = ["north", "east", "south", "west", "up", "down"]
+         */
         public static final BlockProperty<String> FACING = BlockProperties.FACING;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4530,9 +9521,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SMOKER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LIT}
+     */
     public static final class SMOKER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4540,9 +9542,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BLAST_FURNACE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LIT}
+     */
     public static final class BLAST_FURNACE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4550,9 +9563,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#GRINDSTONE} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class GRINDSTONE {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4560,11 +9584,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#LECTERN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HAS_BOOK}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class LECTERN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "has_book" = [true, false]
+         */
         public static final BlockProperty<Boolean> HAS_BOOK = BlockProperties.HAS_BOOK;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4572,7 +9611,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STONECUTTER} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     */
     public static final class STONECUTTER {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4580,11 +9626,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#BELL} can have:
+     * {@link BlockProperties#BELL_ATTACHMENT}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class BELL {
+        /**
+         * Definition: "attachment" = ["floor", "ceiling", "single_wall", "double_wall"]
+         */
         public static final BlockProperty<String> BELL_ATTACHMENT = BlockProperties.BELL_ATTACHMENT;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4592,9 +9653,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#LANTERN} can have:
+     * {@link BlockProperties#HANGING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class LANTERN {
+        /**
+         * Definition: "hanging" = [true, false]
+         */
         public static final BlockProperty<Boolean> HANGING = BlockProperties.HANGING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4602,9 +9674,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#SOUL_LANTERN} can have:
+     * {@link BlockProperties#HANGING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SOUL_LANTERN {
+        /**
+         * Definition: "hanging" = [true, false]
+         */
         public static final BlockProperty<Boolean> HANGING = BlockProperties.HANGING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4612,13 +9695,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#CAMPFIRE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LIT}
+     * {@link BlockProperties#SIGNAL_FIRE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CAMPFIRE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
+        /**
+         * Definition: "signal_fire" = [true, false]
+         */
         public static final BlockProperty<Boolean> SIGNAL_FIRE = BlockProperties.SIGNAL_FIRE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4626,13 +9728,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#SOUL_CAMPFIRE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LIT}
+     * {@link BlockProperties#SIGNAL_FIRE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class SOUL_CAMPFIRE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "lit" = [true, false]
+         */
         public static final BlockProperty<Boolean> LIT = BlockProperties.LIT;
 
+        /**
+         * Definition: "signal_fire" = [true, false]
+         */
         public static final BlockProperty<Boolean> SIGNAL_FIRE = BlockProperties.SIGNAL_FIRE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4640,7 +9761,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#SWEET_BERRY_BUSH} can have:
+     * {@link BlockProperties#AGE_3}
+     */
     public static final class SWEET_BERRY_BUSH {
+        /**
+         * Definition: "age" = [0, 1, 2, 3]
+         */
         public static final BlockProperty<Integer> AGE_3 = BlockProperties.AGE_3;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4648,7 +9776,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WARPED_STEM} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class WARPED_STEM {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4656,7 +9791,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_WARPED_STEM} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_WARPED_STEM {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4664,7 +9806,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WARPED_HYPHAE} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class WARPED_HYPHAE {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4672,7 +9821,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_WARPED_HYPHAE} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_WARPED_HYPHAE {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4680,7 +9836,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CRIMSON_STEM} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class CRIMSON_STEM {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4688,7 +9851,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_CRIMSON_STEM} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_CRIMSON_STEM {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4696,7 +9866,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CRIMSON_HYPHAE} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class CRIMSON_HYPHAE {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4704,7 +9881,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRIPPED_CRIMSON_HYPHAE} can have:
+     * {@link BlockProperties#AXIS}
+     */
     public static final class STRIPPED_CRIMSON_HYPHAE {
+        /**
+         * Definition: "axis" = ["x", "y", "z"]
+         */
         public static final BlockProperty<String> AXIS = BlockProperties.AXIS;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4712,7 +9896,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WEEPING_VINES} can have:
+     * {@link BlockProperties#AGE_25}
+     */
     public static final class WEEPING_VINES {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+         */
         public static final BlockProperty<Integer> AGE_25 = BlockProperties.AGE_25;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4720,7 +9911,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TWISTING_VINES} can have:
+     * {@link BlockProperties#AGE_25}
+     */
     public static final class TWISTING_VINES {
+        /**
+         * Definition: "age" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+         */
         public static final BlockProperty<Integer> AGE_25 = BlockProperties.AGE_25;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4728,9 +9926,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CRIMSON_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CRIMSON_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4738,9 +9947,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#WARPED_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class WARPED_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4748,7 +9968,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#CRIMSON_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class CRIMSON_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4756,7 +9983,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#WARPED_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class WARPED_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4764,15 +9998,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#CRIMSON_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class CRIMSON_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4780,15 +10037,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#WARPED_FENCE} can have:
+     * {@link BlockProperties#EAST}
+     * {@link BlockProperties#NORTH}
+     * {@link BlockProperties#SOUTH}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST}
+     */
     public static final class WARPED_FENCE {
+        /**
+         * Definition: "east" = [true, false]
+         */
         public static final BlockProperty<Boolean> EAST = BlockProperties.EAST;
 
+        /**
+         * Definition: "north" = [true, false]
+         */
         public static final BlockProperty<Boolean> NORTH = BlockProperties.NORTH;
 
+        /**
+         * Definition: "south" = [true, false]
+         */
         public static final BlockProperty<Boolean> SOUTH = BlockProperties.SOUTH;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = [true, false]
+         */
         public static final BlockProperty<Boolean> WEST = BlockProperties.WEST;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4796,15 +10076,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#CRIMSON_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CRIMSON_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4812,15 +10115,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#WARPED_TRAPDOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class WARPED_TRAPDOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4828,13 +10154,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#CRIMSON_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class CRIMSON_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4842,13 +10187,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#WARPED_FENCE_GATE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#IN_WALL}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class WARPED_FENCE_GATE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "in_wall" = [true, false]
+         */
         public static final BlockProperty<Boolean> IN_WALL = BlockProperties.IN_WALL;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4856,13 +10220,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#CRIMSON_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CRIMSON_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4870,13 +10253,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#WARPED_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class WARPED_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4884,11 +10286,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#CRIMSON_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class CRIMSON_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4896,11 +10313,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#WARPED_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class WARPED_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4908,15 +10340,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#CRIMSON_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class CRIMSON_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4924,15 +10379,38 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 5 BlockState properties that {@link Blocks#WARPED_DOOR} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#DOUBLE_BLOCK_HALF}
+     * {@link BlockProperties#DOOR_HINGE}
+     * {@link BlockProperties#OPEN}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class WARPED_DOOR {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["upper", "lower"]
+         */
         public static final BlockProperty<String> DOUBLE_BLOCK_HALF = BlockProperties.DOUBLE_BLOCK_HALF;
 
+        /**
+         * Definition: "hinge" = ["left", "right"]
+         */
         public static final BlockProperty<String> DOOR_HINGE = BlockProperties.DOOR_HINGE;
 
+        /**
+         * Definition: "open" = [true, false]
+         */
         public static final BlockProperty<Boolean> OPEN = BlockProperties.OPEN;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4940,9 +10418,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CRIMSON_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CRIMSON_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4950,9 +10439,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#WARPED_SIGN} can have:
+     * {@link BlockProperties#ROTATION_16}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class WARPED_SIGN {
+        /**
+         * Definition: "rotation" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> ROTATION_16 = BlockProperties.ROTATION_16;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4960,9 +10460,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#CRIMSON_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class CRIMSON_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4970,9 +10481,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#WARPED_WALL_SIGN} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class WARPED_WALL_SIGN {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4980,7 +10502,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#STRUCTURE_BLOCK} can have:
+     * {@link BlockProperties#STRUCTUREBLOCK_MODE}
+     */
     public static final class STRUCTURE_BLOCK {
+        /**
+         * Definition: "mode" = ["save", "load", "corner", "data"]
+         */
         public static final BlockProperty<String> STRUCTUREBLOCK_MODE = BlockProperties.STRUCTUREBLOCK_MODE;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4988,7 +10517,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#JIGSAW} can have:
+     * {@link BlockProperties#ORIENTATION}
+     */
     public static final class JIGSAW {
+        /**
+         * Definition: "orientation" = ["down_east", "down_north", "down_south", "down_west", "up_east", "up_north", "up_south", "up_west", "west_up", "east_up", "north_up", "south_up"]
+         */
         public static final BlockProperty<String> ORIENTATION = BlockProperties.ORIENTATION;
 
         static List<BlockProperty<?>> getProperties() {
@@ -4996,7 +10532,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#COMPOSTER} can have:
+     * {@link BlockProperties#LEVEL_COMPOSTER}
+     */
     public static final class COMPOSTER {
+        /**
+         * Definition: "level" = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+         */
         public static final BlockProperty<Integer> LEVEL_COMPOSTER = BlockProperties.LEVEL_COMPOSTER;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5004,7 +10547,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#TARGET} can have:
+     * {@link BlockProperties#POWER}
+     */
     public static final class TARGET {
+        /**
+         * Definition: "power" = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+         */
         public static final BlockProperty<Integer> POWER = BlockProperties.POWER;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5012,9 +10562,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BEE_NEST} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LEVEL_HONEY}
+     */
     public static final class BEE_NEST {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "honey_level" = [0, 1, 2, 3, 4, 5]
+         */
         public static final BlockProperty<Integer> LEVEL_HONEY = BlockProperties.LEVEL_HONEY;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5022,9 +10583,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BEEHIVE} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#LEVEL_HONEY}
+     */
     public static final class BEEHIVE {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "honey_level" = [0, 1, 2, 3, 4, 5]
+         */
         public static final BlockProperty<Integer> LEVEL_HONEY = BlockProperties.LEVEL_HONEY;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5032,7 +10604,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#RESPAWN_ANCHOR} can have:
+     * {@link BlockProperties#RESPAWN_ANCHOR_CHARGES}
+     */
     public static final class RESPAWN_ANCHOR {
+        /**
+         * Definition: "charges" = [0, 1, 2, 3, 4]
+         */
         public static final BlockProperty<Integer> RESPAWN_ANCHOR_CHARGES = BlockProperties.RESPAWN_ANCHOR_CHARGES;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5040,13 +10619,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#BLACKSTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BLACKSTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5054,17 +10652,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#BLACKSTONE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class BLACKSTONE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5072,9 +10697,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#BLACKSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class BLACKSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5082,9 +10718,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BRICK_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_BLACKSTONE_BRICK_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5092,13 +10739,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BRICK_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_BLACKSTONE_BRICK_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5106,17 +10772,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BRICK_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class POLISHED_BLACKSTONE_BRICK_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5124,13 +10817,32 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 4 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_STAIRS} can have:
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#HALF}
+     * {@link BlockProperties#STAIRS_SHAPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_BLACKSTONE_STAIRS {
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "half" = ["top", "bottom"]
+         */
         public static final BlockProperty<String> HALF = BlockProperties.HALF;
 
+        /**
+         * Definition: "shape" = ["straight", "inner_left", "inner_right", "outer_left", "outer_right"]
+         */
         public static final BlockProperty<String> STAIRS_SHAPE = BlockProperties.STAIRS_SHAPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5138,9 +10850,20 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 2 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_SLAB} can have:
+     * {@link BlockProperties#SLAB_TYPE}
+     * {@link BlockProperties#WATERLOGGED}
+     */
     public static final class POLISHED_BLACKSTONE_SLAB {
+        /**
+         * Definition: "type" = ["top", "bottom", "double"]
+         */
         public static final BlockProperty<String> SLAB_TYPE = BlockProperties.SLAB_TYPE;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5148,7 +10871,14 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 1 BlockState property that {@link Blocks#POLISHED_BLACKSTONE_PRESSURE_PLATE} can have:
+     * {@link BlockProperties#POWERED}
+     */
     public static final class POLISHED_BLACKSTONE_PRESSURE_PLATE {
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5156,11 +10886,26 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 3 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_BUTTON} can have:
+     * {@link BlockProperties#ATTACH_FACE}
+     * {@link BlockProperties#HORIZONTAL_FACING}
+     * {@link BlockProperties#POWERED}
+     */
     public static final class POLISHED_BLACKSTONE_BUTTON {
+        /**
+         * Definition: "face" = ["floor", "wall", "ceiling"]
+         */
         public static final BlockProperty<String> ATTACH_FACE = BlockProperties.ATTACH_FACE;
 
+        /**
+         * Definition: "facing" = ["north", "south", "west", "east"]
+         */
         public static final BlockProperty<String> HORIZONTAL_FACING = BlockProperties.HORIZONTAL_FACING;
 
+        /**
+         * Definition: "powered" = [true, false]
+         */
         public static final BlockProperty<Boolean> POWERED = BlockProperties.POWERED;
 
         static List<BlockProperty<?>> getProperties() {
@@ -5168,17 +10913,44 @@ public final class BlockProperties {
         }
     }
 
+    /**
+     * Represents the 6 BlockState properties that {@link Blocks#POLISHED_BLACKSTONE_WALL} can have:
+     * {@link BlockProperties#EAST_WALL}
+     * {@link BlockProperties#NORTH_WALL}
+     * {@link BlockProperties#SOUTH_WALL}
+     * {@link BlockProperties#UP}
+     * {@link BlockProperties#WATERLOGGED}
+     * {@link BlockProperties#WEST_WALL}
+     */
     public static final class POLISHED_BLACKSTONE_WALL {
+        /**
+         * Definition: "east" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> EAST_WALL = BlockProperties.EAST_WALL;
 
+        /**
+         * Definition: "north" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> NORTH_WALL = BlockProperties.NORTH_WALL;
 
+        /**
+         * Definition: "south" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> SOUTH_WALL = BlockProperties.SOUTH_WALL;
 
+        /**
+         * Definition: "up" = [true, false]
+         */
         public static final BlockProperty<Boolean> UP = BlockProperties.UP;
 
+        /**
+         * Definition: "waterlogged" = [true, false]
+         */
         public static final BlockProperty<Boolean> WATERLOGGED = BlockProperties.WATERLOGGED;
 
+        /**
+         * Definition: "west" = ["none", "low", "tall"]
+         */
         public static final BlockProperty<String> WEST_WALL = BlockProperties.WEST_WALL;
 
         static List<BlockProperty<?>> getProperties() {
