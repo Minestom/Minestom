@@ -14,9 +14,9 @@ jobs:
     - name: Set up JDK 11
       uses: actions/setup-java@v1
       with:
-        java-version: 1.11
+        java-version: 11
     - name: Run java checkstyle
-      uses: nikitasavinov/checkstyle-action@d87d526a914fc5cb0b003908e35038dbb2d6e1b7
+      uses: nikitasavinov/checkstyle-action@0.3.1
       with:
         # Report level for reviewdog [info,warning,error]
         level: info
@@ -28,4 +28,4 @@ jobs:
         fail_on_error: false
         # Checkstyle config file
         checkstyle_config: minestom_checks.xml
-        checkstyle_version: "8.37"
+        checkstyle_version: "8.42"

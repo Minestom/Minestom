@@ -2,9 +2,7 @@ import org.gradle.internal.os.OperatingSystem
 
 plugins {
     id 'java-library'
-    id 'java'
     id 'maven-publish'
-    id 'net.ltgt.apt' version '0.10'
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
     id 'checkstyle'
 }
@@ -12,7 +10,7 @@ plugins {
 group 'net.minestom.server'
 version '1.0'
 
-sourceCompatibility = 1.11
+sourceCompatibility = 11
 project.ext.lwjglVersion = "3.2.3"
 
 switch (OperatingSystem.current()) {
@@ -53,7 +51,7 @@ allprojects {
         // see https://stackoverflow.com/a/56641766
         doLast {
             // Append the fix to the file
-            def searchScript = new File(destinationDir.getAbsolutePath() + '/search.js')
+            def searchScript = new File(destinationDir, '/search.js')
             searchScript.append '\n\n' +
                     'getURLPrefix = function(ui) {\n' +
                     '    return \'\';\n' +
@@ -62,7 +60,7 @@ allprojects {
     }
 
     checkstyle {
-        toolVersion "8.37"
+        toolVersion "8.42"
         configFile file("${projectDir}/minestom_checks.xml")
     }
 }
@@ -112,6 +110,10 @@ java {
 
 test {
     useJUnitPlatform()
+}
+
+tasks.withType(Zip).configureEach {
+    duplicatesStrategy DuplicatesStrategy.EXCLUDE
 }
 
 dependencies {
