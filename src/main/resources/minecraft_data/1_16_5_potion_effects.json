@@ -1,0 +1,194 @@
+[
+  {
+    "id": "minecraft:speed",
+    "name": "MOVEMENT_SPEED",
+    "color": 8171462,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:slowness",
+    "name": "MOVEMENT_SLOWDOWN",
+    "color": 5926017,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:haste",
+    "name": "DIG_SPEED",
+    "color": 14270531,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:mining_fatigue",
+    "name": "DIG_SLOWDOWN",
+    "color": 4866583,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:strength",
+    "name": "DAMAGE_BOOST",
+    "color": 9643043,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:instant_health",
+    "name": "HEAL",
+    "color": 16262179,
+    "instantaneous": true
+  },
+  {
+    "id": "minecraft:instant_damage",
+    "name": "HARM",
+    "color": 4393481,
+    "instantaneous": true
+  },
+  {
+    "id": "minecraft:jump_boost",
+    "name": "JUMP",
+    "color": 2293580,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:nausea",
+    "name": "CONFUSION",
+    "color": 5578058,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:regeneration",
+    "name": "REGENERATION",
+    "color": 13458603,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:resistance",
+    "name": "DAMAGE_RESISTANCE",
+    "color": 10044730,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:fire_resistance",
+    "name": "FIRE_RESISTANCE",
+    "color": 14981690,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:water_breathing",
+    "name": "WATER_BREATHING",
+    "color": 3035801,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:invisibility",
+    "name": "INVISIBILITY",
+    "color": 8356754,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:blindness",
+    "name": "BLINDNESS",
+    "color": 2039587,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:night_vision",
+    "name": "NIGHT_VISION",
+    "color": 2039713,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:hunger",
+    "name": "HUNGER",
+    "color": 5797459,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:weakness",
+    "name": "WEAKNESS",
+    "color": 4738376,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:poison",
+    "name": "POISON",
+    "color": 5149489,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:wither",
+    "name": "WITHER",
+    "color": 3484199,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:health_boost",
+    "name": "HEALTH_BOOST",
+    "color": 16284963,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:absorption",
+    "name": "ABSORPTION",
+    "color": 2445989,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:saturation",
+    "name": "SATURATION",
+    "color": 16262179,
+    "instantaneous": true
+  },
+  {
+    "id": "minecraft:glowing",
+    "name": "GLOWING",
+    "color": 9740385,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:levitation",
+    "name": "LEVITATION",
+    "color": 13565951,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:luck",
+    "name": "LUCK",
+    "color": 3381504,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:unluck",
+    "name": "UNLUCK",
+    "color": 12624973,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:slow_falling",
+    "name": "SLOW_FALLING",
+    "color": 16773073,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:conduit_power",
+    "name": "CONDUIT_POWER",
+    "color": 1950417,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:dolphins_grace",
+    "name": "DOLPHINS_GRACE",
+    "color": 8954814,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:bad_omen",
+    "name": "BAD_OMEN",
+    "color": 745784,
+    "instantaneous": false
+  },
+  {
+    "id": "minecraft:hero_of_the_village",
+    "name": "HERO_OF_THE_VILLAGE",
+    "color": 4521796,
+    "instantaneous": false
+  }
+]

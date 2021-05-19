@@ -1,0 +1,290 @@
+[
+  {
+    "id": "minecraft:ambient_entity_effect",
+    "name": "AMBIENT_ENTITY_EFFECT"
+  },
+  {
+    "id": "minecraft:angry_villager",
+    "name": "ANGRY_VILLAGER"
+  },
+  {
+    "id": "minecraft:barrier",
+    "name": "BARRIER"
+  },
+  {
+    "id": "minecraft:block",
+    "name": "BLOCK"
+  },
+  {
+    "id": "minecraft:bubble",
+    "name": "BUBBLE"
+  },
+  {
+    "id": "minecraft:cloud",
+    "name": "CLOUD"
+  },
+  {
+    "id": "minecraft:crit",
+    "name": "CRIT"
+  },
+  {
+    "id": "minecraft:damage_indicator",
+    "name": "DAMAGE_INDICATOR"
+  },
+  {
+    "id": "minecraft:dragon_breath",
+    "name": "DRAGON_BREATH"
+  },
+  {
+    "id": "minecraft:dripping_lava",
+    "name": "DRIPPING_LAVA"
+  },
+  {
+    "id": "minecraft:falling_lava",
+    "name": "FALLING_LAVA"
+  },
+  {
+    "id": "minecraft:landing_lava",
+    "name": "LANDING_LAVA"
+  },
+  {
+    "id": "minecraft:dripping_water",
+    "name": "DRIPPING_WATER"
+  },
+  {
+    "id": "minecraft:falling_water",
+    "name": "FALLING_WATER"
+  },
+  {
+    "id": "minecraft:dust",
+    "name": "DUST"
+  },
+  {
+    "id": "minecraft:effect",
+    "name": "EFFECT"
+  },
+  {
+    "id": "minecraft:elder_guardian",
+    "name": "ELDER_GUARDIAN"
+  },
+  {
+    "id": "minecraft:enchanted_hit",
+    "name": "ENCHANTED_HIT"
+  },
+  {
+    "id": "minecraft:enchant",
+    "name": "ENCHANT"
+  },
+  {
+    "id": "minecraft:end_rod",
+    "name": "END_ROD"
+  },
+  {
+    "id": "minecraft:entity_effect",
+    "name": "ENTITY_EFFECT"
+  },
+  {
+    "id": "minecraft:explosion_emitter",
+    "name": "EXPLOSION_EMITTER"
+  },
+  {
+    "id": "minecraft:explosion",
+    "name": "EXPLOSION"
+  },
+  {
+    "id": "minecraft:falling_dust",
+    "name": "FALLING_DUST"
+  },
+  {
+    "id": "minecraft:firework",
+    "name": "FIREWORK"
+  },
+  {
+    "id": "minecraft:fishing",
+    "name": "FISHING"
+  },
+  {
+    "id": "minecraft:flame",
+    "name": "FLAME"
+  },
+  {
+    "id": "minecraft:soul_fire_flame",
+    "name": "SOUL_FIRE_FLAME"
+  },
+  {
+    "id": "minecraft:soul",
+    "name": "SOUL"
+  },
+  {
+    "id": "minecraft:flash",
+    "name": "FLASH"
+  },
+  {
+    "id": "minecraft:happy_villager",
+    "name": "HAPPY_VILLAGER"
+  },
+  {
+    "id": "minecraft:composter",
+    "name": "COMPOSTER"
+  },
+  {
+    "id": "minecraft:heart",
+    "name": "HEART"
+  },
+  {
+    "id": "minecraft:instant_effect",
+    "name": "INSTANT_EFFECT"
+  },
+  {
+    "id": "minecraft:item",
+    "name": "ITEM"
+  },
+  {
+    "id": "minecraft:item_slime",
+    "name": "ITEM_SLIME"
+  },
+  {
+    "id": "minecraft:item_snowball",
+    "name": "ITEM_SNOWBALL"
+  },
+  {
+    "id": "minecraft:large_smoke",
+    "name": "LARGE_SMOKE"
+  },
+  {
+    "id": "minecraft:lava",
+    "name": "LAVA"
+  },
+  {
+    "id": "minecraft:mycelium",
+    "name": "MYCELIUM"
+  },
+  {
+    "id": "minecraft:note",
+    "name": "NOTE"
+  },
+  {
+    "id": "minecraft:poof",
+    "name": "POOF"
+  },
+  {
+    "id": "minecraft:portal",
+    "name": "PORTAL"
+  },
+  {
+    "id": "minecraft:rain",
+    "name": "RAIN"
+  },
+  {
+    "id": "minecraft:smoke",
+    "name": "SMOKE"
+  },
+  {
+    "id": "minecraft:sneeze",
+    "name": "SNEEZE"
+  },
+  {
+    "id": "minecraft:spit",
+    "name": "SPIT"
+  },
+  {
+    "id": "minecraft:squid_ink",
+    "name": "SQUID_INK"
+  },
+  {
+    "id": "minecraft:sweep_attack",
+    "name": "SWEEP_ATTACK"
+  },
+  {
+    "id": "minecraft:totem_of_undying",
+    "name": "TOTEM_OF_UNDYING"
+  },
+  {
+    "id": "minecraft:underwater",
+    "name": "UNDERWATER"
+  },
+  {
+    "id": "minecraft:splash",
+    "name": "SPLASH"
+  },
+  {
+    "id": "minecraft:witch",
+    "name": "WITCH"
+  },
+  {
+    "id": "minecraft:bubble_pop",
+    "name": "BUBBLE_POP"
+  },
+  {
+    "id": "minecraft:current_down",
+    "name": "CURRENT_DOWN"
+  },
+  {
+    "id": "minecraft:bubble_column_up",
+    "name": "BUBBLE_COLUMN_UP"
+  },
+  {
+    "id": "minecraft:nautilus",
+    "name": "NAUTILUS"
+  },
+  {
+    "id": "minecraft:dolphin",
+    "name": "DOLPHIN"
+  },
+  {
+    "id": "minecraft:campfire_cosy_smoke",
+    "name": "CAMPFIRE_COSY_SMOKE"
+  },
+  {
+    "id": "minecraft:campfire_signal_smoke",
+    "name": "CAMPFIRE_SIGNAL_SMOKE"
+  },
+  {
+    "id": "minecraft:dripping_honey",
+    "name": "DRIPPING_HONEY"
+  },
+  {
+    "id": "minecraft:falling_honey",
+    "name": "FALLING_HONEY"
+  },
+  {
+    "id": "minecraft:landing_honey",
+    "name": "LANDING_HONEY"
+  },
+  {
+    "id": "minecraft:falling_nectar",
+    "name": "FALLING_NECTAR"
+  },
+  {
+    "id": "minecraft:ash",
+    "name": "ASH"
+  },
+  {
+    "id": "minecraft:crimson_spore",
+    "name": "CRIMSON_SPORE"
+  },
+  {
+    "id": "minecraft:warped_spore",
+    "name": "WARPED_SPORE"
+  },
+  {
+    "id": "minecraft:dripping_obsidian_tear",
+    "name": "DRIPPING_OBSIDIAN_TEAR"
+  },
+  {
+    "id": "minecraft:falling_obsidian_tear",
+    "name": "FALLING_OBSIDIAN_TEAR"
+  },
+  {
+    "id": "minecraft:landing_obsidian_tear",
+    "name": "LANDING_OBSIDIAN_TEAR"
+  },
+  {
+    "id": "minecraft:reverse_portal",
+    "name": "REVERSE_PORTAL"
+  },
+  {
+    "id": "minecraft:white_ash",
+    "name": "WHITE_ASH"
+  }
+]

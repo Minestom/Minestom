@@ -5,9 +5,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.metadata.villager.VillagerProfession;
 import net.minestom.server.entity.metadata.villager.VillagerType;
 import net.minestom.server.fluid.Fluid;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockEntity;
-import net.minestom.server.instance.block.Blocks;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
@@ -17,8 +15,6 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticType;
 
 public final class Registry {
-    public static final IdCrossMapRegistry.Defaulted<Block> BLOCK_REGISTRY = new IdCrossMapRegistry.Defaulted<>(() -> Blocks.AIR);
-
     public static final MapRegistry<BlockEntity> BLOCK_ENTITY_REGISTRY = new MapRegistry<>();
 
     public static final IdCrossMapRegistry.Defaulted<Fluid> FLUID_REGISTRY = new IdCrossMapRegistry.Defaulted<>(() -> Fluid.EMPTY);

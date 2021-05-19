@@ -1,0 +1,1359 @@
+[
+  {
+    "id": "minecraft:ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.0,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:plains",
+    "humid": false,
+    "scale": 0.05,
+    "depth": 0.125,
+    "temperature": 0.8,
+    "downfall": 0.4,
+    "precipitation": "RAIN",
+    "category": "PLAINS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7907327,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:desert",
+    "humid": false,
+    "scale": 0.05,
+    "depth": 0.125,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "DESERT",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:mountains",
+    "humid": false,
+    "scale": 0.5,
+    "depth": 1.0,
+    "temperature": 0.2,
+    "downfall": 0.3,
+    "precipitation": "RAIN",
+    "category": "EXTREME_HILLS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233727,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:forest",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.7,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7972607,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:taiga",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.2,
+    "temperature": 0.25,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233983,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:swamp",
+    "humid": true,
+    "scale": 0.1,
+    "depth": -0.2,
+    "temperature": 0.8,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "SWAMP",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 6388580,
+      "waterFogColor": 2302743,
+      "skyColor": 7907327,
+      "foliageColorOverride": 6975545,
+      "grassColorModifier": "SWAMP"
+    }
+  },
+  {
+    "id": "minecraft:river",
+    "humid": false,
+    "scale": 0.0,
+    "depth": -0.5,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "RIVER",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:nether_wastes",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "NETHER",
+    "effects": {
+      "fogColor": 3344392,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:the_end",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "NONE",
+    "category": "THEEND",
+    "effects": {
+      "fogColor": 10518688,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 0,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:frozen_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.0,
+    "temperature": 0.0,
+    "downfall": 0.5,
+    "precipitation": "SNOW",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 3750089,
+      "waterFogColor": 329011,
+      "skyColor": 8364543,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:frozen_river",
+    "humid": false,
+    "scale": 0.0,
+    "depth": -0.5,
+    "temperature": 0.0,
+    "downfall": 0.5,
+    "precipitation": "SNOW",
+    "category": "RIVER",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 3750089,
+      "waterFogColor": 329011,
+      "skyColor": 8364543,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:snowy_tundra",
+    "humid": false,
+    "scale": 0.05,
+    "depth": 0.125,
+    "temperature": 0.0,
+    "downfall": 0.5,
+    "precipitation": "SNOW",
+    "category": "ICY",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8364543,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:snowy_mountains",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.0,
+    "downfall": 0.5,
+    "precipitation": "SNOW",
+    "category": "ICY",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8364543,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:mushroom_fields",
+    "humid": true,
+    "scale": 0.3,
+    "depth": 0.2,
+    "temperature": 0.9,
+    "downfall": 1.0,
+    "precipitation": "RAIN",
+    "category": "MUSHROOM",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:mushroom_field_shore",
+    "humid": true,
+    "scale": 0.025,
+    "depth": 0.0,
+    "temperature": 0.9,
+    "downfall": 1.0,
+    "precipitation": "RAIN",
+    "category": "MUSHROOM",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:beach",
+    "humid": false,
+    "scale": 0.025,
+    "depth": 0.0,
+    "temperature": 0.8,
+    "downfall": 0.4,
+    "precipitation": "RAIN",
+    "category": "BEACH",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7907327,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:desert_hills",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "DESERT",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:wooded_hills",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.7,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7972607,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:taiga_hills",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.25,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233983,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:mountain_edge",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.8,
+    "temperature": 0.2,
+    "downfall": 0.3,
+    "precipitation": "RAIN",
+    "category": "EXTREME_HILLS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233727,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:jungle",
+    "humid": true,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.95,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:jungle_hills",
+    "humid": true,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.95,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:jungle_edge",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.95,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:deep_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.8,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:stone_shore",
+    "humid": false,
+    "scale": 0.8,
+    "depth": 0.1,
+    "temperature": 0.2,
+    "downfall": 0.3,
+    "precipitation": "RAIN",
+    "category": "NONE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233727,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:snowy_beach",
+    "humid": false,
+    "scale": 0.025,
+    "depth": 0.0,
+    "temperature": 0.05,
+    "downfall": 0.3,
+    "precipitation": "SNOW",
+    "category": "BEACH",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4020182,
+      "waterFogColor": 329011,
+      "skyColor": 8364543,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:birch_forest",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.6,
+    "downfall": 0.6,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8037887,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:birch_forest_hills",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.6,
+    "downfall": 0.6,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8037887,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:dark_forest",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.7,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7972607,
+      "grassColorModifier": "DARK_FOREST"
+    }
+  },
+  {
+    "id": "minecraft:snowy_taiga",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.2,
+    "temperature": -0.5,
+    "downfall": 0.4,
+    "precipitation": "SNOW",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4020182,
+      "waterFogColor": 329011,
+      "skyColor": 8625919,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:snowy_taiga_hills",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": -0.5,
+    "downfall": 0.4,
+    "precipitation": "SNOW",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4020182,
+      "waterFogColor": 329011,
+      "skyColor": 8625919,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:giant_tree_taiga",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.2,
+    "temperature": 0.3,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8168447,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:giant_tree_taiga_hills",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.3,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8168447,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:wooded_mountains",
+    "humid": false,
+    "scale": 0.5,
+    "depth": 1.0,
+    "temperature": 0.2,
+    "downfall": 0.3,
+    "precipitation": "RAIN",
+    "category": "EXTREME_HILLS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233727,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:savanna",
+    "humid": false,
+    "scale": 0.05,
+    "depth": 0.125,
+    "temperature": 1.2,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "SAVANNA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7711487,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:savanna_plateau",
+    "humid": false,
+    "scale": 0.025,
+    "depth": 1.5,
+    "temperature": 1.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "SAVANNA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7776511,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:badlands",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "MESA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "foliageColorOverride": 10387789,
+      "grassColorOverride": 9470285,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:wooded_badlands_plateau",
+    "humid": false,
+    "scale": 0.025,
+    "depth": 1.5,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "MESA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "foliageColorOverride": 10387789,
+      "grassColorOverride": 9470285,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:badlands_plateau",
+    "humid": false,
+    "scale": 0.025,
+    "depth": 1.5,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "MESA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "foliageColorOverride": 10387789,
+      "grassColorOverride": 9470285,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:small_end_islands",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "NONE",
+    "category": "THEEND",
+    "effects": {
+      "fogColor": 10518688,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 0,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:end_midlands",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "NONE",
+    "category": "THEEND",
+    "effects": {
+      "fogColor": 10518688,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 0,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:end_highlands",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "NONE",
+    "category": "THEEND",
+    "effects": {
+      "fogColor": 10518688,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 0,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:end_barrens",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "NONE",
+    "category": "THEEND",
+    "effects": {
+      "fogColor": 10518688,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 0,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:warm_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.0,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4445678,
+      "waterFogColor": 270131,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:lukewarm_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.0,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4566514,
+      "waterFogColor": 267827,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:cold_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.0,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4020182,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:deep_warm_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.8,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4445678,
+      "waterFogColor": 270131,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:deep_lukewarm_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.8,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4566514,
+      "waterFogColor": 267827,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:deep_cold_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.8,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4020182,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:deep_frozen_ocean",
+    "humid": false,
+    "scale": 0.1,
+    "depth": -1.8,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "RAIN",
+    "category": "OCEAN",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 3750089,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:the_void",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.5,
+    "downfall": 0.5,
+    "precipitation": "NONE",
+    "category": "NONE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8103167,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:sunflower_plains",
+    "humid": false,
+    "scale": 0.05,
+    "depth": 0.125,
+    "temperature": 0.8,
+    "downfall": 0.4,
+    "precipitation": "RAIN",
+    "category": "PLAINS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7907327,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:desert_lakes",
+    "humid": false,
+    "scale": 0.25,
+    "depth": 0.225,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "DESERT",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:gravelly_mountains",
+    "humid": false,
+    "scale": 0.5,
+    "depth": 1.0,
+    "temperature": 0.2,
+    "downfall": 0.3,
+    "precipitation": "RAIN",
+    "category": "EXTREME_HILLS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233727,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:flower_forest",
+    "humid": false,
+    "scale": 0.4,
+    "depth": 0.1,
+    "temperature": 0.7,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7972607,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:taiga_mountains",
+    "humid": false,
+    "scale": 0.4,
+    "depth": 0.3,
+    "temperature": 0.25,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233983,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:swamp_hills",
+    "humid": true,
+    "scale": 0.3,
+    "depth": -0.1,
+    "temperature": 0.8,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "SWAMP",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 6388580,
+      "waterFogColor": 2302743,
+      "skyColor": 7907327,
+      "foliageColorOverride": 6975545,
+      "grassColorModifier": "SWAMP"
+    }
+  },
+  {
+    "id": "minecraft:ice_spikes",
+    "humid": false,
+    "scale": 0.45000002,
+    "depth": 0.425,
+    "temperature": 0.0,
+    "downfall": 0.5,
+    "precipitation": "SNOW",
+    "category": "ICY",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8364543,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:modified_jungle",
+    "humid": true,
+    "scale": 0.4,
+    "depth": 0.2,
+    "temperature": 0.95,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:modified_jungle_edge",
+    "humid": false,
+    "scale": 0.4,
+    "depth": 0.2,
+    "temperature": 0.95,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:tall_birch_forest",
+    "humid": false,
+    "scale": 0.4,
+    "depth": 0.2,
+    "temperature": 0.6,
+    "downfall": 0.6,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8037887,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:tall_birch_hills",
+    "humid": false,
+    "scale": 0.5,
+    "depth": 0.55,
+    "temperature": 0.6,
+    "downfall": 0.6,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8037887,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:dark_forest_hills",
+    "humid": false,
+    "scale": 0.4,
+    "depth": 0.2,
+    "temperature": 0.7,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "FOREST",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7972607,
+      "grassColorModifier": "DARK_FOREST"
+    }
+  },
+  {
+    "id": "minecraft:snowy_taiga_mountains",
+    "humid": false,
+    "scale": 0.4,
+    "depth": 0.3,
+    "temperature": -0.5,
+    "downfall": 0.4,
+    "precipitation": "SNOW",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4020182,
+      "waterFogColor": 329011,
+      "skyColor": 8625919,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:giant_spruce_taiga",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.2,
+    "temperature": 0.25,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233983,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:giant_spruce_taiga_hills",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.2,
+    "temperature": 0.25,
+    "downfall": 0.8,
+    "precipitation": "RAIN",
+    "category": "TAIGA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233983,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:modified_gravelly_mountains",
+    "humid": false,
+    "scale": 0.5,
+    "depth": 1.0,
+    "temperature": 0.2,
+    "downfall": 0.3,
+    "precipitation": "RAIN",
+    "category": "EXTREME_HILLS",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 8233727,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:shattered_savanna",
+    "humid": false,
+    "scale": 1.225,
+    "depth": 0.3625,
+    "temperature": 1.1,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "SAVANNA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7776767,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:shattered_savanna_plateau",
+    "humid": false,
+    "scale": 1.2125001,
+    "depth": 1.05,
+    "temperature": 1.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "SAVANNA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7776511,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:eroded_badlands",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "MESA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "foliageColorOverride": 10387789,
+      "grassColorOverride": 9470285,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:modified_wooded_badlands_plateau",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "MESA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "foliageColorOverride": 10387789,
+      "grassColorOverride": 9470285,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:modified_badlands_plateau",
+    "humid": false,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "MESA",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "foliageColorOverride": 10387789,
+      "grassColorOverride": 9470285,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:bamboo_jungle",
+    "humid": true,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 0.95,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:bamboo_jungle_hills",
+    "humid": true,
+    "scale": 0.3,
+    "depth": 0.45,
+    "temperature": 0.95,
+    "downfall": 0.9,
+    "precipitation": "RAIN",
+    "category": "JUNGLE",
+    "effects": {
+      "fogColor": 12638463,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7842047,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:soul_sand_valley",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "NETHER",
+    "effects": {
+      "fogColor": 1787717,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:crimson_forest",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "NETHER",
+    "effects": {
+      "fogColor": 3343107,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:warped_forest",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "NETHER",
+    "effects": {
+      "fogColor": 1705242,
+      "waterColor": 4159204,
+      "waterFogColor": 329011,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  },
+  {
+    "id": "minecraft:basalt_deltas",
+    "humid": false,
+    "scale": 0.2,
+    "depth": 0.1,
+    "temperature": 2.0,
+    "downfall": 0.0,
+    "precipitation": "NONE",
+    "category": "NETHER",
+    "effects": {
+      "fogColor": 6840176,
+      "waterColor": 4159204,
+      "waterFogColor": 4341314,
+      "skyColor": 7254527,
+      "grassColorModifier": "NONE"
+    }
+  }
+]

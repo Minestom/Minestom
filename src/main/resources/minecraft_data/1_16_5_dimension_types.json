@@ -1,0 +1,58 @@
+[
+  {
+    "id": "minecraft:overworld",
+    "bedWorks": true,
+    "coordinateScale": 1.0,
+    "ceiling": false,
+    "fixedTime": false,
+    "raids": true,
+    "skyLight": true,
+    "piglinSafe": false,
+    "logicalHeight": 256,
+    "natural": true,
+    "ultraWarm": false,
+    "respawnAnchorWorks": false
+  },
+  {
+    "id": "minecraft:overworld_caves",
+    "bedWorks": true,
+    "coordinateScale": 1.0,
+    "ceiling": true,
+    "fixedTime": false,
+    "raids": true,
+    "skyLight": true,
+    "piglinSafe": false,
+    "logicalHeight": 256,
+    "natural": true,
+    "ultraWarm": false,
+    "respawnAnchorWorks": false
+  },
+  {
+    "id": "minecraft:the_nether",
+    "bedWorks": false,
+    "coordinateScale": 8.0,
+    "ceiling": true,
+    "fixedTime": true,
+    "raids": false,
+    "skyLight": false,
+    "piglinSafe": true,
+    "logicalHeight": 128,
+    "natural": false,
+    "ultraWarm": true,
+    "respawnAnchorWorks": true
+  },
+  {
+    "id": "minecraft:the_end",
+    "bedWorks": false,
+    "coordinateScale": 1.0,
+    "ceiling": false,
+    "fixedTime": true,
+    "raids": true,
+    "skyLight": false,
+    "piglinSafe": false,
+    "logicalHeight": 256,
+    "natural": false,
+    "ultraWarm": false,
+    "respawnAnchorWorks": false
+  }
+]

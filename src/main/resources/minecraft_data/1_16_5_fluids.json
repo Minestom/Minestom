@@ -1,0 +1,27 @@
+[
+  {
+    "id": "minecraft:empty",
+    "name": "EMPTY",
+    "bucketId": "minecraft:air"
+  },
+  {
+    "id": "minecraft:flowing_water",
+    "name": "FLOWING_WATER",
+    "bucketId": "minecraft:water_bucket"
+  },
+  {
+    "id": "minecraft:water",
+    "name": "WATER",
+    "bucketId": "minecraft:water_bucket"
+  },
+  {
+    "id": "minecraft:flowing_lava",
+    "name": "FLOWING_LAVA",
+    "bucketId": "minecraft:lava_bucket"
+  },
+  {
+    "id": "minecraft:lava",
+    "name": "LAVA",
+    "bucketId": "minecraft:lava_bucket"
+  }
+]

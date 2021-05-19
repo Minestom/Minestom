@@ -89,7 +89,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
                 return Pair.of(null, null);
             }
             short stateId = instance.getBlockStateId(blockPosition);
-            BlockState state = block.getBlockState(stateId);
+            Block state = Block.REGISTRY.fromStateId(stateId);
             try {
                 Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase());
                 Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase());

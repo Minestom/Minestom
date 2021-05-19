@@ -1,0 +1,174 @@
+[
+  {
+    "id": "minecraft:empty",
+    "name": "EMPTY"
+  },
+  {
+    "id": "minecraft:water",
+    "name": "WATER"
+  },
+  {
+    "id": "minecraft:mundane",
+    "name": "MUNDANE"
+  },
+  {
+    "id": "minecraft:thick",
+    "name": "THICK"
+  },
+  {
+    "id": "minecraft:awkward",
+    "name": "AWKWARD"
+  },
+  {
+    "id": "minecraft:night_vision",
+    "name": "NIGHT_VISION"
+  },
+  {
+    "id": "minecraft:long_night_vision",
+    "name": "LONG_NIGHT_VISION"
+  },
+  {
+    "id": "minecraft:invisibility",
+    "name": "INVISIBILITY"
+  },
+  {
+    "id": "minecraft:long_invisibility",
+    "name": "LONG_INVISIBILITY"
+  },
+  {
+    "id": "minecraft:leaping",
+    "name": "LEAPING"
+  },
+  {
+    "id": "minecraft:long_leaping",
+    "name": "LONG_LEAPING"
+  },
+  {
+    "id": "minecraft:strong_leaping",
+    "name": "STRONG_LEAPING"
+  },
+  {
+    "id": "minecraft:fire_resistance",
+    "name": "FIRE_RESISTANCE"
+  },
+  {
+    "id": "minecraft:long_fire_resistance",
+    "name": "LONG_FIRE_RESISTANCE"
+  },
+  {
+    "id": "minecraft:swiftness",
+    "name": "SWIFTNESS"
+  },
+  {
+    "id": "minecraft:long_swiftness",
+    "name": "LONG_SWIFTNESS"
+  },
+  {
+    "id": "minecraft:strong_swiftness",
+    "name": "STRONG_SWIFTNESS"
+  },
+  {
+    "id": "minecraft:slowness",
+    "name": "SLOWNESS"
+  },
+  {
+    "id": "minecraft:long_slowness",
+    "name": "LONG_SLOWNESS"
+  },
+  {
+    "id": "minecraft:strong_slowness",
+    "name": "STRONG_SLOWNESS"
+  },
+  {
+    "id": "minecraft:turtle_master",
+    "name": "TURTLE_MASTER"
+  },
+  {
+    "id": "minecraft:long_turtle_master",
+    "name": "LONG_TURTLE_MASTER"
+  },
+  {
+    "id": "minecraft:strong_turtle_master",
+    "name": "STRONG_TURTLE_MASTER"
+  },
+  {
+    "id": "minecraft:water_breathing",
+    "name": "WATER_BREATHING"
+  },
+  {
+    "id": "minecraft:long_water_breathing",
+    "name": "LONG_WATER_BREATHING"
+  },
+  {
+    "id": "minecraft:healing",
+    "name": "HEALING"
+  },
+  {
+    "id": "minecraft:strong_healing",
+    "name": "STRONG_HEALING"
+  },
+  {
+    "id": "minecraft:harming",
+    "name": "HARMING"
+  },
+  {
+    "id": "minecraft:strong_harming",
+    "name": "STRONG_HARMING"
+  },
+  {
+    "id": "minecraft:poison",
+    "name": "POISON"
+  },
+  {
+    "id": "minecraft:long_poison",
+    "name": "LONG_POISON"
+  },
+  {
+    "id": "minecraft:strong_poison",
+    "name": "STRONG_POISON"
+  },
+  {
+    "id": "minecraft:regeneration",
+    "name": "REGENERATION"
+  },
+  {
+    "id": "minecraft:long_regeneration",
+    "name": "LONG_REGENERATION"
+  },
+  {
+    "id": "minecraft:strong_regeneration",
+    "name": "STRONG_REGENERATION"
+  },
+  {
+    "id": "minecraft:strength",
+    "name": "STRENGTH"
+  },
+  {
+    "id": "minecraft:long_strength",
+    "name": "LONG_STRENGTH"
+  },
+  {
+    "id": "minecraft:strong_strength",
+    "name": "STRONG_STRENGTH"
+  },
+  {
+    "id": "minecraft:weakness",
+    "name": "WEAKNESS"
+  },
+  {
+    "id": "minecraft:long_weakness",
+    "name": "LONG_WEAKNESS"
+  },
+  {
+    "id": "minecraft:luck",
+    "name": "LUCK"
+  },
+  {
+    "id": "minecraft:slow_falling",
+    "name": "SLOW_FALLING"
+  },
+  {
+    "id": "minecraft:long_slow_falling",
+    "name": "LONG_SLOW_FALLING"
+  }
+]

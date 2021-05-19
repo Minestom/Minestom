@@ -4,7 +4,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockState;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.block.BlockUtils;
@@ -103,7 +102,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
                             @NotNull Player pl) {
         final short belowBlockId = instance.getBlockStateId(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
-        if (!BlockState.fromId(belowBlockId).isSolid()) {
+        if (!Block.REGISTRY.fromStateId(belowBlockId).isSolid()) {
             return CANCEL_CODE;
         }
 

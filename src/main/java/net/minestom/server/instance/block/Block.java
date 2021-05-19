@@ -39,6 +39,17 @@ public interface Block extends Keyed, TagReadable, BlockOld {
 
     short getStateId();
 
+    @NotNull BlockData getData();
+
+    /**
+     * Migrated to {@link #getData()}.{@link BlockData#isSolid()} method.
+     * @return True if the Block is solid.
+     */
+    @Deprecated(
+            forRemoval = true
+    )
+    boolean isSolid();
+
     class Registry {
 
         private final Short2ObjectSortedMap<BlockSupplier> set = new Short2ObjectAVLTreeMap<>();
@@ -56,7 +67,7 @@ public interface Block extends Keyed, TagReadable, BlockOld {
         }
 
         @FunctionalInterface
-        private interface BlockSupplier {
+        interface BlockSupplier {
             @NotNull Block get(short stateId);
         }
     }
