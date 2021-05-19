@@ -230,6 +230,7 @@ class BlockImpl implements Block {
             double friction = block.get("friction").getAsDouble();
             double speedFactor = block.get("speedFactor").getAsDouble();
             double jumpFactor = block.get("jumpFactor").getAsDouble();
+            boolean blockEntity = block.get("blockEntity").getAsBoolean();
             // TODO: Get Item from (new) Material registry
             Material item = net.minestom.server.registry.Registry.MATERIAL_REGISTRY.get(block.get("itemId").getAsString());
             JsonArray states = block.get("states").getAsJsonArray();
@@ -246,12 +247,15 @@ class BlockImpl implements Block {
                                 friction,
                                 speedFactor,
                                 jumpFactor,
+                                blockEntity,
+
                                 state.get("destroySpeed").getAsDouble(),
                                 state.get("lightEmission").getAsInt(),
                                 state.get("doesOcclude").getAsBoolean(),
                                 state.get("pushReaction").getAsString(),
                                 state.get("blocksMotion").getAsBoolean(),
                                 state.get("isFlammable").getAsBoolean(),
+                                state.get("air").getAsBoolean(),
                                 state.get("isLiquid").getAsBoolean(),
                                 state.get("isReplaceable").getAsBoolean(),
                                 state.get("isSolid").getAsBoolean(),

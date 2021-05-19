@@ -12,11 +12,14 @@ class BlockDataImpl implements BlockData {
     private final double speedFactor;
     private final double jumpFactor;
     private final double hardness;
+    private final boolean blockEntity;
+
     private final int lightEmission;
     private final boolean occluding;
     private final String pushReaction; // TODO: Dedicated object?
     private final boolean blockingMotion;
     private final boolean flammable;
+    private final boolean air;
     private final boolean liquid;
     private final boolean replaceable;
     private final boolean solid;
@@ -31,12 +34,15 @@ class BlockDataImpl implements BlockData {
             double friction,
             double speedFactor,
             double jumpFactor,
+            boolean blockEntity,
+
             double hardness,
             int lightEmission,
             boolean occluding,
             String pushReaction,
             boolean blockingMotion,
             boolean flammable,
+            boolean air,
             boolean liquid,
             boolean replaceable,
             boolean solid,
@@ -50,10 +56,12 @@ class BlockDataImpl implements BlockData {
         this.speedFactor = speedFactor;
         this.jumpFactor = jumpFactor;
         this.hardness = hardness;
+        this.blockEntity = blockEntity;
         this.lightEmission = lightEmission;
         this.occluding = occluding;
         this.pushReaction = pushReaction;
         this.blockingMotion = blockingMotion;
+        this.air = air;
         this.flammable = flammable;
         this.liquid = liquid;
         this.replaceable = replaceable;
@@ -94,6 +102,11 @@ class BlockDataImpl implements BlockData {
     }
 
     @Override
+    public boolean isBlockEntity() {
+        return blockEntity;
+    }
+
+    @Override
     public int getLightEmission() {
         return lightEmission;
     }
@@ -116,6 +129,11 @@ class BlockDataImpl implements BlockData {
     @Override
     public boolean isFlammable() {
         return flammable;
+    }
+
+    @Override
+    public boolean isAir() {
+        return air;
     }
 
     @Override

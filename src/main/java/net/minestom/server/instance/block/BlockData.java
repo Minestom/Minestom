@@ -6,20 +6,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface BlockData {
-    /**
-     * @return The explosion resistance of the Block
-     */
+    // Block properties
     double getExplosionResistance();
     @Nullable Material getCorrespondingItem();
     double getFriction();
     double getSpeedFactor();
     double getJumpFactor();
+    boolean isBlockEntity();
+
+    // State properties
     double getHardness();
     int getLightEmission();
     boolean isOccluding();
     String getPushReaction(); // TODO: Dedicated object?
     boolean isBlockingMotion();
     boolean isFlammable();
+    boolean isAir();
     boolean isLiquid();
     boolean isReplaceable();
     boolean isSolid();
