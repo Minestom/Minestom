@@ -313,7 +313,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                                 itemClassName,
                                 itemName
                         ).initializer(
-                                "new $T($T.from($S), (byte) $L, new $T($L, $L, $L, $L, () -> $T.BLOCK_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S), new $T($L, $L, $T.$N)))",
+                                "new $T($T.from($S), (byte) $L, new $T($L, $L, $L, $L, () -> $T.REGISTRY.fromNamespaceId($T.from($S)), () -> $T.SOUND_EVENT_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S), new $T($L, $L, $T.$N)))",
                                 itemClassName,
                                 namespaceIDClassName,
                                 item.get("id").getAsString(),
@@ -324,8 +324,11 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                                 item.get("maxDamage").getAsInt(),
                                 item.get("edible").getAsBoolean(),
                                 item.get("fireResistant").getAsBoolean(),
-                                registryClassName,
+
+                                ClassName.get("net.minestom.server.instance.block", "Block"),
+                                namespaceIDClassName,
                                 item.get("blockId").getAsString(),
+
                                 registryClassName,
                                 item.get("eatingSound").getAsString(),
                                 registryClassName,
@@ -343,7 +346,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                                 itemClassName,
                                 itemName
                         ).initializer(
-                                "new $T($T.from($S), (byte) $L, new $T($L, $L, $L, $L, () -> $T.BLOCK_REGISTRY.get($S), () -> $T.SOUND_EVENT_REGISTRY.get($S),() -> $T.SOUND_EVENT_REGISTRY.get($S), null))",
+                                "new $T($T.from($S), (byte) $L, new $T($L, $L, $L, $L, () -> $T.REGISTRY.fromNamespaceId($T.from($S)), () -> $T.SOUND_EVENT_REGISTRY.get($S),() -> $T.SOUND_EVENT_REGISTRY.get($S), null))",
                                 itemClassName,
                                 namespaceIDClassName,
                                 item.get("id").getAsString(),
@@ -354,8 +357,11 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                                 item.get("maxDamage").getAsInt(),
                                 item.get("edible").getAsBoolean(),
                                 item.get("fireResistant").getAsBoolean(),
-                                registryClassName,
+
+                                ClassName.get("net.minestom.server.instance.block", "Block"),
+                                namespaceIDClassName,
                                 item.get("blockId").getAsString(),
+
                                 registryClassName,
                                 item.get("eatingSound").getAsString(),
                                 registryClassName,

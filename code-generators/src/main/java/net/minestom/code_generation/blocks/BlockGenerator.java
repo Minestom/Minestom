@@ -54,7 +54,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDCN = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName blockPropertyCN = ClassName.get("net.minestom.server.instance.block", "BlockProperty");
-        ClassName blockTypeCN = ClassName.get("net.minestom.server.instance.block", "Block");
+        ClassName blockCN = ClassName.get("net.minestom.server.instance.block", "Block");
         ClassName blockImplCN = ClassName.get("net.minestom.server.instance.block", "BlockImpl");
         ClassName rawBlockDataClassName = ClassName.get("net.minestom.server.raw_data", "RawBlockData");
         ClassName rawBlockStateDataClassName = ClassName.get("net.minestom.server.raw_data", "RawBlockStateData");
@@ -245,7 +245,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             if (properties.size() == 0) {
                 // This is a block like Stone that only has 1 BlockState.
                 blocksClass.addField(
-                        FieldSpec.builder(blockTypeCN, blockName)
+                        FieldSpec.builder(blockCN, blockName)
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer(
                                         // Blocks.STONE = new BlockImpl(NamespaceID.from("minecraft:stone"), 1, Collections.emptyList())
@@ -268,7 +268,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             } else {
                 // This is a block that has multiple properties.
                 blocksClass.addField(
-                        FieldSpec.builder(blockTypeCN, blockName)
+                        FieldSpec.builder(blockCN, blockName)
                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer(
                                         // Blocks.GRASS_BLOCK = new BlockImpl(NamespaceID.from("minecraft:grass_block"), 9, 8, varargsProperty)
@@ -294,7 +294,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
             // TEMPORARY CODE FOR THE DEPRECATION OF BLOCK CONSTANTS
             // THE CREATED INTERFACE IS DEPRECATED AND WILL BE REMOVED EVENTUALLY
             blockOldClass.addField(
-                    FieldSpec.builder(blockTypeCN, blockName)
+                    FieldSpec.builder(blockCN, blockName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer("$T.$N", blocksCN, blockName)
                             .addAnnotation(AnnotationSpec.builder(Deprecated.class).addMember("forRemoval", "$L", true).build())

@@ -51,7 +51,9 @@ public interface Block extends Keyed, TagReadable, BlockOld {
     @Deprecated(
             forRemoval = true
     )
-    boolean isSolid();
+    default boolean isSolid() {
+        return getData().isSolid();
+    }
 
     class Registry {
 
