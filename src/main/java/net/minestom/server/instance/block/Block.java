@@ -37,7 +37,9 @@ public interface Block extends Keyed, TagReadable, BlockOld {
         return getNamespaceId().asString();
     }
 
-    short getBlockId();
+    @NotNull Map<String, String> createPropertiesMap();
+
+    int getBlockId();
 
     short getStateId();
 
@@ -65,6 +67,10 @@ public interface Block extends Keyed, TagReadable, BlockOld {
 
         public synchronized @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
             return namespaceMap.get(namespaceID);
+        }
+
+        public synchronized @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
+            return namespaceMap.get(NamespaceID.from(namespaceID));
         }
 
         public synchronized @Nullable Block fromStateId(short stateId) {

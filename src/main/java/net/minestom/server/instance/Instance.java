@@ -603,7 +603,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
      * @return Block at given position.
      */
     public Block getBlock(int x, int y, int z) {
-        return Block.fromStateId(getBlockStateId(x, y, z));
+        return Block.REGISTRY.fromStateId(getBlockStateId(x, y, z));
     }
 
     /**

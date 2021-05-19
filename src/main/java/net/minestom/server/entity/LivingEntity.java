@@ -746,7 +746,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
             Block block = Block.REGISTRY.fromStateId(getInstance().getBlockStateId(it.next()));
-            if (!block.isAir() && !block.isLiquid()) {
+            if (!block.getData().isAir() && !block.getData().isLiquid()) {
                 return false;
             }
         }
@@ -763,7 +763,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             BlockPosition position = it.next();
-            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Blocks.AIR) return position;
+            if (Block.REGISTRY.fromStateId(getInstance().getBlockStateId(position)) != Blocks.AIR) return position;
         }
         return null;
     }

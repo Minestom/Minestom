@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registry;
@@ -32,11 +33,12 @@ public class TagsPacket implements ServerPacket {
     /**
      * Default constructor, required for reflection operations.
      */
-    public TagsPacket() {}
+    public TagsPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Registry.BLOCK_REGISTRY.get(name).getNumericalId());
+        writeTags(writer, blockTags, name -> Block.REGISTRY.fromNamespaceId(name).getBlockId());
         writeTags(writer, itemTags, name -> Registry.MATERIAL_REGISTRY.get(name).getNumericalId());
         writeTags(writer, fluidTags, name -> Registry.FLUID_REGISTRY.get(name).getNumericalId());
         writeTags(writer, entityTags, name -> Registry.ENTITY_TYPE_REGISTRY.get(name).getNumericalId()); // Not defaulted therefore nullable.
@@ -44,7 +46,7 @@ public class TagsPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        readTags(reader, blockTags, id -> Registry.BLOCK_REGISTRY.get(id.shortValue()).getId());
+        readTags(reader, blockTags, id -> Block.REGISTRY.fromStateId(id.shortValue()).getNamespaceId());
         readTags(reader, itemTags, id -> Registry.MATERIAL_REGISTRY.get(id.shortValue()).getId());
         readTags(reader, fluidTags, id -> Registry.FLUID_REGISTRY.get(id.shortValue()).getId());
         readTags(reader, entityTags, id -> Registry.ENTITY_TYPE_REGISTRY.get(id.shortValue()).getId()); // Not defaulted therefore nullable.

@@ -21,10 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Objects;
+import java.util.*;
 
 class BlockImpl implements Block {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockImpl.class);
@@ -35,7 +32,7 @@ class BlockImpl implements Block {
     }
 
     private final NamespaceID namespaceID;
-    private final short blockId;
+    private final int blockId;
     private final short minStateId, stateId;
     private final List<BlockProperty<?>> properties;
     protected BlockImpl original = null;
@@ -43,7 +40,7 @@ class BlockImpl implements Block {
     private NBTCompound compound;
 
     private BlockImpl(NamespaceID namespaceID,
-                      short blockId,
+                      int blockId,
                       short minStateId, short stateId,
                       List<BlockProperty<?>> properties,
                       LinkedHashMap<BlockProperty<?>, Object> propertiesMap,
@@ -58,7 +55,7 @@ class BlockImpl implements Block {
     }
 
     private BlockImpl(NamespaceID namespaceID,
-                      short blockId, short minStateId, short stateId,
+                      int blockId, short minStateId, short stateId,
                       List<BlockProperty<?>> properties,
                       LinkedHashMap<BlockProperty<?>, Object> propertiesMap) {
         this(namespaceID, blockId, minStateId, stateId, properties, propertiesMap, null);
@@ -133,7 +130,14 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public short getBlockId() {
+    public @NotNull Map<String, String> createPropertiesMap() {
+        Map<String, String> properties = new HashMap<>();
+        propertiesMap.forEach((blockProperty, o) -> properties.put(blockProperty.getName(), o.toString()));
+        return properties;
+    }
+
+    @Override
+    public int getBlockId() {
         return blockId;
     }
 
