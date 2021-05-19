@@ -14,7 +14,6 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticType;
 
 public final class Registry {
-
     public static final IdCrossMapRegistry.Defaulted<Fluid> FLUID_REGISTRY = new IdCrossMapRegistry.Defaulted<>(() -> Fluid.EMPTY);
 
     public static final IdCrossMapRegistry.Defaulted<Material> MATERIAL_REGISTRY = new IdCrossMapRegistry.Defaulted<>(() -> Material.AIR);

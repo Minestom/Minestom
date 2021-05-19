@@ -1,7 +1,6 @@
 package net.minestom.code_generation;
 
 import net.minestom.code_generation.attribute.AttributeGenerator;
-import net.minestom.code_generation.blocks.BlockEntityGenerator;
 import net.minestom.code_generation.blocks.BlockGenerator;
 import net.minestom.code_generation.entity.EntityTypeGenerator;
 import net.minestom.code_generation.entity.VillagerProfessionGenerator;
@@ -40,11 +39,6 @@ public class AllGenerators {
         // Generate fluids
         new FluidGenerator(
                 new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_fluids.json"),
-                outputFolder
-        ).generate();
-        // Generate block entities
-        new BlockEntityGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_block_entities.json"),
                 outputFolder
         ).generate();
         // Generate entities
