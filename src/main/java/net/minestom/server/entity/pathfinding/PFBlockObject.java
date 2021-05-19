@@ -5,6 +5,7 @@ import com.extollit.linalg.immutable.AxisAlignedBBox;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isImpeding() {
-        return block.isSolid();
+        return block.getData().isSolid();
     }
 
     @Override
@@ -125,11 +126,11 @@ public class PFBlockObject implements IBlockObject {
 
     @Override
     public boolean isLiquid() {
-        return block.isLiquid();
+        return block.getData().isLiquid();
     }
 
     @Override
     public boolean isIncinerating() {
-        return block == Block.LAVA || block == Block.FIRE || block == Block.SOUL_FIRE;
+        return block == Blocks.LAVA || block == Blocks.FIRE || block == Blocks.SOUL_FIRE;
     }
 }

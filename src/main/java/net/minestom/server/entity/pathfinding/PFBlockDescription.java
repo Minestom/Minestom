@@ -4,6 +4,7 @@ import com.extollit.gaming.ai.path.model.IBlockDescription;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.Blocks;
 
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isImpeding() {
-        return block.isSolid();
+        return block.getData().isSolid();
     }
 
     @Override
@@ -117,11 +118,11 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isLiquid() {
-        return block.isLiquid();
+        return block.getData().isLiquid();
     }
 
     @Override
     public boolean isIncinerating() {
-        return block == Block.LAVA || block == Block.FIRE || block == Block.SOUL_FIRE;
+        return block == Blocks.LAVA || block == Blocks.FIRE || block == Blocks.SOUL_FIRE;
     }
 }
