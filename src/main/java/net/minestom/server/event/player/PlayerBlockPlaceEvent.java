@@ -20,7 +20,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
-    private short blockStateId;
+    private Block block;
     private short customBlockId;
     private Data blockData;
     private final BlockPosition blockPosition;
@@ -33,7 +33,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
         super(player);
-        this.blockStateId = block.getBlockId();
+        this.block = block;
         this.blockPosition = blockPosition;
         this.hand = hand;
         this.consumeBlock = true;
@@ -45,7 +45,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
      * @param customBlock the custom block to place
      */
     public void setCustomBlock(@NotNull CustomBlock customBlock) {
-        setBlockStateId(customBlock.getDefaultBlockStateId());
+        setBlock(customBlock.getDefaultBlock());
         setCustomBlockId(customBlock.getCustomBlockId());
     }
 
@@ -83,7 +83,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     /**
      * Sets the custom block id to place.
      * <p>
-     * WARNING: this does not change the visual block id, see {@link #setBlockStateId(short)}
+     * WARNING: this does not change the visual block id, see {@link #setBlock(Block)}
      * or {@link #setCustomBlock(short)}.
      *
      * @param customBlockId the custom block id
@@ -93,21 +93,21 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     }
 
     /**
-     * Gets the block state id.
+     * Gets the block.
      *
-     * @return the block state id
+     * @return the block
      */
-    public short getBlockStateId() {
-        return blockStateId;
+    public @NotNull Block getBlock() {
+        return block;
     }
 
     /**
-     * Changes the visual block id.
+     * Changes the visual block.
      *
-     * @param blockStateId the new block state id
+     * @param block the new block
      */
-    public void setBlockStateId(short blockStateId) {
-        this.blockStateId = blockStateId;
+    public void setBlock(@NotNull Block block) {
+        this.block = block;
     }
 
     /**

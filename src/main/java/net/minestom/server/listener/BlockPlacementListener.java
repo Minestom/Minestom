@@ -147,14 +147,13 @@ public class BlockPlacementListener {
                     if (!playerBlockPlaceEvent.isCancelled()) {
 
                         // BlockPlacementRule check
-                        short blockStateId = playerBlockPlaceEvent.getBlockStateId();
-                        final Block resultBlock = Block.REGISTRY.fromStateId(blockStateId);
-                        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
+                        Block blockResult = playerBlockPlaceEvent.getBlock();
+                        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockResult);
                         if (blockPlacementRule != null) {
                             // Get id from block placement rule instead of the event
-                            blockStateId = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                            blockResult = blockPlacementRule.blockPlace(instance, blockResult, blockFace, blockPosition, player);
                         }
-                        final boolean placementRuleCheck = blockStateId != BlockPlacementRule.CANCEL_CODE;
+                        final boolean placementRuleCheck = blockResult != null;
 
                         if (placementRuleCheck) {
 
@@ -162,7 +161,7 @@ public class BlockPlacementListener {
                             final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
                             final Data blockData = playerBlockPlaceEvent.getBlockData(); // Possibly null
                             instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(),
-                                    blockStateId, customBlockId, blockData);
+                                    blockResult, customBlockId, blockData);
 
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {

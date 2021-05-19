@@ -50,20 +50,16 @@ public abstract class CustomBlock {
         return -firstBreaker.getEntityId();
     }
 
-    private final short defaultBlockStateId;
+    private final Block defaultBlock;
     private final String identifier;
 
     /**
-     * @param defaultBlockStateId the default block state id
-     * @param identifier          the custom block identifier
+     * @param defaultBlock the default block
+     * @param identifier   the custom block identifier
      */
-    public CustomBlock(short defaultBlockStateId, @NotNull String identifier) {
-        this.defaultBlockStateId = defaultBlockStateId;
+    public CustomBlock(@NotNull Block defaultBlock, @NotNull String identifier) {
+        this.defaultBlock = defaultBlock;
         this.identifier = identifier;
-    }
-
-    public CustomBlock(@NotNull Block block, @NotNull String identifier) {
-        this(block.getBlockId(), identifier);
     }
 
     /**
@@ -200,10 +196,10 @@ public abstract class CustomBlock {
      * <p>
      * Meaning that you should not believe that your custom blocks id will always be this one.
      *
-     * @return the default visual block id
+     * @return the default visual block
      */
-    public short getDefaultBlockStateId() {
-        return defaultBlockStateId;
+    public Block getDefaultBlock() {
+        return defaultBlock;
     }
 
     /**
