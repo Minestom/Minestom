@@ -167,7 +167,7 @@ public class EntityProjectile extends Entity {
             }
             BlockPosition bpos = pos.toBlockPosition();
             Block block = instance.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
-            if (!block.isAir() && !block.isLiquid()) {
+            if (!block.isAir() && !block.getData().isLiquid()) {
                 teleport(pos);
                 return true;
             }
