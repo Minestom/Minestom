@@ -9,6 +9,7 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockData;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -167,7 +168,8 @@ public class EntityProjectile extends Entity {
             }
             BlockPosition bpos = pos.toBlockPosition();
             Block block = instance.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
-            if (!block.isAir() && !block.getData().isLiquid()) {
+            BlockData data = block.getData();
+            if (!data.isAir() && !data.isLiquid()) {
                 teleport(pos);
                 return true;
             }

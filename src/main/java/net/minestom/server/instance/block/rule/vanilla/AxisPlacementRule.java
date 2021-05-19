@@ -4,6 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockProperties;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
@@ -18,21 +19,21 @@ public class AxisPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        return currentId;
+    public Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Block block) {
+        return block;
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance,
+    public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
                             @NotNull Player pl) {
-        String axis = "y";
+        String axis = "Y";
         if (blockFace == BlockFace.WEST || blockFace == BlockFace.EAST) {
-            axis = "x";
+            axis = "X";
         } else if (blockFace == BlockFace.SOUTH || blockFace == BlockFace.NORTH) {
-            axis = "z";
+            axis = "Z";
         }
-        return block.withProperties("axis=" + axis);
+        return block.withProperty(BlockProperties.AXIS, axis);
     }
 
 }

@@ -600,7 +600,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     protected boolean isBlockEntity(short blockStateId) {
         final Block block = Block.REGISTRY.fromStateId(blockStateId);
-        return block.hasBlockEntity();
+        return block.getData().isBlockEntity();
     }
 
     /**

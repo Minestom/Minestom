@@ -195,7 +195,8 @@ public class InstanceContainer extends Instance {
             }
 
             // Change id based on neighbors
-            blockStateId = executeBlockPlacementRule(blockStateId, blockPosition);
+            var block = Block.REGISTRY.fromStateId(blockStateId);
+            blockStateId = executeBlockPlacementRule(block, blockPosition).getStateId();
 
             // Retrieve custom block values
             short customBlockId = 0;
@@ -292,16 +293,16 @@ public class InstanceContainer extends Instance {
     /**
      * Calls the {@link BlockPlacementRule} for the specified block state id.
      *
-     * @param blockStateId  the block state id to modify
+     * @param block         the block to modify
      * @param blockPosition the block position
-     * @return the modified block state id
+     * @return the modified block
      */
-    private short executeBlockPlacementRule(short blockStateId, @NotNull BlockPosition blockPosition) {
-        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(blockStateId);
+    private Block executeBlockPlacementRule(Block block, @NotNull BlockPosition blockPosition) {
+        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
         if (blockPlacementRule != null) {
-            return blockPlacementRule.blockUpdate(this, blockPosition, blockStateId);
+            return blockPlacementRule.blockUpdate(this, blockPosition, block);
         }
-        return blockStateId;
+        return block;
     }
 
     /**

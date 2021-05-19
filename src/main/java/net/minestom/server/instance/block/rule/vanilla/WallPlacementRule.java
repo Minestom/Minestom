@@ -19,7 +19,7 @@ public class WallPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
+    public Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, Block block) {
         final int x = blockPosition.getX();
         final int y = blockPosition.getY();
         final int z = blockPosition.getZ();
@@ -52,19 +52,19 @@ public class WallPlacementRule extends BlockPlacementRule {
                 .withProperty(BlockProperties.SOUTH_WALL, south)
                 .withProperty(BlockProperties.WEST_WALL, west)
                 .withProperty(BlockProperties.UP, up)
-                .withProperty(BlockProperties.WATERLOGGED, waterlogged).getStateId();
+                .withProperty(BlockProperties.WATERLOGGED, waterlogged);
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance,
+    public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
                             @NotNull Player pl) {
-        return getBlockId();
+        return block;
     }
 
     private boolean isBlock(Instance instance, int x, int y, int z) {
         final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.REGISTRY.fromStateId(blockStateId).isSolid();
+        return Block.REGISTRY.fromStateId(blockStateId).getData().isSolid();
     }
 
 }

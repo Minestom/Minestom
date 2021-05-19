@@ -183,7 +183,7 @@ public class PlayerDiggingListener {
                 status, result);
 
         if (!result) {
-            final boolean solid = Block.REGISTRY.fromStateId((short) blockStateId).isSolid();
+            final boolean solid = Block.REGISTRY.fromStateId((short) blockStateId).getData().isSolid();
             if (solid) {
                 final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
 
