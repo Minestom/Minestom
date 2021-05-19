@@ -41,18 +41,18 @@ public interface Block extends Keyed, TagReadable, BlockOld {
 
     class Registry {
 
-        private final Short2ObjectSortedMap<BlockSupplier> set = new Short2ObjectAVLTreeMap<>();
+        private final Short2ObjectSortedMap<BlockSupplier> stateSet = new Short2ObjectAVLTreeMap<>();
 
         private Registry() {
         }
 
         public @Nullable Block fromStateId(short stateId) {
-            BlockSupplier supplier = set.get(stateId);
+            BlockSupplier supplier = stateSet.get(stateId);
             return supplier.get(stateId);
         }
 
         public void register(@NotNull IntRange range, @NotNull BlockSupplier blockSupplier) {
-            IntStream.range(range.getMinimum(), range.getMaximum()).forEach(value -> set.put((short) value, blockSupplier));
+            IntStream.range(range.getMinimum(), range.getMaximum()).forEach(value -> stateSet.put((short) value, blockSupplier));
         }
 
         @FunctionalInterface
