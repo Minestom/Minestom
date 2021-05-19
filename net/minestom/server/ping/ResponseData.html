@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":42,"i14":10,"i15":10,"i16":10,"i17":42,"i18":10,"i19":10,"i20":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":42,"i5":42,"i6":42,"i7":42,"i8":10,"i9":42,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":42,"i16":10,"i17":10,"i18":42,"i19":10,"i20":10,"i21":10,"i22":42,"i23":10,"i24":10,"i25":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -132,9 +132,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public class <span class="typeNameLabel">ResponseData</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Represents the data sent to the player when refreshing the server list.
-
- <p>Edited by listening to the <a href="../event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a>.</div>
+<div class="block">Represents the data sent to the player when responding to a ping event.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../event/server/ServerListPingEvent.html" title="class in net.minestom.server.event.server"><code>ServerListPingEvent</code></a></dd>
+</dl>
 </li>
 </ul>
 </div>
@@ -159,7 +161,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="ResponseData.PingPlayer.html" title="class in net.minestom.server.ping">ResponseData.PingPlayer</a></span></code></th>
 <td class="colLast">
-<div class="block">Represents a player line in the server list hover.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">See <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity"><code>NamedAndIdentified</code></a></div>
+</div>
 </td>
 </tr>
 </table>
@@ -205,97 +209,146 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.Iterable)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEntries(java.util.Collection)">addEntries</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&gt;&nbsp;entries)</code></th>
 <td class="colLast">
-<div class="block">Adds some players to the response.</div>
+<div class="block">Adds a series of entries to the response data sample.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.String)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEntries(net.minestom.server.utils.identity.NamedAndIdentified...)">addEntries</a></span>&#8203;(@NotNull <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>...&nbsp;entries)</code></th>
 <td class="colLast">
-<div class="block">Adds a player to the response.</div>
+<div class="block">Adds a series of entries to the response data sample.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.String,java.util.UUID)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)">addEntry</a></span>&#8203;(@NotNull <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&nbsp;entry)</code></th>
 <td class="colLast">
-<div class="block">Adds a player to the response.</div>
+<div class="block">Adds an entry to the response data sample.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(net.minestom.server.entity.Player)">addPlayer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.Iterable)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</code></th>
 <td class="colLast">
-<div class="block">Adds a player to the response.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntries(java.util.Collection)"><code>addEntries(Collection)</code></a>}</div>
+</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>@NotNull com.google.gson.JsonObject</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#build()">build</a></span>()</code></th>
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.String)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
-<div class="block">Converts the response data into a <code>JsonObject</code>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>addEntry(NamedAndIdentified)</code></a> with <a href="../utils/identity/NamedAndIdentified.html#named(java.lang.String)"><code>NamedAndIdentified.named(String)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearPlayers()">clearPlayers</a></span>()</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(java.lang.String,java.util.UUID)">addPlayer</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</code></th>
 <td class="colLast">
-<div class="block">Removes all of the ping players from this <a href="#pingPlayers"><code>pingPlayers</code></a>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>addEntry(NamedAndIdentified)</code></a> with <a href="../utils/identity/NamedAndIdentified.html#of(java.lang.String,java.util.UUID)"><code>NamedAndIdentified.of(String, UUID)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayer(net.minestom.server.entity.Player)">addPlayer</a></span>&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>addEntry(NamedAndIdentified)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>@NotNull com.google.gson.JsonObject</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#build()">build</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="ServerListPingType.html#getPingResponse(net.minestom.server.ping.ResponseData)"><code>ServerListPingType.getPingResponse(ResponseData)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearEntries()">clearEntries</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Clears the entries.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearPlayers()">clearPlayers</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#clearEntries()"><code>clearEntries()</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDescription()">getDescription</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response description</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntries()">getEntries</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets a modifiable collection of the current entries.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFavicon()">getFavicon</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response favicon.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxPlayer()">getMaxPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response maximum player count.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOnline()">getOnline</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response online count.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ResponseData.PingPlayer.html" title="class in net.minestom.server.ping">ResponseData.PingPlayer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayers()">getPlayers</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Get the list of the response players.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="#getEntries()"><code>getEntries()</code></a>.</div>
+</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProtocol()">getProtocol</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response protocol version.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVersion()">getVersion</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the version name for the response.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(java.lang.String)">setDescription</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;description)</code></th>
 <td class="colLast">
@@ -304,51 +357,51 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.kyori.adventure.text.Component)">setDescription</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</code></th>
 <td class="colLast">
 <div class="block">Sets the response description.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFavicon(java.lang.String)">setFavicon</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;favicon)</code></th>
 <td class="colLast">
 <div class="block">Sets the response favicon.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPlayer(int)">setMaxPlayer</a></span>&#8203;(int&nbsp;maxPlayer)</code></th>
 <td class="colLast">
 <div class="block">Sets the response maximum player count.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setVersion(java.lang.String)"><code>setVersion(String)</code></a></div>
+<div class="deprecationComment">This is named incorrectly, use <a href="#setVersion(java.lang.String)"><code>setVersion(String)</code></a> instead</div>
 </div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnline(int)">setOnline</a></span>&#8203;(int&nbsp;online)</code></th>
 <td class="colLast">
 <div class="block">Sets the response online count.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProtocol(int)">setProtocol</a></span>&#8203;(int&nbsp;protocol)</code></th>
 <td class="colLast">
 <div class="block">Sets the response protocol version.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVersion(java.lang.String)">setVersion</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;version)</code></th>
 <td class="colLast">
@@ -408,7 +461,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setVersion(java.lang.String)"><code>setVersion(String)</code></a></div>
+<div class="deprecationComment">This is named incorrectly, use <a href="#setVersion(java.lang.String)"><code>setVersion(String)</code></a> instead</div>
 </div>
 <div class="block">Sets the name for the response.</div>
 <dl>
@@ -535,7 +588,11 @@ public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>addPlayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Iterable</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntries(java.util.Collection)"><code>addEntries(Collection)</code></a>}</div>
+</div>
 <div class="block">Adds some players to the response.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -549,7 +606,11 @@ public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>addPlayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;addPlayer&#8203;(<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>addEntry(NamedAndIdentified)</code></a></div>
+</div>
 <div class="block">Adds a player to the response.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -563,8 +624,12 @@ public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>addPlayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
                       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>addEntry(NamedAndIdentified)</code></a> with <a href="../utils/identity/NamedAndIdentified.html#of(java.lang.String,java.util.UUID)"><code>NamedAndIdentified.of(String, UUID)</code></a></div>
+</div>
 <div class="block">Adds a player to the response.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -579,7 +644,11 @@ public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>addPlayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;addPlayer&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#addEntry(net.minestom.server.utils.identity.NamedAndIdentified)"><code>addEntry(NamedAndIdentified)</code></a> with <a href="../utils/identity/NamedAndIdentified.html#named(java.lang.String)"><code>NamedAndIdentified.named(String)</code></a></div>
+</div>
 <div class="block">Adds a player to the response.
  <p>
  <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true#randomUUID()" title="class or interface in java.util" class="externalLink"><code>UUID.randomUUID()</code></a> is used as the player's UUID.</div>
@@ -595,8 +664,12 @@ public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>clearPlayers</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;clearPlayers()</pre>
-<div class="block">Removes all of the ping players from this <a href="#pingPlayers"><code>pingPlayers</code></a>. The <a href="#pingPlayers"><code>pingPlayers</code></a> list
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;clearPlayers()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#clearEntries()"><code>clearEntries()</code></a></div>
+</div>
+<div class="block">Removes all of the ping players from this <a href="#entries"><code>entries</code></a>. The <a href="#entries"><code>entries</code></a> list
  will be empty this call returns.</div>
 </li>
 </ul>
@@ -606,7 +679,11 @@ public&nbsp;void&nbsp;setName&#8203;(<a href="https://docs.oracle.com/en/java/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>getPlayers</h4>
-<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ResponseData.PingPlayer.html" title="class in net.minestom.server.ping">ResponseData.PingPlayer</a>&gt;&nbsp;getPlayers()</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ResponseData.PingPlayer.html" title="class in net.minestom.server.ping">ResponseData.PingPlayer</a>&gt;&nbsp;getPlayers()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="#getEntries()"><code>getEntries()</code></a>. This return value is now unmodifiable and this operation is incredibly costly.</div>
+</div>
 <div class="block">Get the list of the response players.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -690,14 +767,94 @@ public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://docs.oracle.com/en/
 </dl>
 </li>
 </ul>
+<a id="addEntry(net.minestom.server.utils.identity.NamedAndIdentified)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addEntry</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addEntry&#8203;(@NotNull
+                     @NotNull <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&nbsp;entry)</pre>
+<div class="block">Adds an entry to the response data sample. This can be a player or a custom object.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity"><code>NamedAndIdentified</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="addEntries(net.minestom.server.utils.identity.NamedAndIdentified...)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addEntries</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addEntries&#8203;(@NotNull
+                       @NotNull <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>...&nbsp;entries)</pre>
+<div class="block">Adds a series of entries to the response data sample. These can be players or a custom object.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entries</code> - the entries</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity"><code>NamedAndIdentified</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="addEntries(java.util.Collection)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addEntries</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;addEntries&#8203;(@NotNull
+                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;? extends <a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&gt;&nbsp;entries)</pre>
+<div class="block">Adds a series of entries to the response data sample. These can be players or a custom object.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entries</code> - the entries</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity"><code>NamedAndIdentified</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="clearEntries()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clearEntries</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;clearEntries()</pre>
+<div class="block">Clears the entries.</div>
+</li>
+</ul>
+<a id="getEntries()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEntries</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&gt;&nbsp;getEntries()</pre>
+<div class="block">Gets a modifiable collection of the current entries.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the entries</dd>
+</dl>
+</li>
+</ul>
 <a id="build()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>build</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+@NotNull
 public&nbsp;@NotNull com.google.gson.JsonObject&nbsp;build()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="ServerListPingType.html#getPingResponse(net.minestom.server.ping.ResponseData)"><code>ServerListPingType.getPingResponse(ResponseData)</code></a></div>
+</div>
 <div class="block">Converts the response data into a <code>JsonObject</code>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

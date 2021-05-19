@@ -164,7 +164,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>default @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">getEquipment</a></span>&#8203;(<a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEquipment(net.minestom.server.entity.EquipmentSlot)">getEquipment</a></span>&#8203;(@NotNull <a href="../entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</code></th>
 <td class="colLast">
 <div class="block">Gets the equipment in a specific slot.</div>
 </td>
@@ -227,7 +227,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot,net.minestom.server.item.ItemStack)">setEquipment</a></span>&#8203;(<a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEquipment(net.minestom.server.entity.EquipmentSlot,net.minestom.server.item.ItemStack)">setEquipment</a></span>&#8203;(@NotNull <a href="../entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot,
             @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -269,7 +269,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">syncEquipment</a></span>&#8203;(<a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#syncEquipment(net.minestom.server.entity.EquipmentSlot)">syncEquipment</a></span>&#8203;(@NotNull <a href="../entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</code></th>
 <td class="colLast">
 <div class="block">Sends a specific equipment to viewers.</div>
 </td>
@@ -507,7 +507,7 @@ default&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.mines
 </dl>
 </li>
 </ul>
-<a id="getEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">
+<a id="getEquipment(net.minestom.server.entity.EquipmentSlot)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -515,7 +515,7 @@ default&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.mines
 <h4>getEquipment</h4>
 <pre class="methodSignature">@NotNull
 default&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getEquipment&#8203;(@NotNull
-                                        <a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot)</pre>
+                                        @NotNull <a href="../entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</pre>
 <div class="block">Gets the equipment in a specific slot.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -525,26 +525,26 @@ default&nbsp;@NotNull <a href="../item/ItemStack.html" title="class in net.mines
 </dl>
 </li>
 </ul>
-<a id="setEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot,net.minestom.server.item.ItemStack)">
+<a id="setEquipment(net.minestom.server.entity.EquipmentSlot,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setEquipment</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;setEquipment&#8203;(@NotNull
-                          <a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot,
+                          @NotNull <a href="../entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot,
                           @NotNull
                           @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
 </li>
 </ul>
-<a id="syncEquipment(net.minestom.server.network.packet.server.play.EntityEquipmentPacket.Slot)">
+<a id="syncEquipment(net.minestom.server.entity.EquipmentSlot)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>syncEquipment</h4>
 <pre class="methodSignature">default&nbsp;void&nbsp;syncEquipment&#8203;(@NotNull
-                           <a href="../network/packet/server/play/EntityEquipmentPacket.Slot.html" title="enum in net.minestom.server.network.packet.server.play">EntityEquipmentPacket.Slot</a>&nbsp;slot)</pre>
+                           @NotNull <a href="../entity/EquipmentSlot.html" title="enum in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</pre>
 <div class="block">Sends a specific equipment to viewers.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

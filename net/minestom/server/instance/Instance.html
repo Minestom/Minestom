@@ -149,7 +149,7 @@ implements <a href="BlockModifier.html" title="interface in net.minestom.server.
  WARNING: when making your own implementation registering the instance manually is required
  with <a href="InstanceManager.html#registerInstance(net.minestom.server.instance.Instance)"><code>InstanceManager.registerInstance(Instance)</code></a>, and
  you need to be sure to signal the <a href="../UpdateManager.html" title="class in net.minestom.server"><code>UpdateManager</code></a> of the changes using
- <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Instance, Chunk)</code></a> and <a href="../UpdateManager.html#signalChunkUnload(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkUnload(Instance, Chunk)</code></a>.</div>
+ <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Chunk)</code></a> and <a href="../UpdateManager.html#signalChunkUnload(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkUnload(Chunk)</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -1309,7 +1309,7 @@ public abstract&nbsp;@Nullable <a href="../storage/StorageLocation.html" title="
 <div class="block">Used when a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is not currently loaded in memory and need to be retrieved from somewhere else.
  Could be read from disk, or generated from scratch.
  <p>
- Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Instance, Chunk)</code></a> and to cache
+ Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Chunk)</code></a> and to cache
  that this chunk has been loaded.
  <p>
  WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.</div>
@@ -1333,7 +1333,7 @@ public abstract&nbsp;@Nullable <a href="../storage/StorageLocation.html" title="
                                     @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
 <div class="block">Called to generated a new <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> from scratch.
  <p>
- Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Instance, Chunk)</code></a> and to cache
+ Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Chunk)</code></a> and to cache
  that this chunk has been loaded.
  <p>
  This is where you can put your chunk generation code.</div>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":6,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":6,"i23":10,"i24":10};
+var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":6,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":6,"i23":10,"i24":10,"i25":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,12 +130,17 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+</dl>
+<dl>
 <dt>Direct Known Subclasses:</dt>
 <dd><code><a href="metadata/CompassMeta.Builder.html" title="class in net.minestom.server.item.metadata">CompassMeta.Builder</a></code>, <code><a href="metadata/CrossbowMeta.Builder.html" title="class in net.minestom.server.item.metadata">CrossbowMeta.Builder</a></code>, <code><a href="metadata/EnchantedBookMeta.Builder.html" title="class in net.minestom.server.item.metadata">EnchantedBookMeta.Builder</a></code>, <code><a href="metadata/FireworkEffectMeta.Builder.html" title="class in net.minestom.server.item.metadata">FireworkEffectMeta.Builder</a></code>, <code><a href="metadata/FireworkMeta.Builder.html" title="class in net.minestom.server.item.metadata">FireworkMeta.Builder</a></code>, <code><a href="metadata/LeatherArmorMeta.Builder.html" title="class in net.minestom.server.item.metadata">LeatherArmorMeta.Builder</a></code>, <code><a href="metadata/MapMeta.Builder.html" title="class in net.minestom.server.item.metadata">MapMeta.Builder</a></code>, <code><a href="metadata/PlayerHeadMeta.Builder.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta.Builder</a></code>, <code><a href="metadata/PotionMeta.Builder.html" title="class in net.minestom.server.item.metadata">PotionMeta.Builder</a></code>, <code><a href="metadata/SpawnEggMeta.Builder.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta.Builder</a></code>, <code><a href="metadata/WritableBookMeta.Builder.html" title="class in net.minestom.server.item.metadata">WritableBookMeta.Builder</a></code>, <code><a href="metadata/WrittenBookMeta.Builder.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta.Builder</a></code></dd>
 </dl>
 <hr>
 <pre>public abstract class <span class="typeNameLabel">ItemMetaBuilder</span>
-extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></pre>
 </li>
 </ul>
 </div>
@@ -402,11 +407,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;@NotNull <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(net.minestom.server.item.ItemTag,T)">set</a></span>&#8203;(@NotNull <a href="ItemTag.html" title="class in net.minestom.server.item">ItemTag</a>&lt;T&gt;&nbsp;tag,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#set(net.minestom.server.tag.Tag,T)">set</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
    T&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i24" class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTag(net.minestom.server.tag.Tag,T)">setTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+      T&nbsp;value)</code></th>
+<td class="colLast">
+<div class="block">Writes the specified type.</div>
+</td>
+</tr>
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unbreakable(boolean)">unbreakable</a></span>&#8203;(boolean&nbsp;unbreakable)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -750,9 +763,34 @@ public&nbsp;@NotNull <a href="ItemMetaBuilder.html" title="class in net.minestom
                                            @NotNull <a href="../instance/block/Block.html" title="enum in net.minestom.server.instance.block">Block</a>...&nbsp;blocks)</pre>
 </li>
 </ul>
-<a id="set(net.minestom.server.item.ItemTag,java.lang.Object)">
+<a id="setTag(net.minestom.server.tag.Tag,java.lang.Object)">
 <!--   -->
-</a><a id="set(net.minestom.server.item.ItemTag,T)">
+</a><a id="setTag(net.minestom.server.tag.Tag,T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTag</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;void&nbsp;setTag&#8203;(@NotNull
+                       @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+                       @Nullable
+                       T&nbsp;value)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">TagWritable</a></code></span></div>
+<div class="block">Writes the specified type.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the tag type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tag</code> - the tag to write</dd>
+<dd><code>value</code> - the tag value, null to remove</dd>
+</dl>
+</li>
+</ul>
+<a id="set(net.minestom.server.tag.Tag,java.lang.Object)">
+<!--   -->
+</a><a id="set(net.minestom.server.tag.Tag,T)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -760,7 +798,7 @@ public&nbsp;@NotNull <a href="ItemMetaBuilder.html" title="class in net.minestom
 <h4>set</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;&lt;T&gt;&nbsp;@NotNull <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;set&#8203;(@NotNull
-                                        @NotNull <a href="ItemTag.html" title="class in net.minestom.server.item">ItemTag</a>&lt;T&gt;&nbsp;tag,
+                                        @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
                                         @Nullable
                                         T&nbsp;value)</pre>
 </li>

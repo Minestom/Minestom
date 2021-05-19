@@ -281,11 +281,6 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 </td>
 </tr>
 <tr id="i13" class="rowColor">
-<td class="colFirst"><code>@NotNull io.netty.buffer.ByteBuf</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTickBuffer()">getTickBuffer</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshServerInformation(java.lang.String,int,int)">refreshServerInformation</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;serverAddress,
                         int&nbsp;serverPort,
@@ -293,6 +288,11 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <td class="colLast">
 <div class="block">Used in <a href="../packet/client/handshake/HandshakePacket.html" title="class in net.minestom.server.network.packet.client.handshake"><code>HandshakePacket</code></a> to change the internal fields.</div>
 </td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#releaseTickBuffer()">releaseTickBuffer</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -780,14 +780,13 @@ public&nbsp;@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/ap
 </dl>
 </li>
 </ul>
-<a id="getTickBuffer()">
+<a id="releaseTickBuffer()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getTickBuffer</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull io.netty.buffer.ByteBuf&nbsp;getTickBuffer()</pre>
+<h4>releaseTickBuffer</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;releaseTickBuffer()</pre>
 </li>
 </ul>
 <a id="getNonce()">

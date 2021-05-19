@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":6,"i12":6,"i13":10,"i14":10,"i15":42,"i16":10,"i17":9,"i18":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":6,"i12":6,"i13":10,"i14":10,"i15":10,"i16":10,"i17":9,"i18":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -225,7 +225,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -266,7 +266,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSuggestionCallback()">getSuggestionCallback</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Gets the suggestion callback of the argument</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -283,7 +285,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasSuggestion()">hasSuggestion</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Check if the argument has a suggestion.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
@@ -333,15 +337,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultValue(T)">setDefaultValue</a></span>&#8203;(<a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</code></th>
 <td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="#setDefaultValue(java.util.function.Supplier)"><code>setDefaultValue(Supplier)</code></a></div>
-</div>
+<div class="block">Sets the default value supplier of the argument.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a></span>&#8203;(@NotNull <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block">Sets the suggestion callback (for dynamic tab completion) of this argument.</div>
+</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../network/packet/server/play/DeclareCommandsPacket.Node.html" title="class in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.Node</a></code></td>
@@ -682,12 +686,15 @@ public&nbsp;@NotNull <a href="Argument.html" title="class in net.minestom.server
 <li class="blockList">
 <h4>setDefaultValue</h4>
 <pre class="methodSignature">@NotNull
-<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setDefaultValue&#8203;(@Nullable
+public&nbsp;@NotNull <a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setDefaultValue&#8203;(@NotNull
                                             <a href="Argument.html" title="type parameter in Argument">T</a>&nbsp;defaultValue)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="#setDefaultValue(java.util.function.Supplier)"><code>setDefaultValue(Supplier)</code></a></div>
-</div>
+<div class="block">Sets the default value supplier of the argument.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>defaultValue</code> - the default argument value</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>'this' for chaining</dd>
+</dl>
 </li>
 </ul>
 <a id="getSuggestionCallback()">
@@ -698,6 +705,13 @@ public&nbsp;@NotNull <a href="Argument.html" title="class in net.minestom.server
 <h4>getSuggestionCallback</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;@Nullable <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;getSuggestionCallback()</pre>
+<div class="block">Gets the suggestion callback of the argument</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the suggestion callback of the argument, null if it doesn't exist</dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)"><code>setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)</code></a></dd>
+</dl>
 </li>
 </ul>
 <a id="setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">
@@ -709,6 +723,15 @@ public&nbsp;@Nullable <a href="../suggestion/SuggestionCallback.html" title="int
 <pre class="methodSignature">@Beta
 public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="Argument.html" title="type parameter in Argument">T</a>&gt;&nbsp;setSuggestionCallback&#8203;(@NotNull
                                          @NotNull <a href="../suggestion/SuggestionCallback.html" title="interface in net.minestom.server.command.builder.suggestion">SuggestionCallback</a>&nbsp;suggestionCallback)</pre>
+<div class="block">Sets the suggestion callback (for dynamic tab completion) of this argument.
+ <p>
+ Note: This will not automatically filter arguments by user input.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>suggestionCallback</code> - The suggestion callback to set.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>'this' for chaining</dd>
+</dl>
 </li>
 </ul>
 <a id="hasSuggestion()">
@@ -718,6 +741,11 @@ public&nbsp;<a href="Argument.html" title="class in net.minestom.server.command.
 <li class="blockList">
 <h4>hasSuggestion</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;hasSuggestion()</pre>
+<div class="block">Check if the argument has a suggestion.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>If this argument has a suggestion.</dd>
+</dl>
 </li>
 </ul>
 <a id="map(net.minestom.server.command.builder.arguments.ArgumentMap.Mapper)">

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -122,12 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="Arguments.html" title="class in net.minestom.server.command.builder">net.minestom.server.command.builder.Arguments</a></li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.command.builder.CommandContext</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -136,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">CommandContext</span>
-extends <a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Class used to retrieve argument data in a <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder"><code>CommandExecutor</code></a>.
  <p>
  All id are the one specified in the <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments"><code>Argument</code></a> constructor.
@@ -157,13 +152,24 @@ extends <a href="Arguments.html" title="class in net.minestom.server.command.bui
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.command.builder.Arguments">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.command.builder.<a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a></h3>
-<code><a href="Arguments.html#args">args</a></code></li>
-</ul>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#args">args</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rawArgs">rawArgs</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 </li>
 </ul>
 </section>
@@ -203,40 +209,95 @@ extends <a href="Arguments.html" title="class in net.minestom.server.command.bui
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandName()">getCommandName</a></span>()</code></th>
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clear()">clear</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInput()">getInput</a></span>()</code></th>
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copy(net.minestom.server.command.builder.CommandContext)">copy</a></span>&#8203;(@NotNull <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRaw(java.lang.String)">getRaw</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(java.lang.String)">get</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRaw(net.minestom.server.command.builder.arguments.Argument)">getRaw</a></span>&#8203;(@NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#get(net.minestom.server.command.builder.arguments.Argument)">get</a></span>&#8203;(@NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandName()">getCommandName</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInput()">getInput</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMap()">getMap</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrDefault(java.lang.String,T)">getOrDefault</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier,
+            T&nbsp;defaultValue)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOrDefault(net.minestom.server.command.builder.arguments.Argument,T)">getOrDefault</a></span>&#8203;(@NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument,
+            T&nbsp;defaultValue)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRaw(java.lang.String)">getRaw</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRaw(net.minestom.server.command.builder.arguments.Argument)">getRaw</a></span>&#8203;(@NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>@Nullable <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReturnData()">getReturnData</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#has(java.lang.String)">has</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#has(net.minestom.server.command.builder.arguments.Argument)">has</a></span>&#8203;(@NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>protected void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#retrieveDefaultValues(java.util.Map)">retrieveDefaultValues</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&gt;&nbsp;defaultValuesMap)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArg(java.lang.String,java.lang.Object,java.lang.String)">setArg</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value,
       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;rawInput)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setReturnData(net.minestom.server.command.builder.CommandData)">setReturnData</a></span>&#8203;(@Nullable <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;returnData)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.builder.Arguments">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.<a href="Arguments.html" title="class in net.minestom.server.command.builder">Arguments</a></h3>
-<code><a href="Arguments.html#clear()">clear</a>, <a href="Arguments.html#copy(net.minestom.server.command.builder.Arguments)">copy</a>, <a href="Arguments.html#get(java.lang.String)">get</a>, <a href="Arguments.html#get(net.minestom.server.command.builder.arguments.Argument)">get</a>, <a href="Arguments.html#getBlockState(java.lang.String)">getBlockState</a>, <a href="Arguments.html#getBoolean(java.lang.String)">getBoolean</a>, <a href="Arguments.html#getColor(java.lang.String)">getColor</a>, <a href="Arguments.html#getDouble(java.lang.String)">getDouble</a>, <a href="Arguments.html#getEnchantment(java.lang.String)">getEnchantment</a>, <a href="Arguments.html#getEntities(java.lang.String)">getEntities</a>, <a href="Arguments.html#getEntityType(java.lang.String)">getEntityType</a>, <a href="Arguments.html#getFloat(java.lang.String)">getFloat</a>, <a href="Arguments.html#getFloatRange(java.lang.String)">getFloatRange</a>, <a href="Arguments.html#getInteger(java.lang.String)">getInteger</a>, <a href="Arguments.html#getIntRange(java.lang.String)">getIntRange</a>, <a href="Arguments.html#getItemStack(java.lang.String)">getItemStack</a>, <a href="Arguments.html#getLong(java.lang.String)">getLong</a>, <a href="Arguments.html#getMap()">getMap</a>, <a href="Arguments.html#getNBT(java.lang.String)">getNBT</a>, <a href="Arguments.html#getNbtCompound(java.lang.String)">getNbtCompound</a>, <a href="Arguments.html#getObject(java.lang.String)">getObject</a>, <a href="Arguments.html#getParticle(java.lang.String)">getParticle</a>, <a href="Arguments.html#getPotionEffect(java.lang.String)">getPotionEffect</a>, <a href="Arguments.html#getRelativeBlockPosition(java.lang.String)">getRelativeBlockPosition</a>, <a href="Arguments.html#getRelativeVector(java.lang.String)">getRelativeVector</a>, <a href="Arguments.html#getReturnData()">getReturnData</a>, <a href="Arguments.html#getString(java.lang.String)">getString</a>, <a href="Arguments.html#getStringArray(java.lang.String)">getStringArray</a>, <a href="Arguments.html#getTime(java.lang.String)">getTime</a>, <a href="Arguments.html#getWord(java.lang.String)">getWord</a>, <a href="Arguments.html#has(java.lang.String)">has</a>, <a href="Arguments.html#has(net.minestom.server.command.builder.arguments.Argument)">has</a>, <a href="Arguments.html#retrieveDefaultValues(java.util.Map)">retrieveDefaultValues</a>, <a href="Arguments.html#setArg(java.lang.String,java.lang.Object)">setArg</a>, <a href="Arguments.html#setReturnData(net.minestom.server.command.builder.CommandData)">setReturnData</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -253,6 +314,34 @@ extends <a href="Arguments.html" title="class in net.minestom.server.command.bui
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="args">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>args</h4>
+<pre>protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt; args</pre>
+</li>
+</ul>
+<a id="rawArgs">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>rawArgs</h4>
+<pre>protected&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt; rawArgs</pre>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -300,15 +389,120 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getCommandName()</pre>
 </li>
 </ul>
+<a id="get(net.minestom.server.command.builder.arguments.Argument)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
+                 @NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</pre>
+</li>
+</ul>
+<a id="get(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>get</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;get&#8203;(@NotNull
+                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</pre>
+</li>
+</ul>
+<a id="getOrDefault(net.minestom.server.command.builder.arguments.Argument,java.lang.Object)">
+<!--   -->
+</a><a id="getOrDefault(net.minestom.server.command.builder.arguments.Argument,T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOrDefault</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
+                          @NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument,
+                          T&nbsp;defaultValue)</pre>
+</li>
+</ul>
+<a id="getOrDefault(java.lang.String,java.lang.Object)">
+<!--   -->
+</a><a id="getOrDefault(java.lang.String,T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOrDefault</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getOrDefault&#8203;(@NotNull
+                          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier,
+                          T&nbsp;defaultValue)</pre>
+</li>
+</ul>
+<a id="has(net.minestom.server.command.builder.arguments.Argument)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>has</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;has&#8203;(@NotNull
+                   @NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</pre>
+</li>
+</ul>
+<a id="has(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>has</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;has&#8203;(@NotNull
+                   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</pre>
+</li>
+</ul>
+<a id="getReturnData()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getReturnData</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;getReturnData()</pre>
+</li>
+</ul>
+<a id="setReturnData(net.minestom.server.command.builder.CommandData)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setReturnData</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setReturnData&#8203;(@Nullable
+                          @Nullable <a href="CommandData.html" title="class in net.minestom.server.command.builder">CommandData</a>&nbsp;returnData)</pre>
+</li>
+</ul>
+<a id="getMap()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMap</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&nbsp;getMap()</pre>
+</li>
+</ul>
+<a id="copy(net.minestom.server.command.builder.CommandContext)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>copy</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;copy&#8203;(@NotNull
+                 @NotNull <a href="CommandContext.html" title="class in net.minestom.server.command.builder">CommandContext</a>&nbsp;context)</pre>
+</li>
+</ul>
 <a id="getRaw(net.minestom.server.command.builder.arguments.Argument)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getRaw</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getRaw&#8203;(@NotNull
-                    @NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;T&gt;&nbsp;argument)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getRaw&#8203;(@NotNull
+                     @NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</pre>
 </li>
 </ul>
 <a id="getRaw(java.lang.String)">
@@ -317,20 +511,39 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getRaw&#8203;(@NotNull
 <ul class="blockList">
 <li class="blockList">
 <h4>getRaw</h4>
-<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getRaw&#8203;(@NotNull
-                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getRaw&#8203;(@NotNull
+                     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</pre>
 </li>
 </ul>
 <a id="setArg(java.lang.String,java.lang.Object,java.lang.String)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setArg</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setArg&#8203;(@NotNull
                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value,
                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;rawInput)</pre>
+</li>
+</ul>
+<a id="clear()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>clear</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;clear()</pre>
+</li>
+</ul>
+<a id="retrieveDefaultValues(java.util.Map)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>retrieveDefaultValues</h4>
+<pre class="methodSignature">protected&nbsp;void&nbsp;retrieveDefaultValues&#8203;(@Nullable
+                                     @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&gt;&gt;&nbsp;defaultValuesMap)</pre>
 </li>
 </ul>
 </li>
@@ -391,7 +604,7 @@ public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getRaw&#8203;(@NotNull
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

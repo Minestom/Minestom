@@ -962,7 +962,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block">Used when a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is not currently loaded in memory and need to be retrieved from somewhere else.
  Could be read from disk, or generated from scratch.
  <p>
- Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Instance, Chunk)</code></a> and to cache
+ Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Chunk)</code></a> and to cache
  that this chunk has been loaded.
  <p>
  WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.</div>
@@ -989,7 +989,7 @@ extends <a href="Instance.html" title="class in net.minestom.server.instance">In
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Instance.html#createChunk(int,int,net.minestom.server.utils.chunk.ChunkCallback)">Instance</a></code></span></div>
 <div class="block">Called to generated a new <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> from scratch.
  <p>
- Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Instance, Chunk)</code></a> and to cache
+ Be sure to signal the chunk using <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Chunk)</code></a> and to cache
  that this chunk has been loaded.
  <p>
  This is where you can put your chunk generation code.</div>
@@ -1218,7 +1218,7 @@ public&nbsp;@Nullable <a href="InstanceContainer.html" title="class in net.mines
 <div class="block">Adds a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to the internal instance map.
  <p>
  WARNING: the chunk will not automatically be sent to players and
- <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Instance,net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Instance, Chunk)</code></a> must be called manually.</div>
+ <a href="../UpdateManager.html#signalChunkLoad(net.minestom.server.instance.Chunk)"><code>UpdateManager.signalChunkLoad(Chunk)</code></a> must be called manually.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>chunk</code> - the chunk to cache</dd>

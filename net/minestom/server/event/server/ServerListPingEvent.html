@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -164,9 +164,17 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.ping.ResponseData,net.minestom.server.network.player.PlayerConnection)">ServerListPingEvent</a></span>&#8203;(<a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData,
-                   <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
-<td class="colLast">&nbsp;</td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.ping.ServerListPingType)">ServerListPingEvent</a></span>&#8203;(@NotNull <a href="../../ping/ServerListPingType.html" title="enum in net.minestom.server.ping">ServerListPingType</a>&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block">Creates a new server list ping event with no player connection.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.player.PlayerConnection,net.minestom.server.ping.ServerListPingType)">ServerListPingEvent</a></span>&#8203;(@Nullable <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
+                   @NotNull <a href="../../ping/ServerListPingType.html" title="enum in net.minestom.server.ping">ServerListPingType</a>&nbsp;type)</code></th>
+<td class="colLast">
+<div class="block">Creates a new server list ping event.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -187,31 +195,45 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConnection()">getConnection</a></span>()</code></th>
 <td class="colLast">
 <div class="block">PlayerConnection of received packet.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResponseData()">getResponseData</a></span>()</code></th>
+<td class="colFirst"><code>@NotNull <a href="../../ping/ServerListPingType.html" title="enum in net.minestom.server.ping">ServerListPingType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPingType()">getPingType</a></span>()</code></th>
 <td class="colLast">
-<div class="block">ResponseData being returned.</div>
+<div class="block">Gets the ping type that the client is pinging with.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResponseData()">getResponseData</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the response data that is sent to the client.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
-<div class="block">Cancelling this event will cause you server to appear offline in the vanilla server list.</div>
+<div class="block">Cancelling this event will cause the server to appear offline in the vanilla server list.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResponseData(net.minestom.server.ping.ResponseData)">setResponseData</a></span>&#8203;(@NotNull <a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData)</code></th>
+<td class="colLast">
+<div class="block">Sets the response data, overwriting the exiting data.</div>
 </td>
 </tr>
 </table>
@@ -238,14 +260,37 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.ping.ResponseData,net.minestom.server.network.player.PlayerConnection)">
+<a id="&lt;init&gt;(net.minestom.server.ping.ServerListPingType)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ServerListPingEvent</h4>
+<pre>public&nbsp;ServerListPingEvent&#8203;(@NotNull
+                           @NotNull <a href="../../ping/ServerListPingType.html" title="enum in net.minestom.server.ping">ServerListPingType</a>&nbsp;type)</pre>
+<div class="block">Creates a new server list ping event with no player connection.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>type</code> - the ping type to respond with</dd>
+</dl>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.network.player.PlayerConnection,net.minestom.server.ping.ServerListPingType)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ServerListPingEvent</h4>
-<pre>public&nbsp;ServerListPingEvent&#8203;(<a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData,
-                           <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</pre>
+<pre>public&nbsp;ServerListPingEvent&#8203;(@Nullable
+                           @Nullable <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
+                           @NotNull
+                           @NotNull <a href="../../ping/ServerListPingType.html" title="enum in net.minestom.server.ping">ServerListPingType</a>&nbsp;type)</pre>
+<div class="block">Creates a new server list ping event.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>connection</code> - the player connection, if the ping type is modern</dd>
+<dd><code>type</code> - the ping type to respond with</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -266,10 +311,26 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <h4>getResponseData</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;getResponseData()</pre>
-<div class="block">ResponseData being returned.</div>
+<div class="block">Gets the response data that is sent to the client.
+ This is mutable and can be modified to change what is returned.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the response data being returned</dd>
+</dl>
+</li>
+</ul>
+<a id="setResponseData(net.minestom.server.ping.ResponseData)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResponseData</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setResponseData&#8203;(@NotNull
+                            @NotNull <a href="../../ping/ResponseData.html" title="class in net.minestom.server.ping">ResponseData</a>&nbsp;responseData)</pre>
+<div class="block">Sets the response data, overwriting the exiting data.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>responseData</code> - the new data</dd>
 </dl>
 </li>
 </ul>
@@ -279,14 +340,28 @@ public&nbsp;@NotNull <a href="../../ping/ResponseData.html" title="class in net.
 <ul class="blockList">
 <li class="blockList">
 <h4>getConnection</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;getConnection()</pre>
-<div class="block">PlayerConnection of received packet.
-
- Note that the player has not joined the server at this time.</div>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;getConnection()</pre>
+<div class="block">PlayerConnection of received packet. Note that the player has not joined the server
+ at this time. This will <b>only</b> be non-null for modern server list pings.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the playerConnection.</dd>
+</dl>
+</li>
+</ul>
+<a id="getPingType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPingType</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../ping/ServerListPingType.html" title="enum in net.minestom.server.ping">ServerListPingType</a>&nbsp;getPingType()</pre>
+<div class="block">Gets the ping type that the client is pinging with.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the ping type</dd>
 </dl>
 </li>
 </ul>
@@ -314,7 +389,8 @@ public&nbsp;@NotNull <a href="../../network/player/PlayerConnection.html" title=
 <li class="blockList">
 <h4>setCancelled</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
-<div class="block">Cancelling this event will cause you server to appear offline in the vanilla server list.</div>
+<div class="block">Cancelling this event will cause the server to appear offline in the vanilla server list.
+ Note that this will have no effect if the ping version is <a href="../../ping/ServerListPingType.html#OPEN_TO_LAN"><code>ServerListPingType.OPEN_TO_LAN</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>

@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":42,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -171,57 +171,66 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChatMode()">getChatMode</a></span>()</code></th>
+<td class="colFirst"><code>@Nullable <a href="../message/ChatMessageType.html" title="enum in net.minestom.server.message">ChatMessageType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChatMessageType()">getChatMessageType</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the player chat mode.</div>
+<div class="block">Gets the messages this player wants to receive.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChatMode()">getChatMode</a></span>()</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getChatMessageType()"><code>getChatMessageType()</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDisplayedSkinParts()">getDisplayedSkinParts</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLocale()">getLocale</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The player game language.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="Player.MainHand.html" title="enum in net.minestom.server.entity">Player.MainHand</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMainHand()">getMainHand</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player main hand.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewDistance()">getViewDistance</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player view distance.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasChatColors()">hasChatColors</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the player has chat colors enabled.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refresh(java.lang.String,byte,net.minestom.server.entity.Player.ChatMode,boolean,byte,net.minestom.server.entity.Player.MainHand)">refresh</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;locale,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refresh(java.lang.String,byte,net.minestom.server.message.ChatMessageType,boolean,byte,net.minestom.server.entity.Player.MainHand)">refresh</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;locale,
        byte&nbsp;viewDistance,
-       <a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>&nbsp;chatMode,
+       <a href="../message/ChatMessageType.html" title="enum in net.minestom.server.message">ChatMessageType</a>&nbsp;chatMessageType,
        boolean&nbsp;chatColors,
        byte&nbsp;displayedSkinParts,
        <a href="Player.MainHand.html" title="enum in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand)</code></th>
@@ -306,11 +315,30 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>getChatMode</h4>
-<pre class="methodSignature">public&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>&nbsp;getChatMode()</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>&nbsp;getChatMode()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">Use <a href="#getChatMessageType()"><code>getChatMessageType()</code></a></div>
+</div>
 <div class="block">Gets the player chat mode.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the player chat mode</dd>
+</dl>
+</li>
+</ul>
+<a id="getChatMessageType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChatMessageType</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="../message/ChatMessageType.html" title="enum in net.minestom.server.message">ChatMessageType</a>&nbsp;getChatMessageType()</pre>
+<div class="block">Gets the messages this player wants to receive.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the messages</dd>
 </dl>
 </li>
 </ul>
@@ -351,7 +379,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="refresh(java.lang.String,byte,net.minestom.server.entity.Player.ChatMode,boolean,byte,net.minestom.server.entity.Player.MainHand)">
+<a id="refresh(java.lang.String,byte,net.minestom.server.message.ChatMessageType,boolean,byte,net.minestom.server.entity.Player.MainHand)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -359,7 +387,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>refresh</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;refresh&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;locale,
                     byte&nbsp;viewDistance,
-                    <a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>&nbsp;chatMode,
+                    <a href="../message/ChatMessageType.html" title="enum in net.minestom.server.message">ChatMessageType</a>&nbsp;chatMessageType,
                     boolean&nbsp;chatColors,
                     byte&nbsp;displayedSkinParts,
                     <a href="Player.MainHand.html" title="enum in net.minestom.server.entity">Player.MainHand</a>&nbsp;mainHand)</pre>
@@ -370,8 +398,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>locale</code> - the player locale</dd>
 <dd><code>viewDistance</code> - the player view distance</dd>
-<dd><code>chatMode</code> - the player chat mode</dd>
-<dd><code>chatColors</code> - the player chat colors</dd>
+<dd><code>chatMessageType</code> - the chat messages the player wishes to receive</dd>
+<dd><code>chatColors</code> - if chat colors should be displayed</dd>
 <dd><code>displayedSkinParts</code> - the player displayed skin parts</dd>
 <dd><code>mainHand</code> - the player main hand</dd>
 </dl>

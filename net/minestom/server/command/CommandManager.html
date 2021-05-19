@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":42,"i11":10,"i12":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -193,7 +193,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -237,57 +237,39 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCommandProcessor(java.lang.String)">getCommandProcessor</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandName)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="#getCommand(java.lang.String)"><code>getCommand(String)</code></a> instead</div>
-</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConsoleSender()">getConsoleSender</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a> (which is used as a <a href="CommandSender.html" title="interface in net.minestom.server.command"><code>CommandSender</code></a>).</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="builder/CommandDispatcher.html" title="class in net.minestom.server.command.builder">CommandDispatcher</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDispatcher()">getDispatcher</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUnknownCommandCallback()">getUnknownCommandCallback</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the callback executed once an unknown command is run.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.builder.Command)">register</a></span>&#8203;(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a>.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.command.CommandProcessor)">register</a></span>&#8203;(@NotNull <a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;commandProcessor)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or <a href="builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
-</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUnknownCommandCallback(net.minestom.server.utils.callback.CommandCallback)">setUnknownCommandCallback</a></span>&#8203;(@Nullable <a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a>&nbsp;unknownCommandCallback)</code></th>
 <td class="colLast">
 <div class="block">Sets the callback executed once an unknown command is run.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.command.builder.Command)">unregister</a></span>&#8203;(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></th>
 <td class="colLast">
@@ -403,49 +385,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 public&nbsp;@Nullable <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;getCommand&#8203;(@NotNull
                                     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandName)</pre>
 <div class="block">Gets the <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> registered by <a href="#register(net.minestom.server.command.builder.Command)"><code>register(Command)</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>commandName</code> - the command name</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the command associated with the name, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="register(net.minestom.server.command.CommandProcessor)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>register</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;register&#8203;(@NotNull
-                     @NotNull <a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;commandProcessor)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a> or <a href="builder/SimpleCommand.html" title="class in net.minestom.server.command.builder"><code>SimpleCommand</code></a> instead</div>
-</div>
-<div class="block">Registers a <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>commandProcessor</code> - the command to register</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalStateException</a></code> - if a command with the same name already exists</dd>
-</dl>
-</li>
-</ul>
-<a id="getCommandProcessor(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCommandProcessor</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-@Nullable
-public&nbsp;@Nullable <a href="CommandProcessor.html" title="interface in net.minestom.server.command">CommandProcessor</a>&nbsp;getCommandProcessor&#8203;(@NotNull
-                                                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;commandName)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="#getCommand(java.lang.String)"><code>getCommand(String)</code></a> instead</div>
-</div>
-<div class="block">Gets the <a href="CommandProcessor.html" title="interface in net.minestom.server.command"><code>CommandProcessor</code></a> registered by <a href="#register(net.minestom.server.command.CommandProcessor)"><code>register(CommandProcessor)</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>commandName</code> - the command name</dd>

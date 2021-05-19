@@ -165,8 +165,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static @NotNull io.netty.buffer.ByteBuf</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">createFramedPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
-                  boolean&nbsp;directBuffer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
 <td class="colLast">
 <div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
  from a server packet, directly into an output buffer.</div>
@@ -389,7 +388,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                      @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
 </li>
 </ul>
-<a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">
+<a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -397,17 +396,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>createFramedPacket</h4>
 <pre class="methodSignature">@NotNull
 public static&nbsp;@NotNull io.netty.buffer.ByteBuf&nbsp;createFramedPacket&#8203;(@NotNull
-                                                                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
-                                                                  boolean&nbsp;directBuffer)</pre>
+                                                                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
 <div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
  from a server packet, directly into an output buffer.
  <p>
  Can be used if you want to store a raw buffer and send it later without the additional writing cost.
  Compression is applied if <a href="../MinecraftServer.html#getCompressionThreshold()"><code>MinecraftServer.getCompressionThreshold()</code></a> is greater than 0.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>serverPacket</code> - the server packet to write</dd>
-</dl>
 </li>
 </ul>
 </li>

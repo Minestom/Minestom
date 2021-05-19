@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -196,30 +196,20 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>byte[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNonce()">getNonce</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/javax/crypto/SecretKey.html?is-external=true" title="class or interface in javax.crypto" class="externalLink">SecretKey</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSecretKey()">getSecretKey</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.network.player.PlayerConnection)">process</a></span>&#8203;(@NotNull <a href="../../../player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Called when the packet is received.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(net.minestom.server.utils.binary.BinaryReader)">read</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader)</code></th>
 <td class="colLast">
 <div class="block">Reads from a <a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary"><code>BinaryReader</code></a>.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
@@ -308,7 +298,7 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <a id="write(net.minestom.server.utils.binary.BinaryWriter)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>write</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;write&#8203;(@NotNull
@@ -323,24 +313,6 @@ implements <a href="../ClientPreplayPacket.html" title="interface in net.minesto
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>writer</code> - the writer to write to</dd>
 </dl>
-</li>
-</ul>
-<a id="getSecretKey()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getSecretKey</h4>
-<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/javax/crypto/SecretKey.html?is-external=true" title="class or interface in javax.crypto" class="externalLink">SecretKey</a>&nbsp;getSecretKey()</pre>
-</li>
-</ul>
-<a id="getNonce()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getNonce</h4>
-<pre class="methodSignature">public&nbsp;byte[]&nbsp;getNonce()</pre>
 </li>
 </ul>
 </li>

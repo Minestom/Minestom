@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -152,7 +152,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(double)">TickMonitor</a></span>&#8203;(double&nbsp;tickTime)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(double,double)">TickMonitor</a></span>&#8203;(double&nbsp;tickTime,
+           double&nbsp;acquisitionTime)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -174,6 +175,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getAcquisitionTime()">getAcquisitionTime</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTickTime()">getTickTime</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -202,13 +208,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(double)">
+<a id="&lt;init&gt;(double,double)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TickMonitor</h4>
-<pre>public&nbsp;TickMonitor&#8203;(double&nbsp;tickTime)</pre>
+<pre>public&nbsp;TickMonitor&#8203;(double&nbsp;tickTime,
+                   double&nbsp;acquisitionTime)</pre>
 </li>
 </ul>
 </li>
@@ -224,10 +231,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="getTickTime()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getTickTime</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;getTickTime()</pre>
+</li>
+</ul>
+<a id="getAcquisitionTime()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getAcquisitionTime</h4>
+<pre class="methodSignature">public&nbsp;double&nbsp;getAcquisitionTime()</pre>
 </li>
 </ul>
 </li>

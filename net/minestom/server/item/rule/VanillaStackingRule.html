@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -122,21 +122,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../StackingRule.html" title="class in net.minestom.server.item">net.minestom.server.item.StackingRule</a></li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.item.rule.VanillaStackingRule</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">VanillaStackingRule</span>
-extends <a href="../StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></pre>
 </li>
 </ul>
 </div>
@@ -157,7 +157,7 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int)">VanillaStackingRule</a></span>&#8203;(int&nbsp;maxSize)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">VanillaStackingRule</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -181,7 +181,7 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#apply(net.minestom.server.item.ItemStack,int)">apply</a></span>&#8203;(@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item,
-     int&nbsp;newAmount)</code></th>
+     int&nbsp;amount)</code></th>
 <td class="colLast">
 <div class="block">Changes the size of the <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to <code>newAmount</code>.</div>
 </td>
@@ -209,20 +209,27 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
 <div class="block">Used to determine the current stack size of an <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.</div>
 </td>
 </tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxSize(net.minestom.server.item.ItemStack)">getMaxSize</a></span>&#8203;(@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
+<td class="colLast">
+<div class="block">Gets the max size of a stack.</div>
+</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.item.StackingRule">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.item.<a href="../StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></h3>
-<code><a href="../StackingRule.html#apply(net.minestom.server.item.ItemStack,java.util.function.IntUnaryOperator)">apply</a>, <a href="../StackingRule.html#getMaxSize()">getMaxSize</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.item.StackingRule">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.item.<a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></h3>
+<code><a href="../StackingRule.html#apply(net.minestom.server.item.ItemStack,java.util.function.IntUnaryOperator)">apply</a></code></li>
 </ul>
 </li>
 </ul>
@@ -240,13 +247,13 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(int)">
+<a id="&lt;init&gt;()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>VanillaStackingRule</h4>
-<pre>public&nbsp;VanillaStackingRule&#8203;(int&nbsp;maxSize)</pre>
+<pre>public&nbsp;VanillaStackingRule()</pre>
 </li>
 </ul>
 </li>
@@ -269,11 +276,11 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
                             @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item1,
                             @NotNull
                             @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item2)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../StackingRule.html#canBeStacked(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">StackingRule</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../StackingRule.html#canBeStacked(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">StackingRule</a></code></span></div>
 <div class="block">Used to know if two <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> can be stacked together.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../StackingRule.html#canBeStacked(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">canBeStacked</a></code>&nbsp;in class&nbsp;<code><a href="../StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></code></dd>
+<dd><code><a href="../StackingRule.html#canBeStacked(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">canBeStacked</a></code>&nbsp;in interface&nbsp;<code><a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item1</code> - the first <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
 <dd><code>item2</code> - the second <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
@@ -292,11 +299,11 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
 <pre class="methodSignature">public&nbsp;boolean&nbsp;canApply&#8203;(@NotNull
                         @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item,
                         int&nbsp;newAmount)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../StackingRule.html#canApply(net.minestom.server.item.ItemStack,int)">StackingRule</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../StackingRule.html#canApply(net.minestom.server.item.ItemStack,int)">StackingRule</a></code></span></div>
 <div class="block">Used to know if an <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> can have the size <code>newAmount</code> applied.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../StackingRule.html#canApply(net.minestom.server.item.ItemStack,int)">canApply</a></code>&nbsp;in class&nbsp;<code><a href="../StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></code></dd>
+<dd><code><a href="../StackingRule.html#canApply(net.minestom.server.item.ItemStack,int)">canApply</a></code>&nbsp;in interface&nbsp;<code><a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - the <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to check</dd>
 <dd><code>newAmount</code> - the desired new amount</dd>
@@ -314,16 +321,16 @@ extends <a href="../StackingRule.html" title="class in net.minestom.server.item"
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;apply&#8203;(@NotNull
                                 @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;item,
-                                int&nbsp;newAmount)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../StackingRule.html#apply(net.minestom.server.item.ItemStack,int)">StackingRule</a></code></span></div>
+                                int&nbsp;amount)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../StackingRule.html#apply(net.minestom.server.item.ItemStack,int)">StackingRule</a></code></span></div>
 <div class="block">Changes the size of the <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to <code>newAmount</code>.
  At this point we know that the item can have this stack size applied.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../StackingRule.html#apply(net.minestom.server.item.ItemStack,int)">apply</a></code>&nbsp;in class&nbsp;<code><a href="../StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></code></dd>
+<dd><code><a href="../StackingRule.html#apply(net.minestom.server.item.ItemStack,int)">apply</a></code>&nbsp;in interface&nbsp;<code><a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>item</code> - the <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to applies the size to</dd>
-<dd><code>newAmount</code> - the new item size</dd>
+<dd><code>amount</code> - the new item size</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>item</code></a> with the specified amount</dd>
 </dl>
@@ -332,21 +339,41 @@ public&nbsp;@NotNull <a href="../ItemStack.html" title="class in net.minestom.se
 <a id="getAmount(net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getAmount</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;getAmount&#8203;(@NotNull
                      @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../StackingRule.html#getAmount(net.minestom.server.item.ItemStack)">StackingRule</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../StackingRule.html#getAmount(net.minestom.server.item.ItemStack)">StackingRule</a></code></span></div>
 <div class="block">Used to determine the current stack size of an <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>.
  It is possible to have it stored in its <a href="../../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> object, lore, etc...</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../StackingRule.html#getAmount(net.minestom.server.item.ItemStack)">getAmount</a></code>&nbsp;in class&nbsp;<code><a href="../StackingRule.html" title="class in net.minestom.server.item">StackingRule</a></code></dd>
+<dd><code><a href="../StackingRule.html#getAmount(net.minestom.server.item.ItemStack)">getAmount</a></code>&nbsp;in interface&nbsp;<code><a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>itemStack</code> - the <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> to check the size</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the correct size of <a href="../ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getMaxSize(net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getMaxSize</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getMaxSize&#8203;(@NotNull
+                      @NotNull <a href="../ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../StackingRule.html#getMaxSize(net.minestom.server.item.ItemStack)">StackingRule</a></code></span></div>
+<div class="block">Gets the max size of a stack.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../StackingRule.html#getMaxSize(net.minestom.server.item.ItemStack)">getMaxSize</a></code>&nbsp;in interface&nbsp;<code><a href="../StackingRule.html" title="interface in net.minestom.server.item">StackingRule</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>itemStack</code> - the item to get the max size from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the max size of a stack</dd>
 </dl>
 </li>
 </ul>

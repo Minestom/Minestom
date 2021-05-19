@@ -219,7 +219,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">sendPacket</a></span>&#8203;(@NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
           boolean&nbsp;skipTranslating)</code></th>
 <td class="colLast">
-<div class="block">Serializes the packet and send it to the client, skipping the translation phase.</div>
+<div class="block">Serializes the packet and send it to the client, optionally skipping the translation phase.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -289,7 +289,7 @@ extends <a href="PlayerConnection.html" title="class in net.minestom.server.netw
                        @NotNull <a href="../packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket,
                        boolean&nbsp;skipTranslating)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">PlayerConnection</a></code></span></div>
-<div class="block">Serializes the packet and send it to the client, skipping the translation phase.
+<div class="block">Serializes the packet and send it to the client, optionally skipping the translation phase.
  <p>
  Also responsible for executing <a href="../ConnectionManager.html#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)"><code>ConnectionManager.onPacketSend(ServerPacketConsumer)</code></a> consumers.</div>
 <dl>

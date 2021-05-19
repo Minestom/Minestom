@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":41,"i1":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -143,8 +143,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd><a href="Player.html" title="class in net.minestom.server.entity">Player</a></dd>
 </dl>
 <hr>
-<pre>public static enum <span class="typeNameLabel">Player.ChatMode</span>
+<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public static enum <span class="typeNameLabel">Player.ChatMode</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink">Enum</a>&lt;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>&gt;</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">See <a href="../message/ChatMessageType.html" title="enum in net.minestom.server.message"><code>ChatMessageType</code></a></div>
+</div>
 </li>
 </ul>
 </div>
@@ -166,15 +170,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#COMMANDS_ONLY">COMMANDS_ONLY</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#ENABLED">ENABLED</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 <tr class="altColor">
 <th class="colFirst" scope="row"><code><span class="memberNameLink"><a href="#HIDDEN">HIDDEN</a></span></code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -188,7 +198,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -198,6 +208,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>static <a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#valueOf(java.lang.String)">valueOf</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns the enum constant of this type with the specified name.</div>
 </td>
 </tr>
@@ -205,6 +216,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>static <a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#values()">values</a></span>()</code></th>
 <td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared.</div>
 </td>
@@ -247,6 +259,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>ENABLED</h4>
 <pre>public static final&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a> ENABLED</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="COMMANDS_ONLY">
@@ -256,6 +269,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>COMMANDS_ONLY</h4>
 <pre>public static final&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a> COMMANDS_ONLY</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 <a id="HIDDEN">
@@ -265,6 +279,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>HIDDEN</h4>
 <pre>public static final&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a> HIDDEN</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 </li>
 </ul>
 </li>
@@ -284,6 +299,7 @@ the order they are declared.</div>
 <li class="blockList">
 <h4>values</h4>
 <pre class="methodSignature">public static&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>[]&nbsp;values()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns an array containing the constants of this enum type, in
 the order they are declared. This method may be used to iterate
 over the constants as follows:
@@ -304,6 +320,7 @@ for (Player.ChatMode c : Player.ChatMode.values())
 <li class="blockList">
 <h4>valueOf</h4>
 <pre class="methodSignature">public static&nbsp;<a href="Player.ChatMode.html" title="enum in net.minestom.server.entity">Player.ChatMode</a>&nbsp;valueOf&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span></div>
 <div class="block">Returns the enum constant of this type with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this type.  (Extraneous whitespace characters are 
