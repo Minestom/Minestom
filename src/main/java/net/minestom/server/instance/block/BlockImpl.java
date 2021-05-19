@@ -151,11 +151,12 @@ class BlockImpl implements Block {
                                       short defaultStateId, List<BlockProperty<?>> properties) {
         var block = new BlockImpl(namespaceID, blockId, minStateId, defaultStateId, properties, computeMap(defaultStateId, properties));
         block.original = block;
-        Block.REGISTRY.register(new IntRange((int) minStateId, (int) maxStateId), requestedStateId -> {
-            var requestedBlock = new BlockImpl(namespaceID, blockId, minStateId, requestedStateId, properties, computeMap(requestedStateId, properties));
-            requestedBlock.original = block;
-            return requestedBlock;
-        });
+        Block.REGISTRY.register(namespaceID, block,
+                new IntRange((int) minStateId, (int) maxStateId), requestedStateId -> {
+                    var requestedBlock = new BlockImpl(namespaceID, blockId, minStateId, requestedStateId, properties, computeMap(requestedStateId, properties));
+                    requestedBlock.original = block;
+                    return requestedBlock;
+                });
         return block;
     }
 

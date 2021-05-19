@@ -11,6 +11,8 @@ import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("removal")
@@ -43,6 +45,7 @@ public interface Block extends Keyed, TagReadable, BlockOld {
 
     /**
      * Migrated to {@link #getData()}.{@link BlockData#isSolid()} method.
+     *
      * @return True if the Block is solid.
      */
     @Deprecated(
@@ -52,17 +55,24 @@ public interface Block extends Keyed, TagReadable, BlockOld {
 
     class Registry {
 
+        private final Map<NamespaceID, Block> namespaceMap = new HashMap<>();
         private final Short2ObjectSortedMap<BlockSupplier> stateSet = new Short2ObjectAVLTreeMap<>();
 
         private Registry() {
         }
 
-        public @Nullable Block fromStateId(short stateId) {
+        public synchronized @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
+            return namespaceMap.get(namespaceID);
+        }
+
+        public synchronized @Nullable Block fromStateId(short stateId) {
             BlockSupplier supplier = stateSet.get(stateId);
             return supplier.get(stateId);
         }
 
-        public void register(@NotNull IntRange range, @NotNull BlockSupplier blockSupplier) {
+        public synchronized void register(@NotNull NamespaceID namespaceID, @NotNull Block block,
+                                          @NotNull IntRange range, @NotNull BlockSupplier blockSupplier) {
+            this.namespaceMap.put(namespaceID, block);
             IntStream.range(range.getMinimum(), range.getMaximum()).forEach(value -> stateSet.put((short) value, blockSupplier));
         }
 
