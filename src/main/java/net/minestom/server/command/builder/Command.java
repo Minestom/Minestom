@@ -3,11 +3,13 @@ package net.minestom.server.command.builder;
 import com.google.common.annotations.Beta;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.*;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.callback.CommandCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -52,6 +54,7 @@ public class Command {
 
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
+    private CommandCallback notEnoughPermissionCallback;
 
     private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
@@ -275,6 +278,25 @@ public class Command {
      */
     public void setDefaultExecutor(@Nullable CommandExecutor executor) {
         this.defaultExecutor = executor;
+    }
+
+    /**
+     * Gets the callback executed once this command was run and the sender does not have enough permission.
+     *
+     * @return the not enough permission command callback, null if not any
+     */
+    public @Nullable CommandCallback getNotEnoughPermissionCallback() {
+        return notEnoughPermissionCallback;
+    }
+
+    /**
+     * Sets the callback executed once this command was run and the sender does not have enough permission.
+     *
+     * @param notEnoughPermissionCallback the not enough permission command callback,
+     *                                    setting it to null means that the default {{@link CommandManager#getUnknownCommandCallback()}} will be called
+     */
+    public void setNotEnoughPermissionCallback(@Nullable CommandCallback notEnoughPermissionCallback) {
+        this.notEnoughPermissionCallback = notEnoughPermissionCallback;
     }
 
     /**

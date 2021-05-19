@@ -85,14 +85,19 @@ public class ParsedCommand {
 
     private void executeCommand(CommandExecutor executor, Command command, @NotNull CommandSender source) {
         if (command.getPermission() == null) {
-            executor.apply(source, context);
+                executor.apply(source, context);
         } else {
             if (source.hasPermission(command.getPermission())) {
                 executor.apply(source, context);
             } else {
+                if (command.getNotEnoughPermissionCallback() != null) {
+                    command.getNotEnoughPermissionCallback().apply(source, context.getCommandName());
+                    return;
+                }
+
                 CommandManager manager = MinecraftServer.getCommandManager();
-                if (manager.getNotEnoughPermissionCallback() != null) {
-                    manager.getNotEnoughPermissionCallback().apply(source, command.getName());
+                if (manager.getDefaultNotEnoughPermissionCallback() != null) {
+                    manager.getDefaultNotEnoughPermissionCallback().apply(source, command.getName());
                 }
             }
         }

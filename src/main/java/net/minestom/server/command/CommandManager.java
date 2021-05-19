@@ -142,7 +142,7 @@ public final class CommandManager {
      *
      * @return the not enough permission command callback, null if not any
      */
-    public @Nullable CommandCallback getNotEnoughPermissionCallback() {
+    public @Nullable CommandCallback getDefaultNotEnoughPermissionCallback() {
         return notEnoughPermissionCallback;
     }
 
@@ -152,7 +152,7 @@ public final class CommandManager {
      * @param notEnoughPermissionCallback the not enough permission command callback,
      *                                    setting it to null mean that nothing will be executed
      */
-    public void setNotEnoughPermissionCallback(@Nullable CommandCallback notEnoughPermissionCallback) {
+    public void setDefaultNotEnoughPermissionCallback(@Nullable CommandCallback notEnoughPermissionCallback) {
         this.notEnoughPermissionCallback = notEnoughPermissionCallback;
     }
 
