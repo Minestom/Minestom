@@ -92,11 +92,14 @@ public class Section implements PublicCloneable<Section> {
         {
             final long clear = MAGIC_MASKS[bitsPerEntry];
 
+            final long value = block >> bitIndex & clear;
+            final boolean isCurrentAir = Block.fromStateId(
+                    hasPalette ? paletteBlockMap.get((short) value) : (short) value).isAir();
+
             block |= clear << bitIndex;
             block ^= clear << bitIndex;
             block |= (long) blockId << bitIndex;
 
-            final boolean isCurrentAir = Block.fromStateId(getBlockAt(x, y, z)).isAir();
             if (!isCurrentAir && isAir) { // The old block isn't air & the new block is.
                 this.blockCount--;
             } else if (isCurrentAir && !isAir) { // The old block is air & the new block isn't.
