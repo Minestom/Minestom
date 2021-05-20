@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":10,"i10":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":9,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -259,21 +259,28 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockCount()">getBlockCount</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Get the amount of non air blocks in this section.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPaletteMap()">getBlockPaletteMap</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>long[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlocks()">getBlocks</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPaletteBlockMap()">getPaletteBlockMap</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSectionIndex(int,int,int)">getSectionIndex</a></span>&#8203;(int&nbsp;x,
                int&nbsp;y,
@@ -282,14 +289,14 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <div class="block">Gets the index of the block on the section array based on the block position.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#resize(int)">resize</a></span>&#8203;(int&nbsp;newBitsPerEntry)</code></th>
 <td class="colLast">
 <div class="block">Resizes the array.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockAt(int,int,int,short)">setBlockAt</a></span>&#8203;(int&nbsp;x,
           int&nbsp;y,
@@ -475,6 +482,20 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <li class="blockList">
 <h4>getBlocks</h4>
 <pre class="methodSignature">public&nbsp;long[]&nbsp;getBlocks()</pre>
+</li>
+</ul>
+<a id="getBlockCount()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBlockCount</h4>
+<pre class="methodSignature">public&nbsp;short&nbsp;getBlockCount()</pre>
+<div class="block">Get the amount of non air blocks in this section.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The amount of blocks in this section.</dd>
+</dl>
 </li>
 </ul>
 <a id="getPaletteBlockMap()">
