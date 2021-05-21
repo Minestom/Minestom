@@ -56,9 +56,6 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         ClassName blockPropertyCN = ClassName.get("net.minestom.server.instance.block", "BlockProperty");
         ClassName blockCN = ClassName.get("net.minestom.server.instance.block", "Block");
         ClassName blockImplCN = ClassName.get("net.minestom.server.instance.block", "BlockImpl");
-        ClassName rawBlockDataClassName = ClassName.get("net.minestom.server.raw_data", "RawBlockData");
-        ClassName rawBlockStateDataClassName = ClassName.get("net.minestom.server.raw_data", "RawBlockStateData");
-        ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
         JsonArray blockProperties;
         try {
