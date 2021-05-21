@@ -85,8 +85,7 @@ public abstract class Extension {
         return logger;
     }
 
-    @NotNull
-    public Path getDataDirectory() {
+    public @NotNull Path getDataDirectory() {
         return getOrigin().getDataDirectory();
     }
 
@@ -101,8 +100,7 @@ public abstract class Extension {
      * @param fileName The file to read
      * @return The file contents, or null if there was an issue reading the file.
      */
-    @Nullable
-    public InputStream getResource(@NotNull String fileName) {
+    public @Nullable InputStream getResource(@NotNull String fileName) {
         return getResource(Paths.get(fileName));
     }
 
@@ -117,8 +115,7 @@ public abstract class Extension {
      * @param target The file to read
      * @return The file contents, or null if there was an issue reading the file.
      */
-    @Nullable
-    public InputStream getResource(@NotNull Path target) {
+    public @Nullable InputStream getResource(@NotNull Path target) {
         final Path targetFile = getDataDirectory().resolve(target);
         try {
             // Copy from jar if the file does not exist in the extension data directory.
@@ -141,7 +138,7 @@ public abstract class Extension {
      * @param fileName The file to read
      * @return The file contents, or null if there was an issue reading the file.
      */
-    public InputStream getPackagedResource(@NotNull String fileName) {
+    public @Nullable InputStream getPackagedResource(@NotNull String fileName) {
         return getPackagedResource(Paths.get(fileName));
     }
 
@@ -153,8 +150,7 @@ public abstract class Extension {
      * @param target The file to read
      * @return The file contents, or null if there was an issue reading the file.
      */
-    @Nullable
-    public InputStream getPackagedResource(@NotNull Path target) {
+    public @Nullable InputStream getPackagedResource(@NotNull Path target) {
         try {
             final URL url = getOrigin().getMinestomExtensionClassLoader().getResource(target.toString());
             if (url == null) {

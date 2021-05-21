@@ -574,8 +574,7 @@ public class ExtensionManager {
         return extensionFolder;
     }
 
-    @NotNull
-    public Path getExtensionDataRoot() {
+    public @NotNull Path getExtensionDataRoot() {
         return extensionDataRoot;
     }
 

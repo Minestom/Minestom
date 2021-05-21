@@ -133,8 +133,7 @@ public final class DiscoveredExtension {
         return originalJar;
     }
 
-    @NotNull
-    public Path getDataDirectory() {
+    public @NotNull Path getDataDirectory() {
         return dataDirectory;
     }
 
