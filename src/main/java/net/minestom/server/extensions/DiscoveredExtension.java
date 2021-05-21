@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
+import java.nio.file.Path;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,6 +76,8 @@ public final class DiscoveredExtension {
     /** The original jar this is from. */
     transient private File originalJar;
 
+    transient private Path dataDirectory;
+
     /** The class loader that powers it. */
     transient private MinestomExtensionClassLoader minestomExtensionClassLoader;
 
@@ -128,6 +131,15 @@ public final class DiscoveredExtension {
     @Nullable
     public File getOriginalJar() {
         return originalJar;
+    }
+
+    @NotNull
+    public Path getDataDirectory() {
+        return dataDirectory;
+    }
+
+    public void setDataDirectory(@NotNull Path dataDirectory) {
+        this.dataDirectory = dataDirectory;
     }
 
     MinestomExtensionClassLoader removeMinestomExtensionClassLoader() {
