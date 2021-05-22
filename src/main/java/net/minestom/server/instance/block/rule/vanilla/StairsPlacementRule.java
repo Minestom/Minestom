@@ -4,8 +4,8 @@ import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockProperties;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
@@ -18,26 +18,26 @@ public class StairsPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentStateID) {
-        return currentStateID;
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Block block) {
+        return block;
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition, @NotNull Player player) {
+    public Block blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace,
+                            @NotNull BlockPosition blockPosition, @NotNull Player player) {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
         boolean waterlogged = false; // waiting for water to be implemented
-        return block.withProperties(
-                "facing=" + facing.toString().toLowerCase(),
-                "half=" + half.toString().toLowerCase(),
-                "shape=" + shape.toString().toLowerCase(),
-                "waterlogged=" + waterlogged
-        );
+
+        return block.withProperty(BlockProperties.FACING, facing.toString())
+                .withProperty(BlockProperties.HALF, half.toString())
+                .withProperty(BlockProperties.STAIRS_SHAPE, shape.toString())
+                .withProperty(BlockProperties.WATERLOGGED, waterlogged);
     }
 
     private enum Shape {
-
         STRAIGHT,
         OUTER_LEFT,
         OUTER_RIGHT,
@@ -46,7 +46,6 @@ public class StairsPlacementRule extends BlockPlacementRule {
     }
 
     private enum Facing {
-
         NORTH(
                 new BlockPosition(0, 0, 1),
                 new BlockPosition(0, 0, -1)
@@ -89,10 +88,10 @@ public class StairsPlacementRule extends BlockPlacementRule {
                 return Pair.of(null, null);
             }
             short stateId = instance.getBlockStateId(blockPosition);
-            BlockAlternative alternative = block.getAlternative(stateId);
+            Block state = Block.fromStateId(stateId);
             try {
-                Shape shape = Shape.valueOf(alternative.getProperty("shape").toUpperCase());
-                Facing facing = Facing.valueOf(alternative.getProperty("facing").toUpperCase());
+                Shape shape = Shape.valueOf(state.getProperty("shape").toUpperCase());
+                Facing facing = Facing.valueOf(state.getProperty("facing").toUpperCase());
                 return Pair.of(shape, facing);
             } catch (Exception ex) {
                 return Pair.of(null, null);
