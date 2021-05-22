@@ -17,7 +17,6 @@ import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -69,6 +68,7 @@ public final class MinecraftServer {
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     public static final String VERSION_NAME = "1.16.5";
+    public static final String VERSION_NAME_UNDERSCORED = VERSION_NAME.replace('.', '_');
     public static final int PROTOCOL_VERSION = 754;
 
     // Threads
@@ -157,7 +157,6 @@ public final class MinecraftServer {
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
         // TODO: automate (probably with code generation)
-        Block.values();
         Material.values();
         PotionType.values();
         PotionEffect.values();

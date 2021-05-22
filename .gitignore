@@ -32,7 +32,7 @@ hs_err_pid*
 
 ### Gradle template
 .gradle
-/build/
+**/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -45,6 +45,7 @@ gradle-app.setting
 
 # IDEA files
 .idea/
+**/out/
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
@@ -56,5 +57,7 @@ gradle-app.setting
 /.mixin.out/
 
 # When compiling we get a docs folder
-/docs
-.mixin.out/
+**/docs
+
+# The data for generation is included in this folder
+code-generators/data/
