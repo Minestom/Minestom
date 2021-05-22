@@ -11,7 +11,6 @@ import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -102,21 +101,16 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      * <p>
      * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
      * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch}s)
-     * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch batches})
+     * The thread-safe version is {@link Instance#setBlock(int, int, int, Block)} (or any similar instance methods)
      * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
      *
-     * @param x             the block X
-     * @param y             the block Y
-     * @param z             the block Z
-     * @param blockStateId  the block state id
-     * @param customBlockId the custom block id, 0 if not
-     * @param data          the {@link Data} of the block, can be null
-     * @param updatable     true if the block has an update method
-     *                      Warning: <code>customBlockId</code> cannot be 0 in this case and needs to be valid since the update delay and method
-     *                      will be retrieved from the associated {@link CustomBlock} object
+     * @param x     the block X
+     * @param y     the block Y
+     * @param z     the block Z
+     * @param block the block to place
      */
-    public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data, boolean updatable);
+    public abstract void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block);
 
     /**
      * Executes a chunk tick.
@@ -131,64 +125,14 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     public abstract void tick(long time);
 
     /**
-     * Gets the block state id at a position.
+     * Gets the block at a position.
      *
      * @param x the block X
      * @param y the block Y
      * @param z the block Z
-     * @return the block state id at the position
+     * @return the block at the position
      */
-    public abstract short getBlockStateId(int x, int y, int z);
-
-    /**
-     * Gets the custom block id at a position.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the custom block id at the position
-     */
-    public abstract short getCustomBlockId(int x, int y, int z);
-
-    /**
-     * Changes the block state id and the custom block id at a position.
-     *
-     * @param x             the block X
-     * @param y             the block Y
-     * @param z             the block Z
-     * @param blockStateId  the new block state id
-     * @param customBlockId the new custom block id
-     */
-    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
-
-    /**
-     * Changes the block state id at a position (the custom block id stays the same).
-     *
-     * @param x            the block X
-     * @param y            the block Y
-     * @param z            the block Z
-     * @param blockStateId the new block state id
-     */
-    protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
-
-    /**
-     * Gets the {@link Data} at a block index.
-     *
-     * @param index the block index
-     * @return the {@link Data} at the block index, null if none
-     */
-    @Nullable
-    public abstract Data getBlockData(int index);
-
-    /**
-     * Sets the {@link Data} at a position.
-     *
-     * @param x    the block X
-     * @param y    the block Y
-     * @param z    the block Z
-     * @param data the new data, can be null
-     */
-    public abstract void setBlockData(int x, int y, int z, @Nullable Data data);
+    public abstract @NotNull Block getBlock(int x, int y, int z);
 
     /**
      * Gets all the block entities in this chunk.
@@ -256,34 +200,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      * Resets the chunk, this means clearing all the data making it empty.
      */
     public abstract void reset();
-
-    /**
-     * Gets the {@link CustomBlock} at a position.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the {@link CustomBlock} at the position
-     */
-    @Nullable
-    public CustomBlock getCustomBlock(int x, int y, int z) {
-        final short customBlockId = getCustomBlockId(x, y, z);
-        return customBlockId != 0 ? BLOCK_MANAGER.getCustomBlock(customBlockId) : null;
-    }
-
-    /**
-     * Gets the {@link CustomBlock} at a block index.
-     *
-     * @param index the block index
-     * @return the {@link CustomBlock} at the block index
-     */
-    @Nullable
-    protected CustomBlock getCustomBlock(int index) {
-        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-        final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-        return getCustomBlock(x, y, z);
-    }
 
     /**
      * Gets the unique identifier of this chunk.
@@ -417,10 +333,10 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask          = 0b111111111111111111;
-        updateLightPacket.emptySkyLightMask     = 0b000000000000000000;
-        updateLightPacket.blockLightMask        = 0b000000000000000000;
-        updateLightPacket.emptyBlockLightMask   = 0b111111111111111111;
+        updateLightPacket.skyLightMask = 0b111111111111111111;
+        updateLightPacket.emptySkyLightMask = 0b000000000000000000;
+        updateLightPacket.blockLightMask = 0b000000000000000000;
+        updateLightPacket.emptyBlockLightMask = 0b111111111111111111;
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
         final List<byte[]> temp = new ArrayList<>(18);
@@ -590,17 +506,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         this.loaded = false;
         ChunkDataPacket.CACHE.invalidate(getIdentifier());
         UpdateLightPacket.CACHE.invalidate(getIdentifier());
-    }
-
-    /**
-     * Gets if a block state id represents a block entity.
-     *
-     * @param blockStateId the block state id to check
-     * @return true if {@code blockStateId} represents a block entity
-     */
-    protected boolean isBlockEntity(short blockStateId) {
-        final Block block = Block.fromStateId(blockStateId);
-        return block.hasBlockEntity();
     }
 
     /**

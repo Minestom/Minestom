@@ -1,7 +1,10 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.ints.*;
+import it.unimi.dsi.fastutil.ints.Int2LongMap;
+import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
@@ -9,18 +12,14 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
-import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -77,8 +76,11 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, Data data, boolean updatable) {
-
+    public void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block) {
+        final short blockStateId = block.getStateId();
+        final short customBlockId = 0; // TODO
+        final boolean updatable = false; // TODO
+        final boolean nbt = false; // TODO
         {
             // Update pathfinder
             if (columnarSpace != null) {
@@ -124,7 +126,7 @@ public class DynamicChunk extends Chunk {
         }
 
         // Set block entity
-        if (isBlockEntity(blockStateId)) {
+        if (nbt) {
             this.blockEntities.add(index);
         } else {
             this.blockEntities.remove(index);
@@ -133,66 +135,15 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        if (updatableBlocks.isEmpty())
-            return;
-
-        // Block all chunk operation during the update
-        final IntIterator iterator = new IntOpenHashSet(updatableBlocks).iterator();
-        while (iterator.hasNext()) {
-            final int index = iterator.nextInt();
-            final CustomBlock customBlock = getCustomBlock(index);
-
-            // Update cooldown
-            final UpdateOption updateOption = customBlock.getUpdateOption();
-            if (updateOption != null) {
-                final long lastUpdate = updatableBlocksLastUpdate.get(index);
-                final boolean hasCooldown = Cooldown.hasCooldown(time, lastUpdate, updateOption);
-                if (hasCooldown)
-                    continue;
-
-                this.updatableBlocksLastUpdate.put(index, time); // Refresh last update time
-
-                final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-                final Data data = getBlockData(index);
-                customBlock.update(instance, blockPosition, data);
-            }
-        }
+        // TODO block update
     }
 
     @Override
-    public short getBlockStateId(int x, int y, int z) {
-        return getBlockAt(blockPalette, x, y, z);
-    }
-
-    @Override
-    public short getCustomBlockId(int x, int y, int z) {
-        return getBlockAt(customBlockPalette, x, y, z);
-    }
-
-    @Override
-    protected void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId) {
-        setBlockAt(blockPalette, x, y, z, blockStateId);
-        setBlockAt(customBlockPalette, x, y, z, customBlockId);
-    }
-
-    @Override
-    protected void refreshBlockStateId(int x, int y, int z, short blockStateId) {
-        setBlockAt(blockPalette, x, y, z, blockStateId);
-    }
-
-    @Override
-    public Data getBlockData(int index) {
-        return blocksData.get(index);
-    }
-
-    @Override
-    public void setBlockData(int x, int y, int z, Data data) {
-        final int index = getBlockIndex(x, y, z);
-        if (data != null) {
-            this.blocksData.put(index, data);
-        } else {
-            this.blocksData.remove(index);
-        }
+    public @NotNull Block getBlock(int x, int y, int z) {
+        final short blockStateId = getBlockAt(blockPalette, x, y, z);
+        Block block = Block.fromStateId(blockStateId);
+        // TODO nbt/handler
+        return block;
     }
 
     @NotNull
@@ -268,7 +219,7 @@ public class DynamicChunk extends Chunk {
                         chunkWriter.writeShort(customBlockId);
 
                         // Data
-                        final Data data = getBlockData(index);
+                        final Data data = null;//getBlockData(index);
                         final boolean hasBlockData = data instanceof SerializableData && !data.isEmpty();
                         chunkWriter.writeBoolean(hasBlockData);
                         if (hasBlockData) {
@@ -375,7 +326,10 @@ public class DynamicChunk extends Chunk {
                         }
                     }
 
-                    UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+                    Block block = Block.fromStateId(blockStateId);
+                    // TODO read other data
+
+                    UNSAFE_setBlock(x, y, z, block);
                 }
 
                 // Finished reading

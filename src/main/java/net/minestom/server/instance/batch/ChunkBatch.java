@@ -10,9 +10,9 @@ import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -72,22 +72,25 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        final short blockStateId = block.getStateId();
+        // TODO other ids
+
         // Cache the entry to be placed later during flush
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         long value = index;
         value = (value << 16) | blockStateId;
-        value = (value << 16) | customBlockId;
+        //value = (value << 16) | customBlockId;
 
         synchronized (blocks) {
             this.blocks.add(value);
         }
 
-        if (data != null) {
+        /*if (data != null) {
             synchronized (blockDataMap) {
                 this.blockDataMap.put(index, data);
             }
-        }
+        }*/
     }
 
     @Override
@@ -245,10 +248,15 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
 
-        if (inverse != null)
-            inverse.setSeparateBlocks(x, y, z, chunk.getBlockStateId(x, y, z), chunk.getCustomBlockId(x, y, z), chunk.getBlockData(index));
+        if (inverse != null) {
+            Block prevBlock = chunk.getBlock(x, y, z);
+            inverse.setBlock(x, y, z, prevBlock);
+        }
 
-        chunk.UNSAFE_setBlock(x, y, z, blockId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+        Block block = Block.fromStateId(blockId);
+        // TODO other data
+
+        chunk.UNSAFE_setBlock(x, y, z, block);
         return ChunkUtils.getSectionAt(y);
     }
 

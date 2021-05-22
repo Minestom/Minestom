@@ -14,13 +14,13 @@ public class PFBlockDescription implements IBlockDescription {
      * <p>
      * Cache the result if it is not already.
      *
-     * @param blockStateId the block state id
+     * @param block the block
      * @return the {@link PFBlockDescription} linked to {@code blockStateId}
      */
-    public static PFBlockDescription getBlockDescription(short blockStateId) {
+    public static PFBlockDescription getBlockDescription(Block block) {
+        final short blockStateId = block.getStateId();
         if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
             synchronized (BLOCK_DESCRIPTION_MAP) {
-                final Block block = Block.fromStateId(blockStateId);
                 final PFBlockDescription blockDescription = new PFBlockDescription(block);
                 BLOCK_DESCRIPTION_MAP.put(blockStateId, blockDescription);
                 return blockDescription;

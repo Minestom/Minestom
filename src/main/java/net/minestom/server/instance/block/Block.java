@@ -56,16 +56,12 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
         BlockRegistry.register(namespaceID, block, range, blockSupplier);
     }
 
-    /**
-     * Migrated to {@link #getData()}.{@link BlockData#isSolid()} method.
-     *
-     * @return True if the Block is solid.
-     */
-    @Deprecated(
-            forRemoval = true
-    )
     default boolean isSolid() {
         return getData().isSolid();
+    }
+
+    default boolean isAir() {
+        return getData().isAir();
     }
 
     @FunctionalInterface

@@ -1,7 +1,7 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -27,8 +27,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void refreshBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId) {
-        this.instanceContainer.refreshBlockStateId(blockPosition, blockStateId);
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        this.instanceContainer.setBlock(x, y, z, block);
     }
 
     @Override
@@ -115,21 +115,6 @@ public class SharedInstance extends Instance {
     @Override
     public boolean isInVoid(@NotNull Position position) {
         return instanceContainer.isInVoid(position);
-    }
-
-    @Override
-    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
-        this.instanceContainer.setBlockStateId(x, y, z, blockStateId, data);
-    }
-
-    @Override
-    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        this.instanceContainer.setCustomBlock(x, y, z, customBlockId, data);
-    }
-
-    @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
-        this.instanceContainer.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
     }
 
     @Override

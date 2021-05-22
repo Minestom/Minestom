@@ -567,10 +567,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
-                        final CustomBlock customBlock = finalChunk.getCustomBlock(
-                                blockPosition.getX(),
-                                blockPosition.getY(),
-                                blockPosition.getZ());
+                        final CustomBlock customBlock = null;//finalChunk.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
                         if (customBlock != null) {
                             // Custom drag
                             drag = customBlock.getDrag(instance, blockPosition);
@@ -624,7 +621,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                                 continue;
                         }
 
-                        final CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
+                        final CustomBlock customBlock = null;//chunk.getCustomBlock(x, y, z);
                         if (customBlock != null) {
                             tmpPosition.setX(x);
                             tmpPosition.setY(y);

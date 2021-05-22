@@ -15,13 +15,13 @@ public class PFBlockObject implements IBlockObject {
      * <p>
      * Cache the result if it is not already.
      *
-     * @param blockStateId the block state id
+     * @param block the block
      * @return the {@link PFBlockObject} linked to {@code blockStateId}
      */
-    public static PFBlockObject getBlockObject(short blockStateId) {
+    public static PFBlockObject getBlockObject(Block block) {
+        final short blockStateId = block.getStateId();
         if (!BLOCK_OBJECT_MAP.containsKey(blockStateId)) {
             synchronized (BLOCK_OBJECT_MAP) {
-                final Block block = Block.fromStateId(blockStateId);
                 final PFBlockObject blockObject = new PFBlockObject(block);
                 BLOCK_OBJECT_MAP.put(blockStateId, blockObject);
                 return blockObject;
