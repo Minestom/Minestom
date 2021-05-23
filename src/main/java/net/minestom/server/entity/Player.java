@@ -401,7 +401,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true, eatingHand);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
@@ -1134,6 +1134,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public boolean isEating() {
         return eatingHand != null;
+    }
+
+    /**
+     * Gets the hand which the player is eating from.
+     *
+     * @return the eating hand, null if none
+     */
+    public Hand getEatingHand() {
+        return eatingHand;
     }
 
     /**
@@ -2287,19 +2296,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Used to call {@link ItemUpdateStateEvent} with the proper item
      * It does check which hand to get the item to update.
      *
-     * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
         if (hand == null)
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
-        final boolean isFood = updatedItem.getMaterial().isFood();
-
-        if (isFood && !allowFood)
-            return null;
 
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
