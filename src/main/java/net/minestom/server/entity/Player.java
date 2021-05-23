@@ -1141,7 +1141,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the eating hand, null if none
      */
-    public Hand getEatingHand() {
+    public @Nullable Hand getEatingHand() {
         return eatingHand;
     }
 
@@ -2296,19 +2296,35 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Used to call {@link ItemUpdateStateEvent} with the proper item
      * It does check which hand to get the item to update.
      *
+     * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
      */
-    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
         if (hand == null)
             return null;
 
         final ItemStack updatedItem = getItemInHand(hand);
+        final boolean isFood = updatedItem.getMaterial().isFood();
+
+        if (isFood && !allowFood)
+            return null;
 
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
         callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
 
         return itemUpdateStateEvent;
+    }
+
+    /**
+     * Used to call {@link ItemUpdateStateEvent} with the proper item
+     * It does check which hand to get the item to update. Allows food.
+     *
+     * @return the called {@link ItemUpdateStateEvent},
+     * null if there is no item to update the state
+     */
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
+        return callItemUpdateStateEvent(true, hand);
     }
 
     /**
