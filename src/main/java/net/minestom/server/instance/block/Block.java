@@ -38,6 +38,14 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
     @NotNull BlockData getData();
 
+    default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
+        return comparator.equals(this, block);
+    }
+
+    default boolean compare(@NotNull Block block) {
+        return compare(block, Comparator.ID);
+    }
+
     static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
         return BlockRegistry.fromNamespaceId(namespaceID);
     }
@@ -62,6 +70,17 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
     default boolean isAir() {
         return getData().isAir();
+    }
+
+    @FunctionalInterface
+    interface Comparator {
+        Comparator IDENTITY = (b1, b2) -> b1 == b2;
+
+        Comparator ID = (b1, b2) -> b1.getBlockId() == b2.getBlockId();
+
+        Comparator STATE = (b1, b2) -> b1.getStateId() == b2.getStateId();
+
+        boolean equals(@NotNull Block b1, @NotNull Block b2);
     }
 
     @FunctionalInterface
