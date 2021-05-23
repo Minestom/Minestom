@@ -2299,7 +2299,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
+     *
+     * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
+    @Deprecated
     public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
         if (hand == null)
             return null;
