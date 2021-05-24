@@ -35,20 +35,12 @@ public class NoiseTestGenerator implements ChunkGenerator {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 final int height = getHeight(x + chunkX * 16, z + chunkZ * 16);
                 for (int y = 0; y < height; y++) {
-                    //if (random.nextInt(100) > 10) {
-                    //    batch.setBlock(x, y, z, Block.DIAMOND_BLOCK);
-                    //} else {
-                    //    batch.setBlock(x, y, z, Block.GOLD_BLOCK);
-                    //}
                     if (y == 0) {
                         batch.setBlock(x, y, z, Block.BEDROCK);
                     } else if (y == height - 1) {
                         batch.setBlock(x, y, z, Block.GRASS_BLOCK);
                     } else if (y > height - 7) {
-                        // Data for debugging purpose
-                        //SerializableData serializableData = new SerializableDataImpl();
-                        //serializableData.set("test", 55, Integer.class);
-                        batch.setBlockStateId(x, y, z, Block.DIRT.getBlockId());
+                        batch.setBlock(x, y, z, Block.DIRT);
                     } else {
                         batch.setBlock(x, y, z, Block.STONE);
                     }

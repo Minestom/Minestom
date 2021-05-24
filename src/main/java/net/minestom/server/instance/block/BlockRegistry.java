@@ -25,6 +25,10 @@ class BlockRegistry {
 
     public static synchronized @Nullable Block fromStateId(short stateId) {
         Block.Supplier supplier = stateSet.get(stateId);
+        if(supplier == null){
+            System.out.println("state "+stateId);
+            return Block.STONE;
+        }
         return supplier.get(stateId);
     }
 

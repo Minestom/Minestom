@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +14,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerBlockInteractEvent extends PlayerEvent implements CancellableEvent {
 
-    private final BlockPosition blockPosition;
     private final Player.Hand hand;
+    private final Block block;
+    private final BlockPosition blockPosition;
     private final BlockFace blockFace;
 
     /**
@@ -25,11 +27,12 @@ public class PlayerBlockInteractEvent extends PlayerEvent implements Cancellable
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player,
-                                    @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand, @NotNull BlockFace blockFace) {
+    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
+                                    @NotNull Block block, @NotNull BlockPosition blockPosition, @NotNull BlockFace blockFace) {
         super(player);
-        this.blockPosition = blockPosition;
         this.hand = hand;
+        this.block = block;
+        this.blockPosition = blockPosition;
         this.blockFace = blockFace;
     }
 
@@ -44,6 +47,10 @@ public class PlayerBlockInteractEvent extends PlayerEvent implements Cancellable
 
     public void setBlockingItemUse(boolean blocks) {
         this.blocksItemUse = blocks;
+    }
+
+    public @NotNull Block getBlock() {
+        return block;
     }
 
     /**

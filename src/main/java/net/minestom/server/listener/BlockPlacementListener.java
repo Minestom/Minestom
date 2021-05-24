@@ -48,10 +48,11 @@ public class BlockPlacementListener {
         }
 
         final ItemStack usedItem = player.getItemInHand(hand);
+        final Block interactedBlock = instance.getBlock(blockPosition);
 
         // Interact at block
         // FIXME: onUseOnBlock
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, blockFace);
         player.callEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent);
         if (playerBlockInteractEvent.isBlockingItemUse()) {
             return;
@@ -71,8 +72,7 @@ public class BlockPlacementListener {
                 canPlaceBlock = false; //Spectators can't place blocks
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the block can placed on the block
-                Block placeBlock = instance.getBlock(blockPosition);
-                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(placeBlock);
+                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(interactedBlock);
             }
         }
 
@@ -107,11 +107,11 @@ public class BlockPlacementListener {
 
         if (useMaterial.isBlock()) {
             if (!chunk.isReadOnly()) {
-                final Block block = useMaterial.getBlock();
+                final Block placedBlock = useMaterial.getBlock();
                 final Set<Entity> entities = instance.getChunkEntities(chunk);
                 // Check if the player is trying to place a block in an entity
                 boolean intersect = player.getBoundingBox().intersect(blockPosition);
-                if (!intersect && block.isSolid()) {
+                if (!intersect && placedBlock.isSolid()) {
                     // TODO push entities too close to the position
                     for (Entity entity : entities) {
                         // 'player' has already been checked
@@ -128,7 +128,7 @@ public class BlockPlacementListener {
                 if (!intersect) {
 
                     // BlockPlaceEvent check
-                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, block, blockPosition, packet.hand);
+                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockPosition, packet.hand);
                     playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                     player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);

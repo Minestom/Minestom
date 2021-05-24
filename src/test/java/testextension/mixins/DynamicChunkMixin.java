@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 public class DynamicChunkMixin {
 
     @ModifyVariable(method = "UNSAFE_setBlock", at = @At("HEAD"), index = 4, require = 1, argsOnly = true, remap = false)
-    public short oopsAllTnt(short blockStateId) {
+    public int oopsAllTnt(short blockStateId) {
         if(blockStateId != 0)
             return Block.TNT.getBlockId();
         return 0;

@@ -1,8 +1,5 @@
 package demo;
 
-import demo.blocks.BurningTorchBlock;
-import demo.blocks.CustomBlockSample;
-import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -29,9 +26,6 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
-        blockManager.registerCustomBlock(new CustomBlockSample());
-        blockManager.registerCustomBlock(new UpdatableBlockDemo());
-        blockManager.registerCustomBlock(new BurningTorchBlock());
 
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 

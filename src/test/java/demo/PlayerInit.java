@@ -21,7 +21,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
@@ -160,31 +159,13 @@ public class PlayerInit {
             event.setChatMessage(ColoredText.of("custom death message"));
         });
 
-        globalEventHandler.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
-            if (event.getHand() != Player.Hand.MAIN)
-                return;
-
-            final Block block = Block.fromStateId(event.getBlockStateId());
-
-            if (block == Block.STONE) {
-                event.setCustomBlock("custom_block");
-                System.out.println("custom stone");
-            }
-            if (block == Block.TORCH) {
-                event.setCustomBlock((short) 3); // custom torch block
-            }
-
-        });
-
         globalEventHandler.addEventCallback(PlayerBlockInteractEvent.class, event -> {
             if (event.getHand() != Player.Hand.MAIN)
                 return;
             final Player player = event.getPlayer();
 
-            final short blockStateId = player.getInstance().getBlockStateId(event.getBlockPosition());
-            final CustomBlock customBlock = player.getInstance().getCustomBlock(event.getBlockPosition());
-            final Block block = Block.fromStateId(blockStateId);
-            player.sendMessage("You clicked at the block " + block + " " + customBlock);
+            final Block block = event.getBlock();
+            player.sendMessage("You clicked at the block " + block);
             player.sendMessage("CHUNK COUNT " + player.getInstance().getChunks().size());
         });
 
@@ -265,8 +246,8 @@ public class PlayerInit {
         });
 
         globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
-            final short blockStateId = event.getBlockStateId();
-            System.out.println("broke " + blockStateId + " " + Block.fromStateId(blockStateId));
+            final Block block = event.getBlock();
+            System.out.println("broke " + block);
         });
 
         globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {

@@ -158,11 +158,13 @@ class BlockImpl implements Block {
 
     protected static BlockImpl create(NamespaceID namespaceID, short blockId, short minStateId, short maxStateId,
                                       short defaultStateId, List<BlockProperty<?>> properties) {
-        var block = new BlockImpl(namespaceID, blockId, minStateId, defaultStateId, properties, computeMap(defaultStateId, properties));
+        var block = new BlockImpl(namespaceID, blockId, minStateId, defaultStateId,
+                properties, computeMap(minStateId, defaultStateId, properties));
         block.original = block;
         Block.register(namespaceID, block,
                 new IntRange((int) minStateId, (int) maxStateId), requestedStateId -> {
-                    var requestedBlock = new BlockImpl(namespaceID, blockId, minStateId, requestedStateId, properties, computeMap(requestedStateId, properties));
+                    var requestedBlock = new BlockImpl(namespaceID, blockId, minStateId, requestedStateId,
+                            properties, computeMap(minStateId, requestedStateId, properties));
                     requestedBlock.original = block;
                     return requestedBlock;
                 });
@@ -184,16 +186,29 @@ class BlockImpl implements Block {
         return id;
     }
 
-    private static LinkedHashMap<BlockProperty<?>, Object> computeMap(short deltaId, List<BlockProperty<?>> properties) {
+    private static LinkedHashMap<BlockProperty<?>, Object> computeMap(short minStateId, short stateId, List<BlockProperty<?>> properties) {
+        // Computes a filled property map from a state id
+
         LinkedHashMap<BlockProperty<?>, Object> result = new LinkedHashMap<>();
         int[] factors = computeFactors(properties);
+        short deltaId = (short) (stateId - minStateId);
         int index = 0;
         for (var property : properties) {
-            final int factor = factors[index++];
-            final int valueIndex = deltaId / factor;
             final var possibilities = property.getPossibleValues();
-            final var value = possibilities.get(valueIndex);
-            result.put(property, value);
+            final int factor = factors[index++];
+
+            // TODO optimize
+            int value = 0;
+            int valueIndex = 0;
+            while (value < deltaId) {
+                if (value + factor > deltaId)
+                    break;
+                value += factor;
+                valueIndex++;
+            }
+            deltaId -= value;
+
+            result.put(property, possibilities.get(valueIndex));
         }
         return result;
     }
