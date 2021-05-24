@@ -38,24 +38,29 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isFenceLike() {
+        // TODO: Use Hitbox
         // Return fences, fencegates and walls.
-        return block.name().toUpperCase().contains("FENCE") || block.name().toUpperCase().endsWith("WALL");
+        // It just so happens that their namespace IDs contain "fence".
+        if (block.getNamespaceId().asString().contains("fence")) {
+            return true;
+        }
+        // Return all walls
+        // It just so happens that their namespace IDs all end with "door".
+        return block.getNamespaceId().asString().endsWith("wall");
     }
 
     @Override
     public boolean isClimbable() {
         // Return ladders and vines (including weeping and twisting vines)
-        return block == Block.LADDER || block.name().toUpperCase().contains("VINE");
+        // Note that no other Namespace IDs contain "vine" except vines.
+        return block.compare(Block.LADDER) || block.getNamespaceId().asString().contains("vine");
     }
 
     @Override
     public boolean isDoor() {
-        // Return wooden doors, trapdoors and wooden fence gates.
-        if (block == Block.IRON_DOOR || block == Block.IRON_TRAPDOOR) {
-            return false;
-        } else {
-            return (block.name().toUpperCase().endsWith("DOOR") || block.name().toUpperCase().endsWith("FENCE_GATE"));
-        }
+        // Return all normal doors and trap doors.
+        // It just so happens that their namespace IDs all end with "door".
+        return block.getNamespaceId().asString().endsWith("door");
     }
 
     @Override
@@ -65,6 +70,7 @@ public class PFBlockDescription implements IBlockDescription {
 
     @Override
     public boolean isFullyBounded() {
+        // TODO: Use Hitbox (would probably be faster as well)
         // Return false for anything that does not have a full hitbox but impedes
         // e.g. Anvils, Lilypads, Ladders, Walls, Fences, EnchantmentTables
         // Fences & Walls
@@ -76,74 +82,48 @@ public class PFBlockDescription implements IBlockDescription {
             return false;
         }
         // All doors/trapdoors.
-        if (block.name().toUpperCase().endsWith("DOOR")) {
+        if (isDoor()) {
             return false;
         }
-        if (block.name().toUpperCase().startsWith("POTTED")) {
+        if (block.getName().startsWith("potted")) {
             return false;
         }
         // Skulls & Heads
-        if (block.name().toUpperCase().contains("SKULL") || block.name().toUpperCase().contains("HEAD")) {
+        if (block.getName().contains("skull") || block.getName().contains("head")) {
+            // NOTE: blocks.getName().contains("head") also matches Piston_Head
+            // I could not find out by documentation if piston_head is fully bounded, I would presume it is NOT.
             return false;
         }
         // Carpets
-        if (block.name().toUpperCase().endsWith("CARPET")) {
+        if (block.getName().endsWith("carpet")) {
             return false;
         }
         // Slabs
-        if (block.name().toUpperCase().contains("SLAB")) {
+        if (block.getName().contains("slab")) {
             return false;
         }
         // Beds
-        if (block.name().toUpperCase().endsWith("BED")) {
+        if (block.getName().endsWith("bed")) {
             return false;
         }
         // Glass Panes
-        if (block.name().toUpperCase().endsWith("PANE")) {
+        if (block.getName().endsWith("pane")) {
             return false;
         }
 
-        switch (block) {
-            case CHORUS_FLOWER:
-            case CHORUS_PLANT:
-            case BAMBOO:
-            case BAMBOO_SAPLING:
-            case SEA_PICKLE:
-            case TURTLE_EGG:
-            case SNOW:
-            case FLOWER_POT:
-            case LILY_PAD:
-            case ANVIL:
-            case CHIPPED_ANVIL:
-            case DAMAGED_ANVIL:
-            case CAKE:
-            case CACTUS:
-            case BREWING_STAND:
-            case LECTERN:
-            case DAYLIGHT_DETECTOR:
-            case CAMPFIRE:
-            case SOUL_CAMPFIRE:
-            case ENCHANTING_TABLE:
-            case CHEST:
-            case ENDER_CHEST:
-            case GRINDSTONE:
-            case TRAPPED_CHEST:
-            case SOUL_SAND:
-            case SOUL_SOIL:
-            case LANTERN:
-            case COCOA:
-            case CONDUIT:
-            case GRASS_PATH:
-            case FARMLAND:
-            case END_ROD:
-            case STONECUTTER:
-            case BELL: {
-                return false;
-            }
-            default: {
-                return true;
-            }
-        }
+        return !Block.CHORUS_FLOWER.compare(block) && !Block.CHORUS_PLANT.compare(block) && !Block.BAMBOO.compare(block)
+                && !Block.BAMBOO_SAPLING.compare(block) && !Block.SEA_PICKLE.compare(block)
+                && !Block.TURTLE_EGG.compare(block) && !Block.SNOW.compare(block) && !Block.FLOWER_POT.compare(block)
+                && !Block.LILY_PAD.compare(block) && !Block.ANVIL.compare(block) && !Block.CHIPPED_ANVIL.compare(block)
+                && !Block.DAMAGED_ANVIL.compare(block) && !Block.CAKE.compare(block) && !Block.CACTUS.compare(block)
+                && !Block.BREWING_STAND.compare(block) && !Block.LECTERN.compare(block)
+                && !Block.DAYLIGHT_DETECTOR.compare(block) && !Block.CAMPFIRE.compare(block)
+                && !Block.SOUL_CAMPFIRE.compare(block) && !Block.ENCHANTING_TABLE.compare(block)
+                && !Block.CHEST.compare(block) && !Block.ENDER_CHEST.compare(block) && !Block.GRINDSTONE.compare(block)
+                && !Block.TRAPPED_CHEST.compare(block) && !Block.SOUL_SAND.compare(block)
+                && !Block.SOUL_SOIL.compare(block) && !Block.LANTERN.compare(block) && !Block.COCOA.compare(block)
+                && !Block.CONDUIT.compare(block) && !Block.GRASS_PATH.compare(block) && !Block.FARMLAND.compare(block)
+                && !Block.END_ROD.compare(block) && !Block.STONECUTTER.compare(block) && !Block.BELL.compare(block);
     }
 
     @Override

@@ -64,13 +64,18 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
         BlockRegistry.register(namespaceID, block, range, blockSupplier);
     }
 
+    default boolean isAir() {
+        return getData().isAir();
+    }
+
     default boolean isSolid() {
         return getData().isSolid();
     }
 
-    default boolean isAir() {
-        return getData().isAir();
+    default boolean isLiquid() {
+        return getData().isLiquid();
     }
+
 
     @FunctionalInterface
     interface Comparator {
