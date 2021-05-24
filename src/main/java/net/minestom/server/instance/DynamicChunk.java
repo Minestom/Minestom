@@ -85,7 +85,7 @@ public class DynamicChunk extends Chunk {
             // Update pathfinder
             if (columnarSpace != null) {
                 final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-                final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(blockStateId);
+                final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(block);
                 columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
             }
         }

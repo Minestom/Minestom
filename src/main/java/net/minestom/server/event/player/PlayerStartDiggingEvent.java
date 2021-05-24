@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,17 +17,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerStartDiggingEvent extends PlayerEvent implements CancellableEvent {
 
+    private final Block block;
     private final BlockPosition blockPosition;
-    private final int blockStateId;
-    private final int customBlockId;
 
     private boolean cancelled;
 
-    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId, int customBlockId) {
+    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition) {
         super(player);
+        this.block = block;
         this.blockPosition = blockPosition;
-        this.blockStateId = blockStateId;
-        this.customBlockId = customBlockId;
+    }
+
+    /**
+     * Gets the block which is being dug.
+     *
+     * @return the block
+     */
+    public @NotNull Block getBlock() {
+        return block;
     }
 
     /**
@@ -34,27 +42,8 @@ public class PlayerStartDiggingEvent extends PlayerEvent implements CancellableE
      *
      * @return the {@link BlockPosition}
      */
-    @NotNull
-    public BlockPosition getBlockPosition() {
+    public @NotNull BlockPosition getBlockPosition() {
         return blockPosition;
-    }
-
-    /**
-     * Gets the block state id.
-     *
-     * @return the block state id
-     */
-    public int getBlockStateId() {
-        return blockStateId;
-    }
-
-    /**
-     * Gets the custom block id.
-     *
-     * @return the custom block id
-     */
-    public int getCustomBlockId() {
-        return customBlockId;
     }
 
     @Override

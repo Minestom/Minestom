@@ -99,10 +99,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
                             @NotNull Player pl) {
-        final short belowBlockId = instance.getBlockStateId(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
-        if (!Block.fromStateId(belowBlockId).getData().isSolid()) {
-            return null;
-        }
-        return block;
+        final Block belowBlock = instance.getBlock(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
+        return belowBlock.isSolid() ? block : null;
     }
 }

@@ -1,7 +1,6 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.Data;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -14,7 +13,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -53,21 +51,8 @@ public class BlockPlacementListener {
 
         // Interact at block
         // FIXME: onUseOnBlock
-        final boolean cancel = false;//usedItem.onUseOnBlock(player, hand, blockPosition, direction);
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
-        playerBlockInteractEvent.setCancelled(cancel);
-        playerBlockInteractEvent.setBlockingItemUse(cancel);
-        player.callCancellableEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent, () -> {
-            final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-            if (customBlock != null) {
-                final Data data = instance.getBlockData(blockPosition);
-                final boolean blocksItem = customBlock.onInteract(player, hand, blockPosition, data);
-                if (blocksItem) {
-                    playerBlockInteractEvent.setBlockingItemUse(true);
-                }
-            }
-        });
-
+        player.callEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent);
         if (playerBlockInteractEvent.isBlockingItemUse()) {
             return;
         }
@@ -150,23 +135,16 @@ public class BlockPlacementListener {
                     if (!playerBlockPlaceEvent.isCancelled()) {
 
                         // BlockPlacementRule check
-                        short blockStateId = playerBlockPlaceEvent.getBlockStateId();
-                        final Block resultBlock = Block.fromStateId(blockStateId);
+                        Block resultBlock = playerBlockPlaceEvent.getBlock();
                         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
                         if (blockPlacementRule != null) {
                             // Get id from block placement rule instead of the event
-                            blockStateId = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
                         }
-                        final boolean placementRuleCheck = blockStateId != BlockPlacementRule.CANCEL_CODE;
-
+                        final boolean placementRuleCheck = resultBlock != null;
                         if (placementRuleCheck) {
-
                             // Place the block
-                            final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
-                            final Data blockData = playerBlockPlaceEvent.getBlockData(); // Possibly null
-                            instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(),
-                                    blockStateId, customBlockId, blockData);
-
+                            instance.setBlock(blockPosition, resultBlock);
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand

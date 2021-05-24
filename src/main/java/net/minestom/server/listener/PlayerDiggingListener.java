@@ -37,11 +37,11 @@ public class PlayerDiggingListener {
             return;
 
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
-            final short blockStateId = instance.getBlockStateId(blockPosition);
+            final Block block = instance.getBlock(blockPosition);
 
             //Check if the player is allowed to break blocks based on their game mode
             if (player.getGameMode() == GameMode.SPECTATOR) {
-                sendAcknowledgePacket(player, blockPosition, blockStateId,
+                sendAcknowledgePacket(player, blockPosition, block,
                         ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                 return; //Spectators can't break blocks
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
@@ -49,7 +49,7 @@ public class PlayerDiggingListener {
                 ItemStack itemInMainHand = player.getItemInMainHand();
                 Block destroyedBlock = instance.getBlock(blockPosition);
                 if (!itemInMainHand.getMeta().getCanDestroy().contains(destroyedBlock)) {
-                    sendAcknowledgePacket(player, blockPosition, blockStateId,
+                    sendAcknowledgePacket(player, blockPosition, block,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                     return;
                 }
@@ -57,23 +57,21 @@ public class PlayerDiggingListener {
 
             final boolean instantBreak = player.isCreative() ||
                     player.isInstantBreak() ||
-                    Block.fromStateId(blockStateId).breaksInstantaneously();
+                    block.breaksInstantaneously();
 
             if (instantBreak) {
                 // No need to check custom block
-                breakBlock(instance, player, blockPosition, blockStateId, status);
+                breakBlock(instance, player, blockPosition, block, status);
             } else {
                 final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-                final int customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
-
-                PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, blockStateId, customBlockId);
+                PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
                 player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
 
                 if (playerStartDiggingEvent.isCancelled()) {
                     addEffect(player);
 
                     // Unsuccessful digging
-                    sendAcknowledgePacket(player, blockPosition, blockStateId,
+                    sendAcknowledgePacket(player, blockPosition, block,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
                 } else if (customBlock != null) {
                     // Start digging the custom block
@@ -82,31 +80,31 @@ public class PlayerDiggingListener {
                         addEffect(player);
                     }
 
-                    sendAcknowledgePacket(player, blockPosition, blockStateId,
+                    sendAcknowledgePacket(player, blockPosition, block,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
                 }
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
 
-            final short blockStateId = instance.getBlockStateId(blockPosition);
+            final Block block = instance.getBlock(blockPosition);
             // Remove custom block target
             player.resetTargetBlock();
 
-            sendAcknowledgePacket(player, blockPosition, blockStateId,
+            sendAcknowledgePacket(player, blockPosition, block,
                     ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
 
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
 
-            final short blockStateId = instance.getBlockStateId(blockPosition);
+            final Block block = instance.getBlock(blockPosition);
             final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
             if (customBlock != null && customBlock.enableCustomBreakDelay()) {
                 // Is not supposed to happen, probably a bug
-                sendAcknowledgePacket(player, blockPosition, blockStateId,
+                sendAcknowledgePacket(player, blockPosition, block,
                         ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, false);
             } else {
                 // Vanilla block
-                breakBlock(instance, player, blockPosition, blockStateId, status);
+                breakBlock(instance, player, blockPosition, block, status);
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
@@ -169,7 +167,7 @@ public class PlayerDiggingListener {
 
     private static void breakBlock(Instance instance,
                                    Player player,
-                                   BlockPosition blockPosition, int blockStateId,
+                                   BlockPosition blockPosition, Block block,
                                    ClientPlayerDiggingPacket.Status status) {
         // Finished digging, remove effect if any
         player.resetTargetBlock();
@@ -177,15 +175,13 @@ public class PlayerDiggingListener {
         // Unverified block break, client is fully responsible
         final boolean result = instance.breakBlock(player, blockPosition);
 
-        final int updatedBlockId = instance.getBlockStateId(blockPosition);
+        final Block updatedBlock = instance.getBlock(blockPosition);
 
         // Send acknowledge packet to allow or cancel the digging process
-        sendAcknowledgePacket(player, blockPosition, updatedBlockId,
-                status, result);
+        sendAcknowledgePacket(player, blockPosition, updatedBlock, status, result);
 
         if (!result) {
-            final boolean solid = Block.fromStateId((short) blockStateId).isSolid();
-            if (solid) {
+            if (block.isSolid()) {
                 final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
 
                 // Teleport the player back if he broke a solid block just below him
@@ -252,15 +248,15 @@ public class PlayerDiggingListener {
      *
      * @param player        the player
      * @param blockPosition the block position
-     * @param blockStateId  the block state id
+     * @param block         the block
      * @param status        the status of the digging
      * @param success       true to notify of a success, false otherwise
      */
-    private static void sendAcknowledgePacket(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId,
+    private static void sendAcknowledgePacket(@NotNull Player player, @NotNull BlockPosition blockPosition, Block block,
                                               @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
         AcknowledgePlayerDiggingPacket acknowledgePlayerDiggingPacket = new AcknowledgePlayerDiggingPacket();
         acknowledgePlayerDiggingPacket.blockPosition = blockPosition;
-        acknowledgePlayerDiggingPacket.blockStateId = blockStateId;
+        acknowledgePlayerDiggingPacket.blockStateId = block.getStateId();
         acknowledgePlayerDiggingPacket.status = status;
         acknowledgePlayerDiggingPacket.successful = success;
 

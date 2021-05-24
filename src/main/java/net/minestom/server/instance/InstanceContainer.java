@@ -18,7 +18,6 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.block.CustomBlockUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -142,21 +141,12 @@ public class InstanceContainer extends Instance {
 
             final BlockPosition blockPosition = new BlockPosition(x, y, z);
 
-            if (isAlreadyChanged(blockPosition, blockStateId)) { // do NOT change the block again.
+            if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
                 return;
             }
-            setAlreadyChanged(blockPosition, blockStateId);
-
-            final int index = ChunkUtils.getBlockIndex(x, y, z);
-
-            final CustomBlock previousBlock = chunk.getCustomBlock(index);
-            final Data previousBlockData = previousBlock != null ? chunk.getBlockData(index) : null;
-            if (previousBlock != null) {
-                // Remove digging information for the previous custom block
-                previousBlock.removeDiggingInformation(this, blockPosition);
-            }
+            setAlreadyChanged(blockPosition, block);
 
             // Change id based on neighbors
             block = executeBlockPlacementRule(block, blockPosition);
@@ -169,21 +159,11 @@ public class InstanceContainer extends Instance {
 
             // Refresh player chunk block
             sendBlockChange(chunk, blockPosition, block);
-
-            // Call the destroy listener for the previously destroyed block
-            if (previousBlock != null) {
-                callBlockDestroy(previousBlock, previousBlockData, blockPosition);
-            }
-
-            // Call the place listener for newly placed custom block
-            if (isCustomBlock) {
-                callBlockPlace(chunk, index, blockPosition);
-            }
         }
     }
 
-    private void setAlreadyChanged(@NotNull BlockPosition blockPosition, short blockStateId) {
-        currentlyChangingBlocks.put(blockPosition, Block.fromStateId(blockStateId));
+    private void setAlreadyChanged(@NotNull BlockPosition blockPosition, Block block) {
+        currentlyChangingBlocks.put(blockPosition, block);
     }
 
     /**
@@ -191,14 +171,14 @@ public class InstanceContainer extends Instance {
      * Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace.
      *
      * @param blockPosition the block position
-     * @param blockStateId  the block state id
+     * @param block         the block
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(@NotNull BlockPosition blockPosition, short blockStateId) {
+    private boolean isAlreadyChanged(@NotNull BlockPosition blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         if (changedBlock == null)
             return false;
-        return changedBlock.getBlockId() == blockStateId;
+        return changedBlock.getBlockId() == block.getBlockId();
     }
 
     /**
@@ -216,26 +196,9 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Calls {@link CustomBlock#onPlace(Instance, BlockPosition, Data)} for the current custom block at the position.
-     * <p>
-     * WARNING {@code chunk} needs to be synchronized.
-     *
-     * @param chunk         the chunk where the block is
-     * @param index         the block index
-     * @param blockPosition the block position
-     */
-    private void callBlockPlace(@NotNull Chunk chunk, int index, @NotNull BlockPosition blockPosition) {
-        final CustomBlock actualBlock = chunk.getCustomBlock(index);
-        if (actualBlock == null)
-            return;
-        final Data previousData = chunk.getBlockData(index);
-        actualBlock.onPlace(this, blockPosition, previousData);
-    }
-
-    /**
      * Calls the {@link BlockPlacementRule} for the specified block state id.
      *
-     * @param block  the block to modify
+     * @param block         the block to modify
      * @param blockPosition the block position
      * @return the modified block state id
      */
@@ -244,7 +207,7 @@ public class InstanceContainer extends Instance {
         if (blockPlacementRule != null) {
             return blockPlacementRule.blockUpdate(this, blockPosition, block);
         }
-        return blockStateId;
+        return block;
     }
 
     /**
@@ -269,27 +232,15 @@ public class InstanceContainer extends Instance {
                     if (chunk == null)
                         continue;
 
-                    final short neighborStateId = chunk.getBlockStateId(neighborX, neighborY, neighborZ);
-                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborStateId);
+                    final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
+                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborBlock);
                     if (neighborBlockPlacementRule != null) {
                         final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
-                        final short newNeighborId = neighborBlockPlacementRule.blockUpdate(this,
-                                neighborPosition, neighborStateId);
-                        if (neighborStateId != newNeighborId) {
-                            refreshBlockStateId(neighborPosition, newNeighborId);
+                        final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
+                                neighborPosition, neighborBlock);
+                        if (neighborBlock != newNeighborBlock) {
+                            setBlock(neighborPosition, newNeighborBlock);
                         }
-                    }
-
-                    // Update neighbors
-                    final CustomBlock customBlock = getCustomBlock(neighborX, neighborY, neighborZ);
-                    if (customBlock != null) {
-                        boolean directNeighbor = false; // only if directly connected to neighbor (no diagonals)
-                        if (offsetX != 0 ^ offsetZ != 0) {
-                            directNeighbor = offsetY == 0;
-                        } else if (offsetX == 0 && offsetZ == 0) {
-                            directNeighbor = true;
-                        }
-                        customBlock.updateFromNeighbor(this, new BlockPosition(neighborX, neighborY, neighborZ), blockPosition, directNeighbor);
                     }
                 }
             }
@@ -316,37 +267,34 @@ public class InstanceContainer extends Instance {
         final int y = blockPosition.getY();
         final int z = blockPosition.getZ();
 
-        final short blockStateId = getBlockStateId(x, y, z);
+        final Block block = getBlock(x, y, z);
 
         // The player probably have a wrong version of this chunk section, send it
-        if (blockStateId == 0) {
+        if (block.isAir()) {
             chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(y), player);
             return false;
         }
 
-        final CustomBlock customBlock = getCustomBlock(x, y, z);
-
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, blockPosition, blockStateId, customBlock, (short) 0, (short) 0);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition);
         player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final short resultState = blockBreakEvent.getResultBlockStateId();
-            final short resultCustom = blockBreakEvent.getResultCustomBlockId();
-            setSeparateBlocks(x, y, z, resultState, resultCustom);
+            final Block resultBlock = blockBreakEvent.getResultBlock();
+            setBlock(x, y, z, resultBlock);
 
             // Send the block break effect packet
             {
                 EffectPacket effectPacket = new EffectPacket();
                 effectPacket.effectId = 2001; // Block break + block break sound
                 effectPacket.position = blockPosition;
-                effectPacket.data = blockStateId;
+                effectPacket.data = resultBlock.getStateId();
                 effectPacket.disableRelativeVolume = false;
 
                 PacketUtils.sendGroupedPacket(chunk.getViewers(), effectPacket,
                         (viewer) -> {
                             // Prevent the block breaker to play the particles and sound two times
-                            return (customBlock != null && customBlock.enableCustomBreakDelay()) || !viewer.equals(player);
+                            return !viewer.equals(player);
                         });
             }
 
