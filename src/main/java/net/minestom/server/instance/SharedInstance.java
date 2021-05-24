@@ -6,7 +6,6 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,11 +114,6 @@ public class SharedInstance extends Instance {
     @Override
     public boolean isInVoid(@NotNull Position position) {
         return instanceContainer.isInVoid(position);
-    }
-
-    @Override
-    public void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position) {
-        this.instanceContainer.scheduleUpdate(time, unit, position);
     }
 
     /**

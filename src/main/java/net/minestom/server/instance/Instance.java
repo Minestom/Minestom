@@ -20,7 +20,6 @@ import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
@@ -823,18 +822,6 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     private Set<Entity> getEntitiesInChunk(long index) {
         return chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet());
     }
-
-    /**
-     * Schedules a block update at a given {@link BlockPosition}.
-     * Does nothing if no {@link CustomBlock} is present at {@code position}.
-     * <p>
-     * Cancelled if the block changes between this call and the actual update.
-     *
-     * @param time     in how long this update must be performed?
-     * @param unit     in what unit is the time expressed
-     * @param position the location of the block to update
-     */
-    public abstract void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position);
 
     /**
      * Performs a single tick in the instance, including scheduled tasks from {@link #scheduleNextTick(Consumer)}.

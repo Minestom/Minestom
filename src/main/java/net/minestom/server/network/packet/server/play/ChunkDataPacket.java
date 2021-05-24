@@ -8,7 +8,6 @@ import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.instance.palette.Section;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -145,14 +144,15 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                         .setInt("y", blockPosition.getY())
                         .setInt("z", blockPosition.getZ());
 
-                if (customBlockPaletteStorage != null) {
-                    final short customBlockId = customBlockPaletteStorage.getBlockAt(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-                    final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-                    if (customBlock != null) {
-                        final Data data = blocksData.get(index);
-                        customBlock.writeBlockEntity(blockPosition, data, nbt);
-                    }
-                }
+                // TODO: Handle custom blocks
+//                if (customBlockPaletteStorage != null) {
+//                    final short customBlockId = customBlockPaletteStorage.getBlockAt(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+//                    final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
+//                    if (customBlock != null) {
+//                        final Data data = blocksData.get(index);
+//                        customBlock.writeBlockEntity(blockPosition, data, nbt);
+//                    }
+//                }
                 writer.writeNBT("", nbt);
             }
         }

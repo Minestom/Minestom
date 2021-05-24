@@ -55,45 +55,6 @@ public class RelativeBlockBatch implements Batch<Runnable> {
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
-
-        // Save the offsets if it is the first entry
-        if (firstEntry) {
-            this.firstEntry = false;
-
-            this.offsetX = x;
-            this.offsetY = y;
-            this.offsetZ = z;
-        }
-
-        // Subtract offset
-        x -= offsetX;
-        y -= offsetY;
-        z -= offsetZ;
-
-        // Verify that blocks are not too far from each other
-        Check.argCondition(Math.abs(x) > Short.MAX_VALUE, "Relative x position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(y) > Short.MAX_VALUE, "Relative y position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(z) > Short.MAX_VALUE, "Relative z position may not be more than 16 bits long.");
-
-        long pos = x;
-        pos = (pos << 16) | (short) y;
-        pos = (pos << 16) | (short) z;
-
-        final int block = (blockStateId << 16) | customBlockId;
-        synchronized (blockIdMap) {
-            this.blockIdMap.put(pos, block);
-
-            // Save data if present
-            if (data != null) {
-                synchronized (blockDataMap) {
-                    this.blockDataMap.put(pos, data);
-                }
-            }
-        }
-    }
-
-    @Override
     public void clear() {
         synchronized (blockIdMap) {
             this.blockIdMap.clear();

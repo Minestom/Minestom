@@ -9,7 +9,6 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
@@ -22,7 +21,6 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
@@ -179,20 +177,6 @@ public class InstanceContainer extends Instance {
         if (changedBlock == null)
             return false;
         return changedBlock.getBlockId() == block.getBlockId();
-    }
-
-    /**
-     * Calls {@link CustomBlock#onDestroy(Instance, BlockPosition, Data)} for {@code previousBlock}.
-     * <p>
-     * WARNING {@code chunk} needs to be synchronized.
-     *
-     * @param previousBlock     the block which has been destroyed
-     * @param previousBlockData the data of the destroyed block
-     * @param blockPosition     the block position
-     */
-    private void callBlockDestroy(@NotNull CustomBlock previousBlock, @Nullable Data previousBlockData,
-                                  @NotNull BlockPosition blockPosition) {
-        previousBlock.onDestroy(this, blockPosition, previousBlockData);
     }
 
     /**
@@ -644,24 +628,6 @@ public class InstanceContainer extends Instance {
         blockChangePacket.blockPosition = blockPosition;
         blockChangePacket.blockStateId = block.getStateId();
         chunk.sendPacketToViewers(blockChangePacket);
-    }
-
-    @Override
-    public void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position) {
-        final CustomBlock toUpdate = getCustomBlock(position);
-        if (toUpdate == null) {
-            return;
-        }
-
-        MinecraftServer.getSchedulerManager().buildTask(() -> {
-            final CustomBlock currentBlock = getCustomBlock(position);
-            if (currentBlock == null)
-                return;
-            if (currentBlock.getCustomBlockId() != toUpdate.getCustomBlockId()) { // block changed
-                return;
-            }
-            currentBlock.scheduledUpdate(this, position, getBlockData(position));
-        }).delay(time, unit).schedule();
     }
 
     @Override

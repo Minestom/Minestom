@@ -40,7 +40,7 @@ public class TagsPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Registries.getBlock(name).ordinal());
+        writeTags(writer, blockTags, name -> Block.fromNamespaceId(name).getBlockId());
         writeTags(writer, itemTags, name -> Registries.getMaterial(name).ordinal());
         writeTags(writer, fluidTags, name -> Registries.getFluid(name).ordinal());
         writeTags(writer, entityTags, name -> Registries.getEntityType(name).ordinal());
@@ -48,7 +48,7 @@ public class TagsPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        readTags(reader, blockTags, id -> NamespaceID.from("minecraft", Block.values()[id].getName()));
+        readTags(reader, blockTags, id -> NamespaceID.from("minecraft", Block.fromBlockId(id).getName()));
         readTags(reader, itemTags, id -> NamespaceID.from("minecraft", Material.values()[id].getName()));
         readTags(reader, fluidTags, id -> NamespaceID.from(Fluid.values()[id].getNamespaceID()));
         readTags(reader, entityTags, id -> NamespaceID.from(EntityType.values()[id].getNamespaceID()));

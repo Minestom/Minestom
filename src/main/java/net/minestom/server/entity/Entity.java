@@ -23,7 +23,6 @@ import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -567,10 +566,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
-                        final CustomBlock customBlock = null;//finalChunk.getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-                        if (customBlock != null) {
-                            // Custom drag
-                            drag = customBlock.getDrag(instance, blockPosition);
+                        if (false) {
+                            // TODO: Handle drag for CustomBlock
                         } else {
                             // Default ground drag
                             drag = 0.5f;
@@ -621,17 +618,19 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                                 continue;
                         }
 
-                        final CustomBlock customBlock = null;//chunk.getCustomBlock(x, y, z);
-                        if (customBlock != null) {
-                            tmpPosition.setX(x);
-                            tmpPosition.setY(y);
-                            tmpPosition.setZ(z);
-                            // checks that we are actually in the block, and not just here because of a rounding error
-                            if (boundingBox.intersect(tmpPosition)) {
-                                // TODO: replace with check with custom block bounding box
-                                customBlock.handleContact(instance, tmpPosition, this);
-                            }
-                        }
+                        // TODO: Handle Block Contact with custom Block
+                        // old code: feel free to remove:
+//                        final CustomBlock customBlock = null;//chunk.getCustomBlock(x, y, z);
+//                        if (customBlock != null) {
+//                            tmpPosition.setX(x);
+//                            tmpPosition.setY(y);
+//                            tmpPosition.setZ(z);
+//                            // checks that we are actually in the block, and not just here because of a rounding error
+//                            if (boundingBox.intersect(tmpPosition)) {
+//                                // TODO: replace with check with custom block bounding box
+//                                customBlock.handleContact(instance, tmpPosition, this);
+//                            }
+//                        }
                     }
                 }
             }

@@ -7,7 +7,6 @@ import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
@@ -57,13 +56,12 @@ public class PlayerDiggingListener {
 
             final boolean instantBreak = player.isCreative() ||
                     player.isInstantBreak() ||
-                    block.breaksInstantaneously();
+                    block.getData().getHardness() == 0;
 
             if (instantBreak) {
                 // No need to check custom block
                 breakBlock(instance, player, blockPosition, block, status);
             } else {
-                final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
                 player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
 
@@ -73,15 +71,8 @@ public class PlayerDiggingListener {
                     // Unsuccessful digging
                     sendAcknowledgePacket(player, blockPosition, block,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                } else if (customBlock != null) {
-                    // Start digging the custom block
-                    if (customBlock.enableCustomBreakDelay()) {
-                        customBlock.startDigging(instance, blockPosition, player);
-                        addEffect(player);
-                    }
-
-                    sendAcknowledgePacket(player, blockPosition, block,
-                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
+                } else if (false) {
+                    // TODO: Handle Custom Block here
                 }
             }
 
@@ -97,11 +88,9 @@ public class PlayerDiggingListener {
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
 
             final Block block = instance.getBlock(blockPosition);
-            final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-            if (customBlock != null && customBlock.enableCustomBreakDelay()) {
-                // Is not supposed to happen, probably a bug
-                sendAcknowledgePacket(player, blockPosition, block,
-                        ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, false);
+
+            if (false) {
+                // TODO: Handle custom block with block break delay here
             } else {
                 // Vanilla block
                 breakBlock(instance, player, blockPosition, block, status);
@@ -204,7 +193,7 @@ public class PlayerDiggingListener {
     /**
      * Adds the effect {@link PotionEffect#MINING_FATIGUE} to the player.
      * <p>
-     * Used for {@link CustomBlock} break delay or when the {@link PlayerStartDiggingEvent} is cancelled
+     * Used for CustomBlock break delay or when the {@link PlayerStartDiggingEvent} is cancelled
      * to remove the player break animation.
      *
      * @param player the player to add the effect to
@@ -228,7 +217,7 @@ public class PlayerDiggingListener {
     /**
      * Used to remove the affect from {@link #addEffect(Player)}.
      * <p>
-     * Called when the player cancelled or finished digging the {@link CustomBlock}.
+     * Called when the player cancelled or finished digging the CustomBlock.
      *
      * @param player the player to remove the effect to
      */

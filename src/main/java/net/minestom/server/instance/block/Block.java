@@ -59,6 +59,9 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
     static @Nullable Block fromStateId(short stateId) {
         return BlockRegistry.fromStateId(stateId);
     }
+    static @Nullable Block fromBlockId(int blockId) {
+        return BlockRegistry.fromBlockId(blockId);
+    }
 
     static void register(@NotNull NamespaceID namespaceID, @NotNull Block block,
                          @NotNull IntRange range,
