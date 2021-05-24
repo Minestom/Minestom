@@ -161,8 +161,7 @@ public class CollisionUtils {
                 }
             }
 
-            final short blockStateId = chunk.getBlockStateId(blockPos.getX(), blockPos.getY(), blockPos.getZ());
-            final Block block = Block.fromStateId(blockStateId);
+            final Block block = chunk.getBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ());
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block

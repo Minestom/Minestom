@@ -38,6 +38,8 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
     @NotNull BlockData getData();
 
+    @Nullable BlockHandler getHandler();
+
     default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
         return comparator.equals(this, block);
     }

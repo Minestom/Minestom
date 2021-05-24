@@ -151,11 +151,16 @@ class BlockImpl implements Block {
         return blockData.get(stateId);
     }
 
+    @Override
+    public @Nullable BlockHandler getHandler() {
+        return null;
+    }
+
     protected static BlockImpl create(NamespaceID namespaceID, short blockId, short minStateId, short maxStateId,
                                       short defaultStateId, List<BlockProperty<?>> properties) {
         var block = new BlockImpl(namespaceID, blockId, minStateId, defaultStateId, properties, computeMap(defaultStateId, properties));
         block.original = block;
-        Block.REGISTRY.register(namespaceID, block,
+        Block.register(namespaceID, block,
                 new IntRange((int) minStateId, (int) maxStateId), requestedStateId -> {
                     var requestedBlock = new BlockImpl(namespaceID, blockId, minStateId, requestedStateId, properties, computeMap(requestedStateId, properties));
                     requestedBlock.original = block;

@@ -1,8 +1,7 @@
 package net.minestom.server.instance.batch;
 
-import net.minestom.server.data.Data;
 import net.minestom.server.instance.*;
-import net.minestom.server.utils.block.CustomBlockUtils;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,8 +20,8 @@ public class ChunkGenerationBatch extends ChunkBatch {
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
-        chunk.UNSAFE_setBlock(x, y, z, blockStateId, customBlockId, data, CustomBlockUtils.hasUpdate(customBlockId));
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        chunk.UNSAFE_setBlock(x, y, z, block);
     }
 
     public void generate(@NotNull ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {

@@ -44,7 +44,7 @@ public class BlockUtils {
     }
 
     public Block getBlock() {
-        return Block.fromStateId(instance.getBlockStateId(position));
+        return instance.getBlock(position);
     }
 
     public boolean equals(Block block) {

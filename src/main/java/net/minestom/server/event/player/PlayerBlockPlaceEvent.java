@@ -1,28 +1,18 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player tries placing a block.
  */
 public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEvent {
 
-    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-
-    private short blockStateId;
-    private short customBlockId;
-    private Data blockData;
+    private Block block;
     private final BlockPosition blockPosition;
     private final Player.Hand hand;
 
@@ -33,100 +23,28 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
         super(player);
-        this.blockStateId = block.getBlockId();
+        this.block = block;
         this.blockPosition = blockPosition;
         this.hand = hand;
         this.consumeBlock = true;
     }
 
     /**
-     * Sets both the blockId and customBlockId.
+     * Gets the block which will be placed.
      *
-     * @param customBlock the custom block to place
+     * @return the block to place
      */
-    public void setCustomBlock(@NotNull CustomBlock customBlock) {
-        setBlockStateId(customBlock.getDefaultBlockStateId());
-        setCustomBlockId(customBlock.getCustomBlockId());
+    public @NotNull Block getBlock() {
+        return block;
     }
 
     /**
-     * Sets both the blockStateId and customBlockId.
+     * Changes the block to be placed.
      *
-     * @param customBlockId the custom block id to place
+     * @param block the new block
      */
-    public void setCustomBlock(short customBlockId) {
-        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        Check.notNull(customBlock, "The custom block with the id '" + customBlockId + "' does not exist");
-        setCustomBlock(customBlock);
-    }
-
-    /**
-     * Sets both the blockId and customBlockId.
-     *
-     * @param customBlockId the custom block id to place
-     */
-    public void setCustomBlock(@NotNull String customBlockId) {
-        final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-        Check.notNull(customBlock, "The custom block with the identifier '" + customBlockId + "' does not exist");
-        setCustomBlock(customBlock);
-    }
-
-    /**
-     * Gets the custom block id.
-     *
-     * @return the custom block id
-     */
-    public short getCustomBlockId() {
-        return customBlockId;
-    }
-
-    /**
-     * Sets the custom block id to place.
-     * <p>
-     * WARNING: this does not change the visual block id, see {@link #setBlockStateId(short)}
-     * or {@link #setCustomBlock(short)}.
-     *
-     * @param customBlockId the custom block id
-     */
-    public void setCustomBlockId(short customBlockId) {
-        this.customBlockId = customBlockId;
-    }
-
-    /**
-     * Gets the block state id.
-     *
-     * @return the block state id
-     */
-    public short getBlockStateId() {
-        return blockStateId;
-    }
-
-    /**
-     * Changes the visual block id.
-     *
-     * @param blockStateId the new block state id
-     */
-    public void setBlockStateId(short blockStateId) {
-        this.blockStateId = blockStateId;
-    }
-
-    /**
-     * Gets the data that the (not placed yet) block should have
-     *
-     * @return the block data, null if not any
-     */
-    @Nullable
-    public Data getBlockData() {
-        return blockData;
-    }
-
-    /**
-     * Sets the data of the block to place.
-     *
-     * @param blockData the block data, null if not any
-     */
-    public void setBlockData(@Nullable Data blockData) {
-        this.blockData = blockData;
+    public void setBlock(@NotNull Block block) {
+        this.block = block;
     }
 
     /**
