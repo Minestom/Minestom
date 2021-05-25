@@ -234,7 +234,7 @@ class BlockImpl implements Block {
      */
     private static void loadBlockData() {
         // E.G. 1_16_5_blocks.json
-        InputStream blocksIS = BlockImpl.class.getResourceAsStream("/minestom_data/" + MinecraftServer.VERSION_NAME_UNDERSCORED + "_blocks.json");
+        InputStream blocksIS = BlockImpl.class.getResourceAsStream("/minecraft_data/" + MinecraftServer.VERSION_NAME_UNDERSCORED + "_blocks.json");
         if (blocksIS == null) {
             LOGGER.error("Failed to find blocks.json");
             return;
