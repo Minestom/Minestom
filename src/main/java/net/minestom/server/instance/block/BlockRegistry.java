@@ -25,9 +25,8 @@ class BlockRegistry {
 
     public static synchronized @Nullable Block fromStateId(short stateId) {
         Block.Supplier supplier = stateSet.get(stateId);
-        if(supplier == null){
-            System.out.println("state "+stateId);
-            return Block.STONE;
+        if (supplier == null) {
+            return null;
         }
         return supplier.get(stateId);
     }
@@ -39,8 +38,7 @@ class BlockRegistry {
     public static synchronized void register(@NotNull NamespaceID namespaceID, @NotNull Block block,
                                              @NotNull IntRange range, @NotNull Block.Supplier blockSupplier) {
         namespaceMap.put(namespaceID, block);
-        IntStream.range(range.getMinimum(), range.getMaximum()).forEach(value -> stateSet.put((short) value, blockSupplier));
+        IntStream.range(range.getMinimum(), range.getMaximum() + 1).forEach(value -> stateSet.put((short) value, blockSupplier));
         blockSet.put(block.getBlockId(), block);
-
     }
 }

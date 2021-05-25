@@ -274,7 +274,7 @@ class BlockImpl implements Block {
                                 state.get("pushReaction").getAsString(),
                                 state.get("blocksMotion").getAsBoolean(),
                                 state.get("isFlammable").getAsBoolean(),
-                                state.get("air").getAsBoolean(),
+                                state.get("isAir").getAsBoolean(),
                                 state.get("isLiquid").getAsBoolean(),
                                 state.get("isReplaceable").getAsBoolean(),
                                 state.get("isSolid").getAsBoolean(),
