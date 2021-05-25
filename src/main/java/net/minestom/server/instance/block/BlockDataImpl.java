@@ -5,9 +5,11 @@ import net.minestom.server.map.MapColors;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Supplier;
+
 class BlockDataImpl implements BlockData {
     private final double explosionResistance;
-    private final @NotNull Material item;
+    private final @NotNull Supplier<@NotNull Material> item;
     private final double friction;
     private final double speedFactor;
     private final double jumpFactor;
@@ -30,7 +32,7 @@ class BlockDataImpl implements BlockData {
 
     BlockDataImpl(
             double explosionResistance,
-            @NotNull Material item,
+            @NotNull Supplier<@NotNull Material> item,
             double friction,
             double speedFactor,
             double jumpFactor,
@@ -78,7 +80,7 @@ class BlockDataImpl implements BlockData {
 
     @Override
     public @Nullable Material getCorrespondingItem() {
-        return item;
+        return item.get();
     }
 
     @Override

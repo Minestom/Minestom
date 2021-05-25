@@ -251,7 +251,8 @@ class BlockImpl implements Block {
             double speedFactor = block.get("speedFactor").getAsDouble();
             double jumpFactor = block.get("jumpFactor").getAsDouble();
             boolean blockEntity = block.get("blockEntity").getAsBoolean();
-            Material item = Registries.getMaterial(block.get("itemId").getAsString());
+            final String blockId = block.get("itemId").getAsString();
+            java.util.function.Supplier<Material> itemSupplier = () -> Registries.getMaterial(blockId);
             JsonArray states = block.get("states").getAsJsonArray();
             for (JsonElement stateEntry : states) {
                 // Load Data
@@ -262,7 +263,7 @@ class BlockImpl implements Block {
                         stateId,
                         new BlockDataImpl(
                                 explosionResistance,
-                                item,
+                                itemSupplier,
                                 friction,
                                 speedFactor,
                                 jumpFactor,
