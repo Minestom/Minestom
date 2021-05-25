@@ -1,6 +1,5 @@
 package net.minestom.codegen;
 
-import net.minestom.codegen.blocks.BlockEnumGenerator;
 import net.minestom.codegen.enchantment.EnchantmentEnumGenerator;
 import net.minestom.codegen.entitytypes.EntityTypeEnumGenerator;
 import net.minestom.codegen.fluids.FluidEnumGenerator;
@@ -16,7 +15,6 @@ import java.io.IOException;
 public class AllGenerators {
 
     public static void main(String[] args) throws IOException {
-        BlockEnumGenerator.main(args);
         ItemEnumGenerator.main(args); // must be done after block
         PotionEnumGenerator.main(args);
         PotionEffectEnumGenerator.main(args);

@@ -4,7 +4,6 @@ import com.squareup.javapoet.*;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.fluids.Fluid;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.particle.Particle;
@@ -38,7 +37,6 @@ public class RegistriesGenerator implements CodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(RegistriesGenerator.class);
 
     private static final ImmutablePair<String, String>[] registries = new ImmutablePair[]{
-            new ImmutablePair<>(Block.class.getCanonicalName(), "AIR"),
             new ImmutablePair<>(Material.class.getCanonicalName(), "AIR"),
             new ImmutablePair<>(Enchantment.class.getCanonicalName(), null),
             new ImmutablePair<>(EntityType.class.getCanonicalName(), null),

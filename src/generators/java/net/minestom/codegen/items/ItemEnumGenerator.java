@@ -131,7 +131,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         // end of special cases
 
         try {
-            return Block.valueOf(itemName);
+            return Block.fromNamespaceId("minecraft:" + itemName.toLowerCase());
         } catch (IllegalArgumentException e) {
             return null;
         }
@@ -234,7 +234,7 @@ public class ItemEnumGenerator extends MinestomEnumGenerator<ItemContainer> {
         generator.addInstance(instanceName,
                 "\"" + item.getName().toString() + "\"",
                 item.getStackSize(),
-                item.getBlock() == null ? "null" : ("Block." + item.getBlock().name())
+                item.getBlock() == null ? "null" : ("Block." + item.getBlock().getNamespaceId().asString().toUpperCase())
         );
     }
 
