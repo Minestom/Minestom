@@ -1,17 +1,13 @@
 package net.minestom.server.event.player;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEvent {
-
-    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     private final Block block;
     private Block resultBlock;
