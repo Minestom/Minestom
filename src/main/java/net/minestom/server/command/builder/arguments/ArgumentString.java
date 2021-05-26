@@ -4,8 +4,8 @@ import io.netty.util.internal.StringUtil;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
-import org.apache.commons.text.StringEscapeUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -75,7 +75,7 @@ public class ArgumentString extends Argument<String> {
             }
         }
 
-        return StringEscapeUtils.unescapeJava(input);
+        return StringUtils.unescapeJavaString(input);
     }
 
     @Override

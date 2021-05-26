@@ -78,19 +78,20 @@ public final class MinecraftServer {
     public static final String THREAD_NAME_TICK = "Ms-Tick";
 
     public static final String THREAD_NAME_BLOCK_BATCH = "Ms-BlockBatchPool";
-    public static final int THREAD_COUNT_BLOCK_BATCH = 4;
+    public static final int THREAD_COUNT_BLOCK_BATCH = getThreadCount("minestom.block-thread-count",
+            Runtime.getRuntime().availableProcessors() / 2);
 
     public static final String THREAD_NAME_SCHEDULER = "Ms-SchedulerPool";
-    public static final int THREAD_COUNT_SCHEDULER = 1;
+    public static final int THREAD_COUNT_SCHEDULER = getThreadCount("minestom.scheduler-thread-count",
+            Runtime.getRuntime().availableProcessors() / 2);
 
     public static final String THREAD_NAME_PARALLEL_CHUNK_SAVING = "Ms-ParallelChunkSaving";
-    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = 4;
+    public static final int THREAD_COUNT_PARALLEL_CHUNK_SAVING = getThreadCount("minestom.save-thread-count", 2);
 
     // Config
     // Can be modified at performance cost when increased
-    public static final int TICK_PER_SECOND = 20;
-    private static final int MS_TO_SEC = 1000;
-    public static final int TICK_MS = MS_TO_SEC / TICK_PER_SECOND;
+    public static final int TICK_PER_SECOND = Integer.getInteger("minestom.tps", 20);
+    public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // Network monitoring
     private static int rateLimit = 300;
@@ -822,5 +823,9 @@ public final class MinecraftServer {
         /*Check.stateCondition(Objects.isNull(object),
                 "You cannot access the manager before MinecraftServer#init, " +
                         "if you are developing an extension be sure to retrieve them at least after Extension#preInitialize");*/
+    }
+
+    private static int getThreadCount(@NotNull String property, int count) {
+        return Integer.getInteger(property, Math.max(1, count));
     }
 }

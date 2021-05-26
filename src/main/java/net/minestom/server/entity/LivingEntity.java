@@ -10,7 +10,7 @@ import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
-import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
@@ -124,8 +124,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        this.mainHandItem = itemStack;
-        syncEquipment(EntityEquipmentPacket.Slot.MAIN_HAND);
+        this.mainHandItem = getEquipmentItem(itemStack, EquipmentSlot.MAIN_HAND);
+        syncEquipment(EquipmentSlot.MAIN_HAND);
     }
 
     @NotNull
@@ -136,8 +136,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        this.offHandItem = itemStack;
-        syncEquipment(EntityEquipmentPacket.Slot.OFF_HAND);
+        this.offHandItem = getEquipmentItem(itemStack, EquipmentSlot.OFF_HAND);
+        syncEquipment(EquipmentSlot.OFF_HAND);
     }
 
     @NotNull
@@ -148,8 +148,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setHelmet(@NotNull ItemStack itemStack) {
-        this.helmet = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
-        syncEquipment(EntityEquipmentPacket.Slot.HELMET);
+        this.helmet = getEquipmentItem(itemStack, EquipmentSlot.HELMET);
+        syncEquipment(EquipmentSlot.HELMET);
     }
 
     @NotNull
@@ -160,8 +160,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setChestplate(@NotNull ItemStack itemStack) {
-        this.chestplate = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
-        syncEquipment(EntityEquipmentPacket.Slot.CHESTPLATE);
+        this.chestplate = getEquipmentItem(itemStack, EquipmentSlot.CHESTPLATE);
+        syncEquipment(EquipmentSlot.CHESTPLATE);
     }
 
     @NotNull
@@ -172,8 +172,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setLeggings(@NotNull ItemStack itemStack) {
-        this.leggings = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
-        syncEquipment(EntityEquipmentPacket.Slot.LEGGINGS);
+        this.leggings = getEquipmentItem(itemStack, EquipmentSlot.LEGGINGS);
+        syncEquipment(EquipmentSlot.LEGGINGS);
     }
 
     @NotNull
@@ -184,14 +184,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
-        this.boots = getEquipmentItem(itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
-        syncEquipment(EntityEquipmentPacket.Slot.BOOTS);
+        this.boots = getEquipmentItem(itemStack, EquipmentSlot.BOOTS);
+        syncEquipment(EquipmentSlot.BOOTS);
     }
 
-    private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull ArmorEquipEvent.ArmorSlot armorSlot) {
-        ArmorEquipEvent armorEquipEvent = new ArmorEquipEvent(this, itemStack, armorSlot);
-        callEvent(ArmorEquipEvent.class, armorEquipEvent);
-        return armorEquipEvent.getArmorItem();
+    private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
+        EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
+        callEvent(EntityEquipEvent.class, entityEquipEvent);
+        return entityEquipEvent.getEquippedItem();
     }
 
     @Override
@@ -605,6 +605,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    public boolean isFlyingWithElytra() {
+        return this.entityMeta.isFlyingWithElytra();
+    }
+
+    public void setFlyingWithElytra(boolean isFlying) {
+        this.entityMeta.setFlyingWithElytra(isFlying);
+    }
+    
     /**
      * Used to change the {@code isDead} internal field.
      *

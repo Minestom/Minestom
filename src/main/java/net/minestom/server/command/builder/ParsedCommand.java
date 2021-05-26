@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -54,11 +55,19 @@ public class ParsedCommand {
                 final CommandCondition commandCondition = syntax.getCommandCondition();
                 if (commandCondition == null || commandCondition.canUse(source, commandString)) {
                     context.retrieveDefaultValues(syntax.getDefaultValuesMap());
-                    executor.apply(source, context);
+                    try {
+                        executor.apply(source, context);
+                    } catch (Exception exception) {
+                        MinecraftServer.getExceptionManager().handleException(exception);
+                    }
                 }
             } else {
                 // The executor is probably the default one
-                executor.apply(source, context);
+                try {
+                    executor.apply(source, context);
+                } catch (Exception exception) {
+                    MinecraftServer.getExceptionManager().handleException(exception);
+                }
             }
         } else if (callback != null && argumentSyntaxException != null) {
             // No syntax has been validated but the faulty argument with a callback has been found

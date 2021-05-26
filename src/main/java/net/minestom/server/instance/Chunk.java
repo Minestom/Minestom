@@ -417,22 +417,18 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask = 0x3FFF0;
-        updateLightPacket.blockLightMask = 0x3F;
-        updateLightPacket.emptySkyLightMask = 0x0F;
-        updateLightPacket.emptyBlockLightMask = 0x3FFC0;
+        updateLightPacket.skyLightMask          = 0b111111111111111111;
+        updateLightPacket.emptySkyLightMask     = 0b000000000000000000;
+        updateLightPacket.blockLightMask        = 0b000000000000000000;
+        updateLightPacket.emptyBlockLightMask   = 0b111111111111111111;
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
-        List<byte[]> temp = new ArrayList<>(14);
-        List<byte[]> temp2 = new ArrayList<>(6);
-        for (int i = 0; i < 14; ++i) {
+        final List<byte[]> temp = new ArrayList<>(18);
+        for (int i = 0; i < 18; ++i) {
             temp.add(bytes);
         }
-        for (int i = 0; i < 6; ++i) {
-            temp2.add(bytes);
-        }
         updateLightPacket.skyLight = temp;
-        updateLightPacket.blockLight = temp2;
+        updateLightPacket.blockLight = new ArrayList<>(0);
 
         return updateLightPacket;
     }

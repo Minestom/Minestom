@@ -195,23 +195,48 @@ public abstract class Argument<T> {
         return this;
     }
 
+    /**
+     * Sets the default value supplier of the argument.
+     *
+     * @param defaultValue the default argument value
+     * @return 'this' for chaining
+     */
     @NotNull
-    public Argument<T> setDefaultValue(@Nullable T defaultValue) {
+    public Argument<T> setDefaultValue(@NotNull T defaultValue) {
         this.defaultValue = () -> defaultValue;
         return this;
     }
 
+    /**
+     * Gets the suggestion callback of the argument
+     *
+     * @see #setSuggestionCallback
+     * @return the suggestion callback of the argument, null if it doesn't exist
+     */
     @Nullable
     public SuggestionCallback getSuggestionCallback() {
         return suggestionCallback;
     }
 
+    /**
+     * Sets the suggestion callback (for dynamic tab completion) of this argument.
+     * <p>
+     * Note: This will not automatically filter arguments by user input.
+     *
+     * @param suggestionCallback The suggestion callback to set.
+     * @return 'this' for chaining
+     */
     @Beta
     public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
         this.suggestionCallback = suggestionCallback;
         return this;
     }
 
+    /**
+     * Check if the argument has a suggestion.
+     *
+     * @return If this argument has a suggestion.
+     */
     public boolean hasSuggestion() {
         return suggestionCallback != null;
     }

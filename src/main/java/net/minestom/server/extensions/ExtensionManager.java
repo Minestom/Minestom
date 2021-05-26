@@ -24,6 +24,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
@@ -44,6 +46,7 @@ public class ExtensionManager {
 
     private final File extensionFolder = new File("extensions");
     private final File dependenciesFolder = new File(extensionFolder, ".libs");
+    private Path extensionDataRoot = extensionFolder.toPath();
     private boolean loaded;
 
     // Option
@@ -336,6 +339,7 @@ public class ExtensionManager {
                 DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
                 extension.files.add(new File(extensionClasses).toURI().toURL());
                 extension.files.add(new File(extensionResources).toURI().toURL());
+                extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
 
                 // Verify integrity and ensure defaults
                 DiscoveredExtension.verifyIntegrity(extension);
@@ -365,6 +369,7 @@ public class ExtensionManager {
             DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);
             extension.setOriginalJar(file);
             extension.files.add(file.toURI().toURL());
+            extension.setDataDirectory(getExtensionDataRoot().resolve(extension.getName()));
 
             // Verify integrity and ensure defaults
             DiscoveredExtension.verifyIntegrity(extension);
@@ -567,6 +572,14 @@ public class ExtensionManager {
     @NotNull
     public File getExtensionFolder() {
         return extensionFolder;
+    }
+
+    public @NotNull Path getExtensionDataRoot() {
+        return extensionDataRoot;
+    }
+
+    public void setExtensionDataRoot(@NotNull Path dataRoot) {
+        this.extensionDataRoot = dataRoot;
     }
 
     @NotNull

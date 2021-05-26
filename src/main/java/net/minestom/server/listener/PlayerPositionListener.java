@@ -79,8 +79,7 @@ public class PlayerPositionListener {
             player.getPosition().set(oldPosition);
         } else {
             // Change the internal data
-            player.refreshPosition(newPosition.getX(), newPosition.getY(), newPosition.getZ());
-            player.refreshView(newPosition.getYaw(), newPosition.getPitch());
+            player.refreshPosition(newPosition);
             player.refreshOnGround(onGround);
         }
     }

@@ -5,7 +5,7 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.ValidSyntaxHolder;
-import org.apache.commons.lang3.StringUtils;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

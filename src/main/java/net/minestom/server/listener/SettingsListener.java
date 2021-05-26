@@ -8,7 +8,7 @@ public class SettingsListener {
 
     public static void listener(ClientSettingsPacket packet, Player player) {
         Player.PlayerSettings settings = player.getSettings();
-        settings.refresh(packet.locale, packet.viewDistance, packet.chatMode, packet.chatColors, packet.displayedSkinParts, packet.mainHand);
+        settings.refresh(packet.locale, packet.viewDistance, packet.chatMessageType, packet.chatColors, packet.displayedSkinParts, packet.mainHand);
 
         PlayerSettingsChangeEvent playerSettingsChangeEvent = new PlayerSettingsChangeEvent(player);
         player.callEvent(PlayerSettingsChangeEvent.class, playerSettingsChangeEvent);

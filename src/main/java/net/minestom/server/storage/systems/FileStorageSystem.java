@@ -19,6 +19,8 @@ import java.nio.file.Paths;
  */
 public class FileStorageSystem implements StorageSystem {
 
+    private Options options;
+
     static {
         RocksDB.loadLibrary();
     }
@@ -32,11 +34,11 @@ public class FileStorageSystem implements StorageSystem {
 
     @Override
     public void open(@NotNull String location, @NotNull StorageOptions storageOptions) {
-        Options options = new Options().setCreateIfMissing(true);
+        options = new Options().setCreateIfMissing(true);
 
         if (storageOptions.hasCompression()) {
             options.setCompressionType(CompressionType.ZSTD_COMPRESSION);
-            options.setCompressionOptions(new CompressionOptions().setLevel(1));
+            options.setCompressionOptions(new CompressionOptions().setLevel(4));
         }
 
         try {
@@ -77,6 +79,9 @@ public class FileStorageSystem implements StorageSystem {
     @Override
     public void close() {
         try {
+            if (options != null)
+                this.options.close();
+
             this.rocksDB.closeE();
         } catch (RocksDBException e) {
             MinecraftServer.getExceptionManager().handleException(e);

@@ -52,11 +52,9 @@ public class PlayerInit {
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
-        for (int i = 0; i < 4; i++) {
-            InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-            instanceContainer.enableAutoChunkLoad(true);
-            instanceContainer.setChunkGenerator(chunkGeneratorDemo);
-        }
+        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
+        instanceContainer.enableAutoChunkLoad(true);
+        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -284,7 +282,7 @@ public class PlayerInit {
 
             // Unload the chunk (save memory) if it has no remaining viewer
             if (chunk.getViewers().isEmpty()) {
-                player.getInstance().unloadChunk(chunk);
+                //player.getInstance().unloadChunk(chunk);
             }
         });
     }

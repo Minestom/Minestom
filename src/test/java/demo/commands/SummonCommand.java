@@ -18,7 +18,7 @@ public class SummonCommand extends Command {
 
     private final ArgumentEntityType entity;
     private final ArgumentRelativeVec3 pos;
-    private final ArgumentEnum<EntityClass> entity_class;
+    private final ArgumentEnum<EntityClass> entityClass;
 
     public SummonCommand() {
         super("summon");
@@ -26,24 +26,27 @@ public class SummonCommand extends Command {
 
         entity = ArgumentType.EntityType("entity type");
         pos = ArgumentType.RelativeVec3("pos");
-        entity_class = ArgumentType.Enum("entity class", EntityClass.class);
-        addSyntax(this::execute, entity, pos, entity_class);
+        entityClass = ArgumentType.Enum("class", EntityClass.class);
+        entityClass.setFormat(ArgumentEnum.Format.LOWER_CASED);
+        entityClass.setDefaultValue(EntityClass.CREATURE);
+        addSyntax(this::execute, entity, pos, entityClass);
+        setDefaultExecutor((sender, context) -> sender.sendMessage("Usage: /summon <type> <x> <y> <z> <class>"));
     }
 
     private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
-        final EntityClass entityClass = commandContext.get(entity_class);
-        final Entity entity = entityClass.instantiate(commandContext.get(this.entity));
+        final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
         //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
         entity.setInstance(commandSender.asPlayer().getInstance(), commandContext.get(pos).from(commandSender.asPlayer()).toPosition());
     }
 
+    @SuppressWarnings("unused")
     enum EntityClass {
-        base(Entity::new),
-        living(LivingEntity::new),
-        creature(EntityCreature::new);
-        private final EntityFactory<?> factory;
+        BASE(Entity::new),
+        LIVING(LivingEntity::new),
+        CREATURE(EntityCreature::new);
+        private final EntityFactory factory;
 
-        EntityClass(EntityFactory<?> factory) {
+        EntityClass(EntityFactory factory) {
             this.factory = factory;
         }
 
@@ -52,7 +55,7 @@ public class SummonCommand extends Command {
         }
     }
 
-    interface EntityFactory<T extends Entity> {
-        T newInstance(EntityType type);
+    interface EntityFactory {
+        Entity newInstance(EntityType type);
     }
 }

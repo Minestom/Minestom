@@ -793,6 +793,10 @@ public class InstanceContainer extends Instance {
      * Unsafe because it has to be done on the same thread as the instance/chunks tick update.
      */
     protected void UNSAFE_unloadChunks() {
+        if (scheduledChunksToRemove.isEmpty()) {
+            // Fast exit
+            return;
+        }
         synchronized (scheduledChunksToRemove) {
             for (Chunk chunk : scheduledChunksToRemove) {
                 final int chunkX = chunk.getChunkX();

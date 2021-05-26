@@ -1,12 +1,12 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.item.ArmorEquipEvent;
+import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.MathUtils;
@@ -170,33 +170,27 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
                 "The slot {0} does not exist for player", slot);
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
 
-        EntityEquipmentPacket.Slot equipmentSlot;
+        EquipmentSlot equipmentSlot = null;
 
         if (slot == player.getHeldSlot()) {
-            equipmentSlot = EntityEquipmentPacket.Slot.MAIN_HAND;
+            equipmentSlot = EquipmentSlot.MAIN_HAND;
         } else if (slot == OFFHAND_SLOT) {
-            equipmentSlot = EntityEquipmentPacket.Slot.OFF_HAND;
-        } else {
-            ArmorEquipEvent armorEquipEvent = null;
+            equipmentSlot = EquipmentSlot.OFF_HAND;
+        } else if (slot == HELMET_SLOT) {
+            equipmentSlot = EquipmentSlot.HELMET;
+        } else if (slot == CHESTPLATE_SLOT) {
+            equipmentSlot = EquipmentSlot.CHESTPLATE;
+        } else if (slot == LEGGINGS_SLOT) {
+            equipmentSlot = EquipmentSlot.LEGGINGS;
+        } else if (slot == BOOTS_SLOT) {
+            equipmentSlot = EquipmentSlot.BOOTS;
+        }
 
-            if (slot == HELMET_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.HELMET);
-            } else if (slot == CHESTPLATE_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.CHESTPLATE);
-            } else if (slot == LEGGINGS_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.LEGGINGS);
-            } else if (slot == BOOTS_SLOT) {
-                armorEquipEvent = new ArmorEquipEvent(player, itemStack, ArmorEquipEvent.ArmorSlot.BOOTS);
-            }
+        if (equipmentSlot != null) {
+            EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
 
-            if (armorEquipEvent != null) {
-                ArmorEquipEvent.ArmorSlot armorSlot = armorEquipEvent.getArmorSlot();
-                equipmentSlot = EntityEquipmentPacket.Slot.fromArmorSlot(armorSlot);
-                player.callEvent(ArmorEquipEvent.class, armorEquipEvent);
-                itemStack = armorEquipEvent.getArmorItem();
-            } else {
-                equipmentSlot = null;
-            }
+            player.callEvent(EntityEquipEvent.class, entityEquipEvent);
+            itemStack = entityEquipEvent.getEquippedItem();
         }
 
         this.itemStacks[slot] = itemStack;
@@ -272,38 +266,40 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
 
     @Override
     public boolean leftClick(@NotNull Player player, int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(convertPlayerInventorySlot(slot, OFFSET));
+        final ItemStack clicked = getItemStack(convertedSlot);
 
-        final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, convertedSlot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
-        setItemStack(slot, OFFSET, clickResult.getClicked());
+        setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         if (!clickResult.isCancel())
-            callClickEvent(player, null, slot, ClickType.LEFT_CLICK, clicked, cursor);
+            callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
 
         return !clickResult.isCancel();
     }
 
     @Override
     public boolean rightClick(@NotNull Player player, int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack clicked = getItemStack(convertedSlot);
 
-        final InventoryClickResult clickResult = clickProcessor.rightClick(null, player, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.rightClick(null, player, convertedSlot, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
-        setItemStack(slot, OFFSET, clickResult.getClicked());
+        setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
 
         if (!clickResult.isCancel())
-            callClickEvent(player, null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
+            callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
 
         return !clickResult.isCancel();
     }

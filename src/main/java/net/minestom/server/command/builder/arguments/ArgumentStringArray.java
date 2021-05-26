@@ -2,8 +2,8 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;

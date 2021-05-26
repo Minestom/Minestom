@@ -3,8 +3,6 @@ package net.minestom.server.command;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
@@ -16,10 +14,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.CommandCallback;
 import net.minestom.server.utils.validate.Check;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +35,6 @@ public final class CommandManager {
     private final ConsoleSender consoleSender = new ConsoleSender();
 
     private final CommandDispatcher dispatcher = new CommandDispatcher();
-    private final Map<String, CommandProcessor> commandProcessorMap = new HashMap<>();
 
     private CommandCallback unknownCommandCallback;
 
@@ -80,47 +75,8 @@ public final class CommandManager {
      * @param commandName the command name
      * @return the command associated with the name, null if not any
      */
-    @Nullable
-    public Command getCommand(@NotNull String commandName) {
+    public @Nullable Command getCommand(@NotNull String commandName) {
         return dispatcher.findCommand(commandName);
-    }
-
-    /**
-     * Registers a {@link CommandProcessor}.
-     *
-     * @param commandProcessor the command to register
-     * @throws IllegalStateException if a command with the same name already exists
-     * @deprecated use {@link Command} or {@link SimpleCommand} instead
-     */
-    @Deprecated
-    public synchronized void register(@NotNull CommandProcessor commandProcessor) {
-        final String commandName = commandProcessor.getCommandName().toLowerCase();
-        Check.stateCondition(commandExists(commandName),
-                "A command with the name " + commandName + " is already registered!");
-        this.commandProcessorMap.put(commandName, commandProcessor);
-        // Register aliases
-        final String[] aliases = commandProcessor.getAliases();
-        if (aliases != null && aliases.length > 0) {
-            for (String alias : aliases) {
-                Check.stateCondition(commandExists(alias),
-                        "A command with the name " + alias + " is already registered!");
-
-                this.commandProcessorMap.put(alias.toLowerCase(), commandProcessor);
-            }
-        }
-    }
-
-    /**
-     * Gets the {@link CommandProcessor} registered by {@link #register(CommandProcessor)}.
-     *
-     * @param commandName the command name
-     * @return the command associated with the name, null if not any
-     * @deprecated use {@link #getCommand(String)} instead
-     */
-    @Deprecated
-    @Nullable
-    public CommandProcessor getCommandProcessor(@NotNull String commandName) {
-        return commandProcessorMap.get(commandName.toLowerCase());
     }
 
     /**
@@ -131,8 +87,7 @@ public final class CommandManager {
      */
     public boolean commandExists(@NotNull String commandName) {
         commandName = commandName.toLowerCase();
-        return dispatcher.findCommand(commandName) != null ||
-                commandProcessorMap.get(commandName) != null;
+        return dispatcher.findCommand(commandName) != null;
     }
 
     /**
@@ -142,8 +97,7 @@ public final class CommandManager {
      * @param command the raw command string (without the command prefix)
      * @return the execution result
      */
-    @NotNull
-    public CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
+    public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
 
         // Command event
         if (sender instanceof Player) {
@@ -159,30 +113,13 @@ public final class CommandManager {
         }
 
         // Process the command
-
-        {
-            // Check for rich-command
-            final CommandResult result = this.dispatcher.execute(sender, command);
-            if (result.getType() != CommandResult.Type.UNKNOWN) {
-                return result;
-            } else {
-                // Check for legacy-command
-                final String[] splitCommand = command.split(StringUtils.SPACE);
-                final String commandName = splitCommand[0];
-                final CommandProcessor commandProcessor = commandProcessorMap.get(commandName.toLowerCase());
-                if (commandProcessor == null) {
-                    if (unknownCommandCallback != null) {
-                        this.unknownCommandCallback.apply(sender, command);
-                    }
-                    return CommandResult.of(CommandResult.Type.UNKNOWN, command);
-                }
-
-                // Execute the legacy-command
-                final String[] args = command.substring(command.indexOf(StringUtils.SPACE) + 1).split(StringUtils.SPACE);
-                commandProcessor.process(sender, commandName, args);
-                return CommandResult.of(CommandResult.Type.SUCCESS, command);
+        final var result = dispatcher.execute(sender, command);
+        if (result.getType() == CommandResult.Type.UNKNOWN) {
+            if (unknownCommandCallback != null) {
+                this.unknownCommandCallback.apply(sender, command);
             }
         }
+        return result;
     }
 
     /**
@@ -191,13 +128,11 @@ public final class CommandManager {
      *
      * @see #execute(CommandSender, String)
      */
-    @NotNull
-    public CommandResult executeServerCommand(@NotNull String command) {
+    public @NotNull CommandResult executeServerCommand(@NotNull String command) {
         return execute(serverSender, command);
     }
 
-    @NotNull
-    public CommandDispatcher getDispatcher() {
+    public @NotNull CommandDispatcher getDispatcher() {
         return dispatcher;
     }
 
@@ -206,8 +141,7 @@ public final class CommandManager {
      *
      * @return the unknown command callback, null if not any
      */
-    @Nullable
-    public CommandCallback getUnknownCommandCallback() {
+    public @Nullable CommandCallback getUnknownCommandCallback() {
         return unknownCommandCallback;
     }
 
@@ -226,8 +160,7 @@ public final class CommandManager {
      *
      * @return the {@link ConsoleSender}
      */
-    @NotNull
-    public ConsoleSender getConsoleSender() {
+    public @NotNull ConsoleSender getConsoleSender() {
         return consoleSender;
     }
 
@@ -239,8 +172,7 @@ public final class CommandManager {
      * @param player the player to get the commands packet
      * @return the {@link DeclareCommandsPacket} for {@code player}
      */
-    @NotNull
-    public DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
+    public @NotNull DeclareCommandsPacket createDeclareCommandsPacket(@NotNull Player player) {
         return buildPacket(player);
     }
 
@@ -250,8 +182,7 @@ public final class CommandManager {
      * @param player the player to build the packet for
      * @return the commands packet for the specific player
      */
-    @NotNull
-    private DeclareCommandsPacket buildPacket(@NotNull Player player) {
+    private @NotNull DeclareCommandsPacket buildPacket(@NotNull Player player) {
         DeclareCommandsPacket declareCommandsPacket = new DeclareCommandsPacket();
 
         List<DeclareCommandsPacket.Node> nodes = new ArrayList<>();
@@ -300,52 +231,6 @@ public final class CommandManager {
             final int argumentNode = argumentIdentityMap.getOrDefault(argument, 0);
             request.retrieve(argumentNode);
         }
-
-        // Pair<CommandName,EnabledTracking>
-        final Object2BooleanMap<String> commandsPair = new Object2BooleanOpenHashMap<>();
-        for (CommandProcessor commandProcessor : commandProcessorMap.values()) {
-            final boolean enableTracking = commandProcessor.enableWritingTracking();
-            // Do not show command if return false
-            if (!commandProcessor.hasAccess(player))
-                continue;
-
-            commandsPair.put(commandProcessor.getCommandName(), enableTracking);
-            final String[] aliases = commandProcessor.getAliases();
-            if (aliases == null || aliases.length == 0)
-                continue;
-            for (String alias : aliases) {
-                commandsPair.put(alias, enableTracking);
-            }
-        }
-
-        for (Object2BooleanMap.Entry<String> entry : commandsPair.object2BooleanEntrySet()) {
-            final String name = entry.getKey();
-            final boolean tracking = entry.getBooleanValue();
-            // Server suggestion (ask_server)
-            {
-                DeclareCommandsPacket.Node tabNode = new DeclareCommandsPacket.Node();
-                tabNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.ARGUMENT,
-                        true, false, tracking);
-                tabNode.name = tracking ? "tab_completion" : "args";
-                tabNode.parser = "brigadier:string";
-                tabNode.properties = BinaryWriter.makeArray(packetWriter -> packetWriter.writeVarInt(2)); // Greedy phrase
-                tabNode.children = new int[0];
-                if (tracking) {
-                    tabNode.suggestionsType = "minecraft:ask_server";
-                }
-
-                nodes.add(tabNode);
-            }
-
-            DeclareCommandsPacket.Node literalNode = new DeclareCommandsPacket.Node();
-            literalNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
-                    true, false, false);
-            literalNode.name = name;
-            literalNode.children = new int[]{nodes.size() - 1};
-
-            addCommandNameNode(literalNode, rootChildren, nodes);
-        }
-
         // Add root node children
         rootNode.children = ArrayUtils.toArray(rootChildren);
 
