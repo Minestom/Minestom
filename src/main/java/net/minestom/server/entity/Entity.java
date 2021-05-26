@@ -531,10 +531,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 }
 
                 // World border collision
-                position.set(CollisionUtils.applyWorldBorder(instance, position, newPosition));
+                newPosition.set(CollisionUtils.applyWorldBorder(instance, position, newPosition));
 
-                if (!ChunkUtils.same(position, positionAtTickStart)) {
-                    final Chunk chunk = instance.getChunkAt(position);
+                if (!ChunkUtils.same(position, newPosition)) {
+                    final Chunk chunk = instance.getChunkAt(newPosition);
 
                     // Entity shouldn't be updated when moving in an unloaded chunk
                     if (!ChunkUtils.isLoaded(chunk)) {
@@ -543,10 +543,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 }
 
                 // Apply the position if changed
-                if (!finalVelocityPosition.isSimilar(position)) {
-                    refreshPosition(finalVelocityPosition.getX(),
-                            finalVelocityPosition.getY(),
-                            finalVelocityPosition.getZ());
+                if (!newPosition.isSimilar(position)) {
+                    refreshPosition(newPosition.getX(),
+                            newPosition.getY(),
+                            newPosition.getZ());
                     sendPositionUpdate(true);
                 }
 
