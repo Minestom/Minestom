@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":10,"i4":10,"i5":9,"i6":9,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":10,"i14":9,"i15":9,"i16":10};
+var data = {"i0":9,"i1":9,"i2":9,"i3":10,"i4":10,"i5":9,"i6":9,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9,"i12":10,"i13":9,"i14":10,"i15":9,"i16":9,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,6 +171,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/BiConsumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">BiConsumer</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;writeConsumer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected </code></td>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,java.util.function.Function,java.util.function.BiConsumer,java.util.function.Supplier)">Tag</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;key,
+   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;readFunction,
+   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/BiConsumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">BiConsumer</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;writeConsumer,
+   @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -251,26 +259,32 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
+<td class="colFirst"><code>&lt;R&gt;&nbsp;<a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;R&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map(java.util.function.Function,java.util.function.Function)">map</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>,&#8203;R&gt;&nbsp;readMap,
+   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;R,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;writeMap)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;org.jglrxavpok.hephaistos.nbt.NBT&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NBT(java.lang.String)">NBT</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;key)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="Tag.html" title="type parameter in Tag">T</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">read</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Short.html?is-external=true" title="class or interface in java.lang" class="externalLink">Short</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#Short(java.lang.String)">Short</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;key)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#String(java.lang.String)">String</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;key)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(org.jglrxavpok.hephaistos.nbt.NBTCompound,T)">write</a></span>&#8203;(@NotNull org.jglrxavpok.hephaistos.nbt.NBTCompound&nbsp;nbtCompound,
      <a href="Tag.html" title="type parameter in Tag">T</a>&nbsp;value)</code></th>
@@ -300,6 +314,22 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(java.lang.String,java.util.function.Function,java.util.function.BiConsumer,java.util.function.Supplier)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>Tag</h4>
+<pre>protected&nbsp;Tag&#8203;(@NotNull
+              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;key,
+              @NotNull
+              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;readFunction,
+              @NotNull
+              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/BiConsumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">BiConsumer</a>&lt;org.jglrxavpok.hephaistos.nbt.NBTCompound,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;writeConsumer,
+              @Nullable
+              @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;(java.lang.String,java.util.function.Function,java.util.function.BiConsumer)">
 <!--   -->
 </a>
@@ -340,7 +370,9 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultValue</h4>
-<pre class="methodSignature">public&nbsp;<a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue&#8203;(@NotNull
+<pre class="methodSignature">@Contract(value="_ -&gt; new",
+          pure=true)
+public&nbsp;<a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue&#8203;(@NotNull
                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue)</pre>
 </li>
 </ul>
@@ -352,8 +384,24 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <ul class="blockList">
 <li class="blockList">
 <h4>defaultValue</h4>
-<pre class="methodSignature">public&nbsp;<a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue&#8203;(@NotNull
+<pre class="methodSignature">@Contract(value="_ -&gt; new",
+          pure=true)
+public&nbsp;<a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;defaultValue&#8203;(@NotNull
                            <a href="Tag.html" title="type parameter in Tag">T</a>&nbsp;defaultValue)</pre>
+</li>
+</ul>
+<a id="map(java.util.function.Function,java.util.function.Function)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>map</h4>
+<pre class="methodSignature">@Contract(value="_, _ -&gt; new",
+          pure=true)
+public&nbsp;&lt;R&gt;&nbsp;<a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;R&gt;&nbsp;map&#8203;(@NotNull
+                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="Tag.html" title="type parameter in Tag">T</a>,&#8203;R&gt;&nbsp;readMap,
+                      @NotNull
+                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;R,&#8203;<a href="Tag.html" title="type parameter in Tag">T</a>&gt;&nbsp;writeMap)</pre>
 </li>
 </ul>
 <a id="read(org.jglrxavpok.hephaistos.nbt.NBTCompound)">
