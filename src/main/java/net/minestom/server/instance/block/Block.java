@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.BiPredicate;
 
 public interface Block extends Keyed, TagReadable, BlockConstants {
 
@@ -41,7 +42,7 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
     @Nullable BlockHandler getHandler();
 
     default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
-        return comparator.equals(this, block);
+        return comparator.test(this, block);
     }
 
     default boolean compare(@NotNull Block block) {
@@ -59,6 +60,7 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
     static @Nullable Block fromStateId(short stateId) {
         return BlockRegistry.fromStateId(stateId);
     }
+
     static @Nullable Block fromBlockId(int blockId) {
         return BlockRegistry.fromBlockId(blockId);
     }
@@ -83,14 +85,12 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
 
     @FunctionalInterface
-    interface Comparator {
+    interface Comparator extends BiPredicate<Block, Block> {
         Comparator IDENTITY = (b1, b2) -> b1 == b2;
 
         Comparator ID = (b1, b2) -> b1.getBlockId() == b2.getBlockId();
 
         Comparator STATE = (b1, b2) -> b1.getStateId() == b2.getStateId();
-
-        boolean equals(@NotNull Block b1, @NotNull Block b2);
     }
 
     @FunctionalInterface
