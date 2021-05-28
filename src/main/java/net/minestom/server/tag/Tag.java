@@ -1,6 +1,7 @@
 package net.minestom.server.tag;
 
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -23,28 +24,64 @@ public class Tag<T> {
     private final String key;
     private final Function<NBTCompound, T> readFunction;
     private final BiConsumer<NBTCompound, T> writeConsumer;
-    private volatile Supplier<T> defaultValue;
+
+    private final Supplier<T> defaultValue;
 
     protected Tag(@NotNull String key,
-                @NotNull Function<NBTCompound, T> readFunction,
-                @NotNull BiConsumer<NBTCompound, T> writeConsumer) {
+                  @NotNull Function<NBTCompound, T> readFunction,
+                  @NotNull BiConsumer<NBTCompound, T> writeConsumer,
+                  @Nullable Supplier<T> defaultValue) {
         this.key = key;
         this.readFunction = readFunction;
         this.writeConsumer = writeConsumer;
+        this.defaultValue = defaultValue;
+    }
+
+    protected Tag(@NotNull String key,
+                  @NotNull Function<NBTCompound, T> readFunction,
+                  @NotNull BiConsumer<NBTCompound, T> writeConsumer) {
+        this(key, readFunction, writeConsumer, null);
     }
 
     public @NotNull String getKey() {
         return key;
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull Supplier<T> defaultValue) {
-        this.defaultValue = defaultValue;
-        return this;
+        return new Tag<>(key, readFunction, writeConsumer, defaultValue);
     }
 
+    @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull T defaultValue) {
-        defaultValue(() -> defaultValue);
-        return this;
+        return new Tag<>(key, readFunction, writeConsumer, () -> defaultValue);
+    }
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public <R> Tag<R> map(@NotNull Function<T, R> readMap,
+                          @NotNull Function<R, T> writeMap) {
+        return new Tag<R>(key,
+                // Read
+                nbtCompound -> {
+                    final var old = readFunction.apply(nbtCompound);
+                    if (old == null) {
+                        return null;
+                    }
+                    return readMap.apply(old);
+                },
+                // Write
+                (nbtCompound, r) -> {
+                    var n = writeMap.apply(r);
+                    writeConsumer.accept(nbtCompound, n);
+                },
+                // Default value
+                () -> {
+                    if (defaultValue == null) {
+                        return null;
+                    }
+                    var old = defaultValue.get();
+                    return readMap.apply(old);
+                });
     }
 
     public @Nullable T read(@NotNull NBTCompound nbtCompound) {
@@ -141,7 +178,20 @@ public class Tag<T> {
 
     public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
-                nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
-                (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
+                nbtCompound -> {
+                    final var compound = nbtCompound.getCompound(key);
+                    if (compound == null) {
+                        return null;
+                    }
+                    return serializer.read(TagReadable.fromCompound(compound));
+                },
+                (nbtCompound, value) -> {
+                    var compound = nbtCompound.getCompound(key);
+                    if (compound == null) {
+                        compound = new NBTCompound();
+                        nbtCompound.set(key, compound);
+                    }
+                    serializer.write(TagWritable.fromCompound(compound), value);
+                });
     }
 }
