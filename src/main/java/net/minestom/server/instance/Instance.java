@@ -19,7 +19,9 @@ import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
@@ -55,7 +57,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockGetter, BlockSetter, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -533,30 +535,13 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
         unloadChunk(chunk);
     }
 
-    /**
-     * Gets Block type from given coordinates.
-     *
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param z z coordinate
-     * @return Block at given position.
-     */
+    @Override
     public @NotNull Block getBlock(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at {0}:{1} is not loaded", x, z);
         synchronized (chunk) {
             return chunk.getBlock(x, y, z);
         }
-    }
-
-    /**
-     * Gets block from given position.
-     *
-     * @param position position to get from
-     * @return Block at given position.
-     */
-    public @NotNull Block getBlock(@NotNull BlockPosition position) {
-        return getBlock(position.getX(), position.getY(), position.getZ());
     }
 
     /**
