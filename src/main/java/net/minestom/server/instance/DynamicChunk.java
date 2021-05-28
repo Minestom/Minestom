@@ -13,6 +13,7 @@ import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -24,6 +25,7 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.ref.SoftReference;
 import java.util.Set;
@@ -43,19 +45,15 @@ public class DynamicChunk extends Chunk {
 
     // WARNING: not thread-safe and should not be changed
     protected PaletteStorage blockPalette;
-    protected PaletteStorage customBlockPalette;
 
-    // Used to get all blocks with data (no null)
-    // Key is still chunk coordinates (see #getBlockIndex)
-    protected final Int2ObjectOpenHashMap<Data> blocksData = new Int2ObjectOpenHashMap<>();
+    // Key = ChunkUtils#getBlockIndex
+    protected final Int2ObjectOpenHashMap<BlockHandler> handlerMap = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectOpenHashMap<NBTCompound> nbtMap = new Int2ObjectOpenHashMap<>();
 
     // Contains CustomBlocks' block index which are updatable
     protected final IntOpenHashSet updatableBlocks = new IntOpenHashSet();
     // (block index)/(last update in ms)
     protected final Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
-
-    // Block entities
-    protected final IntOpenHashSet blockEntities = new IntOpenHashSet();
 
     private long lastChangeTime;
 
@@ -63,24 +61,21 @@ public class DynamicChunk extends Chunk {
     private long cachedPacketTime;
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ,
-                        @NotNull PaletteStorage blockPalette, @NotNull PaletteStorage customBlockPalette) {
+                        @NotNull PaletteStorage blockPalette) {
         super(instance, biomes, chunkX, chunkZ, true);
         this.blockPalette = blockPalette;
-        this.customBlockPalette = customBlockPalette;
     }
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        this(instance, biomes, chunkX, chunkZ,
-                new PaletteStorage(8, 2),
-                new PaletteStorage(8, 2));
+        this(instance, biomes, chunkX, chunkZ, new PaletteStorage(8, 2));
     }
 
     @Override
     public void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block) {
         final short blockStateId = block.getStateId();
-        final short customBlockId = 0; // TODO
+        final BlockHandler handler = block.getHandler();
+        final NBTCompound nbt = null; // TODO
         final boolean updatable = false; // TODO
-        final boolean nbt = false; // TODO
         {
             // Update pathfinder
             if (columnarSpace != null) {
@@ -91,45 +86,19 @@ public class DynamicChunk extends Chunk {
         }
 
         final int index = getBlockIndex(x, y, z);
-        // True if the block is not complete air without any custom block capabilities
-        final boolean hasBlock = blockStateId != 0 || customBlockId != 0;
-
+        // Block palette
         setBlockAt(blockPalette, x, y, z, blockStateId);
-        setBlockAt(customBlockPalette, x, y, z, customBlockId);
-
-        if (!hasBlock) {
-            // Block has been deleted, clear cache and return
-
-            this.blocksData.remove(index);
-
-            this.updatableBlocks.remove(index);
-            this.updatableBlocksLastUpdate.remove(index);
-
-            this.blockEntities.remove(index);
-            return;
-        }
-
-        // Set the new data (or remove from the map if is null)
-        if (data != null) {
-            this.blocksData.put(index, data);
+        // Handler
+        if (handler != null) {
+            this.handlerMap.put(index, handler);
         } else {
-            this.blocksData.remove(index);
+            this.handlerMap.remove(index);
         }
-
-        // Set update consumer
-        if (updatable) {
-            this.updatableBlocks.add(index);
-            this.updatableBlocksLastUpdate.put(index, System.currentTimeMillis());
+        // Nbt
+        if (nbt != null) {
+            this.nbtMap.put(index, nbt);
         } else {
-            this.updatableBlocks.remove(index);
-            this.updatableBlocksLastUpdate.remove(index);
-        }
-
-        // Set block entity
-        if (nbt) {
-            this.blockEntities.add(index);
-        } else {
-            this.blockEntities.remove(index);
+            this.nbtMap.remove(index);
         }
     }
 
@@ -149,7 +118,7 @@ public class DynamicChunk extends Chunk {
     @NotNull
     @Override
     public Set<Integer> getBlockEntities() {
-        return blockEntities;
+        return nbtMap.keySet();
     }
 
     @Override
@@ -205,7 +174,7 @@ public class DynamicChunk extends Chunk {
                         final int index = getBlockIndex(x, y, z);
 
                         final short blockStateId = getBlockAt(blockPalette, x, y, z);
-                        final short customBlockId = getBlockAt(customBlockPalette, x, y, z);
+                        final short customBlockId = 0;//getBlockAt(customBlockPalette, x, y, z);
 
                         // No block at the position
                         if (blockStateId == 0 && customBlockId == 0)
@@ -350,9 +319,8 @@ public class DynamicChunk extends Chunk {
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
         packet.paletteStorage = blockPalette.clone();
-        packet.customBlockPaletteStorage = customBlockPalette.clone();
-        packet.blockEntities = blockEntities.clone();
-        packet.blocksData = blocksData.clone();
+        packet.handlerMap = handlerMap.clone();
+        packet.nbtMap = nbtMap.clone();
 
         this.cachedPacketTime = getLastChangeTime();
         this.cachedPacket = new SoftReference<>(packet);
@@ -364,11 +332,10 @@ public class DynamicChunk extends Chunk {
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
         dynamicChunk.blockPalette = blockPalette.clone();
-        dynamicChunk.customBlockPalette = customBlockPalette.clone();
-        dynamicChunk.blocksData.putAll(blocksData);
+        dynamicChunk.handlerMap.putAll(handlerMap);
         dynamicChunk.updatableBlocks.addAll(updatableBlocks);
         dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);
-        dynamicChunk.blockEntities.addAll(blockEntities);
+        dynamicChunk.nbtMap.putAll(nbtMap);
 
         return dynamicChunk;
     }
@@ -376,12 +343,10 @@ public class DynamicChunk extends Chunk {
     @Override
     public void reset() {
         this.blockPalette.clear();
-        this.customBlockPalette.clear();
-
-        this.blocksData.clear();
+        this.handlerMap.clear();
+        this.nbtMap.clear();
         this.updatableBlocks.clear();
         this.updatableBlocksLastUpdate.clear();
-        this.blockEntities.clear();
     }
 
     private short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
