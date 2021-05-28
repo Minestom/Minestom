@@ -8,6 +8,7 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
 import java.util.function.BiPredicate;
@@ -17,6 +18,12 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
     <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value);
 
     <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
+
+    @NotNull Block withNbt(@Nullable NBTCompound compound);
+
+    @NotNull Block withHandler(@Nullable BlockHandler handler);
+
+    @Nullable BlockHandler getHandler();
 
     @NotNull Block getDefaultBlock();
 
@@ -38,8 +45,6 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
     short getStateId();
 
     @NotNull BlockData getData();
-
-    @Nullable BlockHandler getHandler();
 
     default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
         return comparator.test(this, block);

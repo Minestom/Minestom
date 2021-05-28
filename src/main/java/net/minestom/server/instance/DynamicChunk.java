@@ -109,10 +109,17 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Block getBlock(int x, int y, int z) {
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
         final short blockStateId = getBlockAt(blockPalette, x, y, z);
+        BlockHandler handler = handlerMap.get(index);
+        NBTCompound nbt = nbtMap.get(index);
         Block block = Block.fromStateId(blockStateId);
-        // TODO nbt/handler
-        return block;
+        if (block == null) {
+            return Block.AIR;
+        }
+        return block
+                .withHandler(handler)
+                .withNbt(nbt);
     }
 
     @NotNull

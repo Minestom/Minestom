@@ -31,13 +31,18 @@ class BlockImpl implements Block {
         loadBlockData();
     }
 
-    private final NamespaceID namespaceID;
-    private final int blockId;
-    private final short minStateId, stateId;
-    private final List<BlockProperty<?>> properties;
+    private NamespaceID namespaceID;
+    private int blockId;
+    private short minStateId, stateId;
+    private List<BlockProperty<?>> properties;
     protected BlockImpl original = null;
     private LinkedHashMap<BlockProperty<?>, Object> propertiesMap;
+    private BlockHandler handler;
     private NBTCompound compound;
+
+    private BlockImpl() {
+
+    }
 
     private BlockImpl(NamespaceID namespaceID,
                       int blockId,
@@ -85,8 +90,9 @@ class BlockImpl implements Block {
             map.put(property, value);
         }
 
-        var block = new BlockImpl(namespaceID, blockId, minStateId, computeId(minStateId, properties, map), properties, map);
-        block.original = original;
+        var block = shallowClone();
+        block.stateId = computeId(minStateId, properties, map);
+        block.propertiesMap = map;
         return block;
     }
 
@@ -113,9 +119,20 @@ class BlockImpl implements Block {
         if (compound.getKeys().isEmpty()) {
             compound = null;
         }
+        return withNbt(compound);
+    }
 
-        var block = new BlockImpl(namespaceID, blockId, minStateId, stateId, properties, propertiesMap, compound);
-        block.original = original;
+    @Override
+    public @NotNull Block withNbt(@Nullable NBTCompound compound) {
+        var block = shallowClone();
+        block.compound = compound;
+        return block;
+    }
+
+    @Override
+    public @NotNull Block withHandler(@Nullable BlockHandler handler) {
+        var block = shallowClone();
+        block.handler = handler;
         return block;
     }
 
@@ -153,7 +170,21 @@ class BlockImpl implements Block {
 
     @Override
     public @Nullable BlockHandler getHandler() {
-        return null;
+        return handler;
+    }
+
+    private @NotNull BlockImpl shallowClone() {
+        var block = new BlockImpl();
+        block.namespaceID = namespaceID;
+        block.blockId = blockId;
+        block.minStateId = minStateId;
+        block.stateId = stateId;
+        block.properties = properties;
+        block.original = original;
+        block.propertiesMap = propertiesMap;
+        block.handler = handler;
+        block.compound = compound;
+        return block;
     }
 
     protected static BlockImpl create(NamespaceID namespaceID, short blockId, short minStateId, short maxStateId,
