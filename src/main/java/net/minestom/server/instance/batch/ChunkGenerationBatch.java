@@ -13,8 +13,7 @@ public class ChunkGenerationBatch extends ChunkBatch {
     private final Chunk chunk;
 
     public ChunkGenerationBatch(InstanceContainer instance, Chunk chunk) {
-        super(null, null, new BatchOption());
-
+        super(new BatchOption());
         this.instance = instance;
         this.chunk = chunk;
     }
