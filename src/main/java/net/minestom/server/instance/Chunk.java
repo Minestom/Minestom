@@ -10,7 +10,7 @@ import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -47,9 +47,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements Viewable, Tickable, DataContainer {
+public abstract class Chunk implements BlockGetter, Viewable, Tickable, DataContainer {
 
-    protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     public static final int CHUNK_SIZE_X = 16;
@@ -123,16 +122,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     @Override
     public abstract void tick(long time);
-
-    /**
-     * Gets the block at a position.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the block at the position
-     */
-    public abstract @NotNull Block getBlock(int x, int y, int z);
 
     /**
      * Gets all the block entities in this chunk.

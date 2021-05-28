@@ -568,8 +568,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     float drag;
                     if (onGround) {
                         final BlockPosition blockPosition = position.toBlockPosition();
-                        if (false) {
-                            // TODO: Handle drag for CustomBlock
+                        final Block block = finalChunk.getBlock(blockPosition);
+                        final BlockHandler handler = block.getHandler();
+                        if (handler != null) {
+                            drag = handler.getDrag(instance, block, blockPosition);
                         } else {
                             // Default ground drag
                             drag = 0.5f;
