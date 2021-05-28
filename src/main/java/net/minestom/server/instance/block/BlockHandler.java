@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
@@ -51,6 +52,17 @@ public interface BlockHandler {
      */
     default float getDrag(@NotNull Instance instance, @NotNull Block block, @NotNull BlockPosition blockPosition) {
         return 0.5f;
+    }
+
+    /**
+     * Defines custom behaviour for entities touching this block.
+     *
+     * @param instance the instance
+     * @param block    the block
+     * @param position the position at which the block is
+     * @param touching the entity currently touching the block
+     */
+    default void handleContact(@NotNull Instance instance, @NotNull Block block, @NotNull BlockPosition position, @NotNull Entity touching) {
     }
 
     /**

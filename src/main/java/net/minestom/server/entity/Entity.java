@@ -23,6 +23,8 @@ import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -618,19 +620,18 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                                 continue;
                         }
 
-                        // TODO: Handle Block Contact with custom Block
-                        // old code: feel free to remove:
-//                        final CustomBlock customBlock = null;//chunk.getCustomBlock(x, y, z);
-//                        if (customBlock != null) {
-//                            tmpPosition.setX(x);
-//                            tmpPosition.setY(y);
-//                            tmpPosition.setZ(z);
-//                            // checks that we are actually in the block, and not just here because of a rounding error
-//                            if (boundingBox.intersect(tmpPosition)) {
-//                                // TODO: replace with check with custom block bounding box
-//                                customBlock.handleContact(instance, tmpPosition, this);
-//                            }
-//                        }
+                        final Block block = chunk.getBlock(x, y, z);
+                        final BlockHandler handler = block.getHandler();
+                        if (handler != null) {
+                            tmpPosition.setX(x);
+                            tmpPosition.setY(y);
+                            tmpPosition.setZ(z);
+                            // checks that we are actually in the block, and not just here because of a rounding error
+                            if (boundingBox.intersect(tmpPosition)) {
+                                // TODO: replace with check with custom block bounding box
+                                handler.handleContact(instance, block, tmpPosition, this);
+                            }
+                        }
                     }
                 }
             }
