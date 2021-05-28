@@ -137,7 +137,7 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public int getBlockId() {
+    public int getId() {
         return blockId;
     }
 

@@ -39,6 +39,6 @@ class BlockRegistry {
                                              @NotNull IntRange range, @NotNull Block.Supplier blockSupplier) {
         namespaceMap.put(namespaceID, block);
         IntStream.range(range.getMinimum(), range.getMaximum() + 1).forEach(value -> stateSet.put((short) value, blockSupplier));
-        blockSet.put(block.getBlockId(), block);
+        blockSet.put(block.getId(), block);
     }
 }

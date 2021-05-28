@@ -12,7 +12,7 @@ public class DynamicChunkMixin {
     @ModifyVariable(method = "UNSAFE_setBlock", at = @At("HEAD"), index = 4, require = 1, argsOnly = true, remap = false)
     public int oopsAllTnt(short blockStateId) {
         if(blockStateId != 0)
-            return Block.TNT.getBlockId();
+            return Block.TNT.getId();
         return 0;
     }
 }

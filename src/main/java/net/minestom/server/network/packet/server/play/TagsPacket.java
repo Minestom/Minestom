@@ -40,7 +40,7 @@ public class TagsPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Block.fromNamespaceId(name).getBlockId());
+        writeTags(writer, blockTags, name -> Block.fromNamespaceId(name).getId());
         writeTags(writer, itemTags, name -> Registries.getMaterial(name).ordinal());
         writeTags(writer, fluidTags, name -> Registries.getFluid(name).ordinal());
         writeTags(writer, entityTags, name -> Registries.getEntityType(name).ordinal());

@@ -33,7 +33,7 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
     @NotNull Map<String, String> createPropertiesMap();
 
-    int getBlockId();
+    int getId();
 
     short getStateId();
 
@@ -88,7 +88,7 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
     interface Comparator extends BiPredicate<Block, Block> {
         Comparator IDENTITY = (b1, b2) -> b1 == b2;
 
-        Comparator ID = (b1, b2) -> b1.getBlockId() == b2.getBlockId();
+        Comparator ID = (b1, b2) -> b1.getId() == b2.getId();
 
         Comparator STATE = (b1, b2) -> b1.getStateId() == b2.getStateId();
     }
