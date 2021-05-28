@@ -54,7 +54,7 @@ public class Tag<T> {
 
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> defaultValue(@NotNull T defaultValue) {
-        return new Tag<>(key, readFunction, writeConsumer, () -> defaultValue);
+        return defaultValue(() -> defaultValue);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
