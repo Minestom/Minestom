@@ -9,6 +9,7 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
@@ -146,6 +147,9 @@ public class InstanceContainer extends Instance {
             }
             setAlreadyChanged(blockPosition, block);
 
+            final Block previousBlock = chunk.getBlock(blockPosition);
+            final BlockHandler previousHandler = previousBlock.getHandler();
+
             // Change id based on neighbors
             block = executeBlockPlacementRule(block, blockPosition);
 
@@ -157,6 +161,16 @@ public class InstanceContainer extends Instance {
 
             // Refresh player chunk block
             sendBlockChange(chunk, blockPosition, block);
+
+            if (previousHandler != null) {
+                // Previous destroy
+                previousHandler.onDestroy(this, previousBlock, blockPosition);
+            }
+            final BlockHandler handler = block.getHandler();
+            if (handler != null) {
+                // New placement
+                handler.onPlace(this, block, blockPosition);
+            }
         }
     }
 
