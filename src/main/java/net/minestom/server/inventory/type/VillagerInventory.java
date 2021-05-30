@@ -23,7 +23,7 @@ public class VillagerInventory extends Inventory {
         final int length = oldTrades.length + 1;
         TradeListPacket.Trade[] trades = new TradeListPacket.Trade[length];
         System.arraycopy(oldTrades, 0, trades, 0, oldTrades.length);
-        trades[length] = trade;
+        trades[length - 1] = trade;
         this.tradeListPacket.trades = trades;
         update();
     }
