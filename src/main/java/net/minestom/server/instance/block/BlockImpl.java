@@ -97,6 +97,12 @@ class BlockImpl implements Block {
     }
 
     @Override
+    public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
+        // TODO
+        return null;
+    }
+
+    @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return tag.read(compound);
     }
@@ -134,6 +140,17 @@ class BlockImpl implements Block {
         var block = shallowClone();
         block.handler = handler;
         return block;
+    }
+
+    @Override
+    public <T> @NotNull T getProperty(@NotNull BlockProperty<T> property) {
+        return (T) propertiesMap.get(property);
+    }
+
+    @Override
+    public @NotNull String getProperty(@NotNull String property) {
+        // TODO
+        return null;
     }
 
     @Override

@@ -17,11 +17,17 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
     <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value);
 
+    @NotNull Block withProperty(@NotNull String property, @NotNull String value);
+
     <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
 
     @NotNull Block withNbt(@Nullable NBTCompound compound);
 
     @NotNull Block withHandler(@Nullable BlockHandler handler);
+
+    <T> @NotNull T getProperty(@NotNull BlockProperty<T> property);
+
+    @NotNull String getProperty(@NotNull String property);
 
     @Nullable BlockHandler getHandler();
 
