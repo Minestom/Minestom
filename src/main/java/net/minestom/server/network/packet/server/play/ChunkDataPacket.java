@@ -81,8 +81,9 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
         int mask = 0;
         ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
+        final boolean fullChunk = sections.length == 0;
         for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
-            if (false || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
+            if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 final Section section = paletteStorage.getSections()[i];
                 if (section == null) {
                     // Section not loaded
@@ -95,7 +96,9 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             }
         }
 
-        writer.writeVarInt(mask);
+        // TODO variable size
+        writer.writeVarInt(1);
+        writer.writeLong(mask);
 
         // TODO: don't hardcode heightmaps
         // Heightmap
@@ -163,7 +166,11 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         chunkX = reader.readInt();
         chunkZ = reader.readInt();
 
-        int mask = reader.readVarInt();
+        int maskCount = reader.readVarInt();
+        long[] masks = new long[maskCount];
+        for(int i=0;i<maskCount;i++){
+            masks[i] = reader.readLong();
+        }
         try {
             // TODO: Use heightmaps
             // unused at the moment
@@ -179,6 +186,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             // Data
             this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
+            final long mask = masks[0]; // TODO support for variable size
             for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
                 boolean hasSection = (mask & 1 << section) != 0;
                 if (!hasSection)
