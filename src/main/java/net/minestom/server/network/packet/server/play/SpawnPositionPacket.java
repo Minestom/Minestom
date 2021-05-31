@@ -10,12 +10,14 @@ import org.jetbrains.annotations.NotNull;
 public class SpawnPositionPacket implements ServerPacket {
 
     public int x, y, z;
+    public float angle;
 
     public SpawnPositionPacket() {}
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeBlockPosition(x, y, z);
+        writer.writeFloat(angle);
     }
 
     @Override
@@ -24,6 +26,7 @@ public class SpawnPositionPacket implements ServerPacket {
         x = pos.getX();
         y = pos.getY();
         z = pos.getZ();
+        angle = reader.readFloat();
     }
 
     @Override

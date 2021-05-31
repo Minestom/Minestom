@@ -35,7 +35,6 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
-    public boolean fullChunk;
     public Biome[] biomes;
     public int chunkX, chunkZ;
 
@@ -79,12 +78,11 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
-        writer.writeBoolean(fullChunk);
 
         int mask = 0;
         ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
         for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
-            if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
+            if (false || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
                 final Section section = paletteStorage.getSections()[i];
                 if (section == null) {
                     // Section not loaded
@@ -118,8 +116,10 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             );
         }
 
-        // Biome data
-        if (fullChunk) {
+        // Biomes
+        if (biomes == null || biomes.length == 0) {
+            writer.writeVarInt(0);
+        } else {
             writer.writeVarInt(biomes.length);
             for (Biome biome : biomes) {
                 writer.writeVarInt(biome.getId());
@@ -162,7 +162,6 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public void read(@NotNull BinaryReader reader) {
         chunkX = reader.readInt();
         chunkZ = reader.readInt();
-        fullChunk = reader.readBoolean();
 
         int mask = reader.readVarInt();
         try {
@@ -171,12 +170,10 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             heightmapsNBT = (NBTCompound) reader.readTag();
 
             // Biomes
-            if (fullChunk) {
-                int[] biomesIds = reader.readVarIntArray();
-                this.biomes = new Biome[biomesIds.length];
-                for (int i = 0; i < biomesIds.length; i++) {
-                    this.biomes[i] = MinecraftServer.getBiomeManager().getById(biomesIds[i]);
-                }
+            int[] biomesIds = reader.readVarIntArray();
+            this.biomes = new Biome[biomesIds.length];
+            for (int i = 0; i < biomesIds.length; i++) {
+                this.biomes[i] = MinecraftServer.getBiomeManager().getById(biomesIds[i]);
             }
 
             // Data

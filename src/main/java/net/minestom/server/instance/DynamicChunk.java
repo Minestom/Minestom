@@ -386,7 +386,7 @@ public class DynamicChunk extends Chunk {
 
     @NotNull
     @Override
-    protected ChunkDataPacket createFreshPacket() {
+    public ChunkDataPacket createChunkPacket() {
         ChunkDataPacket packet = cachedPacket.get();
         if (packet != null && cachedPacketTime == getLastChangeTime()) {
             return packet;

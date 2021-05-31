@@ -237,7 +237,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      * @return a new chunk data packet
      */
     @NotNull
-    protected abstract ChunkDataPacket createFreshPacket();
+    public abstract ChunkDataPacket createChunkPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -384,29 +384,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     }
 
     /**
-     * Gets a {@link ChunkDataPacket} which should contain the full chunk.
-     *
-     * @return a fresh full chunk data packet
-     */
-    public ChunkDataPacket getFreshFullDataPacket() {
-        ChunkDataPacket fullDataPacket = createFreshPacket();
-        fullDataPacket.fullChunk = true;
-        return fullDataPacket;
-    }
-
-    /**
-     * Gets a {@link ChunkDataPacket} which should contain the non-full chunk.
-     *
-     * @return a fresh non-full chunk data packet
-     */
-    @NotNull
-    public ChunkDataPacket getFreshPartialDataPacket() {
-        ChunkDataPacket fullDataPacket = createFreshPacket();
-        fullDataPacket.fullChunk = false;
-        return fullDataPacket;
-    }
-
-    /**
      * Gets the light packet of this chunk.
      *
      * @return the light packet
@@ -522,16 +499,16 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getLightPacket());
-        playerConnection.sendPacket(getFreshFullDataPacket());
+        //playerConnection.sendPacket(getLightPacket());
+        playerConnection.sendPacket(createChunkPacket());
     }
 
     public synchronized void sendChunk() {
         if (!isLoaded()) {
             return;
         }
-        sendPacketToViewers(getLightPacket());
-        sendPacketToViewers(getFreshFullDataPacket());
+        //sendPacketToViewers(getLightPacket());
+        sendPacketToViewers(createChunkPacket());
     }
 
     /**
@@ -541,14 +518,14 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     public synchronized void sendChunkUpdate(@NotNull Player player) {
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getFreshFullDataPacket());
+        playerConnection.sendPacket(createChunkPacket());
     }
 
     /**
      * Sends a full {@link ChunkDataPacket} to all chunk viewers.
      */
     public synchronized void sendChunkUpdate() {
-        PacketUtils.sendGroupedPacket(getViewers(), getFreshFullDataPacket());
+        PacketUtils.sendGroupedPacket(getViewers(), createChunkPacket());
     }
 
     /**
@@ -575,8 +552,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     @NotNull
     protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
-        ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
-        chunkDataPacket.fullChunk = false;
+        ChunkDataPacket chunkDataPacket = createChunkPacket();
         int[] sections = new int[CHUNK_SECTION_COUNT];
         sections[section] = 1;
         chunkDataPacket.sections = sections;

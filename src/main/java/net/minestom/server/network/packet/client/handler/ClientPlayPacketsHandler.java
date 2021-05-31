@@ -11,29 +11,30 @@ public class ClientPlayPacketsHandler extends ClientPacketsHandler {
         register(0x04, ClientStatusPacket::new);
         register(0x05, ClientSettingsPacket::new);
         register(0x06, ClientTabCompletePacket::new);
-        register(0x08, ClientClickWindowButtonPacket::new);
-        register(0x09, ClientClickWindowPacket::new);
-        register(0x0A, ClientCloseWindowPacket::new);
-        register(0x0B, ClientPluginMessagePacket::new);
-        register(0x0C, ClientEditBookPacket::new);
-        register(0x0D, ClientQueryEntityNbtPacket::new);
-        register(0x0E, ClientInteractEntityPacket::new);
-        register(0x0F, ClientGenerateStructurePacket::new);
-        register(0x10, ClientKeepAlivePacket::new);
+        register(0x07, ClientClickWindowButtonPacket::new);
+        register(0x08, ClientClickWindowPacket::new);
+        register(0x09, ClientCloseWindowPacket::new);
+        register(0x0A, ClientPluginMessagePacket::new);
+        register(0x0B, ClientEditBookPacket::new);
+        register(0x0C, ClientQueryEntityNbtPacket::new);
+        register(0x0D, ClientInteractEntityPacket::new);
+        register(0x0E, ClientGenerateStructurePacket::new);
+        register(0x0F, ClientKeepAlivePacket::new);
 
-        // 0x11 packet not used server-side
-        register(0x12, ClientPlayerPositionPacket::new);
-        register(0x13, ClientPlayerPositionAndRotationPacket::new);
-        register(0x14, ClientPlayerRotationPacket::new);
-        register(0x15, ClientPlayerPacket::new);
-        register(0x16, ClientVehicleMovePacket::new);
-        register(0x17, ClientSteerBoatPacket::new);
-        register(0x18, ClientPickItemPacket::new);
-        register(0x19, ClientCraftRecipeRequest::new);
-        register(0x1A, ClientPlayerAbilitiesPacket::new);
-        register(0x1B, ClientPlayerDiggingPacket::new);
-        register(0x1C, ClientEntityActionPacket::new);
-        register(0x1D, ClientSteerVehiclePacket::new);
+        // 0x10 packet not used server-side
+        register(0x11, ClientPlayerPositionPacket::new);
+        register(0x12, ClientPlayerPositionAndRotationPacket::new);
+        register(0x13, ClientPlayerRotationPacket::new);
+        register(0x14, ClientPlayerPacket::new);
+        register(0x15, ClientVehicleMovePacket::new);
+        register(0x16, ClientSteerBoatPacket::new);
+        register(0x17, ClientPickItemPacket::new);
+        register(0x18, ClientCraftRecipeRequest::new);
+        register(0x19, ClientPlayerAbilitiesPacket::new);
+        register(0x1A, ClientPlayerDiggingPacket::new);
+        register(0x1B, ClientEntityActionPacket::new);
+        register(0x1C, ClientSteerVehiclePacket::new);
+        //register(0x1D, PONG); // TODO pong packet
         register(0x1E, ClientSetRecipeBookStatePacket::new);
         register(0x1F, ClientSetDisplayedRecipePacket::new);
 
