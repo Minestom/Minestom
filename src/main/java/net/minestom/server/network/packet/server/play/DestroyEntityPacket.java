@@ -13,6 +13,12 @@ public class DestroyEntityPacket implements ServerPacket {
     public DestroyEntityPacket() {
     }
 
+    public static DestroyEntityPacket of(int entityId) {
+        DestroyEntityPacket packet = new DestroyEntityPacket();
+        packet.entityId = entityId;
+        return packet;
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);

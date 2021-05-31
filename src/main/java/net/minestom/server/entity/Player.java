@@ -38,14 +38,14 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -1224,12 +1224,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public synchronized void setSkin(@Nullable PlayerSkin skin) {
         this.skin = skin;
-
         if (instance == null)
             return;
 
-        DestroyEntityPacket destroyEntityPacket = new DestroyEntityPacket();
-        destroyEntityPacket.entityId = getEntityId();
+        DestroyEntityPacket destroyEntityPacket = DestroyEntityPacket.of(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
@@ -2226,7 +2224,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     public void refreshOnGround(boolean onGround) {
         this.onGround = onGround;
-        if(this.onGround && this.isFlyingWithElytra()) {
+        if (this.onGround && this.isFlyingWithElytra()) {
             this.setFlyingWithElytra(false);
             this.callEvent(PlayerStopFlyingWithElytraEvent.class, new PlayerStopFlyingWithElytraEvent(this));
         }
@@ -2675,7 +2673,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @param locale             the player locale
          * @param viewDistance       the player view distance
-         * @param chatMessageType       the chat messages the player wishes to receive
+         * @param chatMessageType    the chat messages the player wishes to receive
          * @param chatColors         if chat colors should be displayed
          * @param displayedSkinParts the player displayed skin parts
          * @param mainHand           the player main hand
