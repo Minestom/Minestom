@@ -16,6 +16,20 @@ public class InitializeWorldBorderPacket implements ServerPacket {
     public int warningTime;
     public int warningBlocks;
 
+    public static InitializeWorldBorderPacket of(double x, double z, double oldDiameter, double newDiameter, long speed,
+                                                 int portalTeleportBoundary, int warningTime, int warningBlocks) {
+        InitializeWorldBorderPacket packet = new InitializeWorldBorderPacket();
+        packet.x = x;
+        packet.z = z;
+        packet.oldDiameter = oldDiameter;
+        packet.newDiameter = newDiameter;
+        packet.speed = speed;
+        packet.portalTeleportBoundary = portalTeleportBoundary;
+        packet.warningTime = warningTime;
+        packet.warningBlocks = warningBlocks;
+        return packet;
+    }
+
     @Override
     public void write(BinaryWriter writer) {
         writer.writeDouble(x);

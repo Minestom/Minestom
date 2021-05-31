@@ -10,6 +10,12 @@ public class WorldBorderSizePacket implements ServerPacket {
 
     public double diameter;
 
+    public static WorldBorderSizePacket of(double diameter) {
+        WorldBorderSizePacket packet = new WorldBorderSizePacket();
+        packet.diameter = diameter;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.diameter = reader.readDouble();

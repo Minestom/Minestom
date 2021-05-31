@@ -27,7 +27,6 @@ public class ServerPacketIdentifier {
     public static final int CLEAR_TITLES = 0x10;
     public static final int TAB_COMPLETE = 0x11;
     public static final int DECLARE_COMMANDS = 0x12;
-    //public static final int WINDOW_CONFIRMATION = 0x11;
     public static final int CLOSE_WINDOW = 0x13;
     public static final int WINDOW_ITEMS = 0x14;
     public static final int WINDOW_PROPERTY = 0x15;
@@ -53,7 +52,6 @@ public class ServerPacketIdentifier {
     public static final int ENTITY_POSITION = 0x29;
     public static final int ENTITY_POSITION_AND_ROTATION = 0x2A;
     public static final int ENTITY_ROTATION = 0x2B;
-    //public static final int ENTITY_MOVEMENT = 0x2A;
     public static final int VEHICLE_MOVE = 0x2C;
     public static final int OPEN_BOOK = 0x2D;
     public static final int OPEN_WINDOW = 0x2E;
@@ -100,7 +98,6 @@ public class ServerPacketIdentifier {
     public static final int TIME_UPDATE = 0x57;
     public static final int SET_TITLE_TEXT = 0x58;
     public static final int SET_TITLE_TIME = 0x59;
-    //public static final int TITLE = 0x4F;
     public static final int ENTITY_SOUND_EFFECT = 0x5A;
     public static final int SOUND_EFFECT = 0x5B;
     public static final int STOP_SOUND = 0x5C;

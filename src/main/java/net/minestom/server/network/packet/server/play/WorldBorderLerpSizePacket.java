@@ -12,6 +12,14 @@ public class WorldBorderLerpSizePacket implements ServerPacket {
     public double newDiameter;
     public long speed;
 
+    public static WorldBorderLerpSizePacket of(double oldDiameter, double newDiameter, long speed) {
+        WorldBorderLerpSizePacket packet = new WorldBorderLerpSizePacket();
+        packet.oldDiameter = oldDiameter;
+        packet.newDiameter = newDiameter;
+        packet.speed = speed;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.oldDiameter = reader.readDouble();

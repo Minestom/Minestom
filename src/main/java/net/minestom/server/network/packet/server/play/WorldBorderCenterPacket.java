@@ -11,6 +11,13 @@ public class WorldBorderCenterPacket implements ServerPacket {
     public double x;
     public double z;
 
+    public static WorldBorderCenterPacket of(double x, double z) {
+        WorldBorderCenterPacket packet = new WorldBorderCenterPacket();
+        packet.x = x;
+        packet.z = z;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.x = reader.readDouble();

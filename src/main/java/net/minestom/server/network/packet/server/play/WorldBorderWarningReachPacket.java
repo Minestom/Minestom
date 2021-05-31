@@ -10,6 +10,12 @@ public class WorldBorderWarningReachPacket implements ServerPacket {
 
     public int warningBlocks;
 
+    public static WorldBorderWarningReachPacket of(int warningBlocks) {
+        WorldBorderWarningReachPacket packet = new WorldBorderWarningReachPacket();
+        packet.warningBlocks = warningBlocks;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.warningBlocks = reader.readVarInt();

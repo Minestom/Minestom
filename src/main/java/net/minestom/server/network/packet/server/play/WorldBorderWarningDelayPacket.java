@@ -10,6 +10,12 @@ public class WorldBorderWarningDelayPacket implements ServerPacket {
 
     public int warningTime;
 
+    public static WorldBorderWarningDelayPacket of(int warningTime) {
+        WorldBorderWarningDelayPacket packet = new WorldBorderWarningDelayPacket();
+        packet.warningTime = warningTime;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.warningTime = reader.readVarInt();
