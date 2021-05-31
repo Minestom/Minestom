@@ -124,22 +124,34 @@ public class FakePlayer extends Player implements NavigableEntity {
         super.setInstance(instance);
     }
 
+    @Override
+    protected boolean addViewer0(@NotNull Player player) {
+        final boolean result = super.addViewer0(player);
+        if (result) {
+            handleTabList(player.getPlayerConnection());
+        }
+        return result;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     protected void showPlayer(@NotNull PlayerConnection connection) {
         super.showPlayer(connection);
-        if (!option.isInTabList()) {
-            // Remove from tab-list
-            MinecraftServer.getSchedulerManager().buildTask(() -> connection.sendPacket(getRemovePlayerToList())).delay(20, TimeUnit.TICK).schedule();
-        }
-
+        handleTabList(connection);
     }
 
     @NotNull
     @Override
     public Navigator getNavigator() {
         return navigator;
+    }
+
+    private void handleTabList(PlayerConnection connection) {
+        if (!option.isInTabList()) {
+            // Remove from tab-list
+            MinecraftServer.getSchedulerManager().buildTask(() -> connection.sendPacket(getRemovePlayerToList())).delay(2, TimeUnit.TICK).schedule();
+        }
     }
 }
