@@ -459,8 +459,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
-                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, deathText);
-                playerConnection.sendPacket(deathPacket);
+                playerConnection.sendPacket(DeathCombatEventPacket.of(getEntityId(), -1, deathText));
             }
 
             // #buildDeathMessage can return null, check here

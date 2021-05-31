@@ -13,6 +13,14 @@ public class DeathCombatEventPacket implements ServerPacket {
     public int entityId;
     public Component message = Component.empty();
 
+    public static DeathCombatEventPacket of(int playerId, int entityId, Component message) {
+        DeathCombatEventPacket packet = new DeathCombatEventPacket();
+        packet.playerId = playerId;
+        packet.entityId = entityId;
+        packet.message = message;
+        return packet;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.playerId = reader.readVarInt();

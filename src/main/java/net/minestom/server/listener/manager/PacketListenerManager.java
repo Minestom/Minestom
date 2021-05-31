@@ -28,7 +28,6 @@ public final class PacketListenerManager {
         setListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
         setListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
-        setListener(ClientWindowConfirmationPacket.class, WindowListener::windowConfirmationListener);
         setListener(ClientEntityActionPacket.class, EntityActionListener::listener);
         setListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
         setListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);

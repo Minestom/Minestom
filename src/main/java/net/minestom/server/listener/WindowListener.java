@@ -8,9 +8,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.client.play.ClientWindowConfirmationPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
-import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 
 import java.util.Objects;
 
@@ -99,13 +97,6 @@ public class WindowListener {
                 inventory.update(player);
             }
         }
-
-        WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
-        windowConfirmationPacket.windowId = windowId;
-        windowConfirmationPacket.actionNumber = actionNumber;
-        windowConfirmationPacket.accepted = successful;
-
-        player.getPlayerConnection().sendPacket(windowConfirmationPacket);
     }
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
@@ -118,10 +109,6 @@ public class WindowListener {
         Inventory newInventory = inventoryCloseEvent.getNewInventory();
         if (newInventory != null)
             player.openInventory(newInventory);
-    }
-
-    public static void windowConfirmationListener(ClientWindowConfirmationPacket packet, Player player) {
-        // Empty
     }
 
     /**
