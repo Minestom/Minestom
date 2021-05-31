@@ -165,6 +165,14 @@ public class EntityMeta {
         this.metadata.setIndex((byte) 6, Metadata.Pose(value));
     }
 
+    public int getTickFrozen() {
+        return this.metadata.getIndex((byte) 7, 0);
+    }
+
+    public void setTickFrozen(int tickFrozen) {
+        this.metadata.setIndex((byte) 7, Metadata.VarInt(tickFrozen));
+    }
+
     protected byte getMask(byte index) {
         return this.metadata.getIndex(index, (byte) 0);
     }
