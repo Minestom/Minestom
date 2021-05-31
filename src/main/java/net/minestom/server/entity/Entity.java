@@ -394,9 +394,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             return false;
         }
 
-        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
-        player.getPlayerConnection().sendPacket(destroyEntitiesPacket);
+        DestroyEntityPacket destroyEntityPacket = new DestroyEntityPacket();
+        destroyEntityPacket.entityId = getEntityId();
+        player.getPlayerConnection().sendPacket(destroyEntityPacket);
         player.viewableEntities.remove(this);
         return true;
     }

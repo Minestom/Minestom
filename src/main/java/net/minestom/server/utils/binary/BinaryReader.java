@@ -200,6 +200,10 @@ public class BinaryReader extends InputStream {
         return GsonComponentSerializer.gson().deserialize(jsonObject);
     }
 
+    public Component readComponent() {
+        return readComponent(Integer.MAX_VALUE);
+    }
+
     /**
      * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader.
      *

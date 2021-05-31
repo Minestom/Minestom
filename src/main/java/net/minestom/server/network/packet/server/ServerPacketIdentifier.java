@@ -24,7 +24,7 @@ public class ServerPacketIdentifier {
     public static final int BOSS_BAR = 0x0D;
     public static final int SERVER_DIFFICULTY = 0x0E;
     public static final int CHAT_MESSAGE = 0x0F;
-    // TODO clear titles
+    public static final int CLEAR_TITLES = 0x10;
     public static final int TAB_COMPLETE = 0x11;
     public static final int DECLARE_COMMANDS = 0x12;
     //public static final int WINDOW_CONFIRMATION = 0x11;
@@ -41,7 +41,7 @@ public class ServerPacketIdentifier {
     public static final int UNLOAD_CHUNK = 0x1D;
     public static final int CHANGE_GAME_STATE = 0x1E;
     public static final int OPEN_HORSE_WINDOW = 0x1F;
-    // TODO initialize world border
+    public static final int INITIALIZE_WORLD_BORDER = 0x20;
     public static final int KEEP_ALIVE = 0x21;
     public static final int CHUNK_DATA = 0x22;
     public static final int EFFECT = 0x23;
@@ -60,22 +60,26 @@ public class ServerPacketIdentifier {
     public static final int OPEN_SIGN_EDITOR = 0x2F;
     public static final int CRAFT_RECIPE_RESPONSE = 0x30;
     public static final int PLAYER_ABILITIES = 0x31;
-    //public static final int COMBAT_EVENT = 0x31;
-    // TODO END/ENTER/DEATH combat event
+    public static final int END_COMBAT_EVENT = 0x32;
+    public static final int ENTER_COMBAT_EVENT = 0x33;
+    public static final int DEATH_COMBAT_EVENT = 0x34;
     public static final int PLAYER_INFO = 0x35;
     public static final int FACE_PLAYER = 0x36;
     public static final int PLAYER_POSITION_AND_LOOK = 0x37;
     public static final int UNLOCK_RECIPES = 0x38;
-    // TODO destroy entity
-    //public static final int DESTROY_ENTITIES = 0x36;
+    public static final int DESTROY_ENTITY = 0x39;
     public static final int REMOVE_ENTITY_EFFECT = 0x3A;
     public static final int RESOURCE_PACK_SEND = 0x3B;
     public static final int RESPAWN = 0x3C;
     public static final int ENTITY_HEAD_LOOK = 0x3D;
     public static final int MULTI_BLOCK_CHANGE = 0x3E;
     public static final int SELECT_ADVANCEMENT_TAB = 0x3F;
-    // TODO action bar, wordborder packets
-    //public static final int WORLD_BORDER = 0x3D;
+    public static final int ACTION_BAR = 0x40;
+    public static final int WORLD_BORDER_CENTER = 0x41;
+    public static final int WORLD_BORDER_LERP_SIZE = 0x42;
+    public static final int WORLD_BORDER_SIZE = 0x43;
+    public static final int WORLD_BORDER_WARNING_DELAY = 0x44;
+    public static final int WORLD_BORDER_WARNING_REACH = 0x45;
     public static final int CAMERA = 0x46;
     public static final int HELD_ITEM_CHANGE = 0x47;
     public static final int UPDATE_VIEW_POSITION = 0x48;
@@ -92,9 +96,10 @@ public class ServerPacketIdentifier {
     public static final int SET_PASSENGERS = 0x53;
     public static final int TEAMS = 0x54;
     public static final int UPDATE_SCORE = 0x55;
-    // TODO set title subtitle
+    public static final int SET_TITLE_SUBTITLE = 0x56;
     public static final int TIME_UPDATE = 0x57;
-    // TODO set title text/time
+    public static final int SET_TITLE_TEXT = 0x58;
+    public static final int SET_TITLE_TIME = 0x59;
     //public static final int TITLE = 0x4F;
     public static final int ENTITY_SOUND_EFFECT = 0x5A;
     public static final int SOUND_EFFECT = 0x5B;

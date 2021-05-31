@@ -1229,8 +1229,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (instance == null)
             return;
 
-        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+        DestroyEntityPacket destroyEntityPacket = new DestroyEntityPacket();
+        destroyEntityPacket.entityId = getEntityId();
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
@@ -1241,14 +1241,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         respawnPacket.isFlat = levelFlat;
 
         playerConnection.sendPacket(removePlayerPacket);
-        playerConnection.sendPacket(destroyEntitiesPacket);
+        playerConnection.sendPacket(destroyEntityPacket);
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
 
         {
             // Remove player
             sendPacketToViewers(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
+            sendPacketToViewers(destroyEntityPacket);
 
             // Show player again
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
