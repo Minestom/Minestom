@@ -35,4 +35,13 @@ public class UpdateOption {
         UpdateOption updateOption = (UpdateOption) o;
         return Objects.equals(value, updateOption.value) && Objects.equals(timeUnit, updateOption.timeUnit);
     }
+
+    /**
+     * Converts this update option to milliseconds
+     *
+     * @return the converted milliseconds based on the time value and the unit
+     */
+    public long toMilliseconds() {
+        return timeUnit.toMilliseconds(value);
+    }
 }
