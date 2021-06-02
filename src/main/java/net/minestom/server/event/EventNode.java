@@ -45,6 +45,10 @@ public interface EventNode<T extends Event> {
 
     void removeListener(@NotNull EventListener<? extends T> listener);
 
+    <E extends T, V> void map(@NotNull EventFilter<E, V> filter, @NotNull V value, @NotNull EventNode<E> node);
+
+    void removeMap(@NotNull Object value);
+
     @NotNull String getName();
 
     @NotNull List<@NotNull EventNode<T>> getChildren();

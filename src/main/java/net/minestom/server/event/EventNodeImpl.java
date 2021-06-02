@@ -13,6 +13,7 @@ class EventNodeImpl<T extends Event, H> implements EventNode<T> {
     private final String name = "debug";
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
+    private final Map<Object, RedirectionEntry<T>> redirectionMap = new ConcurrentHashMap<>();
     private final List<EventNode<T>> children = new CopyOnWriteArrayList<>();
 
     protected final EventFilter<T, H> filter;
@@ -41,6 +42,13 @@ class EventNodeImpl<T extends Event, H> implements EventNode<T> {
             // Cancelled by superclass
             return;
         }
+        // Process redirection
+        final H handler = filter.getHandler(event);
+        final var entry = redirectionMap.get(handler);
+        if (entry != null) {
+            entry.node.call(event);
+        }
+        // Process listener list
         final var listeners = listenerMap.get(event.getClass());
         if (listeners != null && !listeners.isEmpty()) {
             listeners.forEach(listener -> {
@@ -50,6 +58,7 @@ class EventNodeImpl<T extends Event, H> implements EventNode<T> {
                 }
             });
         }
+        // Process children
         this.children.forEach(eventNode -> eventNode.call(event));
     }
 
@@ -78,6 +87,19 @@ class EventNodeImpl<T extends Event, H> implements EventNode<T> {
     }
 
     @Override
+    public <E extends T, V> void map(@NotNull EventFilter<E, V> filter, @NotNull V value, @NotNull EventNode<E> node) {
+        RedirectionEntry<E> entry = new RedirectionEntry<>();
+        entry.filter = filter;
+        entry.node = node;
+        this.redirectionMap.put(value, (RedirectionEntry<T>) entry);
+    }
+
+    @Override
+    public void removeMap(@NotNull Object value) {
+        this.redirectionMap.remove(value);
+    }
+
+    @Override
     public @NotNull String getName() {
         return name;
     }
@@ -85,5 +107,10 @@ class EventNodeImpl<T extends Event, H> implements EventNode<T> {
     @Override
     public @NotNull List<@NotNull EventNode<T>> getChildren() {
         return Collections.unmodifiableList(children);
+    }
+
+    private static class RedirectionEntry<E extends Event> {
+        EventFilter<E, ?> filter;
+        EventNode<E> node;
     }
 }
