@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
 
-    static <E extends Event, H extends EventHandler> EventNode<E> type(@NotNull EventFilter<E, H> filter) {
+    static <E extends Event> EventNode<E> type(@NotNull EventFilter<E, ? extends EventHandler> filter) {
         return new EventNodeImpl<>(filter);
     }
 
