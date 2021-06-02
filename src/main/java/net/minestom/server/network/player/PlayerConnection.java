@@ -95,7 +95,7 @@ public abstract class PlayerConnection {
     }
 
     /**
-     * Serializes the packet and send it to the client, skipping the translation phase.
+     * Serializes the packet and send it to the client, optionally skipping the translation phase.
      * <p>
      * Also responsible for executing {@link ConnectionManager#onPacketSend(ServerPacketConsumer)} consumers.
      *

@@ -27,7 +27,6 @@ public final class MojangUtils {
             .softValues()
             .build();
 
-
     @Nullable
     public static JsonObject fromUuid(@NotNull String uuid) {
 

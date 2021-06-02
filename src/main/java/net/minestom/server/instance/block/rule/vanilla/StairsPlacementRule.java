@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block.rule.vanilla;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -7,7 +8,6 @@ import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -113,10 +113,10 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @Nullable
     private Shape getShapeFromSide(@NotNull Pair<Shape, Facing> side, @NotNull Facing facing, @NotNull Shape right, @NotNull Shape left) {
-        if (side.getLeft() == null) {
+        if (side.left() == null) {
             return null;
         }
-        Facing sideFacing = side.getRight();
+        Facing sideFacing = side.right();
         if (facing.equals(Facing.NORTH)) {
             if (sideFacing.equals(Facing.EAST)) {
                 return right;

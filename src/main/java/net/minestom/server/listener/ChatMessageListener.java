@@ -6,10 +6,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
-import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -26,21 +26,30 @@ public class ChatMessageListener {
         final String cmdPrefix = CommandManager.COMMAND_PREFIX;
         if (message.startsWith(cmdPrefix)) {
             // The message is a command
-            message = message.replaceFirst(cmdPrefix, "");
+            final String command = message.replaceFirst(cmdPrefix, "");
 
-            COMMAND_MANAGER.execute(player, message);
+            // check if we can receive commands
+            if (Messenger.canReceiveCommand(player)) {
+                COMMAND_MANAGER.execute(player, command);
+            } else {
+                Messenger.sendRejectionMessage(player);
+            }
 
             // Do not call chat event
             return;
         }
 
+        // check if we can receive messages
+        if (!Messenger.canReceiveMessage(player)) {
+            Messenger.sendRejectionMessage(player);
+            return;
+        }
+
         final Collection<Player> players = CONNECTION_MANAGER.getOnlinePlayers();
-        String finalMessage = message;
-        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, finalMessage), message);
+        PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, () -> buildDefaultChatMessage(player, message), message);
 
         // Call the event
         player.callCancellableEvent(PlayerChatEvent.class, playerChatEvent, () -> {
-
             final Function<PlayerChatEvent, Component> formatFunction = playerChatEvent.getChatFormatFunction();
 
             Component textObject;
@@ -55,15 +64,10 @@ public class ChatMessageListener {
 
             final Collection<Player> recipients = playerChatEvent.getRecipients();
             if (!recipients.isEmpty()) {
-                // Send the message with the correct player UUID
-                ChatMessagePacket chatMessagePacket =
-                        new ChatMessagePacket(textObject, ChatMessagePacket.Position.CHAT, player.getUuid());
-
-                PacketUtils.sendGroupedPacket(recipients, chatMessagePacket);
+                // delegate to the messenger to avoid sending messages we shouldn't be
+                Messenger.sendMessage(recipients, textObject, ChatPosition.CHAT, player.getUuid());
             }
-
         });
-
     }
 
     private static @NotNull Component buildDefaultChatMessage(@NotNull Player player, @NotNull String message) {

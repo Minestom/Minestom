@@ -12,7 +12,8 @@ import net.kyori.adventure.title.Title;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.ChatMessagePacket;
+import net.minestom.server.message.ChatPosition;
+import net.minestom.server.message.Messenger;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
 import net.minestom.server.network.packet.server.play.TitlePacket;
 import net.minestom.server.utils.PacketUtils;
@@ -46,7 +47,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new ChatMessagePacket(message, ChatMessagePacket.Position.fromMessageType(type), source.uuid()));
+        Messenger.sendMessage(this.getPlayers(), message, ChatPosition.fromMessageType(type), source.uuid());
     }
 
     @Override

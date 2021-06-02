@@ -20,10 +20,10 @@ import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
-import org.apache.commons.text.similarity.JaroWinklerDistance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -83,7 +84,6 @@ public final class ConnectionManager {
 
     /**
      * Finds the closest player matching a given username.
-     * <p>
      *
      * @param username the player username (can be partial)
      * @return the closest match, null if no players are online
@@ -91,18 +91,17 @@ public final class ConnectionManager {
     public @Nullable Player findPlayer(@NotNull String username) {
         Player exact = getPlayer(username);
         if (exact != null) return exact;
+        final String username1 = username.toLowerCase(Locale.ROOT);
 
-        String lowercase = username.toLowerCase();
-        double currentDistance = 0;
-        for (Player player : getOnlinePlayers()) {
-            final JaroWinklerDistance jaroWinklerDistance = new JaroWinklerDistance();
-            final double distance = jaroWinklerDistance.apply(lowercase, player.getUsername().toLowerCase());
-            if (distance > currentDistance) {
-                currentDistance = distance;
-                exact = player;
-            }
-        }
-        return exact;
+        Function<Player, Double> distanceFunction = player -> {
+            final String username2 = player.getUsername().toLowerCase(Locale.ROOT);
+            return StringUtils.jaroWinklerScore(username1, username2);
+        };
+        return getOnlinePlayers()
+                .stream()
+                .min(Comparator.comparingDouble(distanceFunction::apply))
+                .filter(player -> distanceFunction.apply(player) > 0)
+                .orElse(null);
     }
 
     /**
@@ -188,8 +187,12 @@ public final class ConnectionManager {
      * Gets all the listeners which are called for each packet received.
      *
      * @return a list of packet's consumers
+     * @deprecated all packet listening methods will ultimately be removed.
+     * May or may not work depending on the packet.
+     * It is instead recommended to use a proxy, improving scalability and increasing server performance
      */
     @NotNull
+    @Deprecated
     public List<ClientPacketConsumer> getReceivePacketConsumers() {
         return receiveClientPacketConsumers;
     }
@@ -198,7 +201,11 @@ public final class ConnectionManager {
      * Adds a consumer to call once a packet is received.
      *
      * @param clientPacketConsumer the packet consumer
+     * @deprecated all packet listening methods will ultimately be removed.
+     * May or may not work depending on the packet.
+     * It is instead recommended to use a proxy, improving scalability and increasing server performance
      */
+    @Deprecated
     public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
         this.receiveClientPacketConsumers.add(clientPacketConsumer);
     }
@@ -207,8 +214,12 @@ public final class ConnectionManager {
      * Gets all the listeners which are called for each packet sent.
      *
      * @return a list of packet's consumers
+     * @deprecated all packet listening methods will ultimately be removed.
+     * May or may not work depending on the packet.
+     * It is instead recommended to use a proxy, improving scalability and increasing server performance
      */
     @NotNull
+    @Deprecated
     public List<ServerPacketConsumer> getSendPacketConsumers() {
         return sendClientPacketConsumers;
     }
@@ -217,7 +228,11 @@ public final class ConnectionManager {
      * Adds a consumer to call once a packet is sent.
      *
      * @param serverPacketConsumer the packet consumer
+     * @deprecated all packet listening methods will ultimately be removed.
+     * May or may not work depending on the packet.
+     * It is instead recommended to use a proxy, improving scalability and increasing server performance
      */
+    @Deprecated
     public void onPacketSend(@NotNull ServerPacketConsumer serverPacketConsumer) {
         this.sendClientPacketConsumers.add(serverPacketConsumer);
     }
