@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 
-public class EventNodeMap<T extends Event, H extends EventHandler> extends EventNodeImpl<T> {
+public class EventNodeList<T extends Event, H extends EventHandler> extends EventNodeImpl<T> {
 
     private final Function<T, H> handlerGetter;
 
     private final List<H> entries = new CopyOnWriteArrayList<>();
 
-    protected EventNodeMap(Class<T> eventType, Function<T, H> handlerGetter) {
+    protected EventNodeList(Class<T> eventType, Function<T, H> handlerGetter) {
         super(eventType);
         this.handlerGetter = handlerGetter;
     }

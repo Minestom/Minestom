@@ -18,15 +18,15 @@ public interface EventNode<T extends Event> {
         return create(Event.class);
     }
 
-    static <E extends Event> EventNode<E> conditional(@NotNull Class<E> type,
-                                                      @NotNull Predicate<E> predicate) {
+    static <E extends Event> EventNodeConditional<E> conditional(@NotNull Class<E> type,
+                                                                 @NotNull Predicate<E> predicate) {
         return new EventNodeConditional<>(type, predicate);
     }
 
-    static <E extends Event, H extends EventHandler> EventNode<E> map(@NotNull Class<E> eventType,
-                                                                      @NotNull Class<H> handlerType,
-                                                                      @NotNull Function<E, H> handlerGetter) {
-        return new EventNodeMap<>(eventType, handlerGetter);
+    static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull Class<E> eventType,
+                                                                              @NotNull Class<H> handlerType,
+                                                                              @NotNull Function<E, H> handlerGetter) {
+        return new EventNodeList<>(eventType, handlerGetter);
     }
 
     void call(@NotNull T event);
