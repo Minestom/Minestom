@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class EventNode<T extends Event> {
@@ -34,6 +36,12 @@ public class EventNode<T extends Event> {
     public static <E extends Event> EventNode<E> conditional(@NotNull Class<E> type,
                                                              @NotNull Predicate<E> predicate) {
         return new EventNodeConditional<>(type, predicate);
+    }
+
+    public static <E extends Event, H extends EventHandler> EventNode<E> map(@NotNull Class<E> eventType,
+                                                                             @NotNull Class<H> handlerType,
+                                                                             @NotNull Function<E, H> handlerGetter) {
+        return new EventNodeMap<>(eventType, handlerGetter);
     }
 
     protected boolean condition(@NotNull T event) {
