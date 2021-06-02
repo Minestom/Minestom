@@ -23,14 +23,12 @@ public class EventNode<T extends Event> {
         this.type = type;
     }
 
-    private static final EventNode<Event> EMPTY = new EventNode<>(Event.class);
-
-    public static EventNode<Event> create() {
-        return EMPTY;
-    }
-
     public static <E extends Event> EventNode<E> create(@NotNull Class<E> type) {
         return new EventNode<>(type);
+    }
+
+    public static EventNode<Event> create() {
+        return create(Event.class);
     }
 
     public static <E extends Event> EventNode<E> conditional(@NotNull Class<E> type,
