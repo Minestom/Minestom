@@ -6,22 +6,25 @@ import java.util.function.Predicate;
 
 public class EventNodeConditional<T extends Event> extends EventNode<T> {
 
+    private final Class<T> type;
     private volatile Predicate<T> predicate;
 
-    protected EventNodeConditional(Predicate<T> predicate) {
+    protected EventNodeConditional(Class<T> type, Predicate<T> predicate) {
+        this.type = type;
         this.predicate = predicate;
     }
 
     @Override
     protected boolean isValid(@NotNull T event) {
-        return predicate.test(event);
+        final boolean typeCheck = type.isAssignableFrom(event.getClass());
+        return typeCheck && predicate.test(event);
     }
 
-    public Predicate<T> getPredicate() {
+    public @NotNull Predicate<@NotNull T> getPredicate() {
         return predicate;
     }
 
-    public void setPredicate(Predicate<T> predicate) {
+    public void setPredicate(@NotNull Predicate<@NotNull T> predicate) {
         this.predicate = predicate;
     }
 }

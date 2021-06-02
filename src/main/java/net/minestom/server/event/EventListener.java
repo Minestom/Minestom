@@ -9,18 +9,16 @@ import java.util.function.Predicate;
 
 public class EventListener<T extends Event> {
 
-    private final Consumer<T> combined;
+    protected final Class<T> type;
+    protected final Consumer<T> combined;
 
-    private EventListener(@NotNull Consumer<T> combined) {
+    private EventListener(@NotNull Class<T> type, @NotNull Consumer<T> combined) {
+        this.type = type;
         this.combined = combined;
     }
 
-    public static <T extends Event> EventListener.Builder<T> of(Class<T> eventType) {
+    public static <T extends Event> EventListener.Builder<T> of(@NotNull Class<T> eventType) {
         return new EventListener.Builder<>(eventType);
-    }
-
-    protected Consumer<T> getCombined() {
-        return combined;
     }
 
     public static class Builder<T extends Event> {
@@ -45,7 +43,7 @@ public class EventListener<T extends Event> {
         }
 
         public EventListener<T> build() {
-            return new EventListener<>(event -> {
+            return new EventListener<>(eventType, event -> {
                 // Filtering
                 if (!filters.isEmpty()) {
                     if (filters.stream().anyMatch(filter -> !filter.test(event))) {
@@ -53,7 +51,6 @@ public class EventListener<T extends Event> {
                         return;
                     }
                 }
-
                 // Handler
                 if (handler != null) {
                     handler.accept(event);
