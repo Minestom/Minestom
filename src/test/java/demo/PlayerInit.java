@@ -142,6 +142,10 @@ public class PlayerInit {
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
                 .build());
 
+        var empty = EventNode.create();
+        empty.addListener(PlayerMoveEvent.class, (event) -> {
+        });
+
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
