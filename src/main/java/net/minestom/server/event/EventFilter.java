@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 public interface EventFilter<E extends Event, H> {
 
-    EventFilter<Event, ?> ALL = from(Event.class);
+    EventFilter<Event, ?> ALL = from(Event.class, null);
     EventFilter<EntityEvent, Entity> ENTITY = from(EntityEvent.class, EntityEvent::getEntity);
     EventFilter<PlayerEvent, Player> PLAYER = from(PlayerEvent.class, PlayerEvent::getPlayer);
     EventFilter<ItemEvent, ItemStack> ITEM = from(ItemEvent.class, ItemEvent::getItemStack);
@@ -33,10 +33,6 @@ public interface EventFilter<E extends Event, H> {
                 return eventType;
             }
         };
-    }
-
-    static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> type) {
-        return from(type, null);
     }
 
     @Nullable H getHandler(@NotNull E event);
