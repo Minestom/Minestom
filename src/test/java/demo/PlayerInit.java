@@ -19,7 +19,6 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -138,7 +137,7 @@ public class PlayerInit {
 
         // EVENT REGISTERING
 
-        var node = EventNode.type(PlayerEvent.class);
+        var node = EventNode.type(EventFilter.PLAYER);
         node.addListener(EventListener.of(PlayerTickEvent.class)
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
                 .expirationCount(2)

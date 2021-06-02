@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -8,17 +9,17 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-class EventNodeImpl<T extends Event> implements EventNode<T> {
+class EventNodeImpl<T extends Event, H extends EventHandler> implements EventNode<T> {
 
     private final String name = "debug";
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
     private final List<EventNode<T>> children = new CopyOnWriteArrayList<>();
 
-    protected final Class<T> type;
+    protected final EventFilter<T, H> filter;
 
-    protected EventNodeImpl(Class<T> type) {
-        this.type = type;
+    protected EventNodeImpl(EventFilter<T, H> filter) {
+        this.filter = filter;
     }
 
     protected boolean condition(@NotNull T event) {
@@ -27,7 +28,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public void call(@NotNull T event) {
-        if (!type.isAssignableFrom(event.getClass())) {
+        if (!filter.getEventType().isAssignableFrom(event.getClass())) {
             // Invalid event type
             return;
         }

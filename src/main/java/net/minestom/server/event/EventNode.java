@@ -5,36 +5,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
 
-    static <E extends Event> EventNode<E> type(@NotNull EventFilter<E, EventHandler> filter) {
-        return new EventNodeImpl<>(filter.getEventType());
-    }
-
-    static <E extends Event> EventNode<E> type(@NotNull Class<E> type) {
-        return type(EventFilter.from(type));
+    static <E extends Event, H extends EventHandler> EventNode<E> type(@NotNull EventFilter<E, H> filter) {
+        return new EventNodeImpl<>(filter);
     }
 
     static EventNode<Event> all() {
         return type(EventFilter.ALL);
     }
 
-    static <E extends Event> EventNodeConditional<E> conditional(@NotNull Class<E> type,
-                                                                 @NotNull Predicate<E> predicate) {
-        return new EventNodeConditional<>(type, predicate);
+    static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditional(@NotNull EventFilter<E, H> filter,
+                                                                                            @NotNull Predicate<E> predicate) {
+        return new EventNodeConditional<>(filter, predicate);
     }
 
     static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull EventFilter<E, H> filter) {
         return new EventNodeList<>(filter);
-    }
-
-    static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull Class<E> eventType,
-                                                                              @NotNull Class<H> handlerType,
-                                                                              @NotNull Function<E, H> handlerGetter) {
-        return list(EventFilter.from(eventType, handlerType, handlerGetter));
     }
 
     void call(@NotNull T event);

@@ -6,15 +6,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventNodeList<T extends Event, H extends EventHandler> extends EventNodeImpl<T> {
-
-    private final EventFilter<T, H> filter;
+public class EventNodeList<T extends Event, H extends EventHandler> extends EventNodeImpl<T, H> {
 
     private final List<H> entries = new CopyOnWriteArrayList<>();
 
     protected EventNodeList(EventFilter<T, H> filter) {
-        super(filter.getEventType());
-        this.filter = filter;
+        super(filter);
     }
 
     @Override
