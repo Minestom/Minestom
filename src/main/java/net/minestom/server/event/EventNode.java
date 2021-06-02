@@ -10,12 +10,16 @@ import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
 
+    static <E extends Event> EventNode<E> type(@NotNull EventFilter<E, EventHandler> filter) {
+        return new EventNodeImpl<>(filter.getEventType());
+    }
+
     static <E extends Event> EventNode<E> type(@NotNull Class<E> type) {
-        return new EventNodeImpl<>(type);
+        return type(EventFilter.from(type));
     }
 
     static EventNode<Event> all() {
-        return type(Event.class);
+        return type(EventFilter.ALL);
     }
 
     static <E extends Event> EventNodeConditional<E> conditional(@NotNull Class<E> type,
@@ -23,10 +27,18 @@ public interface EventNode<T extends Event> {
         return new EventNodeConditional<>(type, predicate);
     }
 
+    static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull EventFilter<E, H> filter) {
+        return new EventNodeList<>(filter);
+    }
+
+    static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull Class<E> eventType, EventFilter<? super E, H> parser) {
+        return (EventNodeList<E, H>) list(parser);
+    }
+
     static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull Class<E> eventType,
                                                                               @NotNull Class<H> handlerType,
                                                                               @NotNull Function<E, H> handlerGetter) {
-        return new EventNodeList<>(eventType, handlerGetter);
+        return list(EventFilter.from(eventType, handlerType, handlerGetter));
     }
 
     void call(@NotNull T event);

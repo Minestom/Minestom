@@ -11,6 +11,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
@@ -147,8 +148,8 @@ public class PlayerInit {
         empty.addListener(PlayerMoveEvent.class, (event) -> {
         });
 
-        var map = EventNode.list(PlayerEvent.class, Player.class, PlayerEvent::getPlayer);
-        map.addListener(PlayerMoveEvent.class, playerMoveEvent -> {
+        var list = EventNode.list(EventFilter.PLAYER);
+        list.addListener(PlayerMoveEvent.class, playerMoveEvent -> {
             System.out.println("move");
         });
 

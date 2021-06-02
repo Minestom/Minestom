@@ -28,7 +28,7 @@ public class EventListener<T extends Event> {
 
         private final Class<T> eventType;
 
-        private List<Predicate<T>> filters = new ArrayList<>();
+        private final List<Predicate<T>> filters = new ArrayList<>();
         private int expirationCount;
         private UpdateOption expirationTime;
         private Consumer<T> handler;
@@ -44,6 +44,11 @@ public class EventListener<T extends Event> {
 
         public EventListener.Builder<T> expirationCount(int expirationCount) {
             this.expirationCount = expirationCount;
+            return this;
+        }
+
+        public EventListener.Builder<T> expirationTime(UpdateOption expirationTime) {
+            this.expirationTime = expirationTime;
             return this;
         }
 

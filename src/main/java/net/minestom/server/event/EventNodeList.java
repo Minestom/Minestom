@@ -5,22 +5,21 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
 
 public class EventNodeList<T extends Event, H extends EventHandler> extends EventNodeImpl<T> {
 
-    private final Function<T, H> handlerGetter;
+    private final EventFilter<T, H> filter;
 
     private final List<H> entries = new CopyOnWriteArrayList<>();
 
-    protected EventNodeList(Class<T> eventType, Function<T, H> handlerGetter) {
-        super(eventType);
-        this.handlerGetter = handlerGetter;
+    protected EventNodeList(EventFilter<T, H> filter) {
+        super(filter.getEventType());
+        this.filter = filter;
     }
 
     @Override
     protected boolean condition(@NotNull T event) {
-        final var eventHandler = handlerGetter.apply(event);
+        final var eventHandler = filter.getHandler(event);
         return entries.contains(eventHandler);
     }
 
