@@ -51,8 +51,12 @@ public class EventNode<T extends Event> {
         }
         final var listeners = listenerMap.get(event.getClass());
         if (listeners != null && !listeners.isEmpty()) {
-            listeners.forEach(eventListener ->
-                    eventListener.combined.accept(event));
+            listeners.forEach(listener -> {
+                final EventListener.Result result = listener.executor.apply(event);
+                if (result == EventListener.Result.EXPIRED) {
+                    listeners.remove(listener);
+                }
+            });
         }
         this.children.forEach(eventNode -> eventNode.call(event));
     }

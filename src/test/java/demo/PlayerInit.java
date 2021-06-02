@@ -140,6 +140,7 @@ public class PlayerInit {
         var node = EventNode.create(PlayerEvent.class);
         node.addListener(EventListener.of(PlayerTickEvent.class)
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
+                .expirationCount(2)
                 .build());
 
         var empty = EventNode.create();
