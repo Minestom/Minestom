@@ -29,13 +29,13 @@ public class EventNode<T extends Event> {
         return EMPTY;
     }
 
+    public static <E extends Event> EventNode<E> create(@NotNull Class<E> type) {
+        return new EventNode<>(type);
+    }
+
     public static <E extends Event> EventNode<E> conditional(@NotNull Class<E> type,
                                                              @NotNull Predicate<E> predicate) {
         return new EventNodeConditional<>(type, predicate);
-    }
-
-    public static <E extends Event> EventNode<E> conditional(@NotNull Class<E> eventType) {
-        return conditional(eventType, t -> true);
     }
 
     protected boolean condition(@NotNull T event) {
