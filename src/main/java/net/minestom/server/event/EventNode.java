@@ -32,6 +32,6 @@ public class EventNode<T extends EventTrait> {
     public void addListener(EventListener<? extends T> listener) {
     }
 
-    public <E extends Event> void addListener(Class<E> eventClass, Consumer<E> listener) {
+    public <E extends T> void addListener(Class<E> eventClass, Consumer<E> listener) {
     }
 }
