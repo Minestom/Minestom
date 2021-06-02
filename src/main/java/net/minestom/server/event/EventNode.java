@@ -33,6 +33,8 @@ public interface EventNode<T extends Event> {
 
     void addChild(@NotNull EventNode<? extends T> child);
 
+    void removeChild(@NotNull EventNode<? extends T> child);
+
     void addListener(@NotNull EventListener<? extends T> listener);
 
     void removeListener(@NotNull EventListener<? extends T> listener);

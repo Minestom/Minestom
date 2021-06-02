@@ -53,6 +53,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    public void removeChild(@NotNull EventNode<? extends T> child) {
+        this.children.remove(child);
+    }
+
+    @Override
     public void addListener(@NotNull EventListener<? extends T> listener) {
         this.listenerMap.computeIfAbsent(listener.type, aClass -> new CopyOnWriteArrayList<>())
                 .add((EventListener<T>) listener);
