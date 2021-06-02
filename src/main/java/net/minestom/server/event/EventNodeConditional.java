@@ -1,11 +1,10 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiPredicate;
 
-public class EventNodeConditional<T extends Event, H extends EventHandler> extends EventNodeImpl<T, H> {
+public class EventNodeConditional<T extends Event, H> extends EventNodeImpl<T, H> {
 
     private volatile BiPredicate<T, H> predicate;
 

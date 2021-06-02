@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
@@ -9,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-class EventNodeImpl<T extends Event, H extends EventHandler> implements EventNode<T> {
+class EventNodeImpl<T extends Event, H> implements EventNode<T> {
 
     private final String name = "debug";
 

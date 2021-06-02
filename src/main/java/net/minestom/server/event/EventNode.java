@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
 
-    static <E extends Event> EventNode<E> type(@NotNull EventFilter<E, ? extends EventHandler> filter) {
+    static <E extends Event> EventNode<E> type(@NotNull EventFilter<E, ?> filter) {
         return new EventNodeImpl<>(filter);
     }
 
@@ -17,22 +16,22 @@ public interface EventNode<T extends Event> {
         return type(EventFilter.ALL);
     }
 
-    static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditional(@NotNull EventFilter<E, H> filter,
-                                                                                            @NotNull BiPredicate<E, H> predicate) {
+    static <E extends Event, H> EventNodeConditional<E, H> conditional(@NotNull EventFilter<E, H> filter,
+                                                                       @NotNull BiPredicate<E, H> predicate) {
         return new EventNodeConditional<>(filter, predicate);
     }
 
-    static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditionalEvent(@NotNull EventFilter<E, H> filter,
-                                                                                                 @NotNull Predicate<E> predicate) {
+    static <E extends Event, H> EventNodeConditional<E, H> conditionalEvent(@NotNull EventFilter<E, H> filter,
+                                                                            @NotNull Predicate<E> predicate) {
         return conditional(filter, (e, h) -> predicate.test(e));
     }
 
-    static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditionalHandler(@NotNull EventFilter<E, H> filter,
-                                                                                                   @NotNull Predicate<H> predicate) {
+    static <E extends Event, H> EventNodeConditional<E, H> conditionalHandler(@NotNull EventFilter<E, H> filter,
+                                                                              @NotNull Predicate<H> predicate) {
         return conditional(filter, (e, h) -> predicate.test(h));
     }
 
-    static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull EventFilter<E, H> filter) {
+    static <E extends Event, H> EventNodeList<E, H> list(@NotNull EventFilter<E, H> filter) {
         return new EventNodeList<>(filter);
     }
 

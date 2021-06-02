@@ -1,12 +1,11 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventNodeList<T extends Event, H extends EventHandler> extends EventNodeImpl<T, H> {
+public class EventNodeList<T extends Event, H> extends EventNodeImpl<T, H> {
 
     private final List<H> entries = new CopyOnWriteArrayList<>();
 

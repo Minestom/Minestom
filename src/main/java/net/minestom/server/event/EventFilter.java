@@ -10,15 +10,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public interface EventFilter<E extends Event, H extends EventHandler> {
+public interface EventFilter<E extends Event, H> {
 
     EventFilter<Event, EventHandler> ALL = from(Event.class);
     EventFilter<EntityEvent, Entity> ENTITY = from(EntityEvent.class, Entity.class, EntityEvent::getEntity);
     EventFilter<PlayerEvent, Player> PLAYER = from(PlayerEvent.class, Player.class, PlayerEvent::getPlayer);
 
-    static <E extends Event, H extends EventHandler> EventFilter<E, H> from(@NotNull Class<E> eventType,
-                                                                            @NotNull Class<H> handlerType,
-                                                                            @NotNull Function<E, H> handlerGetter) {
+    static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> eventType,
+                                                       @NotNull Class<H> handlerType,
+                                                       @NotNull Function<E, H> handlerGetter) {
         return new EventFilter<>() {
             @Override
             public @Nullable H getHandler(@NotNull E event) {
@@ -32,7 +32,7 @@ public interface EventFilter<E extends Event, H extends EventHandler> {
         };
     }
 
-    static <E extends Event, H extends EventHandler> EventFilter<E, H> from(@NotNull Class<E> type) {
+    static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> type) {
         return new EventFilter<>() {
             @Override
             public @Nullable H getHandler(@NotNull E event) {
