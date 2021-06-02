@@ -2,22 +2,29 @@ package net.minestom.server.event.instance;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.InstanceEvent;
+import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called by an Instance when an entity is removed from it.
  */
-public class RemoveEntityFromInstanceEvent extends InstanceEvent implements CancellableEvent {
+public class RemoveEntityFromInstanceEvent implements InstanceEvent, EntityEvent, CancellableEvent {
 
+    private final Instance instance;
     private final Entity entity;
 
     private boolean cancelled;
 
     public RemoveEntityFromInstanceEvent(@NotNull Instance instance, @NotNull Entity entity) {
-        super(instance);
+        this.instance = instance;
         this.entity = entity;
+    }
+
+    @Override
+    public @NotNull Instance getInstance() {
+        return instance;
     }
 
     /**
