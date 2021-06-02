@@ -13,7 +13,7 @@ import java.util.function.Function;
 
 public interface EventFilter<E extends Event, H> {
 
-    EventFilter<Event, Object> ALL = from(Event.class);
+    EventFilter<Event, ?> ALL = from(Event.class);
     EventFilter<EntityEvent, Entity> ENTITY = from(EntityEvent.class, Entity.class, EntityEvent::getEntity);
     EventFilter<PlayerEvent, Player> PLAYER = from(PlayerEvent.class, Player.class, PlayerEvent::getPlayer);
     EventFilter<ItemEvent, ItemStack> ITEM = from(ItemEvent.class, ItemStack.class, ItemEvent::getItemStack);
@@ -21,12 +21,12 @@ public interface EventFilter<E extends Event, H> {
     EventFilter<InventoryEvent, Inventory> INVENTORY = from(InventoryEvent.class, Inventory.class, InventoryEvent::getInventory);
 
     static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> eventType,
-                                                       @NotNull Class<H> handlerType,
-                                                       @NotNull Function<E, H> handlerGetter) {
+                                                       @Nullable Class<H> handlerType,
+                                                       @Nullable Function<E, H> handlerGetter) {
         return new EventFilter<>() {
             @Override
             public @Nullable H getHandler(@NotNull E event) {
-                return handlerGetter.apply(event);
+                return handlerGetter != null ? handlerGetter.apply(event) : null;
             }
 
             @Override
@@ -37,17 +37,7 @@ public interface EventFilter<E extends Event, H> {
     }
 
     static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> type) {
-        return new EventFilter<>() {
-            @Override
-            public @Nullable H getHandler(@NotNull E event) {
-                return null;
-            }
-
-            @Override
-            public @NotNull Class<E> getEventType() {
-                return type;
-            }
-        };
+        return from(type, null, null);
     }
 
     @Nullable H getHandler(@NotNull E event);
