@@ -22,6 +22,12 @@ class EventNodeImpl<T extends Event, H extends EventHandler> implements EventNod
         this.filter = filter;
     }
 
+    /**
+     * Condition to enter the node.
+     *
+     * @param event the called event
+     * @return true to enter the node, false otherwise
+     */
     protected boolean condition(@NotNull T event) {
         return true;
     }

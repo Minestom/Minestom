@@ -147,10 +147,13 @@ public class PlayerInit {
         empty.addListener(EventListener.of(PlayerMoveEvent.class, (event) -> {
         }));
 
-        var list = EventNode.list(EventFilter.PLAYER);
-        list.addListener(EventListener.of(PlayerMoveEvent.class, playerMoveEvent -> {
-            System.out.println("move");
+        var conditional = EventNode.conditionalHandler(EventFilter.PLAYER, Player::isCreative);
+        conditional.addListener(EventListener.of(PlayerMoveEvent.class, (event) -> {
+            System.out.println("creative player moved");
         }));
+
+        var list = EventNode.list(EventFilter.PLAYER);
+        list.addListener(EventListener.of(PlayerMoveEvent.class, playerMoveEvent -> System.out.println("move")));
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {

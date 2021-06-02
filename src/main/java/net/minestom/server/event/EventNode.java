@@ -4,6 +4,7 @@ import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
@@ -17,8 +18,18 @@ public interface EventNode<T extends Event> {
     }
 
     static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditional(@NotNull EventFilter<E, H> filter,
-                                                                                            @NotNull Predicate<E> predicate) {
+                                                                                            @NotNull BiPredicate<E, H> predicate) {
         return new EventNodeConditional<>(filter, predicate);
+    }
+
+    static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditionalEvent(@NotNull EventFilter<E, H> filter,
+                                                                                                 @NotNull Predicate<E> predicate) {
+        return conditional(filter, (e, h) -> predicate.test(e));
+    }
+
+    static <E extends Event, H extends EventHandler> EventNodeConditional<E, H> conditionalHandler(@NotNull EventFilter<E, H> filter,
+                                                                                                   @NotNull Predicate<H> predicate) {
+        return conditional(filter, (e, h) -> predicate.test(h));
     }
 
     static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull EventFilter<E, H> filter) {

@@ -3,27 +3,27 @@ package net.minestom.server.event;
 import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 public class EventNodeConditional<T extends Event, H extends EventHandler> extends EventNodeImpl<T, H> {
 
-    private volatile Predicate<T> predicate;
+    private volatile BiPredicate<T, H> predicate;
 
-    protected EventNodeConditional(EventFilter<T, H> filter, Predicate<T> predicate) {
+    protected EventNodeConditional(EventFilter<T, H> filter, BiPredicate<T, H> predicate) {
         super(filter);
         this.predicate = predicate;
     }
 
     @Override
     protected boolean condition(@NotNull T event) {
-        return predicate.test(event);
+        return predicate.test(event, filter.getHandler(event));
     }
 
-    public @NotNull Predicate<@NotNull T> getPredicate() {
+    public @NotNull BiPredicate<T, H> getPredicate() {
         return predicate;
     }
 
-    public void setPredicate(@NotNull Predicate<@NotNull T> predicate) {
+    public void setPredicate(@NotNull BiPredicate<T, H> predicate) {
         this.predicate = predicate;
     }
 }
