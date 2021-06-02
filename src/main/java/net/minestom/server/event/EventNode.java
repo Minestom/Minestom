@@ -28,6 +28,9 @@ public class EventNode<T extends Event> {
         return new EventNode<>();
     }
 
+    public void addChild(EventNode<? extends T> child) {
+    }
+
     public void addListener(EventListener<? extends T> listener) {
     }
 
