@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -211,6 +211,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(net.minestom.server.utils.time.UpdateOption)">delay</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<td class="colLast">
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#makeTransient()">makeTransient</a></span>()</code></th>
 <td class="colLast">
@@ -219,7 +226,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
   reload of that extension.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(long,net.minestom.server.utils.time.TimeUnit)">repeat</a></span>&#8203;(long&nbsp;time,
       @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
@@ -227,7 +234,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(net.minestom.server.utils.time.UpdateOption)">repeat</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<td class="colLast">
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
@@ -328,6 +342,23 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
 </dl>
 </li>
 </ul>
+<a id="delay(net.minestom.server.utils.time.UpdateOption)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>delay</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;delay&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>updateOption</code> - the UpdateOption for this builder.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder, for chaining</dd>
+</dl>
+</li>
+</ul>
 <a id="repeat(long,net.minestom.server.utils.time.TimeUnit)">
 <!--   -->
 </a>
@@ -343,6 +374,23 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>time</code> - The time until the repetition</dd>
 <dd><code>unit</code> - The <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time"><code>TimeUnit</code></a> for <code>time</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder, for chaining</dd>
+</dl>
+</li>
+</ul>
+<a id="repeat(net.minestom.server.utils.time.UpdateOption)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>repeat</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;repeat&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>updateOption</code> - the UpdateOption for this builder.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>
