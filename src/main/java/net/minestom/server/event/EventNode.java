@@ -15,13 +15,13 @@ public class EventNode<T extends EventTrait> {
         return null;
     }
 
-    public static <T extends EventTrait> EventNode<T> create(Class<T> eventType) {
-        return new EventNode<>();
-    }
-
     public static <T extends EventTrait, E> EventNode<T> conditional(Class<T> eventType,
                                                                      Class<E> handlerType,
                                                                      Predicate<E> predicate) {
+        return new EventNode<>();
+    }
+
+    public static <T extends EventTrait> EventNode<T> conditional(Class<T> eventType) {
         return new EventNode<>();
     }
 
