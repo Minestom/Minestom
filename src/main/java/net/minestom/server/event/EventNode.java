@@ -10,19 +10,20 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class EventNode<T extends Event> {
+public class EventNode<T extends Event> {
 
     private final String name = "debug";
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
     private final List<EventNode<T>> children = new CopyOnWriteArrayList<>();
 
-    private static final EventNode<Event> EMPTY = new EventNode<>() {
-        @Override
-        protected boolean isValid(@NotNull Event event) {
-            return true;
-        }
-    };
+    protected final Class<T> type;
+
+    protected EventNode(Class<T> type) {
+        this.type = type;
+    }
+
+    private static final EventNode<Event> EMPTY = new EventNode<>(Event.class);
 
     public static EventNode<Event> create() {
         return EMPTY;
@@ -37,11 +38,19 @@ public abstract class EventNode<T extends Event> {
         return conditional(eventType, t -> true);
     }
 
-    protected abstract boolean isValid(@NotNull T event);
+    protected boolean condition(@NotNull T event) {
+        return true;
+    }
 
     public void call(@NotNull T event) {
-        if (!isValid(event))
+        if (!type.isAssignableFrom(event.getClass())) {
+            // Invalid event type
             return;
+        }
+        if (!condition(event)) {
+            // Cancelled by superclass
+            return;
+        }
         final var listeners = listenerMap.get(event.getClass());
         if (listeners != null && !listeners.isEmpty()) {
             listeners.forEach(eventListener ->
