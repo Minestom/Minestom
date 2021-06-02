@@ -7,28 +7,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class EventListener<T extends Event> {
+public interface EventListener<T extends Event> {
 
-    protected final Class<T> type;
-    protected final Function<T, Result> executor;
+    @NotNull Class<T> getEventType();
 
-    private EventListener(@NotNull Class<T> type, @NotNull Function<T, Result> executor) {
-        this.type = type;
-        this.executor = executor;
-    }
+    @NotNull Result run(@NotNull T event);
 
-    public static <T extends Event> EventListener.Builder<T> builder(@NotNull Class<T> eventType) {
+    static <T extends Event> EventListener.Builder<T> builder(@NotNull Class<T> eventType) {
         return new EventListener.Builder<>(eventType);
     }
 
-    public static <T extends Event> EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
-        return EventListener.builder(eventType).handler(listener).build();
+    static <T extends Event> EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
+        return new EventListener<>() {
+            @Override
+            public @NotNull Class<T> getEventType() {
+                return eventType;
+            }
+
+            @Override
+            public @NotNull Result run(@NotNull T event) {
+                listener.accept(event);
+                return Result.SUCCESS;
+            }
+        };
     }
 
-    public static class Builder<T extends Event> {
+    class Builder<T extends Event> {
 
         private final Class<T> eventType;
 
@@ -61,33 +67,40 @@ public class EventListener<T extends Event> {
             return this;
         }
 
-        public EventListener<T> build() {
+        public @NotNull EventListener<T> build() {
             AtomicInteger expirationCount = new AtomicInteger(this.expirationCount);
             final boolean hasExpirationCount = expirationCount.get() > 0;
 
             final var filters = new ArrayList<>(this.filters);
             final var handler = this.handler;
-            return new EventListener<>(eventType, event -> {
-                // Filtering
-                if (!filters.isEmpty()) {
-                    if (filters.stream().anyMatch(filter -> !filter.test(event))) {
-                        // Cancelled
-                        return Result.INVALID;
+            return new EventListener<>() {
+                @Override
+                public @NotNull Class<T> getEventType() {
+                    return eventType;
+                }
+
+                @Override
+                public @NotNull Result run(@NotNull T event) {
+                    // Filtering
+                    if (!filters.isEmpty()) {
+                        if (filters.stream().anyMatch(filter -> !filter.test(event))) {
+                            // Cancelled
+                            return Result.INVALID;
+                        }
                     }
+                    // Handler
+                    if (handler != null) {
+                        handler.accept(event);
+                    }
+                    // Expiration check
+                    if (hasExpirationCount && expirationCount.decrementAndGet() == 0) {
+                        return Result.EXPIRED;
+                    }
+                    return Result.SUCCESS;
                 }
-                // Handler
-                if (handler != null) {
-                    handler.accept(event);
-                }
-                // Expiration check
-                if (hasExpirationCount && expirationCount.decrementAndGet() == 0) {
-                    return Result.EXPIRED;
-                }
-                return Result.SUCCESS;
-            });
+            };
         }
     }
-
 
     enum Result {
         SUCCESS,

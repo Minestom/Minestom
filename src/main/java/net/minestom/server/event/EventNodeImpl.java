@@ -45,7 +45,7 @@ class EventNodeImpl<T extends Event, H extends EventHandler> implements EventNod
         final var listeners = listenerMap.get(event.getClass());
         if (listeners != null && !listeners.isEmpty()) {
             listeners.forEach(listener -> {
-                final EventListener.Result result = listener.executor.apply(event);
+                final EventListener.Result result = listener.run(event);
                 if (result == EventListener.Result.EXPIRED) {
                     listeners.remove(listener);
                 }
@@ -66,13 +66,13 @@ class EventNodeImpl<T extends Event, H extends EventHandler> implements EventNod
 
     @Override
     public void addListener(@NotNull EventListener<? extends T> listener) {
-        this.listenerMap.computeIfAbsent(listener.type, aClass -> new CopyOnWriteArrayList<>())
+        this.listenerMap.computeIfAbsent(listener.getEventType(), aClass -> new CopyOnWriteArrayList<>())
                 .add((EventListener<T>) listener);
     }
 
     @Override
     public void removeListener(@NotNull EventListener<? extends T> listener) {
-        var listeners = listenerMap.get(listener.type);
+        var listeners = listenerMap.get(listener.getEventType());
         if (listeners == null || listeners.isEmpty())
             return;
         listeners.remove(listener);
