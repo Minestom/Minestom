@@ -59,6 +59,14 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
+    public void removeListener(@NotNull EventListener<? extends T> listener) {
+        var listeners = listenerMap.get(listener.type);
+        if (listeners == null || listeners.isEmpty())
+            return;
+        listeners.remove(listener);
+    }
+
+    @Override
     public @NotNull String getName() {
         return name;
     }

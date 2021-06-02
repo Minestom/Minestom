@@ -35,6 +35,8 @@ public interface EventNode<T extends Event> {
 
     void addListener(@NotNull EventListener<? extends T> listener);
 
+    void removeListener(@NotNull EventListener<? extends T> listener);
+
     default <E extends T> void addListener(@NotNull Class<E> eventClass, @NotNull Consumer<@NotNull E> listener) {
         addListener(EventListener.of(eventClass).handler(listener).build());
     }
