@@ -1,23 +1,17 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class EventListener<T extends Event> implements ListenerAttach {
+public class EventListener<T extends Event> {
 
-    private final Class<T> eventType;
-    private final Set<EventHandler> attach = new CopyOnWriteArraySet<>();
     private final Consumer<T> combined;
 
-    private EventListener(Class<T> eventType, @NotNull Consumer<T> combined) {
-        this.eventType = eventType;
+    private EventListener(@NotNull Consumer<T> combined) {
         this.combined = combined;
     }
 
@@ -25,20 +19,8 @@ public class EventListener<T extends Event> implements ListenerAttach {
         return new EventListener.Builder<>(eventType);
     }
 
-    @Override
-    public void attachTo(@NotNull EventHandler handler) {
-        final boolean success = this.attach.add(handler);
-        if (success) {
-            handler.addEventCallback(eventType, combined::accept);
-        }
-    }
-
-    @Override
-    public void detachFrom(@NotNull EventHandler handler) {
-        final boolean success = this.attach.remove(handler);
-        if (success) {
-            handler.removeEventCallback(eventType, combined::accept);
-        }
+    protected Consumer<T> getCombined() {
+        return combined;
     }
 
     public static class Builder<T extends Event> {
@@ -63,7 +45,7 @@ public class EventListener<T extends Event> implements ListenerAttach {
         }
 
         public EventListener<T> build() {
-            return new EventListener<>(eventType, event -> {
+            return new EventListener<>(event -> {
                 // Filtering
                 if (!filters.isEmpty()) {
                     if (filters.stream().anyMatch(filter -> !filter.test(event))) {

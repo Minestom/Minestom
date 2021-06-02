@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 public class EventNode<T extends Event> {
 
     private final String name = "debug";
-    private final List<EventListener<? extends T>> listeners = new CopyOnWriteArrayList<>();
-    private final List<EventNode<? extends T>> children = new CopyOnWriteArrayList<>();
+    private final List<EventListener<T>> listeners = new CopyOnWriteArrayList<>();
+    private final List<EventNode<T>> children = new CopyOnWriteArrayList<>();
     private final Predicate<T> condition = t -> true;
 
     private EventNode() {
@@ -37,12 +37,17 @@ public class EventNode<T extends Event> {
         return new EventNode<>();
     }
 
+    public void call(@NotNull T event) {
+        this.listeners.forEach(eventListener -> eventListener.getCombined().accept(event));
+        this.children.forEach(eventNode -> eventNode.call(event));
+    }
+
     public void addChild(@NotNull EventNode<? extends T> child) {
-        this.children.add(child);
+        this.children.add((EventNode<T>) child);
     }
 
     public void addListener(@NotNull EventListener<? extends T> listener) {
-        this.listeners.add(listener);
+        this.listeners.add((EventListener<T>) listener);
     }
 
     public <E extends T> void addListener(@NotNull Class<E> eventClass, @NotNull Consumer<@NotNull E> listener) {
