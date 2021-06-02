@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Predicate;
 
-public class EventNodeConditional<T extends Event> extends EventNode<T> {
+public class EventNodeConditional<T extends Event> extends EventNodeImpl<T> {
 
     private volatile Predicate<T> predicate;
 

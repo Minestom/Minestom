@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
 
-public class EventNodeMap<T extends Event, H extends EventHandler> extends EventNode<T> {
+public class EventNodeMap<T extends Event, H extends EventHandler> extends EventNodeImpl<T> {
 
     private final Function<T, H> handlerGetter;
 
