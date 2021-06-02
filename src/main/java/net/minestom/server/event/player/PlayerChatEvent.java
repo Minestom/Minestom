@@ -4,7 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,8 +18,9 @@ import java.util.function.Supplier;
  * Called every time a {@link Player} write and send something in the chat.
  * The event can be cancelled to do not send anything, and the format can be changed.
  */
-public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerChatEvent extends Event implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final Collection<Player> recipients;
     private final Supplier<Component> defaultChatFormat;
     private String message;
@@ -29,7 +31,7 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
                            @NotNull Supplier<Component> defaultChatFormat,
                            @NotNull String message) {
-        super(player);
+        this.player = player;
         this.recipients = new ArrayList<>(recipients);
         this.defaultChatFormat = defaultChatFormat;
         this.message = message;
@@ -107,5 +109,10 @@ public class PlayerChatEvent extends PlayerEvent implements CancellableEvent {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

@@ -2,22 +2,24 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Event when an item is used without clicking on a block.
  */
-public class PlayerUseItemEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerUseItemEvent extends Event implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final Player.Hand hand;
     private final ItemStack itemStack;
 
     private boolean cancelled;
 
     public PlayerUseItemEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack) {
-        super(player);
+        this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
     }
@@ -50,5 +52,10 @@ public class PlayerUseItemEvent extends PlayerEvent implements CancellableEvent 
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

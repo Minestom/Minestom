@@ -1,20 +1,22 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player is finished eating.
  */
-public class PlayerEatEvent extends PlayerEvent {
+public class PlayerEatEvent extends Event implements PlayerEvent {
 
+    private final Player player;
     private final ItemStack foodItem;
     private final Player.Hand hand;
 
     public PlayerEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull Player.Hand hand) {
-        super(player);
+        this.player = player;
         this.foodItem = foodItem;
         this.hand = hand;
     }
@@ -30,5 +32,10 @@ public class PlayerEatEvent extends PlayerEvent {
 
     public @NotNull Player.Hand getHand() {
         return hand;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

@@ -2,20 +2,22 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.advancements.AdvancementAction;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a {@link Player} opens the advancement screens or switch the tab
  * and when he closes the screen.
  */
-public class AdvancementTabEvent extends PlayerEvent {
+public class AdvancementTabEvent extends Event implements PlayerEvent {
 
+    private final Player player;
     private final AdvancementAction action;
     private final String tabId;
 
     public AdvancementTabEvent(@NotNull Player player, @NotNull AdvancementAction action, @NotNull String tabId) {
-        super(player);
+        this.player = player;
         this.action = action;
         this.tabId = tabId;
     }
@@ -40,5 +42,10 @@ public class AdvancementTabEvent extends PlayerEvent {
     @NotNull
     public String getTabId() {
         return tabId;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

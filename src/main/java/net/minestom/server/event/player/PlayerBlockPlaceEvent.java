@@ -4,7 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -16,10 +17,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called when a player tries placing a block.
  */
-public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerBlockPlaceEvent extends Event implements PlayerEvent, CancellableEvent {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
+    private final Player player;
     private short blockStateId;
     private short customBlockId;
     private Data blockData;
@@ -32,7 +34,7 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
 
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
-        super(player);
+        this.player = player;
         this.blockStateId = block.getBlockId();
         this.blockPosition = blockPosition;
         this.hand = hand;
@@ -175,5 +177,10 @@ public class PlayerBlockPlaceEvent extends PlayerEvent implements CancellableEve
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

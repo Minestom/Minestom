@@ -2,7 +2,8 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,8 +12,9 @@ import org.jetbrains.annotations.NotNull;
  * or to cancel its processing, cancelling the event means that the player will
  * continue the animation indefinitely.
  */
-public class PlayerPreEatEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerPreEatEvent extends Event implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final ItemStack foodItem;
     private final Player.Hand hand;
     private long eatingTime;
@@ -20,7 +22,7 @@ public class PlayerPreEatEvent extends PlayerEvent implements CancellableEvent {
     private boolean cancelled;
 
     public PlayerPreEatEvent(@NotNull Player player, @NotNull ItemStack foodItem, @NotNull Player.Hand hand, long eatingTime) {
-        super(player);
+        this.player = player;
         this.foodItem = foodItem;
         this.hand = hand;
         this.eatingTime = eatingTime;
@@ -67,5 +69,10 @@ public class PlayerPreEatEvent extends PlayerEvent implements CancellableEvent {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

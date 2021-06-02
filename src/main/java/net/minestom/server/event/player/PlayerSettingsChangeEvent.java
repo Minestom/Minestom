@@ -1,16 +1,19 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called after the player signals the server that his settings has been modified.
  */
-public class PlayerSettingsChangeEvent extends PlayerEvent {
+public class PlayerSettingsChangeEvent extends Event implements PlayerEvent {
+
+    private final Player player;
 
     public PlayerSettingsChangeEvent(@NotNull Player player) {
-        super(player);
+        this.player = player;
     }
 
     /**

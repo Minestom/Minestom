@@ -2,21 +2,23 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.EntityEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a velocity is applied to an entity using {@link Entity#setVelocity(Vector)}.
  */
-public class EntityVelocityEvent extends EntityEvent implements CancellableEvent {
+public class EntityVelocityEvent extends Event implements EntityEvent, CancellableEvent {
 
+    private final Entity entity;
     private Vector velocity;
 
     private boolean cancelled;
 
     public EntityVelocityEvent(@NotNull Entity entity, @NotNull Vector velocity) {
-        super(entity);
+        this.entity = entity;
         this.velocity = velocity;
     }
 

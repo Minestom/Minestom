@@ -1,7 +1,8 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,12 +10,13 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Could be used to unload the chunk internally in order to save memory.
  */
-public class PlayerChunkUnloadEvent extends PlayerEvent {
+public class PlayerChunkUnloadEvent extends Event implements PlayerEvent {
 
+    private final Player player;
     private final int chunkX, chunkZ;
 
     public PlayerChunkUnloadEvent(@NotNull Player player, int chunkX, int chunkZ) {
-        super(player);
+        this.player = player;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
     }
@@ -35,5 +37,10 @@ public class PlayerChunkUnloadEvent extends PlayerEvent {
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

@@ -1,15 +1,23 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called at each player tick.
  */
-public class PlayerTickEvent extends PlayerEvent {
+public class PlayerTickEvent extends Event implements PlayerEvent {
+
+    private final Player player;
 
     public PlayerTickEvent(@NotNull Player player) {
-        super(player);
+        this.player = player;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }
