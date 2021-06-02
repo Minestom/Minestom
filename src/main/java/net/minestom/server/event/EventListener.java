@@ -20,8 +20,12 @@ public class EventListener<T extends Event> {
         this.executor = executor;
     }
 
-    public static <T extends Event> EventListener.Builder<T> of(@NotNull Class<T> eventType) {
+    public static <T extends Event> EventListener.Builder<T> builder(@NotNull Class<T> eventType) {
         return new EventListener.Builder<>(eventType);
+    }
+
+    public static <T extends Event> EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
+        return EventListener.builder(eventType).handler(listener).build();
     }
 
     public static class Builder<T extends Event> {

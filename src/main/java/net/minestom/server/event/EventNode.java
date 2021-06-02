@@ -4,7 +4,6 @@ import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
@@ -35,10 +34,6 @@ public interface EventNode<T extends Event> {
     void addListener(@NotNull EventListener<? extends T> listener);
 
     void removeListener(@NotNull EventListener<? extends T> listener);
-
-    default <E extends T> void addListener(@NotNull Class<E> eventClass, @NotNull Consumer<@NotNull E> listener) {
-        addListener(EventListener.of(eventClass).handler(listener).build());
-    }
 
     @NotNull String getName();
 

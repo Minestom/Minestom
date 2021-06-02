@@ -138,19 +138,19 @@ public class PlayerInit {
         // EVENT REGISTERING
 
         var node = EventNode.type(EventFilter.PLAYER);
-        node.addListener(EventListener.of(PlayerTickEvent.class)
+        node.addListener(EventListener.builder(PlayerTickEvent.class)
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
                 .expirationCount(2)
                 .build());
 
         var empty = EventNode.all();
-        empty.addListener(PlayerMoveEvent.class, (event) -> {
-        });
+        empty.addListener(EventListener.of(PlayerMoveEvent.class, (event) -> {
+        }));
 
         var list = EventNode.list(EventFilter.PLAYER);
-        list.addListener(PlayerMoveEvent.class, playerMoveEvent -> {
+        list.addListener(EventListener.of(PlayerMoveEvent.class, playerMoveEvent -> {
             System.out.println("move");
-        });
+        }));
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
