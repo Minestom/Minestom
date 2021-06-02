@@ -7,7 +7,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PickupItemEvent extends Event implements CancellableEvent {
+public class PickupItemEvent implements CancellableEvent {
 
     private final LivingEntity livingEntity;
     private final ItemEntity itemEntity;

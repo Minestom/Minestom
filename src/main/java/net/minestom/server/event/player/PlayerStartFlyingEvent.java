@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player start flying.
  */
-public class PlayerStartFlyingEvent extends Event implements PlayerEvent {
+public class PlayerStartFlyingEvent implements PlayerEvent {
 
     private final Player player;
 

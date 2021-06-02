@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called at the player connection to initialize his skin.
  */
-public class PlayerSkinInitEvent extends Event implements PlayerEvent {
+public class PlayerSkinInitEvent implements PlayerEvent {
 
     private final Player player;
     private PlayerSkin skin;

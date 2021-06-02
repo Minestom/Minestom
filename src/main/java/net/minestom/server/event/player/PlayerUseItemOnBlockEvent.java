@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
  */
-public class PlayerUseItemOnBlockEvent extends Event implements PlayerEvent {
+public class PlayerUseItemOnBlockEvent implements PlayerEvent {
 
     private final Player player;
     private final Player.Hand hand;

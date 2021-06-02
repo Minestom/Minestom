@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private final BlockPosition blockPosition;

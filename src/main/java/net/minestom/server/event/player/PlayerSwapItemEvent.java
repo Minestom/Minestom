@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player is trying to swap his main and off hand item.
  */
-public class PlayerSwapItemEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerSwapItemEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private ItemStack mainHandItem;

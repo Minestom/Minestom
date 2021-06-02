@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * Called when {@link Player#respawn()} is executed (for custom respawn or as a result of
  * {@link net.minestom.server.network.packet.client.play.ClientStatusPacket}
  */
-public class PlayerRespawnEvent extends Event implements PlayerEvent {
+public class PlayerRespawnEvent implements PlayerEvent {
 
     private final Player player;
     private Position respawnPosition;

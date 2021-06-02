@@ -4,14 +4,13 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.EntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called with {@link LivingEntity#damage(DamageType, float)}.
  */
-public class EntityDamageEvent extends Event implements EntityEvent, CancellableEvent {
+public class EntityDamageEvent implements EntityEvent, CancellableEvent {
 
     private final Entity entity;
     private final DamageType damageType;

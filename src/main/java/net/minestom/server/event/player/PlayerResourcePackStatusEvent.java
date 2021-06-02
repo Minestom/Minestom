@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player warns the server of a resource pack status.
  */
-public class PlayerResourcePackStatusEvent extends Event implements PlayerEvent {
+public class PlayerResourcePackStatusEvent implements PlayerEvent {
 
     private final Player player;
     private final ResourcePackStatus status;

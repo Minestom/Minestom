@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player is finished eating.
  */
-public class PlayerEatEvent extends Event implements PlayerEvent {
+public class PlayerEatEvent implements PlayerEvent {
 
     private final Player player;
     private final ItemStack foodItem;

@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * WARNING: defining the spawning instance is MANDATORY.
  */
-public class PlayerLoginEvent extends Event implements PlayerEvent {
+public class PlayerLoginEvent implements PlayerEvent {
 
     private final Player player;
     private Instance spawningInstance;

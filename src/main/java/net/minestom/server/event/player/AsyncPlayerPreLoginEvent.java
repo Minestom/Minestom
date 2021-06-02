@@ -11,7 +11,7 @@ import java.util.UUID;
  * Called before the player initialization, it can be used to kick the player before any connection
  * or to change his final username/uuid.
  */
-public class AsyncPlayerPreLoginEvent extends Event implements PlayerEvent {
+public class AsyncPlayerPreLoginEvent implements PlayerEvent {
 
     private final Player player;
     private String username;

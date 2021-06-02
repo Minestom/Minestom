@@ -2,12 +2,11 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityFireEvent extends Event implements EntityEvent, CancellableEvent {
+public class EntityFireEvent implements EntityEvent, CancellableEvent {
 
     private final Entity entity;
     private int duration;

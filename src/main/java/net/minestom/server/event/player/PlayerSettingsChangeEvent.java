@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called after the player signals the server that his settings has been modified.
  */
-public class PlayerSettingsChangeEvent extends Event implements PlayerEvent {
+public class PlayerSettingsChangeEvent implements PlayerEvent {
 
     private final Player player;
 

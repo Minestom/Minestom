@@ -3,7 +3,6 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when two {@link ItemEntity} are merging their {@link ItemStack} together to form a sole entity.
  */
-public class EntityItemMergeEvent extends Event implements EntityEvent, CancellableEvent {
+public class EntityItemMergeEvent implements EntityEvent, CancellableEvent {
 
     private Entity entity;
     private final ItemEntity merged;

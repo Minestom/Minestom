@@ -6,7 +6,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityEquipEvent extends Event {
+public class EntityEquipEvent implements Event {
 
     private final Entity entity;
     private ItemStack equippedItem;

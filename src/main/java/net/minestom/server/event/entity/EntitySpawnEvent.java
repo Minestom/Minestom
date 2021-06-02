@@ -1,7 +1,6 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a new instance is set for an entity.
  */
-public class EntitySpawnEvent extends Event implements EntityEvent {
+public class EntitySpawnEvent implements EntityEvent {
 
     private final Entity entity;
     private final Instance spawnInstance;

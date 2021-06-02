@@ -18,7 +18,7 @@ import java.util.function.Supplier;
  * Called every time a {@link Player} write and send something in the chat.
  * The event can be cancelled to do not send anything, and the format can be changed.
  */
-public class PlayerChatEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerChatEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private final Collection<Player> recipients;

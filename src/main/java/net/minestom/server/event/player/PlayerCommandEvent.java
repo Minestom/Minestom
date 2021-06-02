@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called every time a player send a message starting by '/'.
  */
-public class PlayerCommandEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerCommandEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private String command;

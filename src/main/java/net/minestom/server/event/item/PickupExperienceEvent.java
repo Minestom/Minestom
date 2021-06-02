@@ -5,7 +5,7 @@ import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.Event;
 import org.jetbrains.annotations.NotNull;
 
-public class PickupExperienceEvent extends Event implements CancellableEvent {
+public class PickupExperienceEvent implements CancellableEvent {
 
     private final ExperienceOrb experienceOrb;
     private short experienceCount;

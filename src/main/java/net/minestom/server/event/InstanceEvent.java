@@ -3,7 +3,7 @@ package net.minestom.server.event;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
-public class InstanceEvent extends Event {
+public class InstanceEvent implements Event {
 
     protected final Instance instance;
 

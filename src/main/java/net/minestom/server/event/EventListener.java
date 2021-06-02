@@ -21,6 +21,10 @@ public class EventListener<T extends Event> implements ListenerAttach {
         this.combined = combined;
     }
 
+    public static <T extends Event> EventListener.Builder<T> of(Class<T> eventType) {
+        return new EventListener.Builder<>(eventType);
+    }
+
     @Override
     public void attachTo(@NotNull EventHandler handler) {
         final boolean success = this.attach.add(handler);

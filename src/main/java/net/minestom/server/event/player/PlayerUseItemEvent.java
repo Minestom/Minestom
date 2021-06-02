@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Event when an item is used without clicking on a block.
  */
-public class PlayerUseItemEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerUseItemEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private final Player.Hand hand;

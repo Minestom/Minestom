@@ -6,7 +6,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemDropEvent extends Event implements CancellableEvent {
+public class ItemDropEvent implements CancellableEvent {
 
     private final Player player;
     private final ItemStack itemStack;

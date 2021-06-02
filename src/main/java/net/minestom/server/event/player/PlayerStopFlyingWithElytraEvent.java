@@ -5,7 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerStopFlyingWithElytraEvent extends Event implements PlayerEvent {
+public class PlayerStopFlyingWithElytraEvent implements PlayerEvent {
 
     private final Player player;
 

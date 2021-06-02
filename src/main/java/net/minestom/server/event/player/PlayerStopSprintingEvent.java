@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player stops sprinting.
  */
-public class PlayerStopSprintingEvent extends Event implements PlayerEvent {
+public class PlayerStopSprintingEvent implements PlayerEvent {
 
     private final Player player;
 

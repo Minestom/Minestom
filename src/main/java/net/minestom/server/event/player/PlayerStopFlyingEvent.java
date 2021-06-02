@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player stop flying.
  */
-public class PlayerStopFlyingEvent extends Event implements PlayerEvent {
+public class PlayerStopFlyingEvent implements PlayerEvent {
 
     private final Player player;
 

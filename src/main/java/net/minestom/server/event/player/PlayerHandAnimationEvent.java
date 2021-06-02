@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when the player swings his hand.
  */
-public class PlayerHandAnimationEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerHandAnimationEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private final Player.Hand hand;

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * or to cancel its processing, cancelling the event means that the player will
  * continue the animation indefinitely.
  */
-public class PlayerPreEatEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerPreEatEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private final ItemStack foodItem;

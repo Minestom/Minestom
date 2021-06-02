@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called when a player die in {@link Player#kill()}.
  */
-public class PlayerDeathEvent extends Event implements PlayerEvent {
+public class PlayerDeathEvent implements PlayerEvent {
 
     private final Player player;
     private Component deathText;

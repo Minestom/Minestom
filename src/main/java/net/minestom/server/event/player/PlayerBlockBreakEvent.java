@@ -12,7 +12,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerBlockBreakEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerBlockBreakEvent implements PlayerEvent, CancellableEvent {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 

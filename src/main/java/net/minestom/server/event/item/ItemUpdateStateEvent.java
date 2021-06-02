@@ -5,7 +5,7 @@ import net.minestom.server.event.Event;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemUpdateStateEvent extends Event {
+public class ItemUpdateStateEvent implements Event {
 
     private final Player player;
     private final Player.Hand hand;

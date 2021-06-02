@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player is modifying his position.
  */
-public class PlayerMoveEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerMoveEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private Position newPosition;

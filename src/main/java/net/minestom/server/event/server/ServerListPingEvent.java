@@ -2,7 +2,6 @@ package net.minestom.server.event.server;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ResponseDataConsumer;
@@ -16,7 +15,7 @@ import java.util.Objects;
  * Called when a {@link PlayerConnection} sends a status packet,
  * usually to display information on the server list.
  */
-public class ServerListPingEvent extends Event implements CancellableEvent {
+public class ServerListPingEvent implements CancellableEvent {
     private final PlayerConnection connection;
     private final ServerListPingType type;
 
@@ -36,7 +35,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      * Creates a new server list ping event.
      *
      * @param connection the player connection, if the ping type is modern
-     * @param type the ping type to respond with
+     * @param type       the ping type to respond with
      */
     public ServerListPingEvent(@Nullable PlayerConnection connection, @NotNull ServerListPingType type) {
         //noinspection deprecation we need to continue doing this until the consumer is removed - todo remove
@@ -86,7 +85,7 @@ public class ServerListPingEvent extends Event implements CancellableEvent {
      * @return the ping type
      */
     public @NotNull ServerListPingType getPingType() {
-       return type;
+        return type;
     }
 
     @Override

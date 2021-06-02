@@ -3,7 +3,7 @@ package net.minestom.server.event;
 /**
  * Represents an {@link Event} which can be cancelled.
  */
-public interface CancellableEvent {
+public interface CancellableEvent extends Event{
 
     /**
      * Gets if the {@link Event} should be cancelled or not.

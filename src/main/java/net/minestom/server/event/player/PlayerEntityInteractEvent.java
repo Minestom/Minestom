@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a {@link Player} interacts (right-click) with an {@link Entity}.
  */
-public class PlayerEntityInteractEvent extends Event implements PlayerEvent {
+public class PlayerEntityInteractEvent implements PlayerEvent {
 
     private final Player player;
     private final Entity entityTarget;

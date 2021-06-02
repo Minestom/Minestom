@@ -1,7 +1,6 @@
 package net.minestom.server.extras.query.event;
 
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +12,7 @@ import java.util.Objects;
  *
  * @param <T> the type of the response
  */
-public abstract class QueryEvent<T extends Writeable> extends Event implements CancellableEvent {
+public abstract class QueryEvent<T extends Writeable> implements CancellableEvent {
     private final SocketAddress sender;
     private final int sessionID;
 
@@ -23,9 +22,9 @@ public abstract class QueryEvent<T extends Writeable> extends Event implements C
     /**
      * Creates a new query event.
      *
-     * @param sender the sender
+     * @param sender    the sender
      * @param sessionID the session ID of the query sender
-     * @param response the initial response
+     * @param response  the initial response
      */
     public QueryEvent(@NotNull SocketAddress sender, int sessionID, @NotNull T response) {
         this.sender = sender;

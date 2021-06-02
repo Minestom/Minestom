@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Called when a player tries placing a block.
  */
-public class PlayerBlockPlaceEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerBlockPlaceEvent implements PlayerEvent, CancellableEvent {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 

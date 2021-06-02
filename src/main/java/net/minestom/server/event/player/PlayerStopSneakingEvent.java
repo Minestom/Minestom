@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player stops sneaking.
  */
-public class PlayerStopSneakingEvent extends Event implements PlayerEvent {
+public class PlayerStopSneakingEvent implements PlayerEvent {
 
     private final Player player;
 

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player send {@link net.minestom.server.network.packet.client.play.ClientPluginMessagePacket}.
  */
-public class PlayerPluginMessageEvent extends Event implements PlayerEvent {
+public class PlayerPluginMessageEvent implements PlayerEvent {
 
     private final Player player;
     private final String identifier;

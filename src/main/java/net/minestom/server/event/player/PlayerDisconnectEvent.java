@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player disconnect.
  */
-public class PlayerDisconnectEvent extends Event implements PlayerEvent {
+public class PlayerDisconnectEvent implements PlayerEvent {
 
     private final Player player;
 

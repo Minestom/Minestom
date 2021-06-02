@@ -1,4 +1,6 @@
 package net.minestom.server.event.trait;
 
-public interface EventTrait {
+import net.minestom.server.event.Event;
+
+public interface EventTrait extends Event {
 }

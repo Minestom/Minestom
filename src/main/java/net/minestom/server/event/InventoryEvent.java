@@ -3,7 +3,7 @@ package net.minestom.server.event;
 import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.Nullable;
 
-public class InventoryEvent extends Event {
+public class InventoryEvent implements Event {
 
     protected Inventory inventory;
 

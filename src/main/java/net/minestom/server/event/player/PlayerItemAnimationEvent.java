@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ItemAnimationType
  */
-public class PlayerItemAnimationEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerItemAnimationEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private final ItemAnimationType armAnimationType;

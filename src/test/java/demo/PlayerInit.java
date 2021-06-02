@@ -11,11 +11,14 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.event.EventListener;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -133,6 +136,11 @@ public class PlayerInit {
         });
 
         // EVENT REGISTERING
+
+        var node = EventNode.create(PlayerEvent.class);
+        node.addListener(EventListener.of(PlayerTickEvent.class)
+                .handler(playerTickEvent -> System.out.println("Player tick!"))
+                .build());
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {

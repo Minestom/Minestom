@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player receive a new chunk data.
  */
-public class PlayerChunkLoadEvent extends Event implements PlayerEvent {
+public class PlayerChunkLoadEvent implements PlayerEvent {
 
     private final Player player;
     private final int chunkX, chunkZ;

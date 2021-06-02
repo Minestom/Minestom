@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player change his held slot (by pressing 1-9 keys).
  */
-public class PlayerChangeHeldSlotEvent extends Event implements PlayerEvent, CancellableEvent {
+public class PlayerChangeHeldSlotEvent implements PlayerEvent, CancellableEvent {
 
     private final Player player;
     private byte slot;

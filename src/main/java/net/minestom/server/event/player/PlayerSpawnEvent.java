@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a new instance is set for a player.
  */
-public class PlayerSpawnEvent extends Event implements PlayerEvent {
+public class PlayerSpawnEvent implements PlayerEvent {
 
     private final Player player;
     private final Instance spawnInstance;
