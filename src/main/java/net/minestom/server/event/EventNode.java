@@ -31,10 +31,6 @@ public interface EventNode<T extends Event> {
         return new EventNodeList<>(filter);
     }
 
-    static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull Class<E> eventType, EventFilter<? super E, H> parser) {
-        return (EventNodeList<E, H>) list(parser);
-    }
-
     static <E extends Event, H extends EventHandler> EventNodeList<E, H> list(@NotNull Class<E> eventType,
                                                                               @NotNull Class<H> handlerType,
                                                                               @NotNull Function<E, H> handlerGetter) {
