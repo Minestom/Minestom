@@ -10,12 +10,12 @@ import java.util.function.Predicate;
 
 public interface EventNode<T extends Event> {
 
-    static <E extends Event> EventNode<E> create(@NotNull Class<E> type) {
+    static <E extends Event> EventNode<E> type(@NotNull Class<E> type) {
         return new EventNodeImpl<>(type);
     }
 
-    static EventNode<Event> create() {
-        return create(Event.class);
+    static EventNode<Event> all() {
+        return type(Event.class);
     }
 
     static <E extends Event> EventNodeConditional<E> conditional(@NotNull Class<E> type,

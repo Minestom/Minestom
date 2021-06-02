@@ -137,14 +137,19 @@ public class PlayerInit {
 
         // EVENT REGISTERING
 
-        var node = EventNode.create(PlayerEvent.class);
+        var node = EventNode.type(PlayerEvent.class);
         node.addListener(EventListener.of(PlayerTickEvent.class)
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
                 .expirationCount(2)
                 .build());
 
-        var empty = EventNode.create();
+        var empty = EventNode.all();
         empty.addListener(PlayerMoveEvent.class, (event) -> {
+        });
+
+        var map = EventNode.list(PlayerEvent.class, Player.class, PlayerEvent::getPlayer);
+        map.addListener(PlayerMoveEvent.class, playerMoveEvent -> {
+            System.out.println("move");
         });
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
