@@ -40,7 +40,7 @@ public class EventNode<T extends Event> {
     }
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
-    private final Map<Object, RedirectionEntry<T>> redirectionMap = new ConcurrentHashMap<>();
+    private final Map<Object, EventNode<T>> redirectionMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
 
     protected final EventFilter<T, ?> filter;
@@ -82,9 +82,9 @@ public class EventNode<T extends Event> {
         // Process redirection
         final Object handler = filter.getHandler(event);
         if (handler != null) {
-            final var entry = redirectionMap.get(handler);
-            if (entry != null) {
-                entry.node.call(event);
+            final var node = redirectionMap.get(handler);
+            if (node != null) {
+                node.call(event);
             }
         }
         // Process listener list
@@ -172,11 +172,8 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public <E extends T, V2> EventNode<T> map(@NotNull EventFilter<E, V2> filter, @NotNull V2 value, @NotNull EventNode<E> node) {
-        RedirectionEntry<E> entry = new RedirectionEntry<>();
-        entry.filter = filter;
-        entry.node = node;
-        this.redirectionMap.put(value, (RedirectionEntry<T>) entry);
+    public <E extends T> EventNode<T> map(@NotNull Object value, @NotNull EventNode<E> node) {
+        this.redirectionMap.put(value, (EventNode<T>) node);
         return this;
     }
 
@@ -214,10 +211,5 @@ public class EventNode<T extends Event> {
         } else {
             throw new IllegalStateException("Something wrong happened, listener count: " + result);
         }
-    }
-
-    private static class RedirectionEntry<E extends Event> {
-        EventFilter<E, ?> filter;
-        EventNode<E> node;
     }
 }

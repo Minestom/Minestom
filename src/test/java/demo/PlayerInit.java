@@ -175,7 +175,7 @@ public class PlayerInit {
             var test = EventNode.type(EventFilter.ENTITY);
             test.addListener(EventListener.of(PlayerMoveEvent.class, (e) ->
                     System.out.println("Test movement")));
-            empty.map(EventFilter.ENTITY, source, test);
+            empty.map(source, test);
         });
 
         globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {
