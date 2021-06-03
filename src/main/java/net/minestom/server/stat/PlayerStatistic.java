@@ -1,6 +1,7 @@
 package net.minestom.server.stat;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.statistic.StatisticType;
 import org.jetbrains.annotations.NotNull;
 
 /**
