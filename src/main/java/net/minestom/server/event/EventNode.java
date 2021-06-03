@@ -108,7 +108,7 @@ public class EventNode<T extends Event> {
         this.children.forEach(eventNode -> eventNode.call(event));
     }
 
-    public void addChild(@NotNull EventNode<? extends T> child) {
+    public EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final boolean result = this.children.add((EventNode<T>) child);
             if (result) {
@@ -122,9 +122,10 @@ public class EventNode<T extends Event> {
                 }
             }
         }
+        return this;
     }
 
-    public void removeChild(@NotNull EventNode<? extends T> child) {
+    public EventNode<T> removeChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final boolean result = this.children.remove(child);
             if (result) {
@@ -138,9 +139,10 @@ public class EventNode<T extends Event> {
                 }
             }
         }
+        return this;
     }
 
-    public void addListener(@NotNull EventListener<? extends T> listener) {
+    public EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.getEventType();
             this.listenerMap.computeIfAbsent(eventType, aClass -> new CopyOnWriteArrayList<>())
@@ -151,14 +153,15 @@ public class EventNode<T extends Event> {
                 }
             }
         }
+        return this;
     }
 
-    public void removeListener(@NotNull EventListener<? extends T> listener) {
+    public EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.getEventType();
             var listeners = listenerMap.get(eventType);
             if (listeners == null || listeners.isEmpty())
-                return;
+                return this;
             final boolean removed = listeners.remove(listener);
             if (removed && parent != null) {
                 synchronized (parent.lock) {
@@ -166,25 +169,29 @@ public class EventNode<T extends Event> {
                 }
             }
         }
+        return this;
     }
 
-    public <E extends T, V2> void map(@NotNull EventFilter<E, V2> filter, @NotNull V2 value, @NotNull EventNode<E> node) {
+    public <E extends T, V2> EventNode<T> map(@NotNull EventFilter<E, V2> filter, @NotNull V2 value, @NotNull EventNode<E> node) {
         RedirectionEntry<E> entry = new RedirectionEntry<>();
         entry.filter = filter;
         entry.node = node;
         this.redirectionMap.put(value, (RedirectionEntry<T>) entry);
+        return this;
     }
 
-    public void removeMap(@NotNull Object value) {
+    public EventNode<T> removeMap(@NotNull Object value) {
         this.redirectionMap.remove(value);
+        return this;
     }
 
     public @NotNull String getName() {
         return name;
     }
 
-    public void setName(@NotNull String name) {
+    public EventNode<T> setName(@NotNull String name) {
         this.name = name;
+        return this;
     }
 
     public @NotNull Set<@NotNull EventNode<T>> getChildren() {
