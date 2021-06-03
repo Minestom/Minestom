@@ -2,8 +2,11 @@ package net.minestom.server.event;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -36,6 +39,17 @@ public class EventNode<T extends Event> {
     public static <E extends Event, V> EventNode<E> predicateValue(@NotNull EventFilter<E, V> filter,
                                                                    @NotNull Predicate<V> predicate) {
         return predicate(filter, (e, h) -> predicate.test(h));
+    }
+
+    public static <E extends Event, V extends TagReadable> EventNode<E> predicateTag(@NotNull EventFilter<E, V> filter,
+                                                                                     @NotNull Tag<?> tag) {
+        return predicate(filter, (e, h) -> h.hasTag(tag));
+    }
+
+    public static <E extends Event, V extends TagReadable, V2> EventNode<E> predicateTag(@NotNull EventFilter<E, V> filter,
+                                                                                         @NotNull Tag<V2> tag,
+                                                                                         @NotNull Predicate<@Nullable V2> consumer) {
+        return predicate(filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();

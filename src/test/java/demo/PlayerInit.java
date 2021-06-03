@@ -35,6 +35,7 @@ import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -151,6 +152,8 @@ public class PlayerInit {
 
         var conditional = EventNode.predicateValue(EventFilter.PLAYER, Player::isCreative)
                 .addListener(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved"));
+
+        var tagNode = EventNode.predicateTag(EventFilter.ITEM, Tag.String("tag"), s -> s != null && !s.isEmpty());
 
         node.addChild(conditional);
         node.call(new PlayerTickEvent(null));
