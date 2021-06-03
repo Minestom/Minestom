@@ -137,15 +137,17 @@ public class PlayerInit {
 
         // EVENT REGISTERING
 
+        var empty = EventNode.all();
+        empty.setName("empty");
+        empty.addListener(EventListener.of(PlayerMoveEvent.class, (event) -> {
+        }));
+
         var node = EventNode.type(EventFilter.PLAYER);
+        node.setName("node");
         node.addListener(EventListener.builder(PlayerTickEvent.class)
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
                 .expirationCount(2)
                 .build());
-
-        var empty = EventNode.all();
-        empty.addListener(EventListener.of(PlayerMoveEvent.class, (event) -> {
-        }));
 
         /*
          * Map a node to a single element

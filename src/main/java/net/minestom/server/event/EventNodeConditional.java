@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiPredicate;
 
-public class EventNodeConditional<T extends Event, H> extends EventNodeImpl<T, H> {
+public class EventNodeConditional<T extends Event, H> extends EventNode<T> {
 
     private volatile BiPredicate<T, H> predicate;
 
@@ -15,7 +15,7 @@ public class EventNodeConditional<T extends Event, H> extends EventNodeImpl<T, H
 
     @Override
     protected boolean condition(@NotNull T event) {
-        return predicate.test(event, filter.getHandler(event));
+        return predicate.test(event, (H) filter.getHandler(event));
     }
 
     public @NotNull BiPredicate<T, H> getPredicate() {

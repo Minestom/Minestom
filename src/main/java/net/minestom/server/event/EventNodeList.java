@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class EventNodeList<T extends Event, H> extends EventNodeImpl<T, H> {
+public class EventNodeList<T extends Event, H> extends EventNode<T> {
 
     private final List<H> entries = new CopyOnWriteArrayList<>();
 
