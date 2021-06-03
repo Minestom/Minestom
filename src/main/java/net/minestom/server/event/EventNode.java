@@ -123,6 +123,7 @@ public class EventNode<T extends Event> {
 
     public EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            Check.stateCondition(child.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
             final boolean result = this.children.add((EventNode<T>) child);
             if (result) {
@@ -207,6 +208,10 @@ public class EventNode<T extends Event> {
     public EventNode<T> setName(@NotNull String name) {
         this.name = name;
         return this;
+    }
+
+    public @Nullable EventNode<? super T> getParent() {
+        return parent;
     }
 
     public @NotNull Set<@NotNull EventNode<T>> getChildren() {
