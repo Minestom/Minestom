@@ -79,7 +79,6 @@ public class EventNode<T extends Event> {
      */
     protected boolean condition(@NotNull T event) {
         final var value = filter.getHandler(event);
-        System.out.println("test "+event+" "+value);
         return predicate.test(event, value);
     }
 
