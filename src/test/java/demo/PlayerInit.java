@@ -149,13 +149,6 @@ public class PlayerInit {
                 .expirationCount(50)
                 .build());
 
-        empty.addChild(node);
-        node.call(new PlayerTickEvent(null));
-        empty.call(new PlayerTickEvent(null));
-        empty.removeChild(node);
-        node.call(new PlayerTickEvent(null));
-        empty.call(new PlayerTickEvent(null));
-
 
         var conditional = EventNode.predicateValue(EventFilter.PLAYER, Player::isCreative);
         conditional.addListener(EventListener.of(PlayerMoveEvent.class, (event) ->
