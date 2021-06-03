@@ -153,7 +153,7 @@ public class PlayerInit {
         var conditional = EventNode.predicateValue(EventFilter.PLAYER, Player::isCreative)
                 .addListener(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved"));
 
-        var tagNode = EventNode.predicateTag(EventFilter.ITEM, Tag.String("tag"), s -> s != null && !s.isEmpty());
+        var tagNode = EventNode.predicateTag(EventFilter.ITEM, Tag.String("tag"));
 
         node.addChild(conditional);
         node.call(new PlayerTickEvent(null));

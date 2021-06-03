@@ -41,14 +41,14 @@ public class EventNode<T extends Event> {
         return predicate(filter, (e, h) -> predicate.test(h));
     }
 
-    public static <E extends Event, V extends TagReadable> EventNode<E> predicateTag(@NotNull EventFilter<E, V> filter,
-                                                                                     @NotNull Tag<?> tag) {
+    public static <E extends Event> EventNode<E> predicateTag(@NotNull EventFilter<E, ? extends TagReadable> filter,
+                                                              @NotNull Tag<?> tag) {
         return predicate(filter, (e, h) -> h.hasTag(tag));
     }
 
-    public static <E extends Event, V extends TagReadable, V2> EventNode<E> predicateTag(@NotNull EventFilter<E, V> filter,
-                                                                                         @NotNull Tag<V2> tag,
-                                                                                         @NotNull Predicate<@Nullable V2> consumer) {
+    public static <E extends Event, V> EventNode<E> predicateTag(@NotNull EventFilter<E, ? extends TagReadable> filter,
+                                                                 @NotNull Tag<V> tag,
+                                                                 @NotNull Predicate<@Nullable V> consumer) {
         return predicate(filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
