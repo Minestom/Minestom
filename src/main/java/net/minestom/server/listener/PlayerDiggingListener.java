@@ -136,14 +136,18 @@ public class PlayerDiggingListener {
 
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
             Player.Hand hand = null;
-            if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
+            if (player.isEating()) {
+                hand = player.getEatingHand();
+            } else if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
                 hand = Player.Hand.OFF;
             } else if (player.getItemInHand(Player.Hand.MAIN).getMaterial().hasState()) {
                 hand = Player.Hand.MAIN;
             }
 
             player.refreshEating(null);
-            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(false, hand);
+            player.triggerStatus((byte) 9);
+
+            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
 
             if (itemUpdateStateEvent == null) {
                 player.refreshActiveHand(true, false, false);
