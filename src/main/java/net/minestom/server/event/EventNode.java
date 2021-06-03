@@ -18,38 +18,38 @@ import java.util.function.Predicate;
 
 public class EventNode<T extends Event> {
 
-    public static <E extends Event, V> EventNode<E> type(@NotNull EventFilter<E, V> filter) {
-        return new EventNode<>(filter, (e, v) -> true);
-    }
-
     public static EventNode<Event> all() {
         return type(EventFilter.ALL);
     }
 
-    public static <E extends Event, V> EventNode<E> predicate(@NotNull EventFilter<E, V> filter,
-                                                              @NotNull BiPredicate<E, V> predicate) {
+    public static <E extends Event, V> EventNode<E> type(@NotNull EventFilter<E, V> filter,
+                                                         @NotNull BiPredicate<E, V> predicate) {
         return new EventNode<>(filter, (e, o) -> predicate.test(e, (V) o));
+    }
+
+    public static <E extends Event, V> EventNode<E> type(@NotNull EventFilter<E, V> filter) {
+        return type(filter, (e, v) -> true);
     }
 
     public static <E extends Event, V> EventNode<E> event(@NotNull EventFilter<E, V> filter,
                                                           @NotNull Predicate<E> predicate) {
-        return predicate(filter, (e, h) -> predicate.test(e));
+        return type(filter, (e, h) -> predicate.test(e));
     }
 
     public static <E extends Event, V> EventNode<E> value(@NotNull EventFilter<E, V> filter,
                                                           @NotNull Predicate<V> predicate) {
-        return predicate(filter, (e, h) -> predicate.test(h));
+        return type(filter, (e, h) -> predicate.test(h));
     }
 
     public static <E extends Event> EventNode<E> tag(@NotNull EventFilter<E, ? extends TagReadable> filter,
                                                      @NotNull Tag<?> tag) {
-        return predicate(filter, (e, h) -> h.hasTag(tag));
+        return type(filter, (e, h) -> h.hasTag(tag));
     }
 
     public static <E extends Event, V> EventNode<E> tag(@NotNull EventFilter<E, ? extends TagReadable> filter,
                                                         @NotNull Tag<V> tag,
                                                         @NotNull Predicate<@Nullable V> consumer) {
-        return predicate(filter, (e, h) -> consumer.test(h.getTag(tag)));
+        return type(filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
