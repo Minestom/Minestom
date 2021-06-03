@@ -2,12 +2,10 @@ package net.minestom.server.event;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -110,6 +108,7 @@ public class EventNode<T extends Event> {
 
     public EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
+            Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
             final boolean result = this.children.add((EventNode<T>) child);
             if (result) {
                 child.parent = this;
