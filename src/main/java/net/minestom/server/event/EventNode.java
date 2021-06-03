@@ -31,24 +31,24 @@ public class EventNode<T extends Event> {
         return new EventNode<>(filter, (e, o) -> predicate.test(e, (V) o));
     }
 
-    public static <E extends Event, V> EventNode<E> predicateEvent(@NotNull EventFilter<E, V> filter,
-                                                                   @NotNull Predicate<E> predicate) {
+    public static <E extends Event, V> EventNode<E> event(@NotNull EventFilter<E, V> filter,
+                                                          @NotNull Predicate<E> predicate) {
         return predicate(filter, (e, h) -> predicate.test(e));
     }
 
-    public static <E extends Event, V> EventNode<E> predicateValue(@NotNull EventFilter<E, V> filter,
-                                                                   @NotNull Predicate<V> predicate) {
+    public static <E extends Event, V> EventNode<E> value(@NotNull EventFilter<E, V> filter,
+                                                          @NotNull Predicate<V> predicate) {
         return predicate(filter, (e, h) -> predicate.test(h));
     }
 
-    public static <E extends Event> EventNode<E> predicateTag(@NotNull EventFilter<E, ? extends TagReadable> filter,
-                                                              @NotNull Tag<?> tag) {
+    public static <E extends Event> EventNode<E> tag(@NotNull EventFilter<E, ? extends TagReadable> filter,
+                                                     @NotNull Tag<?> tag) {
         return predicate(filter, (e, h) -> h.hasTag(tag));
     }
 
-    public static <E extends Event, V> EventNode<E> predicateTag(@NotNull EventFilter<E, ? extends TagReadable> filter,
-                                                                 @NotNull Tag<V> tag,
-                                                                 @NotNull Predicate<@Nullable V> consumer) {
+    public static <E extends Event, V> EventNode<E> tag(@NotNull EventFilter<E, ? extends TagReadable> filter,
+                                                        @NotNull Tag<V> tag,
+                                                        @NotNull Predicate<@Nullable V> consumer) {
         return predicate(filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
@@ -79,6 +79,7 @@ public class EventNode<T extends Event> {
      */
     protected boolean condition(@NotNull T event) {
         final var value = filter.getHandler(event);
+        System.out.println("test "+event+" "+value);
         return predicate.test(event, value);
     }
 

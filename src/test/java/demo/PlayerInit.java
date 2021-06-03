@@ -150,13 +150,16 @@ public class PlayerInit {
                         .expirationCount(50)
                         .build());
 
-        var conditional = EventNode.predicateValue(EventFilter.PLAYER, Player::isCreative)
+        var conditional = EventNode.value(EventFilter.PLAYER, Player::isCreative)
                 .addListener(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved"));
 
-        var tagNode = EventNode.predicateTag(EventFilter.ITEM, Tag.String("tag"));
+        var tagNode = EventNode.tag(EventFilter.ITEM, Tag.String("tag"));
 
         node.addChild(conditional);
-        node.call(new PlayerTickEvent(null));
+        node.addChild(EventNode.value(EventFilter.PLAYER, player -> player.getUsername().equals("TheMode911"))
+                .addListener(PlayerMoveEvent.class, event -> System.out.println("move!"))
+                .addListener(PlayerTickEvent.class, event -> System.out.println("tick!")));
+        //node.addChild(tagNode); -> Error: cannot add an item listener to a player node
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
