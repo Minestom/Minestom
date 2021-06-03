@@ -2,7 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Event when an item is used without clicking on a block.
  */
-public class PlayerUseItemEvent implements PlayerEvent, CancellableEvent {
+public class PlayerUseItemEvent implements PlayerEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
     private final Player.Hand hand;

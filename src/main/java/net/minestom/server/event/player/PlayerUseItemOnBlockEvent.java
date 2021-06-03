@@ -1,7 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
  */
-public class PlayerUseItemOnBlockEvent implements PlayerEvent {
+public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
 
     private final Player player;
     private final Player.Hand hand;

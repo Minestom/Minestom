@@ -1,11 +1,12 @@
 package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.ItemEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemUpdateStateEvent implements Event {
+public class ItemUpdateStateEvent implements PlayerEvent, ItemEvent {
 
     private final Player player;
     private final Player.Hand hand;
@@ -19,18 +20,8 @@ public class ItemUpdateStateEvent implements Event {
     }
 
     @NotNull
-    public Player getPlayer() {
-        return player;
-    }
-
-    @NotNull
     public Player.Hand getHand() {
         return hand;
-    }
-
-    @NotNull
-    public ItemStack getItemStack() {
-        return itemStack;
     }
 
     public void setHandAnimation(boolean handAnimation) {
@@ -39,5 +30,15 @@ public class ItemUpdateStateEvent implements Event {
 
     public boolean hasHandAnimation() {
         return handAnimation;
+    }
+
+    @Override
+    public @NotNull ItemStack getItemStack() {
+        return itemStack;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

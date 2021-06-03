@@ -2,11 +2,11 @@ package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemDropEvent implements CancellableEvent {
+public class ItemDropEvent implements ItemEvent, CancellableEvent {
 
     private final Player player;
     private final ItemStack itemStack;

@@ -1,13 +1,15 @@
 package net.minestom.server.event.item;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PickupItemEvent implements CancellableEvent {
+public class PickupItemEvent implements EntityEvent, ItemEvent, CancellableEvent {
 
     private final LivingEntity livingEntity;
     private final ItemEntity itemEntity;
@@ -29,10 +31,6 @@ public class PickupItemEvent implements CancellableEvent {
         return itemEntity;
     }
 
-    /**
-     * @deprecated use {@link #getItemEntity()} and {@link ItemEntity#getItemStack()}.
-     */
-    @Deprecated
     @NotNull
     public ItemStack getItemStack() {
         return getItemEntity().getItemStack();
@@ -46,5 +44,10 @@ public class PickupItemEvent implements CancellableEvent {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Entity getEntity() {
+        return livingEntity;
     }
 }
