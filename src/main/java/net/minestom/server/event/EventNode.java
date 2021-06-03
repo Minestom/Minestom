@@ -52,6 +52,8 @@ public class EventNode<T extends Event> {
     protected final EventFilter<T, ?> filter;
 
     // Tree data
+    private static final Object GLOBAL_CHILD_LOCK = new Object();
+
     private volatile EventNode<? super T> parent;
     private final Object lock = new Object();
     private final Object2IntMap<Class<? extends T>> childEventMap = new Object2IntOpenHashMap<>();
@@ -110,53 +112,61 @@ public class EventNode<T extends Event> {
     }
 
     public void addChild(@NotNull EventNode<? extends T> child) {
-        final boolean result = this.children.add((EventNode<T>) child);
-        if (result) {
-            child.parent = this;
-            // Increase listener count
-            synchronized (lock) {
-                child.listenerMap.forEach((eventClass, eventListeners) -> {
-                    final int childCount = eventListeners.size();
-                    increaseListenerCount(eventClass, childCount);
-                });
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final boolean result = this.children.add((EventNode<T>) child);
+            if (result) {
+                child.parent = this;
+                // Increase listener count
+                synchronized (lock) {
+                    child.listenerMap.forEach((eventClass, eventListeners) -> {
+                        final int childCount = eventListeners.size() + child.childEventMap.getInt(eventClass);
+                        increaseListenerCount(eventClass, childCount);
+                    });
+                }
             }
         }
     }
 
     public void removeChild(@NotNull EventNode<? extends T> child) {
-        final boolean result = this.children.remove(child);
-        if (result) {
-            child.parent = null;
-            // Decrease listener count
-            synchronized (lock) {
-                child.listenerMap.forEach((eventClass, eventListeners) -> {
-                    final int childCount = eventListeners.size();
-                    decreaseListenerCount(eventClass, childCount);
-                });
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final boolean result = this.children.remove(child);
+            if (result) {
+                child.parent = null;
+                // Decrease listener count
+                synchronized (lock) {
+                    child.listenerMap.forEach((eventClass, eventListeners) -> {
+                        final int childCount = eventListeners.size() + child.childEventMap.getInt(eventClass);
+                        decreaseListenerCount(eventClass, childCount);
+                    });
+                }
             }
         }
     }
 
     public void addListener(@NotNull EventListener<? extends T> listener) {
-        final var eventType = listener.getEventType();
-        this.listenerMap.computeIfAbsent(eventType, aClass -> new CopyOnWriteArrayList<>())
-                .add((EventListener<T>) listener);
-        if (parent != null) {
-            synchronized (parent.lock) {
-                parent.increaseListenerCount(eventType, 1);
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final var eventType = listener.getEventType();
+            this.listenerMap.computeIfAbsent(eventType, aClass -> new CopyOnWriteArrayList<>())
+                    .add((EventListener<T>) listener);
+            if (parent != null) {
+                synchronized (parent.lock) {
+                    parent.increaseListenerCount(eventType, 1);
+                }
             }
         }
     }
 
     public void removeListener(@NotNull EventListener<? extends T> listener) {
-        final var eventType = listener.getEventType();
-        var listeners = listenerMap.get(eventType);
-        if (listeners == null || listeners.isEmpty())
-            return;
-        final boolean removed = listeners.remove(listener);
-        if (removed && parent != null) {
-            synchronized (parent.lock) {
-                parent.decreaseListenerCount(eventType, 1);
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final var eventType = listener.getEventType();
+            var listeners = listenerMap.get(eventType);
+            if (listeners == null || listeners.isEmpty())
+                return;
+            final boolean removed = listeners.remove(listener);
+            if (removed && parent != null) {
+                synchronized (parent.lock) {
+                    parent.decreaseListenerCount(eventType, 1);
+                }
             }
         }
     }
