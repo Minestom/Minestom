@@ -171,11 +171,9 @@ public class PlayerInit {
             if (source instanceof Player) {
                 ((Player) source).sendMessage("You attacked something!");
             }
-
-            var test = EventNode.type(EventFilter.ENTITY);
-            test.addListener(EventListener.of(PlayerMoveEvent.class, (e) ->
-                    System.out.println("Test movement")));
-            empty.map(source, test);
+            empty.map(source, EventNode.type(EventFilter.ENTITY)
+                    .addListener(EventListener.of(PlayerMoveEvent.class, (e) ->
+                            System.out.println("Test movement"))));
         });
 
         globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {
