@@ -181,7 +181,7 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public EventNode<T> removeMap(@NotNull Object value) {
+    public EventNode<T> unmap(@NotNull Object value) {
         this.redirectionMap.remove(value);
         return this;
     }
