@@ -156,16 +156,8 @@ public class PlayerInit {
         node.call(new PlayerTickEvent(null));
         empty.call(new PlayerTickEvent(null));
 
-        /*
-         * Map a node to a single element
-         *
-         * var test = EventNode.type(EventFilter.ENTITY);
-         * test.addListener(EventListener.of(PlayerMoveEvent.class, (event) ->
-         *         System.out.println("creative player moved")));
-         * empty.map(EventFilter.ENTITY, entity, test);
-         */
 
-        var conditional = EventNode.conditionalHandler(EventFilter.PLAYER, Player::isCreative);
+        var conditional = EventNode.predicateValue(EventFilter.PLAYER, Player::isCreative);
         conditional.addListener(EventListener.of(PlayerMoveEvent.class, (event) ->
                 System.out.println("creative player moved")));
 
@@ -188,6 +180,11 @@ public class PlayerInit {
             if (source instanceof Player) {
                 ((Player) source).sendMessage("You attacked something!");
             }
+
+            var test = EventNode.type(EventFilter.ENTITY);
+            test.addListener(EventListener.of(PlayerMoveEvent.class, (e) ->
+                    System.out.println("Test movement")));
+            empty.map(EventFilter.ENTITY, source, test);
         });
 
         globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {

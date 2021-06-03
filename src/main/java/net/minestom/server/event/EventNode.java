@@ -14,48 +14,48 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
-public class EventNode<T extends Event> {
+public class EventNode<T extends Event, V> {
 
-    public static <E extends Event> EventNode<E> type(@NotNull EventFilter<E, ?> filter) {
-        return new EventNode<>(filter);
+    public static <E extends Event, V> EventNode<E, V> type(@NotNull EventFilter<E, V> filter) {
+        return new EventNode<>(filter, (e, v) -> true);
     }
 
-    public static EventNode<Event> all() {
+    public static EventNode<Event, ?> all() {
         return type(EventFilter.ALL);
     }
 
-    public static <E extends Event, H> EventNodeConditional<E, H> conditional(@NotNull EventFilter<E, H> filter,
-                                                                              @NotNull BiPredicate<E, H> predicate) {
-        return new EventNodeConditional<>(filter, predicate);
+    public static <E extends Event, V> EventNode<E, V> predicate(@NotNull EventFilter<E, V> filter,
+                                                                 @NotNull BiPredicate<E, V> predicate) {
+        return new EventNode<>(filter, predicate);
     }
 
-    public static <E extends Event, H> EventNodeConditional<E, H> conditionalEvent(@NotNull EventFilter<E, H> filter,
-                                                                                   @NotNull Predicate<E> predicate) {
-        return conditional(filter, (e, h) -> predicate.test(e));
+    public static <E extends Event, V> EventNode<E, V> predicateEvent(@NotNull EventFilter<E, V> filter,
+                                                                      @NotNull Predicate<E> predicate) {
+        return predicate(filter, (e, h) -> predicate.test(e));
     }
 
-    public static <E extends Event, H> EventNodeConditional<E, H> conditionalHandler(@NotNull EventFilter<E, H> filter,
-                                                                                     @NotNull Predicate<H> predicate) {
-        return conditional(filter, (e, h) -> predicate.test(h));
+    public static <E extends Event, V> EventNode<E, V> predicateValue(@NotNull EventFilter<E, V> filter,
+                                                                      @NotNull Predicate<V> predicate) {
+        return predicate(filter, (e, h) -> predicate.test(h));
     }
-
-    private volatile String name = "unknown";
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
     private final Map<Object, RedirectionEntry<T>> redirectionMap = new ConcurrentHashMap<>();
-    private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
+    private final Set<EventNode<T, ?>> children = new CopyOnWriteArraySet<>();
 
-    protected final EventFilter<T, ?> filter;
+    protected final EventFilter<T, V> filter;
+    protected volatile BiPredicate<T, V> predicate;
+    private volatile String name = "unknown";
 
     // Tree data
     private static final Object GLOBAL_CHILD_LOCK = new Object();
-
-    private volatile EventNode<? super T> parent;
+    private volatile EventNode<? super T, ?> parent;
     private final Object lock = new Object();
     private final Object2IntMap<Class<? extends T>> childEventMap = new Object2IntOpenHashMap<>();
 
-    protected EventNode(EventFilter<T, ?> filter) {
+    protected EventNode(EventFilter<T, V> filter, BiPredicate<T, V> predicate) {
         this.filter = filter;
+        this.predicate = predicate;
     }
 
     /**
@@ -65,7 +65,7 @@ public class EventNode<T extends Event> {
      * @return true to enter the node, false otherwise
      */
     protected boolean condition(@NotNull T event) {
-        return true;
+        return predicate.test(event, filter.getHandler(event));
     }
 
     public void call(@NotNull T event) {
@@ -107,9 +107,9 @@ public class EventNode<T extends Event> {
         this.children.forEach(eventNode -> eventNode.call(event));
     }
 
-    public void addChild(@NotNull EventNode<? extends T> child) {
+    public void addChild(@NotNull EventNode<? extends T, ?> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            final boolean result = this.children.add((EventNode<T>) child);
+            final boolean result = this.children.add((EventNode<T, ?>) child);
             if (result) {
                 child.parent = this;
                 // Increase listener count
@@ -123,7 +123,7 @@ public class EventNode<T extends Event> {
         }
     }
 
-    public void removeChild(@NotNull EventNode<? extends T> child) {
+    public void removeChild(@NotNull EventNode<? extends T, ?> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final boolean result = this.children.remove(child);
             if (result) {
@@ -167,7 +167,15 @@ public class EventNode<T extends Event> {
         }
     }
 
-    public <E extends T, V> void map(@NotNull EventFilter<E, V> filter, @NotNull V value, @NotNull EventNode<E> node) {
+    public @NotNull BiPredicate<T, V> getPredicate() {
+        return predicate;
+    }
+
+    public void setPredicate(@NotNull BiPredicate<T, V> predicate) {
+        this.predicate = predicate;
+    }
+
+    public <E extends T, V2> void map(@NotNull EventFilter<E, V2> filter, @NotNull V2 value, @NotNull EventNode<E, V2> node) {
         RedirectionEntry<E> entry = new RedirectionEntry<>();
         entry.filter = filter;
         entry.node = node;
@@ -186,7 +194,7 @@ public class EventNode<T extends Event> {
         this.name = name;
     }
 
-    public @NotNull Set<@NotNull EventNode<T>> getChildren() {
+    public @NotNull Set<@NotNull EventNode<T, ?>> getChildren() {
         return Collections.unmodifiableSet(children);
     }
 
@@ -210,6 +218,6 @@ public class EventNode<T extends Event> {
 
     private static class RedirectionEntry<E extends Event> {
         EventFilter<E, ?> filter;
-        EventNode<E> node;
+        EventNode<E, ?> node;
     }
 }
