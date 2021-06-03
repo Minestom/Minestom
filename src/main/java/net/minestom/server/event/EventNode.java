@@ -39,10 +39,6 @@ public class EventNode<T extends Event> {
         return conditional(filter, (e, h) -> predicate.test(h));
     }
 
-    public static <E extends Event, H> EventNodeList<E, H> list(@NotNull EventFilter<E, H> filter) {
-        return new EventNodeList<>(filter);
-    }
-
     private volatile String name = "unknown";
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();

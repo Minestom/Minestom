@@ -146,8 +146,15 @@ public class PlayerInit {
         node.setName("node");
         node.addListener(EventListener.builder(PlayerTickEvent.class)
                 .handler(playerTickEvent -> System.out.println("Player tick!"))
-                .expirationCount(2)
+                .expirationCount(50)
                 .build());
+
+        empty.addChild(node);
+        node.call(new PlayerTickEvent(null));
+        empty.call(new PlayerTickEvent(null));
+        empty.removeChild(node);
+        node.call(new PlayerTickEvent(null));
+        empty.call(new PlayerTickEvent(null));
 
         /*
          * Map a node to a single element
@@ -161,10 +168,6 @@ public class PlayerInit {
         var conditional = EventNode.conditionalHandler(EventFilter.PLAYER, Player::isCreative);
         conditional.addListener(EventListener.of(PlayerMoveEvent.class, (event) ->
                 System.out.println("creative player moved")));
-
-        var list = EventNode.list(EventFilter.PLAYER);
-        list.addListener(EventListener.of(PlayerMoveEvent.class, event ->
-                System.out.println("move")));
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
