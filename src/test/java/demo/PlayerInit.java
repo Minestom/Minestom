@@ -139,8 +139,8 @@ public class PlayerInit {
 
         var empty = EventNode.all()
                 .setName("empty")
-                .addListener(EventListener.of(PlayerMoveEvent.class, (event) -> {
-                }));
+                .addListener(PlayerMoveEvent.class, (event) -> {
+                });
 
         var node = EventNode.type(EventFilter.PLAYER)
                 .setName("node")
@@ -150,7 +150,10 @@ public class PlayerInit {
                         .build());
 
         var conditional = EventNode.predicateValue(EventFilter.PLAYER, Player::isCreative)
-                .addListener(EventListener.of(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved")));
+                .addListener(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved"));
+
+        node.addChild(conditional);
+        node.call(new PlayerTickEvent(null));
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
@@ -172,8 +175,8 @@ public class PlayerInit {
                 ((Player) source).sendMessage("You attacked something!");
             }
             empty.map(source, EventNode.type(EventFilter.ENTITY)
-                    .addListener(EventListener.of(PlayerMoveEvent.class, (e) ->
-                            System.out.println("Test movement"))));
+                    .addListener(PlayerMoveEvent.class, (e) ->
+                            System.out.println("Test movement")));
         });
 
         globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {

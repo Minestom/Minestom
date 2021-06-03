@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.BiPredicate;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class EventNode<T extends Event> {
@@ -169,6 +170,10 @@ public class EventNode<T extends Event> {
             }
         }
         return this;
+    }
+
+    public <E extends T> EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
+        return addListener(EventListener.of(eventType, listener));
     }
 
     public <E extends T> EventNode<T> map(@NotNull Object value, @NotNull EventNode<E> node) {
