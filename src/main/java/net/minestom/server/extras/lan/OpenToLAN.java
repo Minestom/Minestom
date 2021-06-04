@@ -1,6 +1,7 @@
 package net.minestom.server.extras.lan;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.NetworkUtils;
@@ -25,6 +26,7 @@ import static net.minestom.server.ping.ServerListPingType.OPEN_TO_LAN;
  * Instead it simply sends the packets needed to trick the Minecraft client into thinking
  * that this is a single-player world that has been opened to LANfor it to be displayed on
  * the bottom of the server list.
+ *
  * @see <a href="https://wiki.vg/Server_List_Ping#Ping_via_LAN_.28Open_to_LAN_in_Singleplayer.29">wiki.vg</a>
  */
 public class OpenToLAN {
@@ -37,7 +39,8 @@ public class OpenToLAN {
     private static volatile DatagramPacket packet = null;
     private static volatile Task task = null;
 
-    private OpenToLAN() { }
+    private OpenToLAN() {
+    }
 
     /**
      * Opens the server to LAN with the default config.
@@ -121,7 +124,7 @@ public class OpenToLAN {
         if (MinecraftServer.getNettyServer().getPort() != 0) {
             if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
                 final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
-                MinecraftServer.getGlobalEventHandler().callEvent(ServerListPingEvent.class, event);
+                EventDispatcher.call(event);
 
                 final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
                 packet = new DatagramPacket(data, data.length, PING_ADDRESS);

@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.player.PlayerEntityInteractEvent;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
@@ -24,10 +25,10 @@ public class UseEntityListener {
                 return;
 
             EntityAttackEvent entityAttackEvent = new EntityAttackEvent(player, entity);
-            player.callEvent(EntityAttackEvent.class, entityAttackEvent);
+            EventDispatcher.call(entityAttackEvent);
         } else if (type == ClientInteractEntityPacket.Type.INTERACT) {
             PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);
-            player.callEvent(PlayerEntityInteractEvent.class, playerEntityInteractEvent);
+            EventDispatcher.call(playerEntityInteractEvent);
         } else {
             // TODO find difference with INTERACT
             //PlayerEntityInteractEvent playerEntityInteractEvent = new PlayerEntityInteractEvent(player, entity, packet.hand);

@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
@@ -74,7 +75,7 @@ public class PlayerPositionListener {
         final Position cachedPosition = newPosition.clone();
 
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
-        player.callEvent(PlayerMoveEvent.class, playerMoveEvent);
+        EventDispatcher.call(playerMoveEvent);
 
         // True if the event call changed the player position (possibly a teleport)
         final boolean positionChanged = !currentPosition.equals(player.getPosition());

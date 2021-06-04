@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -384,7 +385,7 @@ public class InstanceContainer extends Instance {
         final CustomBlock customBlock = getCustomBlock(x, y, z);
 
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, blockPosition, blockStateId, customBlock, (short) 0, (short) 0);
-        player.callEvent(PlayerBlockBreakEvent.class, blockBreakEvent);
+        EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
@@ -835,11 +836,11 @@ public class InstanceContainer extends Instance {
 
     private void callChunkLoadEvent(int chunkX, int chunkZ) {
         InstanceChunkLoadEvent chunkLoadEvent = new InstanceChunkLoadEvent(this, chunkX, chunkZ);
-        callEvent(InstanceChunkLoadEvent.class, chunkLoadEvent);
+        EventDispatcher.call(chunkLoadEvent);
     }
 
     private void callChunkUnloadEvent(int chunkX, int chunkZ) {
         InstanceChunkUnloadEvent chunkUnloadEvent = new InstanceChunkUnloadEvent(this, chunkX, chunkZ);
-        callEvent(InstanceChunkUnloadEvent.class, chunkUnloadEvent);
+        EventDispatcher.call(chunkUnloadEvent);
     }
 }

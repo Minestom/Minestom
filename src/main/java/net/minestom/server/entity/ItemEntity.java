@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -112,7 +113,7 @@ public class ItemEntity extends ObjectEntity {
                     final ItemStack result = stackingRule.apply(itemStack, totalAmount);
 
                     EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
-                    callCancellableEvent(EntityItemMergeEvent.class, entityItemMergeEvent, () -> {
+                    EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
                         setItemStack(entityItemMergeEvent.getResult());
                         itemEntity.remove();
                     });

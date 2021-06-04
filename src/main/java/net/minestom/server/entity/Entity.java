@@ -18,6 +18,7 @@ import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.instance.Chunk;
@@ -645,7 +646,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             update(time);
 
             ticks++;
-            callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
+            EventDispatcher.call(tickEvent); // reuse tickEvent to avoid recreating it each tick
 
             // remove expired effects
             if (!effects.isEmpty()) {
@@ -655,10 +656,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     if (time >= timedPotion.getStartingTime() + potionTime) {
                         // Send the packet that the potion should no longer be applied
                         timedPotion.getPotion().sendRemovePacket(this);
-                        callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                                this,
-                                timedPotion.getPotion()
-                        ));
+                        EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
                         return true;
                     }
                     return false;
@@ -916,8 +914,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         refreshCurrentChunk(instance.getChunkAt(position.getX(), position.getZ()));
         instance.UNSAFE_addEntity(this);
         spawn();
-        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
-        callEvent(EntitySpawnEvent.class, entitySpawnEvent);
+        EventDispatcher.call(new EntitySpawnEvent(this, instance));
     }
 
     /**
@@ -950,7 +947,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     public void setVelocity(@NotNull Vector velocity) {
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
-        callCancellableEvent(EntityVelocityEvent.class, entityVelocityEvent, () -> {
+        EventDispatcher.callCancellable(entityVelocityEvent, () -> {
             this.velocity.copy(entityVelocityEvent.getVelocity());
             sendPacketToViewersAndSelf(getVelocityPacket());
         });
@@ -1464,7 +1461,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         removeEffect(potion.getEffect());
         this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
-        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
+        EventDispatcher.call(new EntityPotionAddEvent(this, potion));
     }
 
     /**
@@ -1476,10 +1473,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.effects.removeIf(timedPotion -> {
             if (timedPotion.getPotion().getEffect() == effect) {
                 timedPotion.getPotion().sendRemovePacket(this);
-                callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                        this,
-                        timedPotion.getPotion()
-                ));
+                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
                 return true;
             }
             return false;
@@ -1492,10 +1486,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     public void clearEffects() {
         for (TimedPotion timedPotion : effects) {
             timedPotion.getPotion().sendRemovePacket(this);
-            callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                    this,
-                    timedPotion.getPotion()
-            ));
+            EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
         }
         this.effects.clear();
     }

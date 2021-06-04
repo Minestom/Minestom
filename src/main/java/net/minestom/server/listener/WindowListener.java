@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryClickHandler;
@@ -111,7 +112,7 @@ public class WindowListener {
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
-        player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);
+        EventDispatcher.call(inventoryCloseEvent);
 
         player.closeInventory();
 

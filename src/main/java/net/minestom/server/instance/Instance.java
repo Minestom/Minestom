@@ -14,6 +14,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
@@ -862,7 +863,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
             lastInstance.UNSAFE_removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
-        callCancellableEvent(AddEntityToInstanceEvent.class, event, () -> {
+        EventDispatcher.callCancellable(event, () -> {
             final Position entityPosition = entity.getPosition();
             final boolean isPlayer = entity instanceof Player;
 
@@ -907,7 +908,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
             return;
 
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
-        callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
+        EventDispatcher.callCancellable(event, () -> {
             // Remove this entity from players viewable list and send delete entities packet
             entity.getViewers().forEach(entity::removeViewer);
 
@@ -1039,7 +1040,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
         {
             // Process tick events
             InstanceTickEvent chunkTickEvent = new InstanceTickEvent(this, time, lastTickAge);
-            callEvent(InstanceTickEvent.class, chunkTickEvent);
+            EventDispatcher.call(chunkTickEvent);
 
             // Set last tick age
             lastTickAge = time;

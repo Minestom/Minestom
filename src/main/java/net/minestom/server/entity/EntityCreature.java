@@ -6,6 +6,7 @@ import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
@@ -146,7 +147,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         if (swingHand)
             swingMainHand();
         EntityAttackEvent attackEvent = new EntityAttackEvent(this, target);
-        callEvent(EntityAttackEvent.class, attackEvent);
+        EventDispatcher.call(attackEvent);
     }
 
     /**

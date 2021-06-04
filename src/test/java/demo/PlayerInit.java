@@ -159,6 +159,10 @@ public class PlayerInit {
         node.addChild(EventNode.value(EventFilter.PLAYER, player -> player.getUsername().equals("TheMode911"))
                 .addListener(PlayerMoveEvent.class, event -> System.out.println("move!"))
                 .addListener(PlayerTickEvent.class, event -> System.out.println("tick!")));
+
+        //var child = node.findChild("name");
+        //child.addListener(PlayerTickEvent.class, (event) -> {
+        //});
         //node.addChild(tagNode); -> Error: cannot add an item listener to a player node
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();

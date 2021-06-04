@@ -7,6 +7,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
@@ -417,10 +418,10 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask          = 0b111111111111111111;
-        updateLightPacket.emptySkyLightMask     = 0b000000000000000000;
-        updateLightPacket.blockLightMask        = 0b000000000000000000;
-        updateLightPacket.emptyBlockLightMask   = 0b111111111111111111;
+        updateLightPacket.skyLightMask = 0b111111111111111111;
+        updateLightPacket.emptySkyLightMask = 0b000000000000000000;
+        updateLightPacket.blockLightMask = 0b000000000000000000;
+        updateLightPacket.emptyBlockLightMask = 0b111111111111111111;
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
         final List<byte[]> temp = new ArrayList<>(18);
@@ -466,7 +467,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
 
         if (result) {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-            player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
+            EventDispatcher.call(playerChunkLoadEvent);
         }
 
         return result;
@@ -488,7 +489,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
 
         if (result) {
             PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
-            player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
+            EventDispatcher.call(playerChunkUnloadEvent);
         }
 
         return result;

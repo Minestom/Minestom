@@ -58,6 +58,7 @@ public class EventNode<T extends Event> {
 
     protected final EventFilter<T, ?> filter;
     protected final BiPredicate<T, Object> predicate;
+    protected final Class<T> eventType;
     private volatile String name = "unknown";
 
     // Tree data
@@ -69,6 +70,7 @@ public class EventNode<T extends Event> {
     protected EventNode(EventFilter<T, ?> filter, BiPredicate<T, Object> predicate) {
         this.filter = filter;
         this.predicate = predicate;
+        this.eventType = filter.getEventType();
     }
 
     /**
@@ -84,7 +86,7 @@ public class EventNode<T extends Event> {
 
     public void call(@NotNull T event) {
         final var eventClass = event.getClass();
-        if (!filter.getEventType().isAssignableFrom(eventClass)) {
+        if (!eventType.isAssignableFrom(eventClass)) {
             // Invalid event type
             return;
         }
@@ -119,6 +121,29 @@ public class EventNode<T extends Event> {
             }
         }
         this.children.forEach(eventNode -> eventNode.call(event));
+    }
+
+    public void callCancellable(@NotNull T event, @NotNull Runnable successCallback) {
+        call(event);
+        if (!(event instanceof CancellableEvent) || !((CancellableEvent) event).isCancelled()) {
+            successCallback.run();
+        }
+    }
+
+    public @Nullable EventNode<? super T> getParent() {
+        return parent;
+    }
+
+    public @NotNull Set<@NotNull EventNode<T>> getChildren() {
+        return Collections.unmodifiableSet(children);
+    }
+
+    public <E extends T> @NotNull EventNode<E> findChild(@NotNull String name, Class<E> eventType) {
+        return null;
+    }
+
+    public @NotNull EventNode<T> findChild(@NotNull String name) {
+        return findChild(name, eventType);
     }
 
     public EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
@@ -208,14 +233,6 @@ public class EventNode<T extends Event> {
     public EventNode<T> setName(@NotNull String name) {
         this.name = name;
         return this;
-    }
-
-    public @Nullable EventNode<? super T> getParent() {
-        return parent;
-    }
-
-    public @NotNull Set<@NotNull EventNode<T>> getChildren() {
-        return Collections.unmodifiableSet(children);
     }
 
     private void increaseListenerCount(Class<? extends T> eventClass, int count) {
