@@ -65,6 +65,7 @@ public class EventNode<T extends Event> {
     }
 
     private static final Map<Class<? extends Event>, EventFilter<Event, ?>> REDIRECTION_MAP = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends Event>, List<EventFilter<Event, ?>>> REDIRECTION_CACHE = new ConcurrentHashMap<>();
 
     private static void registerMapping(EventFilter<? extends Event, ?> filter) {
         final var type = filter.getEventType();
@@ -129,19 +130,16 @@ public class EventNode<T extends Event> {
         // Process redirection
         if (!redirectionMap.isEmpty()) {
             // Loop through register redirection
-            REDIRECTION_MAP.forEach((aClass, f) -> {
-                if (aClass.isAssignableFrom(eventClass)) {
-                    final Object handler = f.getHandler(event);
-                    if (handler != null) {
-                        final var node = redirectionMap.get(handler);
-                        if (node != null) {
-                            node.call(event);
-                        }
+            getRedirectionCache(event).forEach(redirectionFilter -> {
+                final Object handler = redirectionFilter.getHandler(event);
+                if (handler != null) {
+                    final var node = redirectionMap.get(handler);
+                    if (node != null) {
+                        node.call(event);
                     }
                 }
             });
         }
-
         // Process listener list
         final var listeners = listenerMap.get(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
@@ -289,5 +287,21 @@ public class EventNode<T extends Event> {
         } else {
             throw new IllegalStateException("Something wrong happened, listener count: " + result);
         }
+    }
+
+    private static List<EventFilter<Event, ?>> getRedirectionCache(Event event) {
+        return REDIRECTION_CACHE.computeIfAbsent(event.getClass(),
+                aClass -> findFilters(event));
+    }
+
+    private static List<EventFilter<Event, ?>> findFilters(Event event) {
+        final var eventClass = event.getClass();
+        List<EventFilter<Event, ?>> filters = new ArrayList<>();
+        REDIRECTION_MAP.forEach((aClass, f) -> {
+            if (aClass.isAssignableFrom(eventClass)) {
+                filters.add(f);
+            }
+        });
+        return filters;
     }
 }
