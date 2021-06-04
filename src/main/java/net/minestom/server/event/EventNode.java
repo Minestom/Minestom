@@ -201,17 +201,11 @@ public class EventNode<T extends Event> {
     }
 
     public EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
-        synchronized (GLOBAL_CHILD_LOCK) {
-            final var eventType = listener.getEventType();
-            this.listenerMap.computeIfAbsent(eventType, aClass -> new CopyOnWriteArrayList<>())
-                    .add((EventListener<T>) listener);
-            if (parent != null) {
-                synchronized (parent.lock) {
-                    parent.increaseListenerCount(eventType, 1);
-                }
-            }
-        }
-        return this;
+        return addListener0(listener);
+    }
+
+    public <E extends T> EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
+        return addListener0(EventListener.of(eventType, listener));
     }
 
     public EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
@@ -230,10 +224,6 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public <E extends T> EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
-        return addListener(EventListener.of(eventType, listener));
-    }
-
     public <E extends T> EventNode<T> map(@NotNull Object value, @NotNull EventNode<E> node) {
         this.redirectionMap.put(value, (EventNode<T>) node);
         return this;
@@ -246,6 +236,20 @@ public class EventNode<T extends Event> {
 
     public @NotNull String getName() {
         return name;
+    }
+
+    private EventNode<T> addListener0(@NotNull EventListener<? extends T> listener) {
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final var eventType = listener.getEventType();
+            this.listenerMap.computeIfAbsent(eventType, aClass -> new CopyOnWriteArrayList<>())
+                    .add((EventListener<T>) listener);
+            if (parent != null) {
+                synchronized (parent.lock) {
+                    parent.increaseListenerCount(eventType, 1);
+                }
+            }
+        }
+        return this;
     }
 
     private void increaseListenerCount(Class<? extends T> eventClass, int count) {
