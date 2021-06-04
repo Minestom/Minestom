@@ -80,7 +80,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final EventNode<InstanceEvent> eventNode = EventNode.type(EventFilter.INSTANCE);
+    private final EventNode<InstanceEvent> eventNode;
 
     // Entities present in this instance
     protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
@@ -119,6 +119,8 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
         this.dimensionType = dimensionType;
 
         this.worldBorder = new WorldBorder(this);
+
+        this.eventNode = EventNode.type("instance-" + uniqueId, EventFilter.INSTANCE);
         MinecraftServer.getGlobalEventNode().map(this, eventNode);
     }
 

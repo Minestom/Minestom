@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class GlobalEventHandler implements EventHandler<Event> {
 
-    private final EventNode<Event> node = EventNode.all();
+    private final EventNode<Event> node = EventNode.all("global-handler");
 
     {
         MinecraftServer.getGlobalEventNode().addChild(node);

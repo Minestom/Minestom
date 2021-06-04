@@ -18,48 +18,54 @@ import java.util.function.Predicate;
 
 public class EventNode<T extends Event> {
 
-    public static EventNode<Event> all() {
-        return type(EventFilter.ALL);
+    public static EventNode<Event> all(@NotNull String name) {
+        return type(name, EventFilter.ALL);
     }
 
-    public static <E extends Event, V> EventNode<E> type(@NotNull EventFilter<E, V> filter,
+    public static <E extends Event, V> EventNode<E> type(@NotNull String name,
+                                                         @NotNull EventFilter<E, V> filter,
                                                          @NotNull BiPredicate<E, V> predicate) {
-        return new EventNode<>(filter, (e, o) -> predicate.test(e, (V) o));
+        return new EventNode<>(name, filter, (e, o) -> predicate.test(e, (V) o));
     }
 
-    public static <E extends Event, V> EventNode<E> type(@NotNull EventFilter<E, V> filter) {
-        return type(filter, (e, v) -> true);
+    public static <E extends Event, V> EventNode<E> type(@NotNull String name,
+                                                         @NotNull EventFilter<E, V> filter) {
+        return type(name, filter, (e, v) -> true);
     }
 
-    public static <E extends Event, V> EventNode<E> event(@NotNull EventFilter<E, V> filter,
+    public static <E extends Event, V> EventNode<E> event(@NotNull String name,
+                                                          @NotNull EventFilter<E, V> filter,
                                                           @NotNull Predicate<E> predicate) {
-        return type(filter, (e, h) -> predicate.test(e));
+        return type(name, filter, (e, h) -> predicate.test(e));
     }
 
-    public static <E extends Event, V> EventNode<E> value(@NotNull EventFilter<E, V> filter,
+    public static <E extends Event, V> EventNode<E> value(@NotNull String name,
+                                                          @NotNull EventFilter<E, V> filter,
                                                           @NotNull Predicate<V> predicate) {
-        return type(filter, (e, h) -> predicate.test(h));
+        return type(name, filter, (e, h) -> predicate.test(h));
     }
 
-    public static <E extends Event> EventNode<E> tag(@NotNull EventFilter<E, ? extends TagReadable> filter,
+    public static <E extends Event> EventNode<E> tag(@NotNull String name,
+                                                     @NotNull EventFilter<E, ? extends TagReadable> filter,
                                                      @NotNull Tag<?> tag) {
-        return type(filter, (e, h) -> h.hasTag(tag));
+        return type(name, filter, (e, h) -> h.hasTag(tag));
     }
 
-    public static <E extends Event, V> EventNode<E> tag(@NotNull EventFilter<E, ? extends TagReadable> filter,
+    public static <E extends Event, V> EventNode<E> tag(@NotNull String name,
+                                                        @NotNull EventFilter<E, ? extends TagReadable> filter,
                                                         @NotNull Tag<V> tag,
                                                         @NotNull Predicate<@Nullable V> consumer) {
-        return type(filter, (e, h) -> consumer.test(h.getTag(tag)));
+        return type(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
     private final Map<Object, EventNode<T>> redirectionMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
 
+    protected final String name;
     protected final EventFilter<T, ?> filter;
     protected final BiPredicate<T, Object> predicate;
     protected final Class<T> eventType;
-    private volatile String name = "unknown";
 
     // Tree data
     private static final Object GLOBAL_CHILD_LOCK = new Object();
@@ -67,7 +73,8 @@ public class EventNode<T extends Event> {
     private final Object lock = new Object();
     private final Object2IntMap<Class<? extends T>> childEventMap = new Object2IntOpenHashMap<>();
 
-    protected EventNode(EventFilter<T, ?> filter, BiPredicate<T, Object> predicate) {
+    protected EventNode(String name, EventFilter<T, ?> filter, BiPredicate<T, Object> predicate) {
+        this.name = name;
         this.filter = filter;
         this.predicate = predicate;
         this.eventType = filter.getEventType();
@@ -228,11 +235,6 @@ public class EventNode<T extends Event> {
 
     public @NotNull String getName() {
         return name;
-    }
-
-    public EventNode<T> setName(@NotNull String name) {
-        this.name = name;
-        return this;
     }
 
     private void increaseListenerCount(Class<? extends T> eventClass, int count) {

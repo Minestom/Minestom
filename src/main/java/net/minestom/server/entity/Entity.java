@@ -118,7 +118,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     private long lastAbsoluteSynchronizationTime;
 
     // Events
-    private final EventNode<EntityEvent> eventNode = EventNode.type(EventFilter.ENTITY);
+    private final EventNode<EntityEvent> eventNode;
 
     protected Metadata metadata = new Metadata(this);
     protected EntityMeta entityMeta;
@@ -156,6 +156,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
+        this.eventNode = EventNode.type("entity-" + uuid, EventFilter.ENTITY);
         MinecraftServer.getGlobalEventNode().map(this, eventNode);
     }
 

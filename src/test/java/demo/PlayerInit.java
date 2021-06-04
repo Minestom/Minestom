@@ -138,25 +138,23 @@ public class PlayerInit {
 
         // EVENT REGISTERING
 
-        var empty = EventNode.all()
-                .setName("empty")
+        var empty = EventNode.all("empty-demo")
                 .addListener(PlayerMoveEvent.class, (event) -> {
                 });
 
-        var node = EventNode.type(EventFilter.PLAYER)
-                .setName("node")
+        var node = EventNode.type("test1", EventFilter.PLAYER)
                 .addListener(EventListener.builder(PlayerTickEvent.class)
                         .handler(playerTickEvent -> System.out.println("Player tick!"))
                         .expirationCount(50)
                         .build());
 
-        var conditional = EventNode.value(EventFilter.PLAYER, Player::isCreative)
+        var conditional = EventNode.value("test2", EventFilter.PLAYER, Player::isCreative)
                 .addListener(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved"));
 
-        var tagNode = EventNode.tag(EventFilter.ITEM, Tag.String("tag"));
+        var tagNode = EventNode.tag("test-tag", EventFilter.ITEM, Tag.String("tag"));
 
         node.addChild(conditional);
-        node.addChild(EventNode.value(EventFilter.PLAYER, player -> player.getUsername().equals("TheMode911"))
+        node.addChild(EventNode.value("test-builder", EventFilter.PLAYER, player -> player.getUsername().equals("TheMode911"))
                 .addListener(PlayerMoveEvent.class, event -> System.out.println("move!"))
                 .addListener(PlayerTickEvent.class, event -> System.out.println("tick!")));
 
@@ -184,9 +182,6 @@ public class PlayerInit {
             if (source instanceof Player) {
                 ((Player) source).sendMessage("You attacked something!");
             }
-            empty.map(source, EventNode.type(EventFilter.ENTITY)
-                    .addListener(PlayerMoveEvent.class, (e) ->
-                            System.out.println("Test movement")));
         });
 
         globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {
