@@ -25,37 +25,43 @@ public class EventNode<T extends Event> {
     public static <E extends Event, V> EventNode<E> type(@NotNull String name,
                                                          @NotNull EventFilter<E, V> filter,
                                                          @NotNull BiPredicate<E, V> predicate) {
-        return new EventNode<>(name, filter, (e, o) -> predicate.test(e, (V) o));
+        return create(name, filter, predicate);
     }
 
     public static <E extends Event, V> EventNode<E> type(@NotNull String name,
                                                          @NotNull EventFilter<E, V> filter) {
-        return type(name, filter, (e, v) -> true);
+        return create(name, filter, null);
     }
 
     public static <E extends Event, V> EventNode<E> event(@NotNull String name,
                                                           @NotNull EventFilter<E, V> filter,
                                                           @NotNull Predicate<E> predicate) {
-        return type(name, filter, (e, h) -> predicate.test(e));
+        return create(name, filter, (e, h) -> predicate.test(e));
     }
 
     public static <E extends Event, V> EventNode<E> value(@NotNull String name,
                                                           @NotNull EventFilter<E, V> filter,
                                                           @NotNull Predicate<V> predicate) {
-        return type(name, filter, (e, h) -> predicate.test(h));
+        return create(name, filter, (e, h) -> predicate.test(h));
     }
 
     public static <E extends Event> EventNode<E> tag(@NotNull String name,
                                                      @NotNull EventFilter<E, ? extends TagReadable> filter,
                                                      @NotNull Tag<?> tag) {
-        return type(name, filter, (e, h) -> h.hasTag(tag));
+        return create(name, filter, (e, h) -> h.hasTag(tag));
     }
 
     public static <E extends Event, V> EventNode<E> tag(@NotNull String name,
                                                         @NotNull EventFilter<E, ? extends TagReadable> filter,
                                                         @NotNull Tag<V> tag,
                                                         @NotNull Predicate<@Nullable V> consumer) {
-        return type(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
+        return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
+    }
+
+    private static <E extends Event, V> EventNode<E> create(@NotNull String name,
+                                                            @NotNull EventFilter<E, V> filter,
+                                                            @Nullable BiPredicate<E, V> predicate) {
+        return new EventNode<>(name, filter, predicate != null ? (e, o) -> predicate.test(e, (V) o) : null);
     }
 
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
@@ -73,7 +79,9 @@ public class EventNode<T extends Event> {
     private final Object lock = new Object();
     private final Object2IntMap<Class<? extends T>> childEventMap = new Object2IntOpenHashMap<>();
 
-    protected EventNode(String name, EventFilter<T, ?> filter, BiPredicate<T, Object> predicate) {
+    protected EventNode(@NotNull String name,
+                        @NotNull EventFilter<T, ?> filter,
+                        @Nullable BiPredicate<T, Object> predicate) {
         this.name = name;
         this.filter = filter;
         this.predicate = predicate;
@@ -87,6 +95,8 @@ public class EventNode<T extends Event> {
      * @return true to enter the node, false otherwise
      */
     protected boolean condition(@NotNull T event) {
+        if (predicate == null)
+            return true;
         final var value = filter.getHandler(event);
         return predicate.test(event, value);
     }
@@ -102,11 +112,13 @@ public class EventNode<T extends Event> {
             return;
         }
         // Process redirection
-        final Object handler = filter.getHandler(event);
-        if (handler != null) {
-            final var node = redirectionMap.get(handler);
-            if (node != null) {
-                node.call(event);
+        if (filter != null) {
+            final Object handler = filter.getHandler(event);
+            if (handler != null && !redirectionMap.isEmpty()) {
+                final var node = redirectionMap.get(handler);
+                if (node != null) {
+                    node.call(event);
+                }
             }
         }
         // Process listener list
