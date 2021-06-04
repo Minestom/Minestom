@@ -125,8 +125,8 @@ public final class MinecraftServer {
 
     private static ExtensionManager extensionManager;
 
-    private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
     private static final EventNode<Event> GLOBAL_EVENT_NODE = EventNode.all();
+    private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
 
     private static UpdateManager updateManager;
     private static MinecraftServer minecraftServer;

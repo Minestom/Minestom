@@ -16,11 +16,12 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.metadata.EntityMeta;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -62,7 +63,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -117,8 +118,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     private long lastAbsoluteSynchronizationTime;
 
     // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
+    private final EventNode<EntityEvent> eventNode = EventNode.type(EventFilter.ENTITY);
 
     protected Metadata metadata = new Metadata(this);
     protected EntityMeta entityMeta;
@@ -155,6 +155,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
+
+        MinecraftServer.getGlobalEventNode().map(this, eventNode);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -769,16 +771,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
     }
 
-    @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
-    }
-
-    @NotNull
-    @Override
-    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
-        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
+    public @NotNull EventNode<EntityEvent> getEventNode() {
+        return eventNode;
     }
 
     /**

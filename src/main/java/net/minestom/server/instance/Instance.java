@@ -12,13 +12,14 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
+import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
@@ -43,7 +44,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -57,7 +57,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockModifier, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockModifier, Tickable, EventHandler<InstanceEvent>, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -80,8 +80,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
+    private final EventNode<InstanceEvent> eventNode = EventNode.type(EventFilter.INSTANCE);
 
     // Entities present in this instance
     protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
@@ -120,6 +119,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
         this.dimensionType = dimensionType;
 
         this.worldBorder = new WorldBorder(this);
+        MinecraftServer.getGlobalEventNode().map(this, eventNode);
     }
 
     /**
@@ -834,16 +834,9 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler,
         this.data = data;
     }
 
-    @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
-    }
-
-    @NotNull
-    @Override
-    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
-        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
+    public @NotNull EventNode<InstanceEvent> getEventNode() {
+        return eventNode;
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)
