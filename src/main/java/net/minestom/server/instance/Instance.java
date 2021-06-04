@@ -121,7 +121,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
         this.worldBorder = new WorldBorder(this);
 
         this.eventNode = EventNode.type("instance-" + uniqueId, EventFilter.INSTANCE);
-        MinecraftServer.getGlobalEventNode().map(this, eventNode);
+        MinecraftServer.getGlobalEventHandler().map(this, eventNode);
     }
 
     /**

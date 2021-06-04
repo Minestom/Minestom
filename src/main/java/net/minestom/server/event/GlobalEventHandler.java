@@ -1,25 +1,23 @@
 package net.minestom.server.event;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Consumer;
 
 /**
  * Object containing all the global event listeners.
- *
- * @deprecated use {@link MinecraftServer#getGlobalEventNode()}
  */
-@Deprecated
-public final class GlobalEventHandler implements EventHandler<Event> {
-
-    private final EventNode<Event> node = EventNode.all("global-handler");
-
-    {
-        MinecraftServer.getGlobalEventNode().addChild(node);
+public final class GlobalEventHandler extends EventNode<Event> {
+    public GlobalEventHandler() {
+        super("global", EventFilter.ALL, null);
     }
 
-    @Override
-    public @NotNull EventNode<Event> getEventNode() {
-        return node;
+    /**
+     * @deprecated use {@link #addListener(Class, Consumer)}
+     */
+    @Deprecated
+    public <V extends Event> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
+        addListener(eventClass, eventCallback::run);
+        return true;
     }
 }

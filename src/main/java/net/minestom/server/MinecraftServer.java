@@ -8,8 +8,6 @@ import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
@@ -125,7 +123,6 @@ public final class MinecraftServer {
 
     private static ExtensionManager extensionManager;
 
-    private static final EventNode<Event> GLOBAL_EVENT_NODE = EventNode.all("global");
     private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
 
     private static UpdateManager updateManager;
@@ -300,16 +297,9 @@ public final class MinecraftServer {
      * Used to register event callback at a global scale.
      *
      * @return the global event handler
-     * @deprecated use {@link #getGlobalEventNode()}
      */
-    @NotNull
-    @Deprecated
-    public static GlobalEventHandler getGlobalEventHandler() {
+    public static @NotNull GlobalEventHandler getGlobalEventHandler() {
         return GLOBAL_EVENT_HANDLER;
-    }
-
-    public static @NotNull EventNode<Event> getGlobalEventNode() {
-        return GLOBAL_EVENT_NODE;
     }
 
     /**
