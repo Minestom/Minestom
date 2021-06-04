@@ -121,8 +121,7 @@ public class EventNode<T extends Event> {
         }
         // Process children
         synchronized (lock) {
-            final int childCount = childEventMap.getInt(eventClass);
-            if (childCount < 1) {
+            if (childEventMap.isEmpty() || childEventMap.getInt(eventClass) < 1) {
                 // No listener in children
                 return;
             }
