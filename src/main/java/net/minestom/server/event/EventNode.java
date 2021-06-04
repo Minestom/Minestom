@@ -64,6 +64,21 @@ public class EventNode<T extends Event> {
         return new EventNode<>(name, filter, predicate != null ? (e, o) -> predicate.test(e, (V) o) : null);
     }
 
+    private static final Map<Class<? extends Event>, EventFilter<Event, ?>> REDIRECTION_MAP = new ConcurrentHashMap<>();
+
+    private static void registerMapping(EventFilter<? extends Event, ?> filter) {
+        final var type = filter.getEventType();
+        REDIRECTION_MAP.put(type, (EventFilter<Event, ?>) filter);
+    }
+
+    static {
+        registerMapping(EventFilter.ENTITY);
+        registerMapping(EventFilter.PLAYER);
+        registerMapping(EventFilter.ITEM);
+        registerMapping(EventFilter.INSTANCE);
+        registerMapping(EventFilter.INVENTORY);
+    }
+
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
     private final Map<Object, EventNode<T>> redirectionMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
@@ -112,15 +127,21 @@ public class EventNode<T extends Event> {
             return;
         }
         // Process redirection
-        if (filter != null) {
-            final Object handler = filter.getHandler(event);
-            if (handler != null && !redirectionMap.isEmpty()) {
-                final var node = redirectionMap.get(handler);
-                if (node != null) {
-                    node.call(event);
+        if (!redirectionMap.isEmpty()) {
+            // Loop through register redirection
+            REDIRECTION_MAP.forEach((aClass, f) -> {
+                if (aClass.isAssignableFrom(eventClass)) {
+                    final Object handler = f.getHandler(event);
+                    if (handler != null) {
+                        final var node = redirectionMap.get(handler);
+                        if (node != null) {
+                            node.call(event);
+                        }
+                    }
                 }
-            }
+            });
         }
+
         // Process listener list
         final var listeners = listenerMap.get(eventClass);
         if (listeners != null && !listeners.isEmpty()) {
