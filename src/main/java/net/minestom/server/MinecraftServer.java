@@ -300,8 +300,10 @@ public final class MinecraftServer {
      * Used to register event callback at a global scale.
      *
      * @return the global event handler
+     * @deprecated use {@link #getGlobalEventNode()}
      */
     @NotNull
+    @Deprecated
     public static GlobalEventHandler getGlobalEventHandler() {
         return GLOBAL_EVENT_HANDLER;
     }

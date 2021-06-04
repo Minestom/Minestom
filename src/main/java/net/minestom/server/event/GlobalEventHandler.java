@@ -6,7 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Object containing all the global event listeners.
+ *
+ * @deprecated use {@link MinecraftServer#getGlobalEventNode()}
  */
+@Deprecated
 public final class GlobalEventHandler implements EventHandler<Event> {
 
     private final EventNode<Event> node = EventNode.all("global-handler");
