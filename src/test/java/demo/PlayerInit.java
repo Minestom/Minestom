@@ -5,14 +5,12 @@ import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -35,7 +33,6 @@ import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -138,25 +135,12 @@ public class PlayerInit {
 
         // EVENT REGISTERING
 
-        var empty = EventNode.all("empty-demo")
-                .addListener(PlayerMoveEvent.class, (event) -> {
-                });
-
-        var node = EventNode.type("test1", EventFilter.PLAYER)
-                .addListener(EventListener.builder(PlayerTickEvent.class)
-                        .handler(playerTickEvent -> System.out.println("Player tick!"))
-                        .expirationCount(50)
-                        .build());
-
-        var conditional = EventNode.value("test2", EventFilter.PLAYER, Player::isCreative)
-                .addListener(PlayerMoveEvent.class, (event) -> System.out.println("creative player moved"));
-
-        var tagNode = EventNode.tag("test-tag", EventFilter.ITEM, Tag.String("tag"));
-
-        node.addChild(conditional);
-        node.addChild(EventNode.value("test-builder", EventFilter.PLAYER, player -> player.getUsername().equals("TheMode911"))
+        var globalNode = MinecraftServer.getGlobalEventHandler();
+        var node = EventNode.value("test-builder", EventFilter.PLAYER, player -> player.getUsername().equals("TheMode911"))
                 .addListener(PlayerMoveEvent.class, event -> System.out.println("move!"))
-                .addListener(PlayerTickEvent.class, event -> System.out.println("tick!")));
+                .addListener(PlayerTickEvent.class, event -> System.out.println("tick!"));
+        globalNode.addChild(node);
+        globalNode.removeChild(node);
 
         //var child = node.findChild("name");
         //child.addListener(PlayerTickEvent.class, (event) -> {
@@ -164,7 +148,7 @@ public class PlayerInit {
         //node.addChild(tagNode); -> Error: cannot add an item listener to a player node
 
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
-        globalEventHandler.addEventCallback(EntityAttackEvent.class, event -> {
+        globalEventHandler.addListener(EntityAttackEvent.class, event -> {
             final Entity source = event.getEntity();
             final Entity entity = event.getTarget();
             if (entity instanceof Player) {
@@ -184,11 +168,11 @@ public class PlayerInit {
             }
         });
 
-        globalEventHandler.addEventCallback(PlayerDeathEvent.class, event -> {
-            event.setChatMessage(ColoredText.of("custom death message"));
+        globalEventHandler.addListener(PlayerDeathEvent.class, event -> {
+            event.setChatMessage(Component.text("custom death message"));
         });
 
-        globalEventHandler.addEventCallback(PlayerBlockPlaceEvent.class, event -> {
+        globalEventHandler.addListener(PlayerBlockPlaceEvent.class, event -> {
             if (event.getHand() != Player.Hand.MAIN)
                 return;
 
@@ -204,7 +188,7 @@ public class PlayerInit {
 
         });
 
-        globalEventHandler.addEventCallback(PlayerBlockInteractEvent.class, event -> {
+        globalEventHandler.addListener(PlayerBlockInteractEvent.class, event -> {
             if (event.getHand() != Player.Hand.MAIN)
                 return;
             final Player player = event.getPlayer();
@@ -216,7 +200,7 @@ public class PlayerInit {
             player.sendMessage("CHUNK COUNT " + player.getInstance().getChunks().size());
         });
 
-        globalEventHandler.addEventCallback(PickupItemEvent.class, event -> {
+        globalEventHandler.addListener(PickupItemEvent.class, event -> {
             final Entity entity = event.getLivingEntity();
             if (entity instanceof Player) {
                 // Cancel event if player does not have enough inventory space
@@ -225,7 +209,7 @@ public class PlayerInit {
             }
         });
 
-        globalEventHandler.addEventCallback(ItemDropEvent.class, event -> {
+        globalEventHandler.addListener(ItemDropEvent.class, event -> {
             final Player player = event.getPlayer();
             ItemStack droppedItem = event.getItemStack();
 
@@ -237,12 +221,12 @@ public class PlayerInit {
             itemEntity.setVelocity(velocity);
         });
 
-        globalEventHandler.addEventCallback(PlayerDisconnectEvent.class, event -> {
+        globalEventHandler.addListener(PlayerDisconnectEvent.class, event -> {
             final Player player = event.getPlayer();
             System.out.println("DISCONNECTION " + player.getUsername());
         });
 
-        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
+        globalEventHandler.addListener(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
 
             var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -260,7 +244,7 @@ public class PlayerInit {
             });
         });
 
-        globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {
+        globalEventHandler.addListener(PlayerSpawnEvent.class, event -> {
             final Player player = event.getPlayer();
             player.setGameMode(GameMode.CREATIVE);
 
@@ -292,23 +276,23 @@ public class PlayerInit {
             }
         });
 
-        globalEventHandler.addEventCallback(PlayerBlockBreakEvent.class, event -> {
+        globalEventHandler.addListener(PlayerBlockBreakEvent.class, event -> {
             final short blockStateId = event.getBlockStateId();
             System.out.println("broke " + blockStateId + " " + Block.fromStateId(blockStateId));
         });
 
-        globalEventHandler.addEventCallback(PlayerUseItemEvent.class, useEvent -> {
+        globalEventHandler.addListener(PlayerUseItemEvent.class, useEvent -> {
             final Player player = useEvent.getPlayer();
             player.sendMessage("Using item in air: " + useEvent.getItemStack().getMaterial());
         });
 
-        globalEventHandler.addEventCallback(PlayerUseItemOnBlockEvent.class, useEvent -> {
+        globalEventHandler.addListener(PlayerUseItemOnBlockEvent.class, useEvent -> {
             final Player player = useEvent.getPlayer();
             player.sendMessage("Main item: " + player.getInventory().getItemInMainHand().getMaterial());
             player.sendMessage("Using item on block: " + useEvent.getItemStack().getMaterial() + " at " + useEvent.getPosition() + " on face " + useEvent.getBlockFace());
         });
 
-        globalEventHandler.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
+        globalEventHandler.addListener(PlayerChunkUnloadEvent.class, event -> {
             final Player player = event.getPlayer();
             final Instance instance = player.getInstance();
 
