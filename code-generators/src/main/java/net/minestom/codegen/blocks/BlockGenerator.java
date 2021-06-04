@@ -105,7 +105,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         );
         blockClass.addField(
                 FieldSpec.builder(TypeName.BOOLEAN, "singleState")
-                .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
         blockClass.addField(
                 FieldSpec.builder(ParameterizedTypeName.get(ClassName.get("java.util", "List"), blockAltClassName), "alternatives")
@@ -388,7 +388,12 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                 staticBlock.addStatement("$T.initStates()", blockStateSpecificClassName);
 
                 // Add BlockStates to list of files we need to write:
-                filesToWrite.add(JavaFile.builder("net.minestom.server.instance.block.states", blockStateSpecificClass.build()).indent("    ").build());
+                filesToWrite.add(
+                        JavaFile.builder("net.minestom.server.instance.block.states", blockStateSpecificClass.build()
+                        )
+                                .indent("    ")
+                                .skipJavaLangImports(true)
+                                .build());
             }
         }
         blockClass.addStaticBlock(staticBlock.build());
