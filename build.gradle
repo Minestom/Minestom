@@ -5,8 +5,6 @@ plugins {
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.5.0'
     id 'checkstyle'
-    // Used to download our data
-    id 'de.undercouch.download' version '4.1.1'
 }
 
 group 'net.minestom.server'
@@ -214,86 +212,10 @@ publishing {
     }
 }
 
-def mcVersionUnderscored = mcVersion.replace('.', '_')
-def dataDest = new File(project.projectDir, "/src/main/resources/minecraft_data/")
-def dataDestTags = new File(project.projectDir, "/src/main/resources/minecraft_data/tags")
-def dataDestLootTable = new File(project.projectDir, "/src/main/resources/minecraft_data/loot_tables")
-
 // UPDATE: Update the data to the required version
-task downloadResources(type: Download) {
-    String mainURL = "https://raw.githubusercontent.com/Minestom/MinestomDataGenerator/master/Minestom-data/$mcVersion/${mcVersionUnderscored}_"
-    src([
-            // attributes.json
-            "${mainURL}attributes.json",
-            // biomes.json
-            "${mainURL}biomes.json",
-            // block_entities
-            "${mainURL}block_entities.json",
-            // block_properties
-            "${mainURL}block_properties.json",
-            // blocks.json
-            "${mainURL}blocks.json",
-            // custom_statistics.json
-            "${mainURL}custom_statistics.json",
-            // dimension_types.json
-            "${mainURL}dimension_types.json",
-            // enchantments.json
-            "${mainURL}enchantments.json",
-            // entities.json
-            "${mainURL}entities.json",
-            // fluids.json
-            "${mainURL}fluids.json",
-            // items.json
-            "${mainURL}items.json",
-            // map_colors.json
-            "${mainURL}map_colors.json",
-            // particles.json
-            "${mainURL}particles.json",
-            // potion_effects.json
-            "${mainURL}potion_effects.json",
-            // potions.json
-            "${mainURL}potions.json",
-            // sounds.json
-            "${mainURL}sounds.json",
-            // villager_professions.json
-            "${mainURL}villager_professions.json",
-            // villager_types.json
-            "${mainURL}villager_types.json"
-    ])
-    dest dataDest
-    overwrite true
-    dependsOn("downloadLootTables")
-    dependsOn("downloadTags")
-}
-
-task downloadTags(type: Download) {
-    String mainURL = "https://raw.githubusercontent.com/Minestom/MinestomDataGenerator/master/Minestom-data/$mcVersion/${mcVersionUnderscored}_tags/${mcVersionUnderscored}_"
-    src([
-            // block_tags.json
-            "${mainURL}block_tags.json",
-            // entity_type_tags.json
-            "${mainURL}entity_type_tags.json",
-            // fluid_tags.json
-            "${mainURL}fluid_tags.json",
-            // item_tags.json
-            "${mainURL}item_tags.json",
-    ])
-    dest dataDestTags
-    overwrite true
-}
-
-task downloadLootTables(type: Download) {
-    String mainURL = "https://raw.githubusercontent.com/Minestom/MinestomDataGenerator/master/Minestom-data/$mcVersion/${mcVersionUnderscored}_loot_tables/${mcVersionUnderscored}_"
-    src([
-            // block_loot_tables.json.json
-            "${mainURL}block_loot_tables.json",
-            // chest_loot_tables.json
-            "${mainURL}chest_loot_tables.json",
-            // entity_loot_tables.json
-            "${mainURL}entity_loot_tables.json",
-            // gameplay_loot_tables.json
-            "${mainURL}gameplay_loot_tables.json",
-    ])
-    dest dataDestLootTable
-    overwrite true
+// This task just copies the json data from the submodule to the src/main/resources/minecraft_data folder
+// TODO: Make sure to delete old data from previous versions
+task copyData(type: Copy) {
+    from("MinestomDataGenerator/Minestom-Data/$mcVersion/")
+    into(new File(project.projectDir, "/src/main/resources/minecraft_data/"))
 }
