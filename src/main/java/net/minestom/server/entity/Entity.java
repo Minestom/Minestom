@@ -156,8 +156,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        this.eventNode = EventNode.type("entity-" + uuid, EventFilter.ENTITY);
-        MinecraftServer.getGlobalEventHandler().map(this, eventNode);
+        this.eventNode = EventNode.value("entity-" + uuid, EventFilter.ENTITY, this::equals);
+        MinecraftServer.getGlobalEventHandler().addChild(eventNode);
     }
 
     public Entity(@NotNull EntityType entityType) {

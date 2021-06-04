@@ -64,24 +64,7 @@ public class EventNode<T extends Event> {
         return new EventNode<>(name, filter, predicate != null ? (e, o) -> predicate.test(e, (V) o) : null);
     }
 
-    private static final Map<Class<? extends Event>, EventFilter<Event, ?>> REDIRECTION_MAP = new ConcurrentHashMap<>();
-    private static final Map<Class<? extends Event>, List<EventFilter<Event, ?>>> REDIRECTION_CACHE = new ConcurrentHashMap<>();
-
-    private static void registerMapping(EventFilter<? extends Event, ?> filter) {
-        final var type = filter.getEventType();
-        REDIRECTION_MAP.put(type, (EventFilter<Event, ?>) filter);
-    }
-
-    static {
-        registerMapping(EventFilter.ENTITY);
-        registerMapping(EventFilter.PLAYER);
-        registerMapping(EventFilter.ITEM);
-        registerMapping(EventFilter.INSTANCE);
-        registerMapping(EventFilter.INVENTORY);
-    }
-
     private final Map<Class<? extends T>, List<EventListener<T>>> listenerMap = new ConcurrentHashMap<>();
-    private final Map<Object, EventNode<T>> redirectionMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
 
     protected final String name;
@@ -126,19 +109,6 @@ public class EventNode<T extends Event> {
         if (!condition(event)) {
             // Cancelled by superclass
             return;
-        }
-        // Process redirection
-        if (!redirectionMap.isEmpty()) {
-            // Loop through register redirection
-            getRedirectionCache(event).forEach(redirectionFilter -> {
-                final Object handler = redirectionFilter.getHandler(event);
-                if (handler != null) {
-                    final var node = redirectionMap.get(handler);
-                    if (node != null) {
-                        node.call(event);
-                    }
-                }
-            });
         }
         // Process listener list
         final var listeners = listenerMap.get(eventClass);
@@ -243,16 +213,6 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public <E extends T> EventNode<T> map(@NotNull Object value, @NotNull EventNode<E> node) {
-        this.redirectionMap.put(value, (EventNode<T>) node);
-        return this;
-    }
-
-    public EventNode<T> unmap(@NotNull Object value) {
-        this.redirectionMap.remove(value);
-        return this;
-    }
-
     public @NotNull String getName() {
         return name;
     }
@@ -287,21 +247,5 @@ public class EventNode<T extends Event> {
         } else {
             throw new IllegalStateException("Something wrong happened, listener count: " + result);
         }
-    }
-
-    private static List<EventFilter<Event, ?>> getRedirectionCache(Event event) {
-        return REDIRECTION_CACHE.computeIfAbsent(event.getClass(),
-                aClass -> findFilters(event));
-    }
-
-    private static List<EventFilter<Event, ?>> findFilters(Event event) {
-        final var eventClass = event.getClass();
-        List<EventFilter<Event, ?>> filters = new ArrayList<>();
-        REDIRECTION_MAP.forEach((aClass, f) -> {
-            if (aClass.isAssignableFrom(eventClass)) {
-                filters.add(f);
-            }
-        });
-        return filters;
     }
 }

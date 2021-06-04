@@ -133,6 +133,10 @@ public class PlayerInit {
             packetController.setCancel(false);
         });
 
+        connectionManager.addPlayerInitialization(player -> {
+            player.addEventCallback(PlayerTickEvent.class, event -> {});
+        });
+
         // EVENT REGISTERING
 
         var globalNode = MinecraftServer.getGlobalEventHandler();
