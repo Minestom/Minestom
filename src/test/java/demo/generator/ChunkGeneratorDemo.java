@@ -25,7 +25,7 @@ public class ChunkGeneratorDemo implements ChunkGenerator {
 
         for (short x = 0; x < Chunk.CHUNK_SIZE_X; x++)
             for (short z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                for (short y = 300; y < 500; y++) {
+                for (short y = 250; y < 300; y++) {
                     batch.setBlock(x, y, z, Block.STONE);
                 }
             }

@@ -1,7 +1,9 @@
 package net.minestom.server.world.biomes;
 
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
@@ -162,6 +164,11 @@ public class Biome {
         public String getType() {
             return type;
         }
+    }
+
+    public static int getBiomeCount(DimensionType dimensionType) {
+        final int height = dimensionType.getLogicalHeight();
+        return 4 * 4 * 4 * (height / Chunk.CHUNK_SECTION_SIZE);
     }
 
     public static class BiomeBuilder {

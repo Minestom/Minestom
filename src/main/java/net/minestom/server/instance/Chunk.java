@@ -55,8 +55,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
 
-    public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
-
     private final UUID identifier;
 
     protected Instance instance;
@@ -85,10 +83,11 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
 
-        if (biomes != null && biomes.length == BIOME_COUNT) {
+        final int biomeCount = Biome.getBiomeCount(instance.getDimensionType());
+        if (biomes != null && biomes.length == biomeCount) {
             this.biomes = biomes;
         } else {
-            this.biomes = new Biome[BIOME_COUNT];
+            this.biomes = new Biome[biomeCount];
         }
     }
 
@@ -389,19 +388,17 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask = 0b111111111111111111;
-        updateLightPacket.emptySkyLightMask = 0b000000000000000000;
-        updateLightPacket.blockLightMask = 0b000000000000000000;
-        updateLightPacket.emptyBlockLightMask = 0b111111111111111111;
+        //updateLightPacket.skyLightMask = 0b111111111111111111;
+        //updateLightPacket.emptySkyLightMask = 0b000000000000000000;
+        //updateLightPacket.blockLightMask = 0b000000000000000000;
+        //updateLightPacket.emptyBlockLightMask = 0b111111111111111111;
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
         final List<byte[]> temp = new ArrayList<>(18);
         for (int i = 0; i < 18; ++i) {
             temp.add(bytes);
         }
-        updateLightPacket.skyLight = temp;
-        updateLightPacket.blockLight = new ArrayList<>(0);
-
+        //updateLightPacket.skyLight = temp;
         return updateLightPacket;
     }
 
@@ -494,7 +491,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
             return;
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        //playerConnection.sendPacket(getLightPacket());
+        playerConnection.sendPacket(getLightPacket());
         playerConnection.sendPacket(createChunkPacket());
     }
 
@@ -502,7 +499,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         if (!isLoaded()) {
             return;
         }
-        //sendPacketToViewers(getLightPacket());
+        sendPacketToViewers(getLightPacket());
         sendPacketToViewers(createChunkPacket());
     }
 

@@ -23,14 +23,14 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
     //todo make changeable
     public boolean trustEdges = true;
 
-    public int skyLightMask;
-    public int blockLightMask;
+    public long[] skyLightMask = new long[0];
+    public long[] blockLightMask = new long[0];
 
-    public int emptySkyLightMask;
-    public int emptyBlockLightMask;
+    public long[] emptySkyLightMask = new long[0];
+    public long[] emptyBlockLightMask = new long[0];
 
-    public List<byte[]> skyLight;
-    public List<byte[]> blockLight;
+    public List<byte[]> skyLight = new ArrayList<>();
+    public List<byte[]> blockLight = new ArrayList<>();
 
     // Cacheable data
     private final UUID identifier;
@@ -42,19 +42,11 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
      */
     public UpdateLightPacket() {
         this(UUID.randomUUID(), Long.MAX_VALUE);
-        for (int i = 0; i < 14; i++) {
-            skyLight.add(new byte[2048]);
-        }
-        for (int i = 0; i < 6; i++) {
-            blockLight.add(new byte[2048]);
-        }
     }
 
     public UpdateLightPacket(@Nullable UUID identifier, long timestamp) {
         this.identifier = identifier;
         this.timestamp = timestamp;
-        skyLight = new ArrayList<>(14);
-        blockLight = new ArrayList<>(6);
     }
 
     @Override
@@ -64,19 +56,19 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
         writer.writeBoolean(trustEdges);
 
-        writer.writeVarInt(skyLightMask);
-        writer.writeVarInt(blockLightMask);
+        writer.writeLongArray(skyLightMask);
+        writer.writeLongArray(blockLightMask);
 
-        writer.writeVarInt(emptySkyLightMask);
-        writer.writeVarInt(emptyBlockLightMask);
+        writer.writeLongArray(emptySkyLightMask);
+        writer.writeLongArray(emptyBlockLightMask);
 
-        //writer.writeVarInt(skyLight.size());
+        writer.writeVarInt(skyLight.size());
         for (byte[] bytes : skyLight) {
             writer.writeVarInt(2048); // Always 2048 length
             writer.writeBytes(bytes);
         }
 
-        //writer.writeVarInt(blockLight.size());
+        writer.writeVarInt(blockLight.size());
         for (byte[] bytes : blockLight) {
             writer.writeVarInt(2048); // Always 2048 length
             writer.writeBytes(bytes);
@@ -90,11 +82,11 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
         trustEdges = reader.readBoolean();
 
-        skyLightMask = reader.readVarInt();
-        blockLightMask = reader.readVarInt();
+        skyLightMask = reader.readLongArray();
+        blockLightMask = reader.readLongArray();
 
-        emptySkyLightMask = reader.readVarInt();
-        emptyBlockLightMask = reader.readVarInt();
+        emptySkyLightMask = reader.readLongArray();
+        emptyBlockLightMask = reader.readLongArray();
 
         // sky light
         skyLight.clear();

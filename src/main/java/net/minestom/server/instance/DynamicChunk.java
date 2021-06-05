@@ -242,7 +242,7 @@ public class DynamicChunk extends Chunk {
             }
 
             // Write the biomes id
-            for (int i = 0; i < BIOME_COUNT; i++) {
+            for (int i = 0; i < 1024; i++) { // TODO variable biome count
                 final byte id = (byte) biomes[i].getId();
                 chunkWriter.writeByte(id);
             }
@@ -346,7 +346,7 @@ public class DynamicChunk extends Chunk {
                 }
 
                 // Biomes
-                for (int i = 0; i < BIOME_COUNT; i++) {
+                for (int i = 0; i < 1024; i++) { // TODO variable biome count
                     final byte id = reader.readByte();
                     this.biomes[i] = BIOME_MANAGER.getById(id);
                 }

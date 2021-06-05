@@ -87,7 +87,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             final Section section = entry.getValue();
 
             final int lengthIndex = index % 64;
-            final int maskIndex = index / (16 + 1);
+            final int maskIndex = index / 64;
 
             long mask = maskMap.get(maskIndex);
             mask |= 1L << lengthIndex;
@@ -96,8 +96,12 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             Utils.writeSectionBlocks(blocks, section);
         }
 
-        writer.writeVarInt(maskMap.size());
-        maskMap.values().forEach(writer::writeLong);
+        final int maskSize = maskMap.size();
+        writer.writeVarInt(maskSize);
+        for (int i = 0; i < maskSize; i++) {
+            final long value = maskMap.containsKey(i) ? maskMap.get(i) : 0;
+            writer.writeLong(value);
+        }
 
         // TODO: don't hardcode heightmaps
         // Heightmap
@@ -130,7 +134,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
         // Data
         writer.writeVarInt(blocks.writerIndex());
-        writer.getBuffer().writeBytes(blocks);
+        writer.write(blocks);
         blocks.release();
 
         // Block entities
