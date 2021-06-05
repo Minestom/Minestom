@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -44,8 +45,6 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public IntSet blockEntities;
     public Int2ObjectMap<Data> blocksData;
 
-    public int[] sections = new int[0];
-
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * MAX_BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
@@ -79,26 +78,26 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
 
-        int mask = 0;
         ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
-        final boolean fullChunk = sections.length == 0;
-        for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
-            if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
-                final Section section = paletteStorage.getSections()[i];
-                if (section == null) {
-                    // Section not loaded
-                    continue;
-                }
-                if (section.getBlocks().length > 0) { // section contains at least one block
-                    mask |= 1 << i;
-                    Utils.writeSectionBlocks(blocks, section);
-                }
-            }
+
+        Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
+
+        for (var entry : paletteStorage.getSectionMap().int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+            final Section section = entry.getValue();
+
+            final int lengthIndex = index % 64;
+            final int maskIndex = index / (16 + 1);
+
+            long mask = maskMap.get(maskIndex);
+            mask |= 1L << lengthIndex;
+            maskMap.put(maskIndex, mask);
+
+            Utils.writeSectionBlocks(blocks, section);
         }
 
-        // TODO variable size
-        writer.writeVarInt(1);
-        writer.writeLong(mask);
+        writer.writeVarInt(maskMap.size());
+        maskMap.values().forEach(writer::writeLong);
 
         // TODO: don't hardcode heightmaps
         // Heightmap
@@ -168,7 +167,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
         int maskCount = reader.readVarInt();
         long[] masks = new long[maskCount];
-        for(int i=0;i<maskCount;i++){
+        for (int i = 0; i < maskCount; i++) {
             masks[i] = reader.readLong();
         }
         try {
@@ -195,8 +194,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                 byte bitsPerEntry = reader.readByte();
 
                 // Resize palette if necessary
-                if (bitsPerEntry > paletteStorage.getSections()[section].getBitsPerEntry()) {
-                    paletteStorage.getSections()[section].resize(bitsPerEntry);
+                if (bitsPerEntry > paletteStorage.getSection(section).getBitsPerEntry()) {
+                    paletteStorage.getSection(section).resize(bitsPerEntry);
                 }
 
                 // Retrieve palette values
@@ -204,14 +203,14 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                     int paletteSize = reader.readVarInt();
                     for (int i = 0; i < paletteSize; i++) {
                         final int paletteValue = reader.readVarInt();
-                        paletteStorage.getSections()[section].getPaletteBlockMap().put((short) i, (short) paletteValue);
-                        paletteStorage.getSections()[section].getBlockPaletteMap().put((short) paletteValue, (short) i);
+                        paletteStorage.getSection(section).getPaletteBlockMap().put((short) i, (short) paletteValue);
+                        paletteStorage.getSection(section).getBlockPaletteMap().put((short) paletteValue, (short) i);
                     }
                 }
 
                 // Read blocks
                 int dataLength = reader.readVarInt();
-                long[] data = paletteStorage.getSections()[section].getBlocks();
+                long[] data = paletteStorage.getSection(section).getBlocks();
                 for (int i = 0; i < dataLength; i++) {
                     data[i] = reader.readLong();
                 }

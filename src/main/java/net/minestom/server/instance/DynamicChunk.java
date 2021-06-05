@@ -249,7 +249,7 @@ public class DynamicChunk extends Chunk {
 
             // Loop all blocks
             for (byte x = 0; x < CHUNK_SIZE_X; x++) {
-                for (short y = 0; y < CHUNK_SIZE_Y; y++) {
+                for (short y = 0; y < 256; y++) { // TODO increase max size
                     for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
                         final int index = getBlockIndex(x, y, z);
 
