@@ -416,7 +416,7 @@ public class InventoryClickProcessor {
 
     @NotNull
     public InventoryClickResult drop(@Nullable Inventory inventory, @NotNull Player player,
-                                     int mode, int slot, int button,
+                                     boolean all, int slot, int button,
                                      @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.DROP, clicked, cursor);
 
@@ -454,7 +454,7 @@ public class InventoryClickProcessor {
                 }
             }
 
-        } else if (mode == 4) {
+        } else if (!all) {
             if (button == 0) {
                 // Drop key Q (drop 1)
                 final ItemStack dropItem = cursorRule.apply(resultClicked, 1);

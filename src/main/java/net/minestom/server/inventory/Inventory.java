@@ -398,7 +398,7 @@ public class Inventory extends AbstractInventory implements Viewable {
     }
 
     @Override
-    public boolean drop(@NotNull Player player, int mode, int slot, int button) {
+    public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
         final PlayerInventory playerInventory = player.getInventory();
         final boolean isInWindow = isClickInWindow(slot);
         final boolean outsideDrop = slot == -999;
@@ -408,7 +408,7 @@ public class Inventory extends AbstractInventory implements Viewable {
         final ItemStack cursor = getCursorItem(player);
 
         final InventoryClickResult clickResult = clickProcessor.drop(isInWindow ? this : null, player,
-                mode, slot, button, clicked, cursor);
+                all, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh()) {
             updateFromClick(clickResult, player);
