@@ -115,16 +115,18 @@ public class EventNode<T extends Event> {
 
         final var listeners = entry.listeners;
         if (listeners != null && !listeners.isEmpty()) {
-            listeners.forEach(listener -> {
+            for (EventListener<T> listener : listeners) {
                 final EventListener.Result result = listener.run(event);
                 if (result == EventListener.Result.EXPIRED) {
                     listeners.remove(listener);
                 }
-            });
+            }
         }
         // Process children
         if (entry.childCount > 0) {
-            this.children.forEach(eventNode -> eventNode.call(event));
+            for (EventNode<T> child : children) {
+                child.call(event);
+            }
         }
     }
 
