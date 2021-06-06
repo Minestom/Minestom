@@ -39,9 +39,17 @@ public class WindowListener {
 
         if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
             if (button == 0) {
-                successful = inventory.leftClick(player, slot);
+                if (slot != -999) {
+                    successful = inventory.leftClick(player, slot);
+                } else {
+                    successful = inventory.drop(player, true, slot, button);
+                }
             } else if (button == 1) {
-                successful = inventory.rightClick(player, slot);
+                if (slot != -999) {
+                    successful = inventory.rightClick(player, slot);
+                } else {
+                    successful = inventory.drop(player, false, slot, button);
+                }
             }
         } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
             successful = inventory.shiftClick(player, slot);
