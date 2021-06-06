@@ -39,6 +39,9 @@ allprojects {
         maven {
             url "https://repo.velocitypowered.com/snapshots/"
         }
+        maven {
+            url "https://repo.minestom.com/repository/maven-public/"
+        }
     }
     javadoc {
         options {
@@ -171,6 +174,9 @@ dependencies {
         }
     }
 
+    // This is the data Minestom uses. from https://github.com/Minestom/MinestomDataGenerator
+    api "net.minestom:minestom-data-customizable:${rootProject.properties.get("mcVersion")}"
+
     api "com.github.Minestom:DependencyGetter:v1.0.1"
 
     // Adventure, for user-interface
@@ -200,22 +206,10 @@ configurations.all {
     exclude group: "org.checkerframework", module: "checker-qual"
 }
 
-processResources {
-    dependsOn("copyData")
-}
-
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
         }
     }
-}
-
-// UPDATE: Update the data to the required version
-// This task just copies the json data from the submodule to the src/main/resources/minecraft_data folder
-// TODO: Make sure to delete old data from previous versions
-task copyData(type: Copy) {
-    from("MinestomDataGenerator/Minestom-Data/$mcVersion/")
-    into(new File(project.projectDir, "/src/main/resources/minecraft_data/"))
 }

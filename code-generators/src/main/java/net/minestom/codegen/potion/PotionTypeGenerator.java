@@ -12,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 
 public final class PotionTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionTypeGenerator.class);
-    private final File potionsFile;
+    private final InputStream potionsFile;
     private final File outputFolder;
 
-    public PotionTypeGenerator(@NotNull File potionsFile, @NotNull File outputFolder) {
+    public PotionTypeGenerator(@Nullable InputStream potionsFile, @NotNull File outputFolder) {
         this.potionsFile = potionsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!potionsFile.exists()) {
+        if (potionsFile == null) {
             LOGGER.error("Failed to find potions.json.");
             LOGGER.error("Stopped code generation for potions.");
             return;
@@ -42,14 +40,7 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray potions;
-        try {
-            potions = GSON.fromJson(new JsonReader(new FileReader(potionsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find potions.json.");
-            LOGGER.error("Stopped code generation for potions.");
-            return;
-        }
+        JsonArray potions = GSON.fromJson(new JsonReader(new InputStreamReader(potionsFile)), JsonArray.class);
         ClassName potionTypeClassName = ClassName.get("net.minestom.server.potion", "PotionType");
 
         // Particle

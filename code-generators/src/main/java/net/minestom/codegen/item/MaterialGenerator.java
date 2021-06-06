@@ -12,25 +12,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 import java.util.function.Supplier;
 
 public final class MaterialGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MaterialGenerator.class);
-    private final File itemsFile;
+    private final InputStream itemsFile;
     private final File outputFolder;
 
-    public MaterialGenerator(@NotNull File itemsFile, @NotNull File outputFolder) {
+    public MaterialGenerator(@Nullable InputStream itemsFile, @NotNull File outputFolder) {
         this.itemsFile = itemsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!itemsFile.exists()) {
+        if (itemsFile == null) {
             LOGGER.error("Failed to find items.json.");
             LOGGER.error("Stopped code generation for items.");
             return;
@@ -45,14 +43,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         ClassName blockCN = ClassName.get("net.minestom.server.instance.block", "Block");
         ParameterizedTypeName blocksCNSupplier = ParameterizedTypeName.get(ClassName.get(Supplier.class), blockCN);
 
-        JsonArray items;
-        try {
-            items = GSON.fromJson(new JsonReader(new FileReader(itemsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find items.json.");
-            LOGGER.error("Stopped code generation for items.");
-            return;
-        }
+        JsonArray items = GSON.fromJson(new JsonReader(new InputStreamReader(itemsFile)), JsonArray.class);
         ClassName itemClassName = ClassName.get("net.minestom.server.item", "Material");
 
         // Item

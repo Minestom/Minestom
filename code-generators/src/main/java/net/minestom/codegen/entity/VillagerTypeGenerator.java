@@ -12,25 +12,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
 public final class VillagerTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(VillagerTypeGenerator.class);
-    private final File villagerTypesFile;
+    private final InputStream villagerTypesFile;
     private final File outputFolder;
 
-    public VillagerTypeGenerator(@NotNull File villagerTypesFile, @NotNull File outputFolder) {
+    public VillagerTypeGenerator(@Nullable InputStream villagerTypesFile, @NotNull File outputFolder) {
         this.villagerTypesFile = villagerTypesFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!villagerTypesFile.exists()) {
+        if (villagerTypesFile == null) {
             LOGGER.error("Failed to find villager_types.json.");
             LOGGER.error("Stopped code generation for villager types.");
             return;
@@ -43,14 +41,7 @@ public final class VillagerTypeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
-        JsonArray villagerTypes;
-        try {
-            villagerTypes = GSON.fromJson(new JsonReader(new FileReader(villagerTypesFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find villager_types.json.");
-            LOGGER.error("Stopped code generation for villager types.");
-            return;
-        }
+        JsonArray villagerTypes = GSON.fromJson(new JsonReader(new InputStreamReader(villagerTypesFile)), JsonArray.class);
         ClassName villagerTypeClassName = ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerType");
 
         // Particle

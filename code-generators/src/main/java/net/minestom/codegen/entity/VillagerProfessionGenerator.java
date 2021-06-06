@@ -12,26 +12,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 import java.util.List;
 
 public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(VillagerProfessionGenerator.class);
-    private final File villagerProfessionsFile;
+    private final InputStream villagerProfessionsFile;
     private final File outputFolder;
 
 
-    public VillagerProfessionGenerator(@NotNull File villagerProfessionsFile, @NotNull File outputFolder) {
+    public VillagerProfessionGenerator(@Nullable InputStream villagerProfessionsFile, @NotNull File outputFolder) {
         this.villagerProfessionsFile = villagerProfessionsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!villagerProfessionsFile.exists()) {
+        if (villagerProfessionsFile == null) {
             LOGGER.error("Failed to find villager_professions.json.");
             LOGGER.error("Stopped code generation for villager professions.");
             return;
@@ -45,14 +43,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         ClassName rawVillagerProfessionDataClassName = ClassName.get("net.minestom.server.raw_data", "RawVillagerProfessionData");
         ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
-        JsonArray villagerProfessions;
-        try {
-            villagerProfessions = GSON.fromJson(new JsonReader(new FileReader(villagerProfessionsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find villager_professions.json.");
-            LOGGER.error("Stopped code generation for villager professions.");
-            return;
-        }
+        JsonArray villagerProfessions = GSON.fromJson(new JsonReader(new InputStreamReader(villagerProfessionsFile)), JsonArray.class);
         ClassName villagerProfessionClassName = ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerProfession");
 
         // Particle
