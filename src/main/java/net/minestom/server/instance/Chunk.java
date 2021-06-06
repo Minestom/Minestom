@@ -391,7 +391,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
 
-        final int sectionCount = 16 + 2; //todo
+        final int sectionCount = (getInstance().getDimensionType().getTotalHeight() / 16) + 2;
         final int maskLength = (int) Math.ceil((double) sectionCount / 64);
 
         updateLightPacket.skyLightMask = new long[maskLength];

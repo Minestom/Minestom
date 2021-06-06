@@ -199,6 +199,14 @@ public class DimensionType {
         return this.piglinSafe;
     }
 
+    public int getMinY() {
+        return minY;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public int getLogicalHeight() {
         return this.logicalHeight;
     }
@@ -209,6 +217,10 @@ public class DimensionType {
 
     public NamespaceID getInfiniburn() {
         return this.infiniburn;
+    }
+
+    public int getTotalHeight() {
+        return minY + height;
     }
 
     @Override
