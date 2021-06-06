@@ -408,6 +408,13 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                 default:
                     break;
             }
+            String packageName = metadata.get(metaClassName);
+            if (packageName == null) {
+                LOGGER.error("The Entity metadata for " + entity.get("id").getAsString() + " is not implemented!");
+                LOGGER.error("The package for " + metaClassName + "Meta has been automatically set to 'undefined'");
+                LOGGER.error("The import will be missing!");
+                packageName = "undefined";
+            }
 
             entityClass.addEnumConstant(
                     entityName,
@@ -417,7 +424,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                             entity.get("id").getAsString(),
                             entity.get("width").getAsDouble(),
                             entity.get("height").getAsDouble(),
-                            ClassName.get(metadata.get(metaClassName), metaClassName + "Meta"),
+                            ClassName.get(packageName, metaClassName + "Meta"),
                             ClassName.get("net.minestom.server.entity", "EntitySpawnType"),
                             entity.get("packetType").getAsString().toUpperCase()
                     ).build()
