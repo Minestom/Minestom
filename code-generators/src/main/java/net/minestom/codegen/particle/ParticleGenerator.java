@@ -12,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 
 public final class ParticleGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ParticleGenerator.class);
-    private final File particlesFile;
+    private final InputStream particlesFile;
     private final File outputFolder;
 
-    public ParticleGenerator(@NotNull File particlesFile, @NotNull File outputFolder) {
+    public ParticleGenerator(@Nullable InputStream particlesFile, @NotNull File outputFolder) {
         this.particlesFile = particlesFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!particlesFile.exists()) {
+        if (particlesFile == null) {
             LOGGER.error("Failed to find particles.json.");
             LOGGER.error("Stopped code generation for particles.");
             return;
@@ -42,14 +40,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray particles;
-        try {
-            particles = GSON.fromJson(new JsonReader(new FileReader(particlesFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find particles.json.");
-            LOGGER.error("Stopped code generation for particles.");
-            return;
-        }
+        JsonArray particles = GSON.fromJson(new JsonReader(new InputStreamReader(particlesFile)), JsonArray.class);
         ClassName particleClassName = ClassName.get("net.minestom.server.particle", "Particle");
 
         // Particle

@@ -12,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 
 public final class EnchantmentGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(EnchantmentGenerator.class);
-    private final File enchantmentsFile;
+    private final InputStream enchantmentsFile;
     private final File outputFolder;
 
-    public EnchantmentGenerator(@NotNull File enchantmentsFile, @NotNull File outputFolder) {
+    public EnchantmentGenerator(@Nullable InputStream enchantmentsFile, @NotNull File outputFolder) {
         this.enchantmentsFile = enchantmentsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!enchantmentsFile.exists()) {
+        if (enchantmentsFile == null) {
             LOGGER.error("Failed to find enchantments.json.");
             LOGGER.error("Stopped code generation for enchantments.");
             return;
@@ -42,14 +40,7 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray enchantments;
-        try {
-            enchantments = GSON.fromJson(new JsonReader(new FileReader(enchantmentsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find enchantments.json.");
-            LOGGER.error("Stopped code generation for enchantments.");
-            return;
-        }
+        JsonArray enchantments = GSON.fromJson(new JsonReader(new InputStreamReader(enchantmentsFile)), JsonArray.class);
         ClassName enchantmentClassName = ClassName.get("net.minestom.server.item", "Enchantment");
 
         // Enchantment

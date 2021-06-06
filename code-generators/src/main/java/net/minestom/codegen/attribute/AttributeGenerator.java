@@ -4,32 +4,41 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.CodeBlock;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class AttributeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(AttributeGenerator.class);
-    private final File attributesFile;
+    private final InputStream attributesFile;
     private final File outputFolder;
 
-    public AttributeGenerator(@NotNull File attributesFile, @NotNull File outputFolder) {
+    public AttributeGenerator(@Nullable InputStream attributesFile, @NotNull File outputFolder) {
         this.attributesFile = attributesFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!attributesFile.exists()) {
+        if (attributesFile == null) {
             LOGGER.error("Failed to find attributes.json.");
             LOGGER.error("Stopped code generation for attributes.");
             return;
@@ -42,14 +51,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
-        JsonArray attributes;
-        try {
-            attributes = GSON.fromJson(new JsonReader(new FileReader(attributesFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find attributes.json.");
-            LOGGER.error("Stopped code generation for attributes.");
-            return;
-        }
+        JsonArray attributes = GSON.fromJson(new JsonReader(new InputStreamReader(attributesFile)), JsonArray.class);
         List<JavaFile> filesToWrite = new ArrayList<>();
 
         ClassName attributeClassName = ClassName.get("net.minestom.server.attribute", "Attribute");

@@ -12,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 
 public final class FluidGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FluidGenerator.class);
-    private final File fluidsFile;
+    private final InputStream fluidsFile;
     private final File outputFolder;
 
-    public FluidGenerator(@NotNull File fluidsFile, @NotNull File outputFolder) {
+    public FluidGenerator(@Nullable InputStream fluidsFile, @NotNull File outputFolder) {
         this.fluidsFile = fluidsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!fluidsFile.exists()) {
+        if (fluidsFile == null) {
             LOGGER.error("Failed to find fluids.json.");
             LOGGER.error("Stopped code generation for fluids.");
             return;
@@ -42,14 +40,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray fluids;
-        try {
-            fluids = GSON.fromJson(new JsonReader(new FileReader(fluidsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find fluids.json.");
-            LOGGER.error("Stopped code generation for fluids.");
-            return;
-        }
+        JsonArray fluids = GSON.fromJson(new JsonReader(new InputStreamReader(fluidsFile)), JsonArray.class);
         ClassName fluidClassName = ClassName.get("net.minestom.server.fluid", "Fluid");
 
         // Particle

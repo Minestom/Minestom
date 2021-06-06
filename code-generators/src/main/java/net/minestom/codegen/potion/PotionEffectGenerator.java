@@ -12,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 
 public final class PotionEffectGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(PotionEffectGenerator.class);
-    private final File potionEffectsFile;
+    private final InputStream potionEffectsFile;
     private final File outputFolder;
 
-    public PotionEffectGenerator(@NotNull File potionEffectsFile, @NotNull File outputFolder) {
+    public PotionEffectGenerator(@Nullable InputStream potionEffectsFile, @NotNull File outputFolder) {
         this.potionEffectsFile = potionEffectsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!potionEffectsFile.exists()) {
+        if (potionEffectsFile == null) {
             LOGGER.error("Failed to find potionEffects.json.");
             LOGGER.error("Stopped code generation for potion effects.");
             return;
@@ -42,14 +40,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray potionEffects;
-        try {
-            potionEffects = GSON.fromJson(new JsonReader(new FileReader(potionEffectsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find potionEffects.json.");
-            LOGGER.error("Stopped code generation for potion effects.");
-            return;
-        }
+        JsonArray potionEffects = GSON.fromJson(new JsonReader(new InputStreamReader(potionEffectsFile)), JsonArray.class);
         ClassName potionEffectClassName = ClassName.get("net.minestom.server.potion", "PotionEffect");
 
         // Particle

@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +23,11 @@ import java.util.Map;
 
 public final class BlockGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockGenerator.class);
-    private final File blocksFile;
-    private final File blockPropertyFile;
+    private final InputStream blocksFile;
+    private final InputStream blockPropertyFile;
     private final File outputFolder;
 
-    public BlockGenerator(@NotNull File blocksFile, @NotNull File blockPropertyFile, @NotNull File outputFolder) {
+    public BlockGenerator(@Nullable InputStream blocksFile, @Nullable InputStream blockPropertyFile, @NotNull File outputFolder) {
         this.blocksFile = blocksFile;
         this.blockPropertyFile = blockPropertyFile;
         this.outputFolder = outputFolder;
@@ -35,12 +35,12 @@ public final class BlockGenerator extends MinestomCodeGenerator {
 
     @Override
     public void generate() {
-        if (!blocksFile.exists()) {
+        if (blocksFile == null) {
             LOGGER.error("Failed to find blocks.json.");
             LOGGER.error("Stopped code generation for blocks.");
             return;
         }
-        if (!blockPropertyFile.exists()) {
+        if (blockPropertyFile == null) {
             LOGGER.error("Failed to find block_properties.json.");
             LOGGER.error("Stopped code generation for block properties.");
             return;
@@ -58,14 +58,8 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray blocks;
-        try {
-            blocks = GSON.fromJson(new JsonReader(new FileReader(blocksFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find blocks.json.");
-            LOGGER.error("Stopped code generation for blocks.");
-            return;
-        }
+        JsonArray blocks = GSON.fromJson(new JsonReader(new InputStreamReader(blocksFile)), JsonArray.class);
+
         ClassName blockClassName = ClassName.get("net.minestom.server.instance.block", "Block");
         ClassName blockAltClassName = ClassName.get("net.minestom.server.instance.block", "BlockAlternative");
         List<JavaFile> filesToWrite = new ArrayList<>();

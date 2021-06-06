@@ -12,24 +12,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.util.Collections;
 
 public final class SoundEventGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(SoundEventGenerator.class);
-    private final File soundsFile;
+    private final InputStream soundsFile;
     private final File outputFolder;
 
-    public SoundEventGenerator(@NotNull File itemsFile, @NotNull File outputFolder) {
+    public SoundEventGenerator(@Nullable InputStream itemsFile, @NotNull File outputFolder) {
         this.soundsFile = itemsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!soundsFile.exists()) {
+        if (soundsFile == null) {
             LOGGER.error("Failed to find sounds.json.");
             LOGGER.error("Stopped code generation for sounds.");
             return;
@@ -42,14 +40,7 @@ public final class SoundEventGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray sounds;
-        try {
-            sounds = GSON.fromJson(new JsonReader(new FileReader(soundsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find sounds.json.");
-            LOGGER.error("Stopped code generation for sounds.");
-            return;
-        }
+        JsonArray sounds = GSON.fromJson(new JsonReader(new InputStreamReader(soundsFile)), JsonArray.class);
         ClassName soundClassName = ClassName.get("net.minestom.server.sound", "SoundEvent");
         // Sound
         TypeSpec.Builder soundClass = TypeSpec.enumBuilder(soundClassName)

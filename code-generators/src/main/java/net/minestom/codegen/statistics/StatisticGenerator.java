@@ -13,23 +13,23 @@ import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class StatisticGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(StatisticGenerator.class);
-    private final File statisticsFile;
+    private final InputStream statisticsFile;
     private final File outputFolder;
 
-    public StatisticGenerator(@NotNull File statisticsFile, @NotNull File outputFolder) {
+    public StatisticGenerator(@Nullable InputStream statisticsFile, @NotNull File outputFolder) {
         this.statisticsFile = statisticsFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!statisticsFile.exists()) {
+        if (statisticsFile == null) {
             LOGGER.error("Failed to find statistics.json.");
             LOGGER.error("Stopped code generation for statistics.");
             return;
@@ -42,14 +42,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray statistics;
-        try {
-            statistics = GSON.fromJson(new JsonReader(new FileReader(statisticsFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find statistics.json.");
-            LOGGER.error("Stopped code generation for statistics.");
-            return;
-        }
+        JsonArray statistics = GSON.fromJson(new JsonReader(new InputStreamReader(statisticsFile)), JsonArray.class);
         ClassName statisticClassName = ClassName.get("net.minestom.server.statistic", "StatisticType");
 
         // Particle

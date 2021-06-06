@@ -14,8 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -173,17 +173,17 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         put("Player", "net.minestom.server.entity.metadata");
 
     }};
-    private final File entitiesFile;
+    private final InputStream entitiesFile;
     private final File outputFolder;
 
-    public EntityTypeGenerator(@NotNull File entitiesFile, @NotNull File outputFolder) {
+    public EntityTypeGenerator(@Nullable InputStream entitiesFile, @NotNull File outputFolder) {
         this.entitiesFile = entitiesFile;
         this.outputFolder = outputFolder;
     }
 
     @Override
     public void generate() {
-        if (!entitiesFile.exists()) {
+        if (entitiesFile == null) {
             LOGGER.error("Failed to find entities.json.");
             LOGGER.error("Stopped code generation for entities.");
             return;
@@ -196,14 +196,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray entities;
-        try {
-            entities = GSON.fromJson(new JsonReader(new FileReader(entitiesFile)), JsonArray.class);
-        } catch (FileNotFoundException e) {
-            LOGGER.error("Failed to find entities.json.");
-            LOGGER.error("Stopped code generation for entities.");
-            return;
-        }
+        JsonArray entities = GSON.fromJson(new JsonReader(new InputStreamReader(entitiesFile)), JsonArray.class);
         ClassName entityClassName = ClassName.get("net.minestom.server.entity", "EntityType");
 
         // Particle
