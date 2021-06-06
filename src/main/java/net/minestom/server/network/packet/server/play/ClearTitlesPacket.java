@@ -10,6 +10,13 @@ public class ClearTitlesPacket implements ServerPacket {
 
     public boolean reset;
 
+    public ClearTitlesPacket() {
+    }
+
+    public ClearTitlesPacket(boolean reset) {
+        this.reset = reset;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.reset = reader.readBoolean();

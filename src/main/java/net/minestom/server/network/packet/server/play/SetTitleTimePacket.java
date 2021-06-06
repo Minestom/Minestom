@@ -12,6 +12,15 @@ public class SetTitleTimePacket implements ServerPacket {
     public int stay;
     public int fadeOut;
 
+    public SetTitleTimePacket() {
+    }
+
+    public SetTitleTimePacket(int fadeIn, int stay, int fadeOut) {
+        this.fadeIn = fadeIn;
+        this.stay = stay;
+        this.fadeOut = fadeOut;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.fadeIn = reader.readInt();

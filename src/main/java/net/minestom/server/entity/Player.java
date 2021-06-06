@@ -905,20 +905,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Common method to send a title.
-     *
-     * @param text   the text of the title
-     * @param action the action of the title (where to show it)
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
-     */
-    @Deprecated
-    private void sendTitle(@NotNull JsonMessage text, @NotNull TitlePacket.Action action) {
-        TitlePacket titlePacket = new TitlePacket(action, text.asComponent());
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
      * Sends a title and subtitle message.
      *
      * @param title    the title message
@@ -969,17 +955,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void showTitle(@NotNull Title title) {
-        Collection<TitlePacket> packet = TitlePacket.of(Title.title(title.title(), title.subtitle(), title.times()));
-
-        for (TitlePacket titlePacket : packet) {
-            playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new SetTitleTextPacket(title.title()));
+        playerConnection.sendPacket(new SetTitleSubTitlePacket(title.subtitle()));
+        final var times = title.times();
+        if (times != null) {
+            playerConnection.sendPacket(new SetTitleTimePacket(
+                    TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS)));
         }
     }
 
     @Override
     public void sendActionBar(@NotNull Component message) {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, message);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ActionBarPacket(message));
     }
 
     /**
@@ -993,31 +982,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Deprecated
     public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
-        TitlePacket titlePacket = new TitlePacket(fadeIn, stay, fadeOut);
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
-     * Hides the previous title.
-     *
-     * @deprecated Use {@link #clearTitle()}
-     */
-    @Deprecated
-    public void hideTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new SetTitleTimePacket(fadeIn, stay, fadeOut));
     }
 
     @Override
     public void resetTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ClearTitlesPacket(true));
     }
 
     @Override
     public void clearTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ClearTitlesPacket());
     }
 
     @Override

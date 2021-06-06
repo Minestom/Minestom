@@ -11,6 +11,13 @@ public class SetTitleSubTitlePacket implements ServerPacket {
 
     public Component subtitle = Component.empty();
 
+    public SetTitleSubTitlePacket() {
+    }
+
+    public SetTitleSubTitlePacket(Component subtitle) {
+        this.subtitle = subtitle;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.subtitle = reader.readComponent();

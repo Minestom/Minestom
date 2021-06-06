@@ -11,6 +11,13 @@ public class ActionBarPacket implements ServerPacket {
 
     public Component actionBarText = Component.empty();
 
+    public ActionBarPacket() {
+    }
+
+    public ActionBarPacket(Component actionBarText) {
+        this.actionBarText = actionBarText;
+    }
+
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.actionBarText = reader.readComponent();
