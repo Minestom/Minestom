@@ -23,73 +23,73 @@ public class Generators {
             LOGGER.error("Usage: <MC version> <source folder> <target folder>");
             return;
         }
-        String targetVersion = args[0];
+        String targetVersion = args[0].replace(".", "_");
         File inputFolder = new File(args[1]);
         File outputFolder = new File(args[2]);
         // Generate blocks
         new BlockGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_blocks.json"),
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_block_properties.json"),
+                new File(inputFolder, targetVersion + "_blocks.json"),
+                new File(inputFolder, targetVersion + "_block_properties.json"),
                 outputFolder
         ).generate();
         // Generate fluids
         new FluidGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_fluids.json"),
+                new File(inputFolder, targetVersion + "_fluids.json"),
                 outputFolder
         ).generate();
         // Generate entities
         new EntityTypeGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_entities.json"),
+                new File(inputFolder, targetVersion + "_entities.json"),
                 outputFolder
         ).generate();
         // Generate items
         new MaterialGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_items.json"),
+                new File(inputFolder, targetVersion + "_items.json"),
                 outputFolder
         ).generate();
         // Generate enchantments
         new EnchantmentGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_enchantments.json"),
+                new File(inputFolder, targetVersion + "_enchantments.json"),
                 outputFolder
         ).generate();
         // TODO: Generate attributes
 //        new AttributeGenerator(
-//                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_attributes.json"),
+//                new File(inputFolder, targetVersion + "_attributes.json"),
 //                outputFolder
 //        ).generate();
         // Generate potion effects
         new PotionEffectGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_potion_effects.json"),
+                new File(inputFolder, targetVersion + "_potion_effects.json"),
                 outputFolder
         ).generate();
         // Generate potions
         new PotionTypeGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_potions.json"),
+                new File(inputFolder, targetVersion + "_potions.json"),
                 outputFolder
         ).generate();
         // Generate particles
         new ParticleGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_particles.json"),
+                new File(inputFolder, targetVersion + "_particles.json"),
                 outputFolder
         ).generate();
         // Generate sounds
         new SoundEventGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_sounds.json"),
+                new File(inputFolder, targetVersion + "_sounds.json"),
                 outputFolder
         ).generate();
         // TODO: Generate villager professions
 //        new VillagerProfessionGenerator(
-//                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_villager_professions.json"),
+//                new File(inputFolder, targetVersion + "_villager_professions.json"),
 //                outputFolder
 //        ).generate();
         // TODO: Generate villager types
 //        new VillagerTypeGenerator(
-//                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_villager_types.json"),
+//                new File(inputFolder, targetVersion + "_villager_types.json"),
 //                outputFolder
 //        ).generate();
         // Generate statistics
         new StatisticGenerator(
-                new File(inputFolder, targetVersion.replaceAll("\\.", "_") + "_custom_statistics.json"),
+                new File(inputFolder, targetVersion + "_custom_statistics.json"),
                 outputFolder
         ).generate();
         LOGGER.info("Finished generating code");
