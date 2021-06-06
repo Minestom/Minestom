@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.fluids.Fluid;
+import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -50,7 +50,7 @@ public class TagsPacket implements ServerPacket {
     public void read(@NotNull BinaryReader reader) {
         readTags(reader, blockTags, id -> NamespaceID.from("minecraft", Block.values()[id].getName()));
         readTags(reader, itemTags, id -> NamespaceID.from("minecraft", Material.values()[id].getName()));
-        readTags(reader, fluidTags, id -> NamespaceID.from(Fluid.values()[id].getNamespaceID()));
+        readTags(reader, fluidTags, id -> Fluid.fromId(id.shortValue()).getNamespaceID());
         readTags(reader, entityTags, id -> NamespaceID.from(EntityType.values()[id].getNamespaceID()));
     }
 
