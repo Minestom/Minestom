@@ -201,7 +201,7 @@ configurations.all {
 }
 
 processResources {
-    dependsOn("downloadResources")
+    dependsOn("copyData")
 }
 
 publishing {
