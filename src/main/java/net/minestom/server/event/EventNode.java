@@ -114,7 +114,7 @@ public class EventNode<T extends Event> {
         }
 
         final var listeners = entry.listeners;
-        if (listeners != null && !listeners.isEmpty()) {
+        if (!listeners.isEmpty()) {
             for (EventListener<T> listener : listeners) {
                 final EventListener.Result result = listener.run(event);
                 if (result == EventListener.Result.EXPIRED) {
@@ -241,6 +241,9 @@ public class EventNode<T extends Event> {
     private void increaseChildListenerCount(Class<? extends T> eventClass, int count) {
         var entry = listenerMap.computeIfAbsent(eventClass, aClass -> new ListenerEntry<>());
         ListenerEntry.addAndGet(entry, count);
+        if (parent != null) {
+            parent.increaseChildListenerCount(eventClass, count);
+        }
     }
 
     private void decreaseChildListenerCount(Class<? extends T> eventClass, int count) {
@@ -250,6 +253,9 @@ public class EventNode<T extends Event> {
             this.listenerMap.remove(eventClass);
         } else if (result < 0) {
             throw new IllegalStateException("Something wrong happened, listener count: " + result);
+        }
+        if (parent != null) {
+            parent.decreaseChildListenerCount(eventClass, count);
         }
     }
 
