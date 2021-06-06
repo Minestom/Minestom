@@ -136,9 +136,9 @@ public final class FluidGenerator extends MinestomCodeGenerator {
             String fluidName = fluid.get("name").getAsString();
 
             fluidClass.addEnumConstant(fluidName, TypeSpec.anonymousClassBuilder(
-                            "$T.from($S)",
-                            namespaceIDClassName,
-                            fluid.get("id").getAsString()
+                    "$T.from($S)",
+                    namespaceIDClassName,
+                    fluid.get("id").getAsString()
                     ).build()
             );
         }

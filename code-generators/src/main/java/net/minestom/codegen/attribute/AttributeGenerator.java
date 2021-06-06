@@ -1,6 +1,8 @@
 package net.minestom.codegen.attribute;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
@@ -135,13 +137,13 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         // toString method
         attributeClass.addMethod(
                 MethodSpec.methodBuilder("toString")
-                .addAnnotation(NotNull.class)
-                .addAnnotation(Override.class)
-                .returns(String.class)
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Override.class)
+                        .returns(String.class)
                         // this resolves to [Namespace]
-                .addStatement("return \"[\" + this.id + \"]\"")
-                .addModifiers(Modifier.PUBLIC)
-                .build()
+                        .addStatement("return \"[\" + this.id + \"]\"")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
         );
         // Creating ClampedAttribute
         ClassName clampedAttributeClassName = ClassName.get("net.minestom.server.attribute", "ClampedAttribute");

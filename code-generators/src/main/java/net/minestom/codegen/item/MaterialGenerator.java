@@ -284,7 +284,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
                                 .build()
                 );
                 if (ap.get("slot") != null) {
-                    switch(ap.get("slot").getAsString()) {
+                    switch (ap.get("slot").getAsString()) {
                         case "head": {
                             enumConst.addMethod(
                                     MethodSpec.methodBuilder("isHelmet")
