@@ -385,20 +385,30 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     @NotNull
     public UpdateLightPacket getLightPacket() {
         // TODO do not hardcode light
+
+        // Creates a light packet for the given number of sections with all block light at max and no sky light.
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        //updateLightPacket.skyLightMask = 0b111111111111111111;
-        //updateLightPacket.emptySkyLightMask = 0b000000000000000000;
-        //updateLightPacket.blockLightMask = 0b000000000000000000;
-        //updateLightPacket.emptyBlockLightMask = 0b111111111111111111;
+
+        final int sectionCount = 16 + 2; //todo
+        final int maskLength = (int) Math.ceil((double) sectionCount / 64);
+
+        updateLightPacket.skyLightMask = new long[maskLength];
+        updateLightPacket.blockLightMask = new long[maskLength];
+        updateLightPacket.emptySkyLightMask = new long[maskLength];
+        updateLightPacket.emptyBlockLightMask = new long[maskLength];
+        // Set all block light and no sky light
+        Arrays.fill(updateLightPacket.blockLightMask, -1L);
+        Arrays.fill(updateLightPacket.emptySkyLightMask, -1L);
+
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
-        final List<byte[]> temp = new ArrayList<>(18);
-        for (int i = 0; i < 18; ++i) {
+        final List<byte[]> temp = new ArrayList<>(sectionCount);
+        for (int i = 0; i < sectionCount; ++i) {
             temp.add(bytes);
         }
-        //updateLightPacket.skyLight = temp;
+        updateLightPacket.blockLight = temp;
         return updateLightPacket;
     }
 
