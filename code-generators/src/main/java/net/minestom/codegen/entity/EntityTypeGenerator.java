@@ -38,6 +38,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         put("Cow", "net.minestom.server.entity.metadata.animal");
         put("Donkey", "net.minestom.server.entity.metadata.animal");
         put("Fox", "net.minestom.server.entity.metadata.animal");
+        put("Goat", "net.minestom.server.entity.metadata.animal");
         put("Hoglin", "net.minestom.server.entity.metadata.animal");
         put("Horse", "net.minestom.server.entity.metadata.animal");
         put("Llama", "net.minestom.server.entity.metadata.animal");
@@ -144,11 +145,13 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         put("FallingBlock", "net.minestom.server.entity.metadata.other");
         put("FireworkRocket", "net.minestom.server.entity.metadata.other");
         put("FishingHook", "net.minestom.server.entity.metadata.other");
+        put("GlowItemFrame", "net.minestom.server.entity.metadata.other");
         put("ItemFrame", "net.minestom.server.entity.metadata.other");
         put("LeashKnot", "net.minestom.server.entity.metadata.other");
         put("LightningBolt", "net.minestom.server.entity.metadata.other");
         put("LlamaSpit", "net.minestom.server.entity.metadata.other");
         put("MagmaCube", "net.minestom.server.entity.metadata.other");
+        put("Marker", "net.minestom.server.entity.metadata.other");
         put("Painting", "net.minestom.server.entity.metadata.other");
         put("PrimedTnt", "net.minestom.server.entity.metadata.other");
         put("ShulkerBullet", "net.minestom.server.entity.metadata.other");
@@ -161,7 +164,9 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         put("WanderingTrader", "net.minestom.server.entity.metadata.villager");
         // Water
         // put("WaterAnimalMeta", "net.minestom.server.entity.metadata.water")
+        put("Axolotl", "net.minestom.server.entity.metadata.water");
         put("Squid", "net.minestom.server.entity.metadata.water");
+        put("GlowSquid", "net.minestom.server.entity.metadata.water");
         put("Dolphin", "net.minestom.server.entity.metadata.water");
         // Water - Fish
         // put("AbstractFish", "net.minestom.server.entity.metadata.water.fish");
