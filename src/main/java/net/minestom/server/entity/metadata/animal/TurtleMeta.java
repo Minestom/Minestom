@@ -6,6 +6,8 @@ import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 public class TurtleMeta extends AnimalMeta {
+    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 6;
 
     public TurtleMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -13,52 +15,52 @@ public class TurtleMeta extends AnimalMeta {
 
     @NotNull
     public BlockPosition getHomePosition() {
-        return super.metadata.getIndex((byte) 16, new BlockPosition(0, 0, 0));
+        return super.metadata.getIndex(OFFSET, new BlockPosition(0, 0, 0));
     }
 
     public void setBlockPosition(@NotNull BlockPosition value) {
-        super.metadata.setIndex((byte) 16, Metadata.Position(value));
+        super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 
     public boolean isHasEgg() {
-        return super.metadata.getIndex((byte) 17, false);
+        return super.metadata.getIndex(OFFSET + 1, false);
     }
 
     public void setHasEgg(boolean value) {
-        super.metadata.setIndex((byte) 17, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
     }
 
     public boolean isLayingEgg() {
-        return super.metadata.getIndex((byte) 18, false);
+        return super.metadata.getIndex(OFFSET + 2, false);
     }
 
     public void setLayingEgg(boolean value) {
-        super.metadata.setIndex((byte) 18, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
     }
 
     @NotNull
     public BlockPosition getTravelPosition() {
-        return super.metadata.getIndex((byte) 19, new BlockPosition(0, 0, 0));
+        return super.metadata.getIndex(OFFSET + 3, new BlockPosition(0, 0, 0));
     }
 
     public void setTravelPosition(@NotNull BlockPosition value) {
-        super.metadata.setIndex((byte) 19, Metadata.Position(value));
+        super.metadata.setIndex(OFFSET + 3, Metadata.Position(value));
     }
 
     public boolean isGoingHome() {
-        return super.metadata.getIndex((byte) 20, false);
+        return super.metadata.getIndex(OFFSET + 4, false);
     }
 
     public void setGoingHome(boolean value) {
-        super.metadata.setIndex((byte) 20, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 4, Metadata.Boolean(value));
     }
 
     public boolean isTravelling() {
-        return super.metadata.getIndex((byte) 21, false);
+        return super.metadata.getIndex(OFFSET + 5, false);
     }
 
     public void setTravelling(boolean value) {
-        super.metadata.setIndex((byte) 21, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
     }
 
 }

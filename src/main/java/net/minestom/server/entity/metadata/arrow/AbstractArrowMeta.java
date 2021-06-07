@@ -3,11 +3,12 @@ package net.minestom.server.entity.metadata.arrow;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.animal.tameable.TameableAnimalMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class AbstractArrowMeta extends EntityMeta {
-
-    private final static byte MASK_INDEX = 7;
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     private final static byte CRITICAL_BIT = 0x01;
     private final static byte NO_CLIP_BIT = 0x01;
@@ -17,27 +18,27 @@ public class AbstractArrowMeta extends EntityMeta {
     }
 
     public boolean isCritical() {
-        return getMaskBit(MASK_INDEX, CRITICAL_BIT);
+        return getMaskBit(OFFSET, CRITICAL_BIT);
     }
 
     public void setCritical(boolean value) {
-        setMaskBit(MASK_INDEX, CRITICAL_BIT, value);
+        setMaskBit(OFFSET, CRITICAL_BIT, value);
     }
 
     public boolean isNoClip() {
-        return getMaskBit(MASK_INDEX, NO_CLIP_BIT);
+        return getMaskBit(OFFSET, NO_CLIP_BIT);
     }
 
     public void setNoClip(boolean value) {
-        setMaskBit(MASK_INDEX, NO_CLIP_BIT, value);
+        setMaskBit(OFFSET, NO_CLIP_BIT, value);
     }
 
     public byte getPiercingLevel() {
-        return super.metadata.getIndex((byte) 8, (byte) 0);
+        return super.metadata.getIndex(OFFSET + 1, (byte) 0);
     }
 
     public void setPiercingLevel(byte value) {
-        super.metadata.setIndex((byte) 8, Metadata.Byte(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.Byte(value));
     }
 
 }

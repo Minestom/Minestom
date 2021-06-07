@@ -7,8 +7,8 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityMeta {
-
-    private final static byte MASK_INDEX = 0;
+    public static final byte OFFSET = 0;
+    public static final byte MAX_OFFSET = OFFSET + 8;
 
     private final static byte ON_FIRE_BIT = 0x01;
     private final static byte CROUNCHING_BIT = 0x02;
@@ -44,67 +44,67 @@ public class EntityMeta {
     }
 
     public boolean isOnFire() {
-        return getMaskBit(MASK_INDEX, ON_FIRE_BIT);
+        return getMaskBit(OFFSET, ON_FIRE_BIT);
     }
 
     public void setOnFire(boolean value) {
-        setMaskBit(MASK_INDEX, ON_FIRE_BIT, value);
+        setMaskBit(OFFSET, ON_FIRE_BIT, value);
     }
 
     public boolean isSneaking() {
-        return getMaskBit(MASK_INDEX, CROUNCHING_BIT);
+        return getMaskBit(OFFSET, CROUNCHING_BIT);
     }
 
     public void setSneaking(boolean value) {
-        setMaskBit(MASK_INDEX, CROUNCHING_BIT, value);
+        setMaskBit(OFFSET, CROUNCHING_BIT, value);
     }
 
     public boolean isSprinting() {
-        return getMaskBit(MASK_INDEX, SPRINTING_BIT);
+        return getMaskBit(OFFSET, SPRINTING_BIT);
     }
 
     public void setSprinting(boolean value) {
-        setMaskBit(MASK_INDEX, SPRINTING_BIT, value);
+        setMaskBit(OFFSET, SPRINTING_BIT, value);
     }
 
     public boolean isSwimming() {
-        return getMaskBit(MASK_INDEX, SWIMMING_BIT);
+        return getMaskBit(OFFSET, SWIMMING_BIT);
     }
 
     public void setSwimming(boolean value) {
-        setMaskBit(MASK_INDEX, SWIMMING_BIT, value);
+        setMaskBit(OFFSET, SWIMMING_BIT, value);
     }
 
     public boolean isInvisible() {
-        return getMaskBit(MASK_INDEX, INVISIBLE_BIT);
+        return getMaskBit(OFFSET, INVISIBLE_BIT);
     }
 
     public void setInvisible(boolean value) {
-        setMaskBit(MASK_INDEX, INVISIBLE_BIT, value);
+        setMaskBit(OFFSET, INVISIBLE_BIT, value);
     }
 
     public boolean isHasGlowingEffect() {
-        return getMaskBit(MASK_INDEX, HAS_GLOWING_EFFECT_BIT);
+        return getMaskBit(OFFSET, HAS_GLOWING_EFFECT_BIT);
     }
 
     public void setHasGlowingEffect(boolean value) {
-        setMaskBit(MASK_INDEX, HAS_GLOWING_EFFECT_BIT, value);
+        setMaskBit(OFFSET, HAS_GLOWING_EFFECT_BIT, value);
     }
 
     public boolean isFlyingWithElytra() {
-        return getMaskBit(MASK_INDEX, FLYING_WITH_ELYTRA_BIT);
+        return getMaskBit(OFFSET, FLYING_WITH_ELYTRA_BIT);
     }
 
     public void setFlyingWithElytra(boolean value) {
-        setMaskBit(MASK_INDEX, FLYING_WITH_ELYTRA_BIT, value);
+        setMaskBit(OFFSET, FLYING_WITH_ELYTRA_BIT, value);
     }
 
     public int getAirTicks() {
-        return this.metadata.getIndex((byte) 1, 300);
+        return this.metadata.getIndex(OFFSET + 1, 300);
     }
 
     public void setAirTicks(int value) {
-        this.metadata.setIndex((byte) 1, Metadata.VarInt(value));
+        this.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
     /**
@@ -126,66 +126,66 @@ public class EntityMeta {
     }
 
     public Component getCustomName() {
-        return this.metadata.getIndex((byte) 2, null);
+        return this.metadata.getIndex(OFFSET + 2, null);
     }
 
     public void setCustomName(Component value) {
-        this.metadata.setIndex((byte) 2, Metadata.OptChat(value));
+        this.metadata.setIndex(OFFSET + 2, Metadata.OptChat(value));
     }
 
     public boolean isCustomNameVisible() {
-        return this.metadata.getIndex((byte) 3, false);
+        return this.metadata.getIndex(OFFSET + 3, false);
     }
 
     public void setCustomNameVisible(boolean value) {
-        this.metadata.setIndex((byte) 3, Metadata.Boolean(value));
+        this.metadata.setIndex(OFFSET + 3, Metadata.Boolean(value));
     }
 
     public boolean isSilent() {
-        return this.metadata.getIndex((byte) 4, false);
+        return this.metadata.getIndex(OFFSET + 4, false);
     }
 
     public void setSilent(boolean value) {
-        this.metadata.setIndex((byte) 4, Metadata.Boolean(value));
+        this.metadata.setIndex(OFFSET + 4, Metadata.Boolean(value));
     }
 
     public boolean isHasNoGravity() {
-        return this.metadata.getIndex((byte) 5, false);
+        return this.metadata.getIndex(OFFSET + 5, false);
     }
 
     public void setHasNoGravity(boolean value) {
-        this.metadata.setIndex((byte) 5, Metadata.Boolean(value));
+        this.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
     }
 
     public Entity.Pose getPose() {
-        return this.metadata.getIndex((byte) 6, Entity.Pose.STANDING);
+        return this.metadata.getIndex(OFFSET + 6, Entity.Pose.STANDING);
     }
 
     public void setPose(Entity.Pose value) {
-        this.metadata.setIndex((byte) 6, Metadata.Pose(value));
+        this.metadata.setIndex(OFFSET + 6, Metadata.Pose(value));
     }
 
     public int getTickFrozen() {
-        return this.metadata.getIndex((byte) 7, 0);
+        return this.metadata.getIndex(OFFSET + 7, 0);
     }
 
     public void setTickFrozen(int tickFrozen) {
-        this.metadata.setIndex((byte) 7, Metadata.VarInt(tickFrozen));
+        this.metadata.setIndex(OFFSET + 7, Metadata.VarInt(tickFrozen));
     }
 
-    protected byte getMask(byte index) {
+    protected byte getMask(int index) {
         return this.metadata.getIndex(index, (byte) 0);
     }
 
-    protected void setMask(byte index, byte mask) {
+    protected void setMask(int index, byte mask) {
         this.metadata.setIndex(index, Metadata.Byte(mask));
     }
 
-    protected boolean getMaskBit(byte index, byte bit) {
+    protected boolean getMaskBit(int index, byte bit) {
         return (getMask(index) & bit) == bit;
     }
 
-    protected void setMaskBit(byte index, byte bit, boolean value) {
+    protected void setMaskBit(int index, byte bit, boolean value) {
         byte mask = getMask(index);
         boolean currentValue = (mask & bit) == bit;
         if (currentValue == value) {

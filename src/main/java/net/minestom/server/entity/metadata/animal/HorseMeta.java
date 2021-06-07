@@ -5,17 +5,19 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class HorseMeta extends AbstractHorseMeta {
+    public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     public HorseMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     public Variant getVariant() {
-        return getVariantFromID(super.metadata.getIndex((byte) 18, 0));
+        return getVariantFromID(super.metadata.getIndex(OFFSET, 0));
     }
 
     public void setVariant(Variant variant) {
-        super.metadata.setIndex((byte) 18, Metadata.VarInt(getVariantID(variant.marking, variant.color)));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(getVariantID(variant.marking, variant.color)));
     }
 
     public static int getVariantID(@NotNull Marking marking, @NotNull Color color) {

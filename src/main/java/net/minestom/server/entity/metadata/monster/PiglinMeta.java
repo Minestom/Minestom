@@ -6,13 +6,15 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class PiglinMeta extends BasePiglinMeta {
+    public static final byte OFFSET = BasePiglinMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 3;
 
     public PiglinMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     public boolean isBaby() {
-        return super.metadata.getIndex((byte) 16, false);
+        return super.metadata.getIndex(OFFSET, false);
     }
 
     public void setBaby(boolean value) {
@@ -25,23 +27,23 @@ public class PiglinMeta extends BasePiglinMeta {
         } else {
             setBoundingBox(bb.getWidth() * 2, bb.getHeight() * 2);
         }
-        super.metadata.setIndex((byte) 16, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }
 
     public boolean isChargingCrossbow() {
-        return super.metadata.getIndex((byte) 17, false);
+        return super.metadata.getIndex(OFFSET + 1, false);
     }
 
     public void setChargingCrossbow(boolean value) {
-        super.metadata.setIndex((byte) 17, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
     }
 
     public boolean isDancing() {
-        return super.metadata.getIndex((byte) 18, false);
+        return super.metadata.getIndex(OFFSET + 2, false);
     }
 
     public void setDancing(boolean value) {
-        super.metadata.setIndex((byte) 18, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
     }
 
 }

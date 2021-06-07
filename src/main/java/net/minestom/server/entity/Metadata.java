@@ -238,20 +238,20 @@ public class Metadata {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getIndex(byte index, @Nullable T defaultValue) {
-        Entry<?> value = this.metadataMap.get(index);
+    public <T> T getIndex(int index, @Nullable T defaultValue) {
+        Entry<?> value = this.metadataMap.get((byte) index);
         return value != null ? (T) value.getMetaValue().value : defaultValue;
     }
 
-    public void setIndex(byte index, @NotNull Value<?> value) {
-        final Entry<?> entry = new Entry<>(index, value);
-        this.metadataMap.put(index, entry);
+    public void setIndex(int index, @NotNull Value<?> value) {
+        final Entry<?> entry = new Entry<>((byte) index, value);
+        this.metadataMap.put((byte) index, entry);
 
         // Send metadata packet to update viewers and self
         if (this.entity != null && this.entity.isActive()) {
             if (!this.notifyAboutChanges) {
                 synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
+                    this.notNotifiedChanges.put((byte) index, entry);
                 }
                 return;
             }

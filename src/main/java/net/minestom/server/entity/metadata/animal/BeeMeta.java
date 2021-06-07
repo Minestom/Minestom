@@ -2,11 +2,13 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.ambient.AmbientCreatureMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class BeeMeta extends AnimalMeta {
-
-    private final static byte MASK_INDEX = 16;
+    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     private final static byte ANGRY_BIT = 0x02;
     private final static byte HAS_STUNG_BIT = 0x04;
@@ -17,35 +19,35 @@ public class BeeMeta extends AnimalMeta {
     }
 
     public boolean isAngry() {
-        return getMaskBit(MASK_INDEX, ANGRY_BIT);
+        return getMaskBit(OFFSET, ANGRY_BIT);
     }
 
     public void setAngry(boolean value) {
-        setMaskBit(MASK_INDEX, ANGRY_BIT, value);
+        setMaskBit(OFFSET, ANGRY_BIT, value);
     }
 
     public boolean isHasStung() {
-        return getMaskBit(MASK_INDEX, HAS_STUNG_BIT);
+        return getMaskBit(OFFSET, HAS_STUNG_BIT);
     }
 
     public void setHasStung(boolean value) {
-        setMaskBit(MASK_INDEX, HAS_STUNG_BIT, value);
+        setMaskBit(OFFSET, HAS_STUNG_BIT, value);
     }
 
     public boolean isHasNectar() {
-        return getMaskBit(MASK_INDEX, HAS_NECTAR_BIT);
+        return getMaskBit(OFFSET, HAS_NECTAR_BIT);
     }
 
     public void setHasNectar(boolean value) {
-        setMaskBit(MASK_INDEX, HAS_NECTAR_BIT, value);
+        setMaskBit(OFFSET, HAS_NECTAR_BIT, value);
     }
 
     public int getAngerTicks() {
-        return super.metadata.getIndex((byte) 17, 0);
+        return super.metadata.getIndex(OFFSET + 1, 0);
     }
 
     public void setAngerTicks(int value) {
-        super.metadata.setIndex((byte) 17, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
 }

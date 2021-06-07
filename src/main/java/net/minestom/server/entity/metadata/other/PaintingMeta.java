@@ -10,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public class PaintingMeta extends EntityMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 0;
 
     private Motive motive = Motive.KEBAB;
     private Direction direction = Direction.SOUTH;
