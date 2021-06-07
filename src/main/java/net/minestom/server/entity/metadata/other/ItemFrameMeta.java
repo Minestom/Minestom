@@ -70,5 +70,4 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
         WEST,
         EAST
     }
-
 }
