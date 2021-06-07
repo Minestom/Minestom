@@ -1,31 +1,20 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class TagsPacket implements ServerPacket {
 
-    public List<Tag> blockTags = new LinkedList<>();
-    public List<Tag> itemTags = new LinkedList<>();
-    public List<Tag> fluidTags = new LinkedList<>();
-    public List<Tag> entityTags = new LinkedList<>();
+    public Map<String, List<Tag>> tagsMap = new HashMap<>();
 
     private static final TagsPacket REQUIRED_TAGS_PACKET = new TagsPacket();
 
@@ -36,22 +25,50 @@ public class TagsPacket implements ServerPacket {
     /**
      * Default constructor, required for reflection operations.
      */
-    public TagsPacket() {}
+    public TagsPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Registries.getBlock(name).ordinal());
-        writeTags(writer, itemTags, name -> Registries.getMaterial(name).ordinal());
-        writeTags(writer, fluidTags, name -> Registries.getFluid(name).ordinal());
-        writeTags(writer, entityTags, name -> Registries.getEntityType(name).ordinal());
+        writer.writeVarInt(tagsMap.size());
+        tagsMap.forEach((s, tags) -> {
+            writer.writeSizedString(s);
+
+            writer.writeVarInt(tags.size());
+            for (Tag tag : tags) {
+                // name
+                writer.writeSizedString(tag.getName().toString());
+
+                final Set<NamespaceID> values = tag.getValues();
+                // count
+                writer.writeVarInt(values.size());
+                // entries
+                for (NamespaceID name : values) {
+                    // TODO id from namespace
+                    writer.writeVarInt(0);
+                }
+            }
+        });
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        readTags(reader, blockTags, id -> NamespaceID.from("minecraft", Block.values()[id].getName()));
-        readTags(reader, itemTags, id -> NamespaceID.from("minecraft", Material.values()[id].getName()));
-        readTags(reader, fluidTags, id -> Fluid.fromId(id.shortValue()).getNamespaceID());
-        readTags(reader, entityTags, id -> NamespaceID.from(EntityType.values()[id].getNamespaceID()));
+        this.tagsMap = new HashMap<>();
+        final int typeCount = reader.readVarInt();
+        for (int i = 0; i < typeCount; i++) {
+            final String identifier = reader.readSizedString(Integer.MAX_VALUE);
+            List<Tag> tags = new ArrayList<>();
+            final int tagCount = reader.readVarInt();
+            Set<NamespaceID> values = new HashSet<>();
+            for (int j = 0; j < tagCount; j++) {
+                int protocolID = reader.readVarInt();
+                // TODO tag from id
+                values.add(null);
+            }
+
+            tags.add(new Tag(NamespaceID.from(identifier), values));
+            this.tagsMap.put(identifier, tags);
+        }
     }
 
     private void writeTags(BinaryWriter writer, List<Tag> tags, Function<NamespaceID, Integer> idSupplier) {
@@ -67,23 +84,6 @@ public class TagsPacket implements ServerPacket {
             for (NamespaceID name : values) {
                 writer.writeVarInt(idSupplier.apply(name));
             }
-        }
-    }
-
-    public void readTags(BinaryReader reader, List<Tag> output, Function<Integer, NamespaceID> idSupplier) {
-        output.clear();
-        int length = reader.readVarInt();
-        for (int i = 0; i < length; i++) {
-            String name = reader.readSizedString(Integer.MAX_VALUE);
-
-            int count = reader.readVarInt();
-            Set<NamespaceID> values = new HashSet<>();
-            for (int j = 0; j < count; j++) {
-                int protocolID = reader.readVarInt();
-                values.add(idSupplier.apply(protocolID));
-            }
-
-            output.add(new Tag(NamespaceID.from(name), values));
         }
     }
 

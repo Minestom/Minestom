@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -250,28 +251,14 @@ public class TagManager {
     /**
      * Adds the required tags for the game to function correctly
      *
-     * @param tags the packet to add the tags to
+     * @param tagsPacket the packet to add the tags to
      */
-    public void addRequiredTagsToPacket(TagsPacket tags) {
+    public void addRequiredTagsToPacket(TagsPacket tagsPacket) {
         for (RequiredTag requiredTag : requiredTags) {
-            Tag tag = silentLoad(requiredTag.getName(), requiredTag.getType().name().toLowerCase());
-            switch (requiredTag.getType()) {
-                case BLOCKS:
-                    tags.blockTags.add(tag);
-                    break;
-
-                case ITEMS:
-                    tags.itemTags.add(tag);
-                    break;
-
-                case FLUIDS:
-                    tags.fluidTags.add(tag);
-                    break;
-
-                case ENTITY_TYPES:
-                    tags.entityTags.add(tag);
-                    break;
-            }
+            final Tag tag = silentLoad(requiredTag.getName(), requiredTag.getType().name().toLowerCase());
+            final String identifier = requiredTag.getType().getIdentifier();
+            var map = tagsPacket.tagsMap.computeIfAbsent(identifier, s -> new ArrayList<>());
+            map.add(tag);
         }
     }
 
