@@ -19,11 +19,11 @@ public final class SmoothQuartzSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 10835, "type=top", "waterlogged=true"));
-        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 10836, "type=top", "waterlogged=false"));
-        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 10837, "type=bottom", "waterlogged=true"));
-        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 10838, "type=bottom", "waterlogged=false"));
-        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 10839, "type=double", "waterlogged=true"));
-        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 10840, "type=double", "waterlogged=false"));
+        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 11081, "type=top", "waterlogged=true"));
+        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 11082, "type=top", "waterlogged=false"));
+        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 11083, "type=bottom", "waterlogged=true"));
+        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 11084, "type=bottom", "waterlogged=false"));
+        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 11085, "type=double", "waterlogged=true"));
+        Block.SMOOTH_QUARTZ_SLAB.addBlockAlternative(new BlockAlternative((short) 11086, "type=double", "waterlogged=false"));
     }
 }

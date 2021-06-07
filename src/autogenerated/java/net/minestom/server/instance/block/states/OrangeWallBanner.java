@@ -19,9 +19,9 @@ public final class OrangeWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8161, "facing=north"));
-        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8162, "facing=south"));
-        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8163, "facing=west"));
-        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8164, "facing=east"));
+        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8407, "facing=north"));
+        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8408, "facing=south"));
+        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8409, "facing=west"));
+        Block.ORANGE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8410, "facing=east"));
     }
 }

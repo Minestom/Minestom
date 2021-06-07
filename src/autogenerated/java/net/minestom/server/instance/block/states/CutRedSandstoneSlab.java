@@ -19,11 +19,11 @@ public final class CutRedSandstoneSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8406, "type=top", "waterlogged=true"));
-        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8407, "type=top", "waterlogged=false"));
-        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8408, "type=bottom", "waterlogged=true"));
-        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8409, "type=bottom", "waterlogged=false"));
-        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8410, "type=double", "waterlogged=true"));
-        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8411, "type=double", "waterlogged=false"));
+        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8652, "type=top", "waterlogged=true"));
+        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8653, "type=top", "waterlogged=false"));
+        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8654, "type=bottom", "waterlogged=true"));
+        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8655, "type=bottom", "waterlogged=false"));
+        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8656, "type=double", "waterlogged=true"));
+        Block.CUT_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 8657, "type=double", "waterlogged=false"));
     }
 }

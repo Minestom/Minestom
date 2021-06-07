@@ -19,11 +19,11 @@ public final class AndesiteSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10847, "type=top", "waterlogged=true"));
-        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10848, "type=top", "waterlogged=false"));
-        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10849, "type=bottom", "waterlogged=true"));
-        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10850, "type=bottom", "waterlogged=false"));
-        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10851, "type=double", "waterlogged=true"));
-        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10852, "type=double", "waterlogged=false"));
+        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11093, "type=top", "waterlogged=true"));
+        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11094, "type=top", "waterlogged=false"));
+        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11095, "type=bottom", "waterlogged=true"));
+        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11096, "type=bottom", "waterlogged=false"));
+        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11097, "type=double", "waterlogged=true"));
+        Block.ANDESITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11098, "type=double", "waterlogged=false"));
     }
 }

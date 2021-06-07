@@ -19,12 +19,12 @@ public final class Cake {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4024, "bites=0"));
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4025, "bites=1"));
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4026, "bites=2"));
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4027, "bites=3"));
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4028, "bites=4"));
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4029, "bites=5"));
-        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4030, "bites=6"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4093, "bites=0"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4094, "bites=1"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4095, "bites=2"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4096, "bites=3"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4097, "bites=4"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4098, "bites=5"));
+        Block.CAKE.addBlockAlternative(new BlockAlternative((short) 4099, "bites=6"));
     }
 }

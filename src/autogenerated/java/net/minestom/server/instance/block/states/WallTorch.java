@@ -19,9 +19,9 @@ public final class WallTorch {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1436, "facing=north"));
-        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1437, "facing=south"));
-        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1438, "facing=west"));
-        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1439, "facing=east"));
+        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1492, "facing=north"));
+        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1493, "facing=south"));
+        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1494, "facing=west"));
+        Block.WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 1495, "facing=east"));
     }
 }

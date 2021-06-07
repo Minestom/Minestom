@@ -19,8 +19,8 @@ public final class BoneBlock {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BONE_BLOCK.addBlockAlternative(new BlockAlternative((short) 9260, "axis=x"));
-        Block.BONE_BLOCK.addBlockAlternative(new BlockAlternative((short) 9261, "axis=y"));
-        Block.BONE_BLOCK.addBlockAlternative(new BlockAlternative((short) 9262, "axis=z"));
+        Block.BONE_BLOCK.addBlockAlternative(new BlockAlternative((short) 9506, "axis=x"));
+        Block.BONE_BLOCK.addBlockAlternative(new BlockAlternative((short) 9507, "axis=y"));
+        Block.BONE_BLOCK.addBlockAlternative(new BlockAlternative((short) 9508, "axis=z"));
     }
 }

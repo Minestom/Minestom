@@ -19,11 +19,11 @@ public final class Chain {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4729, "axis=x", "waterlogged=true"));
-        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4730, "axis=x", "waterlogged=false"));
-        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4731, "axis=y", "waterlogged=true"));
-        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4732, "axis=y", "waterlogged=false"));
-        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4733, "axis=z", "waterlogged=true"));
-        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4734, "axis=z", "waterlogged=false"));
+        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4798, "axis=x", "waterlogged=true"));
+        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4799, "axis=x", "waterlogged=false"));
+        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4800, "axis=y", "waterlogged=true"));
+        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4801, "axis=y", "waterlogged=false"));
+        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4802, "axis=z", "waterlogged=true"));
+        Block.CHAIN.addBlockAlternative(new BlockAlternative((short) 4803, "axis=z", "waterlogged=false"));
     }
 }

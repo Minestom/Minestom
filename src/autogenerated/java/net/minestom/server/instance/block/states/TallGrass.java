@@ -19,7 +19,7 @@ public final class TallGrass {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TALL_GRASS.addBlockAlternative(new BlockAlternative((short) 7897, "half=upper"));
-        Block.TALL_GRASS.addBlockAlternative(new BlockAlternative((short) 7898, "half=lower"));
+        Block.TALL_GRASS.addBlockAlternative(new BlockAlternative((short) 8143, "half=upper"));
+        Block.TALL_GRASS.addBlockAlternative(new BlockAlternative((short) 8144, "half=lower"));
     }
 }

@@ -19,9 +19,9 @@ public final class CyanWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8193, "facing=north"));
-        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8194, "facing=south"));
-        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8195, "facing=west"));
-        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8196, "facing=east"));
+        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8439, "facing=north"));
+        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8440, "facing=south"));
+        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8441, "facing=west"));
+        Block.CYAN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8442, "facing=east"));
     }
 }

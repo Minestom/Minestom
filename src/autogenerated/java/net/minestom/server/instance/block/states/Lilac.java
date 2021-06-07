@@ -19,7 +19,7 @@ public final class Lilac {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LILAC.addBlockAlternative(new BlockAlternative((short) 7891, "half=upper"));
-        Block.LILAC.addBlockAlternative(new BlockAlternative((short) 7892, "half=lower"));
+        Block.LILAC.addBlockAlternative(new BlockAlternative((short) 8137, "half=upper"));
+        Block.LILAC.addBlockAlternative(new BlockAlternative((short) 8138, "half=lower"));
     }
 }

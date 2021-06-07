@@ -19,13 +19,13 @@ public final class BirchWallSign {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3751, "facing=north", "waterlogged=true"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3752, "facing=north", "waterlogged=false"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3753, "facing=south", "waterlogged=true"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3754, "facing=south", "waterlogged=false"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3755, "facing=west", "waterlogged=true"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3756, "facing=west", "waterlogged=false"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3757, "facing=east", "waterlogged=true"));
-        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3758, "facing=east", "waterlogged=false"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3818, "facing=north", "waterlogged=true"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3819, "facing=north", "waterlogged=false"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3820, "facing=south", "waterlogged=true"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3821, "facing=south", "waterlogged=false"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3822, "facing=west", "waterlogged=true"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3823, "facing=west", "waterlogged=false"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3824, "facing=east", "waterlogged=true"));
+        Block.BIRCH_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3825, "facing=east", "waterlogged=false"));
     }
 }

@@ -19,9 +19,9 @@ public final class ChippedAnvil {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6618, "facing=north"));
-        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6619, "facing=south"));
-        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6620, "facing=west"));
-        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6621, "facing=east"));
+        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6820, "facing=north"));
+        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6821, "facing=south"));
+        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6822, "facing=west"));
+        Block.CHIPPED_ANVIL.addBlockAlternative(new BlockAlternative((short) 6823, "facing=east"));
     }
 }

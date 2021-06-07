@@ -19,7 +19,7 @@ public final class Jukebox {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JUKEBOX.addBlockAlternative(new BlockAlternative((short) 3964, "has_record=true"));
-        Block.JUKEBOX.addBlockAlternative(new BlockAlternative((short) 3965, "has_record=false"));
+        Block.JUKEBOX.addBlockAlternative(new BlockAlternative((short) 4033, "has_record=true"));
+        Block.JUKEBOX.addBlockAlternative(new BlockAlternative((short) 4034, "has_record=false"));
     }
 }

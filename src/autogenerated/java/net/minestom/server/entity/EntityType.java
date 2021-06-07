@@ -127,6 +127,8 @@ public enum EntityType implements Keyed {
 
     ARROW(NamespaceID.from("minecraft:arrow"), 0.5, 0.5, ArrowMeta::new, EntitySpawnType.BASE),
 
+    AXOLOTL(NamespaceID.from("minecraft:axolotl"), 0.75, 0.42, EntityMeta::new, EntitySpawnType.LIVING),
+
     BAT(NamespaceID.from("minecraft:bat"), 0.5, 0.9, BatMeta::new, EntitySpawnType.LIVING),
 
     BEE(NamespaceID.from("minecraft:bee"), 0.7, 0.6, BeeMeta::new, EntitySpawnType.LIVING),
@@ -183,6 +185,12 @@ public enum EntityType implements Keyed {
 
     GIANT(NamespaceID.from("minecraft:giant"), 3.6, 12.0, GiantMeta::new, EntitySpawnType.LIVING),
 
+    GLOW_ITEM_FRAME(NamespaceID.from("minecraft:glow_item_frame"), 0.5, 0.5, EntityMeta::new, EntitySpawnType.BASE),
+
+    GLOW_SQUID(NamespaceID.from("minecraft:glow_squid"), 0.8, 0.8, EntityMeta::new, EntitySpawnType.LIVING),
+
+    GOAT(NamespaceID.from("minecraft:goat"), 0.9, 1.3, EntityMeta::new, EntitySpawnType.LIVING),
+
     GUARDIAN(NamespaceID.from("minecraft:guardian"), 0.85, 0.85, GuardianMeta::new, EntitySpawnType.LIVING),
 
     HOGLIN(NamespaceID.from("minecraft:hoglin"), 1.3964844, 1.4, HoglinMeta::new, EntitySpawnType.LIVING),
@@ -201,7 +209,7 @@ public enum EntityType implements Keyed {
 
     FIREBALL(NamespaceID.from("minecraft:fireball"), 1.0, 1.0, FireballMeta::new, EntitySpawnType.BASE),
 
-    LEASH_KNOT(NamespaceID.from("minecraft:leash_knot"), 0.5, 0.5, LeashKnotMeta::new, EntitySpawnType.BASE),
+    LEASH_KNOT(NamespaceID.from("minecraft:leash_knot"), 0.375, 0.5, LeashKnotMeta::new, EntitySpawnType.BASE),
 
     LIGHTNING_BOLT(NamespaceID.from("minecraft:lightning_bolt"), 0.0, 0.0, LightningBoltMeta::new, EntitySpawnType.BASE),
 
@@ -210,6 +218,8 @@ public enum EntityType implements Keyed {
     LLAMA_SPIT(NamespaceID.from("minecraft:llama_spit"), 0.25, 0.25, LlamaSpitMeta::new, EntitySpawnType.BASE),
 
     MAGMA_CUBE(NamespaceID.from("minecraft:magma_cube"), 2.04, 2.04, MagmaCubeMeta::new, EntitySpawnType.LIVING),
+
+    MARKER(NamespaceID.from("minecraft:marker"), 0.0, 0.0, EntityMeta::new, EntitySpawnType.BASE),
 
     MINECART(NamespaceID.from("minecraft:minecart"), 0.98, 0.7, MinecartMeta::new, EntitySpawnType.BASE),
 

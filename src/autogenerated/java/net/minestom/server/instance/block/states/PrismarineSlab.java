@@ -19,11 +19,11 @@ public final class PrismarineSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7848, "type=top", "waterlogged=true"));
-        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7849, "type=top", "waterlogged=false"));
-        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7850, "type=bottom", "waterlogged=true"));
-        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7851, "type=bottom", "waterlogged=false"));
-        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7852, "type=double", "waterlogged=true"));
-        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 7853, "type=double", "waterlogged=false"));
+        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 8094, "type=top", "waterlogged=true"));
+        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 8095, "type=top", "waterlogged=false"));
+        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 8096, "type=bottom", "waterlogged=true"));
+        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 8097, "type=bottom", "waterlogged=false"));
+        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 8098, "type=double", "waterlogged=true"));
+        Block.PRISMARINE_SLAB.addBlockAlternative(new BlockAlternative((short) 8099, "type=double", "waterlogged=false"));
     }
 }

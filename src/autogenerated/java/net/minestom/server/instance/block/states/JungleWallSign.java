@@ -19,13 +19,13 @@ public final class JungleWallSign {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3767, "facing=north", "waterlogged=true"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3768, "facing=north", "waterlogged=false"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3769, "facing=south", "waterlogged=true"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3770, "facing=south", "waterlogged=false"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3771, "facing=west", "waterlogged=true"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3772, "facing=west", "waterlogged=false"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3773, "facing=east", "waterlogged=true"));
-        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3774, "facing=east", "waterlogged=false"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3834, "facing=north", "waterlogged=true"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3835, "facing=north", "waterlogged=false"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3836, "facing=south", "waterlogged=true"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3837, "facing=south", "waterlogged=false"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3838, "facing=west", "waterlogged=true"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3839, "facing=west", "waterlogged=false"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3840, "facing=east", "waterlogged=true"));
+        Block.JUNGLE_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3841, "facing=east", "waterlogged=false"));
     }
 }

@@ -19,9 +19,9 @@ public final class Lantern {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 14890, "hanging=true", "waterlogged=true"));
-        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 14891, "hanging=true", "waterlogged=false"));
-        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 14892, "hanging=false", "waterlogged=true"));
-        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 14893, "hanging=false", "waterlogged=false"));
+        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 15136, "hanging=true", "waterlogged=true"));
+        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 15137, "hanging=true", "waterlogged=false"));
+        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 15138, "hanging=false", "waterlogged=true"));
+        Block.LANTERN.addBlockAlternative(new BlockAlternative((short) 15139, "hanging=false", "waterlogged=false"));
     }
 }

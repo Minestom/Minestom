@@ -13,7 +13,9 @@ import org.jetbrains.annotations.Nullable;
 public enum StatisticType implements Keyed {
     LEAVE_GAME(NamespaceID.from("minecraft:leave_game")),
 
-    PLAY_ONE_MINUTE(NamespaceID.from("minecraft:play_one_minute")),
+    PLAY_TIME(NamespaceID.from("minecraft:play_time")),
+
+    TOTAL_WORLD_TIME(NamespaceID.from("minecraft:total_world_time")),
 
     TIME_SINCE_DEATH(NamespaceID.from("minecraft:time_since_death")),
 

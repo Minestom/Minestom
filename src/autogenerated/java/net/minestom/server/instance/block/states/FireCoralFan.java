@@ -19,7 +19,7 @@ public final class FireCoralFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9560, "waterlogged=true"));
-        Block.FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9561, "waterlogged=false"));
+        Block.FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9806, "waterlogged=true"));
+        Block.FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9807, "waterlogged=false"));
     }
 }

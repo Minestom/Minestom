@@ -19,8 +19,8 @@ public final class StrippedDarkOakLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 103, "axis=x"));
-        Block.STRIPPED_DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 104, "axis=y"));
-        Block.STRIPPED_DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 105, "axis=z"));
+        Block.STRIPPED_DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 106, "axis=x"));
+        Block.STRIPPED_DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 107, "axis=y"));
+        Block.STRIPPED_DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 108, "axis=z"));
     }
 }

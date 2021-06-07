@@ -19,17 +19,17 @@ public final class Grindstone {
             forRemoval = false
     )
     public static void initStates() {
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14825, "face=floor", "facing=north"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14826, "face=floor", "facing=south"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14827, "face=floor", "facing=west"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14828, "face=floor", "facing=east"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14829, "face=wall", "facing=north"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14830, "face=wall", "facing=south"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14831, "face=wall", "facing=west"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14832, "face=wall", "facing=east"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14833, "face=ceiling", "facing=north"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14834, "face=ceiling", "facing=south"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14835, "face=ceiling", "facing=west"));
-        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 14836, "face=ceiling", "facing=east"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15071, "face=floor", "facing=north"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15072, "face=floor", "facing=south"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15073, "face=floor", "facing=west"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15074, "face=floor", "facing=east"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15075, "face=wall", "facing=north"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15076, "face=wall", "facing=south"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15077, "face=wall", "facing=west"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15078, "face=wall", "facing=east"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15079, "face=ceiling", "facing=north"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15080, "face=ceiling", "facing=south"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15081, "face=ceiling", "facing=west"));
+        Block.GRINDSTONE.addBlockAlternative(new BlockAlternative((short) 15082, "face=ceiling", "facing=east"));
     }
 }

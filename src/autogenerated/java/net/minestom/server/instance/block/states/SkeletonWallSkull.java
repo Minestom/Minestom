@@ -19,9 +19,9 @@ public final class SkeletonWallSkull {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6510, "facing=north"));
-        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6511, "facing=south"));
-        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6512, "facing=west"));
-        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6513, "facing=east"));
+        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6712, "facing=north"));
+        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6713, "facing=south"));
+        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6714, "facing=west"));
+        Block.SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6715, "facing=east"));
     }
 }

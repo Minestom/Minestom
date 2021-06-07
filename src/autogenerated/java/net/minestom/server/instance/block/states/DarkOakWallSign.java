@@ -19,13 +19,13 @@ public final class DarkOakWallSign {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3775, "facing=north", "waterlogged=true"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3776, "facing=north", "waterlogged=false"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3777, "facing=south", "waterlogged=true"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3778, "facing=south", "waterlogged=false"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3779, "facing=west", "waterlogged=true"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3780, "facing=west", "waterlogged=false"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3781, "facing=east", "waterlogged=true"));
-        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3782, "facing=east", "waterlogged=false"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3842, "facing=north", "waterlogged=true"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3843, "facing=north", "waterlogged=false"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3844, "facing=south", "waterlogged=true"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3845, "facing=south", "waterlogged=false"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3846, "facing=west", "waterlogged=true"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3847, "facing=west", "waterlogged=false"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3848, "facing=east", "waterlogged=true"));
+        Block.DARK_OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3849, "facing=east", "waterlogged=false"));
     }
 }

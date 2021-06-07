@@ -19,7 +19,7 @@ public final class LargeFern {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 7899, "half=upper"));
-        Block.LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 7900, "half=lower"));
+        Block.LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 8145, "half=upper"));
+        Block.LARGE_FERN.addBlockAlternative(new BlockAlternative((short) 8146, "half=lower"));
     }
 }

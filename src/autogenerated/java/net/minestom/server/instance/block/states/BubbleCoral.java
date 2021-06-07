@@ -19,7 +19,7 @@ public final class BubbleCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9538, "waterlogged=true"));
-        Block.BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9539, "waterlogged=false"));
+        Block.BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9784, "waterlogged=true"));
+        Block.BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9785, "waterlogged=false"));
     }
 }

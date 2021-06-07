@@ -19,21 +19,21 @@ public final class CyanBed {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1193, "facing=north", "occupied=true", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1194, "facing=north", "occupied=true", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1195, "facing=north", "occupied=false", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1196, "facing=north", "occupied=false", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1197, "facing=south", "occupied=true", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1198, "facing=south", "occupied=true", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1199, "facing=south", "occupied=false", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1200, "facing=south", "occupied=false", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1201, "facing=west", "occupied=true", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1202, "facing=west", "occupied=true", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1203, "facing=west", "occupied=false", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1204, "facing=west", "occupied=false", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1205, "facing=east", "occupied=true", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1206, "facing=east", "occupied=true", "part=foot"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1207, "facing=east", "occupied=false", "part=head"));
-        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1208, "facing=east", "occupied=false", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1225, "facing=north", "occupied=true", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1226, "facing=north", "occupied=true", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1227, "facing=north", "occupied=false", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1228, "facing=north", "occupied=false", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1229, "facing=south", "occupied=true", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1230, "facing=south", "occupied=true", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1231, "facing=south", "occupied=false", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1232, "facing=south", "occupied=false", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1233, "facing=west", "occupied=true", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1234, "facing=west", "occupied=true", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1235, "facing=west", "occupied=false", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1236, "facing=west", "occupied=false", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1237, "facing=east", "occupied=true", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1238, "facing=east", "occupied=true", "part=foot"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1239, "facing=east", "occupied=false", "part=head"));
+        Block.CYAN_BED.addBlockAlternative(new BlockAlternative((short) 1240, "facing=east", "occupied=false", "part=foot"));
     }
 }

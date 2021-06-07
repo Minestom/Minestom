@@ -19,14 +19,14 @@ public final class Composter {
             forRemoval = false
     )
     public static void initStates() {
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15759, "level=0"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15760, "level=1"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15761, "level=2"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15762, "level=3"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15763, "level=4"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15764, "level=5"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15765, "level=6"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15766, "level=7"));
-        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 15767, "level=8"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16005, "level=0"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16006, "level=1"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16007, "level=2"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16008, "level=3"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16009, "level=4"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16010, "level=5"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16011, "level=6"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16012, "level=7"));
+        Block.COMPOSTER.addBlockAlternative(new BlockAlternative((short) 16013, "level=8"));
     }
 }

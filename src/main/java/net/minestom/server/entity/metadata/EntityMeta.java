@@ -21,7 +21,7 @@ public class EntityMeta {
     protected final Entity entity;
     protected final Metadata metadata;
 
-    protected EntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public EntityMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         this.entity = entity;
         this.metadata = metadata;
     }

@@ -19,8 +19,8 @@ public final class SpruceLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 76, "axis=x"));
-        Block.SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 77, "axis=y"));
-        Block.SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 78, "axis=z"));
+        Block.SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 79, "axis=x"));
+        Block.SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 80, "axis=y"));
+        Block.SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 81, "axis=z"));
     }
 }

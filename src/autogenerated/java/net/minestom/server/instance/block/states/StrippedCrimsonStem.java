@@ -19,8 +19,8 @@ public final class StrippedCrimsonStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14986, "axis=x"));
-        Block.STRIPPED_CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14987, "axis=y"));
-        Block.STRIPPED_CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 14988, "axis=z"));
+        Block.STRIPPED_CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 15232, "axis=x"));
+        Block.STRIPPED_CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 15233, "axis=y"));
+        Block.STRIPPED_CRIMSON_STEM.addBlockAlternative(new BlockAlternative((short) 15234, "axis=z"));
     }
 }

@@ -19,8 +19,8 @@ public final class JungleLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 82, "axis=x"));
-        Block.JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 83, "axis=y"));
-        Block.JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 84, "axis=z"));
+        Block.JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 85, "axis=x"));
+        Block.JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 86, "axis=y"));
+        Block.JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 87, "axis=z"));
     }
 }

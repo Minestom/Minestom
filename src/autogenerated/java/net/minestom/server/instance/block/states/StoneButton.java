@@ -19,29 +19,29 @@ public final class StoneButton {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3897, "face=floor", "facing=north", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3898, "face=floor", "facing=north", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3899, "face=floor", "facing=south", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3900, "face=floor", "facing=south", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3901, "face=floor", "facing=west", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3902, "face=floor", "facing=west", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3903, "face=floor", "facing=east", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3904, "face=floor", "facing=east", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3905, "face=wall", "facing=north", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3906, "face=wall", "facing=north", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3907, "face=wall", "facing=south", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3908, "face=wall", "facing=south", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3909, "face=wall", "facing=west", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3910, "face=wall", "facing=west", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3911, "face=wall", "facing=east", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3912, "face=wall", "facing=east", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3913, "face=ceiling", "facing=north", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3914, "face=ceiling", "facing=north", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3915, "face=ceiling", "facing=south", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3916, "face=ceiling", "facing=south", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3917, "face=ceiling", "facing=west", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3918, "face=ceiling", "facing=west", "powered=false"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3919, "face=ceiling", "facing=east", "powered=true"));
-        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3920, "face=ceiling", "facing=east", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3966, "face=floor", "facing=north", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3967, "face=floor", "facing=north", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3968, "face=floor", "facing=south", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3969, "face=floor", "facing=south", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3970, "face=floor", "facing=west", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3971, "face=floor", "facing=west", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3972, "face=floor", "facing=east", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3973, "face=floor", "facing=east", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3974, "face=wall", "facing=north", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3975, "face=wall", "facing=north", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3976, "face=wall", "facing=south", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3977, "face=wall", "facing=south", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3978, "face=wall", "facing=west", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3979, "face=wall", "facing=west", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3980, "face=wall", "facing=east", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3981, "face=wall", "facing=east", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3982, "face=ceiling", "facing=north", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3983, "face=ceiling", "facing=north", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3984, "face=ceiling", "facing=south", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3985, "face=ceiling", "facing=south", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3986, "face=ceiling", "facing=west", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3987, "face=ceiling", "facing=west", "powered=false"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3988, "face=ceiling", "facing=east", "powered=true"));
+        Block.STONE_BUTTON.addBlockAlternative(new BlockAlternative((short) 3989, "face=ceiling", "facing=east", "powered=false"));
     }
 }

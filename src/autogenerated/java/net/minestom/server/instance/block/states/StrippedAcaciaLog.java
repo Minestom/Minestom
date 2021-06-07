@@ -19,8 +19,8 @@ public final class StrippedAcaciaLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 100, "axis=x"));
-        Block.STRIPPED_ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 101, "axis=y"));
-        Block.STRIPPED_ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 102, "axis=z"));
+        Block.STRIPPED_ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 103, "axis=x"));
+        Block.STRIPPED_ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 104, "axis=y"));
+        Block.STRIPPED_ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 105, "axis=z"));
     }
 }

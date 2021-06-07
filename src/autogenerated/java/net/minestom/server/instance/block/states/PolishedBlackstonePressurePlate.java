@@ -19,7 +19,7 @@ public final class PolishedBlackstonePressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.POLISHED_BLACKSTONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 16759, "powered=true"));
-        Block.POLISHED_BLACKSTONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 16760, "powered=false"));
+        Block.POLISHED_BLACKSTONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 17005, "powered=true"));
+        Block.POLISHED_BLACKSTONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 17006, "powered=false"));
     }
 }

@@ -19,9 +19,9 @@ public final class StructureBlock {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15743, "mode=save"));
-        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15744, "mode=load"));
-        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15745, "mode=corner"));
-        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15746, "mode=data"));
+        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15989, "mode=save"));
+        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15990, "mode=load"));
+        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15991, "mode=corner"));
+        Block.STRUCTURE_BLOCK.addBlockAlternative(new BlockAlternative((short) 15992, "mode=data"));
     }
 }
