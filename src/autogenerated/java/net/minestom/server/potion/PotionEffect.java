@@ -102,7 +102,7 @@ public enum PotionEffect implements Keyed {
 
     @Nullable
     public static PotionEffect fromId(short id) {
-        if(id >= 0 && id < VALUES.length + 1) {
+        if(id >= 1 && id < VALUES.length + 1) {
             return VALUES[id - 1];
         }
         return null;

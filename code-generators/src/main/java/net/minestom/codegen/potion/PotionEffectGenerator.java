@@ -100,7 +100,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
                         .returns(potionEffectClassName)
                         .addAnnotation(Nullable.class)
                         .addParameter(TypeName.SHORT, "id")
-                        .beginControlFlow("if(id >= 0 && id < VALUES.length + 1)")
+                        .beginControlFlow("if(id >= 1 && id < VALUES.length + 1)")
                         .addStatement("return VALUES[id - 1]")
                         .endControlFlow()
                         .addStatement("return null")
