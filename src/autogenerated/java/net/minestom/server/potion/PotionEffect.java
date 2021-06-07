@@ -92,7 +92,7 @@ public enum PotionEffect implements Keyed {
     }
 
     public short getId() {
-        return (short) ordinal();
+        return (short) (ordinal() + 1);
     }
 
     @NotNull
@@ -102,8 +102,8 @@ public enum PotionEffect implements Keyed {
 
     @Nullable
     public static PotionEffect fromId(short id) {
-        if(id >= 0 && id < VALUES.length) {
-            return VALUES[id];
+        if(id >= 1 && id < VALUES.length + 1) {
+            return VALUES[id - 1];
         }
         return null;
     }
