@@ -73,6 +73,7 @@ public class EventNode<T extends Event> {
     protected final EventFilter<T, ?> filter;
     protected final BiPredicate<T, Object> predicate;
     protected final Class<T> eventType;
+    private volatile int priority;
     private volatile EventNode<? super T> parent;
 
     protected EventNode(@NotNull String name,
@@ -124,9 +125,9 @@ public class EventNode<T extends Event> {
         }
         // Process children
         if (entry.childCount > 0) {
-            for (EventNode<T> child : children) {
-                child.call(event);
-            }
+            this.children.stream()
+                    .sorted(Comparator.comparing(EventNode::getPriority))
+                    .forEach(child -> child.call(event));
         }
     }
 
@@ -139,6 +140,15 @@ public class EventNode<T extends Event> {
 
     public @NotNull String getName() {
         return name;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public EventNode<T> setPriority(int priority) {
+        this.priority = priority;
+        return this;
     }
 
     public @Nullable EventNode<? super T> getParent() {
