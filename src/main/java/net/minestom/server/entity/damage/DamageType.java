@@ -26,7 +26,7 @@ public class DamageType implements DataContainer {
     public static final DamageType ON_FIRE = new DamageType("attack.onFire") {
         @Override
         protected SoundEvent getPlayerSound(@NotNull Player player) {
-            return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
+            return SoundEvent.PLAYER_HURT_ON_FIRE;
         }
     };
     private final String identifier;
@@ -143,11 +143,11 @@ public class DamageType implements DataContainer {
     }
 
     protected SoundEvent getGenericSound(@NotNull LivingEntity entity) {
-        return SoundEvent.ENTITY_GENERIC_HURT;
+        return SoundEvent.GENERIC_HURT;
     }
 
     protected SoundEvent getPlayerSound(@NotNull Player player) {
-        return SoundEvent.ENTITY_PLAYER_HURT;
+        return SoundEvent.PLAYER_HURT;
     }
 
     @Override

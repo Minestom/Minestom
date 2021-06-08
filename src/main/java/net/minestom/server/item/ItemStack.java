@@ -4,6 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.item.rule.VanillaStackingRule;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +24,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
+public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
@@ -189,6 +191,21 @@ public final class ItemStack implements HoverEventSource<HoverEvent.ShowItem> {
         return new ItemStackBuilder(material, meta.builder())
                 .amount(amount)
                 .stackingRule(stackingRule);
+    }
+
+    @Contract(value = "_, _ -> new", pure = true)
+    public <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
+        return builder().meta(metaBuilder -> metaBuilder.set(tag, value)).build();
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return meta.getTag(tag);
+    }
+
+    @Override
+    public boolean hasTag(@NotNull Tag<?> tag) {
+        return meta.hasTag(tag);
     }
 
     @Override
