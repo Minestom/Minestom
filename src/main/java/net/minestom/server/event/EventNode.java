@@ -172,12 +172,28 @@ public class EventNode<T extends Event> {
         return Collections.unmodifiableSet(children);
     }
 
-    public <E extends T> @NotNull EventNode<E> findChild(@NotNull String name, Class<E> eventType) {
-        return null;
+    @Contract(pure = true)
+    public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
+        synchronized (GLOBAL_CHILD_LOCK) {
+            if (children.isEmpty()) {
+                return Collections.emptyList();
+            }
+            List<EventNode<E>> result = new ArrayList<>();
+            this.children.forEach(child -> {
+                final boolean nameCheck = child.getName().equals(name);
+                final boolean typeCheck = child.eventType.isAssignableFrom(eventType);
+                if (nameCheck && typeCheck) {
+                    result.add((EventNode<E>) child);
+                }
+                result.addAll(child.findChildren(name, eventType));
+            });
+            return result;
+        }
     }
 
-    public @NotNull EventNode<T> findChild(@NotNull String name) {
-        return findChild(name, eventType);
+    @Contract(pure = true)
+    public @NotNull List<EventNode<T>> findChildren(@NotNull String name) {
+        return findChildren(name, eventType);
     }
 
     @Contract(value = "_ -> this")
