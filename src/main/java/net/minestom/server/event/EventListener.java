@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -39,8 +38,8 @@ public interface EventListener<T extends Event> {
         private final Class<T> eventType;
 
         private final List<Predicate<T>> filters = new ArrayList<>();
-        private int expirationCount;
-        private UpdateOption expirationTime;
+        private int expireCount;
+        private Predicate<T> expireWhen;
         private Consumer<T> handler;
 
         protected Builder(Class<T> eventType) {
@@ -52,13 +51,13 @@ public interface EventListener<T extends Event> {
             return this;
         }
 
-        public EventListener.Builder<T> expirationCount(int expirationCount) {
-            this.expirationCount = expirationCount;
+        public EventListener.Builder<T> expireCount(int expireCount) {
+            this.expireCount = expireCount;
             return this;
         }
 
-        public EventListener.Builder<T> expirationTime(UpdateOption expirationTime) {
-            this.expirationTime = expirationTime;
+        public EventListener.Builder<T> expireWhen(Predicate<T> expireWhen) {
+            this.expireWhen = expireWhen;
             return this;
         }
 
@@ -68,7 +67,7 @@ public interface EventListener<T extends Event> {
         }
 
         public @NotNull EventListener<T> build() {
-            AtomicInteger expirationCount = new AtomicInteger(this.expirationCount);
+            AtomicInteger expirationCount = new AtomicInteger(this.expireCount);
             final boolean hasExpirationCount = expirationCount.get() > 0;
 
             final var filters = new ArrayList<>(this.filters);
@@ -81,6 +80,10 @@ public interface EventListener<T extends Event> {
 
                 @Override
                 public @NotNull Result run(@NotNull T event) {
+                    // Expiration predicate
+                    if (expireWhen != null && expireWhen.test(event)) {
+                        return Result.EXPIRED;
+                    }
                     // Filtering
                     if (!filters.isEmpty()) {
                         if (filters.stream().anyMatch(filter -> !filter.test(event))) {
@@ -92,7 +95,7 @@ public interface EventListener<T extends Event> {
                     if (handler != null) {
                         handler.accept(event);
                     }
-                    // Expiration check
+                    // Expiration count
                     if (hasExpirationCount && expirationCount.decrementAndGet() == 0) {
                         return Result.EXPIRED;
                     }
