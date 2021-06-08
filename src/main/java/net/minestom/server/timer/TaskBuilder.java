@@ -3,6 +3,7 @@ package net.minestom.server.timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -73,6 +74,18 @@ public class TaskBuilder {
     }
 
     /**
+     * Specifies that the {@link Task} should delay its execution by the specified amount of time.
+     *
+     * @param updateOption the UpdateOption for this builder.
+     * @return this builder, for chaining
+     */
+    @NotNull
+    public TaskBuilder delay(UpdateOption updateOption) {
+        this.delay = updateOption.toMilliseconds();
+        return this;
+    }
+
+    /**
      * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
      *
      * @param time The time until the repetition
@@ -82,6 +95,18 @@ public class TaskBuilder {
     @NotNull
     public TaskBuilder repeat(long time, @NotNull TimeUnit unit) {
         this.repeat = unit.toMilliseconds(time);
+        return this;
+    }
+
+    /**
+     * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
+     *
+     * @param updateOption the UpdateOption for this builder.
+     * @return this builder, for chaining
+     */
+    @NotNull
+    public TaskBuilder repeat(UpdateOption updateOption) {
+        this.repeat = updateOption.toMilliseconds();
         return this;
     }
 

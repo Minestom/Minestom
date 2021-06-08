@@ -5,7 +5,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -45,10 +45,13 @@ public class TickThread extends Thread {
 
     protected static class BatchRunnable implements Runnable {
 
+        private static final AtomicReferenceFieldUpdater<BatchRunnable, TickContext> CONTEXT_UPDATER =
+                AtomicReferenceFieldUpdater.newUpdater(BatchRunnable.class, TickContext.class, "tickContext");
+
         private volatile boolean stop;
         private TickThread tickThread;
 
-        private final AtomicReference<TickContext> tickContext = new AtomicReference<>();
+        private volatile TickContext tickContext;
 
         @Override
         public void run() {
@@ -57,7 +60,7 @@ public class TickThread extends Thread {
                 LockSupport.park(tickThread);
                 if (stop)
                     break;
-                TickContext localContext = this.tickContext.get();
+                TickContext localContext = tickContext;
                 // The context is necessary to control the tick rates
                 if (localContext == null) {
                     continue;
@@ -67,12 +70,12 @@ public class TickThread extends Thread {
                 localContext.runnable.run();
 
                 localContext.countDownLatch.countDown();
-                this.tickContext.compareAndSet(localContext, null);
+                CONTEXT_UPDATER.compareAndSet(this, localContext, null);
             }
         }
 
         protected void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
-            this.tickContext.set(new TickContext(countDownLatch, runnable));
+            this.tickContext = new TickContext(countDownLatch, runnable);
             LockSupport.unpark(tickThread);
         }
 
