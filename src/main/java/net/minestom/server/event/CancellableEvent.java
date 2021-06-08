@@ -2,6 +2,7 @@ package net.minestom.server.event;
 
 /**
  * Represents an {@link Event} which can be cancelled.
+ * Called using {@link EventDispatcher#callCancellable(CancellableEvent, Runnable)}.
  */
 public interface CancellableEvent extends Event {
 

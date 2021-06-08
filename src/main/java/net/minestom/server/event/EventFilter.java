@@ -11,6 +11,20 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
+/**
+ * Represents a filter for a specific {@link Event} type.
+ * <p>
+ * The handler represents a "target" of the event. This can be used
+ * to create filters for all events of a specific type using information
+ * about the target.
+ * <p>
+ * For example, the target of a {@link PlayerEvent} is a {@link Player} so
+ * you could create a player event filter which checks if the target player
+ * is in creative mode.
+ *
+ * @param <E> The event type to filter
+ * @param <H> The handler type to filter on.
+ */
 public interface EventFilter<E extends Event, H> {
 
     EventFilter<Event, ?> ALL = from(Event.class, null);
@@ -35,7 +49,19 @@ public interface EventFilter<E extends Event, H> {
         };
     }
 
+    /**
+     * Gets the handler for the given event instance, or null if the event
+     * type has no handler.
+     *
+     * @param event The event instance
+     * @return The handler, if it exists for the given event
+     */
     @Nullable H getHandler(@NotNull E event);
 
+    /**
+     * The event type to filter on.
+     *
+     * @return The event type.
+     */
     @NotNull Class<E> getEventType();
 }

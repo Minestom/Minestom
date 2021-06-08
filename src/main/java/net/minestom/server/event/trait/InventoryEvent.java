@@ -4,6 +4,9 @@ import net.minestom.server.event.Event;
 import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents any event inside an {@link Inventory}.
+ */
 public interface InventoryEvent extends Event {
 
     /**

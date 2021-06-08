@@ -9,6 +9,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+/**
+ * Represents an event listener (handler) in an event graph.
+ * <p>
+ * A listener is responsible for executing some action based on an event triggering.
+ *
+ * @param <T> The event type being handled.
+ */
 public interface EventListener<T extends Event> {
 
     @NotNull Class<T> getEventType();
@@ -20,6 +27,15 @@ public interface EventListener<T extends Event> {
         return new EventListener.Builder<>(eventType);
     }
 
+    /**
+     * Create an event listener without any special options. The given listener will be executed
+     * if the event passes all parent filtering.
+     *
+     * @param eventType The event type to handle
+     * @param listener The handler function
+     * @param <T> The event type to handle
+     * @return An event listener with the given properties
+     */
     @Contract(pure = true)
     static <T extends Event> @NotNull EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
         return new EventListener<>() {
@@ -47,24 +63,43 @@ public interface EventListener<T extends Event> {
             this.eventType = eventType;
         }
 
+        /**
+         * Adds a filter to the executor of this listener. The executor will only
+         * be called if this condition passes on the given event.
+         */
         @Contract(value = "_ -> this")
         public @NotNull EventListener.Builder<T> filter(Predicate<T> filter) {
             this.filters.add(filter);
             return this;
         }
 
+        /**
+         * Removes this listener after it has been executed the given number of times.
+         *
+         * @param expireCount The number of times to execute
+         */
         @Contract(value = "_ -> this")
         public @NotNull EventListener.Builder<T> expireCount(int expireCount) {
             this.expireCount = expireCount;
             return this;
         }
 
+        /**
+         * Expires this listener when it passes the given condition. The expiration will
+         * happen before the event is executed.
+         *
+         * @param expireWhen The condition to test
+         */
         @Contract(value = "_ -> this")
         public @NotNull EventListener.Builder<T> expireWhen(Predicate<T> expireWhen) {
             this.expireWhen = expireWhen;
             return this;
         }
 
+        /**
+         * Sets the handler for this event listener. This will be executed if the listener passes
+         * all conditions.
+         */
         @Contract(value = "_ -> this")
         public @NotNull EventListener.Builder<T> handler(Consumer<T> handler) {
             this.handler = handler;
