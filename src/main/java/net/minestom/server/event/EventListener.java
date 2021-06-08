@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,11 +15,13 @@ public interface EventListener<T extends Event> {
 
     @NotNull Result run(@NotNull T event);
 
-    static <T extends Event> EventListener.Builder<T> builder(@NotNull Class<T> eventType) {
+    @Contract(pure = true)
+    static <T extends Event> EventListener.@NotNull Builder<T> builder(@NotNull Class<T> eventType) {
         return new EventListener.Builder<>(eventType);
     }
 
-    static <T extends Event> EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
+    @Contract(pure = true)
+    static <T extends Event> @NotNull EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
         return new EventListener<>() {
             @Override
             public @NotNull Class<T> getEventType() {
@@ -34,9 +37,7 @@ public interface EventListener<T extends Event> {
     }
 
     class Builder<T extends Event> {
-
         private final Class<T> eventType;
-
         private final List<Predicate<T>> filters = new ArrayList<>();
         private int expireCount;
         private Predicate<T> expireWhen;
@@ -46,29 +47,36 @@ public interface EventListener<T extends Event> {
             this.eventType = eventType;
         }
 
-        public EventListener.Builder<T> filter(Predicate<T> filter) {
+        @Contract(value = "_ -> this")
+        public @NotNull EventListener.Builder<T> filter(Predicate<T> filter) {
             this.filters.add(filter);
             return this;
         }
 
-        public EventListener.Builder<T> expireCount(int expireCount) {
+        @Contract(value = "_ -> this")
+        public @NotNull EventListener.Builder<T> expireCount(int expireCount) {
             this.expireCount = expireCount;
             return this;
         }
 
-        public EventListener.Builder<T> expireWhen(Predicate<T> expireWhen) {
+        @Contract(value = "_ -> this")
+        public @NotNull EventListener.Builder<T> expireWhen(Predicate<T> expireWhen) {
             this.expireWhen = expireWhen;
             return this;
         }
 
-        public EventListener.Builder<T> handler(Consumer<T> handler) {
+        @Contract(value = "_ -> this")
+        public @NotNull EventListener.Builder<T> handler(Consumer<T> handler) {
             this.handler = handler;
             return this;
         }
 
+        @Contract(value = "-> new", pure = true)
         public @NotNull EventListener<T> build() {
             AtomicInteger expirationCount = new AtomicInteger(this.expireCount);
             final boolean hasExpirationCount = expirationCount.get() > 0;
+
+            final Predicate<T> expireWhen = this.expireWhen;
 
             final var filters = new ArrayList<>(this.filters);
             final var handler = this.handler;

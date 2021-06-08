@@ -3,6 +3,7 @@ package net.minestom.server.event;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,43 +18,50 @@ import java.util.function.Predicate;
 
 public class EventNode<T extends Event> {
 
-    public static EventNode<Event> all(@NotNull String name) {
+    @Contract(value = "_ -> new", pure = true)
+    public static @NotNull EventNode<Event> all(@NotNull String name) {
         return type(name, EventFilter.ALL);
     }
 
-    public static <E extends Event, V> EventNode<E> type(@NotNull String name,
-                                                         @NotNull EventFilter<E, V> filter,
-                                                         @NotNull BiPredicate<E, V> predicate) {
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static <E extends Event, V> @NotNull EventNode<E> type(@NotNull String name,
+                                                                  @NotNull EventFilter<E, V> filter,
+                                                                  @NotNull BiPredicate<E, V> predicate) {
         return create(name, filter, predicate);
     }
 
-    public static <E extends Event, V> EventNode<E> type(@NotNull String name,
-                                                         @NotNull EventFilter<E, V> filter) {
+    @Contract(value = "_, _ -> new", pure = true)
+    public static <E extends Event, V> @NotNull EventNode<E> type(@NotNull String name,
+                                                                  @NotNull EventFilter<E, V> filter) {
         return create(name, filter, null);
     }
 
-    public static <E extends Event, V> EventNode<E> event(@NotNull String name,
-                                                          @NotNull EventFilter<E, V> filter,
-                                                          @NotNull Predicate<E> predicate) {
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static <E extends Event, V> @NotNull EventNode<E> event(@NotNull String name,
+                                                                   @NotNull EventFilter<E, V> filter,
+                                                                   @NotNull Predicate<E> predicate) {
         return create(name, filter, (e, h) -> predicate.test(e));
     }
 
-    public static <E extends Event, V> EventNode<E> value(@NotNull String name,
-                                                          @NotNull EventFilter<E, V> filter,
-                                                          @NotNull Predicate<V> predicate) {
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static <E extends Event, V> @NotNull EventNode<E> value(@NotNull String name,
+                                                                   @NotNull EventFilter<E, V> filter,
+                                                                   @NotNull Predicate<V> predicate) {
         return create(name, filter, (e, h) -> predicate.test(h));
     }
 
-    public static <E extends Event> EventNode<E> tag(@NotNull String name,
-                                                     @NotNull EventFilter<E, ? extends TagReadable> filter,
-                                                     @NotNull Tag<?> tag) {
+    @Contract(value = "_, _, _ -> new", pure = true)
+    public static <E extends Event> @NotNull EventNode<E> tag(@NotNull String name,
+                                                              @NotNull EventFilter<E, ? extends TagReadable> filter,
+                                                              @NotNull Tag<?> tag) {
         return create(name, filter, (e, h) -> h.hasTag(tag));
     }
 
-    public static <E extends Event, V> EventNode<E> tag(@NotNull String name,
-                                                        @NotNull EventFilter<E, ? extends TagReadable> filter,
-                                                        @NotNull Tag<V> tag,
-                                                        @NotNull Predicate<@Nullable V> consumer) {
+    @Contract(value = "_, _, _, _ -> new", pure = true)
+    public static <E extends Event, V> @NotNull EventNode<E> tag(@NotNull String name,
+                                                                 @NotNull EventFilter<E, ? extends TagReadable> filter,
+                                                                 @NotNull Tag<V> tag,
+                                                                 @NotNull Predicate<@Nullable V> consumer) {
         return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
@@ -138,23 +146,28 @@ public class EventNode<T extends Event> {
         }
     }
 
+    @Contract(pure = true)
     public @NotNull String getName() {
         return name;
     }
 
+    @Contract(pure = true)
     public int getPriority() {
         return priority;
     }
 
-    public EventNode<T> setPriority(int priority) {
+    @Contract(value = "_ -> this")
+    public @NotNull EventNode<T> setPriority(int priority) {
         this.priority = priority;
         return this;
     }
 
+    @Contract(pure = true)
     public @Nullable EventNode<? super T> getParent() {
         return parent;
     }
 
+    @Contract(pure = true)
     public @NotNull Set<@NotNull EventNode<T>> getChildren() {
         return Collections.unmodifiableSet(children);
     }
@@ -167,7 +180,8 @@ public class EventNode<T extends Event> {
         return findChild(name, eventType);
     }
 
-    public EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
+    @Contract(value = "_ -> this")
+    public @NotNull EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             Check.stateCondition(child.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
@@ -189,7 +203,8 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public EventNode<T> removeChild(@NotNull EventNode<? extends T> child) {
+    @Contract(value = "_ -> this")
+    public @NotNull EventNode<T> removeChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final boolean result = this.children.remove(child);
             if (result) {
@@ -209,15 +224,18 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
+    @Contract(value = "_ -> this")
+    public @NotNull EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
         return addListener0(listener);
     }
 
-    public <E extends T> EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
+    @Contract(value = "_, _ -> this")
+    public <E extends T> @NotNull EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
         return addListener0(EventListener.of(eventType, listener));
     }
 
-    public EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
+    @Contract(value = "_ -> this")
+    public @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.getEventType();
             var entry = listenerMap.get(eventType);
