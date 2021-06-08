@@ -107,7 +107,8 @@ public class EventNode<T extends Event> {
     }
 
     public void call(@NotNull T event) {
-        if (!eventType.isInstance(event)) {
+        final var eventClass = event.getClass();
+        if (!eventType.isAssignableFrom(eventClass)) {
             // Invalid event type
             return;
         }
@@ -116,7 +117,7 @@ public class EventNode<T extends Event> {
             return;
         }
         // Process listener list
-        final var entry = listenerMap.get(event.getClass());
+        final var entry = listenerMap.get(eventClass);
         if (entry == null) {
             // No listener nor children
             return;
@@ -203,6 +204,7 @@ public class EventNode<T extends Event> {
                 if (EventNode.equals(child, name, eventType)) {
                     removeChild(child);
                     addChild(eventNode);
+                    return;
                 }
                 child.replaceChildren(name, eventType, eventNode);
             });
@@ -221,6 +223,7 @@ public class EventNode<T extends Event> {
             this.children.forEach(child -> {
                 if (EventNode.equals(child, name, eventType)) {
                     removeChild(child);
+                    return;
                 }
                 child.removeChildren(name, eventType);
             });
@@ -340,7 +343,7 @@ public class EventNode<T extends Event> {
 
     private static boolean equals(EventNode<?> node, String name, Class<?> eventType) {
         final boolean nameCheck = node.getName().equals(name);
-        final boolean typeCheck = node.eventType.isAssignableFrom(eventType);
+        final boolean typeCheck = eventType.isAssignableFrom(node.eventType);
         return nameCheck && typeCheck;
     }
 

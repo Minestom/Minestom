@@ -11,14 +11,13 @@ import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.Event;
+import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.event.player.PlayerDeathEvent;
-import net.minestom.server.event.player.PlayerDisconnectEvent;
-import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.event.player.PlayerSpawnEvent;
+import net.minestom.server.event.player.*;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -157,9 +156,8 @@ public class PlayerInit {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
         var children = eventHandler.findChildren("demo", Event.class);
-        eventHandler.replaceChildren("demo", Event.class, EventNode.all("new_demo"));
-        eventHandler.replaceChildren("new_demo", EventNode.all("new_demo2"));
-        eventHandler.removeChildren("new_demo2");
+
+        eventHandler.replaceChildren("demo", PlayerEvent.class, EventNode.type("random", EventFilter.PLAYER));
 
         MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
                 LAST_TICK.set(tickMonitor));
