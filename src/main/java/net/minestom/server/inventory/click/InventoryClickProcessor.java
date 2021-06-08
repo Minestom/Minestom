@@ -240,14 +240,16 @@ public class InventoryClickProcessor {
             // Start or end left/right drag
             if (button == 0) {
                 // Start left
-                this.leftDraggingMap.put(player, new IntOpenHashSet());
-
                 clickResult = startCondition(inventory, player, slot, ClickType.START_LEFT_DRAGGING, clicked, cursor);
+
+                if (!clickResult.isCancel())
+                    this.leftDraggingMap.put(player, new IntOpenHashSet());
             } else if (button == 4) {
                 // Start right
-                this.rightDraggingMap.put(player, new IntOpenHashSet());
-
                 clickResult = startCondition(inventory, player, slot, ClickType.START_RIGHT_DRAGGING, clicked, cursor);
+
+                if (!clickResult.isCancel())
+                    this.rightDraggingMap.put(player, new IntOpenHashSet());
             } else if (button == 2) {
                 // End left
                 if (!leftDraggingMap.containsKey(player))
@@ -257,45 +259,58 @@ public class InventoryClickProcessor {
                 final int cursorAmount = stackingRule.getAmount(cursor);
                 if (slotCount > cursorAmount)
                     return null;
-                // Should be size of each defined slot (if not full)
-                final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
-                int finalCursorAmount = cursorAmount;
+
+                boolean cancel = false;
 
                 for (int s : slots) {
                     ItemStack slotItem = itemGetter.apply(s);
 
                     clickResult = startCondition(inventory, player, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
-                    if (clickResult.isCancel())
+
+                    if (clickResult.isCancel()) {
+                        cancel = true;
+
                         break;
-                    StackingRule slotItemRule = slotItem.getStackingRule();
-
-                    final int maxSize = stackingRule.getMaxSize(cursor);
-                    if (stackingRule.canBeStacked(cursor, slotItem)) {
-                        final int amount = slotItemRule.getAmount(slotItem);
-                        if (stackingRule.canApply(slotItem, amount + slotSize)) {
-                            slotItem = stackingRule.apply(slotItem, a -> a + slotSize);
-                            finalCursorAmount -= slotSize;
-                        } else {
-                            final int removedAmount = maxSize - amount;
-                            slotItem = stackingRule.apply(slotItem, maxSize);
-                            finalCursorAmount -= removedAmount;
-                        }
-                    } else if (slotItem.isAir()) {
-                        slotItem = stackingRule.apply(cursor, slotSize);
-                        finalCursorAmount -= slotSize;
                     }
-                    itemSetter.accept(s, slotItem);
-
-                    callClickEvent(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
                 }
 
-                // If no slots were dragged over, no need to apply any kind of stacking rules
-                if (clickResult != null) {
-                    cursor = stackingRule.apply(cursor, finalCursorAmount);
-                    clickResult.setCursor(cursor);
-                }
+                cancel |= startCondition(inventory, player, slot, ClickType.END_LEFT_DRAGGING, clicked, cursor).isCancel();
 
-                clickResult = startCondition(inventory, player, slot, ClickType.END_LEFT_DRAGGING, clicked, cursor);
+                // Should be size of each defined slot (if not full)
+                final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
+                int finalCursorAmount = cursorAmount;
+
+                if (!cancel) {
+                    for (int s : slots) {
+                        ItemStack slotItem = itemGetter.apply(s);
+                        StackingRule slotItemRule = slotItem.getStackingRule();
+
+                        final int maxSize = stackingRule.getMaxSize(cursor);
+                        if (stackingRule.canBeStacked(cursor, slotItem)) {
+                            final int amount = slotItemRule.getAmount(slotItem);
+                            if (stackingRule.canApply(slotItem, amount + slotSize)) {
+                                slotItem = stackingRule.apply(slotItem, a -> a + slotSize);
+                                finalCursorAmount -= slotSize;
+                            } else {
+                                final int removedAmount = maxSize - amount;
+                                slotItem = stackingRule.apply(slotItem, maxSize);
+                                finalCursorAmount -= removedAmount;
+                            }
+                        } else if (slotItem.isAir()) {
+                            slotItem = stackingRule.apply(cursor, slotSize);
+                            finalCursorAmount -= slotSize;
+                        }
+                        itemSetter.accept(s, slotItem);
+
+                        callClickEvent(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+                    }
+
+                    // If no slots were dragged over, no need to apply any kind of stacking rules
+                    if (clickResult != null) {
+                        cursor = stackingRule.apply(cursor, finalCursorAmount);
+                        clickResult.setCursor(cursor);
+                    }
+                }
 
                 leftDraggingMap.remove(player);
             } else if (button == 6) {
@@ -308,38 +323,50 @@ public class InventoryClickProcessor {
                 if (size > cursorAmount)
                     return null;
 
+                boolean cancel = false;
+
                 for (int s : slots) {
-                    ItemStack draggedItem = cursor;
                     ItemStack slotItem = itemGetter.apply(s);
 
                     clickResult = startCondition(inventory, player, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
-                    if (clickResult.isCancel())
-                        break;
 
-                    StackingRule slotItemRule = slotItem.getStackingRule();
-                    if (stackingRule.canBeStacked(draggedItem, slotItem)) {
-                        final int amount = slotItemRule.getAmount(slotItem) + 1;
-                        if (stackingRule.canApply(slotItem, amount)) {
-                            slotItem = stackingRule.apply(slotItem, amount);
-                            itemSetter.accept(s, slotItem);
+                    if (clickResult.isCancel()) {
+                        cancel = true;
+
+                        break;
+                    }
+                }
+
+                cancel |= startCondition(inventory, player, slot, ClickType.END_RIGHT_DRAGGING, clicked, cursor).isCancel();
+
+                if (!cancel) {
+                    for (int s : slots) {
+                        ItemStack draggedItem = cursor;
+                        ItemStack slotItem = itemGetter.apply(s);
+
+                        StackingRule slotItemRule = slotItem.getStackingRule();
+                        if (stackingRule.canBeStacked(draggedItem, slotItem)) {
+                            final int amount = slotItemRule.getAmount(slotItem) + 1;
+                            if (stackingRule.canApply(slotItem, amount)) {
+                                slotItem = stackingRule.apply(slotItem, amount);
+                                itemSetter.accept(s, slotItem);
+                                cursorAmount -= 1;
+                            }
+                        } else if (slotItem.isAir()) {
+                            draggedItem = stackingRule.apply(draggedItem, 1);
+                            itemSetter.accept(s, draggedItem);
                             cursorAmount -= 1;
                         }
-                    } else if (slotItem.isAir()) {
-                        draggedItem = stackingRule.apply(draggedItem, 1);
-                        itemSetter.accept(s, draggedItem);
-                        cursorAmount -= 1;
+
+                        callClickEvent(player, inventory, s, ClickType.RIGHT_DRAGGING, draggedItem, cursor);
                     }
 
-                    callClickEvent(player, inventory, s, ClickType.RIGHT_DRAGGING, draggedItem, cursor);
+                    // If no slots were dragged over, no need to apply any kind of stacking rules
+                    if (clickResult != null) {
+                        cursor = stackingRule.apply(cursor, cursorAmount);
+                        clickResult.setCursor(cursor);
+                    }
                 }
-
-                // If no slots were dragged over, no need to apply any kind of stacking rules
-                if (clickResult != null) {
-                    cursor = stackingRule.apply(cursor, cursorAmount);
-                    clickResult.setCursor(cursor);
-                }
-
-                clickResult = startCondition(inventory, player, slot, ClickType.END_RIGHT_DRAGGING, clicked, cursor);
 
                 rightDraggingMap.remove(player);
 
