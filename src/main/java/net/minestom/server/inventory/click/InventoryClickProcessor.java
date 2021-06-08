@@ -261,9 +261,6 @@ public class InventoryClickProcessor {
                 final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
                 int finalCursorAmount = cursorAmount;
 
-                // Set to a value in case there are no slots
-                clickResult = startCondition(inventory, player, slot, ClickType.START_LEFT_DRAGGING, clicked, cursor);
-
                 for (int s : slots) {
                     ItemStack slotItem = itemGetter.apply(s);
 
@@ -291,8 +288,14 @@ public class InventoryClickProcessor {
 
                     callClickEvent(player, inventory, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
                 }
-                cursor = stackingRule.apply(cursor, finalCursorAmount);
-                clickResult.setCursor(cursor);
+
+                // If no slots were dragged over, no need to apply any kind of stacking rules
+                if (clickResult != null) {
+                    cursor = stackingRule.apply(cursor, finalCursorAmount);
+                    clickResult.setCursor(cursor);
+                }
+
+                clickResult = startCondition(inventory, player, slot, ClickType.END_LEFT_DRAGGING, clicked, cursor);
 
                 leftDraggingMap.remove(player);
             } else if (button == 6) {
@@ -304,9 +307,6 @@ public class InventoryClickProcessor {
                 int cursorAmount = stackingRule.getAmount(cursor);
                 if (size > cursorAmount)
                     return null;
-
-                // Set to a value in case there are no slots
-                clickResult = startCondition(inventory, player, slot, ClickType.START_RIGHT_DRAGGING, clicked, cursor);
 
                 for (int s : slots) {
                     ItemStack draggedItem = cursor;
@@ -332,8 +332,14 @@ public class InventoryClickProcessor {
 
                     callClickEvent(player, inventory, s, ClickType.RIGHT_DRAGGING, draggedItem, cursor);
                 }
-                cursor = stackingRule.apply(cursor, cursorAmount);
-                clickResult.setCursor(cursor);
+
+                // If no slots were dragged over, no need to apply any kind of stacking rules
+                if (clickResult != null) {
+                    cursor = stackingRule.apply(cursor, cursorAmount);
+                    clickResult.setCursor(cursor);
+                }
+
+                clickResult = startCondition(inventory, player, slot, ClickType.END_RIGHT_DRAGGING, clicked, cursor);
 
                 rightDraggingMap.remove(player);
 
@@ -346,15 +352,11 @@ public class InventoryClickProcessor {
                     return null;
                 leftDraggingMap.get(player).add(slot);
 
-                clickResult = startCondition(inventory, player, slot, ClickType.START_LEFT_DRAGGING, clicked, cursor);
-
             } else if (button == 5) {
                 // Add right slot
                 if (!rightDraggingMap.containsKey(player))
                     return null;
                 rightDraggingMap.get(player).add(slot);
-
-                clickResult = startCondition(inventory, player, slot, ClickType.START_RIGHT_DRAGGING, clicked, cursor);
             }
         }
 
