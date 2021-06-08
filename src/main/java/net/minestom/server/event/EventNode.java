@@ -174,15 +174,13 @@ public class EventNode<T extends Event> {
 
     @Contract(pure = true)
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
+        if (children.isEmpty()) {
+            return Collections.emptyList();
+        }
         synchronized (GLOBAL_CHILD_LOCK) {
-            if (children.isEmpty()) {
-                return Collections.emptyList();
-            }
             List<EventNode<E>> result = new ArrayList<>();
             this.children.forEach(child -> {
-                final boolean nameCheck = child.getName().equals(name);
-                final boolean typeCheck = child.eventType.isAssignableFrom(eventType);
-                if (nameCheck && typeCheck) {
+                if (EventNode.equals(child, name, eventType)) {
                     result.add((EventNode<E>) child);
                 }
                 result.addAll(child.findChildren(name, eventType));
@@ -194,6 +192,43 @@ public class EventNode<T extends Event> {
     @Contract(pure = true)
     public @NotNull List<EventNode<T>> findChildren(@NotNull String name) {
         return findChildren(name, eventType);
+    }
+
+    public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
+        if (children.isEmpty()) {
+            return;
+        }
+        synchronized (GLOBAL_CHILD_LOCK) {
+            this.children.forEach(child -> {
+                if (EventNode.equals(child, name, eventType)) {
+                    removeChild(child);
+                    addChild(eventNode);
+                }
+                child.replaceChildren(name, eventType, eventNode);
+            });
+        }
+    }
+
+    public void replaceChildren(@NotNull String name, @NotNull EventNode<T> eventNode) {
+        replaceChildren(name, eventType, eventNode);
+    }
+
+    public <E extends T> void removeChildren(@NotNull String name, @NotNull Class<E> eventType) {
+        if (children.isEmpty()) {
+            return;
+        }
+        synchronized (GLOBAL_CHILD_LOCK) {
+            this.children.forEach(child -> {
+                if (EventNode.equals(child, name, eventType)) {
+                    removeChild(child);
+                }
+                child.removeChildren(name, eventType);
+            });
+        }
+    }
+
+    public void removeChildren(@NotNull String name) {
+        removeChildren(name, eventType);
     }
 
     @Contract(value = "_ -> this")
@@ -301,6 +336,12 @@ public class EventNode<T extends Event> {
         if (parent != null) {
             parent.decreaseChildListenerCount(eventClass, count);
         }
+    }
+
+    private static boolean equals(EventNode<?> node, String name, Class<?> eventType) {
+        final boolean nameCheck = node.getName().equals(name);
+        final boolean typeCheck = node.eventType.isAssignableFrom(eventType);
+        return nameCheck && typeCheck;
     }
 
     private static class ListenerEntry<T extends Event> {

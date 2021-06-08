@@ -154,7 +154,13 @@ public class PlayerInit {
     private static AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public static void init() {
-        MinecraftServer.getGlobalEventHandler().addChild(DEMO_NODE);
+        var eventHandler = MinecraftServer.getGlobalEventHandler();
+        eventHandler.addChild(DEMO_NODE);
+        var children = eventHandler.findChildren("demo", Event.class);
+        eventHandler.replaceChildren("demo", Event.class, EventNode.all("new_demo"));
+        eventHandler.replaceChildren("new_demo", EventNode.all("new_demo2"));
+        eventHandler.removeChildren("new_demo2");
+
         MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
                 LAST_TICK.set(tickMonitor));
 
