@@ -1,6 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.trait.CancellableEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class EventDispatcher {

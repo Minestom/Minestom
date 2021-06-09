@@ -1,6 +1,6 @@
 package net.minestom.server.extras.query.event;
 
-import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 

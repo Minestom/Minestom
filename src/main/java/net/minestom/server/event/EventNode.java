@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.validate.Check;

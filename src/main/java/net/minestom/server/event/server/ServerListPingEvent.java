@@ -1,7 +1,7 @@
 package net.minestom.server.event.server;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.ping.ResponseDataConsumer;

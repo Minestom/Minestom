@@ -1,7 +1,7 @@
 package net.minestom.server.event.instance;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.CancellableEvent;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.Instance;
