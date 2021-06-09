@@ -190,8 +190,14 @@ public class ResourceGatherer {
         try (FileInputStream fis = new FileInputStream(target)) {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
             messageDigest.reset();
+            messageDigest.update(fis.readAllBytes());
+            byte[] digest = messageDigest.digest();
+            StringBuffer sb = new StringBuffer();
+            for (byte b : digest) {
+                sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            }
             // This just converts the sha1 back into a readable string.
-            String sha1Target = new BigInteger(1, messageDigest.digest(fis.readAllBytes())).toString(16);
+            String sha1Target = sb.toString();
             if (!sha1Target.equals(sha1Source)) {
                 LOGGER.error("The checksum test failed after downloading the Minecraft server jar.");
                 LOGGER.error("The expected checksum was: {}.", sha1Source);
