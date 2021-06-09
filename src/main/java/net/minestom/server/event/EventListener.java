@@ -56,7 +56,7 @@ public interface EventListener<T extends Event> {
     class Builder<T extends Event> {
         private final Class<T> eventType;
         private final List<Predicate<T>> filters = new ArrayList<>();
-        private boolean ignoreCancelled;
+        private boolean ignoreCancelled = true;
         private int expireCount;
         private Predicate<T> expireWhen;
         private Consumer<T> handler;
@@ -78,9 +78,9 @@ public interface EventListener<T extends Event> {
         /**
          * Specifies if the handler should still be called if {@link CancellableEvent#isCancelled()} returns {@code true}.
          * <p>
-         * Default is set to {@code false}.
+         * Default is set to {@code true}.
          *
-         * @param ignoreCancelled True to still process the event when cancelled
+         * @param ignoreCancelled True to stop processing the event when cancelled
          */
         @Contract(value = "_ -> this")
         public @NotNull EventListener.Builder<T> ignoreCancelled(boolean ignoreCancelled) {
@@ -140,7 +140,7 @@ public interface EventListener<T extends Event> {
                 @Override
                 public @NotNull Result run(@NotNull T event) {
                     // Event cancellation
-                    if (!ignoreCancelled && event instanceof CancellableEvent &&
+                    if (ignoreCancelled && event instanceof CancellableEvent &&
                             ((CancellableEvent) event).isCancelled()) {
                         return Result.INVALID;
                     }
