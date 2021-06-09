@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.event.trait.CancellableEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,8 +33,8 @@ public interface EventListener<T extends Event> {
      * if the event passes all parent filtering.
      *
      * @param eventType The event type to handle
-     * @param listener The handler function
-     * @param <T> The event type to handle
+     * @param listener  The handler function
+     * @param <T>       The event type to handle
      * @return An event listener with the given properties
      */
     @Contract(pure = true)
@@ -55,6 +56,7 @@ public interface EventListener<T extends Event> {
     class Builder<T extends Event> {
         private final Class<T> eventType;
         private final List<Predicate<T>> filters = new ArrayList<>();
+        private boolean ignoreCancelled;
         private int expireCount;
         private Predicate<T> expireWhen;
         private Consumer<T> handler;
@@ -70,6 +72,19 @@ public interface EventListener<T extends Event> {
         @Contract(value = "_ -> this")
         public @NotNull EventListener.Builder<T> filter(Predicate<T> filter) {
             this.filters.add(filter);
+            return this;
+        }
+
+        /**
+         * Specifies if the handler should still be called if {@link CancellableEvent#isCancelled()} returns {@code true}.
+         * <p>
+         * Default is set to {@code false}.
+         *
+         * @param ignoreCancelled True to still process the event when cancelled
+         */
+        @Contract(value = "_ -> this")
+        public @NotNull EventListener.Builder<T> ignoreCancelled(boolean ignoreCancelled) {
+            this.ignoreCancelled = ignoreCancelled;
             return this;
         }
 
@@ -108,6 +123,7 @@ public interface EventListener<T extends Event> {
 
         @Contract(value = "-> new", pure = true)
         public @NotNull EventListener<T> build() {
+            final boolean ignoreCancelled = this.ignoreCancelled;
             AtomicInteger expirationCount = new AtomicInteger(this.expireCount);
             final boolean hasExpirationCount = expirationCount.get() > 0;
 
@@ -123,6 +139,11 @@ public interface EventListener<T extends Event> {
 
                 @Override
                 public @NotNull Result run(@NotNull T event) {
+                    // Event cancellation
+                    if (!ignoreCancelled && event instanceof CancellableEvent &&
+                            ((CancellableEvent) event).isCancelled()) {
+                        return Result.INVALID;
+                    }
                     // Expiration predicate
                     if (expireWhen != null && expireWhen.test(event)) {
                         return Result.EXPIRED;
