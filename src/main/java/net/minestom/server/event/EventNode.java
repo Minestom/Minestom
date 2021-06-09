@@ -465,12 +465,22 @@ public class EventNode<T extends Event> {
 
     @Contract(value = "_ -> this")
     public @NotNull EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
-        return addListener0(listener);
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final var eventType = listener.getEventType();
+            var entry = listenerMap.computeIfAbsent(eventType, aClass -> new ListenerEntry<>());
+            entry.listeners.add((EventListener<T>) listener);
+            if (parent != null) {
+                synchronized (parent.lock) {
+                    parent.increaseChildListenerCount(eventType, 1);
+                }
+            }
+        }
+        return this;
     }
 
     @Contract(value = "_, _ -> this")
     public <E extends T> @NotNull EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
-        return addListener0(EventListener.of(eventType, listener));
+        return addListener(EventListener.of(eventType, listener));
     }
 
     @Contract(value = "_ -> this")
@@ -485,20 +495,6 @@ public class EventNode<T extends Event> {
             if (removed && parent != null) {
                 synchronized (parent.lock) {
                     parent.decreaseChildListenerCount(eventType, 1);
-                }
-            }
-        }
-        return this;
-    }
-
-    private EventNode<T> addListener0(@NotNull EventListener<? extends T> listener) {
-        synchronized (GLOBAL_CHILD_LOCK) {
-            final var eventType = listener.getEventType();
-            var entry = listenerMap.computeIfAbsent(eventType, aClass -> new ListenerEntry<>());
-            entry.listeners.add((EventListener<T>) listener);
-            if (parent != null) {
-                synchronized (parent.lock) {
-                    parent.increaseChildListenerCount(eventType, 1);
                 }
             }
         }
