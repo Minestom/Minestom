@@ -100,7 +100,7 @@ public class Tag {
         ITEMS("minecraft:item"),
         FLUIDS("minecraft:fluid"),
         ENTITY_TYPES("minecraft:entity_type"),
-        GAME_EVENT("minecraft:game_event");
+        GAME_EVENTS("minecraft:game_event");
 
         private final String identifier;
 

@@ -231,6 +231,8 @@ public class TagManager {
         addRequiredTag(Tag.BasicTypes.ITEMS, NamespaceID.from("wooden_stairs"));
         addRequiredTag(Tag.BasicTypes.ITEMS, NamespaceID.from("wooden_trapdoors"));
         addRequiredTag(Tag.BasicTypes.ITEMS, NamespaceID.from("wool"));
+        addRequiredTag(Tag.BasicTypes.GAME_EVENTS, NamespaceID.from("ignore_vibrations_sneaking"));
+        addRequiredTag(Tag.BasicTypes.GAME_EVENTS, NamespaceID.from("vibrations"));
     }
 
     /**
