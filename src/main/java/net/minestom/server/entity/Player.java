@@ -2689,7 +2689,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
 
-            metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
+            // TODO: Use the metadata object here
+            metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {
