@@ -310,8 +310,7 @@ public class TagManager {
     public void addRequiredTagsToPacket(TagsPacket tagsPacket) {
         for (RequiredTag requiredTag : requiredTags) {
             final Tag tag = silentLoad(requiredTag.getName(), requiredTag.getType().name().toLowerCase());
-            final String identifier = requiredTag.getType().getIdentifier();
-            var map = tagsPacket.tagsMap.computeIfAbsent(identifier, s -> new ArrayList<>());
+            var map = tagsPacket.tagsMap.computeIfAbsent(requiredTag.getType(), s -> new ArrayList<>());
             map.add(tag);
         }
     }
