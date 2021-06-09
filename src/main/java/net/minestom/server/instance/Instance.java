@@ -12,6 +12,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
+import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -121,7 +122,6 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
         this.worldBorder = new WorldBorder(this);
 
         this.eventNode = EventNode.value("instance-" + uniqueId, EventFilter.INSTANCE, this::equals);
-        MinecraftServer.getGlobalEventHandler().addChild(eventNode);
     }
 
     /**
@@ -839,6 +839,14 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
     @Override
     public @NotNull EventNode<InstanceEvent> getEventNode() {
         return eventNode;
+    }
+
+    @Override
+    public synchronized <V extends InstanceEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
+        if (eventNode.getParent() == null) {
+            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+        }
+        return EventHandler.super.addEventCallback(eventClass, eventCallback);
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)

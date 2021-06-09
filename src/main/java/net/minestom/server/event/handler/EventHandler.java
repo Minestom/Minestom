@@ -3,6 +3,7 @@ package net.minestom.server.event.handler;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventNode;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -13,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 @Deprecated
 public interface EventHandler<T extends Event> {
 
-    @Deprecated
+    @ApiStatus.Internal
+    @Deprecated(forRemoval = true)
     @NotNull EventNode<T> getEventNode();
 
     @Deprecated

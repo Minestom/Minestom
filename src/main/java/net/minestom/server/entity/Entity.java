@@ -16,6 +16,7 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
@@ -157,7 +158,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.eventNode = EventNode.value("entity-" + uuid, EventFilter.ENTITY, this::equals);
-        MinecraftServer.getGlobalEventHandler().addChild(eventNode);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -775,6 +775,14 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     @Override
     public @NotNull EventNode<EntityEvent> getEventNode() {
         return eventNode;
+    }
+
+    @Override
+    public synchronized <V extends EntityEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
+        if (eventNode.getParent() == null) {
+            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+        }
+        return EventHandler.super.addEventCallback(eventClass, eventCallback);
     }
 
     /**
