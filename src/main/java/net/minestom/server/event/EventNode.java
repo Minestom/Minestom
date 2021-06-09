@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -246,7 +247,13 @@ public class EventNode<T extends Event> {
         final var listeners = entry.listeners;
         if (!listeners.isEmpty()) {
             for (EventListener<T> listener : listeners) {
-                final EventListener.Result result = listener.run(event);
+                EventListener.Result result;
+                try {
+                    result = listener.run(event);
+                } catch (Exception e) {
+                    result = EventListener.Result.EXCEPTION;
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
                 if (result == EventListener.Result.EXPIRED) {
                     listeners.remove(listener);
                 }

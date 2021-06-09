@@ -172,6 +172,7 @@ public interface EventListener<T extends Event> {
     enum Result {
         SUCCESS,
         INVALID,
-        EXPIRED
+        EXPIRED,
+        EXCEPTION
     }
 }
