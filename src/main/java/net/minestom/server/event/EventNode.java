@@ -47,9 +47,9 @@ public class EventNode<T extends Event> {
      * var playerEventNode = EventNode.type("demo", EventFilter.PLAYER);
      * </pre>
      *
-     * @param name The name of the event node
+     * @param name   The name of the event node
      * @param filter The event type filter to apply
-     * @param <E> The resulting event type of the node
+     * @param <E>    The resulting event type of the node
      * @return A node with just an event type filter
      */
     @Contract(value = "_, _ -> new", pure = true)
@@ -71,10 +71,10 @@ public class EventNode<T extends Event> {
      * });
      * </pre>
      *
-     * @param name The name of the event node
-     * @param filter The event type filter to apply
+     * @param name      The name of the event node
+     * @param filter    The event type filter to apply
      * @param predicate The event condition
-     * @param <E> The resulting event type of the node
+     * @param <E>       The resulting event type of the node
      * @return A node with an event type filter as well as a condition on the event.
      */
     @Contract(value = "_, _, _ -> new", pure = true)
@@ -98,11 +98,11 @@ public class EventNode<T extends Event> {
      * });
      * </pre>
      *
-     * @param name The name of the event node
-     * @param filter The event type filter to apply
+     * @param name      The name of the event node
+     * @param filter    The event type filter to apply
      * @param predicate The event condition
-     * @param <E> The resulting event type of the node
-     * @param <V> The handler type of the event filter
+     * @param <E>       The resulting event type of the node
+     * @param <V>       The handler type of the event filter
      * @return A node with an event type filter as well as a condition on the event.
      */
     @Contract(value = "_, _, _ -> new", pure = true)
@@ -123,11 +123,11 @@ public class EventNode<T extends Event> {
      * var playerIsCreative = EventNode.value("abc", EventFilter.PLAYER, Player::isCreative);
      * </pre>
      *
-     * @param name The name of the event node
-     * @param filter The event type filter to apply
+     * @param name      The name of the event node
+     * @param filter    The event type filter to apply
      * @param predicate The event condition
-     * @param <E> The resulting event type of the node
-     * @param <V> The handler type of the event filter
+     * @param <E>       The resulting event type of the node
+     * @param <V>       The handler type of the event filter
      * @return A node with an event type filter as well as a condition on the event.
      */
     @Contract(value = "_, _, _ -> new", pure = true)
@@ -140,13 +140,13 @@ public class EventNode<T extends Event> {
     /**
      * Creates an event node which accepts any event of the given type which has a handler who
      * has the given tag.
-     *
+     * <p>
      * The {@link EventFilter}'s resulting event type must be {@link TagReadable}.
      *
-     * @param name The name of the event node
+     * @param name   The name of the event node
      * @param filter The event type filter to apply
-     * @param tag The tag which must be contained on the event handler
-     * @param <E> The resulting event type of the node
+     * @param tag    The tag which must be contained on the event handler
+     * @param <E>    The resulting event type of the node
      * @return A node with an event type filter as well as a handler with the provided tag
      */
     @Contract(value = "_, _, _ -> new", pure = true)
@@ -160,11 +160,11 @@ public class EventNode<T extends Event> {
      * Creates an event node which accepts any event of the given type which has a handler who
      * has an applicable tag. An applicable tag means that it passes the given condition.
      *
-     * @param name The name of the event node
-     * @param filter The event type filter to apply
-     * @param tag The tag which must be contained on the event handler
+     * @param name     The name of the event node
+     * @param filter   The event type filter to apply
+     * @param tag      The tag which must be contained on the event handler
      * @param consumer The condition to test against the tag, if it exists.
-     * @param <E> The resulting event type of the node
+     * @param <E>      The resulting event type of the node
      * @return A node with an event type filter as well as a handler with the provided tag
      */
     @Contract(value = "_, _, _, _ -> new", pure = true)
@@ -263,7 +263,7 @@ public class EventNode<T extends Event> {
      * Execute a cancellable event with a callback to execute if the event is successful.
      * Event conditions and propagation is the same as {@link #call(Event)}.
      *
-     * @param event The event to execute
+     * @param event           The event to execute
      * @param successCallback A callback if the event is not cancelled
      */
     public void callCancellable(@NotNull T event, @NotNull Runnable successCallback) {
@@ -308,7 +308,7 @@ public class EventNode<T extends Event> {
     /**
      * Locates all child nodes with the given name and event type recursively starting at this node.
      *
-     * @param name The event node name to filter for
+     * @param name      The event node name to filter for
      * @param eventType The event node type to filter for
      * @return All matching event nodes
      */
@@ -345,7 +345,7 @@ public class EventNode<T extends Event> {
      * <p>
      * Node: The callee may not be replaced by this call.
      *
-     * @param name The event name to filter for
+     * @param name      The event name to filter for
      * @param eventType The event node type to filter for
      * @param eventNode The replacement node
      */
@@ -370,7 +370,7 @@ public class EventNode<T extends Event> {
      * <p>
      * Node: The callee may not be replaced by this call.
      *
-     * @param name The node name to filter for
+     * @param name      The node name to filter for
      * @param eventNode The replacement node
      */
     public void replaceChildren(@NotNull String name, @NotNull EventNode<T> eventNode) {
@@ -380,10 +380,10 @@ public class EventNode<T extends Event> {
     /**
      * Recursively removes children with the given name and type starting at this node.
      *
-     * @param name The node name to filter for
+     * @param name      The node name to filter for
      * @param eventType The node type to filter for
      */
-    public <E extends T> void removeChildren(@NotNull String name, @NotNull Class<E> eventType) {
+    public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
         if (children.isEmpty()) {
             return;
         }
