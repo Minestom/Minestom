@@ -50,6 +50,8 @@ public class UseItemListener {
         PlayerItemAnimationEvent.ItemAnimationType itemAnimationType = null;
         boolean riptideSpinAttack = false;
 
+        boolean cancelAnimation = false;
+
         if (material == Material.BOW) {
             itemAnimationType = PlayerItemAnimationEvent.ItemAnimationType.BOW;
         } else if (material == Material.CROSSBOW) {
@@ -64,9 +66,13 @@ public class UseItemListener {
             // Eating code, contains the eating time customisation
             PlayerPreEatEvent playerPreEatEvent = new PlayerPreEatEvent(player, itemStack, hand, player.getDefaultEatingTime());
             player.callCancellableEvent(PlayerPreEatEvent.class, playerPreEatEvent, () -> player.refreshEating(hand, playerPreEatEvent.getEatingTime()));
+
+            if (playerPreEatEvent.isCancelled()) {
+                cancelAnimation = true;
+            }
         }
 
-        if (itemAnimationType != null) {
+        if (!cancelAnimation && itemAnimationType != null) {
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType);
             player.callCancellableEvent(PlayerItemAnimationEvent.class, playerItemAnimationEvent, () -> {
                 player.refreshActiveHand(true, hand == Player.Hand.OFF, riptideSpinAttack);

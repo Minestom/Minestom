@@ -60,4 +60,4 @@ gradle-app.setting
 **/docs
 
 # The data for generation and the resources is included in this folder
-src/main/resources
+src/main/resources/minecraft_data
