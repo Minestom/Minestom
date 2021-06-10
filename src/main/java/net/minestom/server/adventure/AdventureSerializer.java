@@ -13,6 +13,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Manager class for handling Adventure serialization. By default AdventureSerializer will simply
  * serialize components to Strings using {@link GsonComponentSerializer}. However, AdventureSerializer
@@ -35,7 +37,7 @@ public class AdventureSerializer {
     protected static final Localizable NULL_LOCALIZABLE = () -> null;
 
     private static Function<Component, String> serializer = component -> GsonComponentSerializer.gson().serialize(component);
-    private static Locale defaultLocale = Locale.US;
+    private static Locale defaultLocale = Locale.getDefault();
 
     private AdventureSerializer() {}
 
@@ -73,10 +75,10 @@ public class AdventureSerializer {
      * {@link #translate(Component, Localizable)} is called with a localizable that
      * does not have a locale.
      *
-     * @param defaultLocale the new default locale
+     * @param defaultLocale the new default locale, or {@code null} to return to the default
      */
-    public static void setDefaultLocale(@NotNull Locale defaultLocale) {
-        AdventureSerializer.defaultLocale = defaultLocale;
+    public static void setDefaultLocale(@Nullable Locale defaultLocale) {
+        AdventureSerializer.defaultLocale = Objects.requireNonNullElseGet(defaultLocale, Locale::getDefault);
     }
 
     /**
