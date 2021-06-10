@@ -1,6 +1,8 @@
 package net.minestom.server.gamedata.tags;
 
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -102,14 +104,26 @@ public class Tag {
         ENTITY_TYPES("minecraft:entity_type"),
         GAME_EVENTS("minecraft:game_event");
 
+        private final static BasicTypes[] VALUES = values();
         private final String identifier;
 
-        BasicTypes(String identifier) {
+        BasicTypes(@NotNull String identifier) {
             this.identifier = identifier;
         }
 
+        @NotNull
         public String getIdentifier() {
             return identifier;
+        }
+
+        @Nullable
+        public static BasicTypes fromIdentifer(@NotNull String identifier) {
+            for (BasicTypes value : VALUES) {
+                if (value.identifier.equals(identifier)) {
+                    return value;
+                }
+            }
+            return null;
         }
     }
 }

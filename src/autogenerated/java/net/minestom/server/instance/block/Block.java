@@ -2362,6 +2362,8 @@ public enum Block implements Keyed {
 
     POTTED_FLOWERING_AZALEA(NamespaceID.from("minecraft:potted_flowering_azalea_bush"), (short) 20341, 0.0, 0.0, false, false, false, true);
 
+    private static final Block[] VALUES = values();
+
     static {
         GrassBlock.initStates();
         Podzol.initStates();
@@ -3026,6 +3028,14 @@ public enum Block implements Keyed {
 
     public static Block fromStateId(short blockStateId) {
         return BlockArray.blocks[blockStateId];
+    }
+
+    @Nullable
+    public static Block fromId(short id) {
+        if(id >= 0 && id < VALUES.length) {
+            return VALUES[id];
+        }
+        return null;
     }
 
     @NotNull
