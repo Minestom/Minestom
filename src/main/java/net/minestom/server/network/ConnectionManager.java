@@ -188,9 +188,7 @@ public final class ConnectionManager {
      * Gets all the listeners which are called for each packet received.
      *
      * @return a list of packet's consumers
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
+     * @deprecated see {@link net.minestom.server.event.player.PlayerPacketEvent}
      */
     @NotNull
     @Deprecated
@@ -202,9 +200,7 @@ public final class ConnectionManager {
      * Adds a consumer to call once a packet is received.
      *
      * @param clientPacketConsumer the packet consumer
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
+     * @deprecated listen to {@link net.minestom.server.event.player.PlayerPacketEvent}
      */
     @Deprecated
     public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
