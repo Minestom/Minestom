@@ -1,6 +1,8 @@
 package net.minestom.server.scoreboard;
 
 import com.google.common.collect.MapMaker;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -72,6 +74,9 @@ public class Team implements PacketGroupingAudience {
 
     private final Set<Player> playerMembers = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
     private boolean isPlayerMembersUpToDate;
+
+    // Adventure
+    private Pointers pointers;
 
     /**
      * Default constructor to creates a team.
@@ -586,5 +591,17 @@ public class Team implements PacketGroupingAudience {
         }
 
         return this.playerMembers;
+    }
+
+    @Override
+    public @NotNull Pointers pointers() {
+        if (this.pointers == null) {
+            this.pointers = Pointers.builder()
+                    .withDynamic(Identity.NAME, this::getTeamName)
+                    .withDynamic(Identity.DISPLAY_NAME, this::getTeamDisplayName)
+                    .build();
+        }
+
+        return this.pointers;
     }
 }

@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import com.google.common.collect.Queues;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
@@ -106,6 +108,9 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
 
     // Pathfinder
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
+
+    // Adventure
+    private Pointers pointers = null;
 
     /**
      * Creates a new instance.
@@ -1113,5 +1118,16 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
     @NotNull
     public PFInstanceSpace getInstanceSpace() {
         return instanceSpace;
+    }
+
+    @Override
+    public @NotNull Pointers pointers() {
+        if (this.pointers == null) {
+            this.pointers = Pointers.builder()
+                    .withDynamic(Identity.UUID, this::getUniqueId)
+                    .build();
+        }
+
+        return this.pointers;
     }
 }
