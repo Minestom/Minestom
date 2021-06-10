@@ -2321,21 +2321,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Makes the player digging a custom block, see {@link #resetTargetBlock()} to rewind.
-     *
-     * @param targetCustomBlock   the custom block to dig
-     * @param targetBlockPosition the custom block position
-     * @param breakers            the breakers of the block, can be null if {@code this} is the only breaker
-     */
-    public void setTargetBlock(@NotNull CustomBlock targetCustomBlock, @NotNull BlockPosition targetBlockPosition,
-                               @Nullable Set<Player> breakers) {
-        this.targetCustomBlock = targetCustomBlock;
-        this.targetBlockPosition = targetBlockPosition;
-
-        refreshBreakDelay(breakers);
-    }
-
-    /**
      * Refreshes the break delay for the next block break stage.
      *
      * @param breakers the list of breakers, can be null if {@code this} is the only breaker
