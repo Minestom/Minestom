@@ -327,12 +327,12 @@ public class EventNode<T extends Event> {
         }
         synchronized (GLOBAL_CHILD_LOCK) {
             List<EventNode<E>> result = new ArrayList<>();
-            this.children.forEach(child -> {
+            for (EventNode<T> child : children) {
                 if (EventNode.equals(child, name, eventType)) {
                     result.add((EventNode<E>) child);
                 }
                 result.addAll(child.findChildren(name, eventType));
-            });
+            }
             return result;
         }
     }
@@ -362,14 +362,14 @@ public class EventNode<T extends Event> {
             return;
         }
         synchronized (GLOBAL_CHILD_LOCK) {
-            this.children.forEach(child -> {
+            for (EventNode<T> child : children) {
                 if (EventNode.equals(child, name, eventType)) {
                     removeChild(child);
                     addChild(eventNode);
-                    return;
+                    continue;
                 }
                 child.replaceChildren(name, eventType, eventNode);
-            });
+            }
         }
     }
 
@@ -396,13 +396,13 @@ public class EventNode<T extends Event> {
             return;
         }
         synchronized (GLOBAL_CHILD_LOCK) {
-            this.children.forEach(child -> {
+            for (EventNode<T> child : children) {
                 if (EventNode.equals(child, name, eventType)) {
                     removeChild(child);
-                    return;
+                    continue;
                 }
                 child.removeChildren(name, eventType);
-            });
+            }
         }
     }
 

@@ -150,9 +150,11 @@ public interface EventListener<T extends Event> {
                     }
                     // Filtering
                     if (!filters.isEmpty()) {
-                        if (filters.stream().anyMatch(filter -> !filter.test(event))) {
-                            // Cancelled
-                            return Result.INVALID;
+                        for (var filter : filters) {
+                            if (!filter.test(event)) {
+                                // Cancelled
+                                return Result.INVALID;
+                            }
                         }
                     }
                     // Handler
