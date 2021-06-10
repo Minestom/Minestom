@@ -66,12 +66,12 @@ public class EventNode<T extends Event> {
      * <p>
      * For example, you could create an event filter which only accepts player events
      * where the player is in the pos x/z quadrant of the world.
-     * <p><pre>
+     * <p><pre>{@code
      * var playerInPosXZNode = EventNode.event("abc", EventFilter.PLAYER, event -> {
      *     var position = event.getPlayer().getPosition();
      *     return position.getX() > 0 && position.getZ() > 0;
      * });
-     * </pre>
+     * }</pre>
      *
      * @param name      The name of the event node
      * @param filter    The event type filter to apply
@@ -93,12 +93,12 @@ public class EventNode<T extends Event> {
      * <p>
      * For example, you could create an event filter which only accepts player events
      * where the player is in the pos x/z quadrant of the world.
-     * <p><pre>
+     * <p><pre>{@code
      * var playerInPosXZNode = EventNode.type("abc", EventFilter.PLAYER, (event, player) -> {
      *     var position = player.getPosition();
      *     return position.getX() > 0 && position.getZ() > 0;
      * });
-     * </pre>
+     * }</pre>
      *
      * @param name      The name of the event node
      * @param filter    The event type filter to apply
