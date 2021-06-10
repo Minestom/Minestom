@@ -2,11 +2,12 @@ package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityEquipEvent implements Event {
+public class EntityEquipEvent implements EntityEvent, ItemEvent {
 
     private final Entity entity;
     private ItemStack equippedItem;
@@ -18,13 +19,7 @@ public class EntityEquipEvent implements Event {
         this.slot = slot;
     }
 
-    @NotNull
-    public Entity getEntity() {
-        return entity;
-    }
-
-    @NotNull
-    public ItemStack getEquippedItem() {
+    public @NotNull ItemStack getEquippedItem() {
         return equippedItem;
     }
 
@@ -32,8 +27,20 @@ public class EntityEquipEvent implements Event {
         this.equippedItem = armorItem;
     }
 
-    @NotNull
-    public EquipmentSlot getSlot() {
+    public @NotNull EquipmentSlot getSlot() {
         return slot;
+    }
+
+    /**
+     * Same as {@link #getEquippedItem()}.
+     */
+    @Override
+    public @NotNull ItemStack getItemStack() {
+        return equippedItem;
+    }
+
+    @Override
+    public @NotNull Entity getEntity() {
+        return entity;
     }
 }
