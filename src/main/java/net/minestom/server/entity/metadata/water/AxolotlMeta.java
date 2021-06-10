@@ -12,13 +12,12 @@ public class AxolotlMeta extends WaterAnimalMeta {
         super(entity, metadata);
     }
 
-    //todo variant enum
-    public int getVariant() {
-        return metadata.getIndex(OFFSET, 0);
+    public Variant getVariant() {
+        return Variant.VALUES[super.metadata.getIndex(OFFSET, 0)];
     }
 
-    public void setVariant(int variant) {
-        metadata.setIndex(variant, Metadata.VarInt(variant));
+    public void setVariant(Variant variant) {
+        metadata.setIndex(OFFSET, Metadata.VarInt(variant.ordinal()));
     }
 
     public boolean isPlayingDead() {
@@ -35,5 +34,15 @@ public class AxolotlMeta extends WaterAnimalMeta {
 
     public void setFromBucket(boolean fromBucket) {
         metadata.setIndex(OFFSET + 2, Metadata.Boolean(fromBucket));
+    }
+
+    public enum Variant {
+        LUCY,
+        WILD,
+        GOLD,
+        CYAN,
+        BLUE;
+
+        private final static AxolotlMeta.Variant[] VALUES = values();
     }
 }
