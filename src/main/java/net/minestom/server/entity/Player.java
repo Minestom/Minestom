@@ -836,12 +836,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(@NotNull Sound sound) {
-        playerConnection.sendPacket(AdventurePacketConvertor.createEntitySoundPacket(sound, this));
+        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
     }
 
     @Override
     public void playSound(@NotNull Sound sound, double x, double y, double z) {
         playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
+    }
+
+    @Override
+    public void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        final ServerPacket packet;
+
+        if (emitter == Sound.Emitter.self()) {
+            packet = AdventurePacketConvertor.createSoundPacket(sound, this);
+        } else {
+            packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+        }
+
+        playerConnection.sendPacket(packet);
     }
 
     @Override
