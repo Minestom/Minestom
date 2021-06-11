@@ -90,19 +90,20 @@ public class UpdateLightPacket implements ServerPacket, CacheablePacket {
 
         // sky light
         skyLight.clear();
-        for (int i = 0; i < 14; i++) {
+        final int skyLightCount = reader.readVarInt();
+        for (int i = 0; i < skyLightCount; i++) {
             int length = reader.readVarInt();
             if (length != 2048) {
                 throw new IllegalStateException("Length must be 2048.");
             }
-
             byte[] bytes = reader.readBytes(length);
             skyLight.add(bytes);
         }
 
         // block light
         blockLight.clear();
-        for (int i = 0; i < 6; i++) {
+        final int blockLightCount = reader.readVarInt();
+        for (int i = 0; i < blockLightCount; i++) {
             int length = reader.readVarInt();
             if (length != 2048) {
                 throw new IllegalStateException("Length must be 2048.");

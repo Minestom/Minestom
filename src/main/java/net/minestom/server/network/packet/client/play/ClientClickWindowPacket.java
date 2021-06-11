@@ -13,7 +13,7 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     public byte windowId;
     public short slot;
     public byte button;
-    public ClickType clickType;
+    public ClickType clickType = ClickType.PICKUP;
     public Short2ObjectMap<ItemStack> changedSlots = new Short2ObjectOpenHashMap<>();
     public ItemStack item = ItemStack.AIR;
 
