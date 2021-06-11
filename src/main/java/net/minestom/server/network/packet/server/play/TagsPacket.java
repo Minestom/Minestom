@@ -53,9 +53,10 @@ public class TagsPacket implements ServerPacket {
                         writer.writeVarInt(values.size());
                         // entries
                         for (NamespaceID name : values) {
-                            Block b = Registries.getBlock(name);
-                            if (b == Block.AIR && !name.toString().equals("minecraft:air")) {
+                            Block b = Block.fromNamespaceId(name);
+                            if (b == null) {
                                 writer.writeVarInt(-1);
+                                continue;
                             }
                             writer.writeVarInt(b.getId());
                         }

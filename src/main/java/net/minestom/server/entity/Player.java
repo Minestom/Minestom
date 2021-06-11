@@ -37,8 +37,6 @@ import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -293,7 +291,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Tags
         // FIXME
-        //this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
+        this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
 
         // Some client update
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
