@@ -13,6 +13,26 @@ public class Registry {
             super(resource);
         }
 
+        public float destroySpeed() {
+            return getFloat("destroySpeed");
+        }
+
+        public float explosionResistance() {
+            return getFloat("explosionResistance");
+        }
+
+        public float friction() {
+            return getFloat("friction");
+        }
+
+        public float speedFactor() {
+            return getFloat("speedFactor");
+        }
+
+        public float jumpFactor() {
+            return getFloat("jumpFactor");
+        }
+
         public boolean isSolid() {
             return getBoolean("solid");
         }
@@ -28,6 +48,10 @@ public class Registry {
 
         public String getString(String path) {
             return null;
+        }
+
+        public float getFloat(String path) {
+            return 0;
         }
 
         public int getInt(String path) {
