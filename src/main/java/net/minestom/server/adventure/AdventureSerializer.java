@@ -6,6 +6,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.kyori.adventure.translation.TranslationRegistry;
 import net.kyori.adventure.translation.Translator;
+import net.minestom.server.utils.ComponentUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -38,8 +39,6 @@ public class AdventureSerializer {
      */
     @Deprecated(forRemoval = true)
     public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION;
-
-    protected static final Localizable NULL_LOCALIZABLE = () -> null;
 
     private static Function<Component, String> serializer = component -> GsonComponentSerializer.gson().serialize(component);
 
@@ -183,9 +182,11 @@ public class AdventureSerializer {
      * @param component the component
      * @return {@code true} if the component can be translated server-side,
      * {@code false} otherwise
+     * @deprecated Use {@link ComponentUtils#isTranslatable(Component)}
      */
+    @Deprecated(forRemoval = true)
     public static boolean isTranslatable(@NotNull Component component) {
-        return !component.equals(AdventureSerializer.translate(component, AdventureSerializer.getDefaultLocale()));
+        return ComponentUtils.isTranslatable(component);
     }
 
     /**
@@ -193,14 +194,10 @@ public class AdventureSerializer {
      * @param components the components
      * @return {@code true} if any of the components can be translated server-side,
      * {@code false} otherwise
+     * @deprecated Use {@link ComponentUtils#areAnyTranslatable(Collection)}
      */
+    @Deprecated(forRemoval = true)
     public static boolean areAnyTranslatable(@NotNull Collection<Component> components) {
-        for (Component component : components) {
-            if (AdventureSerializer.isTranslatable(component)) {
-                return true;
-            }
-        }
-
-        return false;
+        return ComponentUtils.areAnyTranslatable(components);
     }
 }

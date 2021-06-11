@@ -68,7 +68,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.displayName = displayName;
         handleCompound("display", nbtCompound -> {
             if (displayName != null) {
-                final String name = AdventureSerializer.serialize(displayName);
+                final String name = GsonComponentSerializer.gson().serialize(displayName);
                 nbtCompound.setString("Name", name);
             } else {
                 nbtCompound.removeTag("Name");

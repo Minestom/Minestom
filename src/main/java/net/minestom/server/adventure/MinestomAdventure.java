@@ -28,6 +28,8 @@ public final class MinestomAdventure {
      */
     public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = false;
 
+    static final Localizable NULL_LOCALIZABLE = () -> null;
+
     private static Locale defaultLocale = Locale.getDefault();
 
     private MinestomAdventure() {

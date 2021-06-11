@@ -4,8 +4,13 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
+
+import java.util.Objects;
+
+import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
 import net.minestom.server.extras.mojangAuth.Encrypter;
@@ -149,8 +154,9 @@ public class NettyPlayerConnection extends PlayerConnection {
         } else if (message instanceof ServerPacket) {
             ServerPacket serverPacket = (ServerPacket) message;
 
-            if ((AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
-                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component -> AdventureSerializer.translate(component, getPlayer()));
+            if ((MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
+                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
+                        GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
             }
 
             synchronized (tickBufferLock) {
