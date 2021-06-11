@@ -1325,13 +1325,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param resourcePack the resource pack
      */
     public void setResourcePack(@NotNull ResourcePack resourcePack) {
-        final String url = resourcePack.getUrl();
-        final String hash = resourcePack.getHash();
-
-        ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
-        resourcePackSendPacket.url = url;
-        resourcePackSendPacket.hash = hash;
-        playerConnection.sendPacket(resourcePackSendPacket);
+        playerConnection.sendPacket(new ResourcePackSendPacket(resourcePack));
     }
 
     /**
@@ -2272,7 +2266,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
-     *
      * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
     @Deprecated

@@ -3,6 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -17,12 +18,21 @@ public class ResourcePackSendPacket implements ServerPacket {
     public ResourcePackSendPacket() {
     }
 
+    public ResourcePackSendPacket(@NotNull ResourcePack resourcePack) {
+        this.url = resourcePack.getUrl();
+        this.hash = resourcePack.getHash();
+        this.forced = resourcePack.isForced();
+        this.forcedMessage = resourcePack.getForcedMessage();
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(url);
         writer.writeSizedString(hash);
         writer.writeBoolean(forced);
-        writer.writeComponent(forcedMessage);
+        if (forced) {
+            writer.writeComponent(forcedMessage);
+        }
     }
 
     @Override
@@ -30,7 +40,9 @@ public class ResourcePackSendPacket implements ServerPacket {
         this.url = reader.readSizedString(Integer.MAX_VALUE);
         this.hash = reader.readSizedString(Integer.MAX_VALUE);
         this.forced = reader.readBoolean();
-        this.forcedMessage = reader.readComponent();
+        if (forced) {
+            this.forcedMessage = reader.readComponent();
+        }
     }
 
     @Override
