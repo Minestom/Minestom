@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
@@ -79,7 +78,7 @@ public class Metadata {
             final boolean present = value != null;
             writer.writeBoolean(present);
             if (present) {
-                writer.writeSizedString(AdventureSerializer.serialize(value));
+                writer.writeComponent(value);
             }
         }, reader -> {
             boolean present = reader.readBoolean();
