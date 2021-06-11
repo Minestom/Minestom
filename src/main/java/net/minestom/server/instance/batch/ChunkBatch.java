@@ -215,7 +215,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             Block prevBlock = chunk.getBlock(x, y, z);
             inverse.setBlock(x, y, z, prevBlock);
         }
-        chunk.UNSAFE_setBlock(x, y, z, block);
+        chunk.setBlock(x, y, z, block);
         return ChunkUtils.getSectionAt(y);
     }
 

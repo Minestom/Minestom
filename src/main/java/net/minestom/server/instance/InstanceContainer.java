@@ -154,7 +154,7 @@ public class InstanceContainer extends Instance {
             block = executeBlockPlacementRule(block, blockPosition);
 
             // Set the block
-            chunk.UNSAFE_setBlock(x, y, z, block);
+            chunk.setBlock(x, y, z, block);
 
             // Refresh neighbors since a new block has been placed
             executeNeighboursBlockPlacementRule(blockPosition);

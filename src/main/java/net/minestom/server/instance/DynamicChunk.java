@@ -71,7 +71,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
         final short blockStateId = block.getStateId();
         final BlockHandler handler = block.getHandler();
         final NBTCompound nbt = null; // TODO
@@ -305,7 +305,7 @@ public class DynamicChunk extends Chunk {
                     Block block = Block.fromStateId(blockStateId);
                     // TODO read other data
 
-                    UNSAFE_setBlock(x, y, z, block);
+                    setBlock(x, y, z, block);
                 }
 
                 // Finished reading

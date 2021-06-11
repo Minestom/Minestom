@@ -20,7 +20,7 @@ public class ChunkGenerationBatch extends ChunkBatch {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        chunk.UNSAFE_setBlock(x, y, z, block);
+        chunk.setBlock(x, y, z, block);
     }
 
     public void generate(@NotNull ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {

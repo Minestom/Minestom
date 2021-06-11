@@ -11,6 +11,7 @@ import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
+import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -45,7 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements BlockGetter, Viewable, Tickable, DataContainer {
+public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, DataContainer {
 
     protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
@@ -103,7 +104,8 @@ public abstract class Chunk implements BlockGetter, Viewable, Tickable, DataCont
      * @param z     the block Z
      * @param block the block to place
      */
-    public abstract void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block);
+    @Override
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
     /**
      * Executes a chunk tick.
