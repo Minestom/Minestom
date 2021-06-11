@@ -291,17 +291,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         // Recipes end
 
-        // Tags start
-        {
-            TagsPacket tags = TagsPacket.getRequiredTagsPacket();
-
-            UpdateTagListEvent event = new UpdateTagListEvent(tags);
-            callEvent(UpdateTagListEvent.class, event);
-
-            // TODO send tags
-            this.playerConnection.sendPacket(tags);
-        }
-        // Tags end
+        // Tags
+        this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
 
         // Some client update
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties

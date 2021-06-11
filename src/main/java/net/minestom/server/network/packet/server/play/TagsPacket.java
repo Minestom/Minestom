@@ -2,10 +2,8 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registries;
@@ -14,7 +12,10 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class TagsPacket implements ServerPacket {
 
@@ -35,13 +36,13 @@ public class TagsPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(tagsMap.size());
-        for (Tag.BasicTypes type : Tag.BasicTypes.values()) {
+        for (var entry : tagsMap.entrySet()) {
+            final var type = entry.getKey();
+            final var tags = entry.getValue();
+            // Tag type
+            writer.writeSizedString(type.getIdentifier());
             switch (type) {
                 case BLOCKS: {
-                    List<Tag> tags = tagsMap.get(type);
-
-                    // Tag type
-                    writer.writeSizedString(type.getIdentifier());
                     // Number of tags
                     writer.writeVarInt(tags.size());
                     for (Tag tag : tags) {
@@ -62,11 +63,6 @@ public class TagsPacket implements ServerPacket {
                     break;
                 }
                 case ENTITY_TYPES: {
-                    List<Tag> tags = tagsMap.get(type);
-
-                    // Tag type
-                    writer.writeSizedString(type.getIdentifier());
-
                     // Number of tags
                     writer.writeVarInt(tags.size());
                     for (Tag tag : tags) {
@@ -89,11 +85,6 @@ public class TagsPacket implements ServerPacket {
                     break;
                 }
                 case FLUIDS: {
-                    List<Tag> tags = tagsMap.get(type);
-
-                    // Tag type
-                    writer.writeSizedString(type.getIdentifier());
-
                     // Number of tags
                     writer.writeVarInt(tags.size());
                     for (Tag tag : tags) {
@@ -111,11 +102,6 @@ public class TagsPacket implements ServerPacket {
                     break;
                 }
                 case GAME_EVENTS: {
-                    List<Tag> tags = tagsMap.get(type);
-
-                    // Tag type
-                    writer.writeSizedString(type.getIdentifier());
-
                     // Number of tags
                     writer.writeVarInt(tags.size());
                     for (Tag tag : tags) {
@@ -134,11 +120,6 @@ public class TagsPacket implements ServerPacket {
                     break;
                 }
                 case ITEMS: {
-                    List<Tag> tags = tagsMap.get(type);
-
-                    // Tag type
-                    writer.writeSizedString(type.getIdentifier());
-
                     // Number of tags
                     writer.writeVarInt(tags.size());
                     for (Tag tag : tags) {
@@ -170,118 +151,12 @@ public class TagsPacket implements ServerPacket {
             if (tagType == null) {
                 throw new IllegalArgumentException("Tag type could not be resolved");
             }
-            switch (tagType) {
-                case BLOCKS: {
-                    // Read tag ID
-                    final String identifier = reader.readSizedString(Integer.MAX_VALUE);
-                    List<Tag> tags = new ArrayList<>();
-                    // Read amount of tags
-                    final int tagCount = reader.readVarInt();
-                    Set<NamespaceID> values = new HashSet<>();
-                    // Read tags
-                    for (int j = 0; j < tagCount; j++) {
-                        int protocolID = reader.readVarInt();
-                        Block b = Block.fromId((short) protocolID);
-                        if (b == null) {
-                            throw new IllegalArgumentException("Block with id '" + protocolID + "' could not be resolved for a tag.");
-                        } else {
-                            values.add(NamespaceID.from(b.getName()));
-                        }
-                    }
 
-                    tags.add(new Tag(NamespaceID.from(identifier), values));
-                    this.tagsMap.put(Tag.BasicTypes.BLOCKS, tags);
-                    break;
-                }
-                case ENTITY_TYPES: {
-                    // Read tag ID
-                    final String identifier = reader.readSizedString(Integer.MAX_VALUE);
-                    List<Tag> tags = new ArrayList<>();
-                    // Read amount of tags
-                    final int tagCount = reader.readVarInt();
-                    Set<NamespaceID> values = new HashSet<>();
-                    // Read tags
-                    for (int j = 0; j < tagCount; j++) {
-                        int protocolID = reader.readVarInt();
-                        EntityType et = EntityType.fromId((short) protocolID);
-                        if (et == null) {
-                            throw new IllegalArgumentException("Entity type with id '" + protocolID + "' could not be resolved for a tag.");
-                        } else {
-                            values.add(et.getNamespaceID());
-                        }
-                    }
-
-                    tags.add(new Tag(NamespaceID.from(identifier), values));
-                    this.tagsMap.put(Tag.BasicTypes.ENTITY_TYPES, tags);
-                    break;
-                }
-                case FLUIDS: {
-                    // Read tag ID
-                    final String identifier = reader.readSizedString(Integer.MAX_VALUE);
-                    List<Tag> tags = new ArrayList<>();
-                    // Read amount of tags
-                    final int tagCount = reader.readVarInt();
-                    Set<NamespaceID> values = new HashSet<>();
-                    // Read tags
-                    for (int j = 0; j < tagCount; j++) {
-                        int protocolID = reader.readVarInt();
-                        Fluid f = Fluid.fromId((short) protocolID);
-                        if (f == null) {
-                            throw new IllegalArgumentException("Fluid with id '" + protocolID + "' could not be resolved for a tag.");
-                        } else {
-                            values.add(f.getNamespaceID());
-                        }
-                    }
-
-                    tags.add(new Tag(NamespaceID.from(identifier), values));
-                    this.tagsMap.put(Tag.BasicTypes.FLUIDS, tags);
-                    break;
-                }
-                case GAME_EVENTS: {
-                    // Read tag ID
-                    final String identifier = reader.readSizedString(Integer.MAX_VALUE);
-                    List<Tag> tags = new ArrayList<>();
-                    // Read amount of tags
-                    final int tagCount = reader.readVarInt();
-                    Set<NamespaceID> values = new HashSet<>();
-                    // Read tags
-                    for (int j = 0; j < tagCount; j++) {
-                        int protocolID = reader.readVarInt();
-                        // TODO: GameEvent
-//                        GameEvent ge = GameEvent.fromId((short) protocolID);
-//                        if (ge == null) {
-//                            throw new IllegalArgumentException("Game event with id '" + protocolID + "' could not be resolved for a tag.");
-//                        } else {
-//                            values.add(ge.getNamespaceID());
-//                        }
-                    }
-
-                    tags.add(new Tag(NamespaceID.from(identifier), values));
-                    this.tagsMap.put(Tag.BasicTypes.GAME_EVENTS, tags);
-                    break;
-                }
-                case ITEMS: {
-                    // Read tag ID
-                    final String identifier = reader.readSizedString(Integer.MAX_VALUE);
-                    List<Tag> tags = new ArrayList<>();
-                    // Read amount of tags
-                    final int tagCount = reader.readVarInt();
-                    Set<NamespaceID> values = new HashSet<>();
-                    // Read tags
-                    for (int j = 0; j < tagCount; j++) {
-                        int protocolID = reader.readVarInt();
-                        Material m = Material.fromId((short) protocolID);
-                        if (m == null) {
-                            throw new IllegalArgumentException("Item with id '" + protocolID + "' could not be resolved for a tag.");
-                        } else {
-                            values.add(m.getNamespaceID());
-                        }
-                    }
-
-                    tags.add(new Tag(NamespaceID.from(identifier), values));
-                    this.tagsMap.put(Tag.BasicTypes.ITEMS, tags);
-                    break;
-                }
+            final int tagCount = reader.readVarInt();
+            for (int j = 0; j < tagCount; j++) {
+                final String tagName = reader.readSizedString(Integer.MAX_VALUE);
+                final int[] entries = reader.readVarIntArray();
+                // TODO convert
             }
         }
     }
