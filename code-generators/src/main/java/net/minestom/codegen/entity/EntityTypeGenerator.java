@@ -3,7 +3,6 @@ package net.minestom.codegen.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import net.minestom.codegen.util.NameUtil;
@@ -201,7 +200,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray entities = GSON.fromJson(new JsonReader(new InputStreamReader(entitiesFile)), JsonArray.class);
+        JsonArray entities = GSON.fromJson(new InputStreamReader(entitiesFile), JsonArray.class);
         ClassName entityClassName = ClassName.get("net.minestom.server.entity", "EntityType");
 
         // Particle

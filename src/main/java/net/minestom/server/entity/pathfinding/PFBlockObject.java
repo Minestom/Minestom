@@ -131,7 +131,7 @@ public class PFBlockObject implements IBlockObject {
                 && !Block.CHEST.compare(block) && !Block.ENDER_CHEST.compare(block) && !Block.GRINDSTONE.compare(block)
                 && !Block.TRAPPED_CHEST.compare(block) && !Block.SOUL_SAND.compare(block)
                 && !Block.SOUL_SOIL.compare(block) && !Block.LANTERN.compare(block) && !Block.COCOA.compare(block)
-                && !Block.CONDUIT.compare(block) && !Block.GRASS_PATH.compare(block) && !Block.FARMLAND.compare(block)
+                && !Block.CONDUIT.compare(block) && !Block.DIRT_PATH.compare(block) && !Block.FARMLAND.compare(block)
                 && !Block.END_ROD.compare(block) && !Block.STONECUTTER.compare(block) && !Block.BELL.compare(block);
     }
 

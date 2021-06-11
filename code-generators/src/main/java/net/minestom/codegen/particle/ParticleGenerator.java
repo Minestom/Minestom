@@ -3,7 +3,6 @@ package net.minestom.codegen.particle;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class ParticleGenerator extends MinestomCodeGenerator {
@@ -40,7 +41,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray particles = GSON.fromJson(new JsonReader(new InputStreamReader(particlesFile)), JsonArray.class);
+        JsonArray particles = GSON.fromJson(new InputStreamReader(particlesFile), JsonArray.class);
         ClassName particleClassName = ClassName.get("net.minestom.server.particle", "Particle");
 
         // Particle
