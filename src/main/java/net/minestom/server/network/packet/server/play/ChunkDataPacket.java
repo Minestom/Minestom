@@ -39,8 +39,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public Biome[] biomes;
     public int chunkX, chunkZ;
 
-    public PaletteStorage paletteStorage;
-    public PaletteStorage customBlockPaletteStorage;
+    public PaletteStorage paletteStorage = new PaletteStorage(8, 2);
+    public PaletteStorage customBlockPaletteStorage = new PaletteStorage(8, 2);
 
     public IntSet blockEntities;
     public Int2ObjectMap<Data> blocksData;
@@ -189,34 +189,36 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             // Data
             this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
-            final long mask = masks[0]; // TODO support for variable size
-            for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
-                boolean hasSection = (mask & 1 << section) != 0;
-                if (!hasSection)
-                    continue;
-                short blockCount = reader.readShort();
-                byte bitsPerEntry = reader.readByte();
+            if (maskCount > 0) {
+                final long mask = masks[0]; // TODO support for variable size
+                for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
+                    boolean hasSection = (mask & 1 << section) != 0;
+                    if (!hasSection)
+                        continue;
+                    short blockCount = reader.readShort();
+                    byte bitsPerEntry = reader.readByte();
 
-                // Resize palette if necessary
-                if (bitsPerEntry > paletteStorage.getSection(section).getBitsPerEntry()) {
-                    paletteStorage.getSection(section).resize(bitsPerEntry);
-                }
-
-                // Retrieve palette values
-                if (bitsPerEntry < 9) {
-                    int paletteSize = reader.readVarInt();
-                    for (int i = 0; i < paletteSize; i++) {
-                        final int paletteValue = reader.readVarInt();
-                        paletteStorage.getSection(section).getPaletteBlockMap().put((short) i, (short) paletteValue);
-                        paletteStorage.getSection(section).getBlockPaletteMap().put((short) paletteValue, (short) i);
+                    // Resize palette if necessary
+                    if (bitsPerEntry > paletteStorage.getSection(section).getBitsPerEntry()) {
+                        paletteStorage.getSection(section).resize(bitsPerEntry);
                     }
-                }
 
-                // Read blocks
-                int dataLength = reader.readVarInt();
-                long[] data = paletteStorage.getSection(section).getBlocks();
-                for (int i = 0; i < dataLength; i++) {
-                    data[i] = reader.readLong();
+                    // Retrieve palette values
+                    if (bitsPerEntry < 9) {
+                        int paletteSize = reader.readVarInt();
+                        for (int i = 0; i < paletteSize; i++) {
+                            final int paletteValue = reader.readVarInt();
+                            paletteStorage.getSection(section).getPaletteBlockMap().put((short) i, (short) paletteValue);
+                            paletteStorage.getSection(section).getBlockPaletteMap().put((short) paletteValue, (short) i);
+                        }
+                    }
+
+                    // Read blocks
+                    int dataLength = reader.readVarInt();
+                    long[] data = paletteStorage.getSection(section).getBlocks();
+                    for (int i = 0; i < dataLength; i++) {
+                        data[i] = reader.readLong();
+                    }
                 }
             }
 
