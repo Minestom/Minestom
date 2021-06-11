@@ -77,7 +77,8 @@ public class Section implements PublicCloneable<Section> {
         }
 
         // Check if the new block is air, used for counting none air blocks.
-        final boolean isAir = Block.fromStateId(blockId).isAir();
+        // FIXME: once block data is working
+        final boolean isAir = blockId == 0;//Block.fromStateId(blockId).isAir();
 
         // Change to palette value
         blockId = getPaletteIndex(blockId);
@@ -93,8 +94,10 @@ public class Section implements PublicCloneable<Section> {
             final long clear = MAGIC_MASKS[bitsPerEntry];
 
             final long value = block >> bitIndex & clear;
-            final boolean isCurrentAir = Block.fromStateId(
-                    hasPalette ? paletteBlockMap.get((short) value) : (short) value).isAir();
+
+            // FIXME: once block data is working
+            final boolean isCurrentAir = (hasPalette ? paletteBlockMap.get((short) value) : (short) value) == 0;
+                    //Block.fromStateId(hasPalette ? paletteBlockMap.get((short) value) : (short) value).isAir();
 
             block |= clear << bitIndex;
             block ^= clear << bitIndex;
