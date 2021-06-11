@@ -1,16 +1,18 @@
 package net.minestom.server.registry;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minestom.server.instance.block.Block;
 
 public class Registry {
 
     public static BlockEntry block(Block block) {
-        return new BlockEntry("blocks.json");
+        return new BlockEntry(new JsonObject());
     }
 
     public static class BlockEntry extends Entry {
-        private BlockEntry(String resource) {
-            super(resource);
+        private BlockEntry(JsonObject json) {
+            super(json);
         }
 
         public float destroySpeed() {
@@ -48,26 +50,30 @@ public class Registry {
 
     public static class Entry {
 
-        private final String resource;
+        private final JsonObject json;
 
-        private Entry(String resource) {
-            this.resource = resource;
+        private Entry(JsonObject json) {
+            this.json = json;
         }
 
-        public String getString(String path) {
-            return null;
+        public String getString(String name) {
+            return element(name).getAsString();
         }
 
-        public float getFloat(String path) {
-            return 0;
+        public float getFloat(String name) {
+            return element(name).getAsFloat();
         }
 
-        public int getInt(String path) {
-            return 0;
+        public int getInt(String name) {
+            return element(name).getAsInt();
         }
 
-        public boolean getBoolean(String path) {
-            return false;
+        public boolean getBoolean(String name) {
+            return element(name).getAsBoolean();
+        }
+
+        protected JsonElement element(String name) {
+            return json.get(name);
         }
     }
 }
