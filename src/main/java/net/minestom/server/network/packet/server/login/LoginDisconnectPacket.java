@@ -38,7 +38,7 @@ public class LoginDisconnectPacket implements ComponentHoldingServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        kickMessage = reader.readComponent(Integer.MAX_VALUE);
+        kickMessage = reader.readComponent();
     }
 
     @Override

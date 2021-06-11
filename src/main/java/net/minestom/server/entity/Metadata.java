@@ -43,7 +43,7 @@ public class Metadata {
     }
 
     public static Value<String> String(@NotNull String value) {
-        return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), reader -> reader.readSizedString(Integer.MAX_VALUE));
+        return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), BinaryReader::readSizedString);
     }
 
     @Deprecated
@@ -71,7 +71,7 @@ public class Metadata {
     }
 
     public static Value<Component> Chat(@NotNull Component value) {
-        return new Value<>(TYPE_CHAT, value, writer -> writer.writeSizedString(AdventureSerializer.serialize(value)), reader -> reader.readComponent(Integer.MAX_VALUE));
+        return new Value<>(TYPE_CHAT, value, writer -> writer.writeComponent(value), BinaryReader::readComponent);
     }
 
     public static Value<Component> OptChat(@Nullable Component value) {
@@ -84,7 +84,7 @@ public class Metadata {
         }, reader -> {
             boolean present = reader.readBoolean();
             if (present) {
-                return reader.readComponent(Integer.MAX_VALUE);
+                return reader.readComponent();
             }
             return null;
         });

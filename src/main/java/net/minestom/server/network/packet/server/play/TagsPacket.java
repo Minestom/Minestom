@@ -147,14 +147,14 @@ public class TagsPacket implements ServerPacket {
         final int typeCount = reader.readVarInt();
         for (int i = 0; i < typeCount; i++) {
             // Read tag type
-            final Tag.BasicTypes tagType = Tag.BasicTypes.fromIdentifer(reader.readSizedString(Integer.MAX_VALUE));
+            final Tag.BasicTypes tagType = Tag.BasicTypes.fromIdentifer(reader.readSizedString());
             if (tagType == null) {
                 throw new IllegalArgumentException("Tag type could not be resolved");
             }
 
             final int tagCount = reader.readVarInt();
             for (int j = 0; j < tagCount; j++) {
-                final String tagName = reader.readSizedString(Integer.MAX_VALUE);
+                final String tagName = reader.readSizedString();
                 final int[] entries = reader.readVarIntArray();
                 // TODO convert
             }

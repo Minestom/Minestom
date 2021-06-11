@@ -37,8 +37,8 @@ public class ResourcePackSendPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.url = reader.readSizedString(Integer.MAX_VALUE);
-        this.hash = reader.readSizedString(Integer.MAX_VALUE);
+        this.url = reader.readSizedString();
+        this.hash = reader.readSizedString();
         this.forced = reader.readBoolean();
         if (forced) {
             this.forcedMessage = reader.readComponent();

@@ -106,19 +106,19 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        teamName = reader.readSizedString(Integer.MAX_VALUE);
+        teamName = reader.readSizedString();
         action = Action.values()[reader.readByte()];
 
         switch (action) {
             case CREATE_TEAM:
             case UPDATE_TEAM_INFO:
-                this.teamDisplayName = reader.readComponent(Integer.MAX_VALUE);
+                this.teamDisplayName = reader.readComponent();
                 this.friendlyFlags = reader.readByte();
-                nameTagVisibility = NameTagVisibility.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
-                collisionRule = CollisionRule.fromIdentifier(reader.readSizedString(Integer.MAX_VALUE));
+                nameTagVisibility = NameTagVisibility.fromIdentifier(reader.readSizedString());
+                collisionRule = CollisionRule.fromIdentifier(reader.readSizedString());
                 this.teamColor = NamedTextColor.ofExact(reader.readVarInt());
-                this.teamPrefix = reader.readComponent(Integer.MAX_VALUE);
-                this.teamSuffix = reader.readComponent(Integer.MAX_VALUE);
+                this.teamPrefix = reader.readComponent();
+                this.teamSuffix = reader.readComponent();
                 break;
             case REMOVE_TEAM:
 
@@ -126,7 +126,7 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
         }
 
         if (action == Action.CREATE_TEAM || action == Action.ADD_PLAYERS_TEAM || action == Action.REMOVE_PLAYERS_TEAM) {
-            entities = reader.readSizedStringArray(Integer.MAX_VALUE);
+            entities = reader.readSizedStringArray();
         }
     }
 
@@ -232,11 +232,11 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
 
         @NotNull
         public static NameTagVisibility fromIdentifier(String identifier) {
-            for(NameTagVisibility v : values()) {
-                if(v.getIdentifier().equals(identifier))
+            for (NameTagVisibility v : values()) {
+                if (v.getIdentifier().equals(identifier))
                     return v;
             }
-            Check.fail("Identifier for NameTagVisibility is invalid: "+identifier);
+            Check.fail("Identifier for NameTagVisibility is invalid: " + identifier);
             return null;
         }
 
@@ -288,11 +288,11 @@ public class TeamsPacket implements ComponentHoldingServerPacket {
 
         @NotNull
         public static CollisionRule fromIdentifier(String identifier) {
-            for(CollisionRule v : values()) {
-                if(v.getIdentifier().equals(identifier))
+            for (CollisionRule v : values()) {
+                if (v.getIdentifier().equals(identifier))
                     return v;
             }
-            Check.fail("Identifier for CollisionRule is invalid: "+identifier);
+            Check.fail("Identifier for CollisionRule is invalid: " + identifier);
             return null;
         }
 

@@ -39,7 +39,7 @@ public class EncryptionRequestPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        reader.readSizedString(Integer.MAX_VALUE); // server id, apparently empty
+        reader.readSizedString(); // server id, apparently empty
 
         publicKey = ByteArrayData.decodeByteArray(reader);
         nonce = ByteArrayData.decodeByteArray(reader);

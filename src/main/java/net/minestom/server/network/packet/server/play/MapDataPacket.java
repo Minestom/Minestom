@@ -161,7 +161,7 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
 
             boolean hasDisplayName = reader.readBoolean();
             if (hasDisplayName) {
-                displayName = reader.readComponent(Integer.MAX_VALUE);
+                displayName = reader.readComponent();
             } else {
                 displayName = null;
             }

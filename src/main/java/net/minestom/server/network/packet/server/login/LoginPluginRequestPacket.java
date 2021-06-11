@@ -24,7 +24,7 @@ public class LoginPluginRequestPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         messageId = reader.readVarInt();
-        channel = reader.readSizedString(Integer.MAX_VALUE);
+        channel = reader.readSizedString();
         data = reader.readRemainingBytes();
     }
 

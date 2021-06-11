@@ -73,7 +73,7 @@ public final class VelocityProxy {
     }
 
     public static InetAddress readAddress(@NotNull BinaryReader reader) {
-        return InetAddresses.forString(reader.readSizedString(Integer.MAX_VALUE));
+        return InetAddresses.forString(reader.readSizedString());
     }
 
     public static PlayerSkin readSkin(@NotNull BinaryReader reader) {

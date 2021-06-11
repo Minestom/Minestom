@@ -25,7 +25,7 @@ public class DeathCombatEventPacket implements ServerPacket {
     public void read(@NotNull BinaryReader reader) {
         this.playerId = reader.readVarInt();
         this.entityId = reader.readInt();
-        this.message = reader.readComponent(Integer.MAX_VALUE);
+        this.message = reader.readComponent();
     }
 
     @Override

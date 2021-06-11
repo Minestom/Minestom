@@ -117,6 +117,10 @@ public class BinaryReader extends InputStream {
         return str;
     }
 
+    public String readSizedString() {
+        return readSizedString(Integer.MAX_VALUE);
+    }
+
     public byte[] readBytes(int length) {
         ByteBuf buf = buffer.readBytes(length);
         byte[] bytes = new byte[buf.readableBytes()];
@@ -132,6 +136,10 @@ public class BinaryReader extends InputStream {
             strings[i] = readSizedString(maxLength);
         }
         return strings;
+    }
+
+    public String[] readSizedStringArray() {
+        return readSizedStringArray(Integer.MAX_VALUE);
     }
 
     public int[] readVarIntArray() {
@@ -150,14 +158,6 @@ public class BinaryReader extends InputStream {
             array[i] = readLong();
         }
         return array;
-    }
-
-    /**
-     * @deprecated Use {@link #readRemainingBytes()} (same semantics, but more consistent naming)
-     */
-    @Deprecated
-    public byte[] getRemainingBytes() {
-        return readRemainingBytes();
     }
 
     public byte[] readRemainingBytes() {

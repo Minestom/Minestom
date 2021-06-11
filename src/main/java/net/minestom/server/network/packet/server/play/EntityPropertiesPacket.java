@@ -76,7 +76,7 @@ public class EntityPropertiesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            String key = reader.readSizedString(Integer.MAX_VALUE);
+            String key = reader.readSizedString();
             attribute = Attribute.fromKey(key);
 
             value = reader.readDouble();
