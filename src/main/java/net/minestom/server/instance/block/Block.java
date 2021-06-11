@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
@@ -35,6 +36,10 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @NotNull Map<String, String> createPropertiesMap();
 
     short getStateId();
+
+    default @NotNull Registry.BlockEntry registry() {
+        return Registry.block(this);
+    }
 
     @NotNull BlockData getData();
 
