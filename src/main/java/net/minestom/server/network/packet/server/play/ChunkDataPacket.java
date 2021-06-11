@@ -7,7 +7,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.instance.palette.Section;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -32,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
-    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
     public Biome[] biomes;
@@ -49,12 +47,6 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     // Cacheable data
     private final UUID identifier;
     private final long timestamp;
-
-    /**
-     * Block entities NBT, as read from raw packet data.
-     * Only filled by #read, and unused at the moment.
-     */
-    public NBTCompound[] blockEntitiesNBT = new NBTCompound[0];
     /**
      * Heightmaps NBT, as read from raw packet data.
      * Only filled by #read, and unused at the moment.
