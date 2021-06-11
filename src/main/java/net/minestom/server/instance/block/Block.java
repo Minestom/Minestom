@@ -1,7 +1,6 @@
 package net.minestom.server.instance.block;
 
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
+import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
@@ -13,7 +12,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
-public interface Block extends Keyed, TagReadable, BlockConstants {
+public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value);
 
@@ -33,20 +32,7 @@ public interface Block extends Keyed, TagReadable, BlockConstants {
 
     @NotNull Block getDefaultBlock();
 
-    @NotNull NamespaceID getNamespaceId();
-
-    @Override
-    default @NotNull Key key() {
-        return getNamespaceId();
-    }
-
-    default @NotNull String getName() {
-        return getNamespaceId().asString();
-    }
-
     @NotNull Map<String, String> createPropertiesMap();
-
-    int getId();
 
     short getStateId();
 
