@@ -4,8 +4,18 @@ import net.minestom.server.instance.block.Block;
 
 public class Registry {
 
-    public static Entry block(Block block) {
-        return new Entry("blocks.json");
+    public static BlockEntry block(Block block) {
+        return new BlockEntry("blocks.json");
+    }
+
+    public static class BlockEntry extends Entry {
+        private BlockEntry(String resource) {
+            super(resource);
+        }
+
+        public boolean isSolid() {
+            return getBoolean("solid");
+        }
     }
 
     public static class Entry {
