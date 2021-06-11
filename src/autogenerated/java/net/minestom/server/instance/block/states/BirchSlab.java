@@ -19,11 +19,11 @@ public final class BirchSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8316, "type=top", "waterlogged=true"));
-        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8317, "type=top", "waterlogged=false"));
-        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8318, "type=bottom", "waterlogged=true"));
-        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8319, "type=bottom", "waterlogged=false"));
-        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8320, "type=double", "waterlogged=true"));
-        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8321, "type=double", "waterlogged=false"));
+        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8562, "type=top", "waterlogged=true"));
+        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8563, "type=top", "waterlogged=false"));
+        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8564, "type=bottom", "waterlogged=true"));
+        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8565, "type=bottom", "waterlogged=false"));
+        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8566, "type=double", "waterlogged=true"));
+        Block.BIRCH_SLAB.addBlockAlternative(new BlockAlternative((short) 8567, "type=double", "waterlogged=false"));
     }
 }

@@ -15,7 +15,6 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -23,7 +22,6 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
-import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
@@ -54,13 +52,8 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     public static final int CHUNK_SIZE_X = 16;
-    public static final int CHUNK_SIZE_Y = 256;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
-
-    public static final int CHUNK_SECTION_COUNT = CHUNK_SIZE_Y / CHUNK_SECTION_SIZE;
-
-    public static final int BIOME_COUNT = 1024; // 4x4x4 blocks group
 
     private final UUID identifier;
 
@@ -90,10 +83,11 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
         this.chunkZ = chunkZ;
         this.shouldGenerate = shouldGenerate;
 
-        if (biomes != null && biomes.length == BIOME_COUNT) {
+        final int biomeCount = Biome.getBiomeCount(instance.getDimensionType());
+        if (biomes != null && biomes.length == biomeCount) {
             this.biomes = biomes;
         } else {
-            this.biomes = new Biome[BIOME_COUNT];
+            this.biomes = new Biome[biomeCount];
         }
     }
 
@@ -237,7 +231,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      * @return a new chunk data packet
      */
     @NotNull
-    protected abstract ChunkDataPacket createFreshPacket();
+    public abstract ChunkDataPacket createChunkPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -384,29 +378,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     }
 
     /**
-     * Gets a {@link ChunkDataPacket} which should contain the full chunk.
-     *
-     * @return a fresh full chunk data packet
-     */
-    public ChunkDataPacket getFreshFullDataPacket() {
-        ChunkDataPacket fullDataPacket = createFreshPacket();
-        fullDataPacket.fullChunk = true;
-        return fullDataPacket;
-    }
-
-    /**
-     * Gets a {@link ChunkDataPacket} which should contain the non-full chunk.
-     *
-     * @return a fresh non-full chunk data packet
-     */
-    @NotNull
-    public ChunkDataPacket getFreshPartialDataPacket() {
-        ChunkDataPacket fullDataPacket = createFreshPacket();
-        fullDataPacket.fullChunk = false;
-        return fullDataPacket;
-    }
-
-    /**
      * Gets the light packet of this chunk.
      *
      * @return the light packet
@@ -414,22 +385,30 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     @NotNull
     public UpdateLightPacket getLightPacket() {
         // TODO do not hardcode light
+
+        // Creates a light packet for the given number of sections with all block light at max and no sky light.
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
-        updateLightPacket.skyLightMask          = 0b111111111111111111;
-        updateLightPacket.emptySkyLightMask     = 0b000000000000000000;
-        updateLightPacket.blockLightMask        = 0b000000000000000000;
-        updateLightPacket.emptyBlockLightMask   = 0b111111111111111111;
+
+        final int sectionCount = (getInstance().getDimensionType().getTotalHeight() / 16) + 2;
+        final int maskLength = (int) Math.ceil((double) sectionCount / 64);
+
+        updateLightPacket.skyLightMask = new long[maskLength];
+        updateLightPacket.blockLightMask = new long[maskLength];
+        updateLightPacket.emptySkyLightMask = new long[maskLength];
+        updateLightPacket.emptyBlockLightMask = new long[maskLength];
+        // Set all block light and no sky light
+        Arrays.fill(updateLightPacket.blockLightMask, -1L);
+        Arrays.fill(updateLightPacket.emptySkyLightMask, -1L);
+
         byte[] bytes = new byte[2048];
         Arrays.fill(bytes, (byte) 0xFF);
-        final List<byte[]> temp = new ArrayList<>(18);
-        for (int i = 0; i < 18; ++i) {
+        final List<byte[]> temp = new ArrayList<>(sectionCount);
+        for (int i = 0; i < sectionCount; ++i) {
             temp.add(bytes);
         }
-        updateLightPacket.skyLight = temp;
-        updateLightPacket.blockLight = new ArrayList<>(0);
-
+        updateLightPacket.blockLight = temp;
         return updateLightPacket;
     }
 
@@ -523,7 +502,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
 
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getLightPacket());
-        playerConnection.sendPacket(getFreshFullDataPacket());
+        playerConnection.sendPacket(createChunkPacket());
     }
 
     public synchronized void sendChunk() {
@@ -531,7 +510,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
             return;
         }
         sendPacketToViewers(getLightPacket());
-        sendPacketToViewers(getFreshFullDataPacket());
+        sendPacketToViewers(createChunkPacket());
     }
 
     /**
@@ -541,14 +520,14 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     public synchronized void sendChunkUpdate(@NotNull Player player) {
         final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getFreshFullDataPacket());
+        playerConnection.sendPacket(createChunkPacket());
     }
 
     /**
      * Sends a full {@link ChunkDataPacket} to all chunk viewers.
      */
     public synchronized void sendChunkUpdate() {
-        PacketUtils.sendGroupedPacket(getViewers(), getFreshFullDataPacket());
+        PacketUtils.sendGroupedPacket(getViewers(), createChunkPacket());
     }
 
     /**
@@ -561,9 +540,6 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     public synchronized void sendChunkSectionUpdate(int section, @NotNull Player player) {
         if (!PlayerUtils.isNettyClient(player))
             return;
-        Check.argCondition(!MathUtils.isBetween(section, 0, CHUNK_SECTION_COUNT),
-                "The chunk section " + section + " does not exist");
-
         player.getPlayerConnection().sendPacket(createChunkSectionUpdatePacket(section));
     }
 
@@ -575,11 +551,8 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
      */
     @NotNull
     protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
-        ChunkDataPacket chunkDataPacket = getFreshPartialDataPacket();
-        chunkDataPacket.fullChunk = false;
-        int[] sections = new int[CHUNK_SECTION_COUNT];
-        sections[section] = 1;
-        chunkDataPacket.sections = sections;
+        ChunkDataPacket chunkDataPacket = createChunkPacket();
+        // TODO
         return chunkDataPacket;
     }
 

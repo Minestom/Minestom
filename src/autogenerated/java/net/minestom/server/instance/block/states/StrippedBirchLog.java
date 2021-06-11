@@ -19,8 +19,8 @@ public final class StrippedBirchLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 94, "axis=x"));
-        Block.STRIPPED_BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 95, "axis=y"));
-        Block.STRIPPED_BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 96, "axis=z"));
+        Block.STRIPPED_BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 97, "axis=x"));
+        Block.STRIPPED_BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 98, "axis=y"));
+        Block.STRIPPED_BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 99, "axis=z"));
     }
 }

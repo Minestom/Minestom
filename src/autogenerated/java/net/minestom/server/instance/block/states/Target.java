@@ -19,21 +19,21 @@ public final class Target {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15768, "power=0"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15769, "power=1"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15770, "power=2"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15771, "power=3"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15772, "power=4"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15773, "power=5"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15774, "power=6"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15775, "power=7"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15776, "power=8"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15777, "power=9"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15778, "power=10"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15779, "power=11"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15780, "power=12"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15781, "power=13"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15782, "power=14"));
-        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 15783, "power=15"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16014, "power=0"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16015, "power=1"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16016, "power=2"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16017, "power=3"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16018, "power=4"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16019, "power=5"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16020, "power=6"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16021, "power=7"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16022, "power=8"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16023, "power=9"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16024, "power=10"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16025, "power=11"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16026, "power=12"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16027, "power=13"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16028, "power=14"));
+        Block.TARGET.addBlockAlternative(new BlockAlternative((short) 16029, "power=15"));
     }
 }

@@ -19,13 +19,13 @@ public final class CrimsonWallSign {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15727, "facing=north", "waterlogged=true"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15728, "facing=north", "waterlogged=false"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15729, "facing=south", "waterlogged=true"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15730, "facing=south", "waterlogged=false"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15731, "facing=west", "waterlogged=true"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15732, "facing=west", "waterlogged=false"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15733, "facing=east", "waterlogged=true"));
-        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15734, "facing=east", "waterlogged=false"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15973, "facing=north", "waterlogged=true"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15974, "facing=north", "waterlogged=false"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15975, "facing=south", "waterlogged=true"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15976, "facing=south", "waterlogged=false"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15977, "facing=west", "waterlogged=true"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15978, "facing=west", "waterlogged=false"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15979, "facing=east", "waterlogged=true"));
+        Block.CRIMSON_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 15980, "facing=east", "waterlogged=false"));
     }
 }

@@ -19,7 +19,7 @@ public final class DarkOakPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DARK_OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3883, "powered=true"));
-        Block.DARK_OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3884, "powered=false"));
+        Block.DARK_OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3950, "powered=true"));
+        Block.DARK_OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3951, "powered=false"));
     }
 }

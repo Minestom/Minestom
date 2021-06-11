@@ -19,11 +19,11 @@ public final class LimeShulkerBox {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9312, "facing=north"));
-        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9313, "facing=east"));
-        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9314, "facing=south"));
-        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9315, "facing=west"));
-        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9316, "facing=up"));
-        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9317, "facing=down"));
+        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9558, "facing=north"));
+        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9559, "facing=east"));
+        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9560, "facing=south"));
+        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9561, "facing=west"));
+        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9562, "facing=up"));
+        Block.LIME_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9563, "facing=down"));
     }
 }

@@ -19,8 +19,8 @@ public final class HayBlock {
             forRemoval = false
     )
     public static void initStates() {
-        Block.HAY_BLOCK.addBlockAlternative(new BlockAlternative((short) 7867, "axis=x"));
-        Block.HAY_BLOCK.addBlockAlternative(new BlockAlternative((short) 7868, "axis=y"));
-        Block.HAY_BLOCK.addBlockAlternative(new BlockAlternative((short) 7869, "axis=z"));
+        Block.HAY_BLOCK.addBlockAlternative(new BlockAlternative((short) 8113, "axis=x"));
+        Block.HAY_BLOCK.addBlockAlternative(new BlockAlternative((short) 8114, "axis=y"));
+        Block.HAY_BLOCK.addBlockAlternative(new BlockAlternative((short) 8115, "axis=z"));
     }
 }

@@ -8,8 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 public class TameableAnimalMeta extends AnimalMeta {
-
-    private final static byte MASK_INDEX = 16;
+    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     private final static byte SITTING_BIT = 0x01;
     private final static byte TAMED_BIT = 0x04;
@@ -19,28 +19,28 @@ public class TameableAnimalMeta extends AnimalMeta {
     }
 
     public boolean isSitting() {
-        return getMaskBit(MASK_INDEX, SITTING_BIT);
+        return getMaskBit(OFFSET, SITTING_BIT);
     }
 
     public void setSitting(boolean value) {
-        setMaskBit(MASK_INDEX, SITTING_BIT, value);
+        setMaskBit(OFFSET, SITTING_BIT, value);
     }
 
     public boolean isTamed() {
-        return getMaskBit(MASK_INDEX, TAMED_BIT);
+        return getMaskBit(OFFSET, TAMED_BIT);
     }
 
     public void setTamed(boolean value) {
-        setMaskBit(MASK_INDEX, TAMED_BIT, value);
+        setMaskBit(OFFSET, TAMED_BIT, value);
     }
 
     @NotNull
     public UUID getOwner() {
-        return super.metadata.getIndex((byte) 17, null);
+        return super.metadata.getIndex(OFFSET + 1, null);
     }
 
     public void setOwner(@NotNull UUID value) {
-        super.metadata.setIndex((byte) 17, Metadata.OptUUID(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.OptUUID(value));
     }
 
 }

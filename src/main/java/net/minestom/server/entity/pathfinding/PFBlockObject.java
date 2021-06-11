@@ -142,7 +142,7 @@ public class PFBlockObject implements IBlockObject {
             case LANTERN:
             case COCOA:
             case CONDUIT:
-            case GRASS_PATH:
+            case DIRT_PATH:
             case FARMLAND:
             case END_ROD:
             case STONECUTTER:

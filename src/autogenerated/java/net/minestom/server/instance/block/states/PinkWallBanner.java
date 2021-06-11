@@ -19,9 +19,9 @@ public final class PinkWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8181, "facing=north"));
-        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8182, "facing=south"));
-        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8183, "facing=west"));
-        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8184, "facing=east"));
+        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8427, "facing=north"));
+        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8428, "facing=south"));
+        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8429, "facing=west"));
+        Block.PINK_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8430, "facing=east"));
     }
 }

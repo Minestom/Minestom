@@ -181,7 +181,7 @@ public class BinaryWriter extends OutputStream {
      * Writes a null terminated string to the buffer. This method adds the null character
      * to the end of the string before writing.
      *
-     * @param string the string to write
+     * @param string  the string to write
      * @param charset the charset to encode in
      */
     public void writeNullTerminatedString(@NotNull String string, @NotNull Charset charset) {
@@ -213,6 +213,17 @@ public class BinaryWriter extends OutputStream {
         writeVarInt(array.length);
         for (int element : array) {
             writeVarInt(element);
+        }
+    }
+
+    public void writeLongArray(long[] array) {
+        if (array == null) {
+            writeVarInt(0);
+            return;
+        }
+        writeVarInt(array.length);
+        for (long element : array) {
+            writeLong(element);
         }
     }
 

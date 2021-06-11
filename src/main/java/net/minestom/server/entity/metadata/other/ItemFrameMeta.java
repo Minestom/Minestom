@@ -9,6 +9,8 @@ import net.minestom.server.utils.Rotation;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     private Orientation orientation;
 
@@ -19,20 +21,20 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
 
     @NotNull
     public ItemStack getItem() {
-        return super.metadata.getIndex((byte) 7, ItemStack.AIR);
+        return super.metadata.getIndex(OFFSET, ItemStack.AIR);
     }
 
     public void setItem(@NotNull ItemStack value) {
-        super.metadata.setIndex((byte) 7, Metadata.Slot(value));
+        super.metadata.setIndex(OFFSET, Metadata.Slot(value));
     }
 
     @NotNull
     public Rotation getRotation() {
-        return Rotation.values()[super.metadata.getIndex((byte) 8, 0)];
+        return Rotation.values()[super.metadata.getIndex(OFFSET + 1, 0)];
     }
 
     public void setRotation(@NotNull Rotation value) {
-        super.metadata.setIndex((byte) 8, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value.ordinal()));
     }
 
     @NotNull
@@ -68,5 +70,4 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
         WEST,
         EAST
     }
-
 }

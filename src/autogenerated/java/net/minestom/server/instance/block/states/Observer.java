@@ -19,17 +19,17 @@ public final class Observer {
             forRemoval = false
     )
     public static void initStates() {
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9264, "facing=north", "powered=true"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9265, "facing=north", "powered=false"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9266, "facing=east", "powered=true"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9267, "facing=east", "powered=false"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9268, "facing=south", "powered=true"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9269, "facing=south", "powered=false"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9270, "facing=west", "powered=true"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9271, "facing=west", "powered=false"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9272, "facing=up", "powered=true"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9273, "facing=up", "powered=false"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9274, "facing=down", "powered=true"));
-        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9275, "facing=down", "powered=false"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9510, "facing=north", "powered=true"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9511, "facing=north", "powered=false"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9512, "facing=east", "powered=true"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9513, "facing=east", "powered=false"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9514, "facing=south", "powered=true"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9515, "facing=south", "powered=false"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9516, "facing=west", "powered=true"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9517, "facing=west", "powered=false"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9518, "facing=up", "powered=true"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9519, "facing=up", "powered=false"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9520, "facing=down", "powered=true"));
+        Block.OBSERVER.addBlockAlternative(new BlockAlternative((short) 9521, "facing=down", "powered=false"));
     }
 }

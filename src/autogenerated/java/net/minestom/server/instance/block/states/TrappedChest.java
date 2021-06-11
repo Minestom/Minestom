@@ -19,29 +19,29 @@ public final class TrappedChest {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6626, "facing=north", "type=single", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6627, "facing=north", "type=single", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6628, "facing=north", "type=left", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6629, "facing=north", "type=left", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6630, "facing=north", "type=right", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6631, "facing=north", "type=right", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6632, "facing=south", "type=single", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6633, "facing=south", "type=single", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6634, "facing=south", "type=left", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6635, "facing=south", "type=left", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6636, "facing=south", "type=right", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6637, "facing=south", "type=right", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6638, "facing=west", "type=single", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6639, "facing=west", "type=single", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6640, "facing=west", "type=left", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6641, "facing=west", "type=left", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6642, "facing=west", "type=right", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6643, "facing=west", "type=right", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6644, "facing=east", "type=single", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6645, "facing=east", "type=single", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6646, "facing=east", "type=left", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6647, "facing=east", "type=left", "waterlogged=false"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6648, "facing=east", "type=right", "waterlogged=true"));
-        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6649, "facing=east", "type=right", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6828, "facing=north", "type=single", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6829, "facing=north", "type=single", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6830, "facing=north", "type=left", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6831, "facing=north", "type=left", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6832, "facing=north", "type=right", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6833, "facing=north", "type=right", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6834, "facing=south", "type=single", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6835, "facing=south", "type=single", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6836, "facing=south", "type=left", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6837, "facing=south", "type=left", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6838, "facing=south", "type=right", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6839, "facing=south", "type=right", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6840, "facing=west", "type=single", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6841, "facing=west", "type=single", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6842, "facing=west", "type=left", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6843, "facing=west", "type=left", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6844, "facing=west", "type=right", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6845, "facing=west", "type=right", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6846, "facing=east", "type=single", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6847, "facing=east", "type=single", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6848, "facing=east", "type=left", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6849, "facing=east", "type=left", "waterlogged=false"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6850, "facing=east", "type=right", "waterlogged=true"));
+        Block.TRAPPED_CHEST.addBlockAlternative(new BlockAlternative((short) 6851, "facing=east", "type=right", "waterlogged=false"));
     }
 }

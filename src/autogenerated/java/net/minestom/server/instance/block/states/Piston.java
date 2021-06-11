@@ -19,17 +19,17 @@ public final class Piston {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1348, "extended=true", "facing=north"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1349, "extended=true", "facing=east"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1350, "extended=true", "facing=south"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1351, "extended=true", "facing=west"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1352, "extended=true", "facing=up"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1353, "extended=true", "facing=down"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1354, "extended=false", "facing=north"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1355, "extended=false", "facing=east"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1356, "extended=false", "facing=south"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1357, "extended=false", "facing=west"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1358, "extended=false", "facing=up"));
-        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1359, "extended=false", "facing=down"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1404, "extended=true", "facing=north"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1405, "extended=true", "facing=east"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1406, "extended=true", "facing=south"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1407, "extended=true", "facing=west"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1408, "extended=true", "facing=up"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1409, "extended=true", "facing=down"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1410, "extended=false", "facing=north"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1411, "extended=false", "facing=east"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1412, "extended=false", "facing=south"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1413, "extended=false", "facing=west"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1414, "extended=false", "facing=up"));
+        Block.PISTON.addBlockAlternative(new BlockAlternative((short) 1415, "extended=false", "facing=down"));
     }
 }

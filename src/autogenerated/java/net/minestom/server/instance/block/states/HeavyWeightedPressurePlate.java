@@ -19,21 +19,21 @@ public final class HeavyWeightedPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6666, "power=0"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6667, "power=1"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6668, "power=2"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6669, "power=3"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6670, "power=4"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6671, "power=5"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6672, "power=6"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6673, "power=7"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6674, "power=8"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6675, "power=9"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6676, "power=10"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6677, "power=11"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6678, "power=12"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6679, "power=13"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6680, "power=14"));
-        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6681, "power=15"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6868, "power=0"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6869, "power=1"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6870, "power=2"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6871, "power=3"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6872, "power=4"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6873, "power=5"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6874, "power=6"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6875, "power=7"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6876, "power=8"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6877, "power=9"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6878, "power=10"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6879, "power=11"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6880, "power=12"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6881, "power=13"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6882, "power=14"));
+        Block.HEAVY_WEIGHTED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 6883, "power=15"));
     }
 }

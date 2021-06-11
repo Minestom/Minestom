@@ -257,11 +257,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      */
     private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
-        ChunkDataPacket chunkDataPacket = chunk.getFreshPartialDataPacket();
-        int[] sections = new int[Chunk.CHUNK_SECTION_COUNT];
-        for (int section : updatedSections)
-            sections[section] = 1;
-        chunkDataPacket.sections = sections;
+        ChunkDataPacket chunkDataPacket = chunk.createChunkPacket();
+        // TODO update all sections from `updatedSections`
         PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket);
 
         if (instance instanceof InstanceContainer) {

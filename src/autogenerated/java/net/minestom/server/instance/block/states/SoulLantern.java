@@ -19,9 +19,9 @@ public final class SoulLantern {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14894, "hanging=true", "waterlogged=true"));
-        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14895, "hanging=true", "waterlogged=false"));
-        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14896, "hanging=false", "waterlogged=true"));
-        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 14897, "hanging=false", "waterlogged=false"));
+        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 15140, "hanging=true", "waterlogged=true"));
+        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 15141, "hanging=true", "waterlogged=false"));
+        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 15142, "hanging=false", "waterlogged=true"));
+        Block.SOUL_LANTERN.addBlockAlternative(new BlockAlternative((short) 15143, "hanging=false", "waterlogged=false"));
     }
 }

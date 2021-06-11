@@ -19,13 +19,13 @@ public final class Smoker {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14807, "facing=north", "lit=true"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14808, "facing=north", "lit=false"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14809, "facing=south", "lit=true"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14810, "facing=south", "lit=false"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14811, "facing=west", "lit=true"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14812, "facing=west", "lit=false"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14813, "facing=east", "lit=true"));
-        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 14814, "facing=east", "lit=false"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15053, "facing=north", "lit=true"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15054, "facing=north", "lit=false"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15055, "facing=south", "lit=true"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15056, "facing=south", "lit=false"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15057, "facing=west", "lit=true"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15058, "facing=west", "lit=false"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15059, "facing=east", "lit=true"));
+        Block.SMOKER.addBlockAlternative(new BlockAlternative((short) 15060, "facing=east", "lit=false"));
     }
 }

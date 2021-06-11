@@ -143,6 +143,15 @@ public class BinaryReader extends InputStream {
         return array;
     }
 
+    public long[] readLongArray() {
+        final int size = readVarInt();
+        long[] array = new long[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = readLong();
+        }
+        return array;
+    }
+
     /**
      * @deprecated Use {@link #readRemainingBytes()} (same semantics, but more consistent naming)
      */
@@ -198,6 +207,10 @@ public class BinaryReader extends InputStream {
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
+    }
+
+    public Component readComponent() {
+        return readComponent(Integer.MAX_VALUE);
     }
 
     /**

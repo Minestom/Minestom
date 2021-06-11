@@ -12,6 +12,7 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
     public Position position;
     public byte flags;
     public int teleportId;
+    public boolean dismountVehicle;
 
     public PlayerPositionAndLookPacket() {
         position = new Position();
@@ -28,6 +29,7 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
 
         writer.writeByte(flags);
         writer.writeVarInt(teleportId);
+        writer.writeBoolean(dismountVehicle);
     }
 
     @Override
@@ -36,6 +38,7 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
 
         flags = reader.readByte();
         teleportId = reader.readVarInt();
+        dismountVehicle = reader.readBoolean();
     }
 
     @Override

@@ -19,7 +19,7 @@ public final class CrimsonPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15067, "powered=true"));
-        Block.CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15068, "powered=false"));
+        Block.CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15313, "powered=true"));
+        Block.CRIMSON_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15314, "powered=false"));
     }
 }

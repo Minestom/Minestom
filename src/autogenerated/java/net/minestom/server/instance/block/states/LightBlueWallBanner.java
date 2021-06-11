@@ -19,9 +19,9 @@ public final class LightBlueWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8169, "facing=north"));
-        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8170, "facing=south"));
-        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8171, "facing=west"));
-        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8172, "facing=east"));
+        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8415, "facing=north"));
+        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8416, "facing=south"));
+        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8417, "facing=west"));
+        Block.LIGHT_BLUE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8418, "facing=east"));
     }
 }

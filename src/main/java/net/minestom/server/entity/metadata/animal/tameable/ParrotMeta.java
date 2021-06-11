@@ -2,9 +2,12 @@ package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ParrotMeta extends TameableAnimalMeta {
+    public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     public ParrotMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -12,11 +15,11 @@ public class ParrotMeta extends TameableAnimalMeta {
 
     @NotNull
     public Color getColor() {
-        return Color.VALUES[super.metadata.getIndex((byte) 18, 0)];
+        return Color.VALUES[super.metadata.getIndex(OFFSET, 0)];
     }
 
     public void setColor(@NotNull Color value) {
-        super.metadata.setIndex((byte) 18, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(value.ordinal()));
     }
 
     public enum Color {

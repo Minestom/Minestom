@@ -19,13 +19,13 @@ public final class MelonStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4784, "age=0"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4785, "age=1"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4786, "age=2"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4787, "age=3"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4788, "age=4"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4789, "age=5"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4790, "age=6"));
-        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4791, "age=7"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4853, "age=0"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4854, "age=1"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4855, "age=2"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4856, "age=3"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4857, "age=4"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4858, "age=5"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4859, "age=6"));
+        Block.MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4860, "age=7"));
     }
 }

@@ -19,9 +19,9 @@ public final class CarvedPumpkin {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4016, "facing=north"));
-        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4017, "facing=south"));
-        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4018, "facing=west"));
-        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4019, "facing=east"));
+        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4085, "facing=north"));
+        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4086, "facing=south"));
+        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4087, "facing=west"));
+        Block.CARVED_PUMPKIN.addBlockAlternative(new BlockAlternative((short) 4088, "facing=east"));
     }
 }

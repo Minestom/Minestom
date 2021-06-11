@@ -6,66 +6,68 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class BoatMeta extends EntityMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 7;
 
     public BoatMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     public int getTimeSinceLastHit() {
-        return super.metadata.getIndex((byte) 7, 0);
+        return super.metadata.getIndex(OFFSET, 0);
     }
 
     public void setTimeSinceLastHit(int value) {
-        super.metadata.setIndex((byte) 7, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
     }
 
     public int getForwardDirection() {
-        return super.metadata.getIndex((byte) 8, 1);
+        return super.metadata.getIndex(OFFSET + 1, 1);
     }
 
     public void setForwardDirection(int value) {
-        super.metadata.setIndex((byte) 8, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
     }
 
     public float getDamageTaken() {
-        return super.metadata.getIndex((byte) 9, 0);
+        return super.metadata.getIndex(OFFSET + 2, 0);
     }
 
     public void setDamageTaken(float value) {
-        super.metadata.setIndex((byte) 9, Metadata.Float(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.Float(value));
     }
 
     @NotNull
     public Type getType() {
-        return Type.VALUES[super.metadata.getIndex((byte) 10, 0)];
+        return Type.VALUES[super.metadata.getIndex(OFFSET + 3, 0)];
     }
 
     public void setType(@NotNull Type value) {
-        super.metadata.setIndex((byte) 10, Metadata.VarInt(value.ordinal()));
+        super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value.ordinal()));
     }
 
     public boolean isLeftPaddleTurning() {
-        return super.metadata.getIndex((byte) 11, false);
+        return super.metadata.getIndex(OFFSET + 4, false);
     }
 
     public void setLeftPaddleTurning(boolean value) {
-        super.metadata.setIndex((byte) 11, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 4, Metadata.Boolean(value));
     }
 
     public boolean isRightPaddleTurning() {
-        return super.metadata.getIndex((byte) 12, false);
+        return super.metadata.getIndex(OFFSET + 5, false);
     }
 
     public void setRightPaddleTurning(boolean value) {
-        super.metadata.setIndex((byte) 12, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
     }
 
     public int getSplashTimer() {
-        return super.metadata.getIndex((byte) 13, 0);
+        return super.metadata.getIndex(OFFSET + 6, 0);
     }
 
     public void setSplashTimer(int value) {
-        super.metadata.setIndex((byte) 13, Metadata.VarInt(value));
+        super.metadata.setIndex(OFFSET + 6, Metadata.VarInt(value));
     }
 
     public enum Type {

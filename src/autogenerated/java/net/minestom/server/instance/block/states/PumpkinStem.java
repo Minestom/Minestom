@@ -19,13 +19,13 @@ public final class PumpkinStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4776, "age=0"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4777, "age=1"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4778, "age=2"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4779, "age=3"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4780, "age=4"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4781, "age=5"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4782, "age=6"));
-        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4783, "age=7"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4845, "age=0"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4846, "age=1"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4847, "age=2"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4848, "age=3"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4849, "age=4"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4850, "age=5"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4851, "age=6"));
+        Block.PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4852, "age=7"));
     }
 }

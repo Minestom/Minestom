@@ -19,7 +19,7 @@ public final class DeadTubeCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9524, "waterlogged=true"));
-        Block.DEAD_TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9525, "waterlogged=false"));
+        Block.DEAD_TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9770, "waterlogged=true"));
+        Block.DEAD_TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9771, "waterlogged=false"));
     }
 }

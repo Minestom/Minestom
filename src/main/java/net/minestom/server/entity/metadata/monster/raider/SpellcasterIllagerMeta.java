@@ -2,9 +2,12 @@ package net.minestom.server.entity.metadata.monster.raider;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.monster.MonsterMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class SpellcasterIllagerMeta extends AbstractIllagerMeta {
+    public static final byte OFFSET = AbstractIllagerMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     protected SpellcasterIllagerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -12,11 +15,11 @@ public class SpellcasterIllagerMeta extends AbstractIllagerMeta {
 
     @NotNull
     public Spell getSpell() {
-        return Spell.VALUES[super.metadata.getIndex((byte) 16, (byte) 0)];
+        return Spell.VALUES[super.metadata.getIndex(OFFSET, (byte) 0)];
     }
 
     public void setSpell(@NotNull Spell spell) {
-        super.metadata.setIndex((byte) 16, Metadata.Byte((byte) spell.ordinal()));
+        super.metadata.setIndex(OFFSET, Metadata.Byte((byte) spell.ordinal()));
     }
 
     public enum Spell {

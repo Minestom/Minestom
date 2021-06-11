@@ -19,7 +19,7 @@ public final class SprucePressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SPRUCE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3875, "powered=true"));
-        Block.SPRUCE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3876, "powered=false"));
+        Block.SPRUCE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3942, "powered=true"));
+        Block.SPRUCE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3943, "powered=false"));
     }
 }

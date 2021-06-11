@@ -19,7 +19,7 @@ public final class WarpedPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15069, "powered=true"));
-        Block.WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15070, "powered=false"));
+        Block.WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15315, "powered=true"));
+        Block.WARPED_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 15316, "powered=false"));
     }
 }

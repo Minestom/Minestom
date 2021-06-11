@@ -19,9 +19,9 @@ public final class Loom {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 14791, "facing=north"));
-        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 14792, "facing=south"));
-        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 14793, "facing=west"));
-        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 14794, "facing=east"));
+        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 15037, "facing=north"));
+        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 15038, "facing=south"));
+        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 15039, "facing=west"));
+        Block.LOOM.addBlockAlternative(new BlockAlternative((short) 15040, "facing=east"));
     }
 }

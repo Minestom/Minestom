@@ -19,8 +19,8 @@ public final class AcaciaWood {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 121, "axis=x"));
-        Block.ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 122, "axis=y"));
-        Block.ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 123, "axis=z"));
+        Block.ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 124, "axis=x"));
+        Block.ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 125, "axis=y"));
+        Block.ACACIA_WOOD.addBlockAlternative(new BlockAlternative((short) 126, "axis=z"));
     }
 }

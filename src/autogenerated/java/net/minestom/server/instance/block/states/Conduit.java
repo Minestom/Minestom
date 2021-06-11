@@ -19,7 +19,7 @@ public final class Conduit {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CONDUIT.addBlockAlternative(new BlockAlternative((short) 9653, "waterlogged=true"));
-        Block.CONDUIT.addBlockAlternative(new BlockAlternative((short) 9654, "waterlogged=false"));
+        Block.CONDUIT.addBlockAlternative(new BlockAlternative((short) 9899, "waterlogged=true"));
+        Block.CONDUIT.addBlockAlternative(new BlockAlternative((short) 9900, "waterlogged=false"));
     }
 }

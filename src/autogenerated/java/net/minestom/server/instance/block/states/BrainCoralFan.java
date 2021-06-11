@@ -19,7 +19,7 @@ public final class BrainCoralFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9556, "waterlogged=true"));
-        Block.BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9557, "waterlogged=false"));
+        Block.BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9802, "waterlogged=true"));
+        Block.BRAIN_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9803, "waterlogged=false"));
     }
 }

@@ -19,21 +19,21 @@ public final class LimeBed {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1129, "facing=north", "occupied=true", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1130, "facing=north", "occupied=true", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1131, "facing=north", "occupied=false", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1132, "facing=north", "occupied=false", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1133, "facing=south", "occupied=true", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1134, "facing=south", "occupied=true", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1135, "facing=south", "occupied=false", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1136, "facing=south", "occupied=false", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1137, "facing=west", "occupied=true", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1138, "facing=west", "occupied=true", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1139, "facing=west", "occupied=false", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1140, "facing=west", "occupied=false", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1141, "facing=east", "occupied=true", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1142, "facing=east", "occupied=true", "part=foot"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1143, "facing=east", "occupied=false", "part=head"));
-        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1144, "facing=east", "occupied=false", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1161, "facing=north", "occupied=true", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1162, "facing=north", "occupied=true", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1163, "facing=north", "occupied=false", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1164, "facing=north", "occupied=false", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1165, "facing=south", "occupied=true", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1166, "facing=south", "occupied=true", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1167, "facing=south", "occupied=false", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1168, "facing=south", "occupied=false", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1169, "facing=west", "occupied=true", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1170, "facing=west", "occupied=true", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1171, "facing=west", "occupied=false", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1172, "facing=west", "occupied=false", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1173, "facing=east", "occupied=true", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1174, "facing=east", "occupied=true", "part=foot"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1175, "facing=east", "occupied=false", "part=head"));
+        Block.LIME_BED.addBlockAlternative(new BlockAlternative((short) 1176, "facing=east", "occupied=false", "part=foot"));
     }
 }

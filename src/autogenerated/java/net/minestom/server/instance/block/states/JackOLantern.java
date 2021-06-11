@@ -19,9 +19,9 @@ public final class JackOLantern {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4020, "facing=north"));
-        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4021, "facing=south"));
-        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4022, "facing=west"));
-        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4023, "facing=east"));
+        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4089, "facing=north"));
+        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4090, "facing=south"));
+        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4091, "facing=west"));
+        Block.JACK_O_LANTERN.addBlockAlternative(new BlockAlternative((short) 4092, "facing=east"));
     }
 }

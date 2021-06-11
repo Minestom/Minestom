@@ -25,7 +25,7 @@ public enum ChatPosition {
 
     private final MessageType messageType;
 
-    ChatPosition(@NotNull MessageType messageType) {
+    ChatPosition(@Nullable MessageType messageType) {
         this.messageType = messageType;
     }
 

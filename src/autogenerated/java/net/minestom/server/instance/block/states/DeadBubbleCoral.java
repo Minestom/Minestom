@@ -19,7 +19,7 @@ public final class DeadBubbleCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9528, "waterlogged=true"));
-        Block.DEAD_BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9529, "waterlogged=false"));
+        Block.DEAD_BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9774, "waterlogged=true"));
+        Block.DEAD_BUBBLE_CORAL.addBlockAlternative(new BlockAlternative((short) 9775, "waterlogged=false"));
     }
 }

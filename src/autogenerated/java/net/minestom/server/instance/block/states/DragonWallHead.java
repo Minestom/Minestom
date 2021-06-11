@@ -19,9 +19,9 @@ public final class DragonWallHead {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6610, "facing=north"));
-        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6611, "facing=south"));
-        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6612, "facing=west"));
-        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6613, "facing=east"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6812, "facing=north"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6813, "facing=south"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6814, "facing=west"));
+        Block.DRAGON_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6815, "facing=east"));
     }
 }

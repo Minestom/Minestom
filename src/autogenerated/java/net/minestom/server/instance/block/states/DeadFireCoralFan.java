@@ -19,7 +19,7 @@ public final class DeadFireCoralFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9550, "waterlogged=true"));
-        Block.DEAD_FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9551, "waterlogged=false"));
+        Block.DEAD_FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9796, "waterlogged=true"));
+        Block.DEAD_FIRE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9797, "waterlogged=false"));
     }
 }

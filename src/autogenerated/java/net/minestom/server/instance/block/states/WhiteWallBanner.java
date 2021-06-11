@@ -19,9 +19,9 @@ public final class WhiteWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8157, "facing=north"));
-        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8158, "facing=south"));
-        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8159, "facing=west"));
-        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8160, "facing=east"));
+        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8403, "facing=north"));
+        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8404, "facing=south"));
+        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8405, "facing=west"));
+        Block.WHITE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8406, "facing=east"));
     }
 }

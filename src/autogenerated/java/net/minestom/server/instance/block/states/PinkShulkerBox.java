@@ -19,11 +19,11 @@ public final class PinkShulkerBox {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9318, "facing=north"));
-        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9319, "facing=east"));
-        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9320, "facing=south"));
-        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9321, "facing=west"));
-        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9322, "facing=up"));
-        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9323, "facing=down"));
+        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9564, "facing=north"));
+        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9565, "facing=east"));
+        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9566, "facing=south"));
+        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9567, "facing=west"));
+        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9568, "facing=up"));
+        Block.PINK_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9569, "facing=down"));
     }
 }
