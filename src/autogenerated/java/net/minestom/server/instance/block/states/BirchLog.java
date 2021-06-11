@@ -19,8 +19,8 @@ public final class BirchLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 79, "axis=x"));
-        Block.BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 80, "axis=y"));
-        Block.BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 81, "axis=z"));
+        Block.BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 82, "axis=x"));
+        Block.BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 83, "axis=y"));
+        Block.BIRCH_LOG.addBlockAlternative(new BlockAlternative((short) 84, "axis=z"));
     }
 }

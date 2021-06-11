@@ -14,8 +14,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
-import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
-import net.minestom.server.network.packet.server.play.TitlePacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +51,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void sendActionBar(@NotNull Component message) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, message));
+        PacketUtils.sendGroupedPacket(this.getPlayers(), new ActionBarPacket(message));
     }
 
     @Override
@@ -62,18 +61,18 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void showTitle(@NotNull Title title) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new TitlePacket(TitlePacket.Action.SET_TITLE, title.title()));
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new TitlePacket(TitlePacket.Action.SET_SUBTITLE, title.subtitle()));
+        PacketUtils.sendGroupedPacket(this.getPlayers(), new SetTitleTextPacket(title.title()));
+        PacketUtils.sendGroupedPacket(this.getPlayers(), new SetTitleSubTitlePacket(title.subtitle()));
     }
 
     @Override
     default void clearTitle() {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new TitlePacket(TitlePacket.Action.HIDE));
+        PacketUtils.sendGroupedPacket(this.getPlayers(), new ClearTitlesPacket());
     }
 
     @Override
     default void resetTitle() {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new TitlePacket(TitlePacket.Action.RESET));
+        PacketUtils.sendGroupedPacket(this.getPlayers(), new ClearTitlesPacket(true));
     }
 
     @Override

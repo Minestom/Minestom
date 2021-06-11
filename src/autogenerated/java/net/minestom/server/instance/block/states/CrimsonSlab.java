@@ -19,11 +19,11 @@ public final class CrimsonSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15055, "type=top", "waterlogged=true"));
-        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15056, "type=top", "waterlogged=false"));
-        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15057, "type=bottom", "waterlogged=true"));
-        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15058, "type=bottom", "waterlogged=false"));
-        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15059, "type=double", "waterlogged=true"));
-        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15060, "type=double", "waterlogged=false"));
+        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15301, "type=top", "waterlogged=true"));
+        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15302, "type=top", "waterlogged=false"));
+        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15303, "type=bottom", "waterlogged=true"));
+        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15304, "type=bottom", "waterlogged=false"));
+        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15305, "type=double", "waterlogged=true"));
+        Block.CRIMSON_SLAB.addBlockAlternative(new BlockAlternative((short) 15306, "type=double", "waterlogged=false"));
     }
 }

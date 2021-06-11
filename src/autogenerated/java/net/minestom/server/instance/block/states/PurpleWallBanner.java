@@ -19,9 +19,9 @@ public final class PurpleWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8197, "facing=north"));
-        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8198, "facing=south"));
-        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8199, "facing=west"));
-        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8200, "facing=east"));
+        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8443, "facing=north"));
+        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8444, "facing=south"));
+        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8445, "facing=west"));
+        Block.PURPLE_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8446, "facing=east"));
     }
 }

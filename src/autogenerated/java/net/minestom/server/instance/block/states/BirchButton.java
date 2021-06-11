@@ -19,29 +19,29 @@ public final class BirchButton {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6398, "face=floor", "facing=north", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6399, "face=floor", "facing=north", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6400, "face=floor", "facing=south", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6401, "face=floor", "facing=south", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6402, "face=floor", "facing=west", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6403, "face=floor", "facing=west", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6404, "face=floor", "facing=east", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6405, "face=floor", "facing=east", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6406, "face=wall", "facing=north", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6407, "face=wall", "facing=north", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6408, "face=wall", "facing=south", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6409, "face=wall", "facing=south", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6410, "face=wall", "facing=west", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6411, "face=wall", "facing=west", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6412, "face=wall", "facing=east", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6413, "face=wall", "facing=east", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6414, "face=ceiling", "facing=north", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6415, "face=ceiling", "facing=north", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6416, "face=ceiling", "facing=south", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6417, "face=ceiling", "facing=south", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6418, "face=ceiling", "facing=west", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6419, "face=ceiling", "facing=west", "powered=false"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6420, "face=ceiling", "facing=east", "powered=true"));
-        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6421, "face=ceiling", "facing=east", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6600, "face=floor", "facing=north", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6601, "face=floor", "facing=north", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6602, "face=floor", "facing=south", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6603, "face=floor", "facing=south", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6604, "face=floor", "facing=west", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6605, "face=floor", "facing=west", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6606, "face=floor", "facing=east", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6607, "face=floor", "facing=east", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6608, "face=wall", "facing=north", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6609, "face=wall", "facing=north", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6610, "face=wall", "facing=south", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6611, "face=wall", "facing=south", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6612, "face=wall", "facing=west", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6613, "face=wall", "facing=west", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6614, "face=wall", "facing=east", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6615, "face=wall", "facing=east", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6616, "face=ceiling", "facing=north", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6617, "face=ceiling", "facing=north", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6618, "face=ceiling", "facing=south", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6619, "face=ceiling", "facing=south", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6620, "face=ceiling", "facing=west", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6621, "face=ceiling", "facing=west", "powered=false"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6622, "face=ceiling", "facing=east", "powered=true"));
+        Block.BIRCH_BUTTON.addBlockAlternative(new BlockAlternative((short) 6623, "face=ceiling", "facing=east", "powered=false"));
     }
 }

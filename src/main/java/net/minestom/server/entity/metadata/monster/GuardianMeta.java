@@ -5,6 +5,8 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class GuardianMeta extends MonsterMeta {
+    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     private Entity target;
 
@@ -13,11 +15,11 @@ public class GuardianMeta extends MonsterMeta {
     }
 
     public boolean isRetractingSpikes() {
-        return super.metadata.getIndex((byte) 15, false);
+        return super.metadata.getIndex(OFFSET, false);
     }
 
     public void setRetractingSpikes(boolean retractingSpikes) {
-        super.metadata.setIndex((byte) 15, Metadata.Boolean(retractingSpikes));
+        super.metadata.setIndex(OFFSET, Metadata.Boolean(retractingSpikes));
     }
 
     public Entity getTarget() {
@@ -26,7 +28,7 @@ public class GuardianMeta extends MonsterMeta {
 
     public void setTarget(@NotNull Entity target) {
         this.target = target;
-        super.metadata.setIndex((byte) 16, Metadata.VarInt(target.getEntityId()));
+        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(target.getEntityId()));
     }
 
 }

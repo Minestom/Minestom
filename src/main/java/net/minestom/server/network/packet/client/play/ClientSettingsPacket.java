@@ -15,6 +15,7 @@ public class ClientSettingsPacket extends ClientPlayPacket {
     public boolean chatColors;
     public byte displayedSkinParts;
     public Player.MainHand mainHand = Player.MainHand.RIGHT;
+    public boolean disableTextFiltering;
 
     @Override
     public void read(@NotNull BinaryReader reader) {
@@ -24,11 +25,12 @@ public class ClientSettingsPacket extends ClientPlayPacket {
         this.chatColors = reader.readBoolean();
         this.displayedSkinParts = reader.readByte();
         this.mainHand = Player.MainHand.values()[reader.readVarInt()];
+        this.disableTextFiltering = reader.readBoolean();
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        if(locale.length() > 128)
+        if (locale.length() > 128)
             throw new IllegalArgumentException("Locale cannot be longer than 128 characters.");
         writer.writeSizedString(locale);
         writer.writeByte(viewDistance);
@@ -36,5 +38,6 @@ public class ClientSettingsPacket extends ClientPlayPacket {
         writer.writeBoolean(chatColors);
         writer.writeByte(displayedSkinParts);
         writer.writeVarInt(mainHand.ordinal());
+        writer.writeBoolean(disableTextFiltering);
     }
 }

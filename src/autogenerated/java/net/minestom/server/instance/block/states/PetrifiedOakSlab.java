@@ -19,11 +19,11 @@ public final class PetrifiedOakSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8364, "type=top", "waterlogged=true"));
-        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8365, "type=top", "waterlogged=false"));
-        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8366, "type=bottom", "waterlogged=true"));
-        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8367, "type=bottom", "waterlogged=false"));
-        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8368, "type=double", "waterlogged=true"));
-        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8369, "type=double", "waterlogged=false"));
+        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8610, "type=top", "waterlogged=true"));
+        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8611, "type=top", "waterlogged=false"));
+        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8612, "type=bottom", "waterlogged=true"));
+        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8613, "type=bottom", "waterlogged=false"));
+        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8614, "type=double", "waterlogged=true"));
+        Block.PETRIFIED_OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8615, "type=double", "waterlogged=false"));
     }
 }

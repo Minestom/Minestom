@@ -19,13 +19,13 @@ public final class SeaPickle {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9644, "pickles=1", "waterlogged=true"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9645, "pickles=1", "waterlogged=false"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9646, "pickles=2", "waterlogged=true"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9647, "pickles=2", "waterlogged=false"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9648, "pickles=3", "waterlogged=true"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9649, "pickles=3", "waterlogged=false"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9650, "pickles=4", "waterlogged=true"));
-        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9651, "pickles=4", "waterlogged=false"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9890, "pickles=1", "waterlogged=true"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9891, "pickles=1", "waterlogged=false"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9892, "pickles=2", "waterlogged=true"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9893, "pickles=2", "waterlogged=false"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9894, "pickles=3", "waterlogged=true"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9895, "pickles=3", "waterlogged=false"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9896, "pickles=4", "waterlogged=true"));
+        Block.SEA_PICKLE.addBlockAlternative(new BlockAlternative((short) 9897, "pickles=4", "waterlogged=false"));
     }
 }

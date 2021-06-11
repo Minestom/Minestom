@@ -19,7 +19,7 @@ public final class BirchPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3877, "powered=true"));
-        Block.BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3878, "powered=false"));
+        Block.BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3944, "powered=true"));
+        Block.BIRCH_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3945, "powered=false"));
     }
 }

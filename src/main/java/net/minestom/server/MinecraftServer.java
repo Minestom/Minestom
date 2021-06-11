@@ -66,9 +66,9 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.16.5";
+    public static final String VERSION_NAME = "1.17";
     public static final String VERSION_NAME_UNDERSCORED = VERSION_NAME.replace('.', '_');
-    public static final int PROTOCOL_VERSION = 754;
+    public static final int PROTOCOL_VERSION = 755;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";

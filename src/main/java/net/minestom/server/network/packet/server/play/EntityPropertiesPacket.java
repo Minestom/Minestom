@@ -19,12 +19,13 @@ public class EntityPropertiesPacket implements ServerPacket {
     public int entityId;
     public Property[] properties = new Property[0];
 
-    public EntityPropertiesPacket() {}
+    public EntityPropertiesPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeInt(properties.length);
+        writer.writeVarInt(properties.length);
         for (Property property : properties) {
             property.write(writer);
         }
@@ -33,7 +34,7 @@ public class EntityPropertiesPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         entityId = reader.readVarInt();
-        int propertyCount = reader.readInt();
+        int propertyCount = reader.readVarInt();
         properties = new Property[propertyCount];
         for (int i = 0; i < propertyCount; i++) {
             properties[i] = new Property();
@@ -75,7 +76,7 @@ public class EntityPropertiesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            String key = reader.readSizedString(Integer.MAX_VALUE);
+            String key = reader.readSizedString();
             attribute = Attribute.fromKey(key);
 
             value = reader.readDouble();

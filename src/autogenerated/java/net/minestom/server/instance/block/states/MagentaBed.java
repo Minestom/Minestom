@@ -19,21 +19,21 @@ public final class MagentaBed {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1081, "facing=north", "occupied=true", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1082, "facing=north", "occupied=true", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1083, "facing=north", "occupied=false", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1084, "facing=north", "occupied=false", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1085, "facing=south", "occupied=true", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1086, "facing=south", "occupied=true", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1087, "facing=south", "occupied=false", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1088, "facing=south", "occupied=false", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1089, "facing=west", "occupied=true", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1090, "facing=west", "occupied=true", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1091, "facing=west", "occupied=false", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1092, "facing=west", "occupied=false", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1093, "facing=east", "occupied=true", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1094, "facing=east", "occupied=true", "part=foot"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1095, "facing=east", "occupied=false", "part=head"));
-        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1096, "facing=east", "occupied=false", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1113, "facing=north", "occupied=true", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1114, "facing=north", "occupied=true", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1115, "facing=north", "occupied=false", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1116, "facing=north", "occupied=false", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1117, "facing=south", "occupied=true", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1118, "facing=south", "occupied=true", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1119, "facing=south", "occupied=false", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1120, "facing=south", "occupied=false", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1121, "facing=west", "occupied=true", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1122, "facing=west", "occupied=true", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1123, "facing=west", "occupied=false", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1124, "facing=west", "occupied=false", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1125, "facing=east", "occupied=true", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1126, "facing=east", "occupied=true", "part=foot"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1127, "facing=east", "occupied=false", "part=head"));
+        Block.MAGENTA_BED.addBlockAlternative(new BlockAlternative((short) 1128, "facing=east", "occupied=false", "part=foot"));
     }
 }

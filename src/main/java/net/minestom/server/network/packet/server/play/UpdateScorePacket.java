@@ -33,10 +33,10 @@ public class UpdateScorePacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        entityName = reader.readSizedString(Integer.MAX_VALUE);
+        entityName = reader.readSizedString();
         action = reader.readByte();
-        objectiveName = reader.readSizedString(Integer.MAX_VALUE);
-        if(action != 1) {
+        objectiveName = reader.readSizedString();
+        if (action != 1) {
             value = reader.readVarInt();
         }
     }

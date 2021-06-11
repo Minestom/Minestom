@@ -19,11 +19,11 @@ public final class BlackstoneSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16252, "type=top", "waterlogged=true"));
-        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16253, "type=top", "waterlogged=false"));
-        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16254, "type=bottom", "waterlogged=true"));
-        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16255, "type=bottom", "waterlogged=false"));
-        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16256, "type=double", "waterlogged=true"));
-        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16257, "type=double", "waterlogged=false"));
+        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16498, "type=top", "waterlogged=true"));
+        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16499, "type=top", "waterlogged=false"));
+        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16500, "type=bottom", "waterlogged=true"));
+        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16501, "type=bottom", "waterlogged=false"));
+        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16502, "type=double", "waterlogged=true"));
+        Block.BLACKSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 16503, "type=double", "waterlogged=false"));
     }
 }

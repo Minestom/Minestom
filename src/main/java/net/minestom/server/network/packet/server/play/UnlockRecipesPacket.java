@@ -62,14 +62,14 @@ public class UnlockRecipesPacket implements ServerPacket {
         int length = reader.readVarInt();
         recipesId = new String[length];
         for (int i = 0; i < length; i++) {
-            recipesId[i] = reader.readSizedString(Integer.MAX_VALUE);
+            recipesId[i] = reader.readSizedString();
         }
 
-        if(mode == 0) {
+        if (mode == 0) {
             int initRecipesLength = reader.readVarInt();
             initRecipesId = new String[initRecipesLength];
             for (int i = 0; i < length; i++) {
-                initRecipesId[i] = reader.readSizedString(Integer.MAX_VALUE);
+                initRecipesId[i] = reader.readSizedString();
             }
         }
     }

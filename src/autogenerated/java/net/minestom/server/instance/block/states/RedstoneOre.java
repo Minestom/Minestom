@@ -19,7 +19,7 @@ public final class RedstoneOre {
             forRemoval = false
     )
     public static void initStates() {
-        Block.REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3885, "lit=true"));
-        Block.REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3886, "lit=false"));
+        Block.REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3952, "lit=true"));
+        Block.REDSTONE_ORE.addBlockAlternative(new BlockAlternative((short) 3953, "lit=false"));
     }
 }

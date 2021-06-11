@@ -19,7 +19,7 @@ public final class FireCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9540, "waterlogged=true"));
-        Block.FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9541, "waterlogged=false"));
+        Block.FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9786, "waterlogged=true"));
+        Block.FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9787, "waterlogged=false"));
     }
 }

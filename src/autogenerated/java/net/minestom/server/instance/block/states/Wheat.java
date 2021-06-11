@@ -19,13 +19,13 @@ public final class Wheat {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3357, "age=0"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3358, "age=1"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3359, "age=2"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3360, "age=3"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3361, "age=4"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3362, "age=5"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3363, "age=6"));
-        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3364, "age=7"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3414, "age=0"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3415, "age=1"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3416, "age=2"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3417, "age=3"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3418, "age=4"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3419, "age=5"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3420, "age=6"));
+        Block.WHEAT.addBlockAlternative(new BlockAlternative((short) 3421, "age=7"));
     }
 }

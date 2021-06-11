@@ -32,8 +32,8 @@ public class DeclareRecipesPacket implements ServerPacket {
         int recipeCount = reader.readVarInt();
         recipes = new DeclaredRecipe[recipeCount];
         for (int i = 0; i < recipeCount; i++) {
-            String type = reader.readSizedString(Integer.MAX_VALUE);
-            String id = reader.readSizedString(Integer.MAX_VALUE);
+            String type = reader.readSizedString();
+            String id = reader.readSizedString();
 
             switch (type) {
                 case "crafting_shapeless":
@@ -136,7 +136,7 @@ public class DeclareRecipesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             int count = reader.readVarInt();
             ingredients = new Ingredient[count];
             for (int i = 0; i < count; i++) {
@@ -193,7 +193,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         public void read(@NotNull BinaryReader reader) {
             width = reader.readVarInt();
             height = reader.readVarInt();
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             ingredients = new Ingredient[width * height];
             for (int i = 0; i < width * height; i++) {
                 ingredients[i] = new Ingredient();
@@ -245,7 +245,7 @@ public class DeclareRecipesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
             result = reader.readItemStack();
@@ -296,7 +296,7 @@ public class DeclareRecipesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
             result = reader.readItemStack();
@@ -347,7 +347,7 @@ public class DeclareRecipesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
             result = reader.readItemStack();
@@ -398,7 +398,7 @@ public class DeclareRecipesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
             result = reader.readItemStack();
@@ -441,7 +441,7 @@ public class DeclareRecipesPacket implements ServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            group = reader.readSizedString(Integer.MAX_VALUE);
+            group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
             result = reader.readItemStack();

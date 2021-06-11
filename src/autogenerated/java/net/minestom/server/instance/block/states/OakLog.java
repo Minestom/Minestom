@@ -19,8 +19,8 @@ public final class OakLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.OAK_LOG.addBlockAlternative(new BlockAlternative((short) 73, "axis=x"));
-        Block.OAK_LOG.addBlockAlternative(new BlockAlternative((short) 74, "axis=y"));
-        Block.OAK_LOG.addBlockAlternative(new BlockAlternative((short) 75, "axis=z"));
+        Block.OAK_LOG.addBlockAlternative(new BlockAlternative((short) 76, "axis=x"));
+        Block.OAK_LOG.addBlockAlternative(new BlockAlternative((short) 77, "axis=y"));
+        Block.OAK_LOG.addBlockAlternative(new BlockAlternative((short) 78, "axis=z"));
     }
 }

@@ -19,8 +19,8 @@ public final class QuartzPillar {
             forRemoval = false
     )
     public static void initStates() {
-        Block.QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6744, "axis=x"));
-        Block.QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6745, "axis=y"));
-        Block.QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6746, "axis=z"));
+        Block.QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6946, "axis=x"));
+        Block.QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6947, "axis=y"));
+        Block.QUARTZ_PILLAR.addBlockAlternative(new BlockAlternative((short) 6948, "axis=z"));
     }
 }

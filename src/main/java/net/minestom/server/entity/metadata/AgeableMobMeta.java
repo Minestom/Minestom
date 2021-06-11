@@ -6,13 +6,15 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class AgeableMobMeta extends PathfinderMobMeta {
+    public static final byte OFFSET = PathfinderMobMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     protected AgeableMobMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     public boolean isBaby() {
-        return super.metadata.getIndex((byte) 15, false);
+        return super.metadata.getIndex(OFFSET, false);
     }
 
     public void setBaby(boolean value) {
@@ -25,7 +27,7 @@ public class AgeableMobMeta extends PathfinderMobMeta {
         } else {
             setBoundingBox(bb.getWidth() * 2, bb.getHeight() * 2);
         }
-        super.metadata.setIndex((byte) 15, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }
 
 }

@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
@@ -43,7 +42,7 @@ public class Metadata {
     }
 
     public static Value<String> String(@NotNull String value) {
-        return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), reader -> reader.readSizedString(Integer.MAX_VALUE));
+        return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), BinaryReader::readSizedString);
     }
 
     @Deprecated
@@ -71,7 +70,7 @@ public class Metadata {
     }
 
     public static Value<Component> Chat(@NotNull Component value) {
-        return new Value<>(TYPE_CHAT, value, writer -> writer.writeSizedString(AdventureSerializer.serialize(value)), reader -> reader.readComponent(Integer.MAX_VALUE));
+        return new Value<>(TYPE_CHAT, value, writer -> writer.writeComponent(value), BinaryReader::readComponent);
     }
 
     public static Value<Component> OptChat(@Nullable Component value) {
@@ -79,12 +78,12 @@ public class Metadata {
             final boolean present = value != null;
             writer.writeBoolean(present);
             if (present) {
-                writer.writeSizedString(AdventureSerializer.serialize(value));
+                writer.writeComponent(value);
             }
         }, reader -> {
             boolean present = reader.readBoolean();
             if (present) {
-                return reader.readComponent(Integer.MAX_VALUE);
+                return reader.readComponent();
             }
             return null;
         });
@@ -238,20 +237,20 @@ public class Metadata {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T getIndex(byte index, @Nullable T defaultValue) {
-        Entry<?> value = this.metadataMap.get(index);
+    public <T> T getIndex(int index, @Nullable T defaultValue) {
+        Entry<?> value = this.metadataMap.get((byte) index);
         return value != null ? (T) value.getMetaValue().value : defaultValue;
     }
 
-    public void setIndex(byte index, @NotNull Value<?> value) {
-        final Entry<?> entry = new Entry<>(index, value);
-        this.metadataMap.put(index, entry);
+    public void setIndex(int index, @NotNull Value<?> value) {
+        final Entry<?> entry = new Entry<>((byte) index, value);
+        this.metadataMap.put((byte) index, entry);
 
         // Send metadata packet to update viewers and self
         if (this.entity != null && this.entity.isActive()) {
             if (!this.notifyAboutChanges) {
                 synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
+                    this.notNotifiedChanges.put((byte) index, entry);
                 }
                 return;
             }

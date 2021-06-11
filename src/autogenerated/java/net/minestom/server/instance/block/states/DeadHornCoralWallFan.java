@@ -19,13 +19,13 @@ public final class DeadHornCoralWallFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9596, "facing=north", "waterlogged=true"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9597, "facing=north", "waterlogged=false"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9598, "facing=south", "waterlogged=true"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9599, "facing=south", "waterlogged=false"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9600, "facing=west", "waterlogged=true"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9601, "facing=west", "waterlogged=false"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9602, "facing=east", "waterlogged=true"));
-        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9603, "facing=east", "waterlogged=false"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9842, "facing=north", "waterlogged=true"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9843, "facing=north", "waterlogged=false"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9844, "facing=south", "waterlogged=true"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9845, "facing=south", "waterlogged=false"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9846, "facing=west", "waterlogged=true"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9847, "facing=west", "waterlogged=false"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9848, "facing=east", "waterlogged=true"));
+        Block.DEAD_HORN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9849, "facing=east", "waterlogged=false"));
     }
 }

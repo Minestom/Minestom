@@ -1,6 +1,8 @@
 package net.minestom.server.gamedata.tags;
 
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.util.HashSet;
@@ -38,7 +40,8 @@ public class Tag {
 
     /**
      * Creates a new tag with the contents of the container
-     * @param manager Used to load tag contents (as tags are valid values inside 'values')
+     *
+     * @param manager       Used to load tag contents (as tags are valid values inside 'values')
      * @param lowerPriority Tag contents from lower priority data packs. If 'replace' is false in 'container',
      *                      appends the contents of that pack to the one being constructed
      * @param container
@@ -46,12 +49,12 @@ public class Tag {
     public Tag(TagManager manager, NamespaceID name, String type, Tag lowerPriority, TagContainer container) throws FileNotFoundException {
         this.name = name;
         values = new HashSet<>();
-        if(!container.replace) {
+        if (!container.replace) {
             values.addAll(lowerPriority.values);
         }
         Objects.requireNonNull(container.values, "Attempted to load from a TagContainer with no 'values' array");
-        for(String line : container.values) {
-            if(line.startsWith("#")) { // pull contents from a tag
+        for (String line : container.values) {
+            if (line.startsWith("#")) { // pull contents from a tag
                 Tag subtag = manager.load(NamespaceID.from(line.substring(1)), type);
                 values.addAll(subtag.values);
             } else {
@@ -68,6 +71,7 @@ public class Tag {
 
     /**
      * Checks whether the given id in inside this tag
+     *
      * @param id the id to check against
      * @return 'true' iif this tag contains the given id
      */
@@ -77,6 +81,7 @@ public class Tag {
 
     /**
      * Returns an immutable set of values present in this tag
+     *
      * @return immutable set of values present in this tag
      */
     public Set<NamespaceID> getValues() {
@@ -85,6 +90,7 @@ public class Tag {
 
     /**
      * Returns the name of this tag
+     *
      * @return
      */
     public NamespaceID getName() {
@@ -92,9 +98,32 @@ public class Tag {
     }
 
     public enum BasicTypes {
-        BLOCKS,
-        ITEMS,
-        FLUIDS,
-        ENTITY_TYPES
+        BLOCKS("minecraft:block"),
+        ITEMS("minecraft:item"),
+        FLUIDS("minecraft:fluid"),
+        ENTITY_TYPES("minecraft:entity_type"),
+        GAME_EVENTS("minecraft:game_event");
+
+        private final static BasicTypes[] VALUES = values();
+        private final String identifier;
+
+        BasicTypes(@NotNull String identifier) {
+            this.identifier = identifier;
+        }
+
+        @NotNull
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        @Nullable
+        public static BasicTypes fromIdentifer(@NotNull String identifier) {
+            for (BasicTypes value : VALUES) {
+                if (value.identifier.equals(identifier)) {
+                    return value;
+                }
+            }
+            return null;
+        }
     }
 }

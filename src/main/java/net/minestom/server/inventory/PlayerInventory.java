@@ -311,13 +311,13 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     }
 
     @Override
-    public boolean drop(@NotNull Player player, int mode, int slot, int button) {
+    public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
         final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot, OFFSET);
 
         final InventoryClickResult clickResult = clickProcessor.drop(null, player,
-                mode, slot, button, clicked, cursor);
+                all, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);

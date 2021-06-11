@@ -1,15 +1,18 @@
 package net.minestom.server.instance.palette;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.clone.CloneUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import static net.minestom.server.instance.Chunk.CHUNK_SECTION_COUNT;
+import java.util.Collection;
+
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
 /**
@@ -20,7 +23,7 @@ import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
  */
 public class PaletteStorage implements PublicCloneable<PaletteStorage> {
 
-    private Section[] sections = new Section[CHUNK_SECTION_COUNT];
+    private Int2ObjectRBTreeMap<Section> sectionMap = new Int2ObjectRBTreeMap<>();
 
     private final int defaultBitsPerEntry;
     private final int defaultBitsIncrement;
@@ -39,28 +42,21 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
     }
 
     public void setBlockAt(int x, int y, int z, short blockId) {
-        if (!MathUtils.isBetween(y, 0, Chunk.CHUNK_SIZE_Y - 1)) {
-            return;
-        }
         final int sectionIndex = ChunkUtils.getSectionAt(y);
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
 
-        Section section = sections[sectionIndex];
+        Section section = getSection(sectionIndex);
         if (section == null) {
             section = new Section(defaultBitsPerEntry, defaultBitsIncrement);
-            sections[sectionIndex] = section;
+            setSection(sectionIndex, section);
         }
         section.setBlockAt(x, y, z, blockId);
     }
 
     public short getBlockAt(int x, int y, int z) {
-        if (y < 0 || y >= Chunk.CHUNK_SIZE_Y) {
-            return 0;
-        }
-
         final int sectionIndex = ChunkUtils.getSectionAt(y);
-        final Section section = sections[sectionIndex];
+        final Section section = getSection(sectionIndex);
         if (section == null) {
             return 0;
         }
@@ -70,8 +66,16 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
         return section.getBlockAt(x, y, z);
     }
 
-    public Section[] getSections() {
-        return sections;
+    public Int2ObjectRBTreeMap<Section> getSectionMap() {
+        return sectionMap;
+    }
+
+    public @Nullable Collection<Section> getSections() {
+        return sectionMap.values();
+    }
+
+    public @Nullable Section getSection(int section) {
+        return sectionMap.get(section);
     }
 
     /**
@@ -81,18 +85,14 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
      * is composed of almost-empty sections since the loop will not stop until a non-air block is discovered.
      */
     public synchronized void clean() {
-        for (Section section : sections) {
-            section.clean();
-        }
+        getSections().forEach(Section::clean);
     }
 
     /**
      * Clears all the data in the palette and data array.
      */
     public void clear() {
-        for (Section section : sections) {
-            section.clear();
-        }
+        getSections().forEach(Section::clear);
     }
 
     @NotNull
@@ -100,12 +100,17 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
     public PaletteStorage clone() {
         try {
             PaletteStorage paletteStorage = (PaletteStorage) super.clone();
-            paletteStorage.sections = CloneUtils.cloneArray(sections, Section[]::new);
+            // TODO deep clone
+            paletteStorage.sectionMap = sectionMap.clone();//CloneUtils.cloneArray(sections, Section[]::new);
             return paletteStorage;
         } catch (CloneNotSupportedException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
+    }
+
+    private void setSection(int sectionIndex, Section section) {
+        this.sectionMap.put(sectionIndex, section);
     }
 
     /**
@@ -122,5 +127,4 @@ public class PaletteStorage implements PublicCloneable<PaletteStorage> {
 
         return xz;
     }
-
 }

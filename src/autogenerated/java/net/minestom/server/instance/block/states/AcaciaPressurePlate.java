@@ -19,7 +19,7 @@ public final class AcaciaPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3881, "powered=true"));
-        Block.ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3882, "powered=false"));
+        Block.ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3948, "powered=true"));
+        Block.ACACIA_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3949, "powered=false"));
     }
 }

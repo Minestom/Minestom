@@ -19,8 +19,8 @@ public final class StrippedJungleWood {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 136, "axis=x"));
-        Block.STRIPPED_JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 137, "axis=y"));
-        Block.STRIPPED_JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 138, "axis=z"));
+        Block.STRIPPED_JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 139, "axis=x"));
+        Block.STRIPPED_JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 140, "axis=y"));
+        Block.STRIPPED_JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 141, "axis=z"));
     }
 }

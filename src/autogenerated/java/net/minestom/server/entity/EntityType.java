@@ -11,6 +11,7 @@ import net.minestom.server.entity.metadata.animal.ChickenMeta;
 import net.minestom.server.entity.metadata.animal.CowMeta;
 import net.minestom.server.entity.metadata.animal.DonkeyMeta;
 import net.minestom.server.entity.metadata.animal.FoxMeta;
+import net.minestom.server.entity.metadata.animal.GoatMeta;
 import net.minestom.server.entity.metadata.animal.HoglinMeta;
 import net.minestom.server.entity.metadata.animal.HorseMeta;
 import net.minestom.server.entity.metadata.animal.LlamaMeta;
@@ -93,11 +94,13 @@ import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
 import net.minestom.server.entity.metadata.other.FallingBlockMeta;
 import net.minestom.server.entity.metadata.other.FireworkRocketMeta;
 import net.minestom.server.entity.metadata.other.FishingHookMeta;
+import net.minestom.server.entity.metadata.other.GlowItemFrameMeta;
 import net.minestom.server.entity.metadata.other.ItemFrameMeta;
 import net.minestom.server.entity.metadata.other.LeashKnotMeta;
 import net.minestom.server.entity.metadata.other.LightningBoltMeta;
 import net.minestom.server.entity.metadata.other.LlamaSpitMeta;
 import net.minestom.server.entity.metadata.other.MagmaCubeMeta;
+import net.minestom.server.entity.metadata.other.MarkerMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.entity.metadata.other.PrimedTntMeta;
 import net.minestom.server.entity.metadata.other.ShulkerBulletMeta;
@@ -106,7 +109,9 @@ import net.minestom.server.entity.metadata.other.TraderLlamaMeta;
 import net.minestom.server.entity.metadata.other.WitherSkullMeta;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.entity.metadata.villager.WanderingTraderMeta;
+import net.minestom.server.entity.metadata.water.AxolotlMeta;
 import net.minestom.server.entity.metadata.water.DolphinMeta;
+import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.CodMeta;
 import net.minestom.server.entity.metadata.water.fish.PufferfishMeta;
@@ -126,6 +131,8 @@ public enum EntityType implements Keyed {
     ARMOR_STAND(NamespaceID.from("minecraft:armor_stand"), 0.5, 1.975, ArmorStandMeta::new, EntitySpawnType.LIVING),
 
     ARROW(NamespaceID.from("minecraft:arrow"), 0.5, 0.5, ArrowMeta::new, EntitySpawnType.BASE),
+
+    AXOLOTL(NamespaceID.from("minecraft:axolotl"), 0.75, 0.42, AxolotlMeta::new, EntitySpawnType.LIVING),
 
     BAT(NamespaceID.from("minecraft:bat"), 0.5, 0.9, BatMeta::new, EntitySpawnType.LIVING),
 
@@ -183,6 +190,12 @@ public enum EntityType implements Keyed {
 
     GIANT(NamespaceID.from("minecraft:giant"), 3.6, 12.0, GiantMeta::new, EntitySpawnType.LIVING),
 
+    GLOW_ITEM_FRAME(NamespaceID.from("minecraft:glow_item_frame"), 0.5, 0.5, GlowItemFrameMeta::new, EntitySpawnType.BASE),
+
+    GLOW_SQUID(NamespaceID.from("minecraft:glow_squid"), 0.8, 0.8, GlowSquidMeta::new, EntitySpawnType.LIVING),
+
+    GOAT(NamespaceID.from("minecraft:goat"), 0.9, 1.3, GoatMeta::new, EntitySpawnType.LIVING),
+
     GUARDIAN(NamespaceID.from("minecraft:guardian"), 0.85, 0.85, GuardianMeta::new, EntitySpawnType.LIVING),
 
     HOGLIN(NamespaceID.from("minecraft:hoglin"), 1.3964844, 1.4, HoglinMeta::new, EntitySpawnType.LIVING),
@@ -201,7 +214,7 @@ public enum EntityType implements Keyed {
 
     FIREBALL(NamespaceID.from("minecraft:fireball"), 1.0, 1.0, FireballMeta::new, EntitySpawnType.BASE),
 
-    LEASH_KNOT(NamespaceID.from("minecraft:leash_knot"), 0.5, 0.5, LeashKnotMeta::new, EntitySpawnType.BASE),
+    LEASH_KNOT(NamespaceID.from("minecraft:leash_knot"), 0.375, 0.5, LeashKnotMeta::new, EntitySpawnType.BASE),
 
     LIGHTNING_BOLT(NamespaceID.from("minecraft:lightning_bolt"), 0.0, 0.0, LightningBoltMeta::new, EntitySpawnType.BASE),
 
@@ -210,6 +223,8 @@ public enum EntityType implements Keyed {
     LLAMA_SPIT(NamespaceID.from("minecraft:llama_spit"), 0.25, 0.25, LlamaSpitMeta::new, EntitySpawnType.BASE),
 
     MAGMA_CUBE(NamespaceID.from("minecraft:magma_cube"), 2.04, 2.04, MagmaCubeMeta::new, EntitySpawnType.LIVING),
+
+    MARKER(NamespaceID.from("minecraft:marker"), 0.0, 0.0, MarkerMeta::new, EntitySpawnType.BASE),
 
     MINECART(NamespaceID.from("minecraft:minecart"), 0.98, 0.7, MinecartMeta::new, EntitySpawnType.BASE),
 

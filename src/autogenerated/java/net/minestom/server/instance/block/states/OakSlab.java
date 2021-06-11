@@ -19,11 +19,11 @@ public final class OakSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8304, "type=top", "waterlogged=true"));
-        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8305, "type=top", "waterlogged=false"));
-        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8306, "type=bottom", "waterlogged=true"));
-        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8307, "type=bottom", "waterlogged=false"));
-        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8308, "type=double", "waterlogged=true"));
-        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8309, "type=double", "waterlogged=false"));
+        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8550, "type=top", "waterlogged=true"));
+        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8551, "type=top", "waterlogged=false"));
+        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8552, "type=bottom", "waterlogged=true"));
+        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8553, "type=bottom", "waterlogged=false"));
+        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8554, "type=double", "waterlogged=true"));
+        Block.OAK_SLAB.addBlockAlternative(new BlockAlternative((short) 8555, "type=double", "waterlogged=false"));
     }
 }

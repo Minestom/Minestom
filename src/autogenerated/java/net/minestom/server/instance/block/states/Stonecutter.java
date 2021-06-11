@@ -19,9 +19,9 @@ public final class Stonecutter {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14854, "facing=north"));
-        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14855, "facing=south"));
-        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14856, "facing=west"));
-        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 14857, "facing=east"));
+        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 15100, "facing=north"));
+        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 15101, "facing=south"));
+        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 15102, "facing=west"));
+        Block.STONECUTTER.addBlockAlternative(new BlockAlternative((short) 15103, "facing=east"));
     }
 }

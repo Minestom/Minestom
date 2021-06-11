@@ -29,6 +29,18 @@ public enum Material implements Keyed {
 
     POLISHED_ANDESITE(NamespaceID.from("minecraft:polished_andesite"), (byte) 64, () -> Registries.getBlock("minecraft:polished_andesite")),
 
+    DEEPSLATE(NamespaceID.from("minecraft:deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate")),
+
+    COBBLED_DEEPSLATE(NamespaceID.from("minecraft:cobbled_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate")),
+
+    POLISHED_DEEPSLATE(NamespaceID.from("minecraft:polished_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate")),
+
+    CALCITE(NamespaceID.from("minecraft:calcite"), (byte) 64, () -> Registries.getBlock("minecraft:calcite")),
+
+    TUFF(NamespaceID.from("minecraft:tuff"), (byte) 64, () -> Registries.getBlock("minecraft:tuff")),
+
+    DRIPSTONE_BLOCK(NamespaceID.from("minecraft:dripstone_block"), (byte) 64, () -> Registries.getBlock("minecraft:dripstone_block")),
+
     GRASS_BLOCK(NamespaceID.from("minecraft:grass_block"), (byte) 64, () -> Registries.getBlock("minecraft:grass_block")),
 
     DIRT(NamespaceID.from("minecraft:dirt"), (byte) 64, () -> Registries.getBlock("minecraft:dirt")),
@@ -36,6 +48,8 @@ public enum Material implements Keyed {
     COARSE_DIRT(NamespaceID.from("minecraft:coarse_dirt"), (byte) 64, () -> Registries.getBlock("minecraft:coarse_dirt")),
 
     PODZOL(NamespaceID.from("minecraft:podzol"), (byte) 64, () -> Registries.getBlock("minecraft:podzol")),
+
+    ROOTED_DIRT(NamespaceID.from("minecraft:rooted_dirt"), (byte) 64, () -> Registries.getBlock("minecraft:rooted_dirt")),
 
     CRIMSON_NYLIUM(NamespaceID.from("minecraft:crimson_nylium"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_nylium")),
 
@@ -79,13 +93,127 @@ public enum Material implements Keyed {
 
     GRAVEL(NamespaceID.from("minecraft:gravel"), (byte) 64, () -> Registries.getBlock("minecraft:gravel")),
 
-    GOLD_ORE(NamespaceID.from("minecraft:gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:gold_ore")),
+    COAL_ORE(NamespaceID.from("minecraft:coal_ore"), (byte) 64, () -> Registries.getBlock("minecraft:coal_ore")),
+
+    DEEPSLATE_COAL_ORE(NamespaceID.from("minecraft:deepslate_coal_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_coal_ore")),
 
     IRON_ORE(NamespaceID.from("minecraft:iron_ore"), (byte) 64, () -> Registries.getBlock("minecraft:iron_ore")),
 
-    COAL_ORE(NamespaceID.from("minecraft:coal_ore"), (byte) 64, () -> Registries.getBlock("minecraft:coal_ore")),
+    DEEPSLATE_IRON_ORE(NamespaceID.from("minecraft:deepslate_iron_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_iron_ore")),
+
+    COPPER_ORE(NamespaceID.from("minecraft:copper_ore"), (byte) 64, () -> Registries.getBlock("minecraft:copper_ore")),
+
+    DEEPSLATE_COPPER_ORE(NamespaceID.from("minecraft:deepslate_copper_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_copper_ore")),
+
+    GOLD_ORE(NamespaceID.from("minecraft:gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:gold_ore")),
+
+    DEEPSLATE_GOLD_ORE(NamespaceID.from("minecraft:deepslate_gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_gold_ore")),
+
+    REDSTONE_ORE(NamespaceID.from("minecraft:redstone_ore"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_ore")),
+
+    DEEPSLATE_REDSTONE_ORE(NamespaceID.from("minecraft:deepslate_redstone_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_redstone_ore")),
+
+    EMERALD_ORE(NamespaceID.from("minecraft:emerald_ore"), (byte) 64, () -> Registries.getBlock("minecraft:emerald_ore")),
+
+    DEEPSLATE_EMERALD_ORE(NamespaceID.from("minecraft:deepslate_emerald_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_emerald_ore")),
+
+    LAPIS_ORE(NamespaceID.from("minecraft:lapis_ore"), (byte) 64, () -> Registries.getBlock("minecraft:lapis_ore")),
+
+    DEEPSLATE_LAPIS_ORE(NamespaceID.from("minecraft:deepslate_lapis_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_lapis_ore")),
+
+    DIAMOND_ORE(NamespaceID.from("minecraft:diamond_ore"), (byte) 64, () -> Registries.getBlock("minecraft:diamond_ore")),
+
+    DEEPSLATE_DIAMOND_ORE(NamespaceID.from("minecraft:deepslate_diamond_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_diamond_ore")),
 
     NETHER_GOLD_ORE(NamespaceID.from("minecraft:nether_gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:nether_gold_ore")),
+
+    NETHER_QUARTZ_ORE(NamespaceID.from("minecraft:nether_quartz_ore"), (byte) 64, () -> Registries.getBlock("minecraft:nether_quartz_ore")),
+
+    ANCIENT_DEBRIS(NamespaceID.from("minecraft:ancient_debris"), (byte) 64, () -> Registries.getBlock("minecraft:ancient_debris")),
+
+    COAL_BLOCK(NamespaceID.from("minecraft:coal_block"), (byte) 64, () -> Registries.getBlock("minecraft:coal_block")),
+
+    RAW_IRON_BLOCK(NamespaceID.from("minecraft:raw_iron_block"), (byte) 64, () -> Registries.getBlock("minecraft:raw_iron_block")),
+
+    RAW_COPPER_BLOCK(NamespaceID.from("minecraft:raw_copper_block"), (byte) 64, () -> Registries.getBlock("minecraft:raw_copper_block")),
+
+    RAW_GOLD_BLOCK(NamespaceID.from("minecraft:raw_gold_block"), (byte) 64, () -> Registries.getBlock("minecraft:raw_gold_block")),
+
+    AMETHYST_BLOCK(NamespaceID.from("minecraft:amethyst_block"), (byte) 64, () -> Registries.getBlock("minecraft:amethyst_block")),
+
+    BUDDING_AMETHYST(NamespaceID.from("minecraft:budding_amethyst"), (byte) 64, () -> Registries.getBlock("minecraft:budding_amethyst")),
+
+    IRON_BLOCK(NamespaceID.from("minecraft:iron_block"), (byte) 64, () -> Registries.getBlock("minecraft:iron_block")),
+
+    COPPER_BLOCK(NamespaceID.from("minecraft:copper_block"), (byte) 64, () -> Registries.getBlock("minecraft:copper_block")),
+
+    GOLD_BLOCK(NamespaceID.from("minecraft:gold_block"), (byte) 64, () -> Registries.getBlock("minecraft:gold_block")),
+
+    DIAMOND_BLOCK(NamespaceID.from("minecraft:diamond_block"), (byte) 64, () -> Registries.getBlock("minecraft:diamond_block")),
+
+    NETHERITE_BLOCK(NamespaceID.from("minecraft:netherite_block"), (byte) 64, () -> Registries.getBlock("minecraft:netherite_block")),
+
+    EXPOSED_COPPER(NamespaceID.from("minecraft:exposed_copper"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_copper")),
+
+    WEATHERED_COPPER(NamespaceID.from("minecraft:weathered_copper"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_copper")),
+
+    OXIDIZED_COPPER(NamespaceID.from("minecraft:oxidized_copper"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_copper")),
+
+    CUT_COPPER(NamespaceID.from("minecraft:cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:cut_copper")),
+
+    EXPOSED_CUT_COPPER(NamespaceID.from("minecraft:exposed_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_cut_copper")),
+
+    WEATHERED_CUT_COPPER(NamespaceID.from("minecraft:weathered_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_cut_copper")),
+
+    OXIDIZED_CUT_COPPER(NamespaceID.from("minecraft:oxidized_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_cut_copper")),
+
+    CUT_COPPER_STAIRS(NamespaceID.from("minecraft:cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:cut_copper_stairs")),
+
+    EXPOSED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:exposed_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_cut_copper_stairs")),
+
+    WEATHERED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:weathered_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_cut_copper_stairs")),
+
+    OXIDIZED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:oxidized_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_cut_copper_stairs")),
+
+    CUT_COPPER_SLAB(NamespaceID.from("minecraft:cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cut_copper_slab")),
+
+    EXPOSED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:exposed_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_cut_copper_slab")),
+
+    WEATHERED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:weathered_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_cut_copper_slab")),
+
+    OXIDIZED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:oxidized_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_cut_copper_slab")),
+
+    WAXED_COPPER_BLOCK(NamespaceID.from("minecraft:waxed_copper_block"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_copper_block")),
+
+    WAXED_EXPOSED_COPPER(NamespaceID.from("minecraft:waxed_exposed_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_copper")),
+
+    WAXED_WEATHERED_COPPER(NamespaceID.from("minecraft:waxed_weathered_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_copper")),
+
+    WAXED_OXIDIZED_COPPER(NamespaceID.from("minecraft:waxed_oxidized_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_copper")),
+
+    WAXED_CUT_COPPER(NamespaceID.from("minecraft:waxed_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_cut_copper")),
+
+    WAXED_EXPOSED_CUT_COPPER(NamespaceID.from("minecraft:waxed_exposed_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_cut_copper")),
+
+    WAXED_WEATHERED_CUT_COPPER(NamespaceID.from("minecraft:waxed_weathered_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_cut_copper")),
+
+    WAXED_OXIDIZED_CUT_COPPER(NamespaceID.from("minecraft:waxed_oxidized_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_cut_copper")),
+
+    WAXED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_cut_copper_stairs")),
+
+    WAXED_EXPOSED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_exposed_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_cut_copper_stairs")),
+
+    WAXED_WEATHERED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_weathered_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_cut_copper_stairs")),
+
+    WAXED_OXIDIZED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_oxidized_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_cut_copper_stairs")),
+
+    WAXED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_cut_copper_slab")),
+
+    WAXED_EXPOSED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_exposed_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_cut_copper_slab")),
+
+    WAXED_WEATHERED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_weathered_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_cut_copper_slab")),
+
+    WAXED_OXIDIZED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_oxidized_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_cut_copper_slab")),
 
     OAK_LOG(NamespaceID.from("minecraft:oak_log"), (byte) 64, () -> Registries.getBlock("minecraft:oak_log")),
 
@@ -163,17 +291,19 @@ public enum Material implements Keyed {
 
     DARK_OAK_LEAVES(NamespaceID.from("minecraft:dark_oak_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_leaves")),
 
+    AZALEA_LEAVES(NamespaceID.from("minecraft:azalea_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:azalea_leaves")),
+
+    AZALEA_LEAVES_FLOWERS(NamespaceID.from("minecraft:flowering_azalea_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:flowering_azalea_leaves")),
+
     SPONGE(NamespaceID.from("minecraft:sponge"), (byte) 64, () -> Registries.getBlock("minecraft:sponge")),
 
     WET_SPONGE(NamespaceID.from("minecraft:wet_sponge"), (byte) 64, () -> Registries.getBlock("minecraft:wet_sponge")),
 
     GLASS(NamespaceID.from("minecraft:glass"), (byte) 64, () -> Registries.getBlock("minecraft:glass")),
 
-    LAPIS_ORE(NamespaceID.from("minecraft:lapis_ore"), (byte) 64, () -> Registries.getBlock("minecraft:lapis_ore")),
+    TINTED_GLASS(NamespaceID.from("minecraft:tinted_glass"), (byte) 64, () -> Registries.getBlock("minecraft:tinted_glass")),
 
     LAPIS_BLOCK(NamespaceID.from("minecraft:lapis_block"), (byte) 64, () -> Registries.getBlock("minecraft:lapis_block")),
-
-    DISPENSER(NamespaceID.from("minecraft:dispenser"), (byte) 64, () -> Registries.getBlock("minecraft:dispenser")),
 
     SANDSTONE(NamespaceID.from("minecraft:sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:sandstone")),
 
@@ -181,27 +311,21 @@ public enum Material implements Keyed {
 
     CUT_SANDSTONE(NamespaceID.from("minecraft:cut_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:cut_sandstone")),
 
-    NOTE_BLOCK(NamespaceID.from("minecraft:note_block"), (byte) 64, () -> Registries.getBlock("minecraft:note_block")),
-
-    POWERED_RAIL(NamespaceID.from("minecraft:powered_rail"), (byte) 64, () -> Registries.getBlock("minecraft:powered_rail")),
-
-    DETECTOR_RAIL(NamespaceID.from("minecraft:detector_rail"), (byte) 64, () -> Registries.getBlock("minecraft:detector_rail")),
-
-    STICKY_PISTON(NamespaceID.from("minecraft:sticky_piston"), (byte) 64, () -> Registries.getBlock("minecraft:sticky_piston")),
-
     COBWEB(NamespaceID.from("minecraft:cobweb"), (byte) 64, () -> Registries.getBlock("minecraft:cobweb")),
 
     GRASS(NamespaceID.from("minecraft:grass"), (byte) 64, () -> Registries.getBlock("minecraft:grass")),
 
     FERN(NamespaceID.from("minecraft:fern"), (byte) 64, () -> Registries.getBlock("minecraft:fern")),
 
+    AZALEA(NamespaceID.from("minecraft:azalea"), (byte) 64, () -> Registries.getBlock("minecraft:azalea")),
+
+    FLOWERING_AZALEA(NamespaceID.from("minecraft:flowering_azalea"), (byte) 64, () -> Registries.getBlock("minecraft:flowering_azalea")),
+
     DEAD_BUSH(NamespaceID.from("minecraft:dead_bush"), (byte) 64, () -> Registries.getBlock("minecraft:dead_bush")),
 
     SEAGRASS(NamespaceID.from("minecraft:seagrass"), (byte) 64, () -> Registries.getBlock("minecraft:seagrass")),
 
     SEA_PICKLE(NamespaceID.from("minecraft:sea_pickle"), (byte) 64, () -> Registries.getBlock("minecraft:sea_pickle")),
-
-    PISTON(NamespaceID.from("minecraft:piston"), (byte) 64, () -> Registries.getBlock("minecraft:piston")),
 
     WHITE_WOOL(NamespaceID.from("minecraft:white_wool"), (byte) 64, () -> Registries.getBlock("minecraft:white_wool")),
 
@@ -261,6 +385,8 @@ public enum Material implements Keyed {
 
     WITHER_ROSE(NamespaceID.from("minecraft:wither_rose"), (byte) 64, () -> Registries.getBlock("minecraft:wither_rose")),
 
+    SPORE_BLOSSOM(NamespaceID.from("minecraft:spore_blossom"), (byte) 64, () -> Registries.getBlock("minecraft:spore_blossom")),
+
     BROWN_MUSHROOM(NamespaceID.from("minecraft:brown_mushroom"), (byte) 64, () -> Registries.getBlock("minecraft:brown_mushroom")),
 
     RED_MUSHROOM(NamespaceID.from("minecraft:red_mushroom"), (byte) 64, () -> Registries.getBlock("minecraft:red_mushroom")),
@@ -283,11 +409,17 @@ public enum Material implements Keyed {
 
     KELP(NamespaceID.from("minecraft:kelp"), (byte) 64, () -> Registries.getBlock("minecraft:kelp")),
 
+    MOSS_CARPET(NamespaceID.from("minecraft:moss_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:moss_carpet")),
+
+    MOSS_BLOCK(NamespaceID.from("minecraft:moss_block"), (byte) 64, () -> Registries.getBlock("minecraft:moss_block")),
+
+    HANGING_ROOTS(NamespaceID.from("minecraft:hanging_roots"), (byte) 64, () -> Registries.getBlock("minecraft:hanging_roots")),
+
+    BIG_DRIPLEAF(NamespaceID.from("minecraft:big_dripleaf"), (byte) 64, () -> Registries.getBlock("minecraft:big_dripleaf")),
+
+    SMALL_DRIPLEAF(NamespaceID.from("minecraft:small_dripleaf"), (byte) 64, () -> Registries.getBlock("minecraft:small_dripleaf")),
+
     BAMBOO(NamespaceID.from("minecraft:bamboo"), (byte) 64, () -> Registries.getBlock("minecraft:bamboo")),
-
-    GOLD_BLOCK(NamespaceID.from("minecraft:gold_block"), (byte) 64, () -> Registries.getBlock("minecraft:gold_block")),
-
-    IRON_BLOCK(NamespaceID.from("minecraft:iron_block"), (byte) 64, () -> Registries.getBlock("minecraft:iron_block")),
 
     OAK_SLAB(NamespaceID.from("minecraft:oak_slab"), (byte) 64, () -> Registries.getBlock("minecraft:oak_slab")),
 
@@ -347,8 +479,6 @@ public enum Material implements Keyed {
 
     BRICKS(NamespaceID.from("minecraft:bricks"), (byte) 64, () -> Registries.getBlock("minecraft:bricks")),
 
-    TNT(NamespaceID.from("minecraft:tnt"), (byte) 64, () -> Registries.getBlock("minecraft:tnt")),
-
     BOOKSHELF(NamespaceID.from("minecraft:bookshelf"), (byte) 64, () -> Registries.getBlock("minecraft:bookshelf")),
 
     MOSSY_COBBLESTONE(NamespaceID.from("minecraft:mossy_cobblestone"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_cobblestone")),
@@ -375,10 +505,6 @@ public enum Material implements Keyed {
 
     CHEST(NamespaceID.from("minecraft:chest"), (byte) 64, () -> Registries.getBlock("minecraft:chest")),
 
-    DIAMOND_ORE(NamespaceID.from("minecraft:diamond_ore"), (byte) 64, () -> Registries.getBlock("minecraft:diamond_ore")),
-
-    DIAMOND_BLOCK(NamespaceID.from("minecraft:diamond_block"), (byte) 64, () -> Registries.getBlock("minecraft:diamond_block")),
-
     CRAFTING_TABLE(NamespaceID.from("minecraft:crafting_table"), (byte) 64, () -> Registries.getBlock("minecraft:crafting_table")),
 
     FARMLAND(NamespaceID.from("minecraft:farmland"), (byte) 64, () -> Registries.getBlock("minecraft:farmland")),
@@ -387,35 +513,7 @@ public enum Material implements Keyed {
 
     LADDER(NamespaceID.from("minecraft:ladder"), (byte) 64, () -> Registries.getBlock("minecraft:ladder")),
 
-    RAIL(NamespaceID.from("minecraft:rail"), (byte) 64, () -> Registries.getBlock("minecraft:rail")),
-
     COBBLESTONE_STAIRS(NamespaceID.from("minecraft:cobblestone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:cobblestone_stairs")),
-
-    LEVER(NamespaceID.from("minecraft:lever"), (byte) 64, () -> Registries.getBlock("minecraft:lever")),
-
-    STONE_PRESSURE_PLATE(NamespaceID.from("minecraft:stone_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:stone_pressure_plate")),
-
-    OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:oak_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:oak_pressure_plate")),
-
-    SPRUCE_PRESSURE_PLATE(NamespaceID.from("minecraft:spruce_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_pressure_plate")),
-
-    BIRCH_PRESSURE_PLATE(NamespaceID.from("minecraft:birch_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:birch_pressure_plate")),
-
-    JUNGLE_PRESSURE_PLATE(NamespaceID.from("minecraft:jungle_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_pressure_plate")),
-
-    ACACIA_PRESSURE_PLATE(NamespaceID.from("minecraft:acacia_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_pressure_plate")),
-
-    DARK_OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:dark_oak_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_pressure_plate")),
-
-    CRIMSON_PRESSURE_PLATE(NamespaceID.from("minecraft:crimson_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_pressure_plate")),
-
-    WARPED_PRESSURE_PLATE(NamespaceID.from("minecraft:warped_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:warped_pressure_plate")),
-
-    POLISHED_BLACKSTONE_PRESSURE_PLATE(NamespaceID.from("minecraft:polished_blackstone_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_pressure_plate")),
-
-    REDSTONE_ORE(NamespaceID.from("minecraft:redstone_ore"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_ore")),
-
-    REDSTONE_TORCH(NamespaceID.from("minecraft:redstone_torch"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_torch")),
 
     SNOW(NamespaceID.from("minecraft:snow"), (byte) 64, () -> Registries.getBlock("minecraft:snow")),
 
@@ -449,6 +547,8 @@ public enum Material implements Keyed {
 
     CARVED_PUMPKIN(NamespaceID.from("minecraft:carved_pumpkin"), (byte) 64, () -> Registries.getBlock("minecraft:carved_pumpkin")),
 
+    JACK_O_LANTERN(NamespaceID.from("minecraft:jack_o_lantern"), (byte) 64, () -> Registries.getBlock("minecraft:jack_o_lantern")),
+
     NETHERRACK(NamespaceID.from("minecraft:netherrack"), (byte) 64, () -> Registries.getBlock("minecraft:netherrack")),
 
     SOUL_SAND(NamespaceID.from("minecraft:soul_sand"), (byte) 64, () -> Registries.getBlock("minecraft:soul_sand")),
@@ -459,27 +559,11 @@ public enum Material implements Keyed {
 
     POLISHED_BASALT(NamespaceID.from("minecraft:polished_basalt"), (byte) 64, () -> Registries.getBlock("minecraft:polished_basalt")),
 
+    SMOOTH_BASALT(NamespaceID.from("minecraft:smooth_basalt"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_basalt")),
+
     SOUL_TORCH(NamespaceID.from("minecraft:soul_torch"), (byte) 64, () -> Registries.getBlock("minecraft:soul_torch")),
 
     GLOWSTONE(NamespaceID.from("minecraft:glowstone"), (byte) 64, () -> Registries.getBlock("minecraft:glowstone")),
-
-    JACK_O_LANTERN(NamespaceID.from("minecraft:jack_o_lantern"), (byte) 64, () -> Registries.getBlock("minecraft:jack_o_lantern")),
-
-    OAK_TRAPDOOR(NamespaceID.from("minecraft:oak_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:oak_trapdoor")),
-
-    SPRUCE_TRAPDOOR(NamespaceID.from("minecraft:spruce_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_trapdoor")),
-
-    BIRCH_TRAPDOOR(NamespaceID.from("minecraft:birch_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:birch_trapdoor")),
-
-    JUNGLE_TRAPDOOR(NamespaceID.from("minecraft:jungle_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_trapdoor")),
-
-    ACACIA_TRAPDOOR(NamespaceID.from("minecraft:acacia_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_trapdoor")),
-
-    DARK_OAK_TRAPDOOR(NamespaceID.from("minecraft:dark_oak_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_trapdoor")),
-
-    CRIMSON_TRAPDOOR(NamespaceID.from("minecraft:crimson_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_trapdoor")),
-
-    WARPED_TRAPDOOR(NamespaceID.from("minecraft:warped_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:warped_trapdoor")),
 
     INFESTED_STONE(NamespaceID.from("minecraft:infested_stone"), (byte) 64, () -> Registries.getBlock("minecraft:infested_stone")),
 
@@ -493,6 +577,8 @@ public enum Material implements Keyed {
 
     INFESTED_CHISELED_STONE_BRICKS(NamespaceID.from("minecraft:infested_chiseled_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:infested_chiseled_stone_bricks")),
 
+    INFESTED_DEEPSLATE(NamespaceID.from("minecraft:infested_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:infested_deepslate")),
+
     STONE_BRICKS(NamespaceID.from("minecraft:stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:stone_bricks")),
 
     MOSSY_STONE_BRICKS(NamespaceID.from("minecraft:mossy_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_stone_bricks")),
@@ -500,6 +586,16 @@ public enum Material implements Keyed {
     CRACKED_STONE_BRICKS(NamespaceID.from("minecraft:cracked_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_stone_bricks")),
 
     CHISELED_STONE_BRICKS(NamespaceID.from("minecraft:chiseled_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_stone_bricks")),
+
+    DEEPSLATE_BRICKS(NamespaceID.from("minecraft:deepslate_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_bricks")),
+
+    CRACKED_DEEPSLATE_BRICKS(NamespaceID.from("minecraft:cracked_deepslate_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_deepslate_bricks")),
+
+    DEEPSLATE_TILES(NamespaceID.from("minecraft:deepslate_tiles"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tiles")),
+
+    CRACKED_DEEPSLATE_TILES(NamespaceID.from("minecraft:cracked_deepslate_tiles"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_deepslate_tiles")),
+
+    CHISELED_DEEPSLATE(NamespaceID.from("minecraft:chiseled_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_deepslate")),
 
     BROWN_MUSHROOM_BLOCK(NamespaceID.from("minecraft:brown_mushroom_block"), (byte) 64, () -> Registries.getBlock("minecraft:brown_mushroom_block")),
 
@@ -517,21 +613,7 @@ public enum Material implements Keyed {
 
     VINE(NamespaceID.from("minecraft:vine"), (byte) 64, () -> Registries.getBlock("minecraft:vine")),
 
-    OAK_FENCE_GATE(NamespaceID.from("minecraft:oak_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:oak_fence_gate")),
-
-    SPRUCE_FENCE_GATE(NamespaceID.from("minecraft:spruce_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_fence_gate")),
-
-    BIRCH_FENCE_GATE(NamespaceID.from("minecraft:birch_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:birch_fence_gate")),
-
-    JUNGLE_FENCE_GATE(NamespaceID.from("minecraft:jungle_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_fence_gate")),
-
-    ACACIA_FENCE_GATE(NamespaceID.from("minecraft:acacia_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_fence_gate")),
-
-    DARK_OAK_FENCE_GATE(NamespaceID.from("minecraft:dark_oak_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_fence_gate")),
-
-    CRIMSON_FENCE_GATE(NamespaceID.from("minecraft:crimson_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_fence_gate")),
-
-    WARPED_FENCE_GATE(NamespaceID.from("minecraft:warped_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:warped_fence_gate")),
+    GLOW_LICHEN(NamespaceID.from("minecraft:glow_lichen"), (byte) 64, () -> Registries.getBlock("minecraft:glow_lichen")),
 
     BRICK_STAIRS(NamespaceID.from("minecraft:brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:brick_stairs")),
 
@@ -561,15 +643,9 @@ public enum Material implements Keyed {
 
     DRAGON_EGG(NamespaceID.from("minecraft:dragon_egg"), (byte) 64, () -> Registries.getBlock("minecraft:dragon_egg")),
 
-    REDSTONE_LAMP(NamespaceID.from("minecraft:redstone_lamp"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_lamp")),
-
     SANDSTONE_STAIRS(NamespaceID.from("minecraft:sandstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:sandstone_stairs")),
 
-    EMERALD_ORE(NamespaceID.from("minecraft:emerald_ore"), (byte) 64, () -> Registries.getBlock("minecraft:emerald_ore")),
-
     ENDER_CHEST(NamespaceID.from("minecraft:ender_chest"), (byte) 64, () -> Registries.getBlock("minecraft:ender_chest")),
-
-    TRIPWIRE_HOOK(NamespaceID.from("minecraft:tripwire_hook"), (byte) 64, () -> Registries.getBlock("minecraft:tripwire_hook")),
 
     EMERALD_BLOCK(NamespaceID.from("minecraft:emerald_block"), (byte) 64, () -> Registries.getBlock("minecraft:emerald_block")),
 
@@ -621,45 +697,19 @@ public enum Material implements Keyed {
 
     POLISHED_BLACKSTONE_BRICK_WALL(NamespaceID.from("minecraft:polished_blackstone_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_brick_wall")),
 
-    STONE_BUTTON(NamespaceID.from("minecraft:stone_button"), (byte) 64, () -> Registries.getBlock("minecraft:stone_button")),
+    COBBLED_DEEPSLATE_WALL(NamespaceID.from("minecraft:cobbled_deepslate_wall"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate_wall")),
 
-    OAK_BUTTON(NamespaceID.from("minecraft:oak_button"), (byte) 64, () -> Registries.getBlock("minecraft:oak_button")),
+    POLISHED_DEEPSLATE_WALL(NamespaceID.from("minecraft:polished_deepslate_wall"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate_wall")),
 
-    SPRUCE_BUTTON(NamespaceID.from("minecraft:spruce_button"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_button")),
+    DEEPSLATE_BRICK_WALL(NamespaceID.from("minecraft:deepslate_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_brick_wall")),
 
-    BIRCH_BUTTON(NamespaceID.from("minecraft:birch_button"), (byte) 64, () -> Registries.getBlock("minecraft:birch_button")),
-
-    JUNGLE_BUTTON(NamespaceID.from("minecraft:jungle_button"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_button")),
-
-    ACACIA_BUTTON(NamespaceID.from("minecraft:acacia_button"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_button")),
-
-    DARK_OAK_BUTTON(NamespaceID.from("minecraft:dark_oak_button"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_button")),
-
-    CRIMSON_BUTTON(NamespaceID.from("minecraft:crimson_button"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_button")),
-
-    WARPED_BUTTON(NamespaceID.from("minecraft:warped_button"), (byte) 64, () -> Registries.getBlock("minecraft:warped_button")),
-
-    POLISHED_BLACKSTONE_BUTTON(NamespaceID.from("minecraft:polished_blackstone_button"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_button")),
+    DEEPSLATE_TILE_WALL(NamespaceID.from("minecraft:deepslate_tile_wall"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tile_wall")),
 
     ANVIL(NamespaceID.from("minecraft:anvil"), (byte) 64, () -> Registries.getBlock("minecraft:anvil")),
 
     CHIPPED_ANVIL(NamespaceID.from("minecraft:chipped_anvil"), (byte) 64, () -> Registries.getBlock("minecraft:chipped_anvil")),
 
     DAMAGED_ANVIL(NamespaceID.from("minecraft:damaged_anvil"), (byte) 64, () -> Registries.getBlock("minecraft:damaged_anvil")),
-
-    TRAPPED_CHEST(NamespaceID.from("minecraft:trapped_chest"), (byte) 64, () -> Registries.getBlock("minecraft:trapped_chest")),
-
-    LIGHT_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:light_weighted_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:light_weighted_pressure_plate")),
-
-    HEAVY_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:heavy_weighted_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:heavy_weighted_pressure_plate")),
-
-    DAYLIGHT_DETECTOR(NamespaceID.from("minecraft:daylight_detector"), (byte) 64, () -> Registries.getBlock("minecraft:daylight_detector")),
-
-    REDSTONE_BLOCK(NamespaceID.from("minecraft:redstone_block"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_block")),
-
-    NETHER_QUARTZ_ORE(NamespaceID.from("minecraft:nether_quartz_ore"), (byte) 64, () -> Registries.getBlock("minecraft:nether_quartz_ore")),
-
-    HOPPER(NamespaceID.from("minecraft:hopper"), (byte) 64, () -> Registries.getBlock("minecraft:hopper")),
 
     CHISELED_QUARTZ_BLOCK(NamespaceID.from("minecraft:chiseled_quartz_block"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_quartz_block")),
 
@@ -670,10 +720,6 @@ public enum Material implements Keyed {
     QUARTZ_PILLAR(NamespaceID.from("minecraft:quartz_pillar"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_pillar")),
 
     QUARTZ_STAIRS(NamespaceID.from("minecraft:quartz_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_stairs")),
-
-    ACTIVATOR_RAIL(NamespaceID.from("minecraft:activator_rail"), (byte) 64, () -> Registries.getBlock("minecraft:activator_rail")),
-
-    DROPPER(NamespaceID.from("minecraft:dropper"), (byte) 64, () -> Registries.getBlock("minecraft:dropper")),
 
     WHITE_TERRACOTTA(NamespaceID.from("minecraft:white_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:white_terracotta")),
 
@@ -709,7 +755,7 @@ public enum Material implements Keyed {
 
     BARRIER(NamespaceID.from("minecraft:barrier"), (byte) 64, () -> Registries.getBlock("minecraft:barrier")),
 
-    IRON_TRAPDOOR(NamespaceID.from("minecraft:iron_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:iron_trapdoor")),
+    LIGHT(NamespaceID.from("minecraft:light"), (byte) 64, () -> Registries.getBlock("minecraft:light")),
 
     HAY_BLOCK(NamespaceID.from("minecraft:hay_block"), (byte) 64, () -> Registries.getBlock("minecraft:hay_block")),
 
@@ -747,17 +793,13 @@ public enum Material implements Keyed {
 
     TERRACOTTA(NamespaceID.from("minecraft:terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:terracotta")),
 
-    COAL_BLOCK(NamespaceID.from("minecraft:coal_block"), (byte) 64, () -> Registries.getBlock("minecraft:coal_block")),
-
     PACKED_ICE(NamespaceID.from("minecraft:packed_ice"), (byte) 64, () -> Registries.getBlock("minecraft:packed_ice")),
 
     ACACIA_STAIRS(NamespaceID.from("minecraft:acacia_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_stairs")),
 
     DARK_OAK_STAIRS(NamespaceID.from("minecraft:dark_oak_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_stairs")),
 
-    SLIME_BLOCK(NamespaceID.from("minecraft:slime_block"), (byte) 64, () -> Registries.getBlock("minecraft:slime_block")),
-
-    GRASS_PATH(NamespaceID.from("minecraft:grass_path"), (byte) 64, () -> Registries.getBlock("minecraft:grass_path")),
+    DIRT_PATH(NamespaceID.from("minecraft:dirt_path"), (byte) 64, () -> Registries.getBlock("minecraft:dirt_path")),
 
     SUNFLOWER(NamespaceID.from("minecraft:sunflower"), (byte) 64, () -> Registries.getBlock("minecraft:sunflower")),
 
@@ -872,8 +914,6 @@ public enum Material implements Keyed {
     BONE_BLOCK(NamespaceID.from("minecraft:bone_block"), (byte) 64, () -> Registries.getBlock("minecraft:bone_block")),
 
     STRUCTURE_VOID(NamespaceID.from("minecraft:structure_void"), (byte) 64, () -> Registries.getBlock("minecraft:structure_void")),
-
-    OBSERVER(NamespaceID.from("minecraft:observer"), (byte) 64, () -> Registries.getBlock("minecraft:observer")),
 
     SHULKER_BOX(NamespaceID.from("minecraft:shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:shulker_box")),
 
@@ -1099,6 +1139,14 @@ public enum Material implements Keyed {
 
     DIORITE_STAIRS(NamespaceID.from("minecraft:diorite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:diorite_stairs")),
 
+    COBBLED_DEEPSLATE_STAIRS(NamespaceID.from("minecraft:cobbled_deepslate_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate_stairs")),
+
+    POLISHED_DEEPSLATE_STAIRS(NamespaceID.from("minecraft:polished_deepslate_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate_stairs")),
+
+    DEEPSLATE_BRICK_STAIRS(NamespaceID.from("minecraft:deepslate_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_brick_stairs")),
+
+    DEEPSLATE_TILE_STAIRS(NamespaceID.from("minecraft:deepslate_tile_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tile_stairs")),
+
     POLISHED_GRANITE_SLAB(NamespaceID.from("minecraft:polished_granite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_granite_slab")),
 
     SMOOTH_RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:smooth_red_sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_red_sandstone_slab")),
@@ -1125,7 +1173,107 @@ public enum Material implements Keyed {
 
     DIORITE_SLAB(NamespaceID.from("minecraft:diorite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:diorite_slab")),
 
+    COBBLED_DEEPSLATE_SLAB(NamespaceID.from("minecraft:cobbled_deepslate_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate_slab")),
+
+    POLISHED_DEEPSLATE_SLAB(NamespaceID.from("minecraft:polished_deepslate_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate_slab")),
+
+    DEEPSLATE_BRICK_SLAB(NamespaceID.from("minecraft:deepslate_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_brick_slab")),
+
+    DEEPSLATE_TILE_SLAB(NamespaceID.from("minecraft:deepslate_tile_slab"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tile_slab")),
+
     SCAFFOLDING(NamespaceID.from("minecraft:scaffolding"), (byte) 64, () -> Registries.getBlock("minecraft:scaffolding")),
+
+    REDSTONE(NamespaceID.from("minecraft:redstone"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_wire")),
+
+    REDSTONE_TORCH(NamespaceID.from("minecraft:redstone_torch"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_torch")),
+
+    REDSTONE_BLOCK(NamespaceID.from("minecraft:redstone_block"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_block")),
+
+    REPEATER(NamespaceID.from("minecraft:repeater"), (byte) 64, () -> Registries.getBlock("minecraft:repeater")),
+
+    COMPARATOR(NamespaceID.from("minecraft:comparator"), (byte) 64, () -> Registries.getBlock("minecraft:comparator")),
+
+    PISTON(NamespaceID.from("minecraft:piston"), (byte) 64, () -> Registries.getBlock("minecraft:piston")),
+
+    STICKY_PISTON(NamespaceID.from("minecraft:sticky_piston"), (byte) 64, () -> Registries.getBlock("minecraft:sticky_piston")),
+
+    SLIME_BLOCK(NamespaceID.from("minecraft:slime_block"), (byte) 64, () -> Registries.getBlock("minecraft:slime_block")),
+
+    HONEY_BLOCK(NamespaceID.from("minecraft:honey_block"), (byte) 64, () -> Registries.getBlock("minecraft:honey_block")),
+
+    OBSERVER(NamespaceID.from("minecraft:observer"), (byte) 64, () -> Registries.getBlock("minecraft:observer")),
+
+    HOPPER(NamespaceID.from("minecraft:hopper"), (byte) 64, () -> Registries.getBlock("minecraft:hopper")),
+
+    DISPENSER(NamespaceID.from("minecraft:dispenser"), (byte) 64, () -> Registries.getBlock("minecraft:dispenser")),
+
+    DROPPER(NamespaceID.from("minecraft:dropper"), (byte) 64, () -> Registries.getBlock("minecraft:dropper")),
+
+    LECTERN(NamespaceID.from("minecraft:lectern"), (byte) 64, () -> Registries.getBlock("minecraft:lectern")),
+
+    TARGET(NamespaceID.from("minecraft:target"), (byte) 64, () -> Registries.getBlock("minecraft:target")),
+
+    LEVER(NamespaceID.from("minecraft:lever"), (byte) 64, () -> Registries.getBlock("minecraft:lever")),
+
+    LIGHTNING_ROD(NamespaceID.from("minecraft:lightning_rod"), (byte) 64, () -> Registries.getBlock("minecraft:lightning_rod")),
+
+    DAYLIGHT_DETECTOR(NamespaceID.from("minecraft:daylight_detector"), (byte) 64, () -> Registries.getBlock("minecraft:daylight_detector")),
+
+    SCULK_SENSOR(NamespaceID.from("minecraft:sculk_sensor"), (byte) 64, () -> Registries.getBlock("minecraft:sculk_sensor")),
+
+    TRIPWIRE_HOOK(NamespaceID.from("minecraft:tripwire_hook"), (byte) 64, () -> Registries.getBlock("minecraft:tripwire_hook")),
+
+    TRAPPED_CHEST(NamespaceID.from("minecraft:trapped_chest"), (byte) 64, () -> Registries.getBlock("minecraft:trapped_chest")),
+
+    TNT(NamespaceID.from("minecraft:tnt"), (byte) 64, () -> Registries.getBlock("minecraft:tnt")),
+
+    REDSTONE_LAMP(NamespaceID.from("minecraft:redstone_lamp"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_lamp")),
+
+    NOTE_BLOCK(NamespaceID.from("minecraft:note_block"), (byte) 64, () -> Registries.getBlock("minecraft:note_block")),
+
+    STONE_BUTTON(NamespaceID.from("minecraft:stone_button"), (byte) 64, () -> Registries.getBlock("minecraft:stone_button")),
+
+    POLISHED_BLACKSTONE_BUTTON(NamespaceID.from("minecraft:polished_blackstone_button"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_button")),
+
+    OAK_BUTTON(NamespaceID.from("minecraft:oak_button"), (byte) 64, () -> Registries.getBlock("minecraft:oak_button")),
+
+    SPRUCE_BUTTON(NamespaceID.from("minecraft:spruce_button"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_button")),
+
+    BIRCH_BUTTON(NamespaceID.from("minecraft:birch_button"), (byte) 64, () -> Registries.getBlock("minecraft:birch_button")),
+
+    JUNGLE_BUTTON(NamespaceID.from("minecraft:jungle_button"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_button")),
+
+    ACACIA_BUTTON(NamespaceID.from("minecraft:acacia_button"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_button")),
+
+    DARK_OAK_BUTTON(NamespaceID.from("minecraft:dark_oak_button"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_button")),
+
+    CRIMSON_BUTTON(NamespaceID.from("minecraft:crimson_button"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_button")),
+
+    WARPED_BUTTON(NamespaceID.from("minecraft:warped_button"), (byte) 64, () -> Registries.getBlock("minecraft:warped_button")),
+
+    STONE_PRESSURE_PLATE(NamespaceID.from("minecraft:stone_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:stone_pressure_plate")),
+
+    POLISHED_BLACKSTONE_PRESSURE_PLATE(NamespaceID.from("minecraft:polished_blackstone_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_pressure_plate")),
+
+    LIGHT_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:light_weighted_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:light_weighted_pressure_plate")),
+
+    HEAVY_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:heavy_weighted_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:heavy_weighted_pressure_plate")),
+
+    OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:oak_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:oak_pressure_plate")),
+
+    SPRUCE_PRESSURE_PLATE(NamespaceID.from("minecraft:spruce_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_pressure_plate")),
+
+    BIRCH_PRESSURE_PLATE(NamespaceID.from("minecraft:birch_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:birch_pressure_plate")),
+
+    JUNGLE_PRESSURE_PLATE(NamespaceID.from("minecraft:jungle_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_pressure_plate")),
+
+    ACACIA_PRESSURE_PLATE(NamespaceID.from("minecraft:acacia_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_pressure_plate")),
+
+    DARK_OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:dark_oak_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_pressure_plate")),
+
+    CRIMSON_PRESSURE_PLATE(NamespaceID.from("minecraft:crimson_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_pressure_plate")),
+
+    WARPED_PRESSURE_PLATE(NamespaceID.from("minecraft:warped_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:warped_pressure_plate")),
 
     IRON_DOOR(NamespaceID.from("minecraft:iron_door"), (byte) 64, () -> Registries.getBlock("minecraft:iron_door")),
 
@@ -1145,9 +1293,77 @@ public enum Material implements Keyed {
 
     WARPED_DOOR(NamespaceID.from("minecraft:warped_door"), (byte) 64, () -> Registries.getBlock("minecraft:warped_door")),
 
-    REPEATER(NamespaceID.from("minecraft:repeater"), (byte) 64, () -> Registries.getBlock("minecraft:repeater")),
+    IRON_TRAPDOOR(NamespaceID.from("minecraft:iron_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:iron_trapdoor")),
 
-    COMPARATOR(NamespaceID.from("minecraft:comparator"), (byte) 64, () -> Registries.getBlock("minecraft:comparator")),
+    OAK_TRAPDOOR(NamespaceID.from("minecraft:oak_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:oak_trapdoor")),
+
+    SPRUCE_TRAPDOOR(NamespaceID.from("minecraft:spruce_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_trapdoor")),
+
+    BIRCH_TRAPDOOR(NamespaceID.from("minecraft:birch_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:birch_trapdoor")),
+
+    JUNGLE_TRAPDOOR(NamespaceID.from("minecraft:jungle_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_trapdoor")),
+
+    ACACIA_TRAPDOOR(NamespaceID.from("minecraft:acacia_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_trapdoor")),
+
+    DARK_OAK_TRAPDOOR(NamespaceID.from("minecraft:dark_oak_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_trapdoor")),
+
+    CRIMSON_TRAPDOOR(NamespaceID.from("minecraft:crimson_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_trapdoor")),
+
+    WARPED_TRAPDOOR(NamespaceID.from("minecraft:warped_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:warped_trapdoor")),
+
+    OAK_FENCE_GATE(NamespaceID.from("minecraft:oak_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:oak_fence_gate")),
+
+    SPRUCE_FENCE_GATE(NamespaceID.from("minecraft:spruce_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_fence_gate")),
+
+    BIRCH_FENCE_GATE(NamespaceID.from("minecraft:birch_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:birch_fence_gate")),
+
+    JUNGLE_FENCE_GATE(NamespaceID.from("minecraft:jungle_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_fence_gate")),
+
+    ACACIA_FENCE_GATE(NamespaceID.from("minecraft:acacia_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_fence_gate")),
+
+    DARK_OAK_FENCE_GATE(NamespaceID.from("minecraft:dark_oak_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_fence_gate")),
+
+    CRIMSON_FENCE_GATE(NamespaceID.from("minecraft:crimson_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_fence_gate")),
+
+    WARPED_FENCE_GATE(NamespaceID.from("minecraft:warped_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:warped_fence_gate")),
+
+    POWERED_RAIL(NamespaceID.from("minecraft:powered_rail"), (byte) 64, () -> Registries.getBlock("minecraft:powered_rail")),
+
+    DETECTOR_RAIL(NamespaceID.from("minecraft:detector_rail"), (byte) 64, () -> Registries.getBlock("minecraft:detector_rail")),
+
+    RAIL(NamespaceID.from("minecraft:rail"), (byte) 64, () -> Registries.getBlock("minecraft:rail")),
+
+    ACTIVATOR_RAIL(NamespaceID.from("minecraft:activator_rail"), (byte) 64, () -> Registries.getBlock("minecraft:activator_rail")),
+
+    SADDLE(NamespaceID.from("minecraft:saddle"), (byte) 1, () -> null),
+
+    MINECART(NamespaceID.from("minecraft:minecart"), (byte) 1, () -> null),
+
+    CHEST_MINECART(NamespaceID.from("minecraft:chest_minecart"), (byte) 1, () -> null),
+
+    FURNACE_MINECART(NamespaceID.from("minecraft:furnace_minecart"), (byte) 1, () -> null),
+
+    TNT_MINECART(NamespaceID.from("minecraft:tnt_minecart"), (byte) 1, () -> null),
+
+    HOPPER_MINECART(NamespaceID.from("minecraft:hopper_minecart"), (byte) 1, () -> null),
+
+    CARROT_ON_A_STICK(NamespaceID.from("minecraft:carrot_on_a_stick"), (byte) 1, () -> null),
+
+    WARPED_FUNGUS_ON_A_STICK(NamespaceID.from("minecraft:warped_fungus_on_a_stick"), (byte) 1, () -> null),
+
+    ELYTRA(NamespaceID.from("minecraft:elytra"), (byte) 1, () -> null),
+
+    OAK_BOAT(NamespaceID.from("minecraft:oak_boat"), (byte) 1, () -> null),
+
+    SPRUCE_BOAT(NamespaceID.from("minecraft:spruce_boat"), (byte) 1, () -> null),
+
+    BIRCH_BOAT(NamespaceID.from("minecraft:birch_boat"), (byte) 1, () -> null),
+
+    JUNGLE_BOAT(NamespaceID.from("minecraft:jungle_boat"), (byte) 1, () -> null),
+
+    ACACIA_BOAT(NamespaceID.from("minecraft:acacia_boat"), (byte) 1, () -> null),
+
+    DARK_OAK_BOAT(NamespaceID.from("minecraft:dark_oak_boat"), (byte) 1, () -> null),
 
     STRUCTURE_BLOCK(NamespaceID.from("minecraft:structure_block"), (byte) 64, () -> Registries.getBlock("minecraft:structure_block")),
 
@@ -1186,7 +1402,23 @@ public enum Material implements Keyed {
 
     DIAMOND(NamespaceID.from("minecraft:diamond"), (byte) 64, () -> null),
 
+    EMERALD(NamespaceID.from("minecraft:emerald"), (byte) 64, () -> null),
+
+    LAPIS_LAZULI(NamespaceID.from("minecraft:lapis_lazuli"), (byte) 64, () -> null),
+
+    QUARTZ(NamespaceID.from("minecraft:quartz"), (byte) 64, () -> null),
+
+    AMETHYST_SHARD(NamespaceID.from("minecraft:amethyst_shard"), (byte) 64, () -> null),
+
+    RAW_IRON(NamespaceID.from("minecraft:raw_iron"), (byte) 64, () -> null),
+
     IRON_INGOT(NamespaceID.from("minecraft:iron_ingot"), (byte) 64, () -> null),
+
+    RAW_COPPER(NamespaceID.from("minecraft:raw_copper"), (byte) 64, () -> null),
+
+    COPPER_INGOT(NamespaceID.from("minecraft:copper_ingot"), (byte) 64, () -> null),
+
+    RAW_GOLD(NamespaceID.from("minecraft:raw_gold"), (byte) 64, () -> null),
 
     GOLD_INGOT(NamespaceID.from("minecraft:gold_ingot"), (byte) 64, () -> null),
 
@@ -1624,15 +1856,9 @@ public enum Material implements Keyed {
 
     LAVA_BUCKET(NamespaceID.from("minecraft:lava_bucket"), (byte) 1, () -> null),
 
-    MINECART(NamespaceID.from("minecraft:minecart"), (byte) 1, () -> null),
-
-    SADDLE(NamespaceID.from("minecraft:saddle"), (byte) 1, () -> null),
-
-    REDSTONE(NamespaceID.from("minecraft:redstone"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_wire")),
+    POWDER_SNOW_BUCKET(NamespaceID.from("minecraft:powder_snow_bucket"), (byte) 1, () -> Registries.getBlock("minecraft:powder_snow")),
 
     SNOWBALL(NamespaceID.from("minecraft:snowball"), (byte) 16, () -> null),
-
-    OAK_BOAT(NamespaceID.from("minecraft:oak_boat"), (byte) 1, () -> null),
 
     LEATHER(NamespaceID.from("minecraft:leather"), (byte) 64, () -> null),
 
@@ -1646,6 +1872,8 @@ public enum Material implements Keyed {
 
     TROPICAL_FISH_BUCKET(NamespaceID.from("minecraft:tropical_fish_bucket"), (byte) 1, () -> null),
 
+    AXOLOTL_BUCKET(NamespaceID.from("minecraft:axolotl_bucket"), (byte) 1, () -> null),
+
     BRICK(NamespaceID.from("minecraft:brick"), (byte) 64, () -> null),
 
     CLAY_BALL(NamespaceID.from("minecraft:clay_ball"), (byte) 64, () -> null),
@@ -1658,17 +1886,17 @@ public enum Material implements Keyed {
 
     SLIME_BALL(NamespaceID.from("minecraft:slime_ball"), (byte) 64, () -> null),
 
-    CHEST_MINECART(NamespaceID.from("minecraft:chest_minecart"), (byte) 1, () -> null),
-
-    FURNACE_MINECART(NamespaceID.from("minecraft:furnace_minecart"), (byte) 1, () -> null),
-
     EGG(NamespaceID.from("minecraft:egg"), (byte) 16, () -> null),
 
     COMPASS(NamespaceID.from("minecraft:compass"), (byte) 64, () -> null),
 
+    BUNDLE(NamespaceID.from("minecraft:bundle"), (byte) 1, () -> null),
+
     FISHING_ROD(NamespaceID.from("minecraft:fishing_rod"), (byte) 1, () -> null),
 
     CLOCK(NamespaceID.from("minecraft:clock"), (byte) 64, () -> null),
+
+    SPYGLASS(NamespaceID.from("minecraft:spyglass"), (byte) 1, () -> null),
 
     GLOWSTONE_DUST(NamespaceID.from("minecraft:glowstone_dust"), (byte) 64, () -> null),
 
@@ -1716,9 +1944,9 @@ public enum Material implements Keyed {
 
     INK_SAC(NamespaceID.from("minecraft:ink_sac"), (byte) 64, () -> null),
 
-    COCOA_BEANS(NamespaceID.from("minecraft:cocoa_beans"), (byte) 64, () -> Registries.getBlock("minecraft:cocoa")),
+    GLOW_INK_SAC(NamespaceID.from("minecraft:glow_ink_sac"), (byte) 64, () -> null),
 
-    LAPIS_LAZULI(NamespaceID.from("minecraft:lapis_lazuli"), (byte) 64, () -> null),
+    COCOA_BEANS(NamespaceID.from("minecraft:cocoa_beans"), (byte) 64, () -> Registries.getBlock("minecraft:cocoa")),
 
     WHITE_DYE(NamespaceID.from("minecraft:white_dye"), (byte) 64, () -> null),
 
@@ -1891,6 +2119,8 @@ public enum Material implements Keyed {
 
     GLISTERING_MELON_SLICE(NamespaceID.from("minecraft:glistering_melon_slice"), (byte) 64, () -> null),
 
+    AXOLOTL_SPAWN_EGG(NamespaceID.from("minecraft:axolotl_spawn_egg"), (byte) 64, () -> null),
+
     BAT_SPAWN_EGG(NamespaceID.from("minecraft:bat_spawn_egg"), (byte) 64, () -> null),
 
     BEE_SPAWN_EGG(NamespaceID.from("minecraft:bee_spawn_egg"), (byte) 64, () -> null),
@@ -1926,6 +2156,10 @@ public enum Material implements Keyed {
     FOX_SPAWN_EGG(NamespaceID.from("minecraft:fox_spawn_egg"), (byte) 64, () -> null),
 
     GHAST_SPAWN_EGG(NamespaceID.from("minecraft:ghast_spawn_egg"), (byte) 64, () -> null),
+
+    GLOW_SQUID_SPAWN_EGG(NamespaceID.from("minecraft:glow_squid_spawn_egg"), (byte) 64, () -> null),
+
+    GOAT_SPAWN_EGG(NamespaceID.from("minecraft:goat_spawn_egg"), (byte) 64, () -> null),
 
     GUARDIAN_SPAWN_EGG(NamespaceID.from("minecraft:guardian_spawn_egg"), (byte) 64, () -> null),
 
@@ -2027,9 +2261,9 @@ public enum Material implements Keyed {
 
     WRITTEN_BOOK(NamespaceID.from("minecraft:written_book"), (byte) 16, () -> null),
 
-    EMERALD(NamespaceID.from("minecraft:emerald"), (byte) 64, () -> null),
-
     ITEM_FRAME(NamespaceID.from("minecraft:item_frame"), (byte) 64, () -> null),
+
+    GLOW_ITEM_FRAME(NamespaceID.from("minecraft:glow_item_frame"), (byte) 64, () -> null),
 
     FLOWER_POT(NamespaceID.from("minecraft:flower_pot"), (byte) 64, () -> Registries.getBlock("minecraft:flower_pot")),
 
@@ -2082,10 +2316,6 @@ public enum Material implements Keyed {
 
     DRAGON_HEAD(NamespaceID.from("minecraft:dragon_head"), (byte) 64, () -> Registries.getBlock("minecraft:dragon_head")),
 
-    CARROT_ON_A_STICK(NamespaceID.from("minecraft:carrot_on_a_stick"), (byte) 1, () -> null),
-
-    WARPED_FUNGUS_ON_A_STICK(NamespaceID.from("minecraft:warped_fungus_on_a_stick"), (byte) 1, () -> null),
-
     NETHER_STAR(NamespaceID.from("minecraft:nether_star"), (byte) 64, () -> null),
 
     PUMPKIN_PIE(NamespaceID.from("minecraft:pumpkin_pie"), (byte) 64, () -> null) {
@@ -2102,12 +2332,6 @@ public enum Material implements Keyed {
     ENCHANTED_BOOK(NamespaceID.from("minecraft:enchanted_book"), (byte) 1, () -> null),
 
     NETHER_BRICK(NamespaceID.from("minecraft:nether_brick"), (byte) 64, () -> null),
-
-    QUARTZ(NamespaceID.from("minecraft:quartz"), (byte) 64, () -> null),
-
-    TNT_MINECART(NamespaceID.from("minecraft:tnt_minecart"), (byte) 1, () -> null),
-
-    HOPPER_MINECART(NamespaceID.from("minecraft:hopper_minecart"), (byte) 1, () -> null),
 
     PRISMARINE_SHARD(NamespaceID.from("minecraft:prismarine_shard"), (byte) 64, () -> null),
 
@@ -2239,18 +2463,6 @@ public enum Material implements Keyed {
 
     SHIELD(NamespaceID.from("minecraft:shield"), (byte) 1, () -> null),
 
-    ELYTRA(NamespaceID.from("minecraft:elytra"), (byte) 1, () -> null),
-
-    SPRUCE_BOAT(NamespaceID.from("minecraft:spruce_boat"), (byte) 1, () -> null),
-
-    BIRCH_BOAT(NamespaceID.from("minecraft:birch_boat"), (byte) 1, () -> null),
-
-    JUNGLE_BOAT(NamespaceID.from("minecraft:jungle_boat"), (byte) 1, () -> null),
-
-    ACACIA_BOAT(NamespaceID.from("minecraft:acacia_boat"), (byte) 1, () -> null),
-
-    DARK_OAK_BOAT(NamespaceID.from("minecraft:dark_oak_boat"), (byte) 1, () -> null),
-
     TOTEM_OF_UNDYING(NamespaceID.from("minecraft:totem_of_undying"), (byte) 1, () -> null),
 
     SHULKER_SHELL(NamespaceID.from("minecraft:shulker_shell"), (byte) 64, () -> null),
@@ -2332,8 +2544,6 @@ public enum Material implements Keyed {
 
     GRINDSTONE(NamespaceID.from("minecraft:grindstone"), (byte) 64, () -> Registries.getBlock("minecraft:grindstone")),
 
-    LECTERN(NamespaceID.from("minecraft:lectern"), (byte) 64, () -> Registries.getBlock("minecraft:lectern")),
-
     SMITHING_TABLE(NamespaceID.from("minecraft:smithing_table"), (byte) 64, () -> Registries.getBlock("minecraft:smithing_table")),
 
     STONECUTTER(NamespaceID.from("minecraft:stonecutter"), (byte) 64, () -> Registries.getBlock("minecraft:stonecutter")),
@@ -2345,6 +2555,13 @@ public enum Material implements Keyed {
     SOUL_LANTERN(NamespaceID.from("minecraft:soul_lantern"), (byte) 64, () -> Registries.getBlock("minecraft:soul_lantern")),
 
     SWEET_BERRIES(NamespaceID.from("minecraft:sweet_berries"), (byte) 64, () -> Registries.getBlock("minecraft:sweet_berry_bush")) {
+        @Override
+        public boolean isFood() {
+            return true;
+        }
+    },
+
+    GLOW_BERRIES(NamespaceID.from("minecraft:glow_berries"), (byte) 64, () -> Registries.getBlock("minecraft:cave_vines")) {
         @Override
         public boolean isFood() {
             return true;
@@ -2370,17 +2587,9 @@ public enum Material implements Keyed {
         }
     },
 
-    HONEY_BLOCK(NamespaceID.from("minecraft:honey_block"), (byte) 64, () -> Registries.getBlock("minecraft:honey_block")),
-
     HONEYCOMB_BLOCK(NamespaceID.from("minecraft:honeycomb_block"), (byte) 64, () -> Registries.getBlock("minecraft:honeycomb_block")),
 
     LODESTONE(NamespaceID.from("minecraft:lodestone"), (byte) 64, () -> Registries.getBlock("minecraft:lodestone")),
-
-    NETHERITE_BLOCK(NamespaceID.from("minecraft:netherite_block"), (byte) 64, () -> Registries.getBlock("minecraft:netherite_block")),
-
-    ANCIENT_DEBRIS(NamespaceID.from("minecraft:ancient_debris"), (byte) 64, () -> Registries.getBlock("minecraft:ancient_debris")),
-
-    TARGET(NamespaceID.from("minecraft:target"), (byte) 64, () -> Registries.getBlock("minecraft:target")),
 
     CRYING_OBSIDIAN(NamespaceID.from("minecraft:crying_obsidian"), (byte) 64, () -> Registries.getBlock("minecraft:crying_obsidian")),
 
@@ -2408,7 +2617,51 @@ public enum Material implements Keyed {
 
     CRACKED_POLISHED_BLACKSTONE_BRICKS(NamespaceID.from("minecraft:cracked_polished_blackstone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_polished_blackstone_bricks")),
 
-    RESPAWN_ANCHOR(NamespaceID.from("minecraft:respawn_anchor"), (byte) 64, () -> Registries.getBlock("minecraft:respawn_anchor"));
+    RESPAWN_ANCHOR(NamespaceID.from("minecraft:respawn_anchor"), (byte) 64, () -> Registries.getBlock("minecraft:respawn_anchor")),
+
+    CANDLE(NamespaceID.from("minecraft:candle"), (byte) 64, () -> Registries.getBlock("minecraft:candle")),
+
+    WHITE_CANDLE(NamespaceID.from("minecraft:white_candle"), (byte) 64, () -> Registries.getBlock("minecraft:white_candle")),
+
+    ORANGE_CANDLE(NamespaceID.from("minecraft:orange_candle"), (byte) 64, () -> Registries.getBlock("minecraft:orange_candle")),
+
+    MAGENTA_CANDLE(NamespaceID.from("minecraft:magenta_candle"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_candle")),
+
+    LIGHT_BLUE_CANDLE(NamespaceID.from("minecraft:light_blue_candle"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_candle")),
+
+    YELLOW_CANDLE(NamespaceID.from("minecraft:yellow_candle"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_candle")),
+
+    LIME_CANDLE(NamespaceID.from("minecraft:lime_candle"), (byte) 64, () -> Registries.getBlock("minecraft:lime_candle")),
+
+    PINK_CANDLE(NamespaceID.from("minecraft:pink_candle"), (byte) 64, () -> Registries.getBlock("minecraft:pink_candle")),
+
+    GRAY_CANDLE(NamespaceID.from("minecraft:gray_candle"), (byte) 64, () -> Registries.getBlock("minecraft:gray_candle")),
+
+    LIGHT_GRAY_CANDLE(NamespaceID.from("minecraft:light_gray_candle"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_candle")),
+
+    CYAN_CANDLE(NamespaceID.from("minecraft:cyan_candle"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_candle")),
+
+    PURPLE_CANDLE(NamespaceID.from("minecraft:purple_candle"), (byte) 64, () -> Registries.getBlock("minecraft:purple_candle")),
+
+    BLUE_CANDLE(NamespaceID.from("minecraft:blue_candle"), (byte) 64, () -> Registries.getBlock("minecraft:blue_candle")),
+
+    BROWN_CANDLE(NamespaceID.from("minecraft:brown_candle"), (byte) 64, () -> Registries.getBlock("minecraft:brown_candle")),
+
+    GREEN_CANDLE(NamespaceID.from("minecraft:green_candle"), (byte) 64, () -> Registries.getBlock("minecraft:green_candle")),
+
+    RED_CANDLE(NamespaceID.from("minecraft:red_candle"), (byte) 64, () -> Registries.getBlock("minecraft:red_candle")),
+
+    BLACK_CANDLE(NamespaceID.from("minecraft:black_candle"), (byte) 64, () -> Registries.getBlock("minecraft:black_candle")),
+
+    SMALL_AMETHYST_BUD(NamespaceID.from("minecraft:small_amethyst_bud"), (byte) 64, () -> Registries.getBlock("minecraft:small_amethyst_bud")),
+
+    MEDIUM_AMETHYST_BUD(NamespaceID.from("minecraft:medium_amethyst_bud"), (byte) 64, () -> Registries.getBlock("minecraft:medium_amethyst_bud")),
+
+    LARGE_AMETHYST_BUD(NamespaceID.from("minecraft:large_amethyst_bud"), (byte) 64, () -> Registries.getBlock("minecraft:large_amethyst_bud")),
+
+    AMETHYST_CLUSTER(NamespaceID.from("minecraft:amethyst_cluster"), (byte) 64, () -> Registries.getBlock("minecraft:amethyst_cluster")),
+
+    POINTED_DRIPSTONE(NamespaceID.from("minecraft:pointed_dripstone"), (byte) 64, () -> Registries.getBlock("minecraft:pointed_dripstone"));
 
     private static final Material[] VALUES = values();
 

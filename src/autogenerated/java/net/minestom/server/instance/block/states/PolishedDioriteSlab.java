@@ -19,11 +19,11 @@ public final class PolishedDioriteSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10811, "type=top", "waterlogged=true"));
-        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10812, "type=top", "waterlogged=false"));
-        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10813, "type=bottom", "waterlogged=true"));
-        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10814, "type=bottom", "waterlogged=false"));
-        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10815, "type=double", "waterlogged=true"));
-        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10816, "type=double", "waterlogged=false"));
+        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11057, "type=top", "waterlogged=true"));
+        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11058, "type=top", "waterlogged=false"));
+        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11059, "type=bottom", "waterlogged=true"));
+        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11060, "type=bottom", "waterlogged=false"));
+        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11061, "type=double", "waterlogged=true"));
+        Block.POLISHED_DIORITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11062, "type=double", "waterlogged=false"));
     }
 }

@@ -24,7 +24,7 @@ public class CraftRecipeResponse implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         windowId = reader.readByte();
-        recipe = reader.readSizedString(Integer.MAX_VALUE);
+        recipe = reader.readSizedString();
     }
 
     @Override

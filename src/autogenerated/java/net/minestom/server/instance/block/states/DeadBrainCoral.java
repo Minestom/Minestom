@@ -19,7 +19,7 @@ public final class DeadBrainCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9526, "waterlogged=true"));
-        Block.DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9527, "waterlogged=false"));
+        Block.DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9772, "waterlogged=true"));
+        Block.DEAD_BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9773, "waterlogged=false"));
     }
 }

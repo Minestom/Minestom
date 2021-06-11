@@ -19,7 +19,7 @@ public final class RedstoneLamp {
             forRemoval = false
     )
     public static void initStates() {
-        Block.REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5160, "lit=true"));
-        Block.REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5161, "lit=false"));
+        Block.REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5361, "lit=true"));
+        Block.REDSTONE_LAMP.addBlockAlternative(new BlockAlternative((short) 5362, "lit=false"));
     }
 }

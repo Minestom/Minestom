@@ -19,7 +19,7 @@ public final class Sunflower {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 7889, "half=upper"));
-        Block.SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 7890, "half=lower"));
+        Block.SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 8135, "half=upper"));
+        Block.SUNFLOWER.addBlockAlternative(new BlockAlternative((short) 8136, "half=lower"));
     }
 }

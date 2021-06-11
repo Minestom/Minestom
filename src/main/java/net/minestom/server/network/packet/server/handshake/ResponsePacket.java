@@ -16,7 +16,7 @@ public class ResponsePacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        jsonResponse = reader.readSizedString(Integer.MAX_VALUE);
+        jsonResponse = reader.readSizedString();
     }
 
     @Override

@@ -7,41 +7,43 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
 public class ShulkerMeta extends AbstractGolemMeta {
+    public static final byte OFFSET = AbstractGolemMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 4;
 
     public ShulkerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
     }
 
     public Direction getAttachFace() {
-        return super.metadata.getIndex((byte) 15, Direction.DOWN);
+        return super.metadata.getIndex(OFFSET, Direction.DOWN);
     }
 
     public void setAttachFace(Direction value) {
-        super.metadata.setIndex((byte) 15, Metadata.Direction(value));
+        super.metadata.setIndex(OFFSET, Metadata.Direction(value));
     }
 
     public BlockPosition getAttachmentPosition() {
-        return super.metadata.getIndex((byte) 16, null);
+        return super.metadata.getIndex(OFFSET + 1, null);
     }
 
     public void setAttachmentPosition(BlockPosition value) {
-        super.metadata.setIndex((byte) 16, Metadata.OptPosition(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.OptPosition(value));
     }
 
     public byte getShieldHeight() {
-        return super.metadata.getIndex((byte) 17, (byte) 0);
+        return super.metadata.getIndex(OFFSET + 2, (byte) 0);
     }
 
     public void setShieldHeight(byte value) {
-        super.metadata.setIndex((byte) 17, Metadata.Byte(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.Byte(value));
     }
 
     public byte getColor() {
-        return super.metadata.getIndex((byte) 18, (byte) 10);
+        return super.metadata.getIndex(OFFSET + 3, (byte) 10);
     }
 
     public void setColor(byte value) {
-        super.metadata.setIndex((byte) 18, Metadata.Byte(value));
+        super.metadata.setIndex(OFFSET + 3, Metadata.Byte(value));
     }
 
 }

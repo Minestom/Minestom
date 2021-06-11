@@ -175,7 +175,7 @@ dependencies {
     }
 
     // This is the data Minestom uses. from https://github.com/Minestom/MinestomDataGenerator
-    api "net.minestom:minestom-data-customizable:${rootProject.properties.get("mcVersion")}"
+    api "net.minestom:minestom-data-full:${rootProject.properties.get("mcVersion")}"
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
 

@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class SmallFireballMeta extends ItemContainingMeta implements ObjectDataProvider, ProjectileMeta {
+    public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 0;
 
     private Entity shooter;
 

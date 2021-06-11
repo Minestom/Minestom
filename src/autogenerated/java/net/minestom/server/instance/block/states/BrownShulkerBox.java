@@ -19,11 +19,11 @@ public final class BrownShulkerBox {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9354, "facing=north"));
-        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9355, "facing=east"));
-        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9356, "facing=south"));
-        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9357, "facing=west"));
-        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9358, "facing=up"));
-        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9359, "facing=down"));
+        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9600, "facing=north"));
+        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9601, "facing=east"));
+        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9602, "facing=south"));
+        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9603, "facing=west"));
+        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9604, "facing=up"));
+        Block.BROWN_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9605, "facing=down"));
     }
 }

@@ -19,7 +19,7 @@ public final class DeadFireCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9530, "waterlogged=true"));
-        Block.DEAD_FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9531, "waterlogged=false"));
+        Block.DEAD_FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9776, "waterlogged=true"));
+        Block.DEAD_FIRE_CORAL.addBlockAlternative(new BlockAlternative((short) 9777, "waterlogged=false"));
     }
 }

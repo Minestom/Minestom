@@ -112,7 +112,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            key = reader.readSizedString(Integer.MAX_VALUE);
+            key = reader.readSizedString();
             value = new Advancement();
             value.read(reader);
         }
@@ -151,7 +151,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         public void read(@NotNull BinaryReader reader) {
             boolean hasParent = reader.readBoolean();
             if (hasParent) {
-                parentIdentifier = reader.readSizedString(Integer.MAX_VALUE);
+                parentIdentifier = reader.readSizedString();
             } else {
                 parentIdentifier = null;
             }
@@ -164,7 +164,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
                 displayData = null;
             }
 
-            criterions = reader.readSizedStringArray(Integer.MAX_VALUE);
+            criterions = reader.readSizedStringArray();
 
             int requirementCount = reader.readVarInt();
             requirements = new Requirement[requirementCount];
@@ -201,13 +201,13 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            title = reader.readComponent(Integer.MAX_VALUE);
-            description = reader.readComponent(Integer.MAX_VALUE);
+            title = reader.readComponent();
+            description = reader.readComponent();
             icon = reader.readItemStack();
             frameType = FrameType.values()[reader.readVarInt()];
             flags = reader.readInt();
             if ((flags & 0x1) != 0) {
-                backgroundTexture = reader.readSizedString(Integer.MAX_VALUE);
+                backgroundTexture = reader.readSizedString();
             } else {
                 backgroundTexture = null;
             }
@@ -243,7 +243,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            key = reader.readSizedString(Integer.MAX_VALUE);
+            key = reader.readSizedString();
             value = new AdvancementProgress();
             value.read(reader);
         }
@@ -283,7 +283,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
 
         @Override
         public void read(@NotNull BinaryReader reader) {
-            criterionIdentifier = reader.readSizedString(Integer.MAX_VALUE);
+            criterionIdentifier = reader.readSizedString();
             criterionProgress = new CriterionProgress();
             criterionProgress.read(reader);
         }

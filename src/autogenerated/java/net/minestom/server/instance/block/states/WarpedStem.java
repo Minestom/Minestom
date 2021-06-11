@@ -19,8 +19,8 @@ public final class WarpedStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14966, "axis=x"));
-        Block.WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14967, "axis=y"));
-        Block.WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14968, "axis=z"));
+        Block.WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 15212, "axis=x"));
+        Block.WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 15213, "axis=y"));
+        Block.WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 15214, "axis=z"));
     }
 }

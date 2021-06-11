@@ -19,13 +19,13 @@ public final class EndPortalFrame {
             forRemoval = false
     )
     public static void initStates() {
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5150, "eye=true", "facing=north"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5151, "eye=true", "facing=south"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5152, "eye=true", "facing=west"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5153, "eye=true", "facing=east"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5154, "eye=false", "facing=north"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5155, "eye=false", "facing=south"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5156, "eye=false", "facing=west"));
-        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5157, "eye=false", "facing=east"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5351, "eye=true", "facing=north"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5352, "eye=true", "facing=south"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5353, "eye=true", "facing=west"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5354, "eye=true", "facing=east"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5355, "eye=false", "facing=north"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5356, "eye=false", "facing=south"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5357, "eye=false", "facing=west"));
+        Block.END_PORTAL_FRAME.addBlockAlternative(new BlockAlternative((short) 5358, "eye=false", "facing=east"));
     }
 }

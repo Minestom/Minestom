@@ -19,8 +19,8 @@ public final class DarkOakWood {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DARK_OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 124, "axis=x"));
-        Block.DARK_OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 125, "axis=y"));
-        Block.DARK_OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 126, "axis=z"));
+        Block.DARK_OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 127, "axis=x"));
+        Block.DARK_OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 128, "axis=y"));
+        Block.DARK_OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 129, "axis=z"));
     }
 }

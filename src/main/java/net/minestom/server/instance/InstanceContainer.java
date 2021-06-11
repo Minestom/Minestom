@@ -411,7 +411,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     protected void createChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
-        Biome[] biomes = new Biome[Chunk.BIOME_COUNT];
+        Biome[] biomes = new Biome[Biome.getBiomeCount(getDimensionType())];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         } else {

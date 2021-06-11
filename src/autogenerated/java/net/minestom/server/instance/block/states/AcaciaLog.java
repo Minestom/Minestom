@@ -19,8 +19,8 @@ public final class AcaciaLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 85, "axis=x"));
-        Block.ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 86, "axis=y"));
-        Block.ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 87, "axis=z"));
+        Block.ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 88, "axis=x"));
+        Block.ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 89, "axis=y"));
+        Block.ACACIA_LOG.addBlockAlternative(new BlockAlternative((short) 90, "axis=z"));
     }
 }

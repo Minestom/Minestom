@@ -5,23 +5,17 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class ClientWindowConfirmationPacket extends ClientPlayPacket {
+public class ClientPongPacket extends ClientPlayPacket {
 
-    public byte windowId;
-    public short actionNumber;
-    public boolean accepted;
+    public int id;
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        this.windowId = reader.readByte();
-        this.actionNumber = reader.readShort();
-        this.accepted = reader.readBoolean();
+        this.id = reader.readInt();
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeByte(windowId);
-        writer.writeShort(actionNumber);
-        writer.writeBoolean(accepted);
+        writer.writeInt(id);
     }
 }

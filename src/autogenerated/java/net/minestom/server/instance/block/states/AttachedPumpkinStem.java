@@ -19,9 +19,9 @@ public final class AttachedPumpkinStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4768, "facing=north"));
-        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4769, "facing=south"));
-        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4770, "facing=west"));
-        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4771, "facing=east"));
+        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4837, "facing=north"));
+        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4838, "facing=south"));
+        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4839, "facing=west"));
+        Block.ATTACHED_PUMPKIN_STEM.addBlockAlternative(new BlockAlternative((short) 4840, "facing=east"));
     }
 }

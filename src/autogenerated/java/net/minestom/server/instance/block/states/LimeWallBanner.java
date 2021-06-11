@@ -19,9 +19,9 @@ public final class LimeWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8177, "facing=north"));
-        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8178, "facing=south"));
-        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8179, "facing=west"));
-        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8180, "facing=east"));
+        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8423, "facing=north"));
+        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8424, "facing=south"));
+        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8425, "facing=west"));
+        Block.LIME_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8426, "facing=east"));
     }
 }

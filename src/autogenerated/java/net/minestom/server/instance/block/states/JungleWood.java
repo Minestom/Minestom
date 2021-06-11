@@ -19,8 +19,8 @@ public final class JungleWood {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 118, "axis=x"));
-        Block.JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 119, "axis=y"));
-        Block.JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 120, "axis=z"));
+        Block.JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 121, "axis=x"));
+        Block.JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 122, "axis=y"));
+        Block.JUNGLE_WOOD.addBlockAlternative(new BlockAlternative((short) 123, "axis=z"));
     }
 }

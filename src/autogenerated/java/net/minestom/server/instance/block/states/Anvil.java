@@ -19,9 +19,9 @@ public final class Anvil {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6614, "facing=north"));
-        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6615, "facing=south"));
-        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6616, "facing=west"));
-        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6617, "facing=east"));
+        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6816, "facing=north"));
+        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6817, "facing=south"));
+        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6818, "facing=west"));
+        Block.ANVIL.addBlockAlternative(new BlockAlternative((short) 6819, "facing=east"));
     }
 }

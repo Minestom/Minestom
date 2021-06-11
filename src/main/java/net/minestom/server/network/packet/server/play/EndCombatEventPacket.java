@@ -6,24 +6,25 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityMovementPacket implements ServerPacket {
+public class EndCombatEventPacket implements ServerPacket {
 
+    public int duration;
     public int entityId;
-
-    public EntityMovementPacket() {}
-
-    @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeVarInt(entityId);
-    }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
+        this.duration = reader.readVarInt();
+        this.entityId = reader.readInt();
+    }
+
+    @Override
+    public void write(@NotNull BinaryWriter writer) {
+        writer.writeVarInt(duration);
+        writer.writeInt(entityId);
     }
 
     @Override
     public int getId() {
-        return ServerPacketIdentifier.ENTITY_MOVEMENT;
+        return ServerPacketIdentifier.END_COMBAT_EVENT;
     }
 }

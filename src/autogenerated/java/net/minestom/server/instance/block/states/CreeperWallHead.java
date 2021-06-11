@@ -19,9 +19,9 @@ public final class CreeperWallHead {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6590, "facing=north"));
-        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6591, "facing=south"));
-        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6592, "facing=west"));
-        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6593, "facing=east"));
+        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6792, "facing=north"));
+        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6793, "facing=south"));
+        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6794, "facing=west"));
+        Block.CREEPER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6795, "facing=east"));
     }
 }

@@ -19,13 +19,13 @@ public final class Ladder {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3637, "facing=north", "waterlogged=true"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3638, "facing=north", "waterlogged=false"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3639, "facing=south", "waterlogged=true"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3640, "facing=south", "waterlogged=false"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3641, "facing=west", "waterlogged=true"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3642, "facing=west", "waterlogged=false"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3643, "facing=east", "waterlogged=true"));
-        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3644, "facing=east", "waterlogged=false"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3694, "facing=north", "waterlogged=true"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3695, "facing=north", "waterlogged=false"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3696, "facing=south", "waterlogged=true"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3697, "facing=south", "waterlogged=false"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3698, "facing=west", "waterlogged=true"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3699, "facing=west", "waterlogged=false"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3700, "facing=east", "waterlogged=true"));
+        Block.LADDER.addBlockAlternative(new BlockAlternative((short) 3701, "facing=east", "waterlogged=false"));
     }
 }

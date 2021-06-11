@@ -19,9 +19,9 @@ public final class FrostedIce {
             forRemoval = false
     )
     public static void initStates() {
-        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9253, "age=0"));
-        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9254, "age=1"));
-        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9255, "age=2"));
-        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9256, "age=3"));
+        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9499, "age=0"));
+        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9500, "age=1"));
+        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9501, "age=2"));
+        Block.FROSTED_ICE.addBlockAlternative(new BlockAlternative((short) 9502, "age=3"));
     }
 }

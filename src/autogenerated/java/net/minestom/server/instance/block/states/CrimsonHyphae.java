@@ -19,8 +19,8 @@ public final class CrimsonHyphae {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14989, "axis=x"));
-        Block.CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14990, "axis=y"));
-        Block.CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14991, "axis=z"));
+        Block.CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 15235, "axis=x"));
+        Block.CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 15236, "axis=y"));
+        Block.CRIMSON_HYPHAE.addBlockAlternative(new BlockAlternative((short) 15237, "axis=z"));
     }
 }

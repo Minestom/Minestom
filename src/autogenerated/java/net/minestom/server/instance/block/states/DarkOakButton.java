@@ -19,29 +19,29 @@ public final class DarkOakButton {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6470, "face=floor", "facing=north", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6471, "face=floor", "facing=north", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6472, "face=floor", "facing=south", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6473, "face=floor", "facing=south", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6474, "face=floor", "facing=west", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6475, "face=floor", "facing=west", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6476, "face=floor", "facing=east", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6477, "face=floor", "facing=east", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6478, "face=wall", "facing=north", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6479, "face=wall", "facing=north", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6480, "face=wall", "facing=south", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6481, "face=wall", "facing=south", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6482, "face=wall", "facing=west", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6483, "face=wall", "facing=west", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6484, "face=wall", "facing=east", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6485, "face=wall", "facing=east", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6486, "face=ceiling", "facing=north", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6487, "face=ceiling", "facing=north", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6488, "face=ceiling", "facing=south", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6489, "face=ceiling", "facing=south", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6490, "face=ceiling", "facing=west", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6491, "face=ceiling", "facing=west", "powered=false"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6492, "face=ceiling", "facing=east", "powered=true"));
-        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6493, "face=ceiling", "facing=east", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6672, "face=floor", "facing=north", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6673, "face=floor", "facing=north", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6674, "face=floor", "facing=south", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6675, "face=floor", "facing=south", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6676, "face=floor", "facing=west", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6677, "face=floor", "facing=west", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6678, "face=floor", "facing=east", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6679, "face=floor", "facing=east", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6680, "face=wall", "facing=north", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6681, "face=wall", "facing=north", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6682, "face=wall", "facing=south", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6683, "face=wall", "facing=south", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6684, "face=wall", "facing=west", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6685, "face=wall", "facing=west", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6686, "face=wall", "facing=east", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6687, "face=wall", "facing=east", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6688, "face=ceiling", "facing=north", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6689, "face=ceiling", "facing=north", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6690, "face=ceiling", "facing=south", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6691, "face=ceiling", "facing=south", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6692, "face=ceiling", "facing=west", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6693, "face=ceiling", "facing=west", "powered=false"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6694, "face=ceiling", "facing=east", "powered=true"));
+        Block.DARK_OAK_BUTTON.addBlockAlternative(new BlockAlternative((short) 6695, "face=ceiling", "facing=east", "powered=false"));
     }
 }

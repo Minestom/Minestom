@@ -19,11 +19,11 @@ public final class OrangeShulkerBox {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9288, "facing=north"));
-        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9289, "facing=east"));
-        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9290, "facing=south"));
-        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9291, "facing=west"));
-        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9292, "facing=up"));
-        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9293, "facing=down"));
+        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9534, "facing=north"));
+        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9535, "facing=east"));
+        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9536, "facing=south"));
+        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9537, "facing=west"));
+        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9538, "facing=up"));
+        Block.ORANGE_SHULKER_BOX.addBlockAlternative(new BlockAlternative((short) 9539, "facing=down"));
     }
 }

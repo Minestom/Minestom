@@ -17,6 +17,8 @@ public enum Particle implements Keyed {
 
     BARRIER(NamespaceID.from("minecraft:barrier")),
 
+    LIGHT(NamespaceID.from("minecraft:light")),
+
     BLOCK(NamespaceID.from("minecraft:block")),
 
     BUBBLE(NamespaceID.from("minecraft:bubble")),
@@ -40,6 +42,8 @@ public enum Particle implements Keyed {
     FALLING_WATER(NamespaceID.from("minecraft:falling_water")),
 
     DUST(NamespaceID.from("minecraft:dust")),
+
+    DUST_COLOR_TRANSITION(NamespaceID.from("minecraft:dust_color_transition")),
 
     EFFECT(NamespaceID.from("minecraft:effect")),
 
@@ -80,6 +84,8 @@ public enum Particle implements Keyed {
     INSTANT_EFFECT(NamespaceID.from("minecraft:instant_effect")),
 
     ITEM(NamespaceID.from("minecraft:item")),
+
+    VIBRATION(NamespaceID.from("minecraft:vibration")),
 
     ITEM_SLIME(NamespaceID.from("minecraft:item_slime")),
 
@@ -139,11 +145,15 @@ public enum Particle implements Keyed {
 
     FALLING_NECTAR(NamespaceID.from("minecraft:falling_nectar")),
 
+    FALLING_SPORE_BLOSSOM(NamespaceID.from("minecraft:falling_spore_blossom")),
+
     ASH(NamespaceID.from("minecraft:ash")),
 
     CRIMSON_SPORE(NamespaceID.from("minecraft:crimson_spore")),
 
     WARPED_SPORE(NamespaceID.from("minecraft:warped_spore")),
+
+    SPORE_BLOSSOM_AIR(NamespaceID.from("minecraft:spore_blossom_air")),
 
     DRIPPING_OBSIDIAN_TEAR(NamespaceID.from("minecraft:dripping_obsidian_tear")),
 
@@ -153,7 +163,31 @@ public enum Particle implements Keyed {
 
     REVERSE_PORTAL(NamespaceID.from("minecraft:reverse_portal")),
 
-    WHITE_ASH(NamespaceID.from("minecraft:white_ash"));
+    WHITE_ASH(NamespaceID.from("minecraft:white_ash")),
+
+    SMALL_FLAME(NamespaceID.from("minecraft:small_flame")),
+
+    SNOWFLAKE(NamespaceID.from("minecraft:snowflake")),
+
+    DRIPPING_DRIPSTONE_LAVA(NamespaceID.from("minecraft:dripping_dripstone_lava")),
+
+    FALLING_DRIPSTONE_LAVA(NamespaceID.from("minecraft:falling_dripstone_lava")),
+
+    DRIPPING_DRIPSTONE_WATER(NamespaceID.from("minecraft:dripping_dripstone_water")),
+
+    FALLING_DRIPSTONE_WATER(NamespaceID.from("minecraft:falling_dripstone_water")),
+
+    GLOW_SQUID_INK(NamespaceID.from("minecraft:glow_squid_ink")),
+
+    GLOW(NamespaceID.from("minecraft:glow")),
+
+    WAX_ON(NamespaceID.from("minecraft:wax_on")),
+
+    WAX_OFF(NamespaceID.from("minecraft:wax_off")),
+
+    ELECTRIC_SPARK(NamespaceID.from("minecraft:electric_spark")),
+
+    SCRAPE(NamespaceID.from("minecraft:scrape"));
 
     private static final Particle[] VALUES = values();
 
