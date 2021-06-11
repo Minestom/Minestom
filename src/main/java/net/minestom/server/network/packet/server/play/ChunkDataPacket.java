@@ -4,12 +4,10 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
-import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.Data;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.instance.palette.Section;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -28,6 +26,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -40,10 +39,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public int chunkX, chunkZ;
 
     public PaletteStorage paletteStorage = new PaletteStorage(8, 2);
-    public PaletteStorage customBlockPaletteStorage = new PaletteStorage(8, 2);
-
-    public IntSet blockEntities;
-    public Int2ObjectMap<Data> blocksData;
+    public Int2ObjectMap<BlockHandler> handlerMap;
+    public Int2ObjectMap<NBTCompound> nbtMap;
 
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
@@ -138,27 +135,26 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         blocks.release();
 
         // Block entities
-        if (blockEntities == null) {
+        if (handlerMap == null || handlerMap.isEmpty()) {
             writer.writeVarInt(0);
         } else {
-            writer.writeVarInt(blockEntities.size());
+            writer.writeVarInt(handlerMap.size());
 
-            for (int index : blockEntities) {
+            for (var entry : handlerMap.int2ObjectEntrySet()) {
+                final int index = entry.getIntKey();
+                final BlockHandler handler = entry.getValue();
                 final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
 
-                NBTCompound nbt = new NBTCompound()
+                NBTCompound nbt;
+                if (nbtMap != null) {
+                    nbt = Objects.requireNonNullElseGet(nbtMap.get(index), NBTCompound::new);
+                } else {
+                    nbt = new NBTCompound();
+                }
+                nbt.setString("id", handler.getNamespaceId().asString())
                         .setInt("x", blockPosition.getX())
                         .setInt("y", blockPosition.getY())
                         .setInt("z", blockPosition.getZ());
-
-                if (customBlockPaletteStorage != null) {
-                    final short customBlockId = customBlockPaletteStorage.getBlockAt(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-                    final CustomBlock customBlock = BLOCK_MANAGER.getCustomBlock(customBlockId);
-                    if (customBlock != null) {
-                        final Data data = blocksData.get(index);
-                        customBlock.writeBlockEntity(blockPosition, data, nbt);
-                    }
-                }
                 writer.writeNBT("", nbt);
             }
         }
@@ -223,12 +219,17 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             }
 
             // Block entities
-            int blockEntityCount = reader.readVarInt();
-            blockEntities = new IntOpenHashSet();
-            blockEntitiesNBT = new NBTCompound[blockEntityCount];
+            final int blockEntityCount = reader.readVarInt();
+            handlerMap = new Int2ObjectOpenHashMap<>();
+            nbtMap = new Int2ObjectOpenHashMap<>();
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
-                blockEntitiesNBT[i] = tag;
+                final String id = tag.getString("id");
+                // TODO retrieve handler by namespace
+                final int x = tag.getInt("x");
+                final int y = tag.getInt("y");
+                final int z = tag.getInt("z");
+                // TODO add to handlerMap & nbtMap
             }
         } catch (IOException | NBTException e) {
             MinecraftServer.getExceptionManager().handleException(e);

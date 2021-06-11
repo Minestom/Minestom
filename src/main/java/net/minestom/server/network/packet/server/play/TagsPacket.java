@@ -57,7 +57,7 @@ public class TagsPacket implements ServerPacket {
                             if (b == Block.AIR && !name.toString().equals("minecraft:air")) {
                                 writer.writeVarInt(-1);
                             }
-                            writer.writeVarInt(b.ordinal());
+                            writer.writeVarInt(b.getId());
                         }
                     }
                     break;
