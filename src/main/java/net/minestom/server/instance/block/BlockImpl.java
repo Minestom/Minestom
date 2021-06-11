@@ -1,35 +1,15 @@
 package net.minestom.server.instance.block;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectAVLTreeMap;
-import it.unimi.dsi.fastutil.shorts.Short2ObjectSortedMap;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.item.Material;
-import net.minestom.server.map.MapColors;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.*;
 
 class BlockImpl implements Block {
-    private static final Logger LOGGER = LoggerFactory.getLogger(BlockImpl.class);
-    private static final Short2ObjectSortedMap<BlockData> blockData = new Short2ObjectAVLTreeMap<>();
-
-    static {
-        loadBlockData();
-    }
 
     private NamespaceID namespaceID;
     private int blockId;
@@ -41,7 +21,6 @@ class BlockImpl implements Block {
     private NBTCompound compound;
 
     private BlockImpl() {
-
     }
 
     private BlockImpl(NamespaceID namespaceID,
@@ -181,11 +160,6 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public @NotNull BlockData getData() {
-        return blockData.get(stateId);
-    }
-
-    @Override
     public @Nullable BlockHandler getHandler() {
         return handler;
     }
@@ -275,64 +249,5 @@ class BlockImpl implements Block {
         }
 
         return result;
-    }
-
-    /**
-     * Loads the {@link BlockData} from the JAR Resources to the Map.
-     */
-    private static void loadBlockData() {
-        // E.G. 1_16_5_blocks.json
-        InputStream blocksIS = BlockImpl.class.getResourceAsStream("/minecraft_data/" + MinecraftServer.VERSION_NAME_UNDERSCORED + "_blocks.json");
-        if (blocksIS == null) {
-            LOGGER.error("Failed to find blocks.json");
-            return;
-        }
-        // Get map Colors as we will need these
-        MapColors[] mapColors = MapColors.values();
-
-        JsonArray blocks = new Gson().fromJson(new InputStreamReader(blocksIS), JsonArray.class);
-        for (JsonElement blockEntry : blocks) {
-            // Load Data
-            JsonObject block = blockEntry.getAsJsonObject();
-            double explosionResistance = block.get("explosionResistance").getAsDouble();
-            double friction = block.get("friction").getAsDouble();
-            double speedFactor = block.get("speedFactor").getAsDouble();
-            double jumpFactor = block.get("jumpFactor").getAsDouble();
-            boolean blockEntity = block.get("blockEntity").getAsBoolean();
-            final String blockId = block.get("itemId").getAsString();
-            java.util.function.Supplier<Material> itemSupplier = () -> Registries.getMaterial(blockId);
-            JsonArray states = block.get("states").getAsJsonArray();
-            for (JsonElement stateEntry : states) {
-                // Load Data
-                JsonObject state = stateEntry.getAsJsonObject();
-
-                short stateId = state.get("id").getAsShort();
-                blockData.put(
-                        stateId,
-                        new BlockDataImpl(
-                                explosionResistance,
-                                itemSupplier,
-                                friction,
-                                speedFactor,
-                                jumpFactor,
-                                blockEntity,
-
-                                state.get("destroySpeed").getAsDouble(),
-                                state.get("lightEmission").getAsInt(),
-                                state.get("doesOcclude").getAsBoolean(),
-                                state.get("pushReaction").getAsString(),
-                                state.get("blocksMotion").getAsBoolean(),
-                                state.get("isFlammable").getAsBoolean(),
-                                state.get("isAir").getAsBoolean(),
-                                state.get("isLiquid").getAsBoolean(),
-                                state.get("isReplaceable").getAsBoolean(),
-                                state.get("isSolid").getAsBoolean(),
-                                state.get("isSolidBlocking").getAsBoolean(),
-                                mapColors[state.get("mapColorId").getAsInt()],
-                                state.get("boundingBox").getAsString()
-                        )
-                );
-            }
-        }
     }
 }

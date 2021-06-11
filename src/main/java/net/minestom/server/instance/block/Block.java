@@ -41,8 +41,6 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
         return Registry.block(this);
     }
 
-    @NotNull BlockData getData();
-
     default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
         return comparator.test(this, block);
     }
@@ -74,15 +72,15 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     default boolean isAir() {
-        return getData().isAir();
+        return registry().isAir();
     }
 
     default boolean isSolid() {
-        return getData().isSolid();
+        return registry().isSolid();
     }
 
     default boolean isLiquid() {
-        return getData().isLiquid();
+        return registry().isLiquid();
     }
 
 

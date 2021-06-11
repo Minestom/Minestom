@@ -33,8 +33,16 @@ public class Registry {
             return getFloat("jumpFactor");
         }
 
+        public boolean isAir() {
+            return getBoolean("air");
+        }
+
         public boolean isSolid() {
             return getBoolean("solid");
+        }
+
+        public boolean isLiquid() {
+            return getBoolean("liquid");
         }
     }
 

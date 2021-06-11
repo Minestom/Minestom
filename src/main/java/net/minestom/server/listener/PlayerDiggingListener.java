@@ -56,7 +56,7 @@ public class PlayerDiggingListener {
 
             final boolean instantBreak = player.isCreative() ||
                     player.isInstantBreak() ||
-                    block.getData().getHardness() == 0;
+                    block.registry().destroySpeed() == 0;
 
             if (instantBreak) {
                 // No need to check custom block
