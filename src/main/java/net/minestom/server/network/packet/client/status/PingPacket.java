@@ -1,5 +1,8 @@
 package net.minestom.server.network.packet.client.status;
 
+import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.server.ClientPingServerEvent;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.status.PongPacket;
 import net.minestom.server.network.player.PlayerConnection;
@@ -15,9 +18,22 @@ public class PingPacket implements ClientPreplayPacket {
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
-        PongPacket pongPacket = new PongPacket(number);
-        connection.sendPacket(pongPacket);
-        connection.disconnect();
+        final ClientPingServerEvent clientPingEvent = new ClientPingServerEvent(connection, number);
+        MinecraftServer.getGlobalEventHandler().callEvent(ClientPingServerEvent.class, clientPingEvent);
+
+        if (clientPingEvent.isCancelled()) {
+            connection.disconnect();
+        } else {
+            if (clientPingEvent.getDelay().toMilliseconds() == 0) {
+                connection.sendPacket(new PongPacket(clientPingEvent.getPayload()));
+                connection.disconnect();
+            } else {
+                MinecraftServer.getSchedulerManager().buildTask(() -> {
+                    connection.sendPacket(new PongPacket(clientPingEvent.getPayload()));
+                    connection.disconnect();
+                }).delay(clientPingEvent.getDelay()).schedule();
+            }
+        }
     }
 
     @Override

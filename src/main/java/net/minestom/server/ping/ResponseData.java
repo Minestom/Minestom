@@ -29,6 +29,7 @@ public class ResponseData {
     private int online;
     private Component description;
     private String favicon;
+    private boolean playersHidden;
 
     /**
      * Constructs a new {@link ResponseData}.
@@ -41,6 +42,7 @@ public class ResponseData {
         this.maxPlayer = this.online + 1;
         this.description = DEFAULT_DESCRIPTION;
         this.favicon = "";
+        this.playersHidden = false;
     }
 
     /**
@@ -292,6 +294,25 @@ public class ResponseData {
      */
     public @NotNull Collection<NamedAndIdentified> getEntries() {
         return this.entries;
+    }
+
+    /**
+     * Sets whether the players are hidden or not.
+     * In the vanilla client, `???` will be displayed where the online and maximum players would be.
+     *
+     * @param playersHidden if the players are hidden
+     */
+    public void setPlayersHidden(boolean playersHidden) {
+        this.playersHidden = playersHidden;
+    }
+
+    /**
+     * Returns if the players are hidden or not.
+     *
+     * @return if the players are hidden
+     */
+    public boolean isPlayersHidden() {
+        return playersHidden;
     }
 
     /**
