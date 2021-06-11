@@ -96,7 +96,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         final int maskSize = maskMap.size();
         writer.writeVarInt(maskSize);
         for (int i = 0; i < maskSize; i++) {
-            final long value = maskMap.containsKey(i) ? maskMap.get(i) : 0;
+            final long value = maskMap.getOrDefault(i, 0);
             writer.writeLong(value);
         }
 
