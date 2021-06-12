@@ -7,6 +7,11 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockHandler)}.
+ * <p>
+ * Implementations are expected to be thread safe.
+ */
 public interface BlockHandler {
 
     /**

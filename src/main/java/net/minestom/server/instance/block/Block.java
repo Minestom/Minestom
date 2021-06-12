@@ -13,6 +13,13 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
+/**
+ * Represents a block that can be placed anywhere.
+ * Block objects are expected to be reusable and therefore do not
+ * retain placement data (e.g. block position)
+ * <p>
+ * Implementations are expected to be immutable.
+ */
 public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value);
