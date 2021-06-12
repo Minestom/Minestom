@@ -460,10 +460,9 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      * @param section the chunk section to update
      * @return the {@link ChunkDataPacket} to update a single chunk section
      */
-    @NotNull
-    protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
+    protected @NotNull ChunkDataPacket createChunkSectionUpdatePacket(int section) {
         ChunkDataPacket chunkDataPacket = createChunkPacket();
-        // TODO
+        chunkDataPacket.sections.entrySet().removeIf(entry -> entry.getKey() != section);
         return chunkDataPacket;
     }
 
