@@ -107,6 +107,10 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
+    public abstract @NotNull Map<Integer, Section> getSections();
+
+    public abstract @Nullable Section getSection(int section);
+
     /**
      * Executes a chunk tick.
      * <p>

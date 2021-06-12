@@ -4,14 +4,13 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
-public class Section implements PublicCloneable<Section> {
+public class Palette implements PublicCloneable<Palette> {
 
     /**
      * The maximum bits per entry value.
@@ -55,7 +54,7 @@ public class Section implements PublicCloneable<Section> {
 
     private short blockCount = 0;
 
-    protected Section(int bitsPerEntry, int bitsIncrement) {
+    public Palette(int bitsPerEntry, int bitsIncrement) {
         this.bitsPerEntry = bitsPerEntry;
         this.bitsIncrement = bitsIncrement;
 
@@ -142,26 +141,26 @@ public class Section implements PublicCloneable<Section> {
     public void resize(int newBitsPerEntry) {
         newBitsPerEntry = fixBitsPerEntry(newBitsPerEntry);
 
-        Section section = new Section(newBitsPerEntry, bitsIncrement);
-        section.paletteBlockMap = paletteBlockMap;
-        section.blockPaletteMap = blockPaletteMap;
+        Palette palette = new Palette(newBitsPerEntry, bitsIncrement);
+        palette.paletteBlockMap = paletteBlockMap;
+        palette.blockPaletteMap = blockPaletteMap;
 
         for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
             for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
                 for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                     final short blockId = getBlockAt(x, y, z);
-                    section.setBlockAt(x, y, z, blockId);
+                    palette.setBlockAt(x, y, z, blockId);
                 }
             }
         }
 
-        this.bitsPerEntry = section.bitsPerEntry;
+        this.bitsPerEntry = palette.bitsPerEntry;
 
-        this.valuesPerLong = section.valuesPerLong;
-        this.hasPalette = section.hasPalette;
+        this.valuesPerLong = palette.valuesPerLong;
+        this.hasPalette = palette.hasPalette;
 
-        this.blocks = section.blocks;
-        this.blockCount = section.blockCount;
+        this.blocks = palette.blocks;
+        this.blockCount = palette.blockCount;
     }
 
     /**
@@ -311,14 +310,14 @@ public class Section implements PublicCloneable<Section> {
 
     @NotNull
     @Override
-    public Section clone() {
+    public Palette clone() {
         try {
-            Section section = (Section) super.clone();
-            section.blocks = blocks.clone();
-            section.paletteBlockMap = paletteBlockMap.clone();
-            section.blockPaletteMap = blockPaletteMap.clone();
-            section.blockCount = blockCount;
-            return section;
+            Palette palette = (Palette) super.clone();
+            palette.blocks = blocks.clone();
+            palette.paletteBlockMap = paletteBlockMap.clone();
+            palette.blockPaletteMap = blockPaletteMap.clone();
+            palette.blockCount = blockCount;
+            return palette;
         } catch (CloneNotSupportedException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");

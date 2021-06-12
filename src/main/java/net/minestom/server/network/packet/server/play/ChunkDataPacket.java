@@ -3,12 +3,10 @@ package net.minestom.server.network.packet.server.play;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.palette.PaletteStorage;
-import net.minestom.server.instance.palette.Section;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.BlockPosition;
@@ -25,6 +23,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -36,9 +36,9 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public Biome[] biomes;
     public int chunkX, chunkZ;
 
-    public PaletteStorage paletteStorage = new PaletteStorage(8, 2);
-    public Int2ObjectMap<BlockHandler> handlerMap;
-    public Int2ObjectMap<NBTCompound> nbtMap;
+    public Map<Integer, Section> sections = new HashMap<>();
+    public Map<Integer, BlockHandler> handlerMap = new HashMap<>();
+    public Map<Integer, NBTCompound> nbtMap = new HashMap<>();
 
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
@@ -71,8 +71,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
         Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
 
-        for (var entry : paletteStorage.getSectionMap().int2ObjectEntrySet()) {
-            final int index = entry.getIntKey();
+        for (var entry : sections.entrySet()) {
+            final int index = entry.getKey();
             final Section section = entry.getValue();
 
             final int lengthIndex = index % 64;
@@ -82,7 +82,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             mask |= 1L << lengthIndex;
             maskMap.put(maskIndex, mask);
 
-            Utils.writeSectionBlocks(blocks, section);
+            Utils.writePaletteBlocks(blocks, section.getPalette());
         }
 
         final int maskSize = maskMap.size();
@@ -132,8 +132,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         } else {
             writer.writeVarInt(handlerMap.size());
 
-            for (var entry : handlerMap.int2ObjectEntrySet()) {
-                final int index = entry.getIntKey();
+            for (var entry : handlerMap.entrySet()) {
+                final int index = entry.getKey();
                 final BlockHandler handler = entry.getValue();
                 final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
 
@@ -175,7 +175,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             }
 
             // Data
-            this.paletteStorage = new PaletteStorage(8, 1);
+            /*this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
             if (maskCount > 0) {
                 final long mask = masks[0]; // TODO support for variable size
@@ -208,7 +208,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                         data[i] = reader.readLong();
                     }
                 }
-            }
+            }*/
 
             // Block entities
             final int blockEntityCount = reader.readVarInt();

@@ -1,10 +1,8 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
-import it.unimi.dsi.fastutil.ints.Int2LongMap;
-import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
@@ -14,7 +12,6 @@ import net.minestom.server.data.SerializableDataImpl;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.palette.PaletteStorage;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -28,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.ref.SoftReference;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,31 +41,19 @@ public class DynamicChunk extends Chunk {
      */
     private static final int DATA_FORMAT_VERSION = 1;
 
-    // WARNING: not thread-safe and should not be changed
-    protected PaletteStorage blockPalette;
+    protected final Int2ObjectRBTreeMap<Section> sectionMap = new Int2ObjectRBTreeMap<>();
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<BlockHandler> handlerMap = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<NBTCompound> nbtMap = new Int2ObjectOpenHashMap<>();
-
-    // Contains CustomBlocks' block index which are updatable
-    protected final IntOpenHashSet updatableBlocks = new IntOpenHashSet();
-    // (block index)/(last update in ms)
-    protected final Int2LongMap updatableBlocksLastUpdate = new Int2LongOpenHashMap();
 
     private long lastChangeTime;
 
     private SoftReference<ChunkDataPacket> cachedPacket = new SoftReference<>(null);
     private long cachedPacketTime;
 
-    public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ,
-                        @NotNull PaletteStorage blockPalette) {
-        super(instance, biomes, chunkX, chunkZ, true);
-        this.blockPalette = blockPalette;
-    }
-
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
-        this(instance, biomes, chunkX, chunkZ, new PaletteStorage(8, 2));
+        super(instance, biomes, chunkX, chunkZ, true);
     }
 
     @Override
@@ -85,9 +71,13 @@ public class DynamicChunk extends Chunk {
             }
         }
 
+        this.lastChangeTime = System.currentTimeMillis();
+        {
+            Section section = retrieveSection(y);
+            section.setBlockAt(x, y, z, blockStateId);
+        }
+
         final int index = getBlockIndex(x, y, z);
-        // Block palette
-        setBlockAt(blockPalette, x, y, z, blockStateId);
         // Handler
         if (handler != null) {
             this.handlerMap.put(index, handler);
@@ -103,14 +93,25 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
+    public @NotNull Map<Integer, Section> getSections() {
+        return sectionMap;
+    }
+
+    @Override
+    public @Nullable Section getSection(int section) {
+        return sectionMap.get(section);
+    }
+
+    @Override
     public void tick(long time) {
         // TODO block update
     }
 
     @Override
     public @NotNull Block getBlock(int x, int y, int z) {
+        final Section section = retrieveSection(y);
         final int index = ChunkUtils.getBlockIndex(x, y, z);
-        final short blockStateId = getBlockAt(blockPalette, x, y, z);
+        final short blockStateId = section.getBlockAt(x, y, z);
         BlockHandler handler = handlerMap.get(index);
         NBTCompound nbt = nbtMap.get(index);
         Block block = Block.fromStateId(blockStateId);
@@ -180,7 +181,9 @@ public class DynamicChunk extends Chunk {
                     for (byte z = 0; z < CHUNK_SIZE_Z; z++) {
                         final int index = getBlockIndex(x, y, z);
 
-                        final short blockStateId = getBlockAt(blockPalette, x, y, z);
+                        final Section section = retrieveSection(y);
+
+                        final short blockStateId = section.getBlockAt(x, y, z);
                         final short customBlockId = 0;//getBlockAt(customBlockPalette, x, y, z);
 
                         // No block at the position
@@ -325,7 +328,7 @@ public class DynamicChunk extends Chunk {
         packet.biomes = biomes;
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
-        packet.paletteStorage = blockPalette.clone();
+        packet.sections = sectionMap.clone(); // TODO deep clone
         packet.handlerMap = handlerMap.clone();
         packet.nbtMap = nbtMap.clone();
 
@@ -338,10 +341,10 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
-        dynamicChunk.blockPalette = blockPalette.clone();
+        for (var entry : sectionMap.int2ObjectEntrySet()) {
+            dynamicChunk.sectionMap.put(entry.getIntKey(), entry.getValue().clone());
+        }
         dynamicChunk.handlerMap.putAll(handlerMap);
-        dynamicChunk.updatableBlocks.addAll(updatableBlocks);
-        dynamicChunk.updatableBlocksLastUpdate.putAll(updatableBlocksLastUpdate);
         dynamicChunk.nbtMap.putAll(nbtMap);
 
         return dynamicChunk;
@@ -349,19 +352,13 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void reset() {
-        this.blockPalette.clear();
+        this.sectionMap.values().forEach(Section::clear);
         this.handlerMap.clear();
         this.nbtMap.clear();
-        this.updatableBlocks.clear();
-        this.updatableBlocksLastUpdate.clear();
     }
 
-    private short getBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z) {
-        return paletteStorage.getBlockAt(x, y, z);
-    }
-
-    private void setBlockAt(@NotNull PaletteStorage paletteStorage, int x, int y, int z, short blockId) {
-        paletteStorage.setBlockAt(x, y, z, blockId);
-        this.lastChangeTime = System.currentTimeMillis();
+    private @NotNull Section retrieveSection(int y) {
+        final int sectionIndex = ChunkUtils.getSectionAt(y);
+        return sectionMap.computeIfAbsent(sectionIndex, key -> new Section());
     }
 }
