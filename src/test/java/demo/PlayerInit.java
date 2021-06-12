@@ -1,5 +1,6 @@
 package demo;
 
+import demo.block.CampfireHandler;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
@@ -37,10 +38,7 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -57,6 +55,10 @@ public class PlayerInit {
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
         instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+
+        instanceContainer.setBlock(0, 45, 3, Block.CAMPFIRE
+                .withHandler(new CampfireHandler())
+                .withTag(CampfireHandler.ITEMS, List.of(ItemStack.of(Material.DIAMOND, 1))));
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
@@ -204,13 +206,6 @@ public class PlayerInit {
             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
             int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
             player.setRespawnPoint(new Position(0, 42f, 0));
-
-            player.getInventory().addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
-                if (slot == -999)
-                    return;
-                //ItemStack itemStack = p.getInventory().getItemStack(slot);
-                //System.out.println("test " + itemStack.getIdentifier() + " " + itemStack.getData());
-            });
         });
 
         globalEventHandler.addEventCallback(PlayerSpawnEvent.class, event -> {

@@ -133,6 +133,11 @@ class BlockImpl implements Block {
     }
 
     @Override
+    public @Nullable NBTCompound getNbt() {
+        return compound != null ? compound.deepClone() : null;
+    }
+
+    @Override
     public @NotNull Block getDefaultBlock() {
         return original;
     }

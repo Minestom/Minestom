@@ -36,6 +36,8 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     @NotNull String getProperty(@NotNull String property);
 
+    @Nullable NBTCompound getNbt();
+
     @Nullable BlockHandler getHandler();
 
     @NotNull Block getDefaultBlock();

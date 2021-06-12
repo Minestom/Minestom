@@ -60,7 +60,7 @@ public class DynamicChunk extends Chunk {
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         final short blockStateId = block.getStateId();
         final BlockHandler handler = block.getHandler();
-        final NBTCompound nbt = null; // TODO
+        final NBTCompound nbt = block.getNbt(); // TODO
         final boolean updatable = false; // TODO
         {
             // Update pathfinder

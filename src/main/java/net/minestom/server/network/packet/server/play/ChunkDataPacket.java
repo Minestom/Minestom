@@ -9,6 +9,7 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -23,10 +24,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class ChunkDataPacket implements ServerPacket, CacheablePacket {
@@ -130,25 +128,35 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         if (handlerMap == null || handlerMap.isEmpty()) {
             writer.writeVarInt(0);
         } else {
-            writer.writeVarInt(handlerMap.size());
-
+            List<NBTCompound> compounds = new ArrayList<>();
             for (var entry : handlerMap.entrySet()) {
                 final int index = entry.getKey();
                 final BlockHandler handler = entry.getValue();
-                final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                final var blockEntityTags = handler.getBlockEntityTags();
+                if (blockEntityTags.isEmpty())
+                    continue;
+                final var blockNbt = Objects.requireNonNullElseGet(nbtMap.get(index), NBTCompound::new);
+                final var resultNbt = new NBTCompound();
 
-                NBTCompound nbt;
-                if (nbtMap != null) {
-                    nbt = Objects.requireNonNullElseGet(nbtMap.get(index), NBTCompound::new);
-                } else {
-                    nbt = new NBTCompound();
+                for (Tag<?> tag : blockEntityTags) {
+                    final var value = tag.read(blockNbt);
+                    if (value != null) {
+                        // Tag is present and valid
+                        tag.writeUnsafe(resultNbt, value);
+                    }
                 }
-                nbt.setString("id", handler.getNamespaceId().asString())
-                        .setInt("x", blockPosition.getX())
-                        .setInt("y", blockPosition.getY())
-                        .setInt("z", blockPosition.getZ());
-                writer.writeNBT("", nbt);
+
+                if (resultNbt.getSize() > 0) {
+                    final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                    resultNbt.setString("id", handler.getNamespaceId().asString())
+                            .setInt("x", blockPosition.getX())
+                            .setInt("y", blockPosition.getY())
+                            .setInt("z", blockPosition.getZ());
+                    compounds.add(resultNbt);
+                }
             }
+            writer.writeVarInt(compounds.size());
+            compounds.forEach(nbtCompound -> writer.writeNBT("", nbtCompound));
         }
     }
 

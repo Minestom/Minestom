@@ -3,9 +3,13 @@ package net.minestom.server.instance.block;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockHandler)}.
@@ -49,6 +53,14 @@ public interface BlockHandler {
      * @param touching the entity currently touching the block
      */
     default void handleContact(@NotNull Instance instance, @NotNull BlockPosition position, @NotNull Entity touching) {
+    }
+
+    default @NotNull Collection<Tag<?>> getBlockEntityTags() {
+        return Collections.emptyList();
+    }
+
+    default byte getBlockEntityAction() {
+        return -1;
     }
 
     /**

@@ -101,6 +101,10 @@ public class Tag<T> {
         }
     }
 
+    public void writeUnsafe(@NotNull NBTCompound nbtCompound, @Nullable Object value) {
+        write(nbtCompound, (T) value);
+    }
+
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
         return new Tag<>(key,
                 nbtCompound -> nbtCompound.getByte(key),
@@ -178,20 +182,7 @@ public class Tag<T> {
 
     public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
-                nbtCompound -> {
-                    final var compound = nbtCompound.getCompound(key);
-                    if (compound == null) {
-                        return null;
-                    }
-                    return serializer.read(TagReadable.fromCompound(compound));
-                },
-                (nbtCompound, value) -> {
-                    var compound = nbtCompound.getCompound(key);
-                    if (compound == null) {
-                        compound = new NBTCompound();
-                        nbtCompound.set(key, compound);
-                    }
-                    serializer.write(TagWritable.fromCompound(compound), value);
-                });
+                nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
+                (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
     }
 }
