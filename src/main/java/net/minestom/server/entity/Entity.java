@@ -538,14 +538,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
                 // World border collision
                 final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                Chunk finalChunk = currentChunk;
-                if (!ChunkUtils.same(position, finalVelocityPosition)) {
-                    finalChunk = instance.getChunkAt(finalVelocityPosition);
-
+                final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
+                if (!ChunkUtils.isLoaded(finalChunk)) {
                     // Entity shouldn't be updated when moving in an unloaded chunk
-                    if (!ChunkUtils.isLoaded(finalChunk)) {
-                        return;
-                    }
+                    return;
                 }
 
                 // Apply the position if changed
@@ -612,12 +608,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        Chunk chunk = currentChunk;
-                        if (!ChunkUtils.same(currentChunk, x, z)) {
-                            chunk = instance.getChunkAt(x, z);
-                            if (!ChunkUtils.isLoaded(chunk))
-                                continue;
-                        }
+                        final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
+                        if (!ChunkUtils.isLoaded(chunk))
+                            continue;
 
                         final Block block = chunk.getBlock(x, y, z);
                         final BlockHandler handler = block.getHandler();

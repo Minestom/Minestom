@@ -152,16 +152,13 @@ public class CollisionUtils {
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
 
-            Chunk chunk = originChunk;
-            if (!ChunkUtils.same(originChunk, blockPos.getX(), blockPos.getZ())) {
-                chunk = instance.getChunkAt(blockPos);
-                if (!ChunkUtils.isLoaded(chunk)) {
-                    // Collision at chunk border
-                    return false;
-                }
+            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, blockPos);
+            if (!ChunkUtils.isLoaded(chunk)) {
+                // Collision at chunk border
+                return false;
             }
 
-            final Block block = chunk.getBlock(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+            final Block block = chunk.getBlock(blockPos);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block

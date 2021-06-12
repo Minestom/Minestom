@@ -98,6 +98,21 @@ public final class ChunkUtils {
         return x1 == x2 && z1 == z2;
     }
 
+    public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
+        if (!ChunkUtils.same(originChunk, x, z)) {
+            return instance.getChunkAt(x, z);
+        }
+        return originChunk;
+    }
+
+    public static Chunk retrieve(Instance instance, Chunk originChunk, Position position) {
+        return retrieve(instance, originChunk, position.getX(), position.getZ());
+    }
+
+    public static Chunk retrieve(Instance instance, Chunk originChunk, BlockPosition blockPosition) {
+        return retrieve(instance, originChunk, blockPosition.getX(), blockPosition.getZ());
+    }
+
     /**
      * @param xz the instance coordinate to convert
      * @return the chunk X or Z based on the argument
