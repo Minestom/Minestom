@@ -138,6 +138,7 @@ public final class MinecraftServer {
     private static int compressionThreshold = 256;
     private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
+    private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
@@ -616,6 +617,24 @@ public final class MinecraftServer {
     }
 
     /**
+     * Gets if the built in Minestom terminal is enabled.
+     * @return true if the terminal is enabled
+     */
+    public static boolean isTerminalEnabled() {
+        return terminalEnabled;
+    }
+
+    /**
+     * Enabled/disables the built in Minestom terminal.
+     *
+     * @param enabled true to enable, false to disable
+     */
+    public static void setTerminalEnabled(boolean enabled) {
+        Check.stateCondition(started, "Terminal settings may not be changed after starting the server.");
+        MinecraftServer.terminalEnabled = enabled;
+    }
+
+    /**
      * Gets the consumer executed to show server-list data.
      *
      * @return the response data consumer
@@ -795,7 +814,9 @@ public final class MinecraftServer {
 
         LOGGER.info("Minestom server started successfully.");
 
-        MinestomTerminal.start();
+        if (terminalEnabled) {
+            MinestomTerminal.start();
+        }
     }
 
     /**
