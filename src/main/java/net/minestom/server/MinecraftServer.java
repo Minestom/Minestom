@@ -795,7 +795,8 @@ public final class MinecraftServer {
 
         LOGGER.info("Minestom server started successfully.");
 
-        MinestomTerminal.start();
+        if (System.getProperty("minestom.terminal.disabled") == null)
+            MinestomTerminal.start();
     }
 
     /**
