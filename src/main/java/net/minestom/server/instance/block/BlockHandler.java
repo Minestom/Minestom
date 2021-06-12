@@ -7,25 +7,29 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
-public interface BlockHandler {
+public abstract class BlockHandler {
+
+    private final Block block;
+
+    public BlockHandler(Block block) {
+        this.block = block;
+    }
 
     /**
      * Called when a block has been placed.
      *
      * @param instance      the instance of the block
-     * @param block         the block
      * @param blockPosition the position of the block
      */
-    void onPlace(@NotNull Instance instance, @NotNull Block block, @NotNull BlockPosition blockPosition);
+    public abstract void onPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition);
 
     /**
      * Called when a block has been destroyed or replaced.
      *
      * @param instance      the instance of the block
-     * @param block         the block
      * @param blockPosition the position of the block
      */
-    void onDestroy(@NotNull Instance instance, @NotNull Block block, @NotNull BlockPosition blockPosition);
+    public abstract void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition);
 
     /**
      * Handles interactions with this block. Can also block normal item use (containers should block when opening the
@@ -33,12 +37,10 @@ public interface BlockHandler {
      *
      * @param player        the player interacting
      * @param hand          the hand used to interact
-     * @param block         the block
      * @param blockPosition the position of this block
      * @return true if this block blocks normal item use, false otherwise
      */
-    boolean onInteract(@NotNull Player player, @NotNull Player.Hand hand,
-                       @NotNull Block block, @NotNull BlockPosition blockPosition);
+    public abstract boolean onInteract(@NotNull Player player, @NotNull Player.Hand hand, @NotNull BlockPosition blockPosition);
 
     /**
      * Gets the drag of this block.
@@ -46,23 +48,21 @@ public interface BlockHandler {
      * Has to be between 0 and 1.
      *
      * @param instance      the instance of the block
-     * @param block         the block
      * @param blockPosition the block position
      * @return the drag to apply
      */
-    default float getDrag(@NotNull Instance instance, @NotNull Block block, @NotNull BlockPosition blockPosition) {
-        return 0.5f;
+    public float getDrag(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+        return block.registry().friction();
     }
 
     /**
      * Defines custom behaviour for entities touching this block.
      *
      * @param instance the instance
-     * @param block    the block
      * @param position the position at which the block is
      * @param touching the entity currently touching the block
      */
-    default void handleContact(@NotNull Instance instance, @NotNull Block block, @NotNull BlockPosition position, @NotNull Entity touching) {
+    public void handleContact(@NotNull Instance instance, @NotNull BlockPosition position, @NotNull Entity touching) {
     }
 
     /**
@@ -72,5 +72,5 @@ public interface BlockHandler {
      *
      * @return the namespace id of this handler
      */
-    @NotNull NamespaceID getNamespaceId();
+    public abstract @NotNull NamespaceID getNamespaceId();
 }

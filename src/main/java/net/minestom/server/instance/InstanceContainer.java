@@ -147,8 +147,8 @@ public class InstanceContainer extends Instance {
             }
             setAlreadyChanged(blockPosition, block);
 
-            final Block previousBlock = chunk.getBlock(blockPosition);
-            final BlockHandler previousHandler = previousBlock.getHandler();
+            final BlockHandler previousHandler = chunk.getBlock(blockPosition)
+                    .getHandler();
 
             // Change id based on neighbors
             block = executeBlockPlacementRule(block, blockPosition);
@@ -164,12 +164,12 @@ public class InstanceContainer extends Instance {
 
             if (previousHandler != null) {
                 // Previous destroy
-                previousHandler.onDestroy(this, previousBlock, blockPosition);
+                previousHandler.onDestroy(this, blockPosition);
             }
             final BlockHandler handler = block.getHandler();
             if (handler != null) {
                 // New placement
-                handler.onPlace(this, block, blockPosition);
+                handler.onPlace(this, blockPosition);
             }
         }
     }

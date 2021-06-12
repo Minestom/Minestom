@@ -564,7 +564,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                         final Block block = finalChunk.getBlock(blockPosition);
                         final BlockHandler handler = block.getHandler();
                         if (handler != null) {
-                            drag = handler.getDrag(instance, block, blockPosition);
+                            drag = handler.getDrag(instance, blockPosition);
                         } else {
                             // Default ground drag
                             drag = 0.5f;
@@ -621,7 +621,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                             // checks that we are actually in the block, and not just here because of a rounding error
                             if (boundingBox.intersect(tmpPosition)) {
                                 // TODO: replace with check with custom block bounding box
-                                handler.handleContact(instance, block, tmpPosition, this);
+                                handler.handleContact(instance, tmpPosition, this);
                             }
                         }
                     }
