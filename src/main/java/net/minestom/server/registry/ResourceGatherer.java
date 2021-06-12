@@ -116,6 +116,9 @@ public class ResourceGatherer {
         new BufferedReader(
                 new InputStreamReader(dataGeneratorProcess.getInputStream())
         ).lines().forEach(LOGGER::info);
+        new BufferedReader(
+                new InputStreamReader(dataGeneratorProcess.getErrorStream())
+        ).lines().forEach(LOGGER::error);
         LOGGER.info("");
 
         try {
