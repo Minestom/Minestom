@@ -558,24 +558,13 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     this.velocity.copy(newVelocityOut);
                     this.velocity.multiply(tps);
 
-                    float drag;
+                    final Block block = finalChunk.getBlock(position.toBlockPosition());
+                    final float drag = block.registry().friction();
                     if (onGround) {
-                        final BlockPosition blockPosition = position.toBlockPosition();
-                        final Block block = finalChunk.getBlock(blockPosition);
-                        final BlockHandler handler = block.getHandler();
-                        if (handler != null) {
-                            drag = handler.getDrag(instance, blockPosition);
-                        } else {
-                            // Default ground drag
-                            drag = 0.5f;
-                        }
-
                         // Stop player velocity
                         if (isNettyClient) {
                             this.velocity.zero();
                         }
-                    } else {
-                        drag = 0.98f; // air drag
                     }
 
                     this.velocity.setX(velocity.getX() * drag);
