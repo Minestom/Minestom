@@ -311,7 +311,7 @@ public class ResponseData {
      *
      * @return if the players are hidden
      */
-    public boolean isPlayersHidden() {
+    public boolean arePlayersHidden() {
         return playersHidden;
     }
 

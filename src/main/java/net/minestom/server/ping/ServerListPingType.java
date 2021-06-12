@@ -110,7 +110,7 @@ public enum ServerListPingType {
         versionObject.addProperty("protocol", data.getProtocol());
 
         JsonObject playersObject = null;
-        if (!data.isPlayersHidden()) {
+        if (!data.arePlayersHidden()) {
             // players info
             playersObject = new JsonObject();
             playersObject.addProperty("max", data.getMaxPlayer());
