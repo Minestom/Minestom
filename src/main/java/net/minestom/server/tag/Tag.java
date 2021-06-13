@@ -21,6 +21,8 @@ import java.util.function.Supplier;
 @ApiStatus.NonExtendable
 public class Tag<T> {
 
+    private static final String EMPTY_KEY = "";
+
     private final String key;
     private final Function<NBTCompound, T> readFunction;
     private final BiConsumer<NBTCompound, T> writeConsumer;
@@ -85,16 +87,16 @@ public class Tag<T> {
     }
 
     public @Nullable T read(@NotNull NBTCompound nbtCompound) {
-        if (nbtCompound.containsKey(key)) {
-            return readFunction.apply(nbtCompound);
-        } else {
+        T result = readFunction.apply(nbtCompound);
+        if (result == null) {
             final var supplier = defaultValue;
-            return supplier != null ? supplier.get() : null;
+            result = supplier != null ? supplier.get() : null;
         }
+        return result;
     }
 
     public void write(@NotNull NBTCompound nbtCompound, @Nullable T value) {
-        if (value != null) {
+        if (value != null || key.equals(EMPTY_KEY)) {
             this.writeConsumer.accept(nbtCompound, value);
         } else {
             nbtCompound.removeTag(key);
@@ -180,8 +182,35 @@ public class Tag<T> {
                 (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
-    public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+    /**
+     * Create a wrapper around a compound.
+     *
+     * @param key        the tag key
+     * @param serializer the tag serializer
+     * @param <T>        the tag type
+     * @return the created tag
+     */
+    public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
+                nbtCompound -> {
+                    final var compound = nbtCompound.getCompound(key);
+                    if (compound == null) {
+                        return null;
+                    }
+                    return serializer.read(TagReadable.fromCompound(compound));
+                },
+                (nbtCompound, value) -> {
+                    var compound = nbtCompound.getCompound(key);
+                    if (compound == null) {
+                        compound = new NBTCompound();
+                        nbtCompound.set(key, compound);
+                    }
+                    serializer.write(TagWritable.fromCompound(compound), value);
+                });
+    }
+
+    public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
+        return new Tag<>(EMPTY_KEY,
                 nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
                 (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
     }

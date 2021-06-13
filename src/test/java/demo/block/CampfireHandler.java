@@ -25,8 +25,7 @@ import java.util.List;
 
 public class CampfireHandler implements BlockHandler {
 
-    public static final Tag<List<ItemStack>> ITEMS = Tag.Custom("Items", new TagSerializer<>() {
-
+    public static final Tag<List<ItemStack>> ITEMS = Tag.View(new TagSerializer<>() {
         private final Tag<NBT> internal = Tag.NBT("Items");
 
         @Override
@@ -44,7 +43,11 @@ public class CampfireHandler implements BlockHandler {
         }
 
         @Override
-        public void write(@NotNull TagWritable writer, @NotNull List<ItemStack> value) {
+        public void write(@NotNull TagWritable writer, @Nullable List<ItemStack> value) {
+            if (value == null) {
+                writer.removeTag(internal);
+                return;
+            }
             NBTList<NBTCompound> items = new NBTList<>(NBTTypes.TAG_Compound);
             for (var item : value) {
                 NBTCompound compound = new NBTCompound()
