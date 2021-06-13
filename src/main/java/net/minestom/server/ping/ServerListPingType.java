@@ -109,21 +109,24 @@ public enum ServerListPingType {
         versionObject.addProperty("name", data.getVersion());
         versionObject.addProperty("protocol", data.getProtocol());
 
-        // players info
-        final JsonObject playersObject = new JsonObject();
-        playersObject.addProperty("max", data.getMaxPlayer());
-        playersObject.addProperty("online", data.getOnline());
+        JsonObject playersObject = null;
+        if (!data.arePlayersHidden()) {
+            // players info
+            playersObject = new JsonObject();
+            playersObject.addProperty("max", data.getMaxPlayer());
+            playersObject.addProperty("online", data.getOnline());
 
-        // individual players
-        final JsonArray sampleArray = new JsonArray();
-        for (NamedAndIdentified entry : data.getEntries()) {
-            JsonObject playerObject = new JsonObject();
-            playerObject.addProperty("name", SECTION.serialize(entry.getName()));
-            playerObject.addProperty("id", entry.getUuid().toString());
-            sampleArray.add(playerObject);
+            // individual players
+            final JsonArray sampleArray = new JsonArray();
+            for (NamedAndIdentified entry : data.getEntries()) {
+                JsonObject playerObject = new JsonObject();
+                playerObject.addProperty("name", SECTION.serialize(entry.getName()));
+                playerObject.addProperty("id", entry.getUuid().toString());
+                sampleArray.add(playerObject);
+            }
+
+            playersObject.add("sample", sampleArray);
         }
-
-        playersObject.add("sample", sampleArray);
 
         final JsonObject jsonObject = new JsonObject();
         jsonObject.add("version", versionObject);
