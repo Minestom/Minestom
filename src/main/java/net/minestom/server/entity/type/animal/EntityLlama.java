@@ -2,7 +2,7 @@ package net.minestom.server.entity.type.animal;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,8 +18,8 @@ public class EntityLlama extends EntityCreature {
         setBoundingBox(.9D, 1.87D, .9D);
     }
 
-    public EntityLlama(@NotNull Position spawnPosition, @Nullable Instance instance) {
-        super(EntityType.LLAMA, spawnPosition, instance);
+    public EntityLlama(@NotNull Position spawnPosition, @Nullable World world) {
+        super(EntityType.LLAMA, spawnPosition, world);
         setBoundingBox(.9D, 1.87D, .9D);
     }
 

@@ -1,8 +1,8 @@
 package demo.generator;
 
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.batch.ChunkBatch;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.batch.ChunkBatch;
+import net.minestom.server.block.Block;
 import net.minestom.server.utils.BlockPosition;
 
 import java.util.HashMap;

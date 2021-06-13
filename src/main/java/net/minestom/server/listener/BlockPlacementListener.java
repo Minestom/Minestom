@@ -8,12 +8,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.block.Block;
+import net.minestom.server.block.BlockFace;
+import net.minestom.server.block.BlockManager;
+import net.minestom.server.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -37,18 +37,18 @@ public class BlockPlacementListener {
         final BlockPosition blockPosition = packet.blockPosition;
         final Direction direction = blockFace.toDirection();
 
-        final Instance instance = player.getInstance();
-        if (instance == null)
+        final World world = player.getWorld();
+        if (world == null)
             return;
 
         // Prevent outdated/modified client data
-        if (!ChunkUtils.isLoaded(instance.getChunkAt(blockPosition))) {
+        if (!ChunkUtils.isLoaded(world.getChunkAt(blockPosition))) {
             // Client tried to place a block in an unloaded chunk, ignore the request
             return;
         }
 
         final ItemStack usedItem = player.getItemInHand(hand);
-        final Block interactedBlock = instance.getBlock(blockPosition);
+        final Block interactedBlock = world.getBlock(blockPosition);
 
         // Interact at block
         // FIXME: onUseOnBlock
@@ -96,7 +96,7 @@ public class BlockPlacementListener {
             return;
         }
 
-        final Chunk chunk = instance.getChunkAt(blockPosition);
+        final Chunk chunk = world.getChunkAt(blockPosition);
 
         Check.stateCondition(!ChunkUtils.isLoaded(chunk),
                 "A player tried to place a block in the border of a loaded chunk " + blockPosition);
@@ -108,7 +108,7 @@ public class BlockPlacementListener {
         if (useMaterial.isBlock()) {
             if (!chunk.isReadOnly()) {
                 final Block placedBlock = useMaterial.getBlock();
-                final Set<Entity> entities = instance.getChunkEntities(chunk);
+                final Set<Entity> entities = world.getChunkEntities(chunk);
                 // Check if the player is trying to place a block in an entity
                 boolean intersect = player.getBoundingBox().intersect(blockPosition);
                 if (!intersect && placedBlock.isSolid()) {
@@ -139,12 +139,12 @@ public class BlockPlacementListener {
                         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
                         if (blockPlacementRule != null) {
                             // Get id from block placement rule instead of the event
-                            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                            resultBlock = blockPlacementRule.blockPlace(world, resultBlock, blockFace, blockPosition, player);
                         }
                         final boolean placementRuleCheck = resultBlock != null;
                         if (placementRuleCheck) {
                             // Place the block
-                            instance.setBlock(blockPosition, resultBlock);
+                            world.setBlock(blockPosition, resultBlock);
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand

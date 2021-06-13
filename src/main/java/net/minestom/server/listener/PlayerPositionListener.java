@@ -2,7 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -51,10 +51,10 @@ public class PlayerPositionListener {
 
     private static void processMovement(@NotNull Player player, double x, double y, double z,
                                         float yaw, float pitch, boolean onGround) {
-        final Instance instance = player.getInstance();
+        final World world = player.getWorld();
 
         // Prevent moving before the player spawned, probably a modified client (or high latency?)
-        if (instance == null) {
+        if (world == null) {
             return;
         }
 
@@ -64,7 +64,7 @@ public class PlayerPositionListener {
         }
 
         // Try to move in an unloaded chunk, prevent it
-        if (!ChunkUtils.isLoaded(instance, x, z)) {
+        if (!ChunkUtils.isLoaded(world, x, z)) {
             player.teleport(player.getPosition());
             return;
         }

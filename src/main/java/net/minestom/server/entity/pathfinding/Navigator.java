@@ -6,9 +6,9 @@ import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.WorldBorder;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.world.WorldBorder;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -110,7 +110,7 @@ public class Navigator {
             return false;
         }
 
-        final Instance instance = entity.getInstance();
+        final World world = entity.getWorld();
 
         if (pathFinder == null) {
             // Unexpected error
@@ -122,19 +122,19 @@ public class Navigator {
             return false;
         }
 
-        // Can't path with a null instance.
-        if (instance == null) {
+        // Can't path with a null world.
+        if (world == null) {
             return false;
         }
 
         // Can't path outside of the world border
-        final WorldBorder worldBorder = instance.getWorldBorder();
+        final WorldBorder worldBorder = world.getWorldBorder();
         if (!worldBorder.isInside(position)) {
             return false;
         }
 
         // Can't path in an unloaded chunk
-        final Chunk chunk = instance.getChunkAt(position);
+        final Chunk chunk = world.getChunkAt(position);
         if (!ChunkUtils.isLoaded(chunk)) {
             return false;
         }
@@ -202,7 +202,7 @@ public class Navigator {
     /**
      * Gets the assigned pathfinder.
      * <p>
-     * Can be null if the navigable element hasn't been assigned to an {@link Instance} yet.
+     * Can be null if the navigable element hasn't been assigned to an {@link World} yet.
      *
      * @return the current pathfinder, null if none
      */

@@ -1,6 +1,6 @@
 package net.minestom.server.world.biomes;
 
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;

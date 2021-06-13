@@ -3,7 +3,7 @@ package net.minestom.server.item;
 import java.util.function.Supplier;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;

@@ -1,10 +1,10 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.WorldBorder;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.world.WorldBorder;
+import net.minestom.server.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -31,21 +31,21 @@ public class CollisionUtils {
                                         @NotNull Position positionOut,
                                         @NotNull Vector velocityOut) {
         // TODO handle collisions with nearby entities (should it be done here?)
-        final Instance instance = entity.getInstance();
+        final World world = entity.getWorld();
         final Chunk originChunk = entity.getChunk();
         final Position currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
         Vector intermediaryPosition = new Vector();
-        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
+        boolean yCollision = stepAxis(world, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
                 intermediaryPosition,
                 deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
 
-        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
+        boolean xCollision = stepAxis(world, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
                 intermediaryPosition,
                 deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
 
-        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
+        boolean zCollision = stepAxis(world, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
                 intermediaryPosition,
                 deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
@@ -70,7 +70,7 @@ public class CollisionUtils {
      * Steps on a single axis. Checks against collisions for each point of 'corners'. This method assumes that startPosition is valid.
      * Immediately return false if corners is of length 0.
      *
-     * @param instance      instance to check blocks from
+     * @param world         World to check blocks from
      * @param startPosition starting position for stepping, can be intermediary position from last step
      * @param axis          step direction. Works best if unit vector and aligned to an axis
      * @param stepAmount    how much to step in the direction (in blocks)
@@ -78,7 +78,7 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return true if a collision has been found
      */
-    private static boolean stepAxis(Instance instance,
+    private static boolean stepAxis(World world,
                                     Chunk originChunk,
                                     Vector startPosition, Vector axis,
                                     double stepAmount, Vector positionOut,
@@ -101,7 +101,7 @@ public class CollisionUtils {
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            if (!stepOnce(instance, originChunk, axis, sign, cornersCopy, cornerPositions)) {
+            if (!stepOnce(world, originChunk, axis, sign, cornersCopy, cornerPositions)) {
                 collisionFound = true;
             }
             if (collisionFound) {
@@ -113,7 +113,7 @@ public class CollisionUtils {
         if (!collisionFound) {
             Vector direction = new Vector();
             direction.copy(axis);
-            collisionFound = !stepOnce(instance, originChunk, direction, remainingLength, cornersCopy, cornerPositions);
+            collisionFound = !stepOnce(world, originChunk, direction, remainingLength, cornersCopy, cornerPositions);
         }
 
         // find the corner which moved the least
@@ -133,14 +133,14 @@ public class CollisionUtils {
     /**
      * Steps once (by a length of 1 block) on the given axis.
      *
-     * @param instance        instance to get blocks from
+     * @param world           World to get blocks from
      * @param axis            the axis to move along
      * @param amount
      * @param cornersCopy     the corners of the bounding box to consider (mutable)
      * @param cornerPositions the corners, converted to BlockPosition (mutable)
      * @return false if this method encountered a collision
      */
-    private static boolean stepOnce(Instance instance,
+    private static boolean stepOnce(World world,
                                     Chunk originChunk,
                                     Vector axis, double amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
         final double sign = Math.signum(amount);
@@ -152,7 +152,7 @@ public class CollisionUtils {
             blockPos.setY((int) Math.floor(corner.getY()));
             blockPos.setZ((int) Math.floor(corner.getZ()));
 
-            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, blockPos);
+            Chunk chunk = ChunkUtils.retrieve(world, originChunk, blockPos);
             if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
                 return false;
@@ -184,15 +184,15 @@ public class CollisionUtils {
     /**
      * Applies world border collision.
      *
-     * @param instance        the instance where the world border is
+     * @param world           the World where the world border is
      * @param currentPosition the current position
      * @param newPosition     the future target position
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
     @NotNull
-    public static Position applyWorldBorder(@NotNull Instance instance,
+    public static Position applyWorldBorder(@NotNull World world,
                                             @NotNull Position currentPosition, @NotNull Position newPosition) {
-        final WorldBorder worldBorder = instance.getWorldBorder();
+        final WorldBorder worldBorder = world.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
         switch (collisionAxis) {
             case NONE:

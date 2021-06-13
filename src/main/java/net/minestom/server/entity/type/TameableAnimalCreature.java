@@ -2,7 +2,7 @@ package net.minestom.server.entity.type;
 
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,8 +18,8 @@ public class TameableAnimalCreature extends AgeableCreature implements TameableA
         super(entityType, spawnPosition);
     }
 
-    protected TameableAnimalCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        super(entityType, spawnPosition, instance);
+    protected TameableAnimalCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable World world) {
+        super(entityType, spawnPosition, world);
     }
 
     public boolean isSitting() {

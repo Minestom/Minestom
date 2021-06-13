@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.block.BlockFace;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;

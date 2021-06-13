@@ -15,10 +15,10 @@ import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.WorldManager;
+import net.minestom.server.block.BlockManager;
+import net.minestom.server.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
@@ -106,7 +106,7 @@ public final class MinecraftServer {
 
     // In-Game Manager
     private static ConnectionManager connectionManager;
-    private static InstanceManager instanceManager;
+    private static WorldManager worldManager;
     private static BlockManager blockManager;
     private static CommandManager commandManager;
     private static RecipeManager recipeManager;
@@ -154,7 +154,7 @@ public final class MinecraftServer {
 
         // warmup/force-init registries
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
-        // That can happen with PotionType for instance, if no code tries to access a PotionType field
+        // That can happen with PotionType for example, if no code tries to access a PotionType field
         // TODO: automate (probably with code generation)
         Material.values();
         PotionType.values();
@@ -171,7 +171,7 @@ public final class MinecraftServer {
         packetProcessor = new PacketProcessor();
         packetListenerManager = new PacketListenerManager();
 
-        instanceManager = new InstanceManager();
+        worldManager = new WorldManager();
         blockManager = new BlockManager();
         commandManager = new CommandManager();
         recipeManager = new RecipeManager();
@@ -322,13 +322,13 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the manager handling all registered instances.
+     * Gets the manager handling all registered Worlds.
      *
-     * @return the instance manager
+     * @return the WorldManager
      */
-    public static InstanceManager getInstanceManager() {
-        checkInitStatus(instanceManager);
-        return instanceManager;
+    public static WorldManager getWorldManager() {
+        checkInitStatus(worldManager);
+        return worldManager;
     }
 
     /**

@@ -3,7 +3,7 @@ package net.minestom.server.entity.type.animal;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.TameableAnimalCreature;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,8 +19,8 @@ public class EntityCat extends TameableAnimalCreature {
         setBoundingBox(.6D, .7D, .6D);
     }
 
-    public EntityCat(@NotNull Position spawnPosition, @Nullable Instance instance) {
-        super(EntityType.CAT, spawnPosition, instance);
+    public EntityCat(@NotNull Position spawnPosition, @Nullable World world) {
+        super(EntityType.CAT, spawnPosition, world);
         setBoundingBox(.6D, .7D, .6D);
     }
 

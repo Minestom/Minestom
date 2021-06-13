@@ -1,7 +1,7 @@
 package net.minestom.server.utils.block;
 
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;

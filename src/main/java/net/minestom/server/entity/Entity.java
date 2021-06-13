@@ -20,11 +20,11 @@ import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.world.WorldManager;
+import net.minestom.server.block.Block;
+import net.minestom.server.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.permission.Permission;
@@ -68,7 +68,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
-    protected Instance instance;
+    protected World world;
     protected Chunk currentChunk;
     protected final Position position;
     /**
@@ -229,7 +229,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     /**
-     * Called when a new instance is set.
+     * Called when a new World is set.
      */
     public void spawn() {
 
@@ -252,17 +252,17 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
     /**
      * Teleports the entity only if the chunk at {@code position} is loaded or if
-     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
+     * {@link World#hasEnabledAutoChunkLoad()} returns true.
      *
      * @param position the teleport position
      * @param chunks   the chunk indexes to load before teleporting the entity,
      *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
      *                 can be null or empty to only load the chunk at {@code position}
      * @param callback the optional callback executed, even if auto chunk is not enabled
-     * @throws IllegalStateException if you try to teleport an entity before settings its instance
+     * @throws IllegalStateException if you try to teleport an entity before settings its World
      */
     public void teleport(@NotNull Position position, @Nullable long[] chunks, @Nullable Runnable callback) {
-        Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
+        Check.stateCondition(world == null, "You need to use Entity#setWorld before teleporting an entity!");
 
         final Position teleportPosition = position.clone(); // Prevent synchronization issue
 
@@ -275,9 +275,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         };
 
         if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(teleportPosition, endCallback);
+            world.loadOptionalChunk(teleportPosition, endCallback);
         } else {
-            ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
+            ChunkUtils.optionalLoadAll(world, chunks, null, endCallback);
         }
     }
 
@@ -447,13 +447,13 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     /**
      * Updates the entity, called every tick.
      * <p>
-     * Ignored if {@link #getInstance()} returns null.
+     * Ignored if {@link #getWorld()} returns null.
      *
      * @param time the update time in milliseconds
      */
     @Override
     public void tick(long time) {
-        if (instance == null)
+        if (world == null)
             return;
 
         // Scheduled remove
@@ -473,7 +473,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         // Fix current chunk being null if the entity has been spawned before
         if (currentChunk == null) {
-            refreshCurrentChunk(instance.getChunkAt(position));
+            refreshCurrentChunk(world.getChunkAt(position));
         }
 
         // Check if the entity chunk is loaded
@@ -537,8 +537,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                 }
 
                 // World border collision
-                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
+                final Position finalVelocityPosition = CollisionUtils.applyWorldBorder(world, position, newPosition);
+                final Chunk finalChunk = ChunkUtils.retrieve(world, currentChunk, finalVelocityPosition);
                 if (!ChunkUtils.isLoaded(finalChunk)) {
                     // Entity shouldn't be updated when moving in an unloaded chunk
                     return;
@@ -597,7 +597,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
+                        final Chunk chunk = ChunkUtils.retrieve(world, currentChunk, x, z);
                         if (!ChunkUtils.isLoaded(chunk))
                             continue;
 
@@ -610,7 +610,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                             // checks that we are actually in the block, and not just here because of a rounding error
                             if (boundingBox.intersect(tmpPosition)) {
                                 // TODO: replace with check with custom block bounding box
-                                handler.handleContact(instance, tmpPosition, this);
+                                handler.handleContact(world, tmpPosition, this);
                             }
                         }
                     }
@@ -744,7 +744,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     protected void handleVoid() {
         // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
+        if (getWorld().isInVoid(this.position)) {
             remove();
         }
     }
@@ -805,9 +805,9 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     /**
-     * Returns false just after instantiation, set to true after calling {@link #setInstance(Instance)}.
+     * Returns false just after instantiation, set to true after calling {@link #setWorld(World)}.
      *
-     * @return true if the entity has been linked to an instance, false otherwise
+     * @return true if the entity has been linked to a World, false otherwise
      */
     public boolean isActive() {
         return isActive;
@@ -863,50 +863,50 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     }
 
     /**
-     * Gets the entity current instance.
+     * Gets the entity's current World.
      *
-     * @return the entity instance, can be null if the entity doesn't have an instance yet
+     * @return the entity's World, can be null if the entity doesn't have a world yet
      */
-    public @Nullable Instance getInstance() {
-        return instance;
+    public @Nullable World getWorld() {
+        return world;
     }
 
     /**
-     * Changes the entity instance, i.e. spawns it.
+     * Changes the entity's World, i.e. spawns it.
      *
-     * @param instance      the new instance of the entity
+     * @param world         the new World of the entity
      * @param spawnPosition the spawn position for the entity.
-     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
+     * @throws IllegalStateException if {@code world} has not been registered in {@link WorldManager}
      */
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
-        Check.stateCondition(!instance.isRegistered(),
-                "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
+    public void setWorld(@NotNull World world, @NotNull Position spawnPosition) {
+        Check.stateCondition(!world.isRegistered(),
+                "Worlds need to be registered, please use WorldManager#registerWorld or WorldManager#registerSharedWorld");
 
-        if (this.instance != null) {
-            this.instance.UNSAFE_removeEntity(this);
+        if (this.world != null) {
+            this.world.UNSAFE_removeEntity(this);
         }
 
         this.position.set(spawnPosition);
         this.lastPosition.set(position);
 
         this.isActive = true;
-        this.instance = instance;
-        refreshCurrentChunk(instance.getChunkAt(position.getX(), position.getZ()));
-        instance.UNSAFE_addEntity(this);
+        this.world = world;
+        refreshCurrentChunk(world.getChunkAt(position.getX(), position.getZ()));
+        world.UNSAFE_addEntity(this);
         spawn();
-        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
+        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, world);
         callEvent(EntitySpawnEvent.class, entitySpawnEvent);
     }
 
     /**
-     * Changes the entity instance.
+     * Changes the entity's World.
      *
-     * @param instance the new instance of the entity
-     * @throws NullPointerException  if {@code instance} is null
-     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
+     * @param world the new World of the entity
+     * @throws NullPointerException  if {@code world} is null
+     * @throws IllegalStateException if {@code world} has not been registered in {@link WorldManager}
      */
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.position);
+    public void setWorld(@NotNull World world) {
+        setWorld(world, this.position);
     }
 
     /**
@@ -1028,10 +1028,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *
      * @param entity the new passenger
      * @throws NullPointerException  if {@code entity} is null
-     * @throws IllegalStateException if {@link #getInstance()} returns null
+     * @throws IllegalStateException if {@link #getWorld()} returns null
      */
     public void addPassenger(@NotNull Entity entity) {
-        Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+        Check.stateCondition(world == null, "You need to set a World using Entity#setWorld");
 
         if (entity.getVehicle() != null) {
             entity.getVehicle().removePassenger(entity);
@@ -1048,10 +1048,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      *
      * @param entity the passenger to remove
      * @throws NullPointerException  if {@code entity} is null
-     * @throws IllegalStateException if {@link #getInstance()} returns null
+     * @throws IllegalStateException if {@link #getWorld()} returns null
      */
     public void removePassenger(@NotNull Entity entity) {
-        Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+        Check.stateCondition(world == null, "You need to set a World using Entity#setWorld");
 
         if (!passengers.remove(entity))
             return;
@@ -1320,7 +1320,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
     /**
      * Used to refresh the entity and its passengers position
-     * - put the entity in the right instance chunk
+     * - put the entity in the right World chunk
      * - update the viewable chunks (load and unload)
      * - add/remove players from the viewers list if {@link #isAutoViewable()} is enabled
      * <p>
@@ -1341,8 +1341,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             }
         }
 
-        final Instance instance = getInstance();
-        if (instance != null) {
+        final World world = getWorld();
+        if (world != null) {
             final int lastChunkX = currentChunk.getChunkX();
             final int lastChunkZ = currentChunk.getChunkZ();
 
@@ -1351,10 +1351,10 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
             if (lastChunkX != newChunkX || lastChunkZ != newChunkZ) {
                 // Entity moved in a new chunk
-                final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
+                final Chunk newChunk = world.getChunk(newChunkX, newChunkZ);
                 Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1};{2}", getEntityId(), x, z);
 
-                instance.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
+                world.UNSAFE_switchEntityChunk(this, currentChunk, newChunk);
                 if (this instanceof Player) {
                     // Refresh player view
                     final Player player = (Player) this;
@@ -1492,8 +1492,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
-        if (instance != null)
-            instance.UNSAFE_removeEntity(this);
+        if (world != null)
+            world.UNSAFE_removeEntity(this);
     }
 
     /**

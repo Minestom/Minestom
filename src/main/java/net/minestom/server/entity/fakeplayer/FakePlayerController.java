@@ -2,7 +2,7 @@ package net.minestom.server.entity.fakeplayer;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.block.BlockFace;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;

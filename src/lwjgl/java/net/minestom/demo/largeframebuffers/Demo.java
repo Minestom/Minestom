@@ -4,8 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.type.decoration.EntityItemFrame;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.world.World;
+import net.minestom.server.world.WorldManager;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.MapMeta;
@@ -36,8 +36,8 @@ public class Demo {
             player.setGameMode(GameMode.CREATIVE);
         });
 
-        InstanceManager instances = MinecraftServer.getInstanceManager();
-        Instance instance = instances.getInstances().stream().findAny().get();
+        WorldManager worldManager = MinecraftServer.getWorldManager();
+        World world = worldManager.getWorlds().stream().findAny().get();
 
         LargeDirectFramebuffer directFramebuffer = new LargeDirectFramebuffer(512, 512);
         LargeGraphics2DFramebuffer graphics2DFramebuffer = new LargeGraphics2DFramebuffer(512, 512);
@@ -57,30 +57,30 @@ public class Demo {
 
         for (int x = -2; x <= 2; x++) {
             for (int z = -2; z <= 2; z++) {
-                instance.loadChunk(x, z);
+                world.loadChunk(x, z);
             }
         }
-        setupMaps(instance, 0, 10);
-        setupMaps(instance, 101, 20);
-        setupMaps(instance, 201, 30);
+        setupMaps(world, 0, 10);
+        setupMaps(world, 101, 20);
+        setupMaps(world, 201, 30);
     }
 
-    private static void createFrame(Instance instance, int id, int x, int y, int z) {
+    private static void createFrame(World world, int id, int x, int y, int z) {
         EntityItemFrame itemFrame = new EntityItemFrame(new Position(x, y, z), EntityItemFrame.ItemFrameOrientation.NORTH);
         itemFrame.getPosition().setYaw(180f);
         ItemStack map = ItemStack.builder(Material.FILLED_MAP)
                 .meta(new MapMeta.Builder().mapId(id).build())
                 .build();
         itemFrame.setItemStack(map);
-        itemFrame.setInstance(instance);
+        itemFrame.setWorld(world);
         itemFrame.setCustomNameVisible(true);
         itemFrame.setCustomName(ColoredText.of("MapID: " + id));
     }
 
-    private static void setupMaps(Instance instance, int mapIDStart, int zCoordinate) {
+    private static void setupMaps(World world, int mapIDStart, int zCoordinate) {
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 4; x++) {
-                createFrame(instance, mapIDStart + y * 4 + x, 2 - x, 45 - y, zCoordinate);
+                createFrame(world, mapIDStart + y * 4 + x, 2 - x, 45 - y, zCoordinate);
             }
         }
     }

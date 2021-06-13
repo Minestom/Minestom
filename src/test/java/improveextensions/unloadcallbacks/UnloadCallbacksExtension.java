@@ -6,10 +6,10 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityTickEvent;
-import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.world.WorldTickEvent;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Assertions;
@@ -24,10 +24,10 @@ public class UnloadCallbacksExtension extends Extension {
     private boolean tickedScheduledNonTransient = false;
     private boolean tickedScheduledTransient = false;
     private boolean zombieTicked = false;
-    private boolean instanceTicked = false;
-    private final EventCallback<InstanceTickEvent> callback = this::onTick;
+    private boolean worldTicked = false;
+    private final EventCallback<WorldTickEvent> callback = this::onTick;
 
-    private void onTick(InstanceTickEvent e) {
+    private void onTick(WorldTickEvent e) {
         ticked1 = true;
     }
 
@@ -35,22 +35,22 @@ public class UnloadCallbacksExtension extends Extension {
     public void initialize() {
         GlobalEventHandler globalEvents = MinecraftServer.getGlobalEventHandler();
         // this callback will be automatically removed when unloading the extension
-        globalEvents.addEventCallback(InstanceTickEvent.class, callback);
+        globalEvents.addEventCallback(WorldTickEvent.class, callback);
         // this one too
-        globalEvents.addEventCallback(InstanceTickEvent.class, e -> ticked2 = true);
+        globalEvents.addEventCallback(WorldTickEvent.class, e -> ticked2 = true);
 
-        Instance instance = MinecraftServer.getInstanceManager().getInstances().stream().findFirst().orElseThrow();
+        World world = MinecraftServer.getWorldManager().getWorlds().stream().findFirst().orElseThrow();
 
-        // add an event callback on an instance
-        instance.addEventCallback(InstanceTickEvent.class, e -> instanceTicked = true);
-        instance.loadChunk(0, 0);
+        // add an event callback on a world
+        world.addEventCallback(WorldTickEvent.class, e -> worldTicked = true);
+        world.loadChunk(0, 0);
 
         // add an event callback on an entity
         EntityCreature zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.addEventCallback(EntityTickEvent.class, e -> {
             zombieTicked = true;
         });
-        zombie.setInstance(instance, new Position(8, 64, 8) /* middle of chunk */);
+        zombie.setWorld(world, new Position(8, 64, 8) /* middle of chunk */);
 
         // this callback will be cancelled
         MinecraftServer.getSchedulerManager().buildTask(() -> {
@@ -86,7 +86,7 @@ public class UnloadCallbacksExtension extends Extension {
                 ticked2 = false;
                 tickedScheduledNonTransient = false;
                 tickedScheduledTransient = false;
-                instanceTicked = false;
+                worldTicked = false;
                 zombieTicked = false;
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -110,7 +110,7 @@ public class UnloadCallbacksExtension extends Extension {
                 Assertions.assertFalse(ticked2, "ticked2 should be false because the callback has been unloaded");
                 Assertions.assertFalse(tickedScheduledNonTransient, "tickedScheduledNonTransient should be false because the callback has been unloaded");
                 Assertions.assertFalse(zombieTicked, "zombieTicked should be false because the callback has been unloaded");
-                Assertions.assertFalse(instanceTicked, "instanceTicked should be false because the callback has been unloaded");
+                Assertions.assertFalse(worldTicked, "worldTicked should be false because the callback has been unloaded");
                 Assertions.assertTrue(tickedScheduledTransient, "tickedScheduledNonTransient should be true because the callback has NOT been unloaded");
                 Assertions.assertFalse(executedDelayTaskAfterTerminate.get(), "executedDelayTaskAfterTerminate should be false because the callback has been unloaded before executing");
                 System.out.println("All tests passed.");

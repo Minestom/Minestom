@@ -49,13 +49,13 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDCN = ClassName.get("net.minestom.server.utils", "NamespaceID");
-        ClassName blockPropertyCN = ClassName.get("net.minestom.server.instance.block", "BlockProperty");
-        ClassName blockCN = ClassName.get("net.minestom.server.instance.block", "Block");
-        ClassName blockImplCN = ClassName.get("net.minestom.server.instance.block", "BlockImpl");
+        ClassName blockPropertyCN = ClassName.get("net.minestom.server.block", "BlockProperty");
+        ClassName blockCN = ClassName.get("net.minestom.server.block", "Block");
+        ClassName blockImplCN = ClassName.get("net.minestom.server.block", "BlockImpl");
 
         JsonArray blockProperties;
         blockProperties = GSON.fromJson(new InputStreamReader(blockPropertyFile), JsonArray.class);
-        ClassName blockPropertiesCN = ClassName.get("net.minestom.server.instance.block", "BlockProperties");
+        ClassName blockPropertiesCN = ClassName.get("net.minestom.server.block", "BlockProperties");
         // Particle
         TypeSpec.Builder blockPropertiesClass = TypeSpec.classBuilder(blockPropertiesCN)
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -124,7 +124,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
 
         JsonArray blocks;
         blocks = GSON.fromJson(new InputStreamReader(blocksFile), JsonArray.class);
-        ClassName blocksCN = ClassName.get("net.minestom.server.instance.block", "BlockConstants");
+        ClassName blocksCN = ClassName.get("net.minestom.server.block", "BlockConstants");
         // BlockConstants class
         TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(blocksCN)
                 // Add @SuppressWarnings("unused")
@@ -260,11 +260,11 @@ public final class BlockGenerator extends MinestomCodeGenerator {
         }
         writeFiles(
                 List.of(
-                        JavaFile.builder("net.minestom.server.instance.block", blockPropertiesClass.build())
+                        JavaFile.builder("net.minestom.server.block", blockPropertiesClass.build())
                                 .indent("    ")
                                 .skipJavaLangImports(true)
                                 .build(),
-                        JavaFile.builder("net.minestom.server.instance.block", blockConstantsClass.build())
+                        JavaFile.builder("net.minestom.server.block", blockConstantsClass.build())
                                 .indent("    ")
                                 .skipJavaLangImports(true)
                                 .build()

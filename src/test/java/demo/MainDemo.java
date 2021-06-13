@@ -4,9 +4,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.instance.*;
-import net.minestom.server.instance.batch.ChunkBatch;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.*;
+import net.minestom.server.world.batch.ChunkBatch;
+import net.minestom.server.block.Block;
 import net.minestom.server.utils.Position;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -20,19 +20,19 @@ public class MainDemo {
         // Initialization
         MinecraftServer minecraftServer = MinecraftServer.init();
 
-        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        // Create the instance
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
+        WorldManager worldManager = MinecraftServer.getWorldManager();
+        // Create the world
+        WorldContainer worldContainer = worldManager.createWorldContainer();
         // Set the ChunkGenerator
-        instanceContainer.setChunkGenerator(new GeneratorDemo());
+        worldContainer.setChunkGenerator(new GeneratorDemo());
         // Enable the auto chunk loading (when players come close)
-        instanceContainer.enableAutoChunkLoad(true);
+        worldContainer.enableAutoChunkLoad(true);
 
-        // Add an event callback to specify the spawning instance (and the spawn position)
+        // Add an event callback to specify the spawning World (and the spawn position)
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
-            event.setSpawningInstance(instanceContainer);
+            event.setSpawningWorld(worldContainer);
             player.setRespawnPoint(new Position(0, 42, 0));
         });
 

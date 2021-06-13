@@ -5,7 +5,7 @@ import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.type.decoration.EntityArmorStand;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -29,52 +29,52 @@ public class Hologram implements Viewable {
     /**
      * Constructs a new {@link Hologram} with the given parameters.
      *
-     * @param instance      The instance where the hologram should be spawned.
+     * @param world         The World where the hologram should be spawned.
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
-     * @deprecated Use {@link #Hologram(Instance, Position, Component, boolean)}
+     * @deprecated Use {@link #Hologram(World, Position, Component, boolean)}
      */
     @Deprecated
-    public Hologram(Instance instance, Position spawnPosition, JsonMessage text, boolean autoViewable) {
-        this(instance, spawnPosition, text.asComponent(), autoViewable);
+    public Hologram(World world, Position spawnPosition, JsonMessage text, boolean autoViewable) {
+        this(world, spawnPosition, text.asComponent(), autoViewable);
     }
 
     /**
      * Constructs a new {@link Hologram} with the given parameters.
      *
-     * @param instance      The instance where the hologram should be spawned.
+     * @param world         The World where the hologram should be spawned.
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
-     * @deprecated Use {@link #Hologram(Instance, Position, Component)}
+     * @deprecated Use {@link #Hologram(World, Position, Component)}
      */
     @Deprecated
-    public Hologram(Instance instance, Position spawnPosition, JsonMessage text) {
-        this(instance, spawnPosition, text, true);
+    public Hologram(World world, Position spawnPosition, JsonMessage text) {
+        this(world, spawnPosition, text, true);
     }
 
     /**
      * Constructs a new {@link Hologram} with the given parameters.
      *
-     * @param instance      The instance where the hologram should be spawned.
+     * @param world         The World where the hologram should be spawned.
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
      */
-    public Hologram(Instance instance, Position spawnPosition, Component text) {
-        this(instance, spawnPosition, text, true);
+    public Hologram(World world, Position spawnPosition, Component text) {
+        this(world, spawnPosition, text, true);
     }
 
     /**
      * Constructs a new {@link Hologram} with the given parameters.
      *
-     * @param instance      The instance where the hologram should be spawned.
+     * @param world         The World where the hologram should be spawned.
      * @param spawnPosition The spawn position of this hologram.
      * @param text          The text of this hologram.
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
      */
-    public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable) {
+    public Hologram(World world, Position spawnPosition, Component text, boolean autoViewable) {
         this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
-        this.entity.setInstance(instance);
+        this.entity.setWorld(world);
         this.entity.setAutoViewable(autoViewable);
 
         this.position = spawnPosition;

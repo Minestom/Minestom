@@ -7,7 +7,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.player.PlayerSpawnEvent;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.FakePlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
@@ -118,10 +118,10 @@ public class FakePlayer extends Player implements NavigableEntity {
     }
 
     @Override
-    public void setInstance(@NotNull Instance instance) {
-        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
+    public void setWorld(@NotNull World world) {
+        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), world.getWorldSpace()));
 
-        super.setInstance(instance);
+        super.setWorld(world);
     }
 
     @Override

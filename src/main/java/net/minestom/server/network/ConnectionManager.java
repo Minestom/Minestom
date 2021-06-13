@@ -11,7 +11,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.listener.manager.ClientPacketConsumer;
 import net.minestom.server.listener.manager.ServerPacketConsumer;
 import net.minestom.server.network.packet.client.login.LoginStartPacket;
@@ -544,14 +544,14 @@ public final class ConnectionManager {
 
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
-            final Instance spawningInstance = loginEvent.getSpawningInstance();
+            final World spawningWorld = loginEvent.getSpawningWorld();
 
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+            Check.notNull(spawningWorld, "You need to specify a spawning World in the PlayerLoginEvent");
 
-            waitingPlayer.UNSAFE_init(spawningInstance);
+            waitingPlayer.UNSAFE_init(spawningWorld);
 
-            // Spawn the player at Player#getRespawnPoint during the next instance tick
-            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
+            // Spawn the player at Player#getRespawnPoint during the next world tick
+            spawningWorld.scheduleNextTick(waitingPlayer::setWorld);
         }
     }
 

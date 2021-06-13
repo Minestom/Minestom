@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * A PlayerConnection is an object needed for all created {@link Player}.
- * It can be extended to create a new kind of player (NPC for instance).
+ * It can be extended to create a new kind of player (NPC for example).
  */
 public abstract class PlayerConnection {
 

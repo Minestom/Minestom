@@ -2,8 +2,8 @@ package net.minestom.server.utils.chunk;
 
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.longs.LongList;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
@@ -20,19 +20,19 @@ public final class ChunkUtils {
     }
 
     /**
-     * Executes {@link Instance#loadOptionalChunk(int, int, ChunkCallback)} for the array of chunks {@code chunks}
+     * Executes {@link World#loadOptionalChunk(int, int, ChunkCallback)} for the array of chunks {@code chunks}
      * with multiple callbacks, {@code eachCallback} which is executed each time a new chunk is loaded and
      * {@code endCallback} when all the chunks in the array have been loaded.
      * <p>
-     * Be aware that {@link Instance#loadOptionalChunk(int, int, ChunkCallback)} can give a null chunk in the callback
-     * if {@link Instance#hasEnabledAutoChunkLoad()} returns false and the chunk is not already loaded.
+     * Be aware that {@link World#loadOptionalChunk(int, int, ChunkCallback)} can give a null chunk in the callback
+     * if {@link World#hasEnabledAutoChunkLoad()} returns false and the chunk is not already loaded.
      *
-     * @param instance     the instance to load the chunks from
+     * @param world        the World to load the chunks from
      * @param chunks       the chunks to loaded, long value from {@link #getChunkIndex(int, int)}
      * @param eachCallback the optional callback when a chunk get loaded
      * @param endCallback  the optional callback when all the chunks have been loaded
      */
-    public static void optionalLoadAll(@NotNull Instance instance, @NotNull long[] chunks,
+    public static void optionalLoadAll(@NotNull World world, @NotNull long[] chunks,
                                        @Nullable ChunkCallback eachCallback, @Nullable ChunkCallback endCallback) {
         final int length = chunks.length;
         AtomicInteger counter = new AtomicInteger(0);
@@ -54,7 +54,7 @@ public final class ChunkUtils {
             };
 
             // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(chunkX, chunkZ, callback);
+            world.loadOptionalChunk(chunkX, chunkZ, callback);
         }
     }
 
@@ -71,16 +71,16 @@ public final class ChunkUtils {
     /**
      * Gets if a chunk is loaded.
      *
-     * @param instance the instance to check
+     * @param world    the World to check
      * @param x        instance X coordinate
      * @param z        instance Z coordinate
      * @return true if the chunk is loaded, false otherwise
      */
-    public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
+    public static boolean isLoaded(@NotNull World world, double x, double z) {
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);
 
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        final Chunk chunk = world.getChunk(chunkX, chunkZ);
         return isLoaded(chunk);
     }
 
@@ -98,19 +98,19 @@ public final class ChunkUtils {
         return x1 == x2 && z1 == z2;
     }
 
-    public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
+    public static Chunk retrieve(World world, Chunk originChunk, double x, double z) {
         if (!ChunkUtils.same(originChunk, x, z)) {
-            return instance.getChunkAt(x, z);
+            return world.getChunkAt(x, z);
         }
         return originChunk;
     }
 
-    public static Chunk retrieve(Instance instance, Chunk originChunk, Position position) {
-        return retrieve(instance, originChunk, position.getX(), position.getZ());
+    public static Chunk retrieve(World world, Chunk originChunk, Position position) {
+        return retrieve(world, originChunk, position.getX(), position.getZ());
     }
 
-    public static Chunk retrieve(Instance instance, Chunk originChunk, BlockPosition blockPosition) {
-        return retrieve(instance, originChunk, blockPosition.getX(), blockPosition.getZ());
+    public static Chunk retrieve(World world, Chunk originChunk, BlockPosition blockPosition) {
+        return retrieve(world, originChunk, blockPosition.getX(), blockPosition.getZ());
     }
 
     /**
@@ -220,13 +220,13 @@ public final class ChunkUtils {
     /**
      * Gets all the loaded neighbours of a chunk and itself, no diagonals.
      *
-     * @param instance the instance of the chunks
+     * @param world    the World of the chunks
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      * @return an array containing all the loaded neighbours chunk index
      */
     @NotNull
-    public static long[] getNeighbours(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public static long[] getNeighbours(@NotNull World world, int chunkX, int chunkZ) {
         LongList chunks = new LongArrayList();
         // Constants used to loop through the neighbors
         final int[] posX = {1, 0, -1};
@@ -241,7 +241,7 @@ public final class ChunkUtils {
 
                 final int targetX = chunkX + x;
                 final int targetZ = chunkZ + z;
-                final Chunk chunk = instance.getChunk(targetX, targetZ);
+                final Chunk chunk = world.getChunk(targetX, targetZ);
                 if (ChunkUtils.isLoaded(chunk)) {
                     // Chunk is loaded, add it
                     final long index = getChunkIndex(targetX, targetZ);

@@ -1,11 +1,11 @@
 package net.minestom.server.extras;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.vanilla.AxisPlacementRule;
-import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
-import net.minestom.server.instance.block.rule.vanilla.WallPlacementRule;
+import net.minestom.server.block.Block;
+import net.minestom.server.block.BlockManager;
+import net.minestom.server.block.rule.vanilla.AxisPlacementRule;
+import net.minestom.server.block.rule.vanilla.RedstonePlacementRule;
+import net.minestom.server.block.rule.vanilla.WallPlacementRule;
 
 public final class PlacementRules {
 

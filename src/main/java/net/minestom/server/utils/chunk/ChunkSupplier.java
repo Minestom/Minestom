@@ -1,7 +1,7 @@
 package net.minestom.server.utils.chunk;
 
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -15,12 +15,12 @@ public interface ChunkSupplier {
     /**
      * Creates a {@link Chunk} object.
      *
-     * @param instance the linked instance
+     * @param world    the linked World
      * @param biomes   the biomes of the chunk, can be null
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
      * @return a newly {@link Chunk} object, cannot be null
      */
     @NotNull
-    Chunk createChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ);
+    Chunk createChunk(@NotNull World world, @Nullable Biome[] biomes, int chunkX, int chunkZ);
 }

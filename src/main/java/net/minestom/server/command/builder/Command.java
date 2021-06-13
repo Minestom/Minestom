@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * Represents a command which has suggestion/auto-completion.
  * <p>
  * The command works using a list of valid syntaxes.
- * For instance we could build the command
+ * For example we could build the command
  * "/health set Notch 50" into multiple argument types "/health [set/add/remove] [username] [integer]"
  * <p>
  * All the default argument types can be found in {@link ArgumentType}

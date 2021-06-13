@@ -7,7 +7,7 @@ import net.minestom.server.entity.ai.EntityAIGroup;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -47,10 +47,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Deprecated
-    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
+    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable World world) {
         this(entityType, spawnPosition);
-        if (instance != null) {
-            setInstance(instance);
+        if (world != null) {
+            setWorld(world);
         }
     }
 
@@ -67,10 +67,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
-        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
+    public void setWorld(@NotNull World world, @NotNull Position spawnPosition) {
+        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), world.getWorldSpace()));
 
-        super.setInstance(instance, spawnPosition);
+        super.setWorld(world, spawnPosition);
     }
 
     @Override

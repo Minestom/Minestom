@@ -1,7 +1,7 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.block.BlockFace;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 

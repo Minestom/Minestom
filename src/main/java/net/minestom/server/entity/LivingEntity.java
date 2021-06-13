@@ -12,8 +12,8 @@ import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.block.Block;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.ConnectionState;
@@ -218,7 +218,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             itemPickupCooldown.refreshLastUpdate(time);
 
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
+            final Set<Entity> entities = world.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
 
@@ -651,7 +651,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     protected void handleVoid() {
         // Kill if in void
-        if (getInstance().isInVoid(this.position)) {
+        if (getWorld().isInVoid(this.position)) {
             damage(DamageType.VOID, 10f);
         }
     }
@@ -724,7 +724,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             BlockPosition position = it.next();
-            if (!getInstance().getBlock(position).isAir()) blocks.add(position);
+            if (!getWorld().getBlock(position).isAir()) blocks.add(position);
         }
         return blocks;
     }
@@ -745,7 +745,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
-            Block block = getInstance().getBlock(it.next());
+            Block block = getWorld().getBlock(it.next());
             if (!block.isAir() && !block.isLiquid()) {
                 return false;
             }
@@ -763,7 +763,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             BlockPosition position = it.next();
-            if (getInstance().getBlock(position) != Block.AIR) return position;
+            if (getWorld().getBlock(position) != Block.AIR) return position;
         }
         return null;
     }

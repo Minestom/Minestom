@@ -3,8 +3,8 @@ package net.minestom.server.entity.ai.goal;
 import it.unimi.dsi.fastutil.shorts.Short2ShortArrayMap;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.World;
+import net.minestom.server.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,16 +41,16 @@ public class EatBlockGoal extends GoalSelector {
             return false;
         }
 
-        final Instance instance = entityCreature.getInstance();
+        final World world = entityCreature.getWorld();
 
-        // An entity shouldn't be eating blocks on null instances.
-        if (instance == null) {
+        // An entity shouldn't be eating blocks of a null World.
+        if (world == null) {
             return false;
         }
 
         final BlockPosition blockPosition = entityCreature.getPosition().toBlockPosition();
-        final short blockStateIdIn = instance.getBlock(blockPosition.clone().subtract(0, 1, 0)).getStateId();
-        final short blockStateIdBelow = instance.getBlock(blockPosition.clone().subtract(0, 2, 0)).getStateId();
+        final short blockStateIdIn = world.getBlock(blockPosition.clone().subtract(0, 1, 0)).getStateId();
+        final short blockStateIdBelow = world.getBlock(blockPosition.clone().subtract(0, 2, 0)).getStateId();
 
         return eatInMap.containsKey(blockStateIdIn) || eatBelowMap.containsKey(blockStateIdBelow);
     }
@@ -69,16 +69,16 @@ public class EatBlockGoal extends GoalSelector {
         if (this.eatAnimationTick != 4) {
             return;
         }
-        Instance instance = entityCreature.getInstance();
+        World world = entityCreature.getWorld();
         final BlockPosition currentPosition = entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1, 0);
         final BlockPosition belowPosition = currentPosition.clone().subtract(0, 1, 0);
 
-        final short blockStateIdIn = instance.getBlock(currentPosition).getStateId();
-        final short blockStateIdBelow = instance.getBlock(belowPosition).getStateId();
+        final short blockStateIdIn = world.getBlock(currentPosition).getStateId();
+        final short blockStateIdBelow = world.getBlock(belowPosition).getStateId();
         if (eatInMap.containsKey(blockStateIdIn)) {
-            instance.setBlock(currentPosition, Block.fromStateId(eatInMap.get(blockStateIdIn)));
+            world.setBlock(currentPosition, Block.fromStateId(eatInMap.get(blockStateIdIn)));
         } else if (eatBelowMap.containsKey(blockStateIdBelow)) {
-            instance.setBlock(belowPosition, Block.fromStateId(eatBelowMap.get(blockStateIdBelow)));
+            world.setBlock(belowPosition, Block.fromStateId(eatBelowMap.get(blockStateIdBelow)));
         }
         // TODO: Call Entity Eat Animation
     }

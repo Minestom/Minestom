@@ -1,6 +1,6 @@
 package net.minestom.server.thread;
 
-import net.minestom.server.instance.Chunk;
+import net.minestom.server.world.Chunk;
 import org.jetbrains.annotations.NotNull;
 
 /**

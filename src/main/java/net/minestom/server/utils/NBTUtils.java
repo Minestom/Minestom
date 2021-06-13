@@ -7,7 +7,7 @@ import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.ItemMetaBuilder;

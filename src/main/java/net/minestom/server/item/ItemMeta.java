@@ -2,7 +2,7 @@ package net.minestom.server.item;
 
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;

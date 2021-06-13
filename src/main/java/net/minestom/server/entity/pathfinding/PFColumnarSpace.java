@@ -4,18 +4,18 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import com.extollit.gaming.ai.path.model.IBlockDescription;
 import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import com.extollit.gaming.ai.path.model.IInstanceSpace;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.block.Block;
 
 public class PFColumnarSpace implements IColumnarSpace {
 
     private final ColumnarOcclusionFieldList occlusionFieldList = new ColumnarOcclusionFieldList(this);
-    private final PFInstanceSpace instanceSpace;
+    private final PFWorldSpace worldSpace;
     private final Chunk chunk;
 
 
-    public PFColumnarSpace(PFInstanceSpace instanceSpace, Chunk chunk) {
-        this.instanceSpace = instanceSpace;
+    public PFColumnarSpace(PFWorldSpace worldSpace, Chunk chunk) {
+        this.worldSpace = worldSpace;
         this.chunk = chunk;
     }
 
@@ -37,6 +37,6 @@ public class PFColumnarSpace implements IColumnarSpace {
 
     @Override
     public IInstanceSpace instance() {
-        return instanceSpace;
+        return worldSpace;
     }
 }

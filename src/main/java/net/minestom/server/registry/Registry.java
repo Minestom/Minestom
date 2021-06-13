@@ -2,7 +2,7 @@ package net.minestom.server.registry;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 

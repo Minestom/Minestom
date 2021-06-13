@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  * Represents a position.
- * The instance is not contained.
+ * The World is not contained.
  */
 public class Position implements PublicCloneable<Position> {
 

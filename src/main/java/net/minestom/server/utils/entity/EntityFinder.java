@@ -8,7 +8,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.math.IntRange;
@@ -120,13 +120,13 @@ public class EntityFinder {
     /**
      * Find a list of entities (could be empty) based on the conditions
      *
-     * @param instance the instance to search from,
+     * @param world    the World to search from,
      *                 null if the query can be executed using global data (all online players)
      * @param self     the source of the query, null if not any
      * @return all entities validating the conditions, can be empty
      */
     @NotNull
-    public List<Entity> find(@Nullable Instance instance, @Nullable Entity self) {
+    public List<Entity> find(@Nullable World world, @Nullable Entity self) {
         if (targetSelector == TargetSelector.MINESTOM_USERNAME) {
             Check.notNull(constantName, "The player name should not be null when searching for it");
             final Player player = MinecraftServer.getConnectionManager().getPlayer(constantName);
@@ -137,7 +137,7 @@ public class EntityFinder {
             return entity != null ? Collections.singletonList(entity) : Collections.emptyList();
         }
 
-        List<Entity> result = findTarget(instance, targetSelector, startPosition, self);
+        List<Entity> result = findTarget(world, targetSelector, startPosition, self);
 
         // Fast exit if there is nothing to process
         if (result.isEmpty())
@@ -257,22 +257,22 @@ public class EntityFinder {
     public List<Entity> find(@NotNull CommandSender sender) {
         if (sender.isPlayer()) {
             Player player = sender.asPlayer();
-            return find(player.getInstance(), player);
+            return find(player.getWorld(), player);
         } else {
             return find(null, null);
         }
     }
 
     /**
-     * Shortcut of {@link #find(Instance, Entity)} to retrieve the first
+     * Shortcut of {@link #find(World, Entity)} to retrieve the first
      * player element in the list.
      *
-     * @return the first player returned by {@link #find(Instance, Entity)}
-     * @see #find(Instance, Entity)
+     * @return the first player returned by {@link #find(World, Entity)}
+     * @see #find(World, Entity)
      */
     @Nullable
-    public Player findFirstPlayer(@Nullable Instance instance, @Nullable Entity self) {
-        final List<Entity> entities = find(instance, self);
+    public Player findFirstPlayer(@Nullable World world, @Nullable Entity self) {
+        final List<Entity> entities = find(world, self);
         for (Entity entity : entities) {
             if (entity instanceof Player) {
                 return (Player) entity;
@@ -285,15 +285,15 @@ public class EntityFinder {
     public Player findFirstPlayer(@NotNull CommandSender sender) {
         if (sender.isPlayer()) {
             final Player player = sender.asPlayer();
-            return findFirstPlayer(player.getInstance(), player);
+            return findFirstPlayer(player.getWorld(), player);
         } else {
             return findFirstPlayer(null, null);
         }
     }
 
     @Nullable
-    public Entity findFirstEntity(@Nullable Instance instance, @Nullable Entity self) {
-        final List<Entity> entities = find(instance, self);
+    public Entity findFirstEntity(@Nullable World world, @Nullable Entity self) {
+        final List<Entity> entities = find(world, self);
         for (Entity entity : entities) {
             return entity;
         }
@@ -304,7 +304,7 @@ public class EntityFinder {
     public Entity findFirstEntity(@NotNull CommandSender sender) {
         if (sender.isPlayer()) {
             final Player player = sender.asPlayer();
-            return findFirstEntity(player.getInstance(), player);
+            return findFirstEntity(player.getWorld(), player);
         } else {
             return findFirstEntity(null, null);
         }
@@ -336,16 +336,16 @@ public class EntityFinder {
     }
 
     @NotNull
-    private static List<Entity> findTarget(@Nullable Instance instance, @NotNull TargetSelector targetSelector,
+    private static List<Entity> findTarget(@Nullable World world, @NotNull TargetSelector targetSelector,
                                            @NotNull Position startPosition, @Nullable Entity self) {
 
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             Entity entity = null;
             double closestDistance = Double.MAX_VALUE;
 
-            Collection<Player> instancePlayers = instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
-            for (Player player : instancePlayers) {
+            Collection<Player> players = world != null ?
+                    world.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
+            for (Player player : players) {
                 final double distance = player.getPosition().getDistance(startPosition);
                 if (distance < closestDistance) {
                     entity = player;
@@ -354,23 +354,23 @@ public class EntityFinder {
             }
             return Collections.singletonList(entity);
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
-            Collection<Player> instancePlayers = instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
-            final int index = ThreadLocalRandom.current().nextInt(instancePlayers.size());
-            final Player player = instancePlayers.stream().skip(index).findFirst().orElseThrow();
+            Collection<Player> players = world != null ?
+                    world.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
+            final int index = ThreadLocalRandom.current().nextInt(players.size());
+            final Player player = players.stream().skip(index).findFirst().orElseThrow();
             return Collections.singletonList(player);
         } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
-            return new ArrayList<>(instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
+            return new ArrayList<>(world != null ?
+                    world.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
-            if (instance != null) {
-                return new ArrayList<>(instance.getEntities());
+            if (world != null) {
+                return new ArrayList<>(world.getEntities());
             } else {
-                // Get entities from every instance
-                var instances = MinecraftServer.getInstanceManager().getInstances();
+                // Get entities from every world
+                var worlds = MinecraftServer.getWorldManager().getWorlds();
                 List<Entity> entities = new LinkedList<>();
-                for (Instance inst : instances) {
-                    entities.addAll(inst.getEntities());
+                for (World someWorld : worlds) {
+                    entities.addAll(someWorld.getEntities());
                 }
                 return entities;
             }

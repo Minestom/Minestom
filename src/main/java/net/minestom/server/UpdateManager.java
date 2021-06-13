@@ -2,9 +2,9 @@ package net.minestom.server;
 
 import com.google.common.collect.Queues;
 import net.minestom.server.acquirable.Acquirable;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.world.WorldManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
@@ -106,9 +106,9 @@ public final class UpdateManager {
      * @param tickStart the time of the tick in milliseconds
      */
     private void serverTick(long tickStart) {
-        // Tick all instances
-        MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
-                instance.tick(tickStart));
+        // Tick all worlds
+        MinecraftServer.getWorldManager().getWorlds().forEach(world ->
+                world.tick(tickStart));
 
         // Tick all chunks (and entities inside)
         final CountDownLatch countDownLatch = threadProvider.update(tickStart);
@@ -150,31 +150,31 @@ public final class UpdateManager {
     }
 
     /**
-     * Signals the {@link ThreadProvider} that an instance has been created.
+     * Signals the {@link ThreadProvider} that a World has been created.
      * <p>
-     * WARNING: should be automatically done by the {@link InstanceManager}.
+     * WARNING: should be automatically done by the {@link WorldManager}.
      *
-     * @param instance the instance
+     * @param world the World
      */
-    public void signalInstanceCreate(Instance instance) {
-        this.threadProvider.onInstanceCreate(instance);
+    public void signalWorldCreate(World world) {
+        this.threadProvider.onWorldCreate(world);
     }
 
     /**
-     * Signals the {@link ThreadProvider} that an instance has been deleted.
+     * Signals the {@link ThreadProvider} that a World has been deleted.
      * <p>
-     * WARNING: should be automatically done by the {@link InstanceManager}.
+     * WARNING: should be automatically done by the {@link WorldManager}.
      *
-     * @param instance the instance
+     * @param world the World
      */
-    public void signalInstanceDelete(Instance instance) {
-        this.threadProvider.onInstanceDelete(instance);
+    public void signalWorldDelete(World world) {
+        this.threadProvider.onWorldDelete(world);
     }
 
     /**
      * Signals the {@link ThreadProvider} that a chunk has been loaded.
      * <p>
-     * WARNING: should be automatically done by the {@link Instance} implementation.
+     * WARNING: should be automatically done by the {@link World} implementation.
      *
      * @param chunk the loaded chunk
      */
@@ -185,7 +185,7 @@ public final class UpdateManager {
     /**
      * Signals the {@link ThreadProvider} that a chunk has been unloaded.
      * <p>
-     * WARNING: should be automatically done by the {@link Instance} implementation.
+     * WARNING: should be automatically done by the {@link World} implementation.
      *
      * @param chunk the unloaded chunk
      */

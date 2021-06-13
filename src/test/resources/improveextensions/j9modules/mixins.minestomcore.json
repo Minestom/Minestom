@@ -5,6 +5,6 @@
   "target": "@env(DEFAULT)",
   "compatibilityLevel": "JAVA_11",
   "mixins": [
-    "InstanceContainerMixin"
+    "WorldContainerMixin"
   ]
 }

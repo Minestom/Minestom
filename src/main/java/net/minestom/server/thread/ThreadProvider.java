@@ -3,8 +3,8 @@ package net.minestom.server.thread;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -46,12 +46,12 @@ public abstract class ThreadProvider {
         this(Runtime.getRuntime().availableProcessors());
     }
 
-    public synchronized void onInstanceCreate(@NotNull Instance instance) {
-        instance.getChunks().forEach(this::addChunk);
+    public synchronized void onWorldCreate(@NotNull World world) {
+        world.getChunks().forEach(this::addChunk);
     }
 
-    public synchronized void onInstanceDelete(@NotNull Instance instance) {
-        instance.getChunks().forEach(this::removeChunk);
+    public synchronized void onWorldDelete(@NotNull World world) {
+        world.getChunks().forEach(this::removeChunk);
     }
 
     public synchronized void onChunkLoad(Chunk chunk) {

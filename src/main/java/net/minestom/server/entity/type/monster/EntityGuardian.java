@@ -5,7 +5,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.type.Monster;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,8 +23,8 @@ public class EntityGuardian extends EntityCreature implements Monster {
         setBoundingBox(0.85f, 0.85f, 0.85f);
     }
 
-    public EntityGuardian(@NotNull Position spawnPosition, @Nullable Instance instance) {
-        super(EntityType.GUARDIAN, spawnPosition, instance);
+    public EntityGuardian(@NotNull Position spawnPosition, @Nullable World world) {
+        super(EntityType.GUARDIAN, spawnPosition, world);
         setBoundingBox(0.85f, 0.85f, 0.85f);
     }
 
@@ -32,8 +32,8 @@ public class EntityGuardian extends EntityCreature implements Monster {
         super(entityType, spawnPosition);
     }
 
-    EntityGuardian(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        super(entityType, spawnPosition, instance);
+    EntityGuardian(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable World world) {
+        super(entityType, spawnPosition, world);
     }
 
     public boolean isRetractingSpikes() {

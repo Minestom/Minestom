@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registries;

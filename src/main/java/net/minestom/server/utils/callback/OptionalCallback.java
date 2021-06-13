@@ -1,6 +1,6 @@
 package net.minestom.server.utils.callback;
 
-import net.minestom.server.instance.Chunk;
+import net.minestom.server.world.Chunk;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.Nullable;
 

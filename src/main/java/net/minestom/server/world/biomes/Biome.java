@@ -1,6 +1,6 @@
 package net.minestom.server.world.biomes;
 
-import net.minestom.server.instance.Chunk;
+import net.minestom.server.world.Chunk;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;

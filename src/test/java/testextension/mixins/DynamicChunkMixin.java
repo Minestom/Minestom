@@ -1,7 +1,7 @@
 package testextension.mixins;
 
-import net.minestom.server.instance.DynamicChunk;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.DynamicChunk;
+import net.minestom.server.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;

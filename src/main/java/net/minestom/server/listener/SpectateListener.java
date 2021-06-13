@@ -16,7 +16,7 @@ public class SpectateListener {
         if (target == null || target == player)
             return;
 
-        // TODO check if 'target' is in a different instance
+        // TODO check if 'target' is in a different world
         player.spectate(target);
     }
 

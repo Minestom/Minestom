@@ -41,7 +41,7 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
-        ClassName blockCN = ClassName.get("net.minestom.server.instance.block", "Block");
+        ClassName blockCN = ClassName.get("net.minestom.server.block", "Block");
         ParameterizedTypeName blocksCNSupplier = ParameterizedTypeName.get(ClassName.get(Supplier.class), blockCN);
 
         JsonArray items = GSON.fromJson(new InputStreamReader(itemsFile), JsonArray.class);

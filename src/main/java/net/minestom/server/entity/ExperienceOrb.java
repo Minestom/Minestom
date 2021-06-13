@@ -1,6 +1,6 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -23,11 +23,11 @@ public class ExperienceOrb extends Entity {
         this.experienceCount = experienceCount;
     }
 
-    public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition, @Nullable Instance instance) {
+    public ExperienceOrb(short experienceCount, @NotNull Position spawnPosition, @Nullable World world) {
         this(experienceCount, spawnPosition);
 
-        if (instance != null) {
-            setInstance(instance);
+        if (world != null) {
+            setWorld(world);
         }
     }
 
@@ -109,7 +109,7 @@ public class ExperienceOrb extends Entity {
     }
 
     private Player getClosestPlayer(Entity entity, float maxDistance) {
-        Player closest = entity.getInstance()
+        Player closest = entity.getWorld()
                 .getPlayers()
                 .stream()
                 .min(Comparator.comparingDouble(a -> a.getDistance(entity)))

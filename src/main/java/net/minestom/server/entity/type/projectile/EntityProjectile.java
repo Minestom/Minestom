@@ -6,9 +6,9 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.entity.EntityShootEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
@@ -144,7 +144,7 @@ public class EntityProjectile extends Entity {
             return true;
         }
 
-        Instance instance = getInstance();
+        World world = getWorld();
         Chunk chunk = null;
         Collection<Entity> entities = null;
 
@@ -166,16 +166,16 @@ public class EntityProjectile extends Entity {
                 pos.add(direction);
             }
             BlockPosition bpos = pos.toBlockPosition();
-            Block block = instance.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
+            Block block = world.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
             if (!block.isAir() && !block.isLiquid()) {
                 teleport(pos);
                 return true;
             }
 
-            Chunk currentChunk = instance.getChunkAt(pos);
+            Chunk currentChunk = world.getChunkAt(pos);
             if (currentChunk != chunk) {
                 chunk = currentChunk;
-                entities = instance.getChunkEntities(chunk)
+                entities = world.getChunkEntities(chunk)
                         .stream()
                         .filter(entity -> entity instanceof LivingEntity)
                         .collect(Collectors.toSet());

@@ -63,8 +63,8 @@ public class HorseCommand extends Command {
         var meta = (HorseMeta) horse.getEntityMeta();
         meta.setBaby(baby);
         meta.setVariant(new HorseMeta.Variant(marking, color));
-        //noinspection ConstantConditions - It should be impossible to execute a command without being in an instance
-        horse.setInstance(player.getInstance(), player.getPosition());
+        //noinspection ConstantConditions - It should be impossible to execute a command without being in a World
+        horse.setWorld(player.getWorld(), player.getPosition());
     }
 
 }

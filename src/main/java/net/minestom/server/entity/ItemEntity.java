@@ -1,8 +1,8 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.event.entity.EntityItemMergeEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.utils.Position;
@@ -44,11 +44,11 @@ public class ItemEntity extends ObjectEntity {
         setBoundingBox(0.25f, 0.25f, 0.25f);
     }
 
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
+    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable World world) {
         this(itemStack, spawnPosition);
 
-        if (instance != null) {
-            setInstance(instance);
+        if (world != null) {
+            setWorld(world);
         }
     }
 
@@ -78,8 +78,8 @@ public class ItemEntity extends ObjectEntity {
                 (mergeUpdateOption == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
             this.lastMergeCheck = time;
 
-            final Chunk chunk = instance.getChunkAt(getPosition());
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
+            final Chunk chunk = world.getChunkAt(getPosition());
+            final Set<Entity> entities = world.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
 

@@ -1,6 +1,6 @@
 package net.minestom.server.utils.chunk;
 
-import net.minestom.server.instance.Chunk;
+import net.minestom.server.world.Chunk;
 
 import java.util.function.Consumer;
 

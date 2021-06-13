@@ -2,7 +2,7 @@ package net.minestom.server.utils;
 
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
-import net.minestom.server.instance.palette.Palette;
+import net.minestom.server.world.palette.Palette;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 

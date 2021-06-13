@@ -4,8 +4,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.TargetSelector;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,19 +30,19 @@ public class ClosestEntityTarget extends TargetSelector {
 
     @Override
     public Entity findTarget() {
-        final Instance instance = getEntityCreature().getInstance();
-        final Chunk currentChunk = instance.getChunkAt(entityCreature.getPosition());
+        final World world = getEntityCreature().getWorld();
+        final Chunk currentChunk = world.getChunkAt(entityCreature.getPosition());
         if (currentChunk == null) {
             return null;
         }
 
-        final List<Chunk> chunks = getNeighbours(instance, currentChunk.getChunkX(), currentChunk.getChunkZ());
+        final List<Chunk> chunks = getNeighbours(world, currentChunk.getChunkX(), currentChunk.getChunkZ());
 
         Entity entity = null;
         double distance = Double.MAX_VALUE;
 
         for (Chunk chunk : chunks) {
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
+            final Set<Entity> entities = world.getChunkEntities(chunk);
 
             for (Entity ent : entities) {
 
@@ -88,7 +88,7 @@ public class ClosestEntityTarget extends TargetSelector {
         return entity;
     }
 
-    private List<Chunk> getNeighbours(Instance instance, int chunkX, int chunkZ) {
+    private List<Chunk> getNeighbours(World world, int chunkX, int chunkZ) {
         List<Chunk> chunks = new ArrayList<>();
         // Constants used to loop through the neighbors
         final int[] posX = {1, 0, -1};
@@ -99,7 +99,7 @@ public class ClosestEntityTarget extends TargetSelector {
 
                 final int targetX = chunkX + x;
                 final int targetZ = chunkZ + z;
-                final Chunk chunk = instance.getChunk(targetX, targetZ);
+                final Chunk chunk = world.getChunk(targetX, targetZ);
                 if (ChunkUtils.isLoaded(chunk)) {
                     // Chunk is loaded, add it
                     chunks.add(chunk);

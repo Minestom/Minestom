@@ -2,6 +2,7 @@ package net.minestom.server.thread;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
+import net.minestom.server.world.Chunk;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CountDownLatch;
@@ -10,7 +11,7 @@ import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Thread responsible for ticking {@link net.minestom.server.instance.Chunk chunks} and {@link net.minestom.server.entity.Entity entities}.
+ * Thread responsible for ticking {@link Chunk chunks} and {@link net.minestom.server.entity.Entity entities}.
  * <p>
  * Created in {@link ThreadProvider}, and awaken every tick with a task to execute.
  */

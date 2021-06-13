@@ -3,7 +3,7 @@ package net.minestom.server.entity.pathfinding;
 import com.extollit.gaming.ai.path.model.IBlockDescription;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 
 public class PFBlockDescription implements IBlockDescription {
 

@@ -2,23 +2,23 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EntityEvent;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a new instance is set for an entity.
+ * Called when a new World is set for an entity.
  */
 public class EntitySpawnEvent extends EntityEvent {
 
-    private final Instance spawnInstance;
+    private final World spawnWorld;
 
-    public EntitySpawnEvent(@NotNull Entity entity, @NotNull Instance spawnInstance) {
+    public EntitySpawnEvent(@NotNull Entity entity, @NotNull World spawnWorld) {
         super(entity);
-        this.spawnInstance = spawnInstance;
+        this.spawnWorld = spawnWorld;
     }
 
     /**
-     * Gets the entity who spawned in the instance.
+     * Gets the entity who spawned in the World.
      *
      * @return the entity
      */
@@ -29,13 +29,13 @@ public class EntitySpawnEvent extends EntityEvent {
     }
 
     /**
-     * Gets the entity new instance.
+     * Gets the entity's new World.
      *
-     * @return the instance
+     * @return the World
      */
     @NotNull
-    public Instance getSpawnInstance() {
-        return spawnInstance;
+    public World getSpawnWorld() {
+        return spawnWorld;
     }
 
 }

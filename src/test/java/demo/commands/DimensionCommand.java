@@ -9,7 +9,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,24 +30,24 @@ public class DimensionCommand extends Command {
 
     private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
         final Player player = commandSender.asPlayer();
-        final Instance instance = player.getInstance();
+        final World world = player.getWorld();
         final String typeName = commandContext.get(dimension_type);
-        final Optional<Instance> targetInstance = MinecraftServer.getInstanceManager().getInstances().stream().filter(in -> in.getDimensionType().toString().equals(typeName)).findFirst();
-        if (targetInstance.isPresent()) {
-            if (instance != null) {
-                if (targetInstance.get() != instance) {
-                    player.sendMessage(Component.text("You were in " + instance.getDimensionType()));
-                    player.setInstance(targetInstance.get());
+        final Optional<World> targetWorld = MinecraftServer.getWorldManager().getWorlds().stream().filter(in -> in.getDimensionType().toString().equals(typeName)).findFirst();
+        if (targetWorld.isPresent()) {
+            if (world != null) {
+                if (targetWorld.get() != world) {
+                    player.sendMessage(Component.text("You were in " + world.getDimensionType()));
+                    player.setWorld(targetWorld.get());
                     player.sendMessage(Component.text("You are now in " + typeName));
                 } else {
-                    player.sendMessage(Component.text("You are already in the instance"));
+                    player.sendMessage(Component.text("You are already in the World"));
                 }
             } else {
-                player.setInstance(targetInstance.get());
+                player.setWorld(targetWorld.get());
                 player.sendMessage(Component.text("You did the impossible and you are now in " + typeName));
             }
         } else {
-            player.sendMessage(Component.text("Could not find instance with dimension " + typeName));
+            player.sendMessage(Component.text("Could not find World with dimension " + typeName));
         }
     }
 }

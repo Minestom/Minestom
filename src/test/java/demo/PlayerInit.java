@@ -17,11 +17,11 @@ import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
+import net.minestom.server.world.WorldContainer;
+import net.minestom.server.world.WorldManager;
+import net.minestom.server.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
@@ -47,16 +47,16 @@ public class PlayerInit {
     private static final Inventory inventory;
 
     static {
-        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
+        WorldManager worldManager = MinecraftServer.getWorldManager();
         //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
-        InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.enableAutoChunkLoad(true);
-        instanceContainer.setChunkGenerator(chunkGeneratorDemo);
+        WorldContainer worldContainer = worldManager.createWorldContainer(DimensionType.OVERWORLD);
+        worldContainer.enableAutoChunkLoad(true);
+        worldContainer.setChunkGenerator(chunkGeneratorDemo);
 
-        instanceContainer.setBlock(0, 45, 3, Block.CAMPFIRE
+        worldContainer.setBlock(0, 45, 3, Block.CAMPFIRE
                 .withHandler(new CampfireHandler())
                 .withTag(CampfireHandler.ITEMS, List.of(ItemStack.of(Material.DIAMOND, 1))));
 
@@ -168,7 +168,7 @@ public class PlayerInit {
 
             final Block block = event.getBlock();
             player.sendMessage("You clicked at the block " + block);
-            player.sendMessage("CHUNK COUNT " + player.getInstance().getChunks().size());
+            player.sendMessage("CHUNK COUNT " + player.getWorld().getChunks().size());
         });
 
         globalEventHandler.addEventCallback(PickupItemEvent.class, event -> {
@@ -187,7 +187,7 @@ public class PlayerInit {
             Position position = player.getPosition().clone().add(0, 1.5f, 0);
             ItemEntity itemEntity = new ItemEntity(droppedItem, position);
             itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
-            itemEntity.setInstance(player.getInstance());
+            itemEntity.setWorld(player.getWorld());
             Vector velocity = player.getPosition().clone().getDirection().multiply(6);
             itemEntity.setVelocity(velocity);
         });
@@ -200,9 +200,9 @@ public class PlayerInit {
         globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
 
-            var instances = MinecraftServer.getInstanceManager().getInstances();
-            Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
-            event.setSpawningInstance(instance);
+            var worlds = MinecraftServer.getWorldManager().getWorlds();
+            World world = worlds.stream().skip(new Random().nextInt(worlds.size())).findFirst().orElse(null);
+            event.setSpawningWorld(world);
             int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
             int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
             player.setRespawnPoint(new Position(0, 42f, 0));
@@ -258,16 +258,16 @@ public class PlayerInit {
 
         globalEventHandler.addEventCallback(PlayerChunkUnloadEvent.class, event -> {
             final Player player = event.getPlayer();
-            final Instance instance = player.getInstance();
+            final World world = player.getWorld();
 
-            Chunk chunk = instance.getChunk(event.getChunkX(), event.getChunkZ());
+            Chunk chunk = world.getChunk(event.getChunkX(), event.getChunkZ());
 
             if (chunk == null)
                 return;
 
             // Unload the chunk (save memory) if it has no remaining viewer
             if (chunk.getViewers().isEmpty()) {
-                //player.getInstance().unloadChunk(chunk);
+                //player.getWorld().unloadChunk(chunk);
             }
         });
     }

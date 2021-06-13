@@ -3,7 +3,7 @@ package net.minestom.server.entity.type;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +14,8 @@ public class AgeableCreature extends EntityCreature implements Ageable {
         super(entityType, spawnPosition);
     }
 
-    protected AgeableCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        super(entityType, spawnPosition, instance);
+    protected AgeableCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable World world) {
+        super(entityType, spawnPosition, world);
     }
 
     @Override

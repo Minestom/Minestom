@@ -1,6 +1,6 @@
 package demo.block;
 
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.block.BlockHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registries;

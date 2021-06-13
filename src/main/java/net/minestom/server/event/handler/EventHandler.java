@@ -8,7 +8,7 @@ import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.extensions.IExtensionObserver;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -120,11 +120,11 @@ public interface EventHandler extends IExtensionObserver {
             final Collection<EventCallback> eventCallbacks = getEventCallbacks(eventClass);
             runEvent(eventCallbacks, event);
 
-            // Call the same event for the current entity instance
+            // Call the same event for the current entity world
             if (this instanceof Entity) {
-                final Instance instance = ((Entity) this).getInstance();
-                if (instance != null) {
-                    runEvent(instance.getEventCallbacks(eventClass), event);
+                final World world = ((Entity) this).getWorld();
+                if (world != null) {
+                    runEvent(world.getEventCallbacks(eventClass), event);
                 }
             }
         } catch (Exception exception) {

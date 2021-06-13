@@ -35,8 +35,8 @@ import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.Chunk;
+import net.minestom.server.world.World;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
@@ -69,7 +69,7 @@ import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
-import net.minestom.server.utils.instance.InstanceUtils;
+import net.minestom.server.utils.world.WorldUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -215,10 +215,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * WARNING: executed in the main update thread
      * UNSAFE: Only meant to be used when a netty player connects through the server.
      *
-     * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
+     * @param spawnWorld the player spawn World (defined in {@link PlayerLoginEvent})
      */
-    public void UNSAFE_init(@NotNull Instance spawnInstance) {
-        this.dimensionType = spawnInstance.getDimensionType();
+    public void UNSAFE_init(@NotNull World spawnWorld) {
+        this.dimensionType = spawnWorld.getDimensionType();
 
         JoinGamePacket joinGamePacket = new JoinGamePacket();
         joinGamePacket.entityId = getEntityId();
@@ -336,9 +336,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 //                // Should increment the target block stage
 //                if (targetCustomBlock.enableMultiPlayerBreaking()) {
 //                    // Let the custom block object manages the breaking
-//                    final boolean canContinue = targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
+//                    final boolean canContinue = targetCustomBlock.processStage(world, targetBlockPosition, this, stageIncrease);
 //                    if (canContinue) {
-//                        final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
+//                        final Set<Player> breakers = targetCustomBlock.getBreakers(world, targetBlockPosition);
 //                        refreshBreakDelay(breakers);
 //                    } else {
 //                        resetTargetBlock();
@@ -348,12 +348,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 //                    // The custom block doesn't support multi player breaking
 //                    if (targetStage + stageIncrease >= CustomBlock.MAX_STAGE) {
 //                        // Break the block
-//                        instance.breakBlock(this, targetBlockPosition);
+//                        world.breakBlock(this, targetBlockPosition);
 //                        resetTargetBlock();
 //                    } else {
 //                        // Send the new block break animation packet and refresh data
 //
-//                        final Chunk chunk = instance.getChunkAt(targetBlockPosition);
+//                        final Chunk chunk = world.getChunkAt(targetBlockPosition);
 //                        final int entityId = targetCustomBlock.getBreakEntityId(this);
 //                        final BlockBreakAnimationPacket blockBreakAnimationPacket =
 //                                new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
@@ -371,7 +371,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
             final Chunk chunk = getChunk(); // TODO check surrounding chunks
-            final Set<Entity> entities = instance.getChunkEntities(chunk);
+            final Set<Entity> entities = world.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ExperienceOrb) {
                     final ExperienceOrb experienceOrb = (ExperienceOrb) entity;
@@ -575,80 +575,80 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Changes the player instance and load surrounding chunks if needed.
+     * Changes the player's World and load surrounding chunks if needed.
      * <p>
      * Be aware that because chunk operations are expensive,
      * it is possible for this method to be non-blocking when retrieving chunks is required.
      *
-     * @param instance      the new player instance
+     * @param world         the new player World
      * @param spawnPosition the new position of the player
      */
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
-        Check.argCondition(this.instance == instance, "Instance should be different than the current one");
+    public void setWorld(@NotNull World world, @NotNull Position spawnPosition) {
+        Check.argCondition(this.world == world, "World should be different than the current one");
 
-        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
-        final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
+        // true if the chunks need to be sent to the client, can be false if the worlds share the same chunks (eg SharedWorld)
+        final boolean needWorldRefresh = !WorldUtils.areLinked(this.world, world) ||
                 !spawnPosition.inSameChunk(this.position);
 
         if (needWorldRefresh) {
             // TODO: Handle player reconnections, must be false in that case too
-            final boolean firstSpawn = this.instance == null;
+            final boolean firstSpawn = this.world == null;
 
-            // Send the new dimension if player isn't in any instance or if the dimension is different
-            final DimensionType instanceDimensionType = instance.getDimensionType();
-            final boolean dimensionChange = dimensionType != instanceDimensionType;
+            // Send the new dimension if player isn't in any world or if the dimension is different
+            final DimensionType dimensionType = world.getDimensionType();
+            final boolean dimensionChange = this.dimensionType != dimensionType;
             if (dimensionChange) {
-                sendDimension(instanceDimensionType);
+                sendDimension(dimensionType);
             }
 
             // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
             final ChunkCallback endCallback =
-                    chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
+                    chunk -> spawnPlayer(world, spawnPosition, firstSpawn, dimensionChange, true);
 
-            ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
+            ChunkUtils.optionalLoadAll(world, visibleChunks, null, endCallback);
         } else {
             // The player already has the good version of all the chunks.
-            // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
+            // We just need to refresh his entity viewing list and add him to the world
+            spawnPlayer(world, spawnPosition, false, false, false);
         }
     }
 
     /**
-     * Changes the player instance without changing its position (defaulted to {@link #getRespawnPoint()}
-     * if the player is not in any instance).
+     * Changes the player World without changing its position (defaulted to {@link #getRespawnPoint()}
+     * if the player is not in any World).
      *
-     * @param instance the new player instance
-     * @see #setInstance(Instance, Position)
+     * @param world the player's new World
+     * @see #setWorld(World, Position)
      */
     @Override
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
+    public void setWorld(@NotNull World world) {
+        setWorld(world, this.world != null ? getPosition() : getRespawnPoint());
     }
 
     /**
      * Used to spawn the player once the client has all the required chunks.
      * <p>
-     * Does add the player to {@code instance}, remove all viewable entities and call {@link PlayerSpawnEvent}.
+     * Does add the player to {@code World}, remove all viewable entities and call {@link PlayerSpawnEvent}.
      * <p>
-     * UNSAFE: only called with {@link #setInstance(Instance, Position)}.
+     * UNSAFE: only called with {@link #setWorld(World, Position)}.
      *
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
-     * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
+     * @param updateChunks  true if chunks should be refreshed, false if the new World shares the same
      *                      chunks
      */
-    private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
+    private void spawnPlayer(@NotNull World world, @NotNull Position spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
-            // Player instance changed, clear current viewable collections
+            // Player world changed, clear current viewable collections
             this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
-        super.setInstance(instance, spawnPosition);
+        super.setWorld(world, spawnPosition);
 
         if (updateChunks) {
             refreshVisibleChunks();
@@ -659,7 +659,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.inventory.update();
         }
 
-        PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
+        PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, world, firstSpawn);
         callEvent(PlayerSpawnEvent.class, spawnEvent);
     }
 
@@ -1200,7 +1200,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public synchronized void setSkin(@Nullable PlayerSkin skin) {
         this.skin = skin;
-        if (instance == null)
+        if (world == null)
             return;
 
         DestroyEntityPacket destroyEntityPacket = DestroyEntityPacket.of(getEntityId());
@@ -1414,7 +1414,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         {
             // Send new chunks
             final BlockPosition pos = position.toBlockPosition();
-            final Chunk chunk = instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+            final Chunk chunk = world.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
             Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
             refreshVisibleChunks(chunk);
         }
@@ -1530,7 +1530,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             unloadChunkPacket.chunkZ = chunkZ;
             playerConnection.sendPacket(unloadChunkPacket);
 
-            final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+            final Chunk chunk = world.getChunk(chunkX, chunkZ);
             if (chunk != null)
                 chunk.removeViewer(this);
         }
@@ -1541,7 +1541,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+            this.world.loadOptionalChunk(chunkX, chunkZ, chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;
@@ -1582,7 +1582,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 });
 
         // Manage entities in unchecked chunks
-        EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
+        EntityUtils.forEachRange(world, newChunk.toPosition(), entityViewDistance, entity -> {
             if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
                 entity.addViewer(this);
             }
@@ -2292,7 +2292,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 //        // Get if multi player breaking is enabled
 //        final boolean multiPlayerBreaking = targetCustomBlock.enableMultiPlayerBreaking();
 //        // Get the stage from the custom block object if it is, otherwise use the local field
-//        final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
+//        final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(world, targetBlockPosition) : targetStage;
 //        // Retrieve the break delay for the current stage
 //        this.targetBreakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
     }
@@ -2307,7 +2307,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // TODO: Handle custom blocks break delay.
 //        if (targetCustomBlock != null) {
-//            targetCustomBlock.stopDigging(instance, targetBlockPosition, this);
+//            targetCustomBlock.stopDigging(world, targetBlockPosition, this);
 //            this.targetCustomBlock = null;
 //            this.targetBlockPosition = null;
 //            this.targetBreakDelay = 0;

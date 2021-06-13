@@ -2,31 +2,31 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.PlayerEvent;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.world.World;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a new instance is set for a player.
+ * Called when a new World is set for a player.
  */
 public class PlayerSpawnEvent extends PlayerEvent {
 
-    private final Instance spawnInstance;
+    private final World spawnWorld;
     private final boolean firstSpawn;
 
-    public PlayerSpawnEvent(@NotNull Player player, @NotNull Instance spawnInstance, boolean firstSpawn) {
+    public PlayerSpawnEvent(@NotNull Player player, @NotNull World spawnWorld, boolean firstSpawn) {
         super(player);
-        this.spawnInstance = spawnInstance;
+        this.spawnWorld = spawnWorld;
         this.firstSpawn = firstSpawn;
     }
 
     /**
-     * Gets the entity new instance.
+     * Gets the entity's new World.
      *
-     * @return the instance
+     * @return the World
      */
     @NotNull
-    public Instance getSpawnInstance() {
-        return spawnInstance;
+    public World getSpawnWorld() {
+        return spawnWorld;
     }
 
     /**

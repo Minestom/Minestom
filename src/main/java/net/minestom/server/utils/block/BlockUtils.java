@@ -1,22 +1,22 @@
 package net.minestom.server.utils.block;
 
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.World;
+import net.minestom.server.block.Block;
 import net.minestom.server.utils.BlockPosition;
 
 public class BlockUtils {
 
-    private final Instance instance;
+    private final World world;
     private final BlockPosition position;
 
-    public BlockUtils(Instance instance, BlockPosition position) {
-        this.instance = instance;
+    public BlockUtils(World world, BlockPosition position) {
+        this.world = world;
         this.position = position;
     }
 
     public BlockUtils getRelativeTo(int x, int y, int z) {
         BlockPosition position = this.position.clone().add(x, y, z);
-        return new BlockUtils(instance, position);
+        return new BlockUtils(world, position);
     }
 
     public BlockUtils above() {
@@ -44,7 +44,7 @@ public class BlockUtils {
     }
 
     public Block getBlock() {
-        return instance.getBlock(position);
+        return world.getBlock(position);
     }
 
     public boolean equals(Block block) {

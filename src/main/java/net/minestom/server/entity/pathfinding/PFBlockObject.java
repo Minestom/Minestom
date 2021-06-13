@@ -4,7 +4,7 @@ import com.extollit.gaming.ai.path.model.IBlockObject;
 import com.extollit.linalg.immutable.AxisAlignedBBox;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.block.Block;
 
 public class PFBlockObject implements IBlockObject {
 

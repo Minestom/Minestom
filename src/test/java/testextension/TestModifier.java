@@ -9,7 +9,7 @@ import java.util.List;
 public class TestModifier extends CodeModifier implements Opcodes {
     @Override
     public boolean transform(ClassNode source) {
-        if(source.name.equals("net/minestom/server/instance/InstanceContainer")) {
+        if(source.name.equals("net/minestom/server/world/WorldContainer")) {
             System.out.println("Modifying code of "+source.name);
             MethodNode constructor = findConstructor(source.methods);
             constructor.instructions.insert(constructor.instructions.getFirst(), buildInjectionCode());

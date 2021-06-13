@@ -5,8 +5,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
+import net.minestom.server.world.World;
+import net.minestom.server.block.Block;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
@@ -30,13 +30,13 @@ public class PlayerDiggingListener {
         final ClientPlayerDiggingPacket.Status status = packet.status;
         final BlockPosition blockPosition = packet.blockPosition;
 
-        final Instance instance = player.getInstance();
+        final World world = player.getWorld();
 
-        if (instance == null)
+        if (world == null)
             return;
 
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
-            final Block block = instance.getBlock(blockPosition);
+            final Block block = world.getBlock(blockPosition);
 
             //Check if the player is allowed to break blocks based on their game mode
             if (player.getGameMode() == GameMode.SPECTATOR) {
@@ -46,7 +46,7 @@ public class PlayerDiggingListener {
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the item can break the block with the current item
                 ItemStack itemInMainHand = player.getItemInMainHand();
-                Block destroyedBlock = instance.getBlock(blockPosition);
+                Block destroyedBlock = world.getBlock(blockPosition);
                 if (!itemInMainHand.getMeta().getCanDestroy().contains(destroyedBlock)) {
                     sendAcknowledgePacket(player, blockPosition, block,
                             ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
@@ -60,7 +60,7 @@ public class PlayerDiggingListener {
 
             if (instantBreak) {
                 // No need to check custom block
-                breakBlock(instance, player, blockPosition, block, status);
+                breakBlock(world, player, blockPosition, block, status);
             } else {
                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
                 player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
@@ -78,7 +78,7 @@ public class PlayerDiggingListener {
 
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
 
-            final Block block = instance.getBlock(blockPosition);
+            final Block block = world.getBlock(blockPosition);
             // Remove custom block target
             player.resetTargetBlock();
 
@@ -87,13 +87,13 @@ public class PlayerDiggingListener {
 
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
 
-            final Block block = instance.getBlock(blockPosition);
+            final Block block = world.getBlock(blockPosition);
 
             if (false) {
                 // TODO: Handle custom block with block break delay here
             } else {
                 // Vanilla block
-                breakBlock(instance, player, blockPosition, block, status);
+                breakBlock(world, player, blockPosition, block, status);
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
@@ -158,7 +158,7 @@ public class PlayerDiggingListener {
         }
     }
 
-    private static void breakBlock(Instance instance,
+    private static void breakBlock(World world,
                                    Player player,
                                    BlockPosition blockPosition, Block block,
                                    ClientPlayerDiggingPacket.Status status) {
@@ -166,9 +166,9 @@ public class PlayerDiggingListener {
         player.resetTargetBlock();
 
         // Unverified block break, client is fully responsible
-        final boolean result = instance.breakBlock(player, blockPosition);
+        final boolean result = world.breakBlock(player, blockPosition);
 
-        final Block updatedBlock = instance.getBlock(blockPosition);
+        final Block updatedBlock = world.getBlock(blockPosition);
 
         // Send acknowledge packet to allow or cancel the digging process
         sendAcknowledgePacket(player, blockPosition, updatedBlock, status, result);

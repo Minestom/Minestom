@@ -9,7 +9,7 @@ public class MissingCodeModifiersExtension extends Extension {
 
     @Override
     public void initialize() {
-        // force load of InstanceContainer class
+        // force load of WorldContainer class
         try {
             Assertions.assertFalse(areCodeModifiersAllLoadedCorrectly(), "Mixin configuration could not be loaded and code modifiers are unavailable, the failure should be reported");
             Assertions.assertTrue(getOrigin().hasFailedToLoadMixin(), "Mixin configuration does not exist and should not be loaded");
