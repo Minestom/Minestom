@@ -24,7 +24,8 @@ public interface BlockHandler {
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
      */
-    void onPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition);
+    default void onPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+    }
 
     /**
      * Called when a block has been destroyed or replaced.
@@ -32,7 +33,8 @@ public interface BlockHandler {
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
      */
-    void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition);
+    default void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+    }
 
     /**
      * Handles interactions with this block. Can also block normal item use (containers should block when opening the
@@ -43,7 +45,9 @@ public interface BlockHandler {
      * @param blockPosition the position of this block
      * @return true if this block blocks normal item use, false otherwise
      */
-    boolean onInteract(@NotNull Player player, @NotNull Player.Hand hand, @NotNull BlockPosition blockPosition);
+    default boolean onInteract(@NotNull Player player, @NotNull Player.Hand hand, @NotNull BlockPosition blockPosition) {
+        return false;
+    }
 
     /**
      * Defines custom behaviour for entities touching this block.

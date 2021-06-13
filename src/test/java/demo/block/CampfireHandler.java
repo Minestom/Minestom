@@ -1,7 +1,5 @@
 package demo.block;
 
-import net.minestom.server.entity.Player;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -10,7 +8,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import net.minestom.server.tag.TagWritable;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,21 +56,6 @@ public class CampfireHandler implements BlockHandler {
             writer.setTag(internal, items);
         }
     });
-
-    @Override
-    public void onPlace(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-
-    }
-
-    @Override
-    public void onDestroy(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-
-    }
-
-    @Override
-    public boolean onInteract(@NotNull Player player, Player.@NotNull Hand hand, @NotNull BlockPosition blockPosition) {
-        return false;
-    }
 
     @Override
     public @NotNull Collection<Tag<?>> getBlockEntityTags() {
