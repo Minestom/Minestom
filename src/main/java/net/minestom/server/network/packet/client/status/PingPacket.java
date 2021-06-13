@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.client.status;
 
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ClientPingServerEvent;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.status.PongPacket;
@@ -14,12 +14,13 @@ public class PingPacket implements ClientPreplayPacket {
 
     private long number;
 
-    public PingPacket() {}
+    public PingPacket() {
+    }
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
         final ClientPingServerEvent clientPingEvent = new ClientPingServerEvent(connection, number);
-        MinecraftServer.getGlobalEventHandler().callEvent(ClientPingServerEvent.class, clientPingEvent);
+        EventDispatcher.call(clientPingEvent);
 
         if (clientPingEvent.isCancelled()) {
             connection.disconnect();

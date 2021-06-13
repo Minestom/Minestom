@@ -1,7 +1,6 @@
 package net.minestom.server.event.server;
 
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ServerListPingEvent
  */
-public class ClientPingServerEvent extends Event implements CancellableEvent {
+public class ClientPingServerEvent implements CancellableEvent {
     private static final UpdateOption DEFAULT_DELAY = new UpdateOption(0, TimeUnit.MILLISECOND);
 
     private final PlayerConnection connection;
@@ -27,7 +26,7 @@ public class ClientPingServerEvent extends Event implements CancellableEvent {
      * Creates a new client ping server event with 0 delay
      *
      * @param connection the player connection
-     * @param payload the payload the client sent
+     * @param payload    the payload the client sent
      */
     public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload) {
         this.connection = connection;
@@ -39,7 +38,7 @@ public class ClientPingServerEvent extends Event implements CancellableEvent {
      * Creates a new client ping server event with 0 delay
      *
      * @param connection the player connection
-     * @param payload the payload the client sent
+     * @param payload    the payload the client sent
      */
     public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, UpdateOption delay) {
         this.connection = connection;
@@ -69,8 +68,9 @@ public class ClientPingServerEvent extends Event implements CancellableEvent {
 
     /**
      * Sets the payload to respond with.
-     *
+     * <p>
      * Note: This should be the same as the client sent, however vanilla 1.17 seems to be OK with a different payload.
+     *
      * @param payload the payload
      */
     public void setPayload(long payload) {
