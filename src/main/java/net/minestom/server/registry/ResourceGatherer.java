@@ -105,7 +105,8 @@ public class ResourceGatherer {
     }
 
     private static void runDataGenerator(File serverJar) throws IOException {
-        ProcessBuilder dataGenerator = new ProcessBuilder("java", "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
+        final String javaExecutable = System.getProperty("java.home") + "/bin/java";
+        ProcessBuilder dataGenerator = new ProcessBuilder(javaExecutable, "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
         dataGenerator.directory(TMP_FOLDER);
         LOGGER.info("Now running data generator with options '--dev', '--server', '--all'");
         LOGGER.info("Executing: {}", String.join(StringUtils.SPACE, dataGenerator.command()));
@@ -115,6 +116,9 @@ public class ResourceGatherer {
         new BufferedReader(
                 new InputStreamReader(dataGeneratorProcess.getInputStream())
         ).lines().forEach(LOGGER::info);
+        new BufferedReader(
+                new InputStreamReader(dataGeneratorProcess.getErrorStream())
+        ).lines().forEach(LOGGER::error);
         LOGGER.info("");
 
         try {
