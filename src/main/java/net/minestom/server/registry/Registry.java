@@ -1,17 +1,22 @@
 package net.minestom.server.registry;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStreamReader;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 public class Registry {
 
     private static final Loader LOADER = new Loader();
+    protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     public static BlockEntry block(@NotNull Block block) {
         return loader().block(block.getName());
@@ -20,6 +25,24 @@ public class Registry {
     @ApiStatus.Internal
     public static @NotNull Loader loader() {
         return LOADER;
+    }
+
+    @ApiStatus.Internal
+    public static JsonObject load(Resource resource) {
+        final String path = String.format("/%s_%s.json", MinecraftServer.VERSION_NAME_UNDERSCORED, resource.name);
+        final var resourceStream = Registry.class.getResourceAsStream(path);
+        return GSON.fromJson(new InputStreamReader(resourceStream), JsonObject.class);
+    }
+
+    public enum Resource {
+        BLOCK("blocks"),
+        BLOCK_PROPERTY("block_properties");
+
+        private final String name;
+
+        Resource(String name) {
+            this.name = name;
+        }
     }
 
     public static class BlockEntry extends Entry {
