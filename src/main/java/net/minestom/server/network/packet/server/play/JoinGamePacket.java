@@ -40,7 +40,7 @@ public class JoinGamePacket implements ServerPacket {
         writer.writeBoolean(hardcore);
         writer.writeByte(gameMode.getId());
 
-        if(previousGameMode == null) {
+        if (previousGameMode == null) {
             writer.writeByte(gameMode.getId());
         } else {
             writer.writeByte(previousGameMode.getId());
@@ -80,23 +80,23 @@ public class JoinGamePacket implements ServerPacket {
         int worldCount = reader.readVarInt();
         Check.stateCondition(worldCount != 1, "Only 1 world is supported per JoinGamePacket by Minestom for the moment.");
         //for (int i = 0; i < worldCount; i++) {
-            String worldName = reader.readSizedString(Integer.MAX_VALUE);
-            try {
-                NBTCompound dimensionCodec = (NBTCompound) reader.readTag();
-                dimensionType = DimensionType.fromNBT((NBTCompound) reader.readTag());
+        String worldName = reader.readSizedString();
+        try {
+            NBTCompound dimensionCodec = (NBTCompound) reader.readTag();
+            dimensionType = DimensionType.fromNBT((NBTCompound) reader.readTag());
 
-                String dimensionName = reader.readSizedString(Integer.MAX_VALUE);
-                hashedSeed = reader.readLong();
-                maxPlayers = reader.readVarInt();
-                viewDistance = reader.readVarInt();
-                reducedDebugInfo = reader.readBoolean();
-                enableRespawnScreen = reader.readBoolean();
-                isDebug = reader.readBoolean();
-                isFlat = reader.readBoolean();
-            } catch (IOException | NBTException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                // TODO: should we throw as the packet is invalid?
-            }
+            String dimensionName = reader.readSizedString();
+            hashedSeed = reader.readLong();
+            maxPlayers = reader.readVarInt();
+            viewDistance = reader.readVarInt();
+            reducedDebugInfo = reader.readBoolean();
+            enableRespawnScreen = reader.readBoolean();
+            isDebug = reader.readBoolean();
+            isFlat = reader.readBoolean();
+        } catch (IOException | NBTException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            // TODO: should we throw as the packet is invalid?
+        }
         //}
     }
 

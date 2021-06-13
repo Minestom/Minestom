@@ -19,7 +19,7 @@ public final class BubbleColumn {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9671, "drag=true"));
-        Block.BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9672, "drag=false"));
+        Block.BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9917, "drag=true"));
+        Block.BUBBLE_COLUMN.addBlockAlternative(new BlockAlternative((short) 9918, "drag=false"));
     }
 }

@@ -3,8 +3,8 @@ package net.minestom.server.entity.fakeplayer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.AbstractInventory;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
@@ -43,10 +43,9 @@ public class FakePlayerController {
      * @param playerInventory {@code true} if the window a {@link PlayerInventory}, otherwise {@code false}.
      * @param slot            The slot where the fake player should click on.
      * @param button          The mouse button that the fake player should used.
-     * @param action          The action that the fake player should perform.
-     * @param mode            The inventory operation mode that the fake player should used.
+     * @param clickType       The click type
      */
-    public void clickWindow(boolean playerInventory, short slot, byte button, short action, int mode) {
+    public void clickWindow(boolean playerInventory, short slot, byte button, ClientClickWindowPacket.ClickType clickType) {
         Inventory inventory = playerInventory ? null : fakePlayer.getOpenInventory();
         AbstractInventory abstractInventory = inventory == null ? fakePlayer.getInventory() : inventory;
         playerInventory = abstractInventory instanceof PlayerInventory;
@@ -59,8 +58,7 @@ public class FakePlayerController {
         clickWindowPacket.windowId = playerInventory ? 0 : inventory.getWindowId();
         clickWindowPacket.slot = slot;
         clickWindowPacket.button = button;
-        clickWindowPacket.actionNumber = action;
-        clickWindowPacket.mode = mode;
+        clickWindowPacket.clickType = clickType;
         clickWindowPacket.item = itemStack;
         addToQueue(clickWindowPacket);
     }

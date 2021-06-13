@@ -19,11 +19,11 @@ public final class GraniteSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10841, "type=top", "waterlogged=true"));
-        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10842, "type=top", "waterlogged=false"));
-        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10843, "type=bottom", "waterlogged=true"));
-        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10844, "type=bottom", "waterlogged=false"));
-        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10845, "type=double", "waterlogged=true"));
-        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 10846, "type=double", "waterlogged=false"));
+        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11087, "type=top", "waterlogged=true"));
+        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11088, "type=top", "waterlogged=false"));
+        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11089, "type=bottom", "waterlogged=true"));
+        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11090, "type=bottom", "waterlogged=false"));
+        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11091, "type=double", "waterlogged=true"));
+        Block.GRANITE_SLAB.addBlockAlternative(new BlockAlternative((short) 11092, "type=double", "waterlogged=false"));
     }
 }

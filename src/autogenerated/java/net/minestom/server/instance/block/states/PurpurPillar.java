@@ -19,8 +19,8 @@ public final class PurpurPillar {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9139, "axis=x"));
-        Block.PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9140, "axis=y"));
-        Block.PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9141, "axis=z"));
+        Block.PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9385, "axis=x"));
+        Block.PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9386, "axis=y"));
+        Block.PURPUR_PILLAR.addBlockAlternative(new BlockAlternative((short) 9387, "axis=z"));
     }
 }

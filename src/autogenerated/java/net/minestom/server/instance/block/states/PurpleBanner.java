@@ -19,21 +19,21 @@ public final class PurpleBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8061, "rotation=0"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8062, "rotation=1"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8063, "rotation=2"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8064, "rotation=3"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8065, "rotation=4"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8066, "rotation=5"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8067, "rotation=6"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8068, "rotation=7"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8069, "rotation=8"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8070, "rotation=9"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8071, "rotation=10"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8072, "rotation=11"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8073, "rotation=12"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8074, "rotation=13"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8075, "rotation=14"));
-        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8076, "rotation=15"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8307, "rotation=0"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8308, "rotation=1"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8309, "rotation=2"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8310, "rotation=3"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8311, "rotation=4"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8312, "rotation=5"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8313, "rotation=6"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8314, "rotation=7"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8315, "rotation=8"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8316, "rotation=9"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8317, "rotation=10"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8318, "rotation=11"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8319, "rotation=12"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8320, "rotation=13"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8321, "rotation=14"));
+        Block.PURPLE_BANNER.addBlockAlternative(new BlockAlternative((short) 8322, "rotation=15"));
     }
 }

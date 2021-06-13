@@ -19,7 +19,7 @@ public final class TallSeagrass {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1346, "half=upper"));
-        Block.TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1347, "half=lower"));
+        Block.TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1402, "half=upper"));
+        Block.TALL_SEAGRASS.addBlockAlternative(new BlockAlternative((short) 1403, "half=lower"));
     }
 }

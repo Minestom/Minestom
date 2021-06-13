@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     private Entity hooked;
     private Entity owner;
@@ -24,15 +26,15 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
     public void setHookedEntity(@Nullable Entity value) {
         this.hooked = value;
         int entityID = value == null ? 0 : value.getEntityId() + 1;
-        super.metadata.setIndex((byte) 7, Metadata.VarInt(entityID));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(entityID));
     }
 
     public boolean isCatchable() {
-        return super.metadata.getIndex((byte) 8, false);
+        return super.metadata.getIndex(OFFSET + 1, false);
     }
 
     public void setCatchable(boolean value) {
-        super.metadata.setIndex((byte) 8, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
     }
 
     @Nullable

@@ -20,8 +20,8 @@ public class PluginMessagePacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        channel = reader.readSizedString(Integer.MAX_VALUE);
-        data = reader.getRemainingBytes();
+        channel = reader.readSizedString();
+        data = reader.readRemainingBytes();
     }
 
     @Override

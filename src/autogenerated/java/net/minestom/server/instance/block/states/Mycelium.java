@@ -19,7 +19,7 @@ public final class Mycelium {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5016, "snowy=true"));
-        Block.MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5017, "snowy=false"));
+        Block.MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5213, "snowy=true"));
+        Block.MYCELIUM.addBlockAlternative(new BlockAlternative((short) 5214, "snowy=false"));
     }
 }

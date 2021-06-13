@@ -19,11 +19,11 @@ public final class WarpedSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15061, "type=top", "waterlogged=true"));
-        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15062, "type=top", "waterlogged=false"));
-        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15063, "type=bottom", "waterlogged=true"));
-        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15064, "type=bottom", "waterlogged=false"));
-        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15065, "type=double", "waterlogged=true"));
-        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15066, "type=double", "waterlogged=false"));
+        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15307, "type=top", "waterlogged=true"));
+        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15308, "type=top", "waterlogged=false"));
+        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15309, "type=bottom", "waterlogged=true"));
+        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15310, "type=bottom", "waterlogged=false"));
+        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15311, "type=double", "waterlogged=true"));
+        Block.WARPED_SLAB.addBlockAlternative(new BlockAlternative((short) 15312, "type=double", "waterlogged=false"));
     }
 }

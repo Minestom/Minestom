@@ -117,6 +117,10 @@ public class BinaryReader extends InputStream {
         return str;
     }
 
+    public String readSizedString() {
+        return readSizedString(Integer.MAX_VALUE);
+    }
+
     public byte[] readBytes(int length) {
         ByteBuf buf = buffer.readBytes(length);
         byte[] bytes = new byte[buf.readableBytes()];
@@ -134,6 +138,10 @@ public class BinaryReader extends InputStream {
         return strings;
     }
 
+    public String[] readSizedStringArray() {
+        return readSizedStringArray(Integer.MAX_VALUE);
+    }
+
     public int[] readVarIntArray() {
         final int size = readVarInt();
         int[] array = new int[size];
@@ -143,12 +151,13 @@ public class BinaryReader extends InputStream {
         return array;
     }
 
-    /**
-     * @deprecated Use {@link #readRemainingBytes()} (same semantics, but more consistent naming)
-     */
-    @Deprecated
-    public byte[] getRemainingBytes() {
-        return readRemainingBytes();
+    public long[] readLongArray() {
+        final int size = readVarInt();
+        long[] array = new long[size];
+        for (int i = 0; i < size; i++) {
+            array[i] = readLong();
+        }
+        return array;
     }
 
     public byte[] readRemainingBytes() {
@@ -198,6 +207,10 @@ public class BinaryReader extends InputStream {
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
+    }
+
+    public Component readComponent() {
+        return readComponent(Integer.MAX_VALUE);
     }
 
     /**

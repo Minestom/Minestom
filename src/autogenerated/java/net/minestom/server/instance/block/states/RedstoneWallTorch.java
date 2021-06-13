@@ -19,13 +19,13 @@ public final class RedstoneWallTorch {
             forRemoval = false
     )
     public static void initStates() {
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3889, "facing=north", "lit=true"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3890, "facing=north", "lit=false"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3891, "facing=south", "lit=true"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3892, "facing=south", "lit=false"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3893, "facing=west", "lit=true"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3894, "facing=west", "lit=false"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3895, "facing=east", "lit=true"));
-        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3896, "facing=east", "lit=false"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3958, "facing=north", "lit=true"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3959, "facing=north", "lit=false"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3960, "facing=south", "lit=true"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3961, "facing=south", "lit=false"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3962, "facing=west", "lit=true"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3963, "facing=west", "lit=false"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3964, "facing=east", "lit=true"));
+        Block.REDSTONE_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 3965, "facing=east", "lit=false"));
     }
 }

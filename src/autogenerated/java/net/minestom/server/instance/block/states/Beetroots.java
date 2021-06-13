@@ -19,9 +19,9 @@ public final class Beetroots {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9223, "age=0"));
-        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9224, "age=1"));
-        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9225, "age=2"));
-        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9226, "age=3"));
+        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9469, "age=0"));
+        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9470, "age=1"));
+        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9471, "age=2"));
+        Block.BEETROOTS.addBlockAlternative(new BlockAlternative((short) 9472, "age=3"));
     }
 }

@@ -19,7 +19,7 @@ public final class RoseBush {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 7893, "half=upper"));
-        Block.ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 7894, "half=lower"));
+        Block.ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 8139, "half=upper"));
+        Block.ROSE_BUSH.addBlockAlternative(new BlockAlternative((short) 8140, "half=lower"));
     }
 }

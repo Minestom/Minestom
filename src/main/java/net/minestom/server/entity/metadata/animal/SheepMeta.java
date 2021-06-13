@@ -5,8 +5,8 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class SheepMeta extends AnimalMeta {
-
-    private final static byte MASK_INDEX = 16;
+    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     private final static byte COLOR_BITS = 0x0F;
     private final static byte SHEARED_BIT = 0x10;
@@ -16,25 +16,25 @@ public class SheepMeta extends AnimalMeta {
     }
 
     public int getColor() {
-        return getMask(MASK_INDEX) & COLOR_BITS;
+        return getMask(OFFSET) & COLOR_BITS;
     }
 
     public void setColor(byte color) {
-        byte before = getMask(MASK_INDEX);
+        byte before = getMask(OFFSET);
         byte mask = before;
         mask &= ~COLOR_BITS;
         mask |= (color & COLOR_BITS);
         if (mask != before) {
-            setMask(MASK_INDEX, mask);
+            setMask(OFFSET, mask);
         }
     }
 
     public boolean isSheared() {
-        return getMaskBit(MASK_INDEX, SHEARED_BIT);
+        return getMaskBit(OFFSET, SHEARED_BIT);
     }
 
     public void setSheared(boolean value) {
-        setMaskBit(MASK_INDEX, SHEARED_BIT, value);
+        setMaskBit(OFFSET, SHEARED_BIT, value);
     }
 
 }

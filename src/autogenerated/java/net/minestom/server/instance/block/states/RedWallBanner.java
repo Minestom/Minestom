@@ -19,9 +19,9 @@ public final class RedWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8213, "facing=north"));
-        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8214, "facing=south"));
-        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8215, "facing=west"));
-        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8216, "facing=east"));
+        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8459, "facing=north"));
+        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8460, "facing=south"));
+        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8461, "facing=west"));
+        Block.RED_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8462, "facing=east"));
     }
 }

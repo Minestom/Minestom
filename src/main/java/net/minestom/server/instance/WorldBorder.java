@@ -2,7 +2,8 @@ package net.minestom.server.instance;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.packet.server.play.WorldBorderPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
@@ -100,11 +101,7 @@ public class WorldBorder {
      */
     public void setWarningTime(int warningTime) {
         this.warningTime = warningTime;
-
-        WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
-        worldBorderPacket.action = WorldBorderPacket.Action.SET_WARNING_TIME;
-        worldBorderPacket.wbAction = new WorldBorderPacket.WBSetWarningTime(warningTime);
-        sendPacket(worldBorderPacket);
+        sendPacket(WorldBorderWarningDelayPacket.of(warningTime));
     }
 
     public int getWarningBlocks() {
@@ -116,11 +113,7 @@ public class WorldBorder {
      */
     public void setWarningBlocks(int warningBlocks) {
         this.warningBlocks = warningBlocks;
-
-        WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
-        worldBorderPacket.action = WorldBorderPacket.Action.SET_WARNING_BLOCKS;
-        worldBorderPacket.wbAction = new WorldBorderPacket.WBSetWarningBlocks(warningBlocks);
-        sendPacket(worldBorderPacket);
+        sendPacket(WorldBorderWarningReachPacket.of(warningBlocks));
     }
 
     /**
@@ -134,16 +127,10 @@ public class WorldBorder {
             setDiameter(diameter);
             return;
         }
-
         this.newDiameter = diameter;
         this.speed = speed;
         this.lerpStartTime = System.currentTimeMillis();
-
-
-        WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
-        worldBorderPacket.action = WorldBorderPacket.Action.LERP_SIZE;
-        worldBorderPacket.wbAction = new WorldBorderPacket.WBLerpSize(oldDiameter, newDiameter, speed);
-        sendPacket(worldBorderPacket);
+        sendPacket(WorldBorderLerpSizePacket.of(oldDiameter, newDiameter, speed));
     }
 
     /**
@@ -166,11 +153,7 @@ public class WorldBorder {
         this.oldDiameter = diameter;
         this.newDiameter = diameter;
         this.lerpStartTime = 0;
-
-        WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
-        worldBorderPacket.action = WorldBorderPacket.Action.SET_SIZE;
-        worldBorderPacket.wbAction = new WorldBorderPacket.WBSetSize(diameter);
-        sendPacket(worldBorderPacket);
+        sendPacket(WorldBorderSizePacket.of(diameter));
     }
 
     /**
@@ -243,11 +226,9 @@ public class WorldBorder {
      * @param player the player to send the packet to
      */
     protected void init(@NotNull Player player) {
-        WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
-        worldBorderPacket.action = WorldBorderPacket.Action.INITIALIZE;
-        worldBorderPacket.wbAction = new WorldBorderPacket.WBInitialize(centerX, centerZ, oldDiameter, newDiameter, speed,
-                portalTeleportBoundary, warningTime, warningBlocks);
-        player.getPlayerConnection().sendPacket(worldBorderPacket);
+        player.getPlayerConnection().sendPacket(
+                InitializeWorldBorderPacket.of(centerX, centerZ, oldDiameter, newDiameter, speed,
+                        portalTeleportBoundary, warningTime, warningBlocks));
     }
 
     /**
@@ -264,18 +245,10 @@ public class WorldBorder {
      * Sends the new world border centers to all instance players.
      */
     private void refreshCenter() {
-        WorldBorderPacket worldBorderPacket = new WorldBorderPacket();
-        worldBorderPacket.action = WorldBorderPacket.Action.SET_CENTER;
-        worldBorderPacket.wbAction = new WorldBorderPacket.WBSetCenter(centerX, centerZ);
-        sendPacket(worldBorderPacket);
+        sendPacket(WorldBorderCenterPacket.of(centerX, centerZ));
     }
 
-    /**
-     * Sends a {@link WorldBorderPacket} to all the instance players.
-     *
-     * @param packet the packet to send
-     */
-    private void sendPacket(@NotNull WorldBorderPacket packet) {
+    private void sendPacket(@NotNull ServerPacket packet) {
         PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
     }
 

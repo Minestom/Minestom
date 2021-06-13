@@ -19,7 +19,7 @@ public final class Peony {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PEONY.addBlockAlternative(new BlockAlternative((short) 7895, "half=upper"));
-        Block.PEONY.addBlockAlternative(new BlockAlternative((short) 7896, "half=lower"));
+        Block.PEONY.addBlockAlternative(new BlockAlternative((short) 8141, "half=upper"));
+        Block.PEONY.addBlockAlternative(new BlockAlternative((short) 8142, "half=lower"));
     }
 }

@@ -19,13 +19,13 @@ public final class DeadBubbleCoralWallFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9580, "facing=north", "waterlogged=true"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9581, "facing=north", "waterlogged=false"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9582, "facing=south", "waterlogged=true"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9583, "facing=south", "waterlogged=false"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9584, "facing=west", "waterlogged=true"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9585, "facing=west", "waterlogged=false"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9586, "facing=east", "waterlogged=true"));
-        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9587, "facing=east", "waterlogged=false"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9826, "facing=north", "waterlogged=true"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9827, "facing=north", "waterlogged=false"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9828, "facing=south", "waterlogged=true"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9829, "facing=south", "waterlogged=false"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9830, "facing=west", "waterlogged=true"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9831, "facing=west", "waterlogged=false"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9832, "facing=east", "waterlogged=true"));
+        Block.DEAD_BUBBLE_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9833, "facing=east", "waterlogged=false"));
     }
 }

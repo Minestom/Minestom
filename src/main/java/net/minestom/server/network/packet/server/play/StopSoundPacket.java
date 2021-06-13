@@ -28,11 +28,11 @@ public class StopSoundPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         flags = reader.readByte();
-        if(flags == 3 || flags == 1) {
+        if (flags == 3 || flags == 1) {
             source = reader.readVarInt();
         }
-        if(flags == 2 || flags == 3) {
-            sound = reader.readSizedString(Integer.MAX_VALUE);
+        if (flags == 2 || flags == 3) {
+            sound = reader.readSizedString();
         }
     }
 

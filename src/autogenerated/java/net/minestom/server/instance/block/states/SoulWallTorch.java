@@ -19,9 +19,9 @@ public final class SoulWallTorch {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4009, "facing=north"));
-        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4010, "facing=south"));
-        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4011, "facing=west"));
-        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4012, "facing=east"));
+        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4078, "facing=north"));
+        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4079, "facing=south"));
+        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4080, "facing=west"));
+        Block.SOUL_WALL_TORCH.addBlockAlternative(new BlockAlternative((short) 4081, "facing=east"));
     }
 }

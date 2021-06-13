@@ -24,7 +24,7 @@ public class DisplayScoreboardPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         position = reader.readByte();
-        scoreName = reader.readSizedString(Integer.MAX_VALUE);
+        scoreName = reader.readSizedString();
     }
 
     @Override

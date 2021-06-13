@@ -19,7 +19,7 @@ public final class TubeCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9534, "waterlogged=true"));
-        Block.TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9535, "waterlogged=false"));
+        Block.TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9780, "waterlogged=true"));
+        Block.TUBE_CORAL.addBlockAlternative(new BlockAlternative((short) 9781, "waterlogged=false"));
     }
 }

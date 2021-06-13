@@ -19,8 +19,8 @@ public final class PolishedBasalt {
             forRemoval = false
     )
     public static void initStates() {
-        Block.POLISHED_BASALT.addBlockAlternative(new BlockAlternative((short) 4005, "axis=x"));
-        Block.POLISHED_BASALT.addBlockAlternative(new BlockAlternative((short) 4006, "axis=y"));
-        Block.POLISHED_BASALT.addBlockAlternative(new BlockAlternative((short) 4007, "axis=z"));
+        Block.POLISHED_BASALT.addBlockAlternative(new BlockAlternative((short) 4074, "axis=x"));
+        Block.POLISHED_BASALT.addBlockAlternative(new BlockAlternative((short) 4075, "axis=y"));
+        Block.POLISHED_BASALT.addBlockAlternative(new BlockAlternative((short) 4076, "axis=z"));
     }
 }

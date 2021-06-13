@@ -47,7 +47,7 @@ public class RespawnPacket implements ServerPacket {
             dimensionType = DimensionType.fromNBT((NBTCompound) reader.readTag());
 
             // dimension type name
-            reader.readSizedString(Integer.MAX_VALUE);
+            reader.readSizedString();
 
             hashedSeed = reader.readLong();
             gameMode = GameMode.values()[reader.readByte()];

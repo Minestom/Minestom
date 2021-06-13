@@ -50,11 +50,11 @@ public class TabCompletePacket implements ComponentHoldingServerPacket {
         int matchCount = reader.readVarInt();
         matches = new Match[matchCount];
         for (int i = 0; i < matchCount; i++) {
-            String match = reader.readSizedString(Integer.MAX_VALUE);
+            String match = reader.readSizedString();
             boolean hasTooltip = reader.readBoolean();
             Component tooltip = null;
-            if(hasTooltip) {
-                tooltip = reader.readComponent(Integer.MAX_VALUE);
+            if (hasTooltip) {
+                tooltip = reader.readComponent();
             }
             Match newMatch = new Match();
             newMatch.match = match;

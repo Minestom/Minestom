@@ -19,7 +19,7 @@ public final class HornCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 9542, "waterlogged=true"));
-        Block.HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 9543, "waterlogged=false"));
+        Block.HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 9788, "waterlogged=true"));
+        Block.HORN_CORAL.addBlockAlternative(new BlockAlternative((short) 9789, "waterlogged=false"));
     }
 }

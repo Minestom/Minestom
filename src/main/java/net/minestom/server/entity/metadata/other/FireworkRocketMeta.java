@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 3;
 
     private Entity shooter;
 
@@ -18,11 +20,11 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
 
     @NotNull
     public ItemStack getFireworkInfo() {
-        return super.metadata.getIndex((byte) 7, ItemStack.AIR);
+        return super.metadata.getIndex(OFFSET, ItemStack.AIR);
     }
 
     public void setFireworkInfo(@NotNull ItemStack value) {
-        super.metadata.setIndex((byte) 7, Metadata.Slot(value));
+        super.metadata.setIndex(OFFSET, Metadata.Slot(value));
     }
 
     @Override
@@ -35,15 +37,15 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
     public void setShooter(@Nullable Entity value) {
         this.shooter = value;
         Integer entityID = value == null ? null : value.getEntityId();
-        super.metadata.setIndex((byte) 8, Metadata.OptVarInt(entityID));
+        super.metadata.setIndex(OFFSET + 1, Metadata.OptVarInt(entityID));
     }
 
     public boolean isShotAtAngle() {
-        return super.metadata.getIndex((byte) 9, false);
+        return super.metadata.getIndex(OFFSET + 2, false);
     }
 
     public void setShotAtAngle(boolean value) {
-        super.metadata.setIndex((byte) 9, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
     }
 
 }

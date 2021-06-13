@@ -19,7 +19,7 @@ public final class JunglePressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3879, "powered=true"));
-        Block.JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3880, "powered=false"));
+        Block.JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3946, "powered=true"));
+        Block.JUNGLE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3947, "powered=false"));
     }
 }

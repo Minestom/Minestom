@@ -292,16 +292,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         // Recipes end
 
-        // Tags start
-        {
-            TagsPacket tags = TagsPacket.getRequiredTagsPacket();
-
-            UpdateTagListEvent event = new UpdateTagListEvent(tags);
-            EventDispatcher.call(event);
-
-            this.playerConnection.sendPacket(tags);
-        }
-        // Tags end
+        // Tags
+        this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
 
         // Some client update
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
@@ -460,8 +452,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
-                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, deathText);
-                playerConnection.sendPacket(deathPacket);
+                playerConnection.sendPacket(DeathCombatEventPacket.of(getEntityId(), -1, deathText));
             }
 
             // #buildDeathMessage can return null, check here
@@ -906,20 +897,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Common method to send a title.
-     *
-     * @param text   the text of the title
-     * @param action the action of the title (where to show it)
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
-     */
-    @Deprecated
-    private void sendTitle(@NotNull JsonMessage text, @NotNull TitlePacket.Action action) {
-        TitlePacket titlePacket = new TitlePacket(action, text.asComponent());
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
      * Sends a title and subtitle message.
      *
      * @param title    the title message
@@ -970,17 +947,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void showTitle(@NotNull Title title) {
-        Collection<TitlePacket> packet = TitlePacket.of(Title.title(title.title(), title.subtitle(), title.times()));
-
-        for (TitlePacket titlePacket : packet) {
-            playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new SetTitleTextPacket(title.title()));
+        playerConnection.sendPacket(new SetTitleSubTitlePacket(title.subtitle()));
+        final var times = title.times();
+        if (times != null) {
+            playerConnection.sendPacket(new SetTitleTimePacket(
+                    TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS)));
         }
     }
 
     @Override
     public void sendActionBar(@NotNull Component message) {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, message);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ActionBarPacket(message));
     }
 
     /**
@@ -994,31 +974,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Deprecated
     public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
-        TitlePacket titlePacket = new TitlePacket(fadeIn, stay, fadeOut);
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
-     * Hides the previous title.
-     *
-     * @deprecated Use {@link #clearTitle()}
-     */
-    @Deprecated
-    public void hideTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new SetTitleTimePacket(fadeIn, stay, fadeOut));
     }
 
     @Override
     public void resetTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ClearTitlesPacket(true));
     }
 
     @Override
     public void clearTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ClearTitlesPacket());
     }
 
     @Override
@@ -1235,12 +1201,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public synchronized void setSkin(@Nullable PlayerSkin skin) {
         this.skin = skin;
-
         if (instance == null)
             return;
 
-        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+        DestroyEntityPacket destroyEntityPacket = DestroyEntityPacket.of(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
@@ -1251,14 +1215,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         respawnPacket.isFlat = levelFlat;
 
         playerConnection.sendPacket(removePlayerPacket);
-        playerConnection.sendPacket(destroyEntitiesPacket);
+        playerConnection.sendPacket(destroyEntityPacket);
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
 
         {
             // Remove player
             sendPacketToViewers(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
+            sendPacketToViewers(destroyEntityPacket);
 
             // Show player again
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
@@ -1353,13 +1317,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param resourcePack the resource pack
      */
     public void setResourcePack(@NotNull ResourcePack resourcePack) {
-        final String url = resourcePack.getUrl();
-        final String hash = resourcePack.getHash();
-
-        ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
-        resourcePackSendPacket.url = url;
-        resourcePackSendPacket.hash = hash;
-        playerConnection.sendPacket(resourcePackSendPacket);
+        playerConnection.sendPacket(new ResourcePackSendPacket(resourcePack));
     }
 
     /**
@@ -2300,7 +2258,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
-     *
      * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
     @Deprecated
@@ -2717,7 +2674,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
 
-            metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
+            // TODO: Use the metadata object here
+            metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

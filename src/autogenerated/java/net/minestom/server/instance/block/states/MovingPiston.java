@@ -19,17 +19,17 @@ public final class MovingPiston {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1400, "facing=north", "type=normal"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1401, "facing=north", "type=sticky"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1402, "facing=east", "type=normal"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1403, "facing=east", "type=sticky"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1404, "facing=south", "type=normal"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1405, "facing=south", "type=sticky"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1406, "facing=west", "type=normal"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1407, "facing=west", "type=sticky"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1408, "facing=up", "type=normal"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1409, "facing=up", "type=sticky"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1410, "facing=down", "type=normal"));
-        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1411, "facing=down", "type=sticky"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1456, "facing=north", "type=normal"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1457, "facing=north", "type=sticky"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1458, "facing=east", "type=normal"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1459, "facing=east", "type=sticky"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1460, "facing=south", "type=normal"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1461, "facing=south", "type=sticky"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1462, "facing=west", "type=normal"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1463, "facing=west", "type=sticky"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1464, "facing=up", "type=normal"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1465, "facing=up", "type=sticky"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1466, "facing=down", "type=normal"));
+        Block.MOVING_PISTON.addBlockAlternative(new BlockAlternative((short) 1467, "facing=down", "type=sticky"));
     }
 }

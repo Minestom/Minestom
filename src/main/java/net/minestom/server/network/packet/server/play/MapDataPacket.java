@@ -17,8 +17,8 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
 
     public int mapId;
     public byte scale;
-    public boolean trackingPosition;
     public boolean locked;
+    public boolean trackingPosition;
 
     public Icon[] icons = new Icon[0];
 
@@ -28,14 +28,15 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
     public byte z;
     public byte[] data = new byte[0];
 
-    public MapDataPacket() {}
+    public MapDataPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(mapId);
         writer.writeByte(scale);
-        writer.writeBoolean(trackingPosition);
         writer.writeBoolean(locked);
+        writer.writeBoolean(trackingPosition);
 
         if (icons != null && icons.length > 0) {
             writer.writeVarInt(icons.length);
@@ -67,8 +68,8 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
     public void read(@NotNull BinaryReader reader) {
         mapId = reader.readVarInt();
         scale = reader.readByte();
-        trackingPosition = reader.readBoolean();
         locked = reader.readBoolean();
+        trackingPosition = reader.readBoolean();
 
         int iconCount = reader.readVarInt();
         icons = new Icon[iconCount];
@@ -78,7 +79,7 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         }
 
         columns = reader.readByte();
-        if(columns <= 0) {
+        if (columns <= 0) {
             return;
         }
 
@@ -159,8 +160,8 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
             direction = reader.readByte();
 
             boolean hasDisplayName = reader.readBoolean();
-            if(hasDisplayName) {
-                displayName = reader.readComponent(Integer.MAX_VALUE);
+            if (hasDisplayName) {
+                displayName = reader.readComponent();
             } else {
                 displayName = null;
             }

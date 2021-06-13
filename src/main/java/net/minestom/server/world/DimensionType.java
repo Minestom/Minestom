@@ -49,6 +49,8 @@ public class DimensionType {
     private final boolean bedSafe;
     private final String effects;
     private final boolean piglinSafe;
+    private final int minY;
+    private final int height;
     private final int logicalHeight;
     private final int coordinateScale;
     private final NamespaceID infiniburn;
@@ -56,7 +58,7 @@ public class DimensionType {
     DimensionType(NamespaceID name, boolean natural, float ambientLight, boolean ceilingEnabled,
                   boolean skylightEnabled, @Nullable Long fixedTime, boolean raidCapable,
                   boolean respawnAnchorSafe, boolean ultrawarm, boolean bedSafe, String effects, boolean piglinSafe,
-                  int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
+                  int minY, int height, int logicalHeight, int coordinateScale, NamespaceID infiniburn) {
         this.name = name;
         this.natural = natural;
         this.ambientLight = ambientLight;
@@ -69,6 +71,8 @@ public class DimensionType {
         this.bedSafe = bedSafe;
         this.effects = effects;
         this.piglinSafe = piglinSafe;
+        this.minY = minY;
+        this.height = height;
         this.logicalHeight = logicalHeight;
         this.coordinateScale = coordinateScale;
         this.infiniburn = infiniburn;
@@ -124,6 +128,8 @@ public class DimensionType {
                 .setByte("bed_works", (byte) (bedSafe ? 0x01 : 0x00))
                 .setString("effects", effects)
                 .setByte("piglin_safe", (byte) (piglinSafe ? 0x01 : 0x00))
+                .setInt("min_y", minY)
+                .setInt("height", height)
                 .setInt("logical_height", logicalHeight)
                 .setInt("coordinate_scale", coordinateScale)
                 .setString("name", name.toString());
@@ -193,6 +199,14 @@ public class DimensionType {
         return this.piglinSafe;
     }
 
+    public int getMinY() {
+        return minY;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public int getLogicalHeight() {
         return this.logicalHeight;
     }
@@ -203,6 +217,10 @@ public class DimensionType {
 
     public NamespaceID getInfiniburn() {
         return this.infiniburn;
+    }
+
+    public int getTotalHeight() {
+        return minY + height;
     }
 
     @Override
@@ -234,7 +252,9 @@ public class DimensionType {
         private boolean bedSafe = true;
         private String effects = "minecraft:overworld";
         private boolean piglinSafe = false;
+        private int minY = 0;
         private int logicalHeight = 256;
+        private int height = 256;
         private int coordinateScale = 1;
         private NamespaceID infiniburn = NamespaceID.from("minecraft:infiniburn_overworld");
 
@@ -301,6 +321,16 @@ public class DimensionType {
             return this;
         }
 
+        public DimensionType.DimensionTypeBuilder minY(int minY) {
+            this.minY = minY;
+            return this;
+        }
+
+        public DimensionType.DimensionTypeBuilder height(int height) {
+            this.height = height;
+            return this;
+        }
+
         public DimensionType.DimensionTypeBuilder logicalHeight(int logicalHeight) {
             this.logicalHeight = logicalHeight;
             return this;
@@ -319,7 +349,7 @@ public class DimensionType {
         public DimensionType build() {
             return new DimensionType(name, natural, ambientLight, ceilingEnabled, skylightEnabled,
                     fixedTime, raidCapable, respawnAnchorSafe, ultrawarm, bedSafe, effects,
-                    piglinSafe, logicalHeight, coordinateScale, infiniburn);
+                    piglinSafe, minY, height, logicalHeight, coordinateScale, infiniburn);
         }
     }
 }

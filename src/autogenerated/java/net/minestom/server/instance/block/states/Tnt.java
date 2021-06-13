@@ -19,7 +19,7 @@ public final class Tnt {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TNT.addBlockAlternative(new BlockAlternative((short) 1430, "unstable=true"));
-        Block.TNT.addBlockAlternative(new BlockAlternative((short) 1431, "unstable=false"));
+        Block.TNT.addBlockAlternative(new BlockAlternative((short) 1486, "unstable=true"));
+        Block.TNT.addBlockAlternative(new BlockAlternative((short) 1487, "unstable=false"));
     }
 }

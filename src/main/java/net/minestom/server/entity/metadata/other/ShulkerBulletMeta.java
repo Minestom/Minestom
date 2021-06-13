@@ -7,6 +7,8 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class ShulkerBulletMeta extends EntityMeta implements ObjectDataProvider {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 0;
 
     public ShulkerBulletMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

@@ -19,8 +19,8 @@ public final class StrippedSpruceLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 91, "axis=x"));
-        Block.STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 92, "axis=y"));
-        Block.STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 93, "axis=z"));
+        Block.STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 94, "axis=x"));
+        Block.STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 95, "axis=y"));
+        Block.STRIPPED_SPRUCE_LOG.addBlockAlternative(new BlockAlternative((short) 96, "axis=z"));
     }
 }

@@ -19,7 +19,7 @@ public final class OakPressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3873, "powered=true"));
-        Block.OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3874, "powered=false"));
+        Block.OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3940, "powered=true"));
+        Block.OAK_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3941, "powered=false"));
     }
 }

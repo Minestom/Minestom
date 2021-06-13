@@ -19,11 +19,11 @@ public final class AcaciaSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8328, "type=top", "waterlogged=true"));
-        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8329, "type=top", "waterlogged=false"));
-        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8330, "type=bottom", "waterlogged=true"));
-        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8331, "type=bottom", "waterlogged=false"));
-        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8332, "type=double", "waterlogged=true"));
-        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8333, "type=double", "waterlogged=false"));
+        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8574, "type=top", "waterlogged=true"));
+        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8575, "type=top", "waterlogged=false"));
+        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8576, "type=bottom", "waterlogged=true"));
+        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8577, "type=bottom", "waterlogged=false"));
+        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8578, "type=double", "waterlogged=true"));
+        Block.ACACIA_SLAB.addBlockAlternative(new BlockAlternative((short) 8579, "type=double", "waterlogged=false"));
     }
 }

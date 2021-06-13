@@ -19,7 +19,7 @@ public final class BubbleCoralFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BUBBLE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9558, "waterlogged=true"));
-        Block.BUBBLE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9559, "waterlogged=false"));
+        Block.BUBBLE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9804, "waterlogged=true"));
+        Block.BUBBLE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9805, "waterlogged=false"));
     }
 }

@@ -83,16 +83,16 @@ public class DeclareCommandsPacket implements ServerPacket {
             }
 
             if (isLiteral() || isArgument()) {
-                name = reader.readSizedString(Integer.MAX_VALUE);
+                name = reader.readSizedString();
             }
 
-            if(isArgument()) {
-                parser = reader.readSizedString(Integer.MAX_VALUE);
+            if (isArgument()) {
+                parser = reader.readSizedString();
                 properties = getProperties(reader, parser);
             }
 
             if ((flags & 0x10) != 0) {
-                suggestionsType = reader.readSizedString(Integer.MAX_VALUE);
+                suggestionsType = reader.readSizedString();
             }
         }
 
@@ -101,10 +101,10 @@ public class DeclareCommandsPacket implements ServerPacket {
                 case "brigadier:double":
                     return reader.extractBytes(() -> {
                         byte flags = reader.readByte();
-                        if((flags & 0x01) == 0x01) {
+                        if ((flags & 0x01) == 0x01) {
                             reader.readDouble(); // min
                         }
-                        if((flags & 0x02) == 0x02) {
+                        if ((flags & 0x02) == 0x02) {
                             reader.readDouble(); // max
                         }
                     });
@@ -112,10 +112,10 @@ public class DeclareCommandsPacket implements ServerPacket {
                 case "brigadier:integer":
                     return reader.extractBytes(() -> {
                         byte flags = reader.readByte();
-                        if((flags & 0x01) == 0x01) {
+                        if ((flags & 0x01) == 0x01) {
                             reader.readInt(); // min
                         }
-                        if((flags & 0x02) == 0x02) {
+                        if ((flags & 0x02) == 0x02) {
                             reader.readInt(); // max
                         }
                     });

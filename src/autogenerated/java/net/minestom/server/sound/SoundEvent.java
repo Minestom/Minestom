@@ -56,6 +56,28 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE(NamespaceID.from("minecraft:ambient.underwater.loop.additions.ultra_rare")),
 
+    AMETHYST_BLOCK_BREAK(NamespaceID.from("minecraft:block.amethyst_block.break")),
+
+    AMETHYST_BLOCK_CHIME(NamespaceID.from("minecraft:block.amethyst_block.chime")),
+
+    AMETHYST_BLOCK_FALL(NamespaceID.from("minecraft:block.amethyst_block.fall")),
+
+    AMETHYST_BLOCK_HIT(NamespaceID.from("minecraft:block.amethyst_block.hit")),
+
+    AMETHYST_BLOCK_PLACE(NamespaceID.from("minecraft:block.amethyst_block.place")),
+
+    AMETHYST_BLOCK_STEP(NamespaceID.from("minecraft:block.amethyst_block.step")),
+
+    AMETHYST_CLUSTER_BREAK(NamespaceID.from("minecraft:block.amethyst_cluster.break")),
+
+    AMETHYST_CLUSTER_FALL(NamespaceID.from("minecraft:block.amethyst_cluster.fall")),
+
+    AMETHYST_CLUSTER_HIT(NamespaceID.from("minecraft:block.amethyst_cluster.hit")),
+
+    AMETHYST_CLUSTER_PLACE(NamespaceID.from("minecraft:block.amethyst_cluster.place")),
+
+    AMETHYST_CLUSTER_STEP(NamespaceID.from("minecraft:block.amethyst_cluster.step")),
+
     ANCIENT_DEBRIS_BREAK(NamespaceID.from("minecraft:block.ancient_debris.break")),
 
     ANCIENT_DEBRIS_STEP(NamespaceID.from("minecraft:block.ancient_debris.step")),
@@ -115,6 +137,44 @@ public enum SoundEvent implements Keyed, Sound.Type {
     ARROW_SHOOT(NamespaceID.from("minecraft:entity.arrow.shoot")),
 
     AXE_STRIP(NamespaceID.from("minecraft:item.axe.strip")),
+
+    AXE_SCRAPE(NamespaceID.from("minecraft:item.axe.scrape")),
+
+    AXE_WAX_OFF(NamespaceID.from("minecraft:item.axe.wax_off")),
+
+    AXOLOTL_ATTACK(NamespaceID.from("minecraft:entity.axolotl.attack")),
+
+    AXOLOTL_DEATH(NamespaceID.from("minecraft:entity.axolotl.death")),
+
+    AXOLOTL_HURT(NamespaceID.from("minecraft:entity.axolotl.hurt")),
+
+    AXOLOTL_IDLE_AIR(NamespaceID.from("minecraft:entity.axolotl.idle_air")),
+
+    AXOLOTL_IDLE_WATER(NamespaceID.from("minecraft:entity.axolotl.idle_water")),
+
+    AXOLOTL_SPLASH(NamespaceID.from("minecraft:entity.axolotl.splash")),
+
+    AXOLOTL_SWIM(NamespaceID.from("minecraft:entity.axolotl.swim")),
+
+    AZALEA_BREAK(NamespaceID.from("minecraft:block.azalea.break")),
+
+    AZALEA_FALL(NamespaceID.from("minecraft:block.azalea.fall")),
+
+    AZALEA_HIT(NamespaceID.from("minecraft:block.azalea.hit")),
+
+    AZALEA_PLACE(NamespaceID.from("minecraft:block.azalea.place")),
+
+    AZALEA_STEP(NamespaceID.from("minecraft:block.azalea.step")),
+
+    AZALEA_LEAVES_BREAK(NamespaceID.from("minecraft:block.azalea_leaves.break")),
+
+    AZALEA_LEAVES_FALL(NamespaceID.from("minecraft:block.azalea_leaves.fall")),
+
+    AZALEA_LEAVES_HIT(NamespaceID.from("minecraft:block.azalea_leaves.hit")),
+
+    AZALEA_LEAVES_PLACE(NamespaceID.from("minecraft:block.azalea_leaves.place")),
+
+    AZALEA_LEAVES_STEP(NamespaceID.from("minecraft:block.azalea_leaves.step")),
 
     BAMBOO_BREAK(NamespaceID.from("minecraft:block.bamboo.break")),
 
@@ -190,6 +250,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     BELL_RESONATE(NamespaceID.from("minecraft:block.bell.resonate")),
 
+    BIG_DRIPLEAF_BREAK(NamespaceID.from("minecraft:block.big_dripleaf.break")),
+
+    BIG_DRIPLEAF_FALL(NamespaceID.from("minecraft:block.big_dripleaf.fall")),
+
+    BIG_DRIPLEAF_HIT(NamespaceID.from("minecraft:block.big_dripleaf.hit")),
+
+    BIG_DRIPLEAF_PLACE(NamespaceID.from("minecraft:block.big_dripleaf.place")),
+
+    BIG_DRIPLEAF_STEP(NamespaceID.from("minecraft:block.big_dripleaf.step")),
+
     BLAZE_AMBIENT(NamespaceID.from("minecraft:entity.blaze.ambient")),
 
     BLAZE_BURN(NamespaceID.from("minecraft:entity.blaze.burn")),
@@ -213,6 +283,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
     BONE_BLOCK_PLACE(NamespaceID.from("minecraft:block.bone_block.place")),
 
     BONE_BLOCK_STEP(NamespaceID.from("minecraft:block.bone_block.step")),
+
+    BONE_MEAL_USE(NamespaceID.from("minecraft:item.bone_meal.use")),
 
     BOOK_PAGE_TURN(NamespaceID.from("minecraft:item.book.page_turn")),
 
@@ -240,17 +312,51 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     BUCKET_EMPTY(NamespaceID.from("minecraft:item.bucket.empty")),
 
+    BUCKET_EMPTY_AXOLOTL(NamespaceID.from("minecraft:item.bucket.empty_axolotl")),
+
     BUCKET_EMPTY_FISH(NamespaceID.from("minecraft:item.bucket.empty_fish")),
 
     BUCKET_EMPTY_LAVA(NamespaceID.from("minecraft:item.bucket.empty_lava")),
 
+    BUCKET_EMPTY_POWDER_SNOW(NamespaceID.from("minecraft:item.bucket.empty_powder_snow")),
+
     BUCKET_FILL(NamespaceID.from("minecraft:item.bucket.fill")),
+
+    BUCKET_FILL_AXOLOTL(NamespaceID.from("minecraft:item.bucket.fill_axolotl")),
 
     BUCKET_FILL_FISH(NamespaceID.from("minecraft:item.bucket.fill_fish")),
 
     BUCKET_FILL_LAVA(NamespaceID.from("minecraft:item.bucket.fill_lava")),
 
+    BUCKET_FILL_POWDER_SNOW(NamespaceID.from("minecraft:item.bucket.fill_powder_snow")),
+
+    CAKE_ADD_CANDLE(NamespaceID.from("minecraft:block.cake.add_candle")),
+
+    CALCITE_BREAK(NamespaceID.from("minecraft:block.calcite.break")),
+
+    CALCITE_STEP(NamespaceID.from("minecraft:block.calcite.step")),
+
+    CALCITE_PLACE(NamespaceID.from("minecraft:block.calcite.place")),
+
+    CALCITE_HIT(NamespaceID.from("minecraft:block.calcite.hit")),
+
+    CALCITE_FALL(NamespaceID.from("minecraft:block.calcite.fall")),
+
     CAMPFIRE_CRACKLE(NamespaceID.from("minecraft:block.campfire.crackle")),
+
+    CANDLE_AMBIENT(NamespaceID.from("minecraft:block.candle.ambient")),
+
+    CANDLE_BREAK(NamespaceID.from("minecraft:block.candle.break")),
+
+    CANDLE_EXTINGUISH(NamespaceID.from("minecraft:block.candle.extinguish")),
+
+    CANDLE_FALL(NamespaceID.from("minecraft:block.candle.fall")),
+
+    CANDLE_HIT(NamespaceID.from("minecraft:block.candle.hit")),
+
+    CANDLE_PLACE(NamespaceID.from("minecraft:block.candle.place")),
+
+    CANDLE_STEP(NamespaceID.from("minecraft:block.candle.step")),
 
     CAT_AMBIENT(NamespaceID.from("minecraft:entity.cat.ambient")),
 
@@ -269,6 +375,18 @@ public enum SoundEvent implements Keyed, Sound.Type {
     CAT_PURR(NamespaceID.from("minecraft:entity.cat.purr")),
 
     CAT_PURREOW(NamespaceID.from("minecraft:entity.cat.purreow")),
+
+    CAVE_VINES_BREAK(NamespaceID.from("minecraft:block.cave_vines.break")),
+
+    CAVE_VINES_FALL(NamespaceID.from("minecraft:block.cave_vines.fall")),
+
+    CAVE_VINES_HIT(NamespaceID.from("minecraft:block.cave_vines.hit")),
+
+    CAVE_VINES_PLACE(NamespaceID.from("minecraft:block.cave_vines.place")),
+
+    CAVE_VINES_STEP(NamespaceID.from("minecraft:block.cave_vines.step")),
+
+    CAVE_VINES_PICK_BERRIES(NamespaceID.from("minecraft:block.cave_vines.pick_berries")),
 
     CHAIN_BREAK(NamespaceID.from("minecraft:block.chain.break")),
 
@@ -330,6 +448,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     CONDUIT_DEACTIVATE(NamespaceID.from("minecraft:block.conduit.deactivate")),
 
+    COPPER_BREAK(NamespaceID.from("minecraft:block.copper.break")),
+
+    COPPER_STEP(NamespaceID.from("minecraft:block.copper.step")),
+
+    COPPER_PLACE(NamespaceID.from("minecraft:block.copper.place")),
+
+    COPPER_HIT(NamespaceID.from("minecraft:block.copper.hit")),
+
+    COPPER_FALL(NamespaceID.from("minecraft:block.copper.fall")),
+
     CORAL_BLOCK_BREAK(NamespaceID.from("minecraft:block.coral_block.break")),
 
     CORAL_BLOCK_FALL(NamespaceID.from("minecraft:block.coral_block.fall")),
@@ -376,6 +504,36 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     CROSSBOW_SHOOT(NamespaceID.from("minecraft:item.crossbow.shoot")),
 
+    DEEPSLATE_BRICKS_BREAK(NamespaceID.from("minecraft:block.deepslate_bricks.break")),
+
+    DEEPSLATE_BRICKS_FALL(NamespaceID.from("minecraft:block.deepslate_bricks.fall")),
+
+    DEEPSLATE_BRICKS_HIT(NamespaceID.from("minecraft:block.deepslate_bricks.hit")),
+
+    DEEPSLATE_BRICKS_PLACE(NamespaceID.from("minecraft:block.deepslate_bricks.place")),
+
+    DEEPSLATE_BRICKS_STEP(NamespaceID.from("minecraft:block.deepslate_bricks.step")),
+
+    DEEPSLATE_BREAK(NamespaceID.from("minecraft:block.deepslate.break")),
+
+    DEEPSLATE_FALL(NamespaceID.from("minecraft:block.deepslate.fall")),
+
+    DEEPSLATE_HIT(NamespaceID.from("minecraft:block.deepslate.hit")),
+
+    DEEPSLATE_PLACE(NamespaceID.from("minecraft:block.deepslate.place")),
+
+    DEEPSLATE_STEP(NamespaceID.from("minecraft:block.deepslate.step")),
+
+    DEEPSLATE_TILES_BREAK(NamespaceID.from("minecraft:block.deepslate_tiles.break")),
+
+    DEEPSLATE_TILES_FALL(NamespaceID.from("minecraft:block.deepslate_tiles.fall")),
+
+    DEEPSLATE_TILES_HIT(NamespaceID.from("minecraft:block.deepslate_tiles.hit")),
+
+    DEEPSLATE_TILES_PLACE(NamespaceID.from("minecraft:block.deepslate_tiles.place")),
+
+    DEEPSLATE_TILES_STEP(NamespaceID.from("minecraft:block.deepslate_tiles.step")),
+
     DISPENSER_DISPENSE(NamespaceID.from("minecraft:block.dispenser.dispense")),
 
     DISPENSER_FAIL(NamespaceID.from("minecraft:block.dispenser.fail")),
@@ -414,6 +572,40 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     DONKEY_HURT(NamespaceID.from("minecraft:entity.donkey.hurt")),
 
+    DRIPSTONE_BLOCK_BREAK(NamespaceID.from("minecraft:block.dripstone_block.break")),
+
+    DRIPSTONE_BLOCK_STEP(NamespaceID.from("minecraft:block.dripstone_block.step")),
+
+    DRIPSTONE_BLOCK_PLACE(NamespaceID.from("minecraft:block.dripstone_block.place")),
+
+    DRIPSTONE_BLOCK_HIT(NamespaceID.from("minecraft:block.dripstone_block.hit")),
+
+    DRIPSTONE_BLOCK_FALL(NamespaceID.from("minecraft:block.dripstone_block.fall")),
+
+    POINTED_DRIPSTONE_BREAK(NamespaceID.from("minecraft:block.pointed_dripstone.break")),
+
+    POINTED_DRIPSTONE_STEP(NamespaceID.from("minecraft:block.pointed_dripstone.step")),
+
+    POINTED_DRIPSTONE_PLACE(NamespaceID.from("minecraft:block.pointed_dripstone.place")),
+
+    POINTED_DRIPSTONE_HIT(NamespaceID.from("minecraft:block.pointed_dripstone.hit")),
+
+    POINTED_DRIPSTONE_FALL(NamespaceID.from("minecraft:block.pointed_dripstone.fall")),
+
+    POINTED_DRIPSTONE_LAND(NamespaceID.from("minecraft:block.pointed_dripstone.land")),
+
+    POINTED_DRIPSTONE_DRIP_LAVA(NamespaceID.from("minecraft:block.pointed_dripstone.drip_lava")),
+
+    POINTED_DRIPSTONE_DRIP_WATER(NamespaceID.from("minecraft:block.pointed_dripstone.drip_water")),
+
+    POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON(NamespaceID.from("minecraft:block.pointed_dripstone.drip_lava_into_cauldron")),
+
+    POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON(NamespaceID.from("minecraft:block.pointed_dripstone.drip_water_into_cauldron")),
+
+    BIG_DRIPLEAF_TILT_DOWN(NamespaceID.from("minecraft:block.big_dripleaf.tilt_down")),
+
+    BIG_DRIPLEAF_TILT_UP(NamespaceID.from("minecraft:block.big_dripleaf.tilt_up")),
+
     DROWNED_AMBIENT(NamespaceID.from("minecraft:entity.drowned.ambient")),
 
     DROWNED_AMBIENT_WATER(NamespaceID.from("minecraft:entity.drowned.ambient_water")),
@@ -431,6 +623,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
     DROWNED_STEP(NamespaceID.from("minecraft:entity.drowned.step")),
 
     DROWNED_SWIM(NamespaceID.from("minecraft:entity.drowned.swim")),
+
+    DYE_USE(NamespaceID.from("minecraft:item.dye.use")),
 
     EGG_THROW(NamespaceID.from("minecraft:entity.egg.throw")),
 
@@ -562,6 +756,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     FLINTANDSTEEL_USE(NamespaceID.from("minecraft:item.flintandsteel.use")),
 
+    FLOWERING_AZALEA_BREAK(NamespaceID.from("minecraft:block.flowering_azalea.break")),
+
+    FLOWERING_AZALEA_FALL(NamespaceID.from("minecraft:block.flowering_azalea.fall")),
+
+    FLOWERING_AZALEA_HIT(NamespaceID.from("minecraft:block.flowering_azalea.hit")),
+
+    FLOWERING_AZALEA_PLACE(NamespaceID.from("minecraft:block.flowering_azalea.place")),
+
+    FLOWERING_AZALEA_STEP(NamespaceID.from("minecraft:block.flowering_azalea.step")),
+
     FOX_AGGRO(NamespaceID.from("minecraft:entity.fox.aggro")),
 
     FOX_AMBIENT(NamespaceID.from("minecraft:entity.fox.ambient")),
@@ -650,6 +854,60 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     GLASS_STEP(NamespaceID.from("minecraft:block.glass.step")),
 
+    GLOW_INK_SAC_USE(NamespaceID.from("minecraft:item.glow_ink_sac.use")),
+
+    GLOW_ITEM_FRAME_ADD_ITEM(NamespaceID.from("minecraft:entity.glow_item_frame.add_item")),
+
+    GLOW_ITEM_FRAME_BREAK(NamespaceID.from("minecraft:entity.glow_item_frame.break")),
+
+    GLOW_ITEM_FRAME_PLACE(NamespaceID.from("minecraft:entity.glow_item_frame.place")),
+
+    GLOW_ITEM_FRAME_REMOVE_ITEM(NamespaceID.from("minecraft:entity.glow_item_frame.remove_item")),
+
+    GLOW_ITEM_FRAME_ROTATE_ITEM(NamespaceID.from("minecraft:entity.glow_item_frame.rotate_item")),
+
+    GLOW_SQUID_AMBIENT(NamespaceID.from("minecraft:entity.glow_squid.ambient")),
+
+    GLOW_SQUID_DEATH(NamespaceID.from("minecraft:entity.glow_squid.death")),
+
+    GLOW_SQUID_HURT(NamespaceID.from("minecraft:entity.glow_squid.hurt")),
+
+    GLOW_SQUID_SQUIRT(NamespaceID.from("minecraft:entity.glow_squid.squirt")),
+
+    GOAT_AMBIENT(NamespaceID.from("minecraft:entity.goat.ambient")),
+
+    GOAT_DEATH(NamespaceID.from("minecraft:entity.goat.death")),
+
+    GOAT_EAT(NamespaceID.from("minecraft:entity.goat.eat")),
+
+    GOAT_HURT(NamespaceID.from("minecraft:entity.goat.hurt")),
+
+    GOAT_LONG_JUMP(NamespaceID.from("minecraft:entity.goat.long_jump")),
+
+    GOAT_MILK(NamespaceID.from("minecraft:entity.goat.milk")),
+
+    GOAT_PREPARE_RAM(NamespaceID.from("minecraft:entity.goat.prepare_ram")),
+
+    GOAT_RAM_IMPACT(NamespaceID.from("minecraft:entity.goat.ram_impact")),
+
+    GOAT_SCREAMING_AMBIENT(NamespaceID.from("minecraft:entity.goat.screaming.ambient")),
+
+    GOAT_SCREAMING_DEATH(NamespaceID.from("minecraft:entity.goat.screaming.death")),
+
+    GOAT_SCREAMING_EAT(NamespaceID.from("minecraft:entity.goat.screaming.eat")),
+
+    GOAT_SCREAMING_HURT(NamespaceID.from("minecraft:entity.goat.screaming.hurt")),
+
+    GOAT_SCREAMING_LONG_JUMP(NamespaceID.from("minecraft:entity.goat.screaming.long_jump")),
+
+    GOAT_SCREAMING_MILK(NamespaceID.from("minecraft:entity.goat.screaming.milk")),
+
+    GOAT_SCREAMING_PREPARE_RAM(NamespaceID.from("minecraft:entity.goat.screaming.prepare_ram")),
+
+    GOAT_SCREAMING_RAM_IMPACT(NamespaceID.from("minecraft:entity.goat.screaming.ram_impact")),
+
+    GOAT_STEP(NamespaceID.from("minecraft:entity.goat.step")),
+
     GRASS_BREAK(NamespaceID.from("minecraft:block.grass.break")),
 
     GRASS_FALL(NamespaceID.from("minecraft:block.grass.fall")),
@@ -688,6 +946,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     GUARDIAN_HURT_LAND(NamespaceID.from("minecraft:entity.guardian.hurt_land")),
 
+    HANGING_ROOTS_BREAK(NamespaceID.from("minecraft:block.hanging_roots.break")),
+
+    HANGING_ROOTS_FALL(NamespaceID.from("minecraft:block.hanging_roots.fall")),
+
+    HANGING_ROOTS_HIT(NamespaceID.from("minecraft:block.hanging_roots.hit")),
+
+    HANGING_ROOTS_PLACE(NamespaceID.from("minecraft:block.hanging_roots.place")),
+
+    HANGING_ROOTS_STEP(NamespaceID.from("minecraft:block.hanging_roots.step")),
+
     HOE_TILL(NamespaceID.from("minecraft:item.hoe.till")),
 
     HOGLIN_AMBIENT(NamespaceID.from("minecraft:entity.hoglin.ambient")),
@@ -717,6 +985,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
     HONEY_BLOCK_SLIDE(NamespaceID.from("minecraft:block.honey_block.slide")),
 
     HONEY_BLOCK_STEP(NamespaceID.from("minecraft:block.honey_block.step")),
+
+    HONEYCOMB_WAX_ON(NamespaceID.from("minecraft:item.honeycomb.wax_on")),
 
     HONEY_DRINK(NamespaceID.from("minecraft:item.honey_bottle.drink")),
 
@@ -782,6 +1052,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     ILLUSIONER_PREPARE_MIRROR(NamespaceID.from("minecraft:entity.illusioner.prepare_mirror")),
 
+    INK_SAC_USE(NamespaceID.from("minecraft:item.ink_sac.use")),
+
     IRON_DOOR_CLOSE(NamespaceID.from("minecraft:block.iron_door.close")),
 
     IRON_DOOR_OPEN(NamespaceID.from("minecraft:block.iron_door.open")),
@@ -835,6 +1107,10 @@ public enum SoundEvent implements Keyed, Sound.Type {
     LANTERN_PLACE(NamespaceID.from("minecraft:block.lantern.place")),
 
     LANTERN_STEP(NamespaceID.from("minecraft:block.lantern.step")),
+
+    LARGE_AMETHYST_BUD_BREAK(NamespaceID.from("minecraft:block.large_amethyst_bud.break")),
+
+    LARGE_AMETHYST_BUD_PLACE(NamespaceID.from("minecraft:block.large_amethyst_bud.place")),
 
     LAVA_AMBIENT(NamespaceID.from("minecraft:block.lava.ambient")),
 
@@ -898,6 +1174,10 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     MAGMA_CUBE_SQUISH_SMALL(NamespaceID.from("minecraft:entity.magma_cube.squish_small")),
 
+    MEDIUM_AMETHYST_BUD_BREAK(NamespaceID.from("minecraft:block.medium_amethyst_bud.break")),
+
+    MEDIUM_AMETHYST_BUD_PLACE(NamespaceID.from("minecraft:block.medium_amethyst_bud.place")),
+
     METAL_BREAK(NamespaceID.from("minecraft:block.metal.break")),
 
     METAL_FALL(NamespaceID.from("minecraft:block.metal.fall")),
@@ -912,6 +1192,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     METAL_STEP(NamespaceID.from("minecraft:block.metal.step")),
 
+    MINECART_INSIDE_UNDERWATER(NamespaceID.from("minecraft:entity.minecart.inside.underwater")),
+
     MINECART_INSIDE(NamespaceID.from("minecraft:entity.minecart.inside")),
 
     MINECART_RIDING(NamespaceID.from("minecraft:entity.minecart.riding")),
@@ -925,6 +1207,26 @@ public enum SoundEvent implements Keyed, Sound.Type {
     MOOSHROOM_MILK_SUSPICIOUSLY(NamespaceID.from("minecraft:entity.mooshroom.suspicious_milk")),
 
     MOOSHROOM_SHEAR(NamespaceID.from("minecraft:entity.mooshroom.shear")),
+
+    MOSS_CARPET_BREAK(NamespaceID.from("minecraft:block.moss_carpet.break")),
+
+    MOSS_CARPET_FALL(NamespaceID.from("minecraft:block.moss_carpet.fall")),
+
+    MOSS_CARPET_HIT(NamespaceID.from("minecraft:block.moss_carpet.hit")),
+
+    MOSS_CARPET_PLACE(NamespaceID.from("minecraft:block.moss_carpet.place")),
+
+    MOSS_CARPET_STEP(NamespaceID.from("minecraft:block.moss_carpet.step")),
+
+    MOSS_BREAK(NamespaceID.from("minecraft:block.moss.break")),
+
+    MOSS_FALL(NamespaceID.from("minecraft:block.moss.fall")),
+
+    MOSS_HIT(NamespaceID.from("minecraft:block.moss.hit")),
+
+    MOSS_PLACE(NamespaceID.from("minecraft:block.moss.place")),
+
+    MOSS_STEP(NamespaceID.from("minecraft:block.moss.step")),
 
     MULE_AMBIENT(NamespaceID.from("minecraft:entity.mule.ambient")),
 
@@ -1312,6 +1614,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     PLAYER_HURT_DROWN(NamespaceID.from("minecraft:entity.player.hurt_drown")),
 
+    PLAYER_HURT_FREEZE(NamespaceID.from("minecraft:entity.player.hurt_freeze")),
+
     PLAYER_HURT_ON_FIRE(NamespaceID.from("minecraft:entity.player.hurt_on_fire")),
 
     PLAYER_HURT_SWEET_BERRY_BUSH(NamespaceID.from("minecraft:entity.player.hurt_sweet_berry_bush")),
@@ -1338,11 +1642,31 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     POLAR_BEAR_WARNING(NamespaceID.from("minecraft:entity.polar_bear.warning")),
 
+    POLISHED_DEEPSLATE_BREAK(NamespaceID.from("minecraft:block.polished_deepslate.break")),
+
+    POLISHED_DEEPSLATE_FALL(NamespaceID.from("minecraft:block.polished_deepslate.fall")),
+
+    POLISHED_DEEPSLATE_HIT(NamespaceID.from("minecraft:block.polished_deepslate.hit")),
+
+    POLISHED_DEEPSLATE_PLACE(NamespaceID.from("minecraft:block.polished_deepslate.place")),
+
+    POLISHED_DEEPSLATE_STEP(NamespaceID.from("minecraft:block.polished_deepslate.step")),
+
     PORTAL_AMBIENT(NamespaceID.from("minecraft:block.portal.ambient")),
 
     PORTAL_TRAVEL(NamespaceID.from("minecraft:block.portal.travel")),
 
     PORTAL_TRIGGER(NamespaceID.from("minecraft:block.portal.trigger")),
+
+    POWDER_SNOW_BREAK(NamespaceID.from("minecraft:block.powder_snow.break")),
+
+    POWDER_SNOW_FALL(NamespaceID.from("minecraft:block.powder_snow.fall")),
+
+    POWDER_SNOW_HIT(NamespaceID.from("minecraft:block.powder_snow.hit")),
+
+    POWDER_SNOW_PLACE(NamespaceID.from("minecraft:block.powder_snow.place")),
+
+    POWDER_SNOW_STEP(NamespaceID.from("minecraft:block.powder_snow.step")),
 
     PUFFER_FISH_AMBIENT(NamespaceID.from("minecraft:entity.puffer_fish.ambient")),
 
@@ -1418,6 +1742,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     RESPAWN_ANCHOR_SET_SPAWN(NamespaceID.from("minecraft:block.respawn_anchor.set_spawn")),
 
+    ROOTED_DIRT_BREAK(NamespaceID.from("minecraft:block.rooted_dirt.break")),
+
+    ROOTED_DIRT_FALL(NamespaceID.from("minecraft:block.rooted_dirt.fall")),
+
+    ROOTED_DIRT_HIT(NamespaceID.from("minecraft:block.rooted_dirt.hit")),
+
+    ROOTED_DIRT_PLACE(NamespaceID.from("minecraft:block.rooted_dirt.place")),
+
+    ROOTED_DIRT_STEP(NamespaceID.from("minecraft:block.rooted_dirt.step")),
+
     SALMON_AMBIENT(NamespaceID.from("minecraft:entity.salmon.ambient")),
 
     SALMON_DEATH(NamespaceID.from("minecraft:entity.salmon.death")),
@@ -1445,6 +1779,20 @@ public enum SoundEvent implements Keyed, Sound.Type {
     SCAFFOLDING_PLACE(NamespaceID.from("minecraft:block.scaffolding.place")),
 
     SCAFFOLDING_STEP(NamespaceID.from("minecraft:block.scaffolding.step")),
+
+    SCULK_CLICKING(NamespaceID.from("minecraft:block.sculk_sensor.clicking")),
+
+    SCULK_CLICKING_STOP(NamespaceID.from("minecraft:block.sculk_sensor.clicking_stop")),
+
+    SCULK_SENSOR_BREAK(NamespaceID.from("minecraft:block.sculk_sensor.break")),
+
+    SCULK_SENSOR_FALL(NamespaceID.from("minecraft:block.sculk_sensor.fall")),
+
+    SCULK_SENSOR_HIT(NamespaceID.from("minecraft:block.sculk_sensor.hit")),
+
+    SCULK_SENSOR_PLACE(NamespaceID.from("minecraft:block.sculk_sensor.place")),
+
+    SCULK_SENSOR_STEP(NamespaceID.from("minecraft:block.sculk_sensor.step")),
 
     SHEEP_AMBIENT(NamespaceID.from("minecraft:entity.sheep.ambient")),
 
@@ -1506,6 +1854,8 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     SKELETON_AMBIENT(NamespaceID.from("minecraft:entity.skeleton.ambient")),
 
+    SKELETON_CONVERTED_TO_STRAY(NamespaceID.from("minecraft:entity.skeleton.converted_to_stray")),
+
     SKELETON_DEATH(NamespaceID.from("minecraft:entity.skeleton.death")),
 
     SKELETON_HORSE_AMBIENT(NamespaceID.from("minecraft:entity.skeleton_horse.ambient")),
@@ -1550,6 +1900,20 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     SLIME_BLOCK_STEP(NamespaceID.from("minecraft:block.slime_block.step")),
 
+    SMALL_AMETHYST_BUD_BREAK(NamespaceID.from("minecraft:block.small_amethyst_bud.break")),
+
+    SMALL_AMETHYST_BUD_PLACE(NamespaceID.from("minecraft:block.small_amethyst_bud.place")),
+
+    SMALL_DRIPLEAF_BREAK(NamespaceID.from("minecraft:block.small_dripleaf.break")),
+
+    SMALL_DRIPLEAF_FALL(NamespaceID.from("minecraft:block.small_dripleaf.fall")),
+
+    SMALL_DRIPLEAF_HIT(NamespaceID.from("minecraft:block.small_dripleaf.hit")),
+
+    SMALL_DRIPLEAF_PLACE(NamespaceID.from("minecraft:block.small_dripleaf.place")),
+
+    SMALL_DRIPLEAF_STEP(NamespaceID.from("minecraft:block.small_dripleaf.step")),
+
     SOUL_SAND_BREAK(NamespaceID.from("minecraft:block.soul_sand.break")),
 
     SOUL_SAND_STEP(NamespaceID.from("minecraft:block.soul_sand.step")),
@@ -1571,6 +1935,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
     SOUL_SOIL_FALL(NamespaceID.from("minecraft:block.soul_soil.fall")),
 
     SOUL_ESCAPE(NamespaceID.from("minecraft:particle.soul_escape")),
+
+    SPORE_BLOSSOM_BREAK(NamespaceID.from("minecraft:block.spore_blossom.break")),
+
+    SPORE_BLOSSOM_FALL(NamespaceID.from("minecraft:block.spore_blossom.fall")),
+
+    SPORE_BLOSSOM_HIT(NamespaceID.from("minecraft:block.spore_blossom.hit")),
+
+    SPORE_BLOSSOM_PLACE(NamespaceID.from("minecraft:block.spore_blossom.place")),
+
+    SPORE_BLOSSOM_STEP(NamespaceID.from("minecraft:block.spore_blossom.step")),
 
     STRIDER_AMBIENT(NamespaceID.from("minecraft:entity.strider.ambient")),
 
@@ -1636,6 +2010,10 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     SPLASH_POTION_THROW(NamespaceID.from("minecraft:entity.splash_potion.throw")),
 
+    SPYGLASS_USE(NamespaceID.from("minecraft:item.spyglass.use")),
+
+    SPYGLASS_STOP_USING(NamespaceID.from("minecraft:item.spyglass.stop_using")),
+
     SQUID_AMBIENT(NamespaceID.from("minecraft:entity.squid.ambient")),
 
     SQUID_DEATH(NamespaceID.from("minecraft:entity.squid.death")),
@@ -1674,7 +2052,7 @@ public enum SoundEvent implements Keyed, Sound.Type {
 
     SWEET_BERRY_BUSH_PLACE(NamespaceID.from("minecraft:block.sweet_berry_bush.place")),
 
-    SWEET_BERRY_BUSH_PICK_BERRIES(NamespaceID.from("minecraft:item.sweet_berries.pick_from_bush")),
+    SWEET_BERRY_BUSH_PICK_BERRIES(NamespaceID.from("minecraft:block.sweet_berry_bush.pick_berries")),
 
     THORNS_HIT(NamespaceID.from("minecraft:enchant.thorns.hit")),
 
@@ -1713,6 +2091,16 @@ public enum SoundEvent implements Keyed, Sound.Type {
     TROPICAL_FISH_FLOP(NamespaceID.from("minecraft:entity.tropical_fish.flop")),
 
     TROPICAL_FISH_HURT(NamespaceID.from("minecraft:entity.tropical_fish.hurt")),
+
+    TUFF_BREAK(NamespaceID.from("minecraft:block.tuff.break")),
+
+    TUFF_STEP(NamespaceID.from("minecraft:block.tuff.step")),
+
+    TUFF_PLACE(NamespaceID.from("minecraft:block.tuff.place")),
+
+    TUFF_HIT(NamespaceID.from("minecraft:block.tuff.hit")),
+
+    TUFF_FALL(NamespaceID.from("minecraft:block.tuff.fall")),
 
     TURTLE_AMBIENT_LAND(NamespaceID.from("minecraft:entity.turtle.ambient_land")),
 
@@ -1811,6 +2199,14 @@ public enum SoundEvent implements Keyed, Sound.Type {
     VINDICATOR_DEATH(NamespaceID.from("minecraft:entity.vindicator.death")),
 
     VINDICATOR_HURT(NamespaceID.from("minecraft:entity.vindicator.hurt")),
+
+    VINE_BREAK(NamespaceID.from("minecraft:block.vine.break")),
+
+    VINE_FALL(NamespaceID.from("minecraft:block.vine.fall")),
+
+    VINE_HIT(NamespaceID.from("minecraft:block.vine.hit")),
+
+    VINE_PLACE(NamespaceID.from("minecraft:block.vine.place")),
 
     VINE_STEP(NamespaceID.from("minecraft:block.vine.step")),
 

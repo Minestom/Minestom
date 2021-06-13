@@ -52,8 +52,8 @@ public class PlayerListHeaderAndFooterPacket implements ComponentHoldingServerPa
     }
 
     public void read(@NotNull BinaryReader reader) {
-        header = reader.readComponent(Integer.MAX_VALUE);
-        footer = reader.readComponent(Integer.MAX_VALUE);
+        header = reader.readComponent();
+        footer = reader.readComponent();
     }
 
     @Override

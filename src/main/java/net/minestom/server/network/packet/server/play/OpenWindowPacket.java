@@ -31,7 +31,7 @@ public class OpenWindowPacket implements ServerPacket {
     public void read(@NotNull BinaryReader reader) {
         windowId = reader.readVarInt();
         windowType = reader.readVarInt();
-        title = reader.readComponent(Integer.MAX_VALUE);
+        title = reader.readComponent();
     }
 
     @Override

@@ -19,21 +19,21 @@ public final class Cactus {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3931, "age=0"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3932, "age=1"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3933, "age=2"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3934, "age=3"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3935, "age=4"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3936, "age=5"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3937, "age=6"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3938, "age=7"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3939, "age=8"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3940, "age=9"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3941, "age=10"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3942, "age=11"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3943, "age=12"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3944, "age=13"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3945, "age=14"));
-        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 3946, "age=15"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4000, "age=0"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4001, "age=1"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4002, "age=2"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4003, "age=3"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4004, "age=4"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4005, "age=5"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4006, "age=6"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4007, "age=7"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4008, "age=8"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4009, "age=9"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4010, "age=10"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4011, "age=11"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4012, "age=12"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4013, "age=13"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4014, "age=14"));
+        Block.CACTUS.addBlockAlternative(new BlockAlternative((short) 4015, "age=15"));
     }
 }

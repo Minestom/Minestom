@@ -6,6 +6,8 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class LightningBoltMeta extends EntityMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 0;
 
     public LightningBoltMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);

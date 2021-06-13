@@ -19,9 +19,9 @@ public final class CyanGlazedTerracotta {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9414, "facing=north"));
-        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9415, "facing=south"));
-        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9416, "facing=west"));
-        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9417, "facing=east"));
+        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9660, "facing=north"));
+        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9661, "facing=south"));
+        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9662, "facing=west"));
+        Block.CYAN_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9663, "facing=east"));
     }
 }

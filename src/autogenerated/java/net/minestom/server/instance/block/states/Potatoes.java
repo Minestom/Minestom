@@ -19,13 +19,13 @@ public final class Potatoes {
             forRemoval = false
     )
     public static void initStates() {
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6342, "age=0"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6343, "age=1"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6344, "age=2"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6345, "age=3"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6346, "age=4"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6347, "age=5"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6348, "age=6"));
-        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6349, "age=7"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6544, "age=0"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6545, "age=1"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6546, "age=2"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6547, "age=3"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6548, "age=4"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6549, "age=5"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6550, "age=6"));
+        Block.POTATOES.addBlockAlternative(new BlockAlternative((short) 6551, "age=7"));
     }
 }

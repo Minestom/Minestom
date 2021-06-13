@@ -108,6 +108,13 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .addAnnotation(NotNull.class)
                         .build()
         );
+        // static field
+        blockClass.addField(
+                FieldSpec.builder(ArrayTypeName.of(blockClassName), "VALUES")
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("values()")
+                        .build()
+        );
         // Block constructor
         blockClass.addMethod(
                 MethodSpec.constructorBuilder()
@@ -276,6 +283,19 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                         .returns(blockClassName)
                         .addParameter(TypeName.SHORT, "blockStateId")
                         .addStatement("return BlockArray.blocks[blockStateId]")
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .build()
+        );
+        // fromId Method
+        blockClass.addMethod(
+                MethodSpec.methodBuilder("fromId")
+                        .returns(blockClassName)
+                        .addAnnotation(Nullable.class)
+                        .addParameter(TypeName.SHORT, "id")
+                        .beginControlFlow("if(id >= 0 && id < VALUES.length)")
+                        .addStatement("return VALUES[id]")
+                        .endControlFlow()
+                        .addStatement("return null")
                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         .build()
         );

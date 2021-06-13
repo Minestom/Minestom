@@ -19,7 +19,7 @@ public final class TubeCoralFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9554, "waterlogged=true"));
-        Block.TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9555, "waterlogged=false"));
+        Block.TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9800, "waterlogged=true"));
+        Block.TUBE_CORAL_FAN.addBlockAlternative(new BlockAlternative((short) 9801, "waterlogged=false"));
     }
 }

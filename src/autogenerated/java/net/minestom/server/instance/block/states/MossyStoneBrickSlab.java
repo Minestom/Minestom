@@ -19,11 +19,11 @@ public final class MossyStoneBrickSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10805, "type=top", "waterlogged=true"));
-        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10806, "type=top", "waterlogged=false"));
-        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10807, "type=bottom", "waterlogged=true"));
-        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10808, "type=bottom", "waterlogged=false"));
-        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10809, "type=double", "waterlogged=true"));
-        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10810, "type=double", "waterlogged=false"));
+        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11051, "type=top", "waterlogged=true"));
+        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11052, "type=top", "waterlogged=false"));
+        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11053, "type=bottom", "waterlogged=true"));
+        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11054, "type=bottom", "waterlogged=false"));
+        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11055, "type=double", "waterlogged=true"));
+        Block.MOSSY_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11056, "type=double", "waterlogged=false"));
     }
 }

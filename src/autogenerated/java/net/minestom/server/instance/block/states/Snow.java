@@ -19,13 +19,13 @@ public final class Snow {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3921, "layers=1"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3922, "layers=2"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3923, "layers=3"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3924, "layers=4"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3925, "layers=5"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3926, "layers=6"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3927, "layers=7"));
-        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3928, "layers=8"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3990, "layers=1"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3991, "layers=2"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3992, "layers=3"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3993, "layers=4"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3994, "layers=5"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3995, "layers=6"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3996, "layers=7"));
+        Block.SNOW.addBlockAlternative(new BlockAlternative((short) 3997, "layers=8"));
     }
 }

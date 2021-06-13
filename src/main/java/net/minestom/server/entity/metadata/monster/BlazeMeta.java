@@ -5,8 +5,8 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class BlazeMeta extends MonsterMeta {
-
-    private final static byte MASK_INDEX = 15;
+    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     private final static byte ON_FIRE_BIT = 0x01;
 
@@ -15,11 +15,11 @@ public class BlazeMeta extends MonsterMeta {
     }
 
     public boolean isOnFire() {
-        return getMaskBit(MASK_INDEX, ON_FIRE_BIT);
+        return getMaskBit(OFFSET, ON_FIRE_BIT);
     }
 
     public void setOnFire(boolean value) {
-        setMaskBit(MASK_INDEX, ON_FIRE_BIT, value);
+        setMaskBit(OFFSET, ON_FIRE_BIT, value);
     }
 
 }

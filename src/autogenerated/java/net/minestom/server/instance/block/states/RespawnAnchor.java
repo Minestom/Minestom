@@ -19,10 +19,10 @@ public final class RespawnAnchor {
             forRemoval = false
     )
     public static void initStates() {
-        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15837, "charges=0"));
-        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15838, "charges=1"));
-        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15839, "charges=2"));
-        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15840, "charges=3"));
-        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 15841, "charges=4"));
+        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 16083, "charges=0"));
+        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 16084, "charges=1"));
+        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 16085, "charges=2"));
+        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 16086, "charges=3"));
+        Block.RESPAWN_ANCHOR.addBlockAlternative(new BlockAlternative((short) 16087, "charges=4"));
     }
 }
