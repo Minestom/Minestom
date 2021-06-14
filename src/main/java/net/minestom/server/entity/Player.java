@@ -29,6 +29,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
@@ -1037,13 +1038,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendUpdateHealthPacket();
     }
 
+    @Override
+    public @NotNull PlayerMeta getEntityMeta() {
+        return (PlayerMeta) super.getEntityMeta();
+    }
+
     /**
      * Gets the player additional hearts.
      *
      * @return the player additional hearts
      */
     public float getAdditionalHearts() {
-        return metadata.getIndex((byte) 14, 0f);
+        return getEntityMeta().getAdditionalHearts();
     }
 
     /**
@@ -1052,7 +1058,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param additionalHearts the count of additional hearts
      */
     public void setAdditionalHearts(float additionalHearts) {
-        this.metadata.setIndex((byte) 14, Metadata.Float(additionalHearts));
+        getEntityMeta().setAdditionalHearts(additionalHearts);
     }
 
     /**

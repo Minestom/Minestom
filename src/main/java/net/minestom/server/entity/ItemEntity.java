@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.Chunk;
@@ -18,7 +19,7 @@ import java.util.Set;
 /**
  * Represents an item on the ground.
  */
-public class ItemEntity extends ObjectEntity {
+public class ItemEntity extends Entity {
 
     /**
      * Used to slow down the merge check delay
@@ -129,8 +130,8 @@ public class ItemEntity extends ObjectEntity {
     }
 
     @Override
-    public int getObjectData() {
-        return 1;
+    public @NotNull ItemEntityMeta getEntityMeta() {
+        return (ItemEntityMeta) super.getEntityMeta();
     }
 
     /**
@@ -150,7 +151,7 @@ public class ItemEntity extends ObjectEntity {
      */
     public void setItemStack(@NotNull ItemStack itemStack) {
         this.itemStack = itemStack;
-        this.metadata.setIndex((byte) 7, Metadata.Slot(itemStack));
+        getEntityMeta().setItem(itemStack);
     }
 
     /**
