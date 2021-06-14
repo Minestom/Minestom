@@ -1,13 +1,14 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerBlockBreakEvent implements PlayerEvent, CancellableEvent {
+public class PlayerBlockBreakEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final Block block;
@@ -30,6 +31,7 @@ public class PlayerBlockBreakEvent implements PlayerEvent, CancellableEvent {
      *
      * @return the block
      */
+    @Override
     public @NotNull Block getBlock() {
         return block;
     }

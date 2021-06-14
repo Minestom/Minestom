@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
-public class PlayerStartDiggingEvent implements PlayerEvent, CancellableEvent {
+public class PlayerStartDiggingEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private final Block block;
@@ -34,6 +35,7 @@ public class PlayerStartDiggingEvent implements PlayerEvent, CancellableEvent {
      *
      * @return the block
      */
+    @Override
     public @NotNull Block getBlock() {
         return block;
     }

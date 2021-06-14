@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player tries placing a block.
  */
-public class PlayerBlockPlaceEvent implements PlayerEvent, CancellableEvent {
+public class PlayerBlockPlaceEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
     private Block block;
@@ -35,6 +36,7 @@ public class PlayerBlockPlaceEvent implements PlayerEvent, CancellableEvent {
      *
      * @return the block to place
      */
+    @Override
     public @NotNull Block getBlock() {
         return block;
     }
