@@ -4,32 +4,22 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 
+@ApiStatus.Internal
 public class Registry {
 
-    private static final Loader LOADER = new Loader();
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    public static BlockEntry block(@NotNull Block block) {
-        return loader().block(block.getName());
+    public static BlockEntry block(@NotNull JsonObject jsonObject) {
+        return new BlockEntry(jsonObject);
     }
 
-    @ApiStatus.Internal
-    public static @NotNull Loader loader() {
-        return LOADER;
-    }
-
-    @ApiStatus.Internal
     public static JsonObject load(Resource resource) {
-        final String path = String.format("/%s_%s.json", MinecraftServer.VERSION_NAME_UNDERSCORED, resource.name);
+        final String path = String.format("/%s.json", resource.name);
         final var resourceStream = Registry.class.getResourceAsStream(path);
         return GSON.fromJson(new InputStreamReader(resourceStream), JsonObject.class);
     }
@@ -48,6 +38,18 @@ public class Registry {
     public static class BlockEntry extends Entry {
         private BlockEntry(JsonObject json) {
             super(json);
+        }
+
+        public String namespace() {
+            return getString("namespace");
+        }
+
+        public int id() {
+            return getInt("id");
+        }
+
+        public int stateId() {
+            return getInt("stateId");
         }
 
         public float destroySpeed() {
@@ -108,33 +110,6 @@ public class Registry {
 
         protected JsonElement element(String name) {
             return json.get(name);
-        }
-    }
-
-    public static class Loader {
-        private final RegistryMap<BlockEntry> blockRegistry = new RegistryMap<>(BlockEntry::new);
-
-        public void loadBlocks(@NotNull JsonObject blocks) {
-            loadRegistry(blockRegistry, blocks);
-        }
-
-        public BlockEntry block(String name) {
-            return blockRegistry.get(name);
-        }
-
-        private <T extends Entry> void loadRegistry(RegistryMap<T> map, JsonObject data) {
-            data.keySet().forEach(namespace -> {
-                final JsonObject value = data.get(namespace).getAsJsonObject();
-                map.put(namespace, map.function.apply(value));
-            });
-        }
-    }
-
-    private static class RegistryMap<T extends Entry> extends ConcurrentHashMap<String, T> {
-        private final Function<JsonObject, T> function;
-
-        private RegistryMap(Function<JsonObject, T> function) {
-            this.function = function;
         }
     }
 }

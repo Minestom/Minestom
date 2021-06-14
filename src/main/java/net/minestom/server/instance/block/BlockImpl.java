@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.math.IntRange;
@@ -9,6 +10,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 
+@Deprecated
 class BlockImpl implements Block {
 
     private NamespaceID namespaceID;
@@ -43,36 +45,6 @@ class BlockImpl implements Block {
                       List<BlockProperty<?>> properties,
                       LinkedHashMap<BlockProperty<?>, Object> propertiesMap) {
         this(namespaceID, blockId, minStateId, stateId, properties, propertiesMap, null);
-    }
-
-    @Override
-    public @NotNull <T> Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value) {
-        if (properties.isEmpty()) {
-            // This block doesn't have any state
-            return this;
-        }
-        final int index = properties.indexOf(property);
-        if (index == -1) {
-            // Invalid state
-            return this;
-        }
-
-        // Find properties map
-        LinkedHashMap<BlockProperty<?>, Object> map;
-        if (propertiesMap == null) {
-            // Represents the first id, create a new map
-            map = new LinkedHashMap<>();
-            properties.forEach(prop -> map.put(prop, prop.equals(property) ? value : null));
-        } else {
-            // Change property
-            map = (LinkedHashMap<BlockProperty<?>, Object>) propertiesMap.clone();
-            map.put(property, value);
-        }
-
-        var block = shallowClone();
-        block.stateId = computeId(minStateId, properties, map);
-        block.propertiesMap = map;
-        return block;
     }
 
     @Override
@@ -122,11 +94,6 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public <T> @NotNull T getProperty(@NotNull BlockProperty<T> property) {
-        return (T) propertiesMap.get(property);
-    }
-
-    @Override
     public @NotNull String getProperty(@NotNull String property) {
         // TODO
         return null;
@@ -135,11 +102,6 @@ class BlockImpl implements Block {
     @Override
     public @Nullable NBTCompound getNbt() {
         return compound != null ? compound.deepClone() : null;
-    }
-
-    @Override
-    public @NotNull Block getDefaultBlock() {
-        return original;
     }
 
     @Override
@@ -155,13 +117,8 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public int getId() {
-        return blockId;
-    }
-
-    @Override
-    public short getStateId() {
-        return stateId;
+    public @NotNull Registry.BlockEntry registry() {
+        return BlockRegistry.getState(stateId).registry(); // TODO
     }
 
     @Override

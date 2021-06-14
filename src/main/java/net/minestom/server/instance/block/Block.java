@@ -22,9 +22,11 @@ import java.util.function.BiPredicate;
  */
 public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
-    <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value);
-
     @NotNull Block withProperty(@NotNull String property, @NotNull String value);
+
+    default <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value) {
+        return withProperty(property.getName(), value.toString());
+    }
 
     <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
 
@@ -32,22 +34,44 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     @NotNull Block withHandler(@Nullable BlockHandler handler);
 
-    <T> @NotNull T getProperty(@NotNull BlockProperty<T> property);
-
     @NotNull String getProperty(@NotNull String property);
+
+    default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
+        return getProperty(property.getName());
+    }
 
     @Nullable NBTCompound getNbt();
 
     @Nullable BlockHandler getHandler();
 
-    @NotNull Block getDefaultBlock();
-
     @NotNull Map<String, String> createPropertiesMap();
 
-    short getStateId();
+    @NotNull Registry.BlockEntry registry();
 
-    default @NotNull Registry.BlockEntry registry() {
-        return Registry.block(this);
+    @Override
+    default @NotNull NamespaceID getNamespaceId() {
+        return NamespaceID.from(registry().namespace());
+    }
+
+    @Override
+    default int getId() {
+        return registry().id();
+    }
+
+    default short getStateId() {
+        return (short) registry().stateId();
+    }
+
+    default boolean isAir() {
+        return registry().isAir();
+    }
+
+    default boolean isSolid() {
+        return registry().isSolid();
+    }
+
+    default boolean isLiquid() {
+        return registry().isLiquid();
     }
 
     default boolean compare(@NotNull Block block, @NotNull Comparator comparator) {
@@ -79,19 +103,6 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
                          @NotNull Block.Supplier blockSupplier) {
         BlockRegistry.register(namespaceID, block, range, blockSupplier);
     }
-
-    default boolean isAir() {
-        return registry().isAir();
-    }
-
-    default boolean isSolid() {
-        return registry().isSolid();
-    }
-
-    default boolean isLiquid() {
-        return registry().isLiquid();
-    }
-
 
     @FunctionalInterface
     interface Comparator extends BiPredicate<Block, Block> {
