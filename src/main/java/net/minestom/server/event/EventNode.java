@@ -215,7 +215,12 @@ public class EventNode<T extends Event> {
         if (predicate == null)
             return true;
         final var value = filter.getHandler(event);
-        return predicate.test(event, value);
+        try {
+            return predicate.test(event, value);
+        } catch (Exception e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            return false;
+        }
     }
 
     /**
