@@ -2,8 +2,8 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
@@ -11,10 +11,11 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerBlockBreakEvent implements PlayerEvent, CancellableEvent {
 
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
+    private final Player player;
     private final BlockPosition blockPosition;
 
     private final short blockStateId;
@@ -28,7 +29,7 @@ public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEve
     public PlayerBlockBreakEvent(@NotNull Player player, @NotNull BlockPosition blockPosition,
                                  short blockStateId, @Nullable CustomBlock customBlock,
                                  short resultBlockStateId, short resultCustomBlockId) {
-        super(player);
+        this.player = player;
 
         this.blockPosition = blockPosition;
 
@@ -150,5 +151,10 @@ public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEve
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

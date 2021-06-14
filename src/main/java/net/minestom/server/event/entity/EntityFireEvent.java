@@ -1,19 +1,21 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.EntityEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.NotNull;
 
-public class EntityFireEvent extends EntityEvent implements CancellableEvent {
+public class EntityFireEvent implements EntityEvent, CancellableEvent {
 
+    private final Entity entity;
     private int duration;
     private TimeUnit timeUnit;
 
     private boolean cancelled;
 
     public EntityFireEvent(Entity entity, int duration, TimeUnit timeUnit) {
-        super(entity);
+        this.entity = entity;
         setFireTime(duration, timeUnit);
     }
 
@@ -42,5 +44,10 @@ public class EntityFireEvent extends EntityEvent implements CancellableEvent {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Entity getEntity() {
+        return entity;
     }
 }

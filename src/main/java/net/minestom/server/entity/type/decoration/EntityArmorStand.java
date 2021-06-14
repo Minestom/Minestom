@@ -1,6 +1,7 @@
 package net.minestom.server.entity.type.decoration;
 
 import net.minestom.server.entity.*;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemStack;
@@ -237,7 +238,7 @@ public class EntityArmorStand extends ObjectEntity implements EquipmentHandler {
 
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
-        callEvent(EntityEquipEvent.class, entityEquipEvent);
+        EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
     }
 }

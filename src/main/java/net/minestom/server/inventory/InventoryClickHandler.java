@@ -1,6 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
@@ -78,7 +79,7 @@ public interface InventoryClickHandler {
     default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
-        player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
+        EventDispatcher.call(inventoryClickEvent);
     }
 
 }

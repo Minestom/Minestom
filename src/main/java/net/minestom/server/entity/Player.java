@@ -30,6 +30,7 @@ import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -250,7 +251,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Add player to list with spawning skin
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
-        callEvent(PlayerSkinInitEvent.class, skinInitEvent);
+        EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
         playerConnection.sendPacket(getAddPlayerToList());
@@ -380,7 +381,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
                             continue;
                         PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
-                        callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
+                        EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                             short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
                             entity.remove();
                         });
@@ -406,7 +407,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
-                    callEvent(PlayerEatEvent.class, playerEatEvent);
+                    EventDispatcher.call(playerEatEvent);
                 }
 
                 refreshEating(null);
@@ -414,7 +415,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Tick event
-        callEvent(PlayerTickEvent.class, playerTickEvent);
+        EventDispatcher.call(playerTickEvent);
     }
 
     @Override
@@ -444,7 +445,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // Call player death event
             PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(this, deathText, chatMessage);
-            callEvent(PlayerDeathEvent.class, playerDeathEvent);
+            EventDispatcher.call(playerDeathEvent);
 
             deathText = playerDeathEvent.getDeathText();
             chatMessage = playerDeathEvent.getChatMessage();
@@ -480,7 +481,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         respawnPacket.isFlat = levelFlat;
         getPlayerConnection().sendPacket(respawnPacket);
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
-        callEvent(PlayerRespawnEvent.class, respawnEvent);
+        EventDispatcher.call(respawnEvent);
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
@@ -502,7 +503,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isRemoved())
             return;
 
-        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
+        EventDispatcher.call(new PlayerDisconnectEvent(this));
 
         super.remove();
         this.packets.clear();
@@ -660,7 +661,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
-        callEvent(PlayerSpawnEvent.class, spawnEvent);
+        EventDispatcher.call(spawnEvent);
     }
 
     /**
@@ -1306,7 +1307,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
-        callEvent(ItemDropEvent.class, itemDropEvent);
+        EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
     }
 
@@ -1827,7 +1828,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
-        callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
+        EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
             Inventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
@@ -2196,7 +2197,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.onGround = onGround;
         if (this.onGround && this.isFlyingWithElytra()) {
             this.setFlyingWithElytra(false);
-            this.callEvent(PlayerStopFlyingWithElytraEvent.class, new PlayerStopFlyingWithElytraEvent(this));
+            EventDispatcher.call(new PlayerStopFlyingWithElytraEvent(this));
         }
     }
 
@@ -2271,7 +2272,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
-        callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
+        EventDispatcher.call(itemUpdateStateEvent);
 
         return itemUpdateStateEvent;
     }

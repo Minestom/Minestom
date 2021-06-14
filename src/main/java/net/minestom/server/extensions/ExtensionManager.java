@@ -5,6 +5,8 @@ import net.minestom.dependencies.DependencyGetter;
 import net.minestom.dependencies.ResolvedDependency;
 import net.minestom.dependencies.maven.MavenRepository;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.extras.selfmodification.MinestomExtensionClassLoader;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.ping.ResponseDataConsumer;
@@ -25,7 +27,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipFile;
@@ -278,6 +279,22 @@ public class ExtensionManager {
         } catch (NoSuchFieldException e) {
             // This should also not occur (unless someone changed the logger in Extension superclass).
             LOGGER.error("Main class '{}' in '{}' has no logger field.", mainClass, extensionName, e);
+        }
+
+        // Set event node
+        try {
+            EventNode<Event> eventNode = EventNode.all(extensionName); // Use the extension name
+            Field loggerField = Extension.class.getDeclaredField("eventNode");
+            loggerField.setAccessible(true);
+            loggerField.set(extension, eventNode);
+
+            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+        } catch (IllegalAccessException e) {
+            // We made it accessible, should not occur
+            MinecraftServer.getExceptionManager().handleException(e);
+        } catch (NoSuchFieldException e) {
+            // This should also not occur
+            LOGGER.error("Main class '{}' in '{}' has no event node field.", mainClass, extensionName, e);
         }
 
         // add dependents to pre-existing extensions, so that they can easily be found during reloading
@@ -659,6 +676,10 @@ public class ExtensionManager {
         String extensionName = ext.getOrigin().getName();
         ext.triggerChange(observer -> observer.onExtensionUnload(extensionName));
         // TODO: more callback types
+
+        // Remove event node
+        EventNode<Event> eventNode = ext.getEventNode();
+        MinecraftServer.getGlobalEventHandler().removeChild(eventNode);
 
         ext.postTerminate();
         ext.unload();

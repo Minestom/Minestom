@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
@@ -67,7 +68,7 @@ public class PlayerDiggingListener {
                 final int customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
 
                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, blockStateId, customBlockId);
-                player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                EventDispatcher.call(playerStartDiggingEvent);
 
                 if (playerStartDiggingEvent.isCancelled()) {
                     addEffect(player);
@@ -163,7 +164,7 @@ public class PlayerDiggingListener {
             final ItemStack offHand = playerInventory.getItemInOffHand();
 
             PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
-            player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
+            EventDispatcher.callCancellable(swapItemEvent, () -> {
                 playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
                 playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
             });

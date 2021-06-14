@@ -16,10 +16,13 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.metadata.EntityMeta;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.event.handler.EventHandler;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -61,7 +64,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -116,8 +119,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     private long lastAbsoluteSynchronizationTime;
 
     // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
+    private final EventNode<EntityEvent> eventNode;
 
     protected Metadata metadata = new Metadata(this);
     protected EntityMeta entityMeta;
@@ -154,6 +156,8 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
+
+        this.eventNode = EventNode.value("entity-" + uuid, EventFilter.ENTITY, this::equals);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -642,7 +646,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
             update(time);
 
             ticks++;
-            callEvent(EntityTickEvent.class, tickEvent); // reuse tickEvent to avoid recreating it each tick
+            EventDispatcher.call(tickEvent); // reuse tickEvent to avoid recreating it each tick
 
             // remove expired effects
             if (!effects.isEmpty()) {
@@ -652,10 +656,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
                     if (time >= timedPotion.getStartingTime() + potionTime) {
                         // Send the packet that the potion should no longer be applied
                         timedPotion.getPotion().sendRemovePacket(this);
-                        callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                                this,
-                                timedPotion.getPotion()
-                        ));
+                        EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
                         return true;
                     }
                     return false;
@@ -768,16 +769,17 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         }
     }
 
-    @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
+    public @NotNull EventNode<EntityEvent> getEventNode() {
+        return eventNode;
     }
 
-    @NotNull
     @Override
-    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
-        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
+    public synchronized <V extends EntityEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
+        if (eventNode.getParent() == null) {
+            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+        }
+        return EventHandler.super.addEventCallback(eventClass, eventCallback);
     }
 
     /**
@@ -913,8 +915,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         refreshCurrentChunk(instance.getChunkAt(position.getX(), position.getZ()));
         instance.UNSAFE_addEntity(this);
         spawn();
-        EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(this, instance);
-        callEvent(EntitySpawnEvent.class, entitySpawnEvent);
+        EventDispatcher.call(new EntitySpawnEvent(this, instance));
     }
 
     /**
@@ -947,7 +948,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
      */
     public void setVelocity(@NotNull Vector velocity) {
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
-        callCancellableEvent(EntityVelocityEvent.class, entityVelocityEvent, () -> {
+        EventDispatcher.callCancellable(entityVelocityEvent, () -> {
             this.velocity.copy(entityVelocityEvent.getVelocity());
             sendPacketToViewersAndSelf(getVelocityPacket());
         });
@@ -1461,7 +1462,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         removeEffect(potion.getEffect());
         this.effects.add(new TimedPotion(potion, System.currentTimeMillis()));
         potion.sendAddPacket(this);
-        callEvent(EntityPotionAddEvent.class, new EntityPotionAddEvent(this, potion));
+        EventDispatcher.call(new EntityPotionAddEvent(this, potion));
     }
 
     /**
@@ -1473,10 +1474,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
         this.effects.removeIf(timedPotion -> {
             if (timedPotion.getPotion().getEffect() == effect) {
                 timedPotion.getPotion().sendRemovePacket(this);
-                callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                        this,
-                        timedPotion.getPotion()
-                ));
+                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
                 return true;
             }
             return false;
@@ -1489,10 +1487,7 @@ public class Entity implements Viewable, Tickable, EventHandler, DataContainer, 
     public void clearEffects() {
         for (TimedPotion timedPotion : effects) {
             timedPotion.getPotion().sendRemovePacket(this);
-            callEvent(EntityPotionRemoveEvent.class, new EntityPotionRemoveEvent(
-                    this,
-                    timedPotion.getPotion()
-            ));
+            EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
         }
         this.effects.clear();
     }

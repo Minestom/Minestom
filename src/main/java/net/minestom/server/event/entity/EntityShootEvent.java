@@ -1,16 +1,17 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.EntityEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called with {@link net.minestom.server.entity.type.projectile.EntityProjectile#shoot(Position, double, double)}
  */
-public class EntityShootEvent extends EntityEvent implements CancellableEvent {
+public class EntityShootEvent implements EntityEvent, CancellableEvent {
 
+    private final Entity entity;
     private final Entity projectile;
     private final Position to;
     private double power;
@@ -19,7 +20,7 @@ public class EntityShootEvent extends EntityEvent implements CancellableEvent {
     private boolean cancelled;
 
     public EntityShootEvent(@NotNull Entity entity, @NotNull Entity projectile, @NotNull Position to, double power, double spread) {
-        super(entity);
+        this.entity = entity;
         this.projectile = projectile;
         this.to = to;
         this.power = power;
@@ -90,4 +91,8 @@ public class EntityShootEvent extends EntityEvent implements CancellableEvent {
         this.cancelled = cancel;
     }
 
+    @Override
+    public @NotNull Entity getEntity() {
+        return entity;
+    }
 }

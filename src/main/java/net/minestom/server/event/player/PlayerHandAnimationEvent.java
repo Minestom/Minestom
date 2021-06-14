@@ -1,21 +1,22 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when the player swings his hand.
  */
-public class PlayerHandAnimationEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerHandAnimationEvent implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final Player.Hand hand;
 
     private boolean cancelled;
 
     public PlayerHandAnimationEvent(@NotNull Player player, @NotNull Player.Hand hand) {
-        super(player);
+        this.player = player;
         this.hand = hand;
     }
 
@@ -37,5 +38,10 @@ public class PlayerHandAnimationEvent extends PlayerEvent implements Cancellable
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

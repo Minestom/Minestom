@@ -1,6 +1,6 @@
 package net.minestom.server.network.packet.client.status;
 
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.handshake.ResponsePacket;
@@ -16,7 +16,7 @@ public class StatusRequestPacket implements ClientPreplayPacket {
     public void process(@NotNull PlayerConnection connection) {
         final ServerListPingType pingVersion = ServerListPingType.fromModernProtocolVersion(connection.getProtocolVersion());
         final ServerListPingEvent statusRequestEvent = new ServerListPingEvent(connection, pingVersion);
-        MinecraftServer.getGlobalEventHandler().callCancellableEvent(ServerListPingEvent.class, statusRequestEvent, () -> {
+        EventDispatcher.callCancellable(statusRequestEvent, () -> {
             final ResponsePacket responsePacket = new ResponsePacket();
             responsePacket.jsonResponse = pingVersion.getPingResponse(statusRequestEvent.getResponseData());
 
