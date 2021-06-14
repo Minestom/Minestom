@@ -38,13 +38,15 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         writer.writeBoolean(locked);
         writer.writeBoolean(trackingPosition);
 
-        if (icons != null && icons.length > 0) {
-            writer.writeVarInt(icons.length);
-            for (Icon icon : icons) {
-                icon.write(writer);
+        if (trackingPosition) {
+            if (icons != null && icons.length > 0) {
+                writer.writeVarInt(icons.length);
+                for (Icon icon : icons) {
+                    icon.write(writer);
+                }
+            } else {
+                writer.writeVarInt(0);
             }
-        } else {
-            writer.writeVarInt(0);
         }
 
         writer.writeByte((byte) columns);
