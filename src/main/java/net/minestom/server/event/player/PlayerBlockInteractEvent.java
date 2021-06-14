@@ -1,9 +1,6 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
@@ -31,7 +28,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player,@NotNull Player.Hand hand,
+    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
                                     @NotNull Block block, @NotNull BlockPosition blockPosition,
                                     @NotNull BlockFace blockFace) {
         this.player = player;

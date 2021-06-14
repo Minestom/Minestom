@@ -64,7 +64,7 @@ public class PlayerDiggingListener {
                 breakBlock(instance, player, blockPosition, block, status);
             } else {
                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
-                EventDispatcher.call(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                EventDispatcher.call(playerStartDiggingEvent);
 
                 if (playerStartDiggingEvent.isCancelled()) {
                     addEffect(player);

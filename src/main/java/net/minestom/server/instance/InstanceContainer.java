@@ -275,7 +275,7 @@ public class InstanceContainer extends Instance {
         }
 
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition);
-        EventDispatcher.call(PlayerBlockBreakEvent.class, blockBreakEvent);
+        EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result

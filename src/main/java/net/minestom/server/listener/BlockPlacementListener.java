@@ -54,7 +54,7 @@ public class BlockPlacementListener {
         // Interact at block
         // FIXME: onUseOnBlock
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, blockFace);
-        player.callEvent(PlayerBlockInteractEvent.class, playerBlockInteractEvent);
+        EventDispatcher.call(playerBlockInteractEvent);
         if (playerBlockInteractEvent.isBlockingItemUse()) {
             return;
         }

@@ -3,8 +3,6 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
