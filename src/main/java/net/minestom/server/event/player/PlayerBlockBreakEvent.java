@@ -1,14 +1,17 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerBlockBreakEvent implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final Block block;
     private Block resultBlock;
     private final BlockPosition blockPosition;
@@ -17,7 +20,8 @@ public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEve
 
     public PlayerBlockBreakEvent(@NotNull Player player,
                                  @NotNull Block block, @NotNull Block resultBlock, @NotNull BlockPosition blockPosition) {
-        super(player);
+        this.player = player;
+
         this.block = block;
         this.resultBlock = resultBlock;
         this.blockPosition = blockPosition;
@@ -67,5 +71,10 @@ public class PlayerBlockBreakEvent extends PlayerEvent implements CancellableEve
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

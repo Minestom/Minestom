@@ -7,6 +7,7 @@ import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
 import net.minestom.server.event.entity.EntityFireEvent;
@@ -196,7 +197,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
-        callEvent(EntityEquipEvent.class, entityEquipEvent);
+        EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
     }
 
@@ -235,7 +236,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                         if (itemEntity.shouldRemove() || itemEntity.isRemoveScheduled())
                             continue;
                         PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                        callCancellableEvent(PickupItemEvent.class, pickupItemEvent, () -> {
+                        EventDispatcher.callCancellable(pickupItemEvent, () -> {
                             final ItemStack item = itemEntity.getItemStack();
 
                             CollectItemPacket collectItemPacket = new CollectItemPacket();
@@ -308,7 +309,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);
-        callEvent(EntityDeathEvent.class, entityDeathEvent);
+        EventDispatcher.call(entityDeathEvent);
     }
 
     /**
@@ -332,7 +333,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         // Do not start fire event if the fire needs to be removed (< 0 duration)
         if (duration > 0) {
-            callCancellableEvent(EntityFireEvent.class, entityFireEvent, () -> {
+            EventDispatcher.callCancellable(entityFireEvent, () -> {
                 final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
                 fireExtinguishTime = System.currentTimeMillis() + fireTime;
@@ -357,7 +358,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, type, value);
-        callCancellableEvent(EntityDamageEvent.class, entityDamageEvent, () -> {
+        EventDispatcher.callCancellable(entityDamageEvent, () -> {
             // Set the last damage type since the event is not cancelled
             this.lastDamageSource = entityDamageEvent.getDamageType();
 

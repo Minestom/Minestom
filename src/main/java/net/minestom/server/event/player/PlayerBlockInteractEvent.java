@@ -4,6 +4,9 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.CancellableEvent;
 import net.minestom.server.event.PlayerEvent;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +15,9 @@ import org.jetbrains.annotations.NotNull;
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final Player.Hand hand;
     private final Block block;
     private final BlockPosition blockPosition;
@@ -27,9 +31,10 @@ public class PlayerBlockInteractEvent extends PlayerEvent implements Cancellable
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                    @NotNull Block block, @NotNull BlockPosition blockPosition, @NotNull BlockFace blockFace) {
-        super(player);
+    public PlayerBlockInteractEvent(@NotNull Player player,@NotNull Player.Hand hand,
+                                    @NotNull Block block, @NotNull BlockPosition blockPosition,
+                                    @NotNull BlockFace blockFace) {
+        this.player = player;
         this.hand = hand;
         this.block = block;
         this.blockPosition = blockPosition;
@@ -91,5 +96,10 @@ public class PlayerBlockInteractEvent extends PlayerEvent implements Cancellable
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

@@ -11,6 +11,7 @@ import net.minestom.server.command.builder.parser.ArgumentQueryResult;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.CommandQueryResult;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerCommandEvent;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.ArrayUtils;
@@ -104,7 +105,7 @@ public final class CommandManager {
             Player player = (Player) sender;
 
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
-            player.callEvent(PlayerCommandEvent.class, playerCommandEvent);
+            EventDispatcher.call(playerCommandEvent);
 
             if (playerCommandEvent.isCancelled())
                 return CommandResult.of(CommandResult.Type.CANCELLED, command);

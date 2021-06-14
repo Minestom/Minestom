@@ -3,15 +3,17 @@ package net.minestom.server.event.player;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player die in {@link Player#kill()}.
  */
-public class PlayerDeathEvent extends PlayerEvent {
+public class PlayerDeathEvent implements PlayerEvent {
 
+    private final Player player;
     private Component deathText;
     private Component chatMessage;
 
@@ -24,7 +26,7 @@ public class PlayerDeathEvent extends PlayerEvent {
     }
 
     public PlayerDeathEvent(@NotNull Player player, Component deathText, Component chatMessage) {
-        super(player);
+        this.player = player;
         this.deathText = deathText;
         this.chatMessage = chatMessage;
     }
@@ -111,5 +113,10 @@ public class PlayerDeathEvent extends PlayerEvent {
      */
     public void setChatMessage(@Nullable Component chatMessage) {
         this.chatMessage = chatMessage;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

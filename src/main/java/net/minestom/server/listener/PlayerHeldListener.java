@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
 import net.minestom.server.utils.MathUtils;
@@ -16,7 +17,7 @@ public class PlayerHeldListener {
         final byte slot = (byte) packet.slot;
 
         PlayerChangeHeldSlotEvent changeHeldSlotEvent = new PlayerChangeHeldSlotEvent(player, slot);
-        player.callEvent(PlayerChangeHeldSlotEvent.class, changeHeldSlotEvent);
+        EventDispatcher.call(changeHeldSlotEvent);
 
         if (!changeHeldSlotEvent.isCancelled()) {
             // Event hasn't been canceled, process it

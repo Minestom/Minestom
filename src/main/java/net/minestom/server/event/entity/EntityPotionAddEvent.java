@@ -1,17 +1,24 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.EntityEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.potion.Potion;
 import org.jetbrains.annotations.NotNull;
 
-public class EntityPotionAddEvent extends EntityEvent {
+public class EntityPotionAddEvent implements EntityEvent {
 
+    private final Entity entity;
     private final Potion potion;
 
     public EntityPotionAddEvent(@NotNull Entity entity, @NotNull Potion potion) {
-        super(entity);
+        this.entity = entity;
         this.potion = potion;
+    }
+
+    @NotNull
+    @Override
+    public Entity getEntity() {
+        return entity;
     }
 
     /**

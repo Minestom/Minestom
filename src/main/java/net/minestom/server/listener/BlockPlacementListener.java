@@ -5,6 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
@@ -131,7 +132,7 @@ public class BlockPlacementListener {
                     PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockPosition, packet.hand);
                     playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
-                    player.callEvent(PlayerBlockPlaceEvent.class, playerBlockPlaceEvent);
+                    EventDispatcher.call(playerBlockPlaceEvent);
                     if (!playerBlockPlaceEvent.isCancelled()) {
 
                         // BlockPlacementRule check
@@ -167,7 +168,7 @@ public class BlockPlacementListener {
             // Player didn't try to place a block but interacted with one
             final BlockPosition usePosition = blockPosition.clone().subtract(offsetX, offsetY, offsetZ);
             PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, usePosition, direction);
-            player.callEvent(PlayerUseItemOnBlockEvent.class, event);
+            EventDispatcher.call(event);
             refreshChunk = true;
         }
 

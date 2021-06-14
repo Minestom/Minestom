@@ -7,6 +7,7 @@ import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
@@ -356,7 +357,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
 
         if (result) {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-            player.callEvent(PlayerChunkLoadEvent.class, playerChunkLoadEvent);
+            EventDispatcher.call(playerChunkLoadEvent);
         }
 
         return result;
@@ -378,7 +379,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
 
         if (result) {
             PlayerChunkUnloadEvent playerChunkUnloadEvent = new PlayerChunkUnloadEvent(player, chunkX, chunkZ);
-            player.callEvent(PlayerChunkUnloadEvent.class, playerChunkUnloadEvent);
+            EventDispatcher.call(playerChunkUnloadEvent);
         }
 
         return result;

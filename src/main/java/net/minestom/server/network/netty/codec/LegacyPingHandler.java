@@ -6,6 +6,7 @@ import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.ping.ServerListPingType;
 import org.jetbrains.annotations.NotNull;
@@ -138,12 +139,12 @@ public class LegacyPingHandler extends ChannelInboundHandlerAdapter {
      * Calls a {@link ServerListPingEvent} and sends the response, if the event was not cancelled.
      *
      * @param version the version
-     * @param ctx the context
+     * @param ctx     the context
      * @return {@code true} if the response was cancelled, {@code false} otherwise
      */
     private static boolean trySendResponse(@NotNull ServerListPingType version, @NotNull ChannelHandlerContext ctx) {
         final ServerListPingEvent event = new ServerListPingEvent(version);
-        MinecraftServer.getGlobalEventHandler().callEvent(ServerListPingEvent.class, event);
+        EventDispatcher.call(event);
 
         if (event.isCancelled()) {
             return true;

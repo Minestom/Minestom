@@ -12,12 +12,16 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.EventCallback;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.InstanceEvent;
 import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
+import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockManager;
@@ -43,7 +47,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 /**
@@ -57,7 +60,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockGetter, BlockSetter, Tickable, EventHandler, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockGetter, BlockSetter, Tickable, EventHandler<InstanceEvent>, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -80,8 +83,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
+    private final EventNode<InstanceEvent> eventNode;
 
     // Entities present in this instance
     protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
@@ -120,6 +122,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
         this.dimensionType = dimensionType;
 
         this.worldBorder = new WorldBorder(this);
+
+        this.eventNode = EventNode.value("instance-" + uniqueId, EventFilter.INSTANCE, this::equals);
     }
 
     /**
@@ -649,16 +653,17 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
         this.data = data;
     }
 
-    @NotNull
     @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
+    public @NotNull EventNode<InstanceEvent> getEventNode() {
+        return eventNode;
     }
 
-    @NotNull
     @Override
-    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
-        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
+    public synchronized <V extends InstanceEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
+        if (eventNode.getParent() == null) {
+            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+        }
+        return EventHandler.super.addEventCallback(eventClass, eventCallback);
     }
 
     // UNSAFE METHODS (need most of time to be synchronized)
@@ -678,7 +683,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
             lastInstance.UNSAFE_removeEntity(entity); // If entity is in another instance, remove it from there and add it to this
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
-        callCancellableEvent(AddEntityToInstanceEvent.class, event, () -> {
+        EventDispatcher.callCancellable(event, () -> {
             final Position entityPosition = entity.getPosition();
             final boolean isPlayer = entity instanceof Player;
 
@@ -723,7 +728,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
             return;
 
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
-        callCancellableEvent(RemoveEntityFromInstanceEvent.class, event, () -> {
+        EventDispatcher.callCancellable(event, () -> {
             // Remove this entity from players viewable list and send delete entities packet
             entity.getViewers().forEach(entity::removeViewer);
 
@@ -843,7 +848,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
         {
             // Process tick events
             InstanceTickEvent chunkTickEvent = new InstanceTickEvent(this, time, lastTickAge);
-            callEvent(InstanceTickEvent.class, chunkTickEvent);
+            EventDispatcher.call(chunkTickEvent);
 
             // Set last tick age
             lastTickAge = time;

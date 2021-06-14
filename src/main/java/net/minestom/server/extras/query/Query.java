@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.event.FullQueryEvent;
 import net.minestom.server.timer.Task;
@@ -28,6 +29,7 @@ import java.util.Random;
 
 /**
  * Utility class to manage responses to the GameSpy4 Query Protocol.
+ *
  * @see <a href="https://wiki.vg/Query">wiki.vg</a>
  */
 public class Query {
@@ -41,7 +43,8 @@ public class Query {
     private static volatile Thread thread;
     private static volatile Task task;
 
-    private Query() { }
+    private Query() {
+    }
 
     /**
      * Starts the query system, responding to queries on a random port, logging if it could not be started.
@@ -190,12 +193,12 @@ public class Query {
 
                     if (remaining == 0) { // basic
                         BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);
-                        MinecraftServer.getGlobalEventHandler().callCancellableEvent(BasicQueryEvent.class, event,
-                                () -> sendResponse(event.getQueryResponse(), sessionID, sender));
+                        EventDispatcher.callCancellable(event, () ->
+                                sendResponse(event.getQueryResponse(), sessionID, sender));
                     } else if (remaining == 5) { // full
                         FullQueryEvent event = new FullQueryEvent(sender, sessionID);
-                        MinecraftServer.getGlobalEventHandler().callCancellableEvent(FullQueryEvent.class, event,
-                                () -> sendResponse(event.getQueryResponse(), sessionID, sender));
+                        EventDispatcher.callCancellable(event, () ->
+                                sendResponse(event.getQueryResponse(), sessionID, sender));
                     }
                 }
             }

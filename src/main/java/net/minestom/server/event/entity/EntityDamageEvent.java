@@ -1,23 +1,25 @@
 package net.minestom.server.event.entity;
 
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.EntityEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called with {@link LivingEntity#damage(DamageType, float)}.
  */
-public class EntityDamageEvent extends EntityEvent implements CancellableEvent {
+public class EntityDamageEvent implements EntityEvent, CancellableEvent {
 
+    private final Entity entity;
     private final DamageType damageType;
     private float damage;
 
     private boolean cancelled;
 
     public EntityDamageEvent(@NotNull LivingEntity entity, @NotNull DamageType damageType, float damage) {
-        super(entity);
+        this.entity = entity;
         this.damageType = damageType;
         this.damage = damage;
     }

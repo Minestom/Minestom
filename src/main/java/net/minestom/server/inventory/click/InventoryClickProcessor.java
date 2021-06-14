@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
@@ -187,7 +188,7 @@ public class InventoryClickProcessor {
 
         var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            if(result.isCancel()){
+            if (result.isCancel()) {
                 clickResult.setRefresh(true);
                 return false;
             }
@@ -214,7 +215,7 @@ public class InventoryClickProcessor {
             if (index == slot) // Prevent item lose/duplication
                 return false;
             InventoryClickResult result = startCondition(targetInventory, player, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            if(result.isCancel()){
+            if (result.isCancel()) {
                 clickResult.setRefresh(true);
                 return false;
             }
@@ -553,7 +554,7 @@ public class InventoryClickProcessor {
         {
             InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType,
                     clickResult.getClicked(), clickResult.getCursor());
-            player.callEvent(InventoryPreClickEvent.class, inventoryPreClickEvent);
+            EventDispatcher.call(inventoryPreClickEvent);
             clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
             clickResult.setClicked(inventoryPreClickEvent.getClickedItem());
 
@@ -609,7 +610,7 @@ public class InventoryClickProcessor {
     private void callClickEvent(@NotNull Player player, @Nullable Inventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
-        player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
+        EventDispatcher.call(inventoryClickEvent);
     }
 
     public void clearCache(@NotNull Player player) {

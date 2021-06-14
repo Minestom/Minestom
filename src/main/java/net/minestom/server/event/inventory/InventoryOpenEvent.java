@@ -1,8 +1,9 @@
 package net.minestom.server.event.inventory;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.InventoryEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.InventoryEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,14 +13,15 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Executed by {@link Player#openInventory(Inventory)}.
  */
-public class InventoryOpenEvent extends InventoryEvent implements CancellableEvent {
+public class InventoryOpenEvent implements InventoryEvent, PlayerEvent, CancellableEvent {
 
+    private Inventory inventory;
     private final Player player;
 
     private boolean cancelled;
 
     public InventoryOpenEvent(@Nullable Inventory inventory, @NotNull Player player) {
-        super(inventory);
+        this.inventory = inventory;
         this.player = player;
     }
 

@@ -1,20 +1,26 @@
 package net.minestom.server.event.instance;
 
-import net.minestom.server.event.InstanceEvent;
+import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a chunk in an instance is loaded.
  */
-public class InstanceChunkLoadEvent extends InstanceEvent {
+public class InstanceChunkLoadEvent implements InstanceEvent {
 
+    private final Instance instance;
     private final int chunkX, chunkZ;
 
     public InstanceChunkLoadEvent(@NotNull Instance instance, int chunkX, int chunkZ) {
-        super(instance);
+        this.instance = instance;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
+    }
+
+    @Override
+    public @NotNull Instance getInstance() {
+        return instance;
     }
 
     /**

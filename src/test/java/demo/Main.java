@@ -3,6 +3,7 @@ package demo;
 import demo.commands.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.server.MinecraftServer;
@@ -80,6 +81,9 @@ public class Main {
                         .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
                         .append(Component.text(event.getConnection().getProtocolVersion()))));
             }
+            responseData.addEntry(NamedAndIdentified.named(Component.text("Time", NamedTextColor.YELLOW)
+                    .append(Component.text(": ", NamedTextColor.GRAY))
+                    .append(Component.text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC)))));
 
             // components will be converted the legacy section sign format so they are displayed in the client
             responseData.addEntry(NamedAndIdentified.named(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
@@ -87,6 +91,7 @@ public class Main {
             // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
             // on legacy versions, colors will be converted to the section format so it'll work there too
             responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
+            //responseData.setPlayersHidden(true);
         });
 
         PlayerInit.init();

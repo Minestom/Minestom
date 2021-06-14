@@ -1,11 +1,9 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
-
 /**
- * Object which can be listened to by an {@link EventHandler}.
+ * Event which can be listened to by an {@link EventNode} using {@link EventNode#addListener(EventListener)}.
  * <p>
- * Called using {@link EventHandler#callEvent(Class, Event)}.
+ * Called using {@link EventDispatcher#call(Event)}.
  */
-public class Event {
+public interface Event {
 }
