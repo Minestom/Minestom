@@ -133,15 +133,18 @@ public abstract class ThreadProvider {
                     if (!ChunkUtils.isLoaded(chunk))
                         return;
                     chunk.tick(time);
-                    chunkEntry.entities.forEach(entity -> {
-                        final boolean hasQueue = lock.hasQueuedThreads();
-                        if (hasQueue) {
-                            lock.unlock();
-                            // #acquire callbacks should be called here
-                            lock.lock();
+                    final var entities = chunkEntry.entities;
+                    if (!entities.isEmpty()) {
+                        for (Entity entity : entities) {
+                            final boolean hasQueue = lock.hasQueuedThreads();
+                            if (hasQueue) {
+                                lock.unlock();
+                                // #acquire callbacks should be called here
+                                lock.lock();
+                            }
+                            entity.tick(time);
                         }
-                        entity.tick(time);
-                    });
+                    }
                 });
                 Acquirable.refreshEntries(Collections.emptySet());
                 lock.unlock();
