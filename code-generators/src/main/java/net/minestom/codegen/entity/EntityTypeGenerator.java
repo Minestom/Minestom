@@ -222,6 +222,14 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
         );
         entityClass.addField(
+                FieldSpec.builder(TypeName.DOUBLE, "gravityAcceleration")
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
+        );
+        entityClass.addField(
+                FieldSpec.builder(TypeName.DOUBLE, "gravityDrag")
+                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).build()
+        );
+        entityClass.addField(
                 FieldSpec.builder(
                         ParameterizedTypeName.get(
                                 ClassName.get(BiFunction.class),
@@ -257,6 +265,8 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
                         .addParameter(ParameterSpec.builder(TypeName.DOUBLE, "width").build())
                         .addParameter(ParameterSpec.builder(TypeName.DOUBLE, "height").build())
+                        .addParameter(ParameterSpec.builder(TypeName.DOUBLE, "gravityAcceleration").build())
+                        .addParameter(ParameterSpec.builder(TypeName.DOUBLE, "gravityDrag").build())
                         .addParameter(
                                 ParameterSpec.builder(
                                         ParameterizedTypeName.get(
@@ -281,6 +291,8 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         .addStatement("this.id = id")
                         .addStatement("this.width = width")
                         .addStatement("this.height = height")
+                        .addStatement("this.gravityAcceleration = gravityAcceleration")
+                        .addStatement("this.gravityDrag = gravityDrag")
                         .addStatement("this.metaConstructor = metaConstructor")
                         .addStatement("this.spawnType = spawnType")
                         .addStatement("$T.entityTypes.put(id, this)", registriesClassName)
@@ -326,6 +338,22 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                 MethodSpec.methodBuilder("getHeight")
                         .returns(TypeName.DOUBLE)
                         .addStatement("return this.height")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getGravityAcceleration method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getGravityAcceleration")
+                        .returns(TypeName.DOUBLE)
+                        .addStatement("return this.gravityAcceleration")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
+        // getGravityDrag method
+        entityClass.addMethod(
+                MethodSpec.methodBuilder("getGravityDrag")
+                        .returns(TypeName.DOUBLE)
+                        .addStatement("return this.gravityDrag")
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
@@ -415,14 +443,96 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                 className = "EntityMeta";
             }
 
+            // Default gravity values
+            // according to https://minecraft.gamepedia.com/Entity#Motion_of_entities
+
+            double gravityAcceleration;
+
+            switch (entityName) {
+                // 0
+                case "item_frame":
+                    gravityAcceleration = 0;
+                    break;
+                // 0.03
+                case "egg":
+                case "fishing_bobber":
+                case "experience_orb":
+                case "ender_pearl":
+                case "potion":
+                case "snowball":
+                    gravityAcceleration = 0.03;
+                    break;
+                // 0.04
+                case "boat":
+                case "tnt":
+                case "falling_block":
+                case "item":
+                case "minecart":
+                    gravityAcceleration = 0.04;
+                    break;
+                // 0.05
+                case "arrow":
+                case "spectral_arrow":
+                case "trident":
+                    gravityAcceleration = 0.05;
+                    break;
+                // 0.06
+                case "llama_spit":
+                    gravityAcceleration = 0.06;
+                    break;
+                // 0.1
+                case "fireball":
+                case "wither_skull":
+                case "dragon_fireball":
+                    gravityAcceleration = 0.1;
+                    break;
+                // 0.08
+                default:
+                    gravityAcceleration = 0.08;
+                    break;
+            }
+
+            double gravityDrag;
+            switch (entityName) {
+                // 0
+                case "boat":
+                    gravityDrag = 0;
+                    break;
+                // 0.01
+                case "llama_spit":
+                case "ender_pearl":
+                case "potion":
+                case "snowball":
+                case "egg":
+                case "trident":
+                case "spectral_arrow":
+                case "arrow":
+                    gravityDrag = 0.01;
+                    break;
+                // 0.05
+                case "minecart":
+                    gravityDrag = 0.05;
+                    break;
+                // 0.08
+                case "fishing_bobber":
+                    gravityDrag = 0.08;
+                    break;
+                // 0.02
+                default:
+                    gravityDrag = 0.02;
+                    break;
+            }
+
             entityClass.addEnumConstant(
                     entityName,
                     TypeSpec.anonymousClassBuilder(
-                            "$T.from($S), $L, $L, $T::new, $T.$N",
+                            "$T.from($S), $L, $L, $L, $L, $T::new, $T.$N",
                             namespaceIDClassName,
                             entity.get("id").getAsString(),
                             entity.get("width").getAsDouble(),
                             entity.get("height").getAsDouble(),
+                            gravityAcceleration,
+                            gravityDrag,
                             ClassName.get(packageName, className),
                             ClassName.get("net.minestom.server.entity", "EntitySpawnType"),
                             entity.get("packetType").getAsString().toUpperCase()
