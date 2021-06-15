@@ -518,16 +518,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
 
-        // Boss bars cache
-        {
-            Set<net.minestom.server.bossbar.BossBar> bossBars = net.minestom.server.bossbar.BossBar.getBossBars(this);
-            if (bossBars != null) {
-                for (net.minestom.server.bossbar.BossBar bossBar : bossBars) {
-                    bossBar.removeViewer(this);
-                }
-            }
-        }
-
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
 
         // Advancement tabs cache
