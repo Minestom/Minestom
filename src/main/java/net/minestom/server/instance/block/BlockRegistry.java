@@ -1,6 +1,5 @@
 package net.minestom.server.instance.block;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectSortedMap;
@@ -12,19 +11,12 @@ import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
 
 class BlockRegistry {
-
-    // Property name -> values
-    private static final Map<String, List<String>> PROPERTIES_MAP = new ConcurrentHashMap<>();
-    // Unique name -> IG key
-    private static final Map<String, String> PROPERTIES_NAME_MAP = new ConcurrentHashMap<>();
 
     // Block namespace -> registry data
     private static final Map<String, Block> NAMESPACE_MAP = new ConcurrentHashMap<>();
@@ -45,22 +37,6 @@ class BlockRegistry {
 
     static {
         // Load data from file
-
-        // Block properties
-        JsonObject properties = Registry.load(Registry.Resource.BLOCK_PROPERTY);
-        properties.entrySet().forEach(entry -> {
-            final String propertyName = entry.getKey();
-            final JsonObject propertyObject = entry.getValue().getAsJsonObject();
-
-            final String key = propertyObject.get("key").getAsString();
-            final JsonArray values = propertyObject.getAsJsonArray("values");
-
-            List<String> stringValues = new ArrayList<>(values.size());
-            values.forEach(jsonElement -> stringValues.add(jsonElement.toString()));
-
-            PROPERTIES_MAP.put(key, stringValues);
-            PROPERTIES_NAME_MAP.put(propertyName, key);
-        });
 
         // Blocks
         JsonObject blocks = Registry.load(Registry.Resource.BLOCK);
@@ -125,8 +101,12 @@ class BlockRegistry {
         return result;
     }
 
-    public static synchronized @Nullable Block get(@NotNull String namespace) {
+    public static @Nullable Block get(@NotNull String namespace) {
         return NAMESPACE_MAP.get(namespace);
+    }
+
+    public static @Nullable Block getId(int id) {
+        return BLOCK_ID_MAP.get(id);
     }
 
     public static @Nullable Block getState(int stateId) {
