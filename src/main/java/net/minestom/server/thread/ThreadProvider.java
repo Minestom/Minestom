@@ -136,8 +136,7 @@ public abstract class ThreadProvider {
                     final var entities = chunkEntry.entities;
                     if (!entities.isEmpty()) {
                         for (Entity entity : entities) {
-                            final boolean hasQueue = lock.hasQueuedThreads();
-                            if (hasQueue) {
+                            if (lock.hasQueuedThreads()) {
                                 lock.unlock();
                                 // #acquire callbacks should be called here
                                 lock.lock();
