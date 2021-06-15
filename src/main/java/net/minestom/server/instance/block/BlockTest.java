@@ -1,12 +1,12 @@
 package net.minestom.server.instance.block;
 
-import com.google.gson.JsonObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -34,11 +34,6 @@ class BlockTest implements Block {
         this(registry, properties, null, null);
     }
 
-    BlockTest(JsonObject jsonObject, JsonObject override,
-              Map<String, String> properties) {
-        this(Registry.block(jsonObject, override), properties);
-    }
-
     @Override
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
@@ -48,9 +43,9 @@ class BlockTest implements Block {
 
     @Override
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var block = new BlockTest(registry, properties, compound.deepClone(), handler);
-        tag.write(block.compound, value);
-        return block;
+        var compound = this.compound != null ? this.compound.deepClone() : new NBTCompound();
+        tag.write(compound, value);
+        return new BlockTest(registry, properties, compound, handler);
     }
 
     @Override
@@ -79,8 +74,8 @@ class BlockTest implements Block {
     }
 
     @Override
-    public @NotNull Map<String, String> createPropertiesMap() {
-        return new HashMap<>(properties);
+    public @NotNull Map<String, String> getPropertiesMap() {
+        return Collections.unmodifiableMap(properties);
     }
 
     @Override

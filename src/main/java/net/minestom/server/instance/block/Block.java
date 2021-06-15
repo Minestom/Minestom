@@ -43,7 +43,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     @Nullable BlockHandler getHandler();
 
-    @NotNull Map<String, String> createPropertiesMap();
+    @NotNull Map<String, String> getPropertiesMap();
 
     @NotNull Registry.BlockEntry registry();
 
