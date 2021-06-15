@@ -76,7 +76,7 @@ public class Team implements PacketGroupingAudience {
     private boolean isPlayerMembersUpToDate;
 
     // Adventure
-    private Pointers pointers;
+    private final Pointers pointers;
 
     /**
      * Default constructor to creates a team.
@@ -96,6 +96,11 @@ public class Team implements PacketGroupingAudience {
         this.suffix = Component.empty();
 
         this.members = new CopyOnWriteArraySet<>();
+
+        this.pointers = Pointers.builder()
+                .withDynamic(Identity.NAME, this::getTeamName)
+                .withDynamic(Identity.DISPLAY_NAME, this::getTeamDisplayName)
+                .build();
     }
 
     /**
@@ -595,13 +600,6 @@ public class Team implements PacketGroupingAudience {
 
     @Override
     public @NotNull Pointers pointers() {
-        if (this.pointers == null) {
-            this.pointers = Pointers.builder()
-                    .withDynamic(Identity.NAME, this::getTeamName)
-                    .withDynamic(Identity.DISPLAY_NAME, this::getTeamDisplayName)
-                    .build();
-        }
-
         return this.pointers;
     }
 }

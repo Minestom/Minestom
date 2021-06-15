@@ -110,7 +110,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
     private final PFInstanceSpace instanceSpace = new PFInstanceSpace(this);
 
     // Adventure
-    private Pointers pointers = null;
+    private final Pointers pointers;
 
     /**
      * Creates a new instance.
@@ -127,6 +127,10 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
         this.worldBorder = new WorldBorder(this);
 
         this.eventNode = EventNode.value("instance-" + uniqueId, EventFilter.INSTANCE, this::equals);
+
+        this.pointers = Pointers.builder()
+                .withDynamic(Identity.UUID, this::getUniqueId)
+                .build();
     }
 
     /**
@@ -1122,12 +1126,6 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
 
     @Override
     public @NotNull Pointers pointers() {
-        if (this.pointers == null) {
-            this.pointers = Pointers.builder()
-                    .withDynamic(Identity.UUID, this::getUniqueId)
-                    .build();
-        }
-
         return this.pointers;
     }
 }

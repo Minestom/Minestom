@@ -183,7 +183,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Adventure
     private Identity identity;
-    private Pointers pointers;
+    private final Pointers pointers;
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
@@ -212,6 +212,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnectionInit();
 
         this.identity = Identity.identity(uuid);
+        this.pointers = Pointers.builder()
+                .withDynamic(Identity.UUID, this::getUuid)
+                .withDynamic(Identity.NAME, this::getUsername)
+                .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
+                .build();
     }
 
     /**
@@ -2550,14 +2555,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public @NotNull Pointers pointers() {
-        if (this.pointers == null) {
-            this.pointers = Pointers.builder()
-                    .withDynamic(Identity.UUID, this::getUuid)
-                    .withDynamic(Identity.NAME, this::getUsername)
-                    .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
-                    .build();
-        }
-
         return this.pointers;
     }
 
