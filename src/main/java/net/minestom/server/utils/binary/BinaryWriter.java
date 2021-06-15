@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.JsonMessage;
@@ -71,7 +72,7 @@ public class BinaryWriter extends OutputStream {
      * @param component the component
      */
     public void writeComponent(@NotNull Component component) {
-        this.writeSizedString(AdventureSerializer.serialize(component));
+        this.writeSizedString(GsonComponentSerializer.gson().serialize(component));
     }
 
     /**

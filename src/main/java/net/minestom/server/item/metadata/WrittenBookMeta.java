@@ -117,7 +117,7 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
             handleCollection(pages, "pages", nbt, () -> {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
                 for (Component page : pages) {
-                    list.add(new NBTString(AdventureSerializer.serialize(page)));
+                    list.add(new NBTString(GsonComponentSerializer.gson().serialize(page)));
                 }
                 return list;
             });

@@ -6,6 +6,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -182,6 +183,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Adventure
     private Identity identity;
+    private final Pointers pointers;
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
@@ -210,6 +212,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnectionInit();
 
         this.identity = Identity.identity(uuid);
+        this.pointers = Pointers.builder()
+                .withDynamic(Identity.UUID, this::getUuid)
+                .withDynamic(Identity.NAME, this::getUsername)
+                .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
+                .build();
     }
 
     /**
@@ -834,12 +841,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(@NotNull Sound sound) {
-        playerConnection.sendPacket(AdventurePacketConvertor.createEntitySoundPacket(sound, this));
+        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
     }
 
     @Override
     public void playSound(@NotNull Sound sound, double x, double y, double z) {
         playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
+    }
+
+    @Override
+    public void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        final ServerPacket packet;
+
+        if (emitter == Sound.Emitter.self()) {
+            packet = AdventurePacketConvertor.createSoundPacket(sound, this);
+        } else {
+            packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+        }
+
+        playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -2531,6 +2551,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public @NotNull Identity identity() {
         return this.identity;
+    }
+
+    @Override
+    public @NotNull Pointers pointers() {
+        return this.pointers;
     }
 
     @Override
