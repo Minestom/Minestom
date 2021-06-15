@@ -19,8 +19,8 @@ public final class StrippedWarpedStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14969, "axis=x"));
-        Block.STRIPPED_WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14970, "axis=y"));
-        Block.STRIPPED_WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 14971, "axis=z"));
+        Block.STRIPPED_WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 15215, "axis=x"));
+        Block.STRIPPED_WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 15216, "axis=y"));
+        Block.STRIPPED_WARPED_STEM.addBlockAlternative(new BlockAlternative((short) 15217, "axis=z"));
     }
 }

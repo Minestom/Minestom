@@ -19,9 +19,9 @@ public final class NetherWart {
             forRemoval = false
     )
     public static void initStates() {
-        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5132, "age=0"));
-        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5133, "age=1"));
-        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5134, "age=2"));
-        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5135, "age=3"));
+        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5329, "age=0"));
+        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5330, "age=1"));
+        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5331, "age=2"));
+        Block.NETHER_WART.addBlockAlternative(new BlockAlternative((short) 5332, "age=3"));
     }
 }

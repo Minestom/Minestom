@@ -1,5 +1,7 @@
 package net.minestom.server.extensions;
 
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -14,7 +16,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
@@ -25,6 +29,9 @@ public abstract class Extension {
     // Set by reflection
     @SuppressWarnings("unused")
     private Logger logger;
+    // Set by reflection
+    @SuppressWarnings("unused")
+    private EventNode<Event> eventNode;
 
     /**
      * Observers that will be notified of events related to this extension.
@@ -78,11 +85,16 @@ public abstract class Extension {
 
     /**
      * Gets the logger for the extension
+     *
      * @return The logger for the extension
      */
     @NotNull
     public Logger getLogger() {
         return logger;
+    }
+
+    public @NotNull EventNode<Event> getEventNode() {
+        return eventNode;
     }
 
     public @NotNull Path getDataDirectory() {
@@ -209,6 +221,7 @@ public abstract class Extension {
 
     /**
      * Calls some action on all valid observers of this extension
+     *
      * @param action code to execute on each observer
      */
     public void triggerChange(Consumer<IExtensionObserver> action) {
@@ -234,7 +247,7 @@ public abstract class Extension {
      */
     public void cleanupObservers() {
         Reference<? extends IExtensionObserver> ref;
-        while((ref = observerReferenceQueue.poll()) != null) {
+        while ((ref = observerReferenceQueue.poll()) != null) {
             observers.remove(ref);
         }
     }

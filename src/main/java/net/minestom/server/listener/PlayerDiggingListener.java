@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
@@ -67,7 +68,7 @@ public class PlayerDiggingListener {
                 final int customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
 
                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, blockStateId, customBlockId);
-                player.callEvent(PlayerStartDiggingEvent.class, playerStartDiggingEvent);
+                EventDispatcher.call(playerStartDiggingEvent);
 
                 if (playerStartDiggingEvent.isCancelled()) {
                     addEffect(player);
@@ -136,14 +137,18 @@ public class PlayerDiggingListener {
 
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
             Player.Hand hand = null;
-            if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
+            if (player.isEating()) {
+                hand = player.getEatingHand();
+            } else if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
                 hand = Player.Hand.OFF;
             } else if (player.getItemInHand(Player.Hand.MAIN).getMaterial().hasState()) {
                 hand = Player.Hand.MAIN;
             }
 
             player.refreshEating(null);
-            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(false, hand);
+            player.triggerStatus((byte) 9);
+
+            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
 
             if (itemUpdateStateEvent == null) {
                 player.refreshActiveHand(true, false, false);
@@ -159,7 +164,7 @@ public class PlayerDiggingListener {
             final ItemStack offHand = playerInventory.getItemInOffHand();
 
             PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
-            player.callCancellableEvent(PlayerSwapItemEvent.class, swapItemEvent, () -> {
+            EventDispatcher.callCancellable(swapItemEvent, () -> {
                 playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
                 playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
             });
@@ -206,7 +211,7 @@ public class PlayerDiggingListener {
     }
 
     /**
-     * Adds the effect {@link PotionEffect#MINING_FATIGUE} to the player.
+     * Adds the effect {@link PotionEffect#DIG_SLOWDOWN} to the player.
      * <p>
      * Used for {@link CustomBlock} break delay or when the {@link PlayerStartDiggingEvent} is cancelled
      * to remove the player break animation.
@@ -219,7 +224,7 @@ public class PlayerDiggingListener {
         EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
         entityEffectPacket.entityId = player.getEntityId();
         entityEffectPacket.potion = new Potion(
-                PotionEffect.MINING_FATIGUE,
+                PotionEffect.DIG_SLOWDOWN,
                 (byte) -1,
                 0,
                 false,
@@ -242,7 +247,7 @@ public class PlayerDiggingListener {
 
             RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
             removeEntityEffectPacket.entityId = player.getEntityId();
-            removeEntityEffectPacket.effect = PotionEffect.MINING_FATIGUE;
+            removeEntityEffectPacket.effect = PotionEffect.DIG_SLOWDOWN;
             player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
         }
     }

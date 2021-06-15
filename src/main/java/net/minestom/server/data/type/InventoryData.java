@@ -28,8 +28,8 @@ public class InventoryData extends DataType<Inventory> {
     @NotNull
     @Override
     public Inventory decode(@NotNull BinaryReader reader) {
-        final Component title = reader.readComponent(Integer.MAX_VALUE);
-        final InventoryType inventoryType = InventoryType.valueOf(reader.readSizedString(Integer.MAX_VALUE));
+        final Component title = reader.readComponent();
+        final InventoryType inventoryType = InventoryType.valueOf(reader.readSizedString());
         final int size = inventoryType.getSize();
 
         Inventory inventory = new Inventory(inventoryType, title);

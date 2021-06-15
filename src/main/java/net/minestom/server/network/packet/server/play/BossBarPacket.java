@@ -26,7 +26,8 @@ public class BossBarPacket implements ComponentHoldingServerPacket {
     public BossBar.Overlay overlay = BossBar.Overlay.PROGRESS;
     public byte flags;
 
-    public BossBarPacket() {}
+    public BossBarPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -67,7 +68,7 @@ public class BossBarPacket implements ComponentHoldingServerPacket {
 
         switch (action) {
             case ADD:
-                title = reader.readComponent(Integer.MAX_VALUE);
+                title = reader.readComponent();
                 health = reader.readFloat();
                 color = BossBar.Color.values()[reader.readVarInt()];
                 overlay = BossBar.Overlay.values()[reader.readVarInt()];
@@ -80,7 +81,7 @@ public class BossBarPacket implements ComponentHoldingServerPacket {
                 health = reader.readFloat();
                 break;
             case UPDATE_TITLE:
-                title = reader.readComponent(Integer.MAX_VALUE);
+                title = reader.readComponent();
                 break;
             case UPDATE_STYLE:
                 color = BossBar.Color.values()[reader.readVarInt()];
@@ -127,7 +128,8 @@ public class BossBarPacket implements ComponentHoldingServerPacket {
                 packet.flags = flags;
                 return packet;
             }
-            default: return this;
+            default:
+                return this;
         }
     }
 

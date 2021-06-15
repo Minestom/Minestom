@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public class FoxMeta extends AnimalMeta {
-
-    private final static byte MASK_INDEX = 17;
+    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 4;
 
     private final static byte SITTING_BIT = 0x01;
     private final static byte CROUCHING_BIT = 0x04;
@@ -25,85 +25,85 @@ public class FoxMeta extends AnimalMeta {
 
     @NotNull
     public Type getType() {
-        return Type.VALUES[super.metadata.getIndex((byte) 16, 0)];
+        return Type.VALUES[super.metadata.getIndex(OFFSET, 0)];
     }
 
     public void setType(@NotNull Type type) {
-        super.metadata.setIndex((byte) 16, Metadata.VarInt(type.ordinal()));
+        super.metadata.setIndex(OFFSET, Metadata.VarInt(type.ordinal()));
     }
 
     public boolean isSitting() {
-        return getMaskBit(MASK_INDEX, SITTING_BIT);
+        return getMaskBit(OFFSET + 1, SITTING_BIT);
     }
 
     public void setSitting(boolean value) {
-        setMaskBit(MASK_INDEX, SITTING_BIT, value);
+        setMaskBit(OFFSET + 1, SITTING_BIT, value);
     }
 
     public boolean isFoxSneaking() {
-        return getMaskBit(MASK_INDEX, CROUCHING_BIT);
+        return getMaskBit(OFFSET + 1, CROUCHING_BIT);
     }
 
     public void setFoxSneaking(boolean value) {
-        setMaskBit(MASK_INDEX, CROUCHING_BIT, value);
+        setMaskBit(OFFSET + 1, CROUCHING_BIT, value);
     }
 
     public boolean isInterested() {
-        return getMaskBit(MASK_INDEX, INTERESTED_BIT);
+        return getMaskBit(OFFSET + 1, INTERESTED_BIT);
     }
 
     public void setInterested(boolean value) {
-        setMaskBit(MASK_INDEX, INTERESTED_BIT, value);
+        setMaskBit(OFFSET + 1, INTERESTED_BIT, value);
     }
 
     public boolean isPouncing() {
-        return getMaskBit(MASK_INDEX, POUNCING_BIT);
+        return getMaskBit(OFFSET + 1, POUNCING_BIT);
     }
 
     public void setPouncing(boolean value) {
-        setMaskBit(MASK_INDEX, POUNCING_BIT, value);
+        setMaskBit(OFFSET + 1, POUNCING_BIT, value);
     }
 
     public boolean isSleeping() {
-        return getMaskBit(MASK_INDEX, SLEEPING_BIT);
+        return getMaskBit(OFFSET + 1, SLEEPING_BIT);
     }
 
     public void setSleeping(boolean value) {
-        setMaskBit(MASK_INDEX, SLEEPING_BIT, value);
+        setMaskBit(OFFSET + 1, SLEEPING_BIT, value);
     }
 
     public boolean isFaceplanted() {
-        return getMaskBit(MASK_INDEX, FACEPLANTED_BIT);
+        return getMaskBit(OFFSET + 1, FACEPLANTED_BIT);
     }
 
     public void setFaceplanted(boolean value) {
-        setMaskBit(MASK_INDEX, FACEPLANTED_BIT, value);
+        setMaskBit(OFFSET + 1, FACEPLANTED_BIT, value);
     }
 
     public boolean isDefending() {
-        return getMaskBit(MASK_INDEX, DEFENDING_BIT);
+        return getMaskBit(OFFSET + 1, DEFENDING_BIT);
     }
 
     public void setDefending(boolean value) {
-        setMaskBit(MASK_INDEX, DEFENDING_BIT, value);
+        setMaskBit(OFFSET + 1, DEFENDING_BIT, value);
     }
 
     @Nullable
     public UUID getFirstUUID() {
-        return super.metadata.getIndex((byte) 18, null);
+        return super.metadata.getIndex(OFFSET + 2, null);
     }
 
     public void setFirstUUID(@Nullable UUID value) {
-        super.metadata.setIndex((byte) 18, Metadata.OptUUID(value));
+        super.metadata.setIndex(OFFSET + 2, Metadata.OptUUID(value));
     }
 
     @Nullable
     public UUID getSecondUUID() {
-        return super.metadata.getIndex((byte) 19, null);
+        return super.metadata.getIndex(OFFSET + 3, null);
     }
 
     public void setSecondUUID(@Nullable UUID value) {
-        super.metadata.setIndex((byte) 19, Metadata.OptUUID(value));
+        super.metadata.setIndex(OFFSET + 3, Metadata.OptUUID(value));
     }
 
     public enum Type {

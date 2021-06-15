@@ -19,9 +19,9 @@ public final class ZombieWallHead {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6550, "facing=north"));
-        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6551, "facing=south"));
-        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6552, "facing=west"));
-        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6553, "facing=east"));
+        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6752, "facing=north"));
+        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6753, "facing=south"));
+        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6754, "facing=west"));
+        Block.ZOMBIE_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6755, "facing=east"));
     }
 }

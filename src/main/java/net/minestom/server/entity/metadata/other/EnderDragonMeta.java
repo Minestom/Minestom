@@ -2,10 +2,13 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.MobMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class EnderDragonMeta extends MobMeta {
+    public static final byte OFFSET = MobMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 0;
 
     public EnderDragonMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -13,11 +16,11 @@ public class EnderDragonMeta extends MobMeta {
 
     @NotNull
     public Phase getPhase() {
-        return Phase.VALUES[super.metadata.getIndex((byte) 15, 0)];
+        return Phase.VALUES[super.metadata.getIndex(OFFSET, 0)];
     }
 
     public void setPhase(@NotNull Phase value) {
-        super.metadata.getIndex((byte) 15, Metadata.VarInt(value.ordinal()));
+        super.metadata.getIndex(OFFSET, Metadata.VarInt(value.ordinal()));
     }
 
     public enum Phase {

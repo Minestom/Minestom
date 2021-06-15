@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     private Entity shooter;
 
@@ -17,11 +19,11 @@ public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, P
     }
 
     public boolean isInvulnerable() {
-        return super.metadata.getIndex((byte) 7, false);
+        return super.metadata.getIndex(OFFSET, false);
     }
 
     public void setInvulnerable(boolean value) {
-        super.metadata.setIndex((byte) 7, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
     }
 
     @Override

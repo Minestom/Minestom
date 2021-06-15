@@ -68,7 +68,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
                     break;
 
                 default:
-                    throw new IllegalArgumentException("Unsupported action encountered: "+action.name());
+                    throw new IllegalArgumentException("Unsupported action encountered: " + action.name());
             }
 
             playerInfos.set(i, info);
@@ -92,7 +92,8 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
                     }
                 }
                 return components;
-            default: return Collections.emptyList();
+            default:
+                return Collections.emptyList();
         }
     }
 
@@ -110,7 +111,8 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
                         playerInfos.add(playerInfo);
                     }
                 }
-            default: return this;
+            default:
+                return this;
         }
     }
 
@@ -163,7 +165,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
 
         AddPlayer(UUID uuid, BinaryReader reader) {
             super(uuid);
-            name = reader.readSizedString(Integer.MAX_VALUE);
+            name = reader.readSizedString();
             int propertyCount = reader.readVarInt();
 
             properties = new ArrayList<>(propertyCount);
@@ -175,8 +177,8 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
             ping = reader.readVarInt();
             boolean hasDisplayName = reader.readBoolean();
 
-            if(hasDisplayName) {
-                displayName = reader.readComponent(Integer.MAX_VALUE);
+            if (hasDisplayName) {
+                displayName = reader.readComponent();
             } else {
                 displayName = null;
             }
@@ -235,12 +237,12 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
             }
 
             Property(BinaryReader reader) {
-                name = reader.readSizedString(Integer.MAX_VALUE);
-                value = reader.readSizedString(Integer.MAX_VALUE);
+                name = reader.readSizedString();
+                value = reader.readSizedString();
                 boolean hasSignature = reader.readBoolean();
 
-                if(hasSignature) {
-                    signature = reader.readSizedString(Integer.MAX_VALUE);
+                if (hasSignature) {
+                    signature = reader.readSizedString();
                 }
             }
 
@@ -308,8 +310,8 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
         UpdateDisplayName(UUID uuid, BinaryReader reader) {
             super(uuid);
             boolean hasDisplayName = reader.readBoolean();
-            if(hasDisplayName) {
-                displayName = reader.readComponent(Integer.MAX_VALUE);
+            if (hasDisplayName) {
+                displayName = reader.readComponent();
             } else {
                 displayName = null;
             }

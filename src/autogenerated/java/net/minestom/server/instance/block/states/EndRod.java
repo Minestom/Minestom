@@ -19,11 +19,11 @@ public final class EndRod {
             forRemoval = false
     )
     public static void initStates() {
-        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9062, "facing=north"));
-        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9063, "facing=east"));
-        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9064, "facing=south"));
-        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9065, "facing=west"));
-        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9066, "facing=up"));
-        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9067, "facing=down"));
+        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9308, "facing=north"));
+        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9309, "facing=east"));
+        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9310, "facing=south"));
+        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9311, "facing=west"));
+        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9312, "facing=up"));
+        Block.END_ROD.addBlockAlternative(new BlockAlternative((short) 9313, "facing=down"));
     }
 }

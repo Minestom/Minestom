@@ -19,11 +19,11 @@ public final class EndStoneBrickSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10823, "type=top", "waterlogged=true"));
-        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10824, "type=top", "waterlogged=false"));
-        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10825, "type=bottom", "waterlogged=true"));
-        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10826, "type=bottom", "waterlogged=false"));
-        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10827, "type=double", "waterlogged=true"));
-        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 10828, "type=double", "waterlogged=false"));
+        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11069, "type=top", "waterlogged=true"));
+        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11070, "type=top", "waterlogged=false"));
+        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11071, "type=bottom", "waterlogged=true"));
+        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11072, "type=bottom", "waterlogged=false"));
+        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11073, "type=double", "waterlogged=true"));
+        Block.END_STONE_BRICK_SLAB.addBlockAlternative(new BlockAlternative((short) 11074, "type=double", "waterlogged=false"));
     }
 }

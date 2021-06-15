@@ -19,8 +19,8 @@ public final class WarpedHyphae {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14972, "axis=x"));
-        Block.WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14973, "axis=y"));
-        Block.WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 14974, "axis=z"));
+        Block.WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 15218, "axis=x"));
+        Block.WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 15219, "axis=y"));
+        Block.WARPED_HYPHAE.addBlockAlternative(new BlockAlternative((short) 15220, "axis=z"));
     }
 }

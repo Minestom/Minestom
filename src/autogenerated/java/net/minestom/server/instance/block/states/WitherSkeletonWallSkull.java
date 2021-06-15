@@ -19,9 +19,9 @@ public final class WitherSkeletonWallSkull {
             forRemoval = false
     )
     public static void initStates() {
-        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6530, "facing=north"));
-        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6531, "facing=south"));
-        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6532, "facing=west"));
-        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6533, "facing=east"));
+        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6732, "facing=north"));
+        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6733, "facing=south"));
+        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6734, "facing=west"));
+        Block.WITHER_SKELETON_WALL_SKULL.addBlockAlternative(new BlockAlternative((short) 6735, "facing=east"));
     }
 }

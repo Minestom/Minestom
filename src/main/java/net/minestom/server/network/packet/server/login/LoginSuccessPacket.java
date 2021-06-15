@@ -17,7 +17,7 @@ public class LoginSuccessPacket implements ServerPacket {
      * DO NOT USE.
      */
     private LoginSuccessPacket() {
-        this(new UUID(0,0), "");
+        this(new UUID(0, 0), "");
     }
 
     public LoginSuccessPacket(@NotNull UUID uuid, @NotNull String username) {
@@ -34,7 +34,7 @@ public class LoginSuccessPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         uuid = reader.readUuid();
-        username = reader.readSizedString(Integer.MAX_VALUE);
+        username = reader.readSizedString();
     }
 
     @Override

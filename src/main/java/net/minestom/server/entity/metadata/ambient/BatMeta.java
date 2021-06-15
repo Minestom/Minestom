@@ -2,11 +2,12 @@ package net.minestom.server.entity.metadata.ambient;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.metadata.LivingEntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class BatMeta extends AmbientCreatureMeta {
-
-    private final static byte MASK_INDEX = 15;
+    public static final byte OFFSET = AmbientCreatureMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 0;
 
     private final static byte IS_HANGING_BIT = 0x01;
 
@@ -15,11 +16,11 @@ public class BatMeta extends AmbientCreatureMeta {
     }
 
     public boolean isHanging() {
-        return getMaskBit(MASK_INDEX, IS_HANGING_BIT);
+        return getMaskBit(OFFSET, IS_HANGING_BIT);
     }
 
     public void setHanging(boolean value) {
-        setMaskBit(MASK_INDEX, IS_HANGING_BIT, value);
+        setMaskBit(OFFSET, IS_HANGING_BIT, value);
     }
 
 }

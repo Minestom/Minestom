@@ -19,13 +19,13 @@ public final class BrainCoralWallFan {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9612, "facing=north", "waterlogged=true"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9613, "facing=north", "waterlogged=false"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9614, "facing=south", "waterlogged=true"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9615, "facing=south", "waterlogged=false"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9616, "facing=west", "waterlogged=true"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9617, "facing=west", "waterlogged=false"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9618, "facing=east", "waterlogged=true"));
-        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9619, "facing=east", "waterlogged=false"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9858, "facing=north", "waterlogged=true"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9859, "facing=north", "waterlogged=false"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9860, "facing=south", "waterlogged=true"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9861, "facing=south", "waterlogged=false"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9862, "facing=west", "waterlogged=true"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9863, "facing=west", "waterlogged=false"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9864, "facing=east", "waterlogged=true"));
+        Block.BRAIN_CORAL_WALL_FAN.addBlockAlternative(new BlockAlternative((short) 9865, "facing=east", "waterlogged=false"));
     }
 }

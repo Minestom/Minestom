@@ -5,8 +5,8 @@ import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
 
 public class VexMeta extends MonsterMeta {
-
-    private final static byte MASK_INDEX = 15;
+    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 1;
 
     private final static byte ATTACKING_BIT = 0x01;
 
@@ -15,11 +15,11 @@ public class VexMeta extends MonsterMeta {
     }
 
     public boolean isAttacking() {
-        return getMaskBit(MASK_INDEX, ATTACKING_BIT);
+        return getMaskBit(OFFSET, ATTACKING_BIT);
     }
 
     public void setAttacking(boolean value) {
-        setMaskBit(MASK_INDEX, ATTACKING_BIT, value);
+        setMaskBit(OFFSET, ATTACKING_BIT, value);
     }
 
 }

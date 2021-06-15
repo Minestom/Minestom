@@ -19,9 +19,9 @@ public final class YellowWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8173, "facing=north"));
-        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8174, "facing=south"));
-        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8175, "facing=west"));
-        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8176, "facing=east"));
+        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8419, "facing=north"));
+        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8420, "facing=south"));
+        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8421, "facing=west"));
+        Block.YELLOW_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8422, "facing=east"));
     }
 }

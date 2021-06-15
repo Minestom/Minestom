@@ -19,7 +19,7 @@ public final class StonePressurePlate {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3807, "powered=true"));
-        Block.STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3808, "powered=false"));
+        Block.STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3874, "powered=true"));
+        Block.STONE_PRESSURE_PLATE.addBlockAlternative(new BlockAlternative((short) 3875, "powered=false"));
     }
 }

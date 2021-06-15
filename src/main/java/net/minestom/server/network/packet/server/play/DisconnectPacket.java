@@ -17,6 +17,7 @@ public class DisconnectPacket implements ComponentHoldingServerPacket {
 
     /**
      * Creates a new disconnect packet with a given message.
+     *
      * @param message the message
      */
     public DisconnectPacket(@NotNull Component message) {
@@ -34,7 +35,7 @@ public class DisconnectPacket implements ComponentHoldingServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        message = reader.readComponent(Integer.MAX_VALUE);
+        message = reader.readComponent();
     }
 
     @Override

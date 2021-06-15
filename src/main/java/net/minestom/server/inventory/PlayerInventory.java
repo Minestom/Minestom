@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
@@ -189,7 +190,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         if (equipmentSlot != null) {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
 
-            player.callEvent(EntityEquipEvent.class, entityEquipEvent);
+            EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
         }
 
@@ -311,13 +312,13 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     }
 
     @Override
-    public boolean drop(@NotNull Player player, int mode, int slot, int button) {
+    public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
         final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot, OFFSET);
 
         final InventoryClickResult clickResult = clickProcessor.drop(null, player,
-                mode, slot, button, clicked, cursor);
+                all, slot, button, clicked, cursor);
 
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);

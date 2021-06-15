@@ -19,9 +19,9 @@ public final class SweetBerryBush {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 14962, "age=0"));
-        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 14963, "age=1"));
-        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 14964, "age=2"));
-        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 14965, "age=3"));
+        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 15208, "age=0"));
+        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 15209, "age=1"));
+        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 15210, "age=2"));
+        Block.SWEET_BERRY_BUSH.addBlockAlternative(new BlockAlternative((short) 15211, "age=3"));
     }
 }

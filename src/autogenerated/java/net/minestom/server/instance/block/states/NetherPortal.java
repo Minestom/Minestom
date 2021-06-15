@@ -19,7 +19,7 @@ public final class NetherPortal {
             forRemoval = false
     )
     public static void initStates() {
-        Block.NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4014, "axis=x"));
-        Block.NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4015, "axis=z"));
+        Block.NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4083, "axis=x"));
+        Block.NETHER_PORTAL.addBlockAlternative(new BlockAlternative((short) 4084, "axis=z"));
     }
 }

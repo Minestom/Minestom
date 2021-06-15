@@ -19,29 +19,29 @@ public final class BeeNest {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15784, "facing=north", "honey_level=0"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15785, "facing=north", "honey_level=1"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15786, "facing=north", "honey_level=2"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15787, "facing=north", "honey_level=3"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15788, "facing=north", "honey_level=4"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15789, "facing=north", "honey_level=5"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15790, "facing=south", "honey_level=0"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15791, "facing=south", "honey_level=1"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15792, "facing=south", "honey_level=2"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15793, "facing=south", "honey_level=3"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15794, "facing=south", "honey_level=4"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15795, "facing=south", "honey_level=5"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15796, "facing=west", "honey_level=0"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15797, "facing=west", "honey_level=1"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15798, "facing=west", "honey_level=2"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15799, "facing=west", "honey_level=3"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15800, "facing=west", "honey_level=4"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15801, "facing=west", "honey_level=5"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15802, "facing=east", "honey_level=0"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15803, "facing=east", "honey_level=1"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15804, "facing=east", "honey_level=2"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15805, "facing=east", "honey_level=3"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15806, "facing=east", "honey_level=4"));
-        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 15807, "facing=east", "honey_level=5"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16030, "facing=north", "honey_level=0"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16031, "facing=north", "honey_level=1"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16032, "facing=north", "honey_level=2"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16033, "facing=north", "honey_level=3"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16034, "facing=north", "honey_level=4"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16035, "facing=north", "honey_level=5"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16036, "facing=south", "honey_level=0"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16037, "facing=south", "honey_level=1"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16038, "facing=south", "honey_level=2"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16039, "facing=south", "honey_level=3"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16040, "facing=south", "honey_level=4"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16041, "facing=south", "honey_level=5"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16042, "facing=west", "honey_level=0"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16043, "facing=west", "honey_level=1"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16044, "facing=west", "honey_level=2"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16045, "facing=west", "honey_level=3"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16046, "facing=west", "honey_level=4"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16047, "facing=west", "honey_level=5"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16048, "facing=east", "honey_level=0"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16049, "facing=east", "honey_level=1"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16050, "facing=east", "honey_level=2"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16051, "facing=east", "honey_level=3"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16052, "facing=east", "honey_level=4"));
+        Block.BEE_NEST.addBlockAlternative(new BlockAlternative((short) 16053, "facing=east", "honey_level=5"));
     }
 }

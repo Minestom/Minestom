@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EndCrystalMeta extends EntityMeta {
+    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
+    public static final byte MAX_OFFSET = OFFSET + 2;
 
     public EndCrystalMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
         super(entity, metadata);
@@ -15,19 +17,19 @@ public class EndCrystalMeta extends EntityMeta {
 
     @Nullable
     public BlockPosition getBeamTarget() {
-        return super.metadata.getIndex((byte) 7, null);
+        return super.metadata.getIndex(OFFSET, null);
     }
 
     public void setBeamTarget(@Nullable BlockPosition value) {
-        super.metadata.setIndex((byte) 7, Metadata.OptPosition(value));
+        super.metadata.setIndex(OFFSET, Metadata.OptPosition(value));
     }
 
     public boolean isShowingBottom() {
-        return super.metadata.getIndex((byte) 8, true);
+        return super.metadata.getIndex(OFFSET + 1, true);
     }
 
     public void setShowingBottom(boolean value) {
-        super.metadata.setIndex((byte) 8, Metadata.Boolean(value));
+        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
     }
 
 }

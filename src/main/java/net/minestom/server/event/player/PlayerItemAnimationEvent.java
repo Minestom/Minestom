@@ -1,8 +1,8 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,14 +10,15 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ItemAnimationType
  */
-public class PlayerItemAnimationEvent extends PlayerEvent implements CancellableEvent {
+public class PlayerItemAnimationEvent implements PlayerEvent, CancellableEvent {
 
+    private final Player player;
     private final ItemAnimationType armAnimationType;
 
     private boolean cancelled;
 
     public PlayerItemAnimationEvent(@NotNull Player player, @NotNull ItemAnimationType armAnimationType) {
-        super(player);
+        this.player = player;
         this.armAnimationType = armAnimationType;
     }
 
@@ -29,6 +30,11 @@ public class PlayerItemAnimationEvent extends PlayerEvent implements Cancellable
     @NotNull
     public ItemAnimationType getArmAnimationType() {
         return armAnimationType;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 
     public enum ItemAnimationType {

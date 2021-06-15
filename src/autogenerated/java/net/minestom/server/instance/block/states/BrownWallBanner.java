@@ -19,9 +19,9 @@ public final class BrownWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8205, "facing=north"));
-        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8206, "facing=south"));
-        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8207, "facing=west"));
-        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8208, "facing=east"));
+        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8451, "facing=north"));
+        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8452, "facing=south"));
+        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8453, "facing=west"));
+        Block.BROWN_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8454, "facing=east"));
     }
 }

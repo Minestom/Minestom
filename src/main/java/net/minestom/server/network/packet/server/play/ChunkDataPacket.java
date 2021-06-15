@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
@@ -35,17 +36,14 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
 
-    public boolean fullChunk;
     public Biome[] biomes;
     public int chunkX, chunkZ;
 
-    public PaletteStorage paletteStorage;
-    public PaletteStorage customBlockPaletteStorage;
+    public PaletteStorage paletteStorage = new PaletteStorage(8, 2);
+    public PaletteStorage customBlockPaletteStorage = new PaletteStorage(8, 2);
 
     public IntSet blockEntities;
     public Int2ObjectMap<Data> blocksData;
-
-    public int[] sections = new int[0];
 
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
@@ -79,25 +77,31 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
-        writer.writeBoolean(fullChunk);
 
-        int mask = 0;
         ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
-        for (byte i = 0; i < CHUNK_SECTION_COUNT; i++) {
-            if (fullChunk || (sections.length == CHUNK_SECTION_COUNT && sections[i] != 0)) {
-                final Section section = paletteStorage.getSections()[i];
-                if (section == null) {
-                    // Section not loaded
-                    continue;
-                }
-                if (section.getBlocks().length > 0) { // section contains at least one block
-                    mask |= 1 << i;
-                    Utils.writeSectionBlocks(blocks, section);
-                }
-            }
+
+        Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
+
+        for (var entry : paletteStorage.getSectionMap().int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+            final Section section = entry.getValue();
+
+            final int lengthIndex = index % 64;
+            final int maskIndex = index / 64;
+
+            long mask = maskMap.get(maskIndex);
+            mask |= 1L << lengthIndex;
+            maskMap.put(maskIndex, mask);
+
+            Utils.writeSectionBlocks(blocks, section);
         }
 
-        writer.writeVarInt(mask);
+        final int maskSize = maskMap.size();
+        writer.writeVarInt(maskSize);
+        for (int i = 0; i < maskSize; i++) {
+            final long value = maskMap.containsKey(i) ? maskMap.get(i) : 0;
+            writer.writeLong(value);
+        }
 
         // TODO: don't hardcode heightmaps
         // Heightmap
@@ -118,8 +122,10 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             );
         }
 
-        // Biome data
-        if (fullChunk) {
+        // Biomes
+        if (biomes == null || biomes.length == 0) {
+            writer.writeVarInt(0);
+        } else {
             writer.writeVarInt(biomes.length);
             for (Biome biome : biomes) {
                 writer.writeVarInt(biome.getId());
@@ -128,7 +134,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
         // Data
         writer.writeVarInt(blocks.writerIndex());
-        writer.getBuffer().writeBytes(blocks);
+        writer.write(blocks);
         blocks.release();
 
         // Block entities
@@ -162,53 +168,57 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public void read(@NotNull BinaryReader reader) {
         chunkX = reader.readInt();
         chunkZ = reader.readInt();
-        fullChunk = reader.readBoolean();
 
-        int mask = reader.readVarInt();
+        int maskCount = reader.readVarInt();
+        long[] masks = new long[maskCount];
+        for (int i = 0; i < maskCount; i++) {
+            masks[i] = reader.readLong();
+        }
         try {
             // TODO: Use heightmaps
             // unused at the moment
             heightmapsNBT = (NBTCompound) reader.readTag();
 
             // Biomes
-            if (fullChunk) {
-                int[] biomesIds = reader.readVarIntArray();
-                this.biomes = new Biome[biomesIds.length];
-                for (int i = 0; i < biomesIds.length; i++) {
-                    this.biomes[i] = MinecraftServer.getBiomeManager().getById(biomesIds[i]);
-                }
+            int[] biomesIds = reader.readVarIntArray();
+            this.biomes = new Biome[biomesIds.length];
+            for (int i = 0; i < biomesIds.length; i++) {
+                this.biomes[i] = MinecraftServer.getBiomeManager().getById(biomesIds[i]);
             }
 
             // Data
             this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
-            for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
-                boolean hasSection = (mask & 1 << section) != 0;
-                if (!hasSection)
-                    continue;
-                short blockCount = reader.readShort();
-                byte bitsPerEntry = reader.readByte();
+            if (maskCount > 0) {
+                final long mask = masks[0]; // TODO support for variable size
+                for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
+                    boolean hasSection = (mask & 1 << section) != 0;
+                    if (!hasSection)
+                        continue;
+                    short blockCount = reader.readShort();
+                    byte bitsPerEntry = reader.readByte();
 
-                // Resize palette if necessary
-                if (bitsPerEntry > paletteStorage.getSections()[section].getBitsPerEntry()) {
-                    paletteStorage.getSections()[section].resize(bitsPerEntry);
-                }
-
-                // Retrieve palette values
-                if (bitsPerEntry < 9) {
-                    int paletteSize = reader.readVarInt();
-                    for (int i = 0; i < paletteSize; i++) {
-                        final int paletteValue = reader.readVarInt();
-                        paletteStorage.getSections()[section].getPaletteBlockMap().put((short) i, (short) paletteValue);
-                        paletteStorage.getSections()[section].getBlockPaletteMap().put((short) paletteValue, (short) i);
+                    // Resize palette if necessary
+                    if (bitsPerEntry > paletteStorage.getSection(section).getBitsPerEntry()) {
+                        paletteStorage.getSection(section).resize(bitsPerEntry);
                     }
-                }
 
-                // Read blocks
-                int dataLength = reader.readVarInt();
-                long[] data = paletteStorage.getSections()[section].getBlocks();
-                for (int i = 0; i < dataLength; i++) {
-                    data[i] = reader.readLong();
+                    // Retrieve palette values
+                    if (bitsPerEntry < 9) {
+                        int paletteSize = reader.readVarInt();
+                        for (int i = 0; i < paletteSize; i++) {
+                            final int paletteValue = reader.readVarInt();
+                            paletteStorage.getSection(section).getPaletteBlockMap().put((short) i, (short) paletteValue);
+                            paletteStorage.getSection(section).getBlockPaletteMap().put((short) paletteValue, (short) i);
+                        }
+                    }
+
+                    // Read blocks
+                    int dataLength = reader.readVarInt();
+                    long[] data = paletteStorage.getSection(section).getBlocks();
+                    for (int i = 0; i < dataLength; i++) {
+                        data[i] = reader.readLong();
+                    }
                 }
             }
 

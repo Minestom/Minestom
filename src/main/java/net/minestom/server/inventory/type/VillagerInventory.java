@@ -1,9 +1,11 @@
 package net.minestom.server.inventory.type;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.network.packet.server.play.TradeListPacket;
 import net.minestom.server.utils.ArrayUtils;
+import org.jetbrains.annotations.NotNull;
 
 public class VillagerInventory extends Inventory {
 
@@ -23,7 +25,7 @@ public class VillagerInventory extends Inventory {
         final int length = oldTrades.length + 1;
         TradeListPacket.Trade[] trades = new TradeListPacket.Trade[length];
         System.arraycopy(oldTrades, 0, trades, 0, oldTrades.length);
-        trades[length] = trade;
+        trades[length - 1] = trade;
         this.tradeListPacket.trades = trades;
         update();
     }
@@ -77,6 +79,15 @@ public class VillagerInventory extends Inventory {
     public void update() {
         super.update();
         sendPacketToViewers(tradeListPacket); // Refresh window
+    }
+
+    @Override
+    public boolean addViewer(@NotNull Player player) {
+        final boolean result = super.addViewer(player);
+        if (result) {
+            player.getPlayerConnection().sendPacket(tradeListPacket);
+        }
+        return result;
     }
 
     private void setupPacket() {

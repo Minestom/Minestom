@@ -19,17 +19,17 @@ public final class Cocoa {
             forRemoval = false
     )
     public static void initStates() {
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5162, "age=0", "facing=north"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5163, "age=0", "facing=south"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5164, "age=0", "facing=west"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5165, "age=0", "facing=east"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5166, "age=1", "facing=north"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5167, "age=1", "facing=south"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5168, "age=1", "facing=west"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5169, "age=1", "facing=east"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5170, "age=2", "facing=north"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5171, "age=2", "facing=south"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5172, "age=2", "facing=west"));
-        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5173, "age=2", "facing=east"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5363, "age=0", "facing=north"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5364, "age=0", "facing=south"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5365, "age=0", "facing=west"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5366, "age=0", "facing=east"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5367, "age=1", "facing=north"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5368, "age=1", "facing=south"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5369, "age=1", "facing=west"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5370, "age=1", "facing=east"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5371, "age=2", "facing=north"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5372, "age=2", "facing=south"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5373, "age=2", "facing=west"));
+        Block.COCOA.addBlockAlternative(new BlockAlternative((short) 5374, "age=2", "facing=east"));
     }
 }

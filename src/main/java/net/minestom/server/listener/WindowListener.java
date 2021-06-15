@@ -1,39 +1,35 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.InventoryClickHandler;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
-import net.minestom.server.network.packet.client.play.ClientWindowConfirmationPacket;
+import net.minestom.server.network.packet.client.play.ClientPongPacket;
+import net.minestom.server.network.packet.server.play.PingPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
-import net.minestom.server.network.packet.server.play.WindowConfirmationPacket;
 
 import java.util.Objects;
 
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
-        final Inventory inventory;
         final byte windowId = packet.windowId;
-        if (windowId == 0) {
-            inventory = null;
-        } else {
-            inventory = player.getOpenInventory();
+        final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
+        if (inventory == null) {
+            // Invalid packet
+            return;
         }
-
-        InventoryClickHandler clickHandler = inventory == null ?
-                player.getInventory() : player.getOpenInventory();
 
         final short slot = packet.slot;
         final byte button = packet.button;
-        final short actionNumber = packet.actionNumber;
-        final int mode = packet.mode;
+        final ClientClickWindowPacket.ClickType clickType = packet.clickType;
 
-        // System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | mode: " + mode);
+        //System.out.println("Window id: " + windowId + " | slot: " + slot + " | button: " + button + " | clickType: " + clickType);
 
         boolean successful = false;
 
@@ -42,76 +38,64 @@ public class WindowListener {
             return;
         }
 
-        switch (mode) {
-            case 0:
-                switch (button) {
-                    case 0:
-                        if (slot != -999) {
-                            // Left click
-                            successful = clickHandler.leftClick(player, slot);
-                        } else {
-                            // DROP
-                            successful = clickHandler.drop(player, mode, slot, button);
-                        }
-                        break;
-                    case 1:
-                        if (slot != -999) {
-                            // Right click
-                            successful = clickHandler.rightClick(player, slot);
-                        } else {
-                            // DROP
-                            successful = clickHandler.drop(player, mode, slot, button);
-                        }
-                        break;
+        if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
+            if (button == 0) {
+                if (slot != -999) {
+                    successful = inventory.leftClick(player, slot);
+                } else {
+                    successful = inventory.drop(player, true, slot, button);
                 }
-                break;
-            case 1:
-                successful = clickHandler.shiftClick(player, slot); // Shift + left/right have identical behavior
-                break;
-            case 2:
-                successful = clickHandler.changeHeld(player, slot, button);
-                break;
-            case 3:
-                // Middle click (only creative players in non-player inventories)
-                break;
-            case 4:
-                // Dropping functions
-                successful = clickHandler.drop(player, mode, slot, button);
-                break;
-            case 5:
-                // Dragging
-                successful = clickHandler.dragging(player, slot, button);
-                break;
-            case 6:
-                successful = clickHandler.doubleClick(player, slot);
-                break;
+            } else if (button == 1) {
+                if (slot != -999) {
+                    successful = inventory.rightClick(player, slot);
+                } else {
+                    successful = inventory.drop(player, false, slot, button);
+                }
+            }
+        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
+            successful = inventory.shiftClick(player, slot);
+        } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
+            successful = inventory.changeHeld(player, slot, button);
+        } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
+            successful = player.isCreative();
+            if (successful) {
+                setCursor(player, inventory, packet.item);
+            }
+        } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
+            successful = inventory.drop(player, false, slot, button);
+        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_CRAFT) {
+            successful = inventory.dragging(player, slot, button);
+        } else if (clickType == ClientClickWindowPacket.ClickType.PICKUP_ALL) {
+            successful = inventory.doubleClick(player, slot);
         }
 
         // Prevent the player from picking a ghost item in cursor
         if (Objects.equals(player.getOpenInventory(), inventory)) {
-            refreshCursorItem(player, inventory);
+            assert inventory instanceof Inventory;
+            refreshCursorItem(player, (Inventory) inventory);
         }
 
         // Prevent ghost item when the click is cancelled
         if (!successful) {
             player.getInventory().update();
-            if (inventory != null) {
-                inventory.update(player);
+            if (inventory instanceof Inventory) {
+                ((Inventory) inventory).update(player);
             }
         }
 
-        WindowConfirmationPacket windowConfirmationPacket = new WindowConfirmationPacket();
-        windowConfirmationPacket.windowId = windowId;
-        windowConfirmationPacket.actionNumber = actionNumber;
-        windowConfirmationPacket.accepted = successful;
+        PingPacket pingPacket = new PingPacket();
+        pingPacket.id = (1 << 30) | (windowId << 16);
+        player.getPlayerConnection().sendPacket(pingPacket);
+    }
 
-        player.getPlayerConnection().sendPacket(windowConfirmationPacket);
+    public static void pong(ClientPongPacket packet, Player player) {
+        // Empty
     }
 
     public static void closeWindowListener(ClientCloseWindowPacket packet, Player player) {
         // if windowId == 0 then it is player's inventory, meaning that they hadn't been any open inventory packet
         InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(player.getOpenInventory(), player);
-        player.callEvent(InventoryCloseEvent.class, inventoryCloseEvent);
+        EventDispatcher.call(inventoryCloseEvent);
 
         player.closeInventory();
 
@@ -120,32 +104,25 @@ public class WindowListener {
             player.openInventory(newInventory);
     }
 
-    public static void windowConfirmationListener(ClientWindowConfirmationPacket packet, Player player) {
-        // Empty
-    }
-
     /**
      * @param player    the player to refresh the cursor item
      * @param inventory the player open inventory, null if not any (could be player inventory)
      */
     private static void refreshCursorItem(Player player, Inventory inventory) {
-        PlayerInventory playerInventory = player.getInventory();
-
-        ItemStack cursorItem;
-        if (inventory != null) {
-            cursorItem = inventory.getCursorItem(player);
-        } else {
-            cursorItem = playerInventory.getCursorItem();
-        }
-
-        // Error occurred while retrieving the cursor item, stop here
-        if (cursorItem == null) {
-            return;
-        }
-
+        ItemStack cursorItem = inventory != null ?
+                inventory.getCursorItem(player) : player.getInventory().getCursorItem();
         final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-
         player.getPlayerConnection().sendPacket(setSlotPacket);
+    }
+
+    private static void setCursor(Player player, AbstractInventory inventory, ItemStack itemStack) {
+        if (inventory instanceof PlayerInventory) {
+            ((PlayerInventory) inventory).setCursorItem(itemStack);
+        } else if (inventory instanceof Inventory) {
+            ((Inventory) inventory).setCursorItem(player, itemStack);
+        } else {
+            System.err.println("Invalid inventory: " + inventory.getClass());
+        }
     }
 
 }

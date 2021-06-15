@@ -19,8 +19,8 @@ public final class OakWood {
             forRemoval = false
     )
     public static void initStates() {
-        Block.OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 109, "axis=x"));
-        Block.OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 110, "axis=y"));
-        Block.OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 111, "axis=z"));
+        Block.OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 112, "axis=x"));
+        Block.OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 113, "axis=y"));
+        Block.OAK_WOOD.addBlockAlternative(new BlockAlternative((short) 114, "axis=z"));
     }
 }

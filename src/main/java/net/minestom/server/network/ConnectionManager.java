@@ -9,6 +9,7 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.Instance;
@@ -187,9 +188,7 @@ public final class ConnectionManager {
      * Gets all the listeners which are called for each packet received.
      *
      * @return a list of packet's consumers
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
+     * @deprecated see {@link net.minestom.server.event.player.PlayerPacketEvent}
      */
     @NotNull
     @Deprecated
@@ -201,9 +200,7 @@ public final class ConnectionManager {
      * Adds a consumer to call once a packet is received.
      *
      * @param clientPacketConsumer the packet consumer
-     * @deprecated all packet listening methods will ultimately be removed.
-     * May or may not work depending on the packet.
-     * It is instead recommended to use a proxy, improving scalability and increasing server performance
+     * @deprecated listen to {@link net.minestom.server.event.player.PlayerPacketEvent}
      */
     @Deprecated
     public void onPacketReceive(@NotNull ClientPacketConsumer clientPacketConsumer) {
@@ -419,7 +416,7 @@ public final class ConnectionManager {
 
             // Call pre login event
             AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, username, uuid);
-            player.callEvent(AsyncPlayerPreLoginEvent.class, asyncPlayerPreLoginEvent);
+            EventDispatcher.call(asyncPlayerPreLoginEvent);
 
             // Close the player channel if he has been disconnected (kick)
             final boolean online = player.isOnline();
@@ -543,7 +540,7 @@ public final class ConnectionManager {
         while ((waitingPlayer = waitingPlayers.poll()) != null) {
 
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
-            waitingPlayer.callEvent(PlayerLoginEvent.class, loginEvent);
+            EventDispatcher.call(loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");

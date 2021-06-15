@@ -19,9 +19,9 @@ public final class GrayWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8185, "facing=north"));
-        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8186, "facing=south"));
-        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8187, "facing=west"));
-        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8188, "facing=east"));
+        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8431, "facing=north"));
+        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8432, "facing=south"));
+        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8433, "facing=west"));
+        Block.GRAY_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8434, "facing=east"));
     }
 }

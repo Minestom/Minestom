@@ -47,7 +47,7 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        message = reader.readComponent(Integer.MAX_VALUE);
+        message = reader.readComponent();
         position = ChatPosition.fromPacketID(reader.readByte());
         uuid = reader.readUuid();
     }

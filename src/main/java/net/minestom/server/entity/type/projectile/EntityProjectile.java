@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.metadata.ProjectileMeta;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
@@ -70,14 +71,14 @@ public class EntityProjectile extends Entity {
     }
 
     public void shoot(Position to, double power, double spread) {
-        EntityShootEvent event = new EntityShootEvent(this.shooter, this, to, power, spread);
-        this.shooter.callEvent(EntityShootEvent.class, event);
-        if (event.isCancelled()) {
+        EntityShootEvent shootEvent = new EntityShootEvent(this.shooter, this, to, power, spread);
+        EventDispatcher.call(shootEvent);
+        if (shootEvent.isCancelled()) {
             remove();
             return;
         }
         Position from = this.shooter.getPosition().clone().add(0D, this.shooter.getEyeHeight(), 0D);
-        shoot(from, to, event.getPower(), event.getSpread());
+        shoot(from, to, shootEvent.getPower(), shootEvent.getSpread());
     }
 
     private void shoot(@NotNull Position from, @NotNull Position to, double power, double spread) {
@@ -192,7 +193,7 @@ public class EntityProjectile extends Entity {
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
                 victim.setArrowCount(victim.getArrowCount() + 1);
-                callEvent(EntityAttackEvent.class, new EntityAttackEvent(this, victim));
+                EventDispatcher.call(new EntityAttackEvent(this, victim));
                 remove();
                 return super.onGround;
             }

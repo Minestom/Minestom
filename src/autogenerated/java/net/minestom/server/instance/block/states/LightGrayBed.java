@@ -19,21 +19,21 @@ public final class LightGrayBed {
             forRemoval = false
     )
     public static void initStates() {
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1177, "facing=north", "occupied=true", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1178, "facing=north", "occupied=true", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1179, "facing=north", "occupied=false", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1180, "facing=north", "occupied=false", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1181, "facing=south", "occupied=true", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1182, "facing=south", "occupied=true", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1183, "facing=south", "occupied=false", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1184, "facing=south", "occupied=false", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1185, "facing=west", "occupied=true", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1186, "facing=west", "occupied=true", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1187, "facing=west", "occupied=false", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1188, "facing=west", "occupied=false", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1189, "facing=east", "occupied=true", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1190, "facing=east", "occupied=true", "part=foot"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1191, "facing=east", "occupied=false", "part=head"));
-        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1192, "facing=east", "occupied=false", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1209, "facing=north", "occupied=true", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1210, "facing=north", "occupied=true", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1211, "facing=north", "occupied=false", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1212, "facing=north", "occupied=false", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1213, "facing=south", "occupied=true", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1214, "facing=south", "occupied=true", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1215, "facing=south", "occupied=false", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1216, "facing=south", "occupied=false", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1217, "facing=west", "occupied=true", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1218, "facing=west", "occupied=true", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1219, "facing=west", "occupied=false", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1220, "facing=west", "occupied=false", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1221, "facing=east", "occupied=true", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1222, "facing=east", "occupied=true", "part=foot"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1223, "facing=east", "occupied=false", "part=head"));
+        Block.LIGHT_GRAY_BED.addBlockAlternative(new BlockAlternative((short) 1224, "facing=east", "occupied=false", "part=foot"));
     }
 }

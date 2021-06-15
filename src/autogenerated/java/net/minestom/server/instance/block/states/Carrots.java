@@ -19,13 +19,13 @@ public final class Carrots {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6334, "age=0"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6335, "age=1"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6336, "age=2"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6337, "age=3"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6338, "age=4"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6339, "age=5"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6340, "age=6"));
-        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6341, "age=7"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6536, "age=0"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6537, "age=1"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6538, "age=2"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6539, "age=3"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6540, "age=4"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6541, "age=5"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6542, "age=6"));
+        Block.CARROTS.addBlockAlternative(new BlockAlternative((short) 6543, "age=7"));
     }
 }

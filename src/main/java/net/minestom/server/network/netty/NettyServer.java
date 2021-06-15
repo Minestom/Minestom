@@ -21,6 +21,7 @@ import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
 import net.minestom.server.network.netty.codec.*;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 
+@ApiStatus.Internal
 public final class NettyServer {
 
     public static final Logger LOGGER = LoggerFactory.getLogger(NettyServer.class);
@@ -170,6 +172,10 @@ public final class NettyServer {
         } catch (InterruptedException ex) {
             MinecraftServer.getExceptionManager().handleException(ex);
         }
+    }
+
+    public ServerSocketChannel getServerChannel() {
+        return serverChannel;
     }
 
     /**

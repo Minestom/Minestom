@@ -19,13 +19,13 @@ public final class OakWallSign {
             forRemoval = false
     )
     public static void initStates() {
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3735, "facing=north", "waterlogged=true"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3736, "facing=north", "waterlogged=false"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3737, "facing=south", "waterlogged=true"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3738, "facing=south", "waterlogged=false"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3739, "facing=west", "waterlogged=true"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3740, "facing=west", "waterlogged=false"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3741, "facing=east", "waterlogged=true"));
-        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3742, "facing=east", "waterlogged=false"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3802, "facing=north", "waterlogged=true"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3803, "facing=north", "waterlogged=false"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3804, "facing=south", "waterlogged=true"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3805, "facing=south", "waterlogged=false"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3806, "facing=west", "waterlogged=true"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3807, "facing=west", "waterlogged=false"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3808, "facing=east", "waterlogged=true"));
+        Block.OAK_WALL_SIGN.addBlockAlternative(new BlockAlternative((short) 3809, "facing=east", "waterlogged=false"));
     }
 }

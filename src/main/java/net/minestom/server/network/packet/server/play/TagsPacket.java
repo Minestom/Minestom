@@ -2,10 +2,8 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.fluids.Fluid;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registries;
@@ -14,18 +12,12 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 
 public class TagsPacket implements ServerPacket {
-
-    public List<Tag> blockTags = new LinkedList<>();
-    public List<Tag> itemTags = new LinkedList<>();
-    public List<Tag> fluidTags = new LinkedList<>();
-    public List<Tag> entityTags = new LinkedList<>();
 
     private static final TagsPacket REQUIRED_TAGS_PACKET = new TagsPacket();
 
@@ -33,57 +25,139 @@ public class TagsPacket implements ServerPacket {
         MinecraftServer.getTagManager().addRequiredTagsToPacket(REQUIRED_TAGS_PACKET);
     }
 
+    public Map<Tag.BasicTypes, List<Tag>> tagsMap = new HashMap<>();
+
     /**
      * Default constructor, required for reflection operations.
      */
-    public TagsPacket() {}
+    public TagsPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writeTags(writer, blockTags, name -> Registries.getBlock(name).ordinal());
-        writeTags(writer, itemTags, name -> Registries.getMaterial(name).ordinal());
-        writeTags(writer, fluidTags, name -> Registries.getFluid(name).ordinal());
-        writeTags(writer, entityTags, name -> Registries.getEntityType(name).ordinal());
-    }
+        writer.writeVarInt(tagsMap.size());
+        for (var entry : tagsMap.entrySet()) {
+            final var type = entry.getKey();
+            final var tags = entry.getValue();
+            // Tag type
+            writer.writeSizedString(type.getIdentifier());
+            switch (type) {
+                case BLOCKS: {
+                    // Number of tags
+                    writer.writeVarInt(tags.size());
+                    for (Tag tag : tags) {
+                        // name
+                        writer.writeSizedString(tag.getName().toString());
+                        final Set<NamespaceID> values = tag.getValues();
+                        // count
+                        writer.writeVarInt(values.size());
+                        // entries
+                        for (NamespaceID name : values) {
+                            Block b = Registries.getBlock(name);
+                            if (b == Block.AIR && !name.toString().equals("minecraft:air")) {
+                                writer.writeVarInt(-1);
+                            }
+                            writer.writeVarInt(b.ordinal());
+                        }
+                    }
+                    break;
+                }
+                case ENTITY_TYPES: {
+                    // Number of tags
+                    writer.writeVarInt(tags.size());
+                    for (Tag tag : tags) {
+                        // name
+                        writer.writeSizedString(tag.getName().toString());
 
-    @Override
-    public void read(@NotNull BinaryReader reader) {
-        readTags(reader, blockTags, id -> NamespaceID.from("minecraft", Block.values()[id].getName()));
-        readTags(reader, itemTags, id -> NamespaceID.from("minecraft", Material.values()[id].getName()));
-        readTags(reader, fluidTags, id -> NamespaceID.from(Fluid.values()[id].getNamespaceID()));
-        readTags(reader, entityTags, id -> NamespaceID.from(EntityType.values()[id].getNamespaceID()));
-    }
+                        final Set<NamespaceID> values = tag.getValues();
+                        // count
+                        writer.writeVarInt(values.size());
+                        // entries
+                        for (NamespaceID name : values) {
+                            EntityType et = Registries.getEntityType(name);
+                            if (et == null) {
+                                writer.writeVarInt(-1);
+                            } else {
+                                writer.writeVarInt(et.ordinal());
+                            }
+                        }
+                    }
+                    break;
+                }
+                case FLUIDS: {
+                    // Number of tags
+                    writer.writeVarInt(tags.size());
+                    for (Tag tag : tags) {
+                        // name
+                        writer.writeSizedString(tag.getName().toString());
 
-    private void writeTags(BinaryWriter writer, List<Tag> tags, Function<NamespaceID, Integer> idSupplier) {
-        writer.writeVarInt(tags.size());
-        for (Tag tag : tags) {
-            // name
-            writer.writeSizedString(tag.getName().toString());
+                        final Set<NamespaceID> values = tag.getValues();
+                        // count
+                        writer.writeVarInt(values.size());
+                        // entries
+                        for (NamespaceID name : values) {
+                            writer.writeVarInt(Registries.getFluid(name).ordinal());
+                        }
+                    }
+                    break;
+                }
+                case GAME_EVENTS: {
+                    // Number of tags
+                    writer.writeVarInt(tags.size());
+                    for (Tag tag : tags) {
+                        // name
+                        writer.writeSizedString(tag.getName().toString());
 
-            final Set<NamespaceID> values = tag.getValues();
-            // count
-            writer.writeVarInt(values.size());
-            // entries
-            for (NamespaceID name : values) {
-                writer.writeVarInt(idSupplier.apply(name));
+                        final Set<NamespaceID> values = tag.getValues();
+                        // count
+                        writer.writeVarInt(values.size());
+                        // entries
+                        for (NamespaceID name : values) {
+                            // TODO: GameEvents
+                            writer.writeVarInt(-1);
+                        }
+                    }
+                    break;
+                }
+                case ITEMS: {
+                    // Number of tags
+                    writer.writeVarInt(tags.size());
+                    for (Tag tag : tags) {
+                        // name
+                        writer.writeSizedString(tag.getName().toString());
+
+                        final Set<NamespaceID> values = tag.getValues();
+                        // count
+                        writer.writeVarInt(values.size());
+                        // entries
+                        for (NamespaceID name : values) {
+                            writer.writeVarInt(Registries.getMaterial(name).ordinal());
+                        }
+                    }
+                    break;
+                }
             }
         }
     }
 
-    public void readTags(BinaryReader reader, List<Tag> output, Function<Integer, NamespaceID> idSupplier) {
-        output.clear();
-        int length = reader.readVarInt();
-        for (int i = 0; i < length; i++) {
-            String name = reader.readSizedString(Integer.MAX_VALUE);
-
-            int count = reader.readVarInt();
-            Set<NamespaceID> values = new HashSet<>();
-            for (int j = 0; j < count; j++) {
-                int protocolID = reader.readVarInt();
-                values.add(idSupplier.apply(protocolID));
+    @Override
+    public void read(@NotNull BinaryReader reader) {
+        this.tagsMap = new HashMap<>();
+        // Read amount of tag types
+        final int typeCount = reader.readVarInt();
+        for (int i = 0; i < typeCount; i++) {
+            // Read tag type
+            final Tag.BasicTypes tagType = Tag.BasicTypes.fromIdentifer(reader.readSizedString());
+            if (tagType == null) {
+                throw new IllegalArgumentException("Tag type could not be resolved");
             }
 
-            output.add(new Tag(NamespaceID.from(name), values));
+            final int tagCount = reader.readVarInt();
+            for (int j = 0; j < tagCount; j++) {
+                final String tagName = reader.readSizedString();
+                final int[] entries = reader.readVarIntArray();
+                // TODO convert
+            }
         }
     }
 

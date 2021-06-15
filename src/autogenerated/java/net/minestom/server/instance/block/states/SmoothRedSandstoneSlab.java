@@ -19,11 +19,11 @@ public final class SmoothRedSandstoneSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10799, "type=top", "waterlogged=true"));
-        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10800, "type=top", "waterlogged=false"));
-        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10801, "type=bottom", "waterlogged=true"));
-        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10802, "type=bottom", "waterlogged=false"));
-        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10803, "type=double", "waterlogged=true"));
-        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 10804, "type=double", "waterlogged=false"));
+        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 11045, "type=top", "waterlogged=true"));
+        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 11046, "type=top", "waterlogged=false"));
+        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 11047, "type=bottom", "waterlogged=true"));
+        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 11048, "type=bottom", "waterlogged=false"));
+        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 11049, "type=double", "waterlogged=true"));
+        Block.SMOOTH_RED_SANDSTONE_SLAB.addBlockAlternative(new BlockAlternative((short) 11050, "type=double", "waterlogged=false"));
     }
 }

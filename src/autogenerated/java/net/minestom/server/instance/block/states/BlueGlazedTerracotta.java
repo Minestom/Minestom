@@ -19,9 +19,9 @@ public final class BlueGlazedTerracotta {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9422, "facing=north"));
-        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9423, "facing=south"));
-        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9424, "facing=west"));
-        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9425, "facing=east"));
+        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9668, "facing=north"));
+        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9669, "facing=south"));
+        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9670, "facing=west"));
+        Block.BLUE_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9671, "facing=east"));
     }
 }

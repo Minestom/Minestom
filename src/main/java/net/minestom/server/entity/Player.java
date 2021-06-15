@@ -30,6 +30,7 @@ import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -38,14 +39,14 @@ import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
-import net.minestom.server.message.ChatMessageType;
-import net.minestom.server.message.ChatPosition;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
 import net.minestom.server.listener.PlayerDiggingListener;
+import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
@@ -250,7 +251,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Add player to list with spawning skin
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
-        callEvent(PlayerSkinInitEvent.class, skinInitEvent);
+        EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
         playerConnection.sendPacket(getAddPlayerToList());
@@ -291,16 +292,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
         // Recipes end
 
-        // Tags start
-        {
-            TagsPacket tags = TagsPacket.getRequiredTagsPacket();
-
-            UpdateTagListEvent event = new UpdateTagListEvent(tags);
-            callEvent(UpdateTagListEvent.class, event);
-
-            this.playerConnection.sendPacket(tags);
-        }
-        // Tags end
+        // Tags
+        this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
 
         // Some client update
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
@@ -388,7 +381,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         if (experienceOrb.shouldRemove() || experienceOrb.isRemoveScheduled())
                             continue;
                         PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(experienceOrb);
-                        callCancellableEvent(PickupExperienceEvent.class, pickupExperienceEvent, () -> {
+                        EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
                             short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
                             entity.remove();
                         });
@@ -401,7 +394,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isEating()) {
             if (time - startEatingTime >= eatingTime) {
                 triggerStatus((byte) 9); // Mark item use as finished
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(true, eatingHand);
+                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(eatingHand);
 
                 Check.notNull(itemUpdateStateEvent, "#callItemUpdateStateEvent returned null.");
 
@@ -414,7 +407,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
                 if (isFood) {
                     PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, foodItem, eatingHand);
-                    callEvent(PlayerEatEvent.class, playerEatEvent);
+                    EventDispatcher.call(playerEatEvent);
                 }
 
                 refreshEating(null);
@@ -422,7 +415,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Tick event
-        callEvent(PlayerTickEvent.class, playerTickEvent);
+        EventDispatcher.call(playerTickEvent);
     }
 
     @Override
@@ -452,15 +445,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
             // Call player death event
             PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(this, deathText, chatMessage);
-            callEvent(PlayerDeathEvent.class, playerDeathEvent);
+            EventDispatcher.call(playerDeathEvent);
 
             deathText = playerDeathEvent.getDeathText();
             chatMessage = playerDeathEvent.getChatMessage();
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
-                CombatEventPacket deathPacket = CombatEventPacket.death(this, null, deathText);
-                playerConnection.sendPacket(deathPacket);
+                playerConnection.sendPacket(DeathCombatEventPacket.of(getEntityId(), -1, deathText));
             }
 
             // #buildDeathMessage can return null, check here
@@ -489,7 +481,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         respawnPacket.isFlat = levelFlat;
         getPlayerConnection().sendPacket(respawnPacket);
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
-        callEvent(PlayerRespawnEvent.class, respawnEvent);
+        EventDispatcher.call(respawnEvent);
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
@@ -511,7 +503,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (isRemoved())
             return;
 
-        callEvent(PlayerDisconnectEvent.class, new PlayerDisconnectEvent(this));
+        EventDispatcher.call(new PlayerDisconnectEvent(this));
 
         super.remove();
         this.packets.clear();
@@ -669,7 +661,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
-        callEvent(PlayerSpawnEvent.class, spawnEvent);
+        EventDispatcher.call(spawnEvent);
     }
 
     /**
@@ -905,20 +897,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Common method to send a title.
-     *
-     * @param text   the text of the title
-     * @param action the action of the title (where to show it)
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)} and {@link #sendActionBar(Component)}
-     */
-    @Deprecated
-    private void sendTitle(@NotNull JsonMessage text, @NotNull TitlePacket.Action action) {
-        TitlePacket titlePacket = new TitlePacket(action, text.asComponent());
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
      * Sends a title and subtitle message.
      *
      * @param title    the title message
@@ -969,17 +947,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void showTitle(@NotNull Title title) {
-        Collection<TitlePacket> packet = TitlePacket.of(Title.title(title.title(), title.subtitle(), title.times()));
-
-        for (TitlePacket titlePacket : packet) {
-            playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new SetTitleTextPacket(title.title()));
+        playerConnection.sendPacket(new SetTitleSubTitlePacket(title.subtitle()));
+        final var times = title.times();
+        if (times != null) {
+            playerConnection.sendPacket(new SetTitleTimePacket(
+                    TickUtils.fromDuration(times.fadeIn(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.stay(), TickUtils.CLIENT_TICK_MS),
+                    TickUtils.fromDuration(times.fadeOut(), TickUtils.CLIENT_TICK_MS)));
         }
     }
 
     @Override
     public void sendActionBar(@NotNull Component message) {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.SET_ACTION_BAR, message);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ActionBarPacket(message));
     }
 
     /**
@@ -993,31 +974,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Deprecated
     public void sendTitleTime(int fadeIn, int stay, int fadeOut) {
-        TitlePacket titlePacket = new TitlePacket(fadeIn, stay, fadeOut);
-        playerConnection.sendPacket(titlePacket);
-    }
-
-    /**
-     * Hides the previous title.
-     *
-     * @deprecated Use {@link #clearTitle()}
-     */
-    @Deprecated
-    public void hideTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new SetTitleTimePacket(fadeIn, stay, fadeOut));
     }
 
     @Override
     public void resetTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.RESET);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ClearTitlesPacket(true));
     }
 
     @Override
     public void clearTitle() {
-        TitlePacket titlePacket = new TitlePacket(TitlePacket.Action.HIDE);
-        playerConnection.sendPacket(titlePacket);
+        playerConnection.sendPacket(new ClearTitlesPacket());
     }
 
     @Override
@@ -1137,6 +1104,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * Gets the hand which the player is eating from.
+     *
+     * @return the eating hand, null if none
+     */
+    public @Nullable Hand getEatingHand() {
+        return eatingHand;
+    }
+
+    /**
      * Gets the player default eating time.
      *
      * @return the player default eating time
@@ -1225,12 +1201,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public synchronized void setSkin(@Nullable PlayerSkin skin) {
         this.skin = skin;
-
         if (instance == null)
             return;
 
-        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket();
-        destroyEntitiesPacket.entityIds = new int[]{getEntityId()};
+        DestroyEntityPacket destroyEntityPacket = DestroyEntityPacket.of(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
@@ -1241,14 +1215,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         respawnPacket.isFlat = levelFlat;
 
         playerConnection.sendPacket(removePlayerPacket);
-        playerConnection.sendPacket(destroyEntitiesPacket);
+        playerConnection.sendPacket(destroyEntityPacket);
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
 
         {
             // Remove player
             sendPacketToViewers(removePlayerPacket);
-            sendPacketToViewers(destroyEntitiesPacket);
+            sendPacketToViewers(destroyEntityPacket);
 
             // Show player again
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
@@ -1333,7 +1307,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
-        callEvent(ItemDropEvent.class, itemDropEvent);
+        EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
     }
 
@@ -1343,13 +1317,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param resourcePack the resource pack
      */
     public void setResourcePack(@NotNull ResourcePack resourcePack) {
-        final String url = resourcePack.getUrl();
-        final String hash = resourcePack.getHash();
-
-        ResourcePackSendPacket resourcePackSendPacket = new ResourcePackSendPacket();
-        resourcePackSendPacket.url = url;
-        resourcePackSendPacket.hash = hash;
-        playerConnection.sendPacket(resourcePackSendPacket);
+        playerConnection.sendPacket(new ResourcePackSendPacket(resourcePack));
     }
 
     /**
@@ -1857,7 +1825,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
-        callCancellableEvent(InventoryOpenEvent.class, inventoryOpenEvent, () -> {
+        EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
             Inventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
@@ -2225,9 +2193,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     public void refreshOnGround(boolean onGround) {
         this.onGround = onGround;
-        if(this.onGround && this.isFlyingWithElytra()) {
+        if (this.onGround && this.isFlyingWithElytra()) {
             this.setFlyingWithElytra(false);
-            this.callEvent(PlayerStopFlyingWithElytraEvent.class, new PlayerStopFlyingWithElytraEvent(this));
+            EventDispatcher.call(new PlayerStopFlyingWithElytraEvent(this));
         }
     }
 
@@ -2288,7 +2256,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param allowFood true if food should be updated, false otherwise
      * @return the called {@link ItemUpdateStateEvent},
      * null if there is no item to update the state
+     * @deprecated Use {@link #callItemUpdateStateEvent(Hand)} instead
      */
+    @Deprecated
     public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(boolean allowFood, @Nullable Hand hand) {
         if (hand == null)
             return null;
@@ -2300,9 +2270,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return null;
 
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, updatedItem);
-        callEvent(ItemUpdateStateEvent.class, itemUpdateStateEvent);
+        EventDispatcher.call(itemUpdateStateEvent);
 
         return itemUpdateStateEvent;
+    }
+
+    /**
+     * Used to call {@link ItemUpdateStateEvent} with the proper item
+     * It does check which hand to get the item to update. Allows food.
+     *
+     * @return the called {@link ItemUpdateStateEvent},
+     * null if there is no item to update the state
+     */
+    public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
+        return callItemUpdateStateEvent(true, hand);
     }
 
     /**
@@ -2674,7 +2655,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
          *
          * @param locale             the player locale
          * @param viewDistance       the player view distance
-         * @param chatMessageType       the chat messages the player wishes to receive
+         * @param chatMessageType    the chat messages the player wishes to receive
          * @param chatColors         if chat colors should be displayed
          * @param displayedSkinParts the player displayed skin parts
          * @param mainHand           the player main hand
@@ -2691,7 +2672,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.displayedSkinParts = displayedSkinParts;
             this.mainHand = mainHand;
 
-            metadata.setIndex((byte) 16, Metadata.Byte(displayedSkinParts));
+            // TODO: Use the metadata object here
+            metadata.setIndex((byte) 17, Metadata.Byte(displayedSkinParts));
 
             // Client changed his view distance in the settings
             if (viewDistanceChanged) {

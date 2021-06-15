@@ -1,18 +1,20 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.PlayerEvent;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player receive a new chunk data.
  */
-public class PlayerChunkLoadEvent extends PlayerEvent {
+public class PlayerChunkLoadEvent implements PlayerEvent {
 
+    private final Player player;
     private final int chunkX, chunkZ;
 
     public PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ) {
-        super(player);
+        this.player = player;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
     }
@@ -33,5 +35,10 @@ public class PlayerChunkLoadEvent extends PlayerEvent {
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    @Override
+    public @NotNull Player getPlayer() {
+        return player;
     }
 }

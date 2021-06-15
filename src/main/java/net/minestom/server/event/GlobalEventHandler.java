@@ -1,31 +1,23 @@
 package net.minestom.server.event;
 
-import net.minestom.server.event.handler.EventHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
 
 /**
  * Object containing all the global event listeners.
  */
-public final class GlobalEventHandler implements EventHandler {
-
-    // Events
-    private final Map<Class<? extends Event>, Collection<EventCallback>> eventCallbacks = new ConcurrentHashMap<>();
-    private final Map<String, Collection<EventCallback<?>>> extensionCallbacks = new ConcurrentHashMap<>();
-
-    @NotNull
-    @Override
-    public Map<Class<? extends Event>, Collection<EventCallback>> getEventCallbacksMap() {
-        return eventCallbacks;
+public final class GlobalEventHandler extends EventNode<Event> {
+    public GlobalEventHandler() {
+        super("global", EventFilter.ALL, null);
     }
 
-    @NotNull
-    @Override
-    public Collection<EventCallback<?>> getExtensionCallbacks(String extension) {
-        return extensionCallbacks.computeIfAbsent(extension, e -> new CopyOnWriteArrayList<>());
+    /**
+     * @deprecated use {@link #addListener(Class, Consumer)}
+     */
+    @Deprecated
+    public <V extends Event> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
+        addListener(eventClass, eventCallback::run);
+        return true;
     }
 }

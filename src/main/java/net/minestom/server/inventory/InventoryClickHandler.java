@@ -1,6 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
@@ -57,12 +58,12 @@ public interface InventoryClickHandler {
      * Called when a {@link Player} press the drop button
      *
      * @param player the player who clicked
-     * @param mode
+     * @param all
      * @param slot   the slot number
      * @param button -999 if clicking outside, normal if he is not
      * @return true if the drop hasn't been cancelled, false otherwise
      */
-    boolean drop(@NotNull Player player, int mode, int slot, int button);
+    boolean drop(@NotNull Player player, boolean all, int slot, int button);
 
     boolean dragging(@NotNull Player player, int slot, int button);
 
@@ -78,7 +79,7 @@ public interface InventoryClickHandler {
     default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickEvent inventoryClickEvent = new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor);
-        player.callEvent(InventoryClickEvent.class, inventoryClickEvent);
+        EventDispatcher.call(inventoryClickEvent);
     }
 
 }

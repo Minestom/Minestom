@@ -19,9 +19,9 @@ public final class MagentaGlazedTerracotta {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9386, "facing=north"));
-        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9387, "facing=south"));
-        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9388, "facing=west"));
-        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9389, "facing=east"));
+        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9632, "facing=north"));
+        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9633, "facing=south"));
+        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9634, "facing=west"));
+        Block.MAGENTA_GLAZED_TERRACOTTA.addBlockAlternative(new BlockAlternative((short) 9635, "facing=east"));
     }
 }

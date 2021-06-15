@@ -19,8 +19,8 @@ public final class StrippedSpruceWood {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_SPRUCE_WOOD.addBlockAlternative(new BlockAlternative((short) 130, "axis=x"));
-        Block.STRIPPED_SPRUCE_WOOD.addBlockAlternative(new BlockAlternative((short) 131, "axis=y"));
-        Block.STRIPPED_SPRUCE_WOOD.addBlockAlternative(new BlockAlternative((short) 132, "axis=z"));
+        Block.STRIPPED_SPRUCE_WOOD.addBlockAlternative(new BlockAlternative((short) 133, "axis=x"));
+        Block.STRIPPED_SPRUCE_WOOD.addBlockAlternative(new BlockAlternative((short) 134, "axis=y"));
+        Block.STRIPPED_SPRUCE_WOOD.addBlockAlternative(new BlockAlternative((short) 135, "axis=z"));
     }
 }

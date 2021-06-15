@@ -19,11 +19,11 @@ public final class ChorusFlower {
             forRemoval = false
     )
     public static void initStates() {
-        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9132, "age=0"));
-        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9133, "age=1"));
-        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9134, "age=2"));
-        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9135, "age=3"));
-        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9136, "age=4"));
-        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9137, "age=5"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9378, "age=0"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9379, "age=1"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9380, "age=2"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9381, "age=3"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9382, "age=4"));
+        Block.CHORUS_FLOWER.addBlockAlternative(new BlockAlternative((short) 9383, "age=5"));
     }
 }

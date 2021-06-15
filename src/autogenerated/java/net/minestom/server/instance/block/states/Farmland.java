@@ -19,13 +19,13 @@ public final class Farmland {
             forRemoval = false
     )
     public static void initStates() {
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3365, "moisture=0"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3366, "moisture=1"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3367, "moisture=2"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3368, "moisture=3"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3369, "moisture=4"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3370, "moisture=5"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3371, "moisture=6"));
-        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3372, "moisture=7"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3422, "moisture=0"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3423, "moisture=1"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3424, "moisture=2"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3425, "moisture=3"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3426, "moisture=4"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3427, "moisture=5"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3428, "moisture=6"));
+        Block.FARMLAND.addBlockAlternative(new BlockAlternative((short) 3429, "moisture=7"));
     }
 }

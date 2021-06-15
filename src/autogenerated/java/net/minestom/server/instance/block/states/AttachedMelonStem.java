@@ -19,9 +19,9 @@ public final class AttachedMelonStem {
             forRemoval = false
     )
     public static void initStates() {
-        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4772, "facing=north"));
-        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4773, "facing=south"));
-        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4774, "facing=west"));
-        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4775, "facing=east"));
+        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4841, "facing=north"));
+        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4842, "facing=south"));
+        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4843, "facing=west"));
+        Block.ATTACHED_MELON_STEM.addBlockAlternative(new BlockAlternative((short) 4844, "facing=east"));
     }
 }

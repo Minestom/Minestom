@@ -19,11 +19,11 @@ public final class JungleSlab {
             forRemoval = false
     )
     public static void initStates() {
-        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8322, "type=top", "waterlogged=true"));
-        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8323, "type=top", "waterlogged=false"));
-        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8324, "type=bottom", "waterlogged=true"));
-        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8325, "type=bottom", "waterlogged=false"));
-        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8326, "type=double", "waterlogged=true"));
-        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8327, "type=double", "waterlogged=false"));
+        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8568, "type=top", "waterlogged=true"));
+        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8569, "type=top", "waterlogged=false"));
+        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8570, "type=bottom", "waterlogged=true"));
+        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8571, "type=bottom", "waterlogged=false"));
+        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8572, "type=double", "waterlogged=true"));
+        Block.JUNGLE_SLAB.addBlockAlternative(new BlockAlternative((short) 8573, "type=double", "waterlogged=false"));
     }
 }

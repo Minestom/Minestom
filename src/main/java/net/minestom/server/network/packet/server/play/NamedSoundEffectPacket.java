@@ -34,7 +34,7 @@ public class NamedSoundEffectPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        soundName = reader.readSizedString(Integer.MAX_VALUE);
+        soundName = reader.readSizedString();
         soundSource = Source.values()[reader.readVarInt()];
         x = reader.readInt() / 8;
         y = reader.readInt() / 8;

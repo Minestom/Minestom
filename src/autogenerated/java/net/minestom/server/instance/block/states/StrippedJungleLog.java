@@ -19,8 +19,8 @@ public final class StrippedJungleLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.STRIPPED_JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 97, "axis=x"));
-        Block.STRIPPED_JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 98, "axis=y"));
-        Block.STRIPPED_JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 99, "axis=z"));
+        Block.STRIPPED_JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 100, "axis=x"));
+        Block.STRIPPED_JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 101, "axis=y"));
+        Block.STRIPPED_JUNGLE_LOG.addBlockAlternative(new BlockAlternative((short) 102, "axis=z"));
     }
 }

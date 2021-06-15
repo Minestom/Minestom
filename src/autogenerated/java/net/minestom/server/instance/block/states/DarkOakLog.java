@@ -19,8 +19,8 @@ public final class DarkOakLog {
             forRemoval = false
     )
     public static void initStates() {
-        Block.DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 88, "axis=x"));
-        Block.DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 89, "axis=y"));
-        Block.DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 90, "axis=z"));
+        Block.DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 91, "axis=x"));
+        Block.DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 92, "axis=y"));
+        Block.DARK_OAK_LOG.addBlockAlternative(new BlockAlternative((short) 93, "axis=z"));
     }
 }

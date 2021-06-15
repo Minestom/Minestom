@@ -52,11 +52,11 @@ public class ScoreboardObjectivePacket implements ComponentHoldingServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        objectiveName = reader.readSizedString(Integer.MAX_VALUE);
+        objectiveName = reader.readSizedString();
         mode = reader.readByte();
 
-        if(mode == 0 || mode == 2) {
-            objectiveValue = reader.readComponent(Integer.MAX_VALUE);
+        if (mode == 0 || mode == 2) {
+            objectiveValue = reader.readComponent();
             type = Type.values()[reader.readVarInt()];
         }
     }

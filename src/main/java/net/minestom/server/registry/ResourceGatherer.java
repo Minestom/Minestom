@@ -105,7 +105,8 @@ public class ResourceGatherer {
     }
 
     private static void runDataGenerator(File serverJar) throws IOException {
-        ProcessBuilder dataGenerator = new ProcessBuilder("java", "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
+        final String javaExecutable = System.getProperty("java.home") + "/bin/java";
+        ProcessBuilder dataGenerator = new ProcessBuilder(javaExecutable, "-cp", serverJar.getName(), "net.minecraft.data.Main", "--all", "--server", "--dev");
         dataGenerator.directory(TMP_FOLDER);
         LOGGER.info("Now running data generator with options '--dev', '--server', '--all'");
         LOGGER.info("Executing: {}", String.join(StringUtils.SPACE, dataGenerator.command()));
@@ -115,6 +116,9 @@ public class ResourceGatherer {
         new BufferedReader(
                 new InputStreamReader(dataGeneratorProcess.getInputStream())
         ).lines().forEach(LOGGER::info);
+        new BufferedReader(
+                new InputStreamReader(dataGeneratorProcess.getErrorStream())
+        ).lines().forEach(LOGGER::error);
         LOGGER.info("");
 
         try {
@@ -190,8 +194,14 @@ public class ResourceGatherer {
         try (FileInputStream fis = new FileInputStream(target)) {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-1");
             messageDigest.reset();
+            messageDigest.update(fis.readAllBytes());
+            byte[] digest = messageDigest.digest();
+            StringBuffer sb = new StringBuffer();
+            for (byte b : digest) {
+                sb.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
+            }
             // This just converts the sha1 back into a readable string.
-            String sha1Target = new BigInteger(1, messageDigest.digest(fis.readAllBytes())).toString(16);
+            String sha1Target = sb.toString();
             if (!sha1Target.equals(sha1Source)) {
                 LOGGER.error("The checksum test failed after downloading the Minecraft server jar.");
                 LOGGER.error("The expected checksum was: {}.", sha1Source);

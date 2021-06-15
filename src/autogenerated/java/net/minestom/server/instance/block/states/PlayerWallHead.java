@@ -19,9 +19,9 @@ public final class PlayerWallHead {
             forRemoval = false
     )
     public static void initStates() {
-        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6570, "facing=north"));
-        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6571, "facing=south"));
-        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6572, "facing=west"));
-        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6573, "facing=east"));
+        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6772, "facing=north"));
+        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6773, "facing=south"));
+        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6774, "facing=west"));
+        Block.PLAYER_WALL_HEAD.addBlockAlternative(new BlockAlternative((short) 6775, "facing=east"));
     }
 }

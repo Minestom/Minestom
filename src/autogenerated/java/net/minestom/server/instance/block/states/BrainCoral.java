@@ -19,7 +19,7 @@ public final class BrainCoral {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9536, "waterlogged=true"));
-        Block.BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9537, "waterlogged=false"));
+        Block.BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9782, "waterlogged=true"));
+        Block.BRAIN_CORAL.addBlockAlternative(new BlockAlternative((short) 9783, "waterlogged=false"));
     }
 }

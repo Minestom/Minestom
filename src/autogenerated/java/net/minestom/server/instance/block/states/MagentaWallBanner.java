@@ -19,9 +19,9 @@ public final class MagentaWallBanner {
             forRemoval = false
     )
     public static void initStates() {
-        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8165, "facing=north"));
-        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8166, "facing=south"));
-        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8167, "facing=west"));
-        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8168, "facing=east"));
+        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8411, "facing=north"));
+        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8412, "facing=south"));
+        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8413, "facing=west"));
+        Block.MAGENTA_WALL_BANNER.addBlockAlternative(new BlockAlternative((short) 8414, "facing=east"));
     }
 }

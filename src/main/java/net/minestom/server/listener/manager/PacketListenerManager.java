@@ -2,6 +2,8 @@ package net.minestom.server.listener.manager;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
@@ -28,7 +30,7 @@ public final class PacketListenerManager {
         setListener(ClientChatMessagePacket.class, ChatMessageListener::listener);
         setListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
-        setListener(ClientWindowConfirmationPacket.class, WindowListener::windowConfirmationListener);
+        setListener(ClientPongPacket.class, WindowListener::pong);
         setListener(ClientEntityActionPacket.class, EntityActionListener::listener);
         setListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
         setListener(ClientPlayerBlockPlacementPacket.class, BlockPlacementListener::listener);
@@ -74,13 +76,23 @@ public final class PacketListenerManager {
             LOGGER.warn("Packet " + clazz + " does not have any default listener! (The issue comes from Minestom)");
         }
 
-        final PacketController packetController = new PacketController();
-        for (ClientPacketConsumer clientPacketConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
-            clientPacketConsumer.accept(player, packetController, packet);
+        // TODO remove legacy
+        {
+            final PacketController packetController = new PacketController();
+            for (ClientPacketConsumer clientPacketConsumer : CONNECTION_MANAGER.getReceivePacketConsumers()) {
+                clientPacketConsumer.accept(player, packetController, packet);
+            }
+
+            if (packetController.isCancel())
+                return;
         }
 
-        if (packetController.isCancel())
+        // Event
+        PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
+        EventDispatcher.call(playerPacketEvent);
+        if (playerPacketEvent.isCancelled()) {
             return;
+        }
 
         // Finally execute the listener
         if (packetListenerConsumer != null) {

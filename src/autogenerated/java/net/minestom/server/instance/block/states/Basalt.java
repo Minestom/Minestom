@@ -19,8 +19,8 @@ public final class Basalt {
             forRemoval = false
     )
     public static void initStates() {
-        Block.BASALT.addBlockAlternative(new BlockAlternative((short) 4002, "axis=x"));
-        Block.BASALT.addBlockAlternative(new BlockAlternative((short) 4003, "axis=y"));
-        Block.BASALT.addBlockAlternative(new BlockAlternative((short) 4004, "axis=z"));
+        Block.BASALT.addBlockAlternative(new BlockAlternative((short) 4071, "axis=x"));
+        Block.BASALT.addBlockAlternative(new BlockAlternative((short) 4072, "axis=y"));
+        Block.BASALT.addBlockAlternative(new BlockAlternative((short) 4073, "axis=z"));
     }
 }

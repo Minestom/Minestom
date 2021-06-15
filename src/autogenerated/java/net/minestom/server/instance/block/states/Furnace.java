@@ -19,13 +19,13 @@ public final class Furnace {
             forRemoval = false
     )
     public static void initStates() {
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3373, "facing=north", "lit=true"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3374, "facing=north", "lit=false"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3375, "facing=south", "lit=true"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3376, "facing=south", "lit=false"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3377, "facing=west", "lit=true"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3378, "facing=west", "lit=false"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3379, "facing=east", "lit=true"));
-        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3380, "facing=east", "lit=false"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3430, "facing=north", "lit=true"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3431, "facing=north", "lit=false"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3432, "facing=south", "lit=true"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3433, "facing=south", "lit=false"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3434, "facing=west", "lit=true"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3435, "facing=west", "lit=false"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3436, "facing=east", "lit=true"));
+        Block.FURNACE.addBlockAlternative(new BlockAlternative((short) 3437, "facing=east", "lit=false"));
     }
 }

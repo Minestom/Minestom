@@ -1,12 +1,13 @@
 package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.CancellableEvent;
-import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.ItemEvent;
+import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemDropEvent extends Event implements CancellableEvent {
+public class ItemDropEvent implements PlayerEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
     private final ItemStack itemStack;
@@ -18,8 +19,8 @@ public class ItemDropEvent extends Event implements CancellableEvent {
         this.itemStack = itemStack;
     }
 
-    @NotNull
-    public Player getPlayer() {
+    @Override
+    public @NotNull Player getPlayer() {
         return player;
     }
 
@@ -37,4 +38,5 @@ public class ItemDropEvent extends Event implements CancellableEvent {
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }
+
 }

@@ -108,7 +108,7 @@ public abstract class SerializableData extends Data {
         {
             final int dataIndexSize = binaryReader.readVarInt();
             for (int i = 0; i < dataIndexSize; i++) {
-                final String className = binaryReader.readSizedString(Integer.MAX_VALUE);
+                final String className = binaryReader.readSizedString();
                 final short classIndex = binaryReader.readShort();
                 typeToIndexMap.put(className, classIndex);
             }

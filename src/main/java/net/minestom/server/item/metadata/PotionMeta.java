@@ -52,7 +52,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
 
         public Builder potionType(@NotNull PotionType potionType) {
             this.potionType = potionType;
-            this.nbt.setString("Potion", potionType.getNamespaceID());
+            this.nbt.setString("Potion", potionType.getNamespaceID().asString());
             return this;
         }
 

@@ -19,21 +19,21 @@ public final class TripwireHook {
             forRemoval = false
     )
     public static void initStates() {
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5263, "attached=true", "facing=north", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5264, "attached=true", "facing=north", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5265, "attached=true", "facing=south", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5266, "attached=true", "facing=south", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5267, "attached=true", "facing=west", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5268, "attached=true", "facing=west", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5269, "attached=true", "facing=east", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5270, "attached=true", "facing=east", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5271, "attached=false", "facing=north", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5272, "attached=false", "facing=north", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5273, "attached=false", "facing=south", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5274, "attached=false", "facing=south", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5275, "attached=false", "facing=west", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5276, "attached=false", "facing=west", "powered=false"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5277, "attached=false", "facing=east", "powered=true"));
-        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5278, "attached=false", "facing=east", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5465, "attached=true", "facing=north", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5466, "attached=true", "facing=north", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5467, "attached=true", "facing=south", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5468, "attached=true", "facing=south", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5469, "attached=true", "facing=west", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5470, "attached=true", "facing=west", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5471, "attached=true", "facing=east", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5472, "attached=true", "facing=east", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5473, "attached=false", "facing=north", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5474, "attached=false", "facing=north", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5475, "attached=false", "facing=south", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5476, "attached=false", "facing=south", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5477, "attached=false", "facing=west", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5478, "attached=false", "facing=west", "powered=false"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5479, "attached=false", "facing=east", "powered=true"));
+        Block.TRIPWIRE_HOOK.addBlockAlternative(new BlockAlternative((short) 5480, "attached=false", "facing=east", "powered=false"));
     }
 }

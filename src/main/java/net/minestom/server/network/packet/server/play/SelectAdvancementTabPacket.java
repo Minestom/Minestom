@@ -12,7 +12,8 @@ public class SelectAdvancementTabPacket implements ServerPacket {
     @Nullable
     public String identifier;
 
-    public SelectAdvancementTabPacket() {}
+    public SelectAdvancementTabPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -27,8 +28,8 @@ public class SelectAdvancementTabPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         boolean hasID = reader.readBoolean();
-        if(hasID) {
-            identifier = reader.readSizedString(Integer.MAX_VALUE);
+        if (hasID) {
+            identifier = reader.readSizedString();
         } else {
             identifier = null;
         }
