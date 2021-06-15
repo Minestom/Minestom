@@ -43,7 +43,7 @@ class BlockTest implements Block {
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
         properties.put(property, value);
-        return Objects.requireNonNull(BlockRegistry.getProperties(getNamespaceId().asString(), properties));
+        return Objects.requireNonNull(BlockRegistry.getProperties(this, properties));
     }
 
     @Override
@@ -70,7 +70,7 @@ class BlockTest implements Block {
 
     @Override
     public @Nullable NBTCompound getNbt() {
-        return compound.deepClone();
+        return compound != null ? compound.deepClone() : null;
     }
 
     @Override

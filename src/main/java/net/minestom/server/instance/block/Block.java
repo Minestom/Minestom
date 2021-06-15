@@ -5,7 +5,6 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -82,26 +81,20 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
         return compare(block, Comparator.ID);
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return BlockRegistry.fromNamespaceId(namespaceID);
+    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
+        return BlockRegistry.get(namespaceID);
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
-        return fromNamespaceId(NamespaceID.from(namespaceID));
+    static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromNamespaceId(namespaceID.asString());
     }
 
     static @Nullable Block fromStateId(short stateId) {
-        return BlockRegistry.fromStateId(stateId);
+        return BlockRegistry.getState(stateId);
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockRegistry.fromBlockId(blockId);
-    }
-
-    static void register(@NotNull NamespaceID namespaceID, @NotNull Block block,
-                         @NotNull IntRange range,
-                         @NotNull Block.Supplier blockSupplier) {
-        BlockRegistry.register(namespaceID, block, range, blockSupplier);
+        return BlockRegistry.getId(blockId);
     }
 
     @FunctionalInterface
