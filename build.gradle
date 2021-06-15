@@ -40,7 +40,7 @@ allprojects {
             url "https://repo.velocitypowered.com/snapshots/"
         }
         maven {
-            url "https://repo.minestom.com/repository/maven-public/"
+            url "https://repo.minestom.net/repository/maven-public/"
         }
     }
     javadoc {
