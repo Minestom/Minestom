@@ -8,14 +8,15 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
+import java.util.Objects;
 
 @ApiStatus.Internal
 public class Registry {
 
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    public static BlockEntry block(@NotNull JsonObject jsonObject) {
-        return new BlockEntry(jsonObject);
+    public static BlockEntry block(@NotNull JsonObject jsonObject, JsonObject override) {
+        return new BlockEntry(jsonObject, override);
     }
 
     public static JsonObject load(Resource resource) {
@@ -36,8 +37,8 @@ public class Registry {
     }
 
     public static class BlockEntry extends Entry {
-        private BlockEntry(JsonObject json) {
-            super(json);
+        private BlockEntry(JsonObject main, JsonObject override) {
+            super(main, override);
         }
 
         public String namespace() {
@@ -86,10 +87,11 @@ public class Registry {
     }
 
     public static class Entry {
-        private final JsonObject json;
+        private final JsonObject main, override;
 
-        private Entry(JsonObject json) {
-            this.json = json;
+        private Entry(JsonObject main, JsonObject override) {
+            this.main = main;
+            this.override = override;
         }
 
         public String getString(String name) {
@@ -109,7 +111,7 @@ public class Registry {
         }
 
         protected JsonElement element(String name) {
-            return json.get(name);
+            return Objects.requireNonNullElseGet(override.get(name), () -> main.get(name));
         }
     }
 }

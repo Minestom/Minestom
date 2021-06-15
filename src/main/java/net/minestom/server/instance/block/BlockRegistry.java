@@ -43,8 +43,10 @@ class BlockRegistry {
         blocks.entrySet().forEach(entry -> {
             final String blockNamespace = entry.getKey();
             final JsonObject blockObject = entry.getValue().getAsJsonObject();
+            final JsonObject stateObject = blockObject.remove("states").getAsJsonObject();
+            blockObject.remove("properties");
 
-            retrieveState(blockNamespace, blockObject);
+            retrieveState(blockNamespace, blockObject, stateObject);
             final int defaultState = blockObject.get("defaultStateId").getAsInt();
             final Block defaultBlock = getState(defaultState);
             final int id = blockObject.get("id").getAsInt();
@@ -53,24 +55,14 @@ class BlockRegistry {
         });
     }
 
-    private static void retrieveState(String namespace, JsonObject object) {
-        final JsonObject states = object.getAsJsonObject("states");
-
+    private static void retrieveState(String namespace, JsonObject object, JsonObject stateObject) {
         PropertyEntry propertyEntry = new PropertyEntry();
-        states.entrySet().forEach(stateEntry -> {
+        stateObject.entrySet().forEach(stateEntry -> {
             final String query = stateEntry.getKey();
-
-            JsonObject stateObject = object.deepCopy();
-
-            stateObject.remove("states");
-            stateObject.remove("properties");
-
             JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
-            stateOverride.entrySet().forEach(entry -> stateObject.add(entry.getKey(), entry.getValue()));
             final int stateId = stateOverride.get("stateId").getAsInt();
-
             final var propertyMap = getPropertyMap(query);
-            final Block block = new BlockTest(stateObject);
+            final Block block = new BlockTest(object, stateOverride);
             BLOCK_STATE_MAP.put(stateId, block);
             propertyEntry.propertyMap.put(propertyMap, block);
         });

@@ -23,8 +23,8 @@ class BlockTest implements Block {
         this.registry = registry;
     }
 
-    BlockTest(JsonObject jsonObject) {
-        this(Registry.block(jsonObject));
+    BlockTest(JsonObject jsonObject, JsonObject override) {
+        this(Registry.block(jsonObject, override));
     }
 
     @Override
