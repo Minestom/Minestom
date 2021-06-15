@@ -15,16 +15,28 @@ class BlockTest implements Block {
 
     private final Registry.BlockEntry registry;
 
-    private final Map<String, String> properties = new HashMap<>();
-    private NBTCompound compound;
-    private BlockHandler handler;
+    private final Map<String, String> properties;
+    private final NBTCompound compound;
+    private final BlockHandler handler;
 
-    BlockTest(Registry.BlockEntry registry) {
+    BlockTest(Registry.BlockEntry registry,
+              Map<String, String> properties,
+              NBTCompound compound,
+              BlockHandler handler) {
         this.registry = registry;
+        this.properties = properties;
+        this.compound = compound;
+        this.handler = handler;
     }
 
-    BlockTest(JsonObject jsonObject, JsonObject override) {
-        this(Registry.block(jsonObject, override));
+    BlockTest(Registry.BlockEntry registry,
+              Map<String, String> properties) {
+        this(registry, properties, null, null);
+    }
+
+    BlockTest(JsonObject jsonObject, JsonObject override,
+              Map<String, String> properties) {
+        this(Registry.block(jsonObject, override), properties);
     }
 
     @Override
@@ -36,24 +48,19 @@ class BlockTest implements Block {
 
     @Override
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var clone = shallowClone();
-        clone.compound = Objects.requireNonNullElseGet(clone.compound, NBTCompound::new);
-        tag.write(clone.compound, value);
-        return clone;
+        var block = new BlockTest(registry, properties, compound.deepClone(), handler);
+        tag.write(block.compound, value);
+        return block;
     }
 
     @Override
     public @NotNull Block withNbt(@Nullable NBTCompound compound) {
-        var clone = shallowClone();
-        clone.compound = compound;
-        return clone;
+        return new BlockTest(registry, properties, compound, handler);
     }
 
     @Override
     public @NotNull Block withHandler(@Nullable BlockHandler handler) {
-        var clone = shallowClone();
-        clone.handler = handler;
-        return clone;
+        return new BlockTest(registry, properties, compound, handler);
     }
 
     @Override
@@ -89,9 +96,5 @@ class BlockTest implements Block {
     @Override
     public boolean hasTag(@NotNull Tag<?> tag) {
         return compound.containsKey(tag.getKey());
-    }
-
-    private @NotNull BlockTest shallowClone() {
-        return new BlockTest(registry);
     }
 }

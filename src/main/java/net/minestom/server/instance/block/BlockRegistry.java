@@ -62,7 +62,7 @@ class BlockRegistry {
             JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
             final int stateId = stateOverride.get("stateId").getAsInt();
             final var propertyMap = getPropertyMap(query);
-            final Block block = new BlockTest(object, stateOverride);
+            final Block block = new BlockTest(object, stateOverride, propertyMap);
             BLOCK_STATE_MAP.put(stateId, block);
             propertyEntry.propertyMap.put(propertyMap, block);
         });
