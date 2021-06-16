@@ -24,6 +24,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
+import net.minestom.server.utils.mojang.MojangUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -56,7 +57,7 @@ public final class ConnectionManager {
     // All the consumers to call once a packet is sent
     private final List<ServerPacketConsumer> sendClientPacketConsumers = new CopyOnWriteArrayList<>();
     // The uuid provider once a player login
-    private UuidProvider uuidProvider;
+    private UuidProvider uuidProvider = (playerConnection, username) -> MojangUtils.grabUUID(username);
     // The player provider to have your own Player implementation
     private PlayerProvider playerProvider;
     // The consumers to call once a player connect, mostly used to init events

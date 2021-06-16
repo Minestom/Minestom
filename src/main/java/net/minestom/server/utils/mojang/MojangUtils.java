@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -57,6 +58,20 @@ public final class MojangUtils {
         // Retrieve from the rate-limited Mojang API
         final String url = "https://api.mojang.com/users/profiles/minecraft/" + username;
         return retrieve(url, username, USERNAME_CACHE);
+    }
+
+    @Nullable
+    public static UUID grabUUID(@NotNull String username) {
+        JsonObject jsonObject = fromUsername(username);
+
+        if (jsonObject == null) return null;
+
+        String unHyphenedUUID = jsonObject.get("id").getAsString();
+
+        return new UUID(
+                Long.parseUnsignedLong(unHyphenedUUID.substring(0, 16), 16),
+                Long.parseUnsignedLong(unHyphenedUUID.substring(16), 16)
+        );
     }
 
     @Nullable
