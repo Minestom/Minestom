@@ -42,13 +42,6 @@ class BlockTest implements Block {
     }
 
     @Override
-    public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var compound = this.compound != null ? this.compound.deepClone() : new NBTCompound();
-        tag.write(compound, value);
-        return new BlockTest(registry, properties, compound, handler);
-    }
-
-    @Override
     public @NotNull Block withNbt(@Nullable NBTCompound compound) {
         return new BlockTest(registry, properties, compound, handler);
     }

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
@@ -27,9 +28,13 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
         return withProperty(property.getName(), value.toString());
     }
 
-    <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
-
     @NotNull Block withNbt(@Nullable NBTCompound compound);
+
+    default <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
+        var compound = Objects.requireNonNullElseGet(getNbt(), NBTCompound::new);
+        tag.write(compound, value);
+        return withNbt(compound);
+    }
 
     @NotNull Block withHandler(@Nullable BlockHandler handler);
 
