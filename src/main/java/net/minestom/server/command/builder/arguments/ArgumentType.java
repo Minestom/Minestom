@@ -270,31 +270,4 @@ public class ArgumentType {
     public static ArgumentEntity Entities(@NotNull String id) {
         return new ArgumentEntity(id);
     }
-
-    /**
-     * @see ArgumentDynamicWord
-     * @deprecated will be replaced soon
-     */
-    @Deprecated
-    public static ArgumentDynamicWord DynamicWord(@NotNull String id, @NotNull SuggestionType suggestionType) {
-        return new ArgumentDynamicWord(id, suggestionType);
-    }
-
-    /**
-     * @see ArgumentDynamicWord
-     * @deprecated will be replaced soon
-     */
-    @Deprecated
-    public static ArgumentDynamicWord DynamicWord(@NotNull String id) {
-        return DynamicWord(id, SuggestionType.ASK_SERVER);
-    }
-
-    /**
-     * @see ArgumentDynamicStringArray
-     * @deprecated will be replaced soon
-     */
-    @Deprecated
-    public static ArgumentDynamicStringArray DynamicStringArray(@NotNull String id) {
-        return new ArgumentDynamicStringArray(id);
-    }
 }
