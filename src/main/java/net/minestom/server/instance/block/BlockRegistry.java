@@ -81,7 +81,7 @@ class BlockRegistry {
 
     private static Map<String, String> getPropertyMap(String query) {
         Map<String, String> result = new HashMap<>();
-        final String propertiesString = query.substring(1, query.length() - 1);
+        final String propertiesString = query.substring(1);
         StringBuilder keyBuilder = new StringBuilder();
         StringBuilder valueBuilder = new StringBuilder();
         StringBuilder builder = keyBuilder;
@@ -90,7 +90,7 @@ class BlockRegistry {
             if (c == '=') {
                 // Switch to value builder
                 builder = valueBuilder;
-            } else if (c == ',') {
+            } else if (c == ',' || c == ']') {
                 // Append current text
                 result.put(keyBuilder.toString(), valueBuilder.toString());
                 keyBuilder = new StringBuilder();
@@ -98,13 +98,6 @@ class BlockRegistry {
                 builder = keyBuilder;
             } else if (c != ' ') {
                 builder.append(c);
-            }
-        }
-        // Add last property if present
-        {
-            final String key = keyBuilder.toString();
-            if (!key.isEmpty()) {
-                result.put(key, valueBuilder.toString());
             }
         }
         return result;
