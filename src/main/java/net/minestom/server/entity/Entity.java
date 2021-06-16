@@ -563,7 +563,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                     this.velocity.multiply(tps);
 
                     final Block block = finalChunk.getBlock(position.toBlockPosition());
-                    final float drag = block.registry().friction();
+                    final double drag = block.registry().friction();
                     if (onGround) {
                         // Stop player velocity
                         if (isNettyClient) {

@@ -53,24 +53,24 @@ public class Registry {
             return getInt("stateId");
         }
 
-        public float destroySpeed() {
-            return getFloat("destroySpeed");
+        public double destroySpeed() {
+            return getDouble("destroySpeed");
         }
 
-        public float explosionResistance() {
-            return getFloat("explosionResistance");
+        public double explosionResistance() {
+            return getDouble("explosionResistance");
         }
 
-        public float friction() {
-            return getFloat("friction");
+        public double friction() {
+            return getDouble("friction");
         }
 
-        public float speedFactor() {
-            return getFloat("speedFactor");
+        public double speedFactor() {
+            return getDouble("speedFactor");
         }
 
-        public float jumpFactor() {
-            return getFloat("jumpFactor");
+        public double jumpFactor() {
+            return getDouble("jumpFactor");
         }
 
         public boolean isAir() {
@@ -98,8 +98,8 @@ public class Registry {
             return element(name).getAsString();
         }
 
-        public float getFloat(String name) {
-            return element(name).getAsFloat();
+        public double getDouble(String name) {
+            return element(name).getAsDouble();
         }
 
         public int getInt(String name) {
