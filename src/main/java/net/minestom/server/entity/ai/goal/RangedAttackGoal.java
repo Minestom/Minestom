@@ -5,7 +5,7 @@ import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.entity.type.projectile.EntityProjectile;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
