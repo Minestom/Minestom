@@ -5,6 +5,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -22,34 +23,45 @@ import java.util.function.BiPredicate;
  */
 public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
+    @Contract(pure = true)
     @NotNull Block withProperty(@NotNull String property, @NotNull String value);
 
+    @Contract(pure = true)
     default <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value) {
         return withProperty(property.getName(), value.toString());
     }
 
+    @Contract(pure = true)
     @NotNull Block withNbt(@Nullable NBTCompound compound);
 
+    @Contract(pure = true)
     default <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
         var compound = Objects.requireNonNullElseGet(getNbt(), NBTCompound::new);
         tag.write(compound, value);
         return withNbt(compound);
     }
 
+    @Contract(pure = true)
     @NotNull Block withHandler(@Nullable BlockHandler handler);
 
+    @Contract(pure = true)
     @NotNull String getProperty(@NotNull String property);
 
+    @Contract(pure = true)
     default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
         return getProperty(property.getName());
     }
 
+    @Contract(pure = true)
     @Nullable NBTCompound getNbt();
 
+    @Contract(pure = true)
     @Nullable BlockHandler getHandler();
 
+    @Contract(pure = true)
     @NotNull Map<String, String> getPropertiesMap();
 
+    @Contract(pure = true)
     @NotNull Registry.BlockEntry registry();
 
     @Override
