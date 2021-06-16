@@ -4,8 +4,10 @@ import com.google.common.annotations.Beta;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
+import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -283,19 +285,6 @@ public class Command {
      */
     public @NotNull Collection<CommandSyntax> getSyntaxes() {
         return syntaxes;
-    }
-
-    /**
-     * Allows for tab auto completion, this is called everytime the player press a key in the chat
-     * when in a dynamic argument ({@link ArgumentDynamicWord} (when {@link SuggestionType#ASK_SERVER} is used)
-     * and {@link ArgumentDynamicStringArray}).
-     *
-     * @param sender the command sender
-     * @param text   the whole player's text
-     * @return the array containing all the suggestion for the current arg (split SPACE), can be null
-     */
-    public @Nullable String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
-        return null;
     }
 
     /**
