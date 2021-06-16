@@ -37,7 +37,7 @@ public class LoadExtensionCommand extends Command {
         sender.sendMessage(Component.text("extensionFile = " + name + "...."));
 
         ExtensionManager extensionManager = MinecraftServer.getExtensionManager();
-        Path extensionFolder = extensionManager.getExtensionFolder().toPath().toAbsolutePath();
+        Path extensionFolder = extensionManager.getExtensionFolder().toAbsolutePath();
         Path extensionJar = extensionFolder.resolve(name);
         try {
             if (!extensionJar.toFile().getCanonicalPath().startsWith(extensionFolder.toFile().getCanonicalPath())) {
