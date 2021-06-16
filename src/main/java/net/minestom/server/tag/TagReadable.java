@@ -24,7 +24,9 @@ public interface TagReadable {
      * @param tag the tag to check
      * @return true if the tag is present, false otherwise
      */
-    boolean hasTag(@NotNull Tag<?> tag);
+    default boolean hasTag(@NotNull Tag<?> tag) {
+        return getTag(tag) != null;
+    }
 
     /**
      * Converts an nbt compound to a tag reader.
