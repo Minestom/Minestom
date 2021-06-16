@@ -103,11 +103,10 @@ public class NamespaceID implements CharSequence, Key {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        NamespaceID that = (NamespaceID) o;
-        return Objects.equals(domain, that.domain) &&
-                Objects.equals(path, that.path);
+        if(this == o) return true;
+        if(!(o instanceof Key)) return false;
+        final Key that = (Key) o;
+        return Objects.equals(this.domain, that.namespace()) && Objects.equals(this.path, that.value());
     }
 
     @Override
