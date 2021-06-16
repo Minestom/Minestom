@@ -20,25 +20,11 @@ import java.util.function.Supplier;
 
 public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
 
-    private final String author;
-    private final String title;
     private final List<Component> pages;
 
-    protected WritableBookMeta(@NotNull ItemMetaBuilder metaBuilder,
-                               @Nullable String author, @Nullable String title,
-                               @NotNull List<@NotNull Component> pages) {
+    protected WritableBookMeta(@NotNull ItemMetaBuilder metaBuilder, @NotNull List<@NotNull Component> pages) {
         super(metaBuilder);
-        this.author = author;
-        this.title = title;
         this.pages = new ArrayList<>(pages);
-    }
-
-    public @Nullable String getAuthor() {
-        return author;
-    }
-
-    public @Nullable String getTitle() {
-        return title;
     }
 
     public @NotNull List<@NotNull Component> getPages() {
@@ -50,20 +36,6 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         private String author;
         private String title;
         private List<Component> pages = new ArrayList<>();
-
-        public Builder author(@Nullable String author) {
-            this.author = author;
-            handleNullable(author, "author", nbt,
-                    () -> new NBTString(Objects.requireNonNull(author)));
-            return this;
-        }
-
-        public Builder title(@Nullable String title) {
-            this.title = title;
-            handleNullable(title, "title", nbt,
-                    () -> new NBTString(Objects.requireNonNull(title)));
-            return this;
-        }
 
         public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = pages;
@@ -81,19 +53,13 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
 
         @Override
         public @NotNull WritableBookMeta build() {
-            return new WritableBookMeta(this, author, title, pages);
+            return new WritableBookMeta(this, pages);
         }
 
         @Override
         public void read(@NotNull NBTCompound nbtCompound) {
-            if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
-            }
-            if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
-            }
-            if (nbtCompound.containsKey("pages")) {
-                final NBTList<NBTString> list = nbtCompound.getList("pages");
+            final NBTList<NBTString> list = nbtCompound.getList("pages");
+            if (list != null) {
                 for (NBTString page : list) {
                     this.pages.add(GsonComponentSerializer.gson().deserialize(page.getValue()));
                 }

@@ -3,12 +3,14 @@ package net.minestom.server.item.metadata;
 import net.kyori.adventure.inventory.Book;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.*;
@@ -18,13 +20,13 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
     private final boolean resolved;
     private final WrittenBookGeneration generation;
-    private final String author;
-    private final String title;
+    private final Component author;
+    private final Component title;
     private final List<Component> pages;
 
     protected WrittenBookMeta(@NotNull ItemMetaBuilder metaBuilder, boolean resolved,
                               @Nullable WrittenBookGeneration generation,
-                              @Nullable String author, @Nullable String title,
+                              @Nullable Component author, @Nullable Component title,
                               @NotNull List<@NotNull Component> pages) {
         super(metaBuilder);
         this.resolved = resolved;
@@ -42,11 +44,11 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         return generation;
     }
 
-    public @Nullable String getAuthor() {
+    public @Nullable Component getAuthor() {
         return author;
     }
 
-    public @Nullable String getTitle() {
+    public @Nullable Component getTitle() {
         return title;
     }
 
@@ -62,16 +64,15 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
      * Creates a written book meta from an Adventure book. This meta will not be
      * resolved and the generation will default to {@link WrittenBookGeneration#ORIGINAL}.
      *
-     * @param book        the book
-     * @param localizable who the book is for
+     * @param book the book
      * @return the meta
      */
-    public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book, @NotNull Localizable localizable) {
+    public static @NotNull WrittenBookMeta fromAdventure(@NotNull Book book) {
         return new Builder()
                 .resolved(false)
                 .generation(WrittenBookGeneration.ORIGINAL)
-                .author(AdventureSerializer.translateAndSerialize(book.author(), localizable))
-                .title(AdventureSerializer.translateAndSerialize(book.title(), localizable))
+                .author(book.author())
+                .title(book.title())
                 .pages(book.pages())
                 .build();
     }
@@ -80,8 +81,8 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         private boolean resolved;
         private WrittenBookGeneration generation;
-        private String author;
-        private String title;
+        private Component author;
+        private Component title;
         private List<Component> pages = new ArrayList<>();
 
         public Builder resolved(boolean resolved) {
@@ -97,17 +98,17 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
             return this;
         }
 
-        public Builder author(@Nullable String author) {
+        public Builder author(@Nullable Component author) {
             this.author = author;
             handleNullable(author, "author", nbt,
-                    () -> new NBTString(Objects.requireNonNull(author)));
+                    () -> new NBTString(LegacyComponentSerializer.legacySection().serialize(author)));
             return this;
         }
 
-        public Builder title(@Nullable String title) {
+        public Builder title(@Nullable Component title) {
             this.title = title;
             handleNullable(title, "title", nbt,
-                    () -> new NBTString(Objects.requireNonNull(title)));
+                    () -> new NBTString(LegacyComponentSerializer.legacySection().serialize(title)));
             return this;
         }
 
@@ -143,10 +144,10 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
                 generation(WrittenBookGeneration.values()[nbtCompound.getInt("generation")]);
             }
             if (nbtCompound.containsKey("author")) {
-                author(nbtCompound.getString("author"));
+                author(LegacyComponentSerializer.legacySection().deserialize(nbtCompound.getString("author")));
             }
             if (nbtCompound.containsKey("title")) {
-                title(nbtCompound.getString("title"));
+                title(LegacyComponentSerializer.legacySection().deserialize(nbtCompound.getString("title")));
             }
             if (nbtCompound.containsKey("pages")) {
                 final NBTList<NBTString> list = nbtCompound.getList("pages");
