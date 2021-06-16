@@ -1,13 +1,14 @@
 package net.minestom.server.event.entity;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called with {@link net.minestom.server.entity.type.projectile.EntityProjectile#shoot(Position, double, double)}
+ * Called with {@link EntityProjectile#shoot(Position, double, double)}
  */
 public class EntityShootEvent implements EntityEvent, CancellableEvent {
 
