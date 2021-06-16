@@ -43,6 +43,7 @@ public class ItemEntity extends Entity {
     public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
         super(EntityType.ITEM, spawnPosition);
         setItemStack(itemStack);
+        setGravity(0.02f, 0.04f, 1.96f);
         setBoundingBox(0.25f, 0.25f, 0.25f);
     }
 
