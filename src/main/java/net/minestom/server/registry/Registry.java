@@ -37,52 +37,75 @@ public class Registry {
     }
 
     public static class BlockEntry extends Entry {
+        private final String namespace;
+        private final int id;
+        private final int stateId;
+        private final double destroySpeed;
+        private final double explosionResistance;
+        private final double friction;
+        private final double speedFactor;
+        private final double jumpFactor;
+        private final boolean air;
+        private final boolean solid;
+        private final boolean liquid;
+
         private BlockEntry(JsonObject main, JsonObject override) {
             super(main, override);
+            this.namespace = getString("namespace");
+            this.id = getInt("id");
+            this.stateId = getInt("stateId");
+            this.destroySpeed = getDouble("hardness");
+            this.explosionResistance = getDouble("explosionResistance");
+            this.friction = getDouble("friction");
+            this.speedFactor = getDouble("speedFactor");
+            this.jumpFactor = getDouble("jumpFactor");
+            this.air = getBoolean("air");
+            this.solid = getBoolean("solid");
+            this.liquid = getBoolean("liquid");
         }
 
         public String namespace() {
-            return getString("namespace");
+            return namespace;
         }
 
         public int id() {
-            return getInt("id");
+            return id;
         }
 
         public int stateId() {
-            return getInt("stateId");
+            return stateId;
         }
 
         public double destroySpeed() {
-            return getDouble("destroySpeed");
+            return destroySpeed;
         }
 
         public double explosionResistance() {
-            return getDouble("explosionResistance");
+            return explosionResistance;
         }
 
         public double friction() {
-            return getDouble("friction");
+            return friction;
         }
 
         public double speedFactor() {
-            return getDouble("speedFactor");
+            return speedFactor;
         }
 
         public double jumpFactor() {
-            return getDouble("jumpFactor");
+            return jumpFactor;
         }
 
         public boolean isAir() {
-            return getBoolean("air");
+            return air;
         }
 
         public boolean isSolid() {
-            return getBoolean("solid");
+            return solid;
         }
 
         public boolean isLiquid() {
-            return getBoolean("liquid");
+            return liquid;
         }
     }
 
