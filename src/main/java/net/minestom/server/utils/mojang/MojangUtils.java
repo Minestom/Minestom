@@ -66,8 +66,10 @@ public final class MojangUtils {
 
         if (jsonObject == null) return null;
 
+        // Grab the UUID. It does not have hyphens, so it has to be parsed specially
         String unHyphenedUUID = jsonObject.get("id").getAsString();
 
+        // UUID is split into 2 logs -- this parses both of those in the UUID format
         return new UUID(
                 Long.parseUnsignedLong(unHyphenedUUID.substring(0, 16), 16),
                 Long.parseUnsignedLong(unHyphenedUUID.substring(16), 16)
