@@ -3,7 +3,6 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.other.BoatMeta;
-import net.minestom.server.entity.type.vehicle.EntityBoat;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
