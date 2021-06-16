@@ -38,7 +38,8 @@ class BlockTest implements Block {
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
         properties.put(property, value);
-        return Objects.requireNonNull(BlockRegistry.getProperties(this, properties));
+        final Block block = BlockRegistry.getProperties(this, properties);
+        return Objects.requireNonNull(block);
     }
 
     @Override

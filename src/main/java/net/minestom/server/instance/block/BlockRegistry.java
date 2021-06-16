@@ -20,14 +20,29 @@ class BlockRegistry {
     // Block namespace -> properties map to block access
     private static final Map<String, PropertyEntry> BLOCK_PROPERTY_MAP = new ConcurrentHashMap<>();
 
-    private static class PropertyEntry {
-        private final Map<Map<String, String>, Block> propertyMap = new ConcurrentHashMap<>();
+    static @Nullable Block get(@NotNull String namespace) {
+        return NAMESPACE_MAP.get(namespace);
+    }
+
+    static @Nullable Block getId(int id) {
+        return BLOCK_ID_MAP.get(id);
+    }
+
+    static @Nullable Block getState(int stateId) {
+        return BLOCK_STATE_MAP.get(stateId);
+    }
+
+    static @Nullable Block getProperties(String namespace, Map<String, String> properties) {
+        final var entry = BLOCK_PROPERTY_MAP.get(namespace);
+        return entry.propertyMap.get(properties);
+    }
+
+    static @Nullable Block getProperties(Block block, Map<String, String> properties) {
+        return getProperties(block.getNamespaceId().asString(), properties);
     }
 
     static {
         // Load data from file
-
-        // Blocks
         JsonObject blocks = Registry.load(Registry.Resource.BLOCK);
         blocks.entrySet().forEach(entry -> {
             final String blockNamespace = entry.getKey();
@@ -44,6 +59,10 @@ class BlockRegistry {
             BLOCK_ID_MAP.put(id, defaultBlock);
             NAMESPACE_MAP.put(blockNamespace, defaultBlock);
         });
+    }
+
+    private static class PropertyEntry {
+        private final Map<Map<String, String>, Block> propertyMap = new ConcurrentHashMap<>();
     }
 
     private static void retrieveState(String namespace, JsonObject object, JsonObject stateObject) {
@@ -81,27 +100,13 @@ class BlockRegistry {
                 builder.append(c);
             }
         }
+        // Add last property if present
+        {
+            final String key = keyBuilder.toString();
+            if (!key.isEmpty()) {
+                result.put(key, valueBuilder.toString());
+            }
+        }
         return result;
-    }
-
-    public static @Nullable Block get(@NotNull String namespace) {
-        return NAMESPACE_MAP.get(namespace);
-    }
-
-    public static @Nullable Block getId(int id) {
-        return BLOCK_ID_MAP.get(id);
-    }
-
-    public static @Nullable Block getState(int stateId) {
-        return BLOCK_STATE_MAP.get(stateId);
-    }
-
-    public static @Nullable Block getProperties(String namespace, Map<String, String> properties) {
-        final var entry = BLOCK_PROPERTY_MAP.get(namespace);
-        return entry.propertyMap.get(properties);
-    }
-
-    public static @Nullable Block getProperties(Block block, Map<String, String> properties) {
-        return getProperties(block.getNamespaceId().asString(), properties);
     }
 }
