@@ -1,7 +1,6 @@
 package net.minestom.server.entity.metadata;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import org.jetbrains.annotations.NotNull;
@@ -105,24 +104,6 @@ public class EntityMeta {
 
     public void setAirTicks(int value) {
         this.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
-    }
-
-    /**
-     * @deprecated Use {@link #getCustomName()}
-     */
-    @Deprecated
-    public JsonMessage getCustomNameJson() {
-        return JsonMessage.fromComponent(this.getCustomName());
-    }
-
-    /**
-     * @deprecated Use {@link #setCustomName(Component)}
-     */
-    @Deprecated
-    public void setCustomName(JsonMessage value) {
-        if (value != null) {
-            this.setCustomName(value.asComponent());
-        }
     }
 
     public Component getCustomName() {

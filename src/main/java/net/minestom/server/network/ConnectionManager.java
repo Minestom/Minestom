@@ -1,12 +1,9 @@
 package net.minestom.server.network;
 
 import io.netty.channel.Channel;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
@@ -298,34 +295,10 @@ public final class ConnectionManager {
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
-     * @deprecated Use {@link #getShutdownText()}
-     */
-    @Deprecated
-    @NotNull
-    public JsonMessage getShutdownTextJson() {
-        return JsonMessage.fromComponent(shutdownText);
-    }
-
-    /**
-     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
-     *
-     * @return the kick reason in case on a shutdown
      */
     @NotNull
     public Component getShutdownText() {
         return shutdownText;
-    }
-
-    /**
-     * Changes the kick reason in case of a shutdown.
-     *
-     * @param shutdownText the new shutdown kick reason
-     * @see #getShutdownTextJson()
-     * @deprecated Use {@link #setShutdownText(Component)}
-     */
-    @Deprecated
-    public void setShutdownText(@NotNull JsonMessage shutdownText) {
-        this.shutdownText = shutdownText.asComponent();
     }
 
     /**

@@ -2,7 +2,6 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 
@@ -85,46 +84,10 @@ public class TeamBuilder {
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
-     * @deprecated Use {@link #updateSuffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateSuffix(JsonMessage suffix) {
-        return this.updateSuffix(suffix.asComponent());
-    }
-
-    /**
-     * Updates the suffix of the {@link Team}.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
      */
     public TeamBuilder updateSuffix(Component suffix) {
         this.team.updateSuffix(suffix);
         return this;
-    }
-
-    /**
-     * Updates the display name of the {@link Team}.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateTeamDisplayName(String displayName) {
-        return this.updateTeamDisplayName(Component.text(displayName));
-    }
-
-    /**
-     * Updates the display name of the {@link Team}.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updateTeamDisplayName(JsonMessage displayName) {
-        return this.updateTeamDisplayName(displayName.asComponent());
     }
 
     /**
@@ -196,34 +159,6 @@ public class TeamBuilder {
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
-     * @deprecated Use {@link #prefix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder prefix(String prefix) {
-        return this.prefix(Component.text(prefix));
-    }
-
-    /**
-     * Changes the prefix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #prefix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder prefix(JsonMessage prefix) {
-        return this.prefix(prefix.asComponent());
-    }
-
-    /**
-     * Changes the prefix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
      */
     public TeamBuilder prefix(Component prefix) {
         this.team.setPrefix(prefix);
@@ -268,20 +203,6 @@ public class TeamBuilder {
     @Deprecated
     public TeamBuilder teamDisplayName(String displayName) {
         return this.teamDisplayName(Component.text(displayName));
-    }
-
-    /**
-     * Changes the display name of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param displayName The new display name
-     * @return this builder, for chaining
-     * @deprecated Use {@link #teamDisplayName(Component)}
-     */
-    @Deprecated
-    public TeamBuilder teamDisplayName(JsonMessage displayName) {
-        return this.teamDisplayName(displayName.asComponent());
     }
 
     /**

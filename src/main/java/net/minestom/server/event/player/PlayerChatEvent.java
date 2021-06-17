@@ -1,7 +1,6 @@
 package net.minestom.server.event.player;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
@@ -34,17 +33,6 @@ public class PlayerChatEvent implements PlayerEvent, CancellableEvent {
         this.recipients = new ArrayList<>(recipients);
         this.defaultChatFormat = defaultChatFormat;
         this.message = message;
-    }
-
-    /**
-     * Changes the chat format.
-     *
-     * @param chatFormat the custom chat format, null to use the default one
-     * @deprecated Use {@link #setChatFormat(Function)}
-     */
-    @Deprecated
-    public void setChatFormatJson(@Nullable Function<PlayerChatEvent, JsonMessage> chatFormat) {
-        this.chatFormat = chatFormat == null ? null : chatFormat.andThen(JsonMessage::asComponent);
     }
 
     /**

@@ -4,7 +4,6 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
@@ -185,23 +184,6 @@ public class BinaryReader extends InputStream {
         final ItemStack itemStack = NBTUtils.readItemStack(this);
         Check.notNull(itemStack, "#readSlot returned null, probably because the buffer was corrupted");
         return itemStack;
-    }
-
-    /**
-     * Same as readItemStack
-     */
-    @Deprecated
-    public ItemStack readSlot() {
-        return readItemStack();
-    }
-
-    /**
-     * Use {@link #readComponent(int)}
-     */
-    @Deprecated
-    public JsonMessage readJsonMessage(int maxLength) {
-        final String jsonObject = readSizedString(maxLength);
-        return new JsonMessage.RawJsonMessage(jsonObject);
     }
 
     public Component readComponent(int maxLength) {
