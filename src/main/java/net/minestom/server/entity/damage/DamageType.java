@@ -1,7 +1,6 @@
 package net.minestom.server.entity.damage;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
@@ -55,14 +54,6 @@ public class DamageType implements DataContainer {
     }
 
     /**
-     * @deprecated Use {@link #buildDeathMessage(Player)}
-     */
-    @Deprecated
-    public JsonMessage buildDeathMessageJson(@NotNull Player killed) {
-        return JsonMessage.fromComponent(this.buildDeathMessage(killed));
-    }
-
-    /**
      * Builds the death message linked to this damage type.
      * <p>
      * Used in {@link Player#kill()} to broadcast the proper message.
@@ -107,15 +98,6 @@ public class DamageType implements DataContainer {
     @NotNull
     public static EntityDamage fromEntity(@NotNull Entity entity) {
         return new EntityDamage(entity);
-    }
-
-    /**
-     * @deprecated Use {@link #buildDeathScreenText(Player)}
-     */
-    @Deprecated
-    @Nullable
-    public JsonMessage buildDeathScreenTextJson(@NotNull Player killed) {
-        return JsonMessage.fromComponent(this.buildDeathScreenText(killed));
     }
 
     /**

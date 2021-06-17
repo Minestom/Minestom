@@ -11,7 +11,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.acquirable.Acquirable;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.data.Data;
@@ -1256,33 +1255,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
-     * @deprecated Use {@link #getCustomName()}
-     */
-    @Deprecated
-    @Nullable
-    public JsonMessage getCustomNameJson() {
-        return this.entityMeta.getCustomNameJson();
-    }
-
-    /**
-     * Gets the entity custom name.
-     *
-     * @return the custom name of the entity, null if there is not
      */
     @Nullable
     public Component getCustomName() {
         return this.entityMeta.getCustomName();
-    }
-
-    /**
-     * Changes the entity custom name.
-     *
-     * @param customName the custom name of the entity, null to remove it
-     * @deprecated Use {@link #setCustomName(Component)}
-     */
-    @Deprecated
-    public void setCustomName(@Nullable JsonMessage customName) {
-        this.entityMeta.setCustomName(customName);
     }
 
     /**
