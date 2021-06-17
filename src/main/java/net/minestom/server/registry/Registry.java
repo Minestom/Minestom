@@ -48,6 +48,7 @@ public class Registry {
         private final boolean air;
         private final boolean solid;
         private final boolean liquid;
+        private final boolean blockEntity;
 
         private BlockEntry(JsonObject main, JsonObject override) {
             super(main, override);
@@ -62,6 +63,7 @@ public class Registry {
             this.air = getBoolean("air");
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid");
+            this.blockEntity = getBoolean("blockEntity");
         }
 
         public String namespace() {
@@ -106,6 +108,10 @@ public class Registry {
 
         public boolean isLiquid() {
             return liquid;
+        }
+
+        public boolean isBlockEntity() {
+            return blockEntity;
         }
     }
 
