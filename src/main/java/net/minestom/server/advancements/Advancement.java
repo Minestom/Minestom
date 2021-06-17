@@ -1,7 +1,6 @@
 package net.minestom.server.advancements;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -42,26 +41,6 @@ public class Advancement {
 
     // Packet
     private AdvancementsPacket.Criteria criteria;
-
-    /**
-     * @deprecated Use {@link #Advancement(Component, Component, ItemStack, FrameType, float, float)}
-     */
-    @Deprecated
-    public Advancement(@NotNull JsonMessage title, JsonMessage description,
-                       @NotNull ItemStack icon, @NotNull FrameType frameType,
-                       float x, float y) {
-        this(title.asComponent(), description.asComponent(), icon, frameType, x, y);
-    }
-
-    /**
-     * @deprecated Use {@link #Advancement(Component, Component, Material, FrameType, float, float)}
-     */
-    @Deprecated
-    public Advancement(@NotNull JsonMessage title, @NotNull JsonMessage description,
-                       @NotNull Material icon, @NotNull FrameType frameType,
-                       float x, float y) {
-        this(title, description, ItemStack.of(icon), frameType, x, y);
-    }
 
     public Advancement(@NotNull Component title, Component description,
                        @NotNull ItemStack icon, @NotNull FrameType frameType,
@@ -125,36 +104,12 @@ public class Advancement {
     }
 
     /**
-     * Gets the title of the advancement.
-     *
-     * @return the advancement title
-     * @deprecated Use {@link #getTitle()}
-     */
-    @NotNull
-    @Deprecated
-    public JsonMessage getTitleJson() {
-        return JsonMessage.fromComponent(title);
-    }
-
-    /**
      * Changes the advancement title.
      *
      * @param title the new title
      */
     public void setTitle(@NotNull Component title) {
         this.title = title;
-        update();
-    }
-
-    /**
-     * Changes the advancement title.
-     *
-     * @param title the new title
-     * @deprecated Use {@link #setTitle(Component)}
-     */
-    @Deprecated
-    public void setTitle(@NotNull JsonMessage title) {
-        this.title = title.asComponent();
         update();
     }
 
@@ -169,36 +124,12 @@ public class Advancement {
     }
 
     /**
-     * Gets the description of the advancement.
-     *
-     * @return the description title
-     * @deprecated Use {@link #getDescription()}
-     */
-    @NotNull
-    @Deprecated
-    public JsonMessage getDescriptionJson() {
-        return JsonMessage.fromComponent(description);
-    }
-
-    /**
      * Changes the description title.
      *
      * @param description the new description
      */
     public void setDescription(@NotNull Component description) {
         this.description = description;
-        update();
-    }
-
-    /**
-     * Changes the description title.
-     *
-     * @param description the new description
-     * @deprecated Use {@link #setDescription(Component)}
-     */
-    @Deprecated
-    public void setDescription(@NotNull JsonMessage description) {
-        this.description = description.asComponent();
         update();
     }
 
