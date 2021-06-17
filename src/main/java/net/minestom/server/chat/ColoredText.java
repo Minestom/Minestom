@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 /**
  * Represents a text with one or multiple colors.
  * <p>
- * Used when the message can contain colors but not events like in {@link RichMessage}.
+ * Used when the message can contain colors but not events.
  * <p>
  * To create one, you simply call one of the static methods like {@link #of(ChatColor, String)},
  * you can then continue to append text with {@link #append(ChatColor, String)}.

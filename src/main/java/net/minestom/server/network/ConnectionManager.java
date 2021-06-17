@@ -139,33 +139,6 @@ public final class ConnectionManager {
         return null;
     }
 
-    /**
-     * Sends a {@link JsonMessage} to all online players who validate the condition {@code condition}.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @param condition   the condition to receive the message
-     * @deprecated Use {@link Audiences#players(Predicate)}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
-        if (condition == null) {
-            Audiences.players().sendMessage(jsonMessage);
-        } else {
-            Audiences.players(condition).sendMessage(jsonMessage);
-        }
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link Audiences#players()}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        this.broadcastMessage(jsonMessage, null);
-    }
-
     private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
         Collection<Player> recipients;
 

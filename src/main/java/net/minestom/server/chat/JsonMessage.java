@@ -13,7 +13,7 @@ import java.util.Objects;
 /**
  * Represents a json message which can be send to a player.
  * <p>
- * Examples are {@link ColoredText} and {@link RichMessage}.
+ * Examples are {@link ColoredText}.
  *
  * @see <a href="https://wiki.vg/Chat">Chat Format</a>
  * @deprecated Use {@link Component}
