@@ -2,7 +2,6 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.chat.ChatColor;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
@@ -52,46 +51,10 @@ public class TeamBuilder {
      *
      * @param prefix The new prefix
      * @return this builder, for chaining
-     * @deprecated Use {@link #updatePrefix(Component)}}
-     */
-    @Deprecated
-    public TeamBuilder updatePrefix(String prefix) {
-        return this.updatePrefix(Component.text(prefix));
-    }
-
-    /**
-     * Updates the prefix of the {@link Team}.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updatePrefix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder updatePrefix(JsonMessage prefix) {
-        return this.updatePrefix(prefix.asComponent());
-    }
-
-    /**
-     * Updates the prefix of the {@link Team}.
-     *
-     * @param prefix The new prefix
-     * @return this builder, for chaining
      */
     public TeamBuilder updatePrefix(Component prefix) {
         this.team.updatePrefix(prefix);
         return this;
-    }
-
-    /**
-     * Updates the color of the {@link Team}.
-     *
-     * @param color The new color
-     * @return this builder, for chaining
-     * @deprecated Use {@link #updateTeamColor(NamedTextColor)}
-     */
-    @Deprecated
-    public TeamBuilder updateTeamColor(ChatColor color) {
-        return this.updateTeamColor(NamedTextColor.nearestTo(color.asTextColor()));
     }
 
     /**
@@ -274,52 +237,10 @@ public class TeamBuilder {
      *
      * @param suffix The new suffix
      * @return this builder, for chaining
-     * @deprecated Use {@link #suffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder suffix(String suffix) {
-        return this.suffix(Component.text(suffix));
-    }
-
-    /**
-     * Changes the suffix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
-     * @deprecated Use {@link #suffix(Component)}
-     */
-    @Deprecated
-    public TeamBuilder suffix(JsonMessage suffix) {
-        return this.suffix(suffix.asComponent());
-    }
-
-    /**
-     * Changes the suffix of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param suffix The new suffix
-     * @return this builder, for chaining
      */
     public TeamBuilder suffix(Component suffix) {
         this.team.setSuffix(suffix);
         return this;
-    }
-
-    /**
-     * Changes the color of the {@link Team} without an update packet.
-     * <br><br>
-     * <b>Warning: </b> If you do not call {@link #updateTeamPacket()}, this is only changed of the <b>server side</b>.
-     *
-     * @param color The new team color
-     * @return this builder, for chaining
-     * @deprecated Use {@link #teamColor(NamedTextColor)}
-     */
-    @Deprecated
-    public TeamBuilder teamColor(ChatColor color) {
-        return this.teamColor(NamedTextColor.nearestTo(color.asTextColor()));
     }
 
     /**

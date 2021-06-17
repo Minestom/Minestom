@@ -1,7 +1,6 @@
 package net.minestom.server.color;
 
 import net.kyori.adventure.util.RGBLike;
-import net.minestom.server.chat.ChatColor;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -157,17 +156,6 @@ public class Color implements RGBLike {
         this.red = Math.round(averageRed * gainFactor);
         this.blue = Math.round(averageBlue * gainFactor);
         this.green = Math.round(averageGreen * gainFactor);
-    }
-
-    /**
-     * Gets the ChatColor representation of this color.
-     *
-     * @return the chat color
-     * @deprecated ChatColor is deprecated and should not be used
-     */
-    @Deprecated
-    public ChatColor asLegacyChatColor() {
-        return ChatColor.fromRGB((byte) red, (byte) blue, (byte) green);
     }
 
     @Override
