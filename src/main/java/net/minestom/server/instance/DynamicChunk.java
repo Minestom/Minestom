@@ -111,6 +111,9 @@ public class DynamicChunk extends Chunk {
     public @NotNull Block getBlock(int x, int y, int z) {
         final Section section = retrieveSection(y);
         final short blockStateId = section.getBlockAt(x, y, z);
+        if (blockStateId == -1) {
+            return Block.AIR;
+        }
         Block block = Block.fromStateId(blockStateId);
         if (block == null) {
             return Block.AIR;

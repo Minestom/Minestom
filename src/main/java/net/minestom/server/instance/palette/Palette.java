@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -76,8 +77,7 @@ public class Palette implements PublicCloneable<Palette> {
         }
 
         // Check if the new block is air, used for counting none air blocks.
-        // FIXME: once block data is working
-        final boolean isAir = blockId == 0;//Block.fromStateId(blockId).isAir();
+        final boolean isAir = Block.fromStateId(blockId).isAir();
 
         // Change to palette value
         blockId = getPaletteIndex(blockId);
@@ -94,9 +94,7 @@ public class Palette implements PublicCloneable<Palette> {
 
             final long value = block >> bitIndex & clear;
 
-            // FIXME: once block data is working
-            final boolean isCurrentAir = (hasPalette ? paletteBlockMap.get((short) value) : (short) value) == 0;
-                    //Block.fromStateId(hasPalette ? paletteBlockMap.get((short) value) : (short) value).isAir();
+            final boolean isCurrentAir = Block.fromStateId(hasPalette ? paletteBlockMap.get((short) value) : (short) value).isAir();
 
             block |= clear << bitIndex;
             block ^= clear << bitIndex;
@@ -115,7 +113,7 @@ public class Palette implements PublicCloneable<Palette> {
     public short getBlockAt(int x, int y, int z) {
         if (blocks.length == 0) {
             // Section is not loaded, can only be air
-            return 0;
+            return -1;
         }
 
         final int sectionIdentifier = getSectionIndex(x, y, z);
