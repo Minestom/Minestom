@@ -1,9 +1,11 @@
 package net.minestom.demo.largeframebuffers;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ColoredText;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.type.decoration.EntityItemFrame;
+import net.minestom.server.entity.metadata.other.ItemFrameMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.item.ItemStack;
@@ -66,15 +68,26 @@ public class Demo {
     }
 
     private static void createFrame(Instance instance, int id, int x, int y, int z) {
-        EntityItemFrame itemFrame = new EntityItemFrame(new Position(x, y, z), EntityItemFrame.ItemFrameOrientation.NORTH);
-        itemFrame.getPosition().setYaw(180f);
+        Entity itemFrame = new Entity(EntityType.ITEM_FRAME);
+
+        ItemFrameMeta itemFrameMeta = (ItemFrameMeta) itemFrame.getEntityMeta();
+
+        itemFrameMeta.setNotifyAboutChanges(false);
+
+        itemFrameMeta.setOrientation(ItemFrameMeta.Orientation.NORTH);
+
         ItemStack map = ItemStack.builder(Material.FILLED_MAP)
                 .meta(new MapMeta.Builder().mapId(id).build())
                 .build();
-        itemFrame.setItemStack(map);
-        itemFrame.setInstance(instance);
-        itemFrame.setCustomNameVisible(true);
-        itemFrame.setCustomName(ColoredText.of("MapID: " + id));
+
+        itemFrameMeta.setItem(map);
+        itemFrameMeta.setCustomNameVisible(true);
+        itemFrameMeta.setCustomName(Component.text("MapID: " + id));
+
+        itemFrameMeta.setNotifyAboutChanges(true);
+
+        itemFrame.setInstance(instance, new Position(x, y, z));
+        itemFrame.getPosition().setYaw(180f);
     }
 
     private static void setupMaps(Instance instance, int mapIDStart, int zCoordinate) {
