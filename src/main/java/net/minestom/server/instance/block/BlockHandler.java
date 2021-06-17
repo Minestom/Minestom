@@ -51,7 +51,7 @@ public interface BlockHandler {
      *
      * @param touch the contact details
      */
-    default void handleContact(@NotNull Touch touch) {
+    default void onTouch(@NotNull Touch touch) {
     }
 
     default @NotNull Collection<Tag<?>> getBlockEntityTags() {
