@@ -5,6 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.util.Codec;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.instance.block.Block;
@@ -34,9 +35,11 @@ public final class NBTUtils {
 
     /**
      * An Adventure codec to convert between NBT and SNBT.
+     *
+     * @deprecated Use {@link MinestomAdventure#NBT_CODEC}
      */
-    public static final Codec<NBT, String, NBTException, RuntimeException> SNBT_CODEC
-            = Codec.of(encoded -> new SNBTParser(new StringReader(encoded)).parse(), NBT::toSNBT);
+    @Deprecated(forRemoval = true)
+    public static final Codec<NBT, String, NBTException, RuntimeException> SNBT_CODEC = MinestomAdventure.NBT_CODEC;
 
     private NBTUtils() {
 
@@ -54,7 +57,7 @@ public final class NBTUtils {
             return null;
         }
 
-        return BinaryTagHolder.encode(tag, SNBT_CODEC);
+        return BinaryTagHolder.encode(tag, MinestomAdventure.NBT_CODEC);
     }
 
     /**

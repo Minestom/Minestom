@@ -1,4 +1,4 @@
-package net.minestom.server.entity.type.projectile;
+package net.minestom.server.entity;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;

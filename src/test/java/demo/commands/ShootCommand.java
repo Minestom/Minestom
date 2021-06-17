@@ -10,7 +10,7 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.arrow.ArrowMeta;
-import net.minestom.server.entity.type.projectile.EntityProjectile;
+import net.minestom.server.entity.EntityProjectile;
 
 import java.util.concurrent.ThreadLocalRandom;
 

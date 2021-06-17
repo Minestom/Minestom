@@ -7,6 +7,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.AdventureSerializer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
@@ -84,8 +85,8 @@ public final class PacketUtils {
 
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
-        if (AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
-            needsTranslating = AdventureSerializer.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
+        if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
+            needsTranslating = ComponentUtils.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
 
         if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {

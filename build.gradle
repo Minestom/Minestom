@@ -39,9 +39,6 @@ allprojects {
         maven {
             url "https://repo.velocitypowered.com/snapshots/"
         }
-        maven {
-            url "https://repo.minestom.net/repository/maven-public/"
-        }
     }
     javadoc {
         options {
@@ -173,9 +170,6 @@ dependencies {
             requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
         }
     }
-
-    // This is the data Minestom uses. from https://github.com/Minestom/MinestomDataGenerator
-    api "net.minestom:minestom-data-full:${rootProject.properties.get("mcVersion")}"
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
 

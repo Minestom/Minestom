@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.Queues;
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
@@ -65,7 +66,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, PermissionHandler, HoverEventSource<ShowEntity> {
+public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();

@@ -1,14 +1,13 @@
 package net.minestom.server.sound;
 
+import net.kyori.adventure.sound.Sound;
 import org.jetbrains.annotations.NotNull;
 
-import static net.kyori.adventure.sound.Sound.*;
-
 /**
- * @deprecated Use {@link Source}
+ * @deprecated Use {@link Sound.Source}
  */
 @Deprecated
-public enum SoundCategory {
+public enum SoundCategory implements Sound.Source.Provider {
     MASTER,
     MUSIC,
     RECORDS,
@@ -24,8 +23,15 @@ public enum SoundCategory {
      * Gets the Adventure source representing this sound category.
      *
      * @return the source
+     * @deprecated Use {@link #soundSource()}
      */
-    public @NotNull Source asSource() {
-        return Source.values()[this.ordinal()];
+    @Deprecated
+    public @NotNull Sound.Source asSource() {
+        return this.soundSource();
+    }
+
+    @Override
+    public @NotNull Sound.Source soundSource() {
+        return Sound.Source.values()[this.ordinal()];
     }
 }

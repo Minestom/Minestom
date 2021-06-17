@@ -13,6 +13,10 @@ application {
     mainClass.set("net.minestom.codegen.Generators")
 }
 
+repositories {
+    maven { url "https://repo.minestom.net/repository/maven-public/" }
+}
+
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'org.jetbrains:annotations:20.1.0'

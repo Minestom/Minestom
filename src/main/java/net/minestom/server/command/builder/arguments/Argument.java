@@ -226,7 +226,6 @@ public abstract class Argument<T> {
      * @param suggestionCallback The suggestion callback to set.
      * @return 'this' for chaining
      */
-    @Beta
     public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
         this.suggestionCallback = suggestionCallback;
         return this;

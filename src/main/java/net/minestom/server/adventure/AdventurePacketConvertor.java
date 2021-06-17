@@ -3,6 +3,7 @@ package net.minestom.server.adventure;
 import it.unimi.dsi.fastutil.objects.Object2IntArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -14,6 +15,7 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.packet.server.play.StopSoundPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -44,6 +46,7 @@ public class AdventurePacketConvertor {
 
     /**
      * Gets the int value of a boss bar overlay.
+     *
      * @param overlay the overlay
      * @return the value
      */
@@ -53,6 +56,7 @@ public class AdventurePacketConvertor {
 
     /**
      * Gets the byte value of a collection of boss bar flags.
+     *
      * @param flags the flags
      * @return the value
      */
@@ -66,6 +70,7 @@ public class AdventurePacketConvertor {
 
     /**
      * Gets the int value of a boss bar color.
+     *
      * @param color the color
      * @return the value
      */
@@ -75,6 +80,7 @@ public class AdventurePacketConvertor {
 
     /**
      * Gets the int value of a sound source.
+     *
      * @param source the source
      * @return the value
      */
@@ -84,6 +90,7 @@ public class AdventurePacketConvertor {
 
     /**
      * Gets the int value from a named text color.
+     *
      * @param color the color
      * @return the int value
      */
@@ -93,17 +100,18 @@ public class AdventurePacketConvertor {
 
     /**
      * Creates a sound packet from a sound and a location.
+     *
      * @param sound the sound
      * @param x the x coordinate
      * @param y the y coordinate
      * @param z the z coordinate
      * @return the sound packet
      */
-    public static ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
-        SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
+    public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
+        final SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
 
         if (minestomSound == null) {
-            NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
+            final NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
             packet.soundName = sound.name().asString();
             packet.soundSource = sound.source();
             packet.x = (int) x;
@@ -113,7 +121,7 @@ public class AdventurePacketConvertor {
             packet.pitch = sound.pitch();
             return packet;
         } else {
-            SoundEffectPacket packet = new SoundEffectPacket();
+            final SoundEffectPacket packet = new SoundEffectPacket();
             packet.soundId = minestomSound.getId();
             packet.soundSource = sound.source();
             packet.x = (int) x;
@@ -126,21 +134,38 @@ public class AdventurePacketConvertor {
     }
 
     /**
-     * Creates an entity sound packet from an Adventure sound.
+     * Creates a sound effect packet from a sound and an emitter.
+     *
      * @param sound the sound
-     * @param entity the entity the sound is coming from
-     * @return the packet
+     * @param emitter the emitter, must be an {@link Entity}
+     * @return the sound packet
      */
-    public static ServerPacket createEntitySoundPacket(@NotNull Sound sound, @NotNull Entity entity) {
-        SoundEvent soundEvent = Registries.getSoundEvent(sound.name());
+    public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        if (emitter == Sound.Emitter.self())
+            throw new IllegalArgumentException("you must replace instances of Emitter.self() before calling this method");
+        if (!(emitter instanceof Entity))
+            throw new IllegalArgumentException("you can only call this method with entities");
 
-        if (soundEvent == null) {
-            throw new IllegalArgumentException("Sound must be a valid sound event.");
-        } else {
-            EntitySoundEffectPacket packet = new EntitySoundEffectPacket();
-            packet.soundId = soundEvent.getId();
+        final Entity entity = (Entity) emitter;
+        final SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
+
+        if (minestomSound != null) {
+            final EntitySoundEffectPacket packet = new EntitySoundEffectPacket();
+            packet.soundId = minestomSound.getId();
             packet.soundSource = sound.source();
             packet.entityId = entity.getEntityId();
+            packet.volume = sound.volume();
+            packet.pitch = sound.pitch();
+            return packet;
+        } else {
+            final Position pos = entity.getPosition();
+
+            final NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
+            packet.soundName = sound.name().asString();
+            packet.soundSource = sound.source();
+            packet.x = (int) pos.getX();
+            packet.y = (int) pos.getY();
+            packet.z = (int) pos.getX();
             packet.volume = sound.volume();
             packet.pitch = sound.pitch();
             return packet;
@@ -148,7 +173,21 @@ public class AdventurePacketConvertor {
     }
 
     /**
+     * Creates an entity sound packet from an Adventure sound.
+     *
+     * @param sound the sound
+     * @param entity the entity the sound is coming from
+     * @return the packet
+     * @deprecated Use {@link #createSoundPacket(Sound, Sound.Emitter)}
+     */
+    @Deprecated(forRemoval = true)
+    public static ServerPacket createEntitySoundPacket(@NotNull Sound sound, @NotNull Entity entity) {
+        return createSoundPacket(sound, entity);
+    }
+
+    /**
      * Creates a sound stop packet from a sound stop.
+     *
      * @param stop the sound stop
      * @return the sound stop packet
      */
@@ -156,14 +195,16 @@ public class AdventurePacketConvertor {
         StopSoundPacket packet = new StopSoundPacket();
         packet.flags = 0x0;
 
-        if (stop.source() != null) {
+        final Sound.Source source = stop.source();
+        if (source != null) {
             packet.flags |= 0x1;
-            packet.source = AdventurePacketConvertor.getSoundSourceValue(stop.source());
+            packet.source = AdventurePacketConvertor.getSoundSourceValue(source);
         }
 
-        if (stop.sound() != null) {
+        final Key sound = stop.sound();
+        if (sound != null) {
             packet.flags |= 0x2;
-            packet.sound = stop.sound().asString();
+            packet.sound = sound.asString();
         }
 
         return packet;

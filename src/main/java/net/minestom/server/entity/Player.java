@@ -6,6 +6,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
@@ -29,6 +30,7 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
+import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
@@ -179,6 +181,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Adventure
     private Identity identity;
+    private final Pointers pointers;
 
     public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
         super(EntityType.PLAYER, uuid);
@@ -207,6 +210,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnectionInit();
 
         this.identity = Identity.identity(uuid);
+        this.pointers = Pointers.builder()
+                .withDynamic(Identity.UUID, this::getUuid)
+                .withDynamic(Identity.NAME, this::getUsername)
+                .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
+                .build();
     }
 
     /**
@@ -509,16 +517,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.packets.clear();
         if (getOpenInventory() != null)
             getOpenInventory().removeViewer(this);
-
-        // Boss bars cache
-        {
-            Set<net.minestom.server.bossbar.BossBar> bossBars = net.minestom.server.bossbar.BossBar.getBossBars(this);
-            if (bossBars != null) {
-                for (net.minestom.server.bossbar.BossBar bossBar : bossBars) {
-                    bossBar.removeViewer(this);
-                }
-            }
-        }
 
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
 
@@ -833,12 +831,25 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(@NotNull Sound sound) {
-        playerConnection.sendPacket(AdventurePacketConvertor.createEntitySoundPacket(sound, this));
+        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
     }
 
     @Override
     public void playSound(@NotNull Sound sound, double x, double y, double z) {
         playerConnection.sendPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
+    }
+
+    @Override
+    public void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        final ServerPacket packet;
+
+        if (emitter == Sound.Emitter.self()) {
+            packet = AdventurePacketConvertor.createSoundPacket(sound, this);
+        } else {
+            packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+        }
+
+        playerConnection.sendPacket(packet);
     }
 
     @Override
@@ -1037,13 +1048,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         sendUpdateHealthPacket();
     }
 
+    @Override
+    public @NotNull PlayerMeta getEntityMeta() {
+        return (PlayerMeta) super.getEntityMeta();
+    }
+
     /**
      * Gets the player additional hearts.
      *
      * @return the player additional hearts
      */
     public float getAdditionalHearts() {
-        return metadata.getIndex((byte) 14, 0f);
+        return getEntityMeta().getAdditionalHearts();
     }
 
     /**
@@ -1052,7 +1068,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param additionalHearts the count of additional hearts
      */
     public void setAdditionalHearts(float additionalHearts) {
-        this.metadata.setIndex((byte) 14, Metadata.Float(additionalHearts));
+        getEntityMeta().setAdditionalHearts(additionalHearts);
     }
 
     /**
@@ -2502,6 +2518,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public @NotNull Identity identity() {
         return this.identity;
+    }
+
+    @Override
+    public @NotNull Pointers pointers() {
+        return this.pointers;
     }
 
     @Override
