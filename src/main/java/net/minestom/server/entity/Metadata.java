@@ -1,10 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.BlockPosition;
