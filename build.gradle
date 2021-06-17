@@ -39,9 +39,7 @@ allprojects {
         maven {
             url "https://repo.velocitypowered.com/snapshots/"
         }
-        maven {
-            url "https://repo.minestom.com/repository/maven-public/"
-        }
+        //maven { url "https://repo.minestom.com/repository/maven-public/" }
     }
     javadoc {
         options {
@@ -175,7 +173,7 @@ dependencies {
     }
 
     // This is the data Minestom uses. from https://github.com/Minestom/MinestomDataGenerator
-    api "net.minestom:minestom-data-full:${rootProject.properties.get("mcVersion")}"
+    //api "net.minestom:minestom-data-full:${rootProject.properties.get("mcVersion")}"
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
 
