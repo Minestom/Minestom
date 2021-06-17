@@ -45,7 +45,6 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
-import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -142,17 +141,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
-
-    // TODO: CustomBlock break delay
-    private BlockPosition targetBlockPosition;
-    // The last break delay requested
-    private long targetBreakDelay;
-    // Number of tick since the last stage change
-    private long targetBlockBreakCount;
-    // The current stage of the target block, only if multi player breaking is disabled
-    private byte targetStage;
-    // Only used if multi player breaking is disabled, contains only this player
-    private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(new UpdateOption(10, TimeUnit.TICK));
@@ -328,54 +316,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.update(time); // Super update (item pickup/fire management)
 
-        // Target block stage
-        // TODO: CustomBlock break delay
-        // Old code feel free to remove.
-//        if (targetCustomBlock != null) {
-//            this.targetBlockBreakCount++;
-//
-//            final boolean processStage = targetBreakDelay < 0 || targetBlockBreakCount >= targetBreakDelay;
-//
-//            // Check if the player did finish his current break delay
-//            if (processStage) {
-//
-//                // Negative value should skip abs(value) stage
-//                final byte stageIncrease = (byte) (targetBreakDelay > 0 ? 1 : Math.abs(targetBreakDelay));
-//
-//                // Should increment the target block stage
-//                if (targetCustomBlock.enableMultiPlayerBreaking()) {
-//                    // Let the custom block object manages the breaking
-//                    final boolean canContinue = targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
-//                    if (canContinue) {
-//                        final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
-//                        refreshBreakDelay(breakers);
-//                    } else {
-//                        resetTargetBlock();
-//                    }
-//                } else {
-//                    // Let the player object manages the breaking
-//                    // The custom block doesn't support multi player breaking
-//                    if (targetStage + stageIncrease >= CustomBlock.MAX_STAGE) {
-//                        // Break the block
-//                        instance.breakBlock(this, targetBlockPosition);
-//                        resetTargetBlock();
-//                    } else {
-//                        // Send the new block break animation packet and refresh data
-//
-//                        final Chunk chunk = instance.getChunkAt(targetBlockPosition);
-//                        final int entityId = targetCustomBlock.getBreakEntityId(this);
-//                        final BlockBreakAnimationPacket blockBreakAnimationPacket =
-//                                new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
-//                        Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
-//                        chunk.sendPacketToViewers(blockBreakAnimationPacket);
-//
-//                        refreshBreakDelay(targetBreakers);
-//                        this.targetStage += stageIncrease;
-//                    }
-//                }
-//            }
-//        }
-
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
@@ -537,7 +477,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             if (chunk.isLoaded())
                 chunk.removeViewer(this);
         });
-        resetTargetBlock();
         playerConnection.disconnect();
     }
 
@@ -2101,11 +2040,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Changes the player ability "Creative Mode".
-     * <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">see</a>
-     * <p>
-     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition, byte, Set)}.
      *
      * @param instantBreak true to allow instant break
+     * @see <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">player abilities</a>
      */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;
@@ -2292,45 +2229,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public @Nullable ItemUpdateStateEvent callItemUpdateStateEvent(@Nullable Hand hand) {
         return callItemUpdateStateEvent(true, hand);
-    }
-
-    /**
-     * Refreshes the break delay for the next block break stage.
-     *
-     * @param breakers the list of breakers, can be null if {@code this} is the only breaker
-     */
-    private void refreshBreakDelay(@Nullable Set<Player> breakers) {
-        breakers = breakers == null ? targetBreakers : breakers;
-
-        // Refresh the last tick update
-        this.targetBlockBreakCount = 0;
-
-        // TODO: Handle custom blocks break delay.
-//        // Get if multi player breaking is enabled
-//        final boolean multiPlayerBreaking = targetCustomBlock.enableMultiPlayerBreaking();
-//        // Get the stage from the custom block object if it is, otherwise use the local field
-//        final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
-//        // Retrieve the break delay for the current stage
-//        this.targetBreakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
-    }
-
-    /**
-     * Resets data from the current block the player is mining.
-     * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen.
-     */
-    public void resetTargetBlock() {
-        // Remove effect
-        PlayerDiggingListener.removeEffect(this);
-
-        // TODO: Handle custom blocks break delay.
-//        if (targetCustomBlock != null) {
-//            targetCustomBlock.stopDigging(instance, targetBlockPosition, this);
-//            this.targetCustomBlock = null;
-//            this.targetBlockPosition = null;
-//            this.targetBreakDelay = 0;
-//            this.targetBlockBreakCount = 0;
-//            this.targetStage = 0;
-//        }
     }
 
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
