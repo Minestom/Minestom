@@ -13,19 +13,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
-import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
-import net.minestom.server.potion.Potion;
-import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 public class PlayerDiggingListener {
-
-    private static final List<Player> playersEffect = new CopyOnWriteArrayList<>();
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
         final ClientPlayerDiggingPacket.Status status = packet.status;
@@ -66,36 +57,21 @@ public class PlayerDiggingListener {
                 PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
                 EventDispatcher.call(playerStartDiggingEvent);
 
-                if (playerStartDiggingEvent.isCancelled()) {
-                    addEffect(player);
-
-                    // Unsuccessful digging
-                    sendAcknowledgePacket(player, blockPosition, block,
-                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                } else if (false) {
-                    // TODO: Handle Custom Block here
-                }
+                sendAcknowledgePacket(player, blockPosition, block,
+                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, !playerStartDiggingEvent.isCancelled());
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
 
             final Block block = instance.getBlock(blockPosition);
-            // Remove custom block target
-            player.resetTargetBlock();
-
             sendAcknowledgePacket(player, blockPosition, block,
                     ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
 
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
 
             final Block block = instance.getBlock(blockPosition);
-
-            if (false) {
-                // TODO: Handle custom block with block break delay here
-            } else {
-                // Vanilla block
-                breakBlock(instance, player, blockPosition, block, status);
-            }
+            // Vanilla block
+            breakBlock(instance, player, blockPosition, block, status);
 
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
 
@@ -163,9 +139,6 @@ public class PlayerDiggingListener {
                                    Player player,
                                    BlockPosition blockPosition, Block block,
                                    ClientPlayerDiggingPacket.Status status) {
-        // Finished digging, remove effect if any
-        player.resetTargetBlock();
-
         // Unverified block break, client is fully responsible
         final boolean result = instance.breakBlock(player, blockPosition);
 
@@ -192,48 +165,6 @@ public class PlayerDiggingListener {
             playerInventory.setItemInMainHand(handItem);
         } else {
             playerInventory.update();
-        }
-    }
-
-    /**
-     * Adds the effect {@link PotionEffect#DIG_SLOWDOWN} to the player.
-     * <p>
-     * Used for CustomBlock break delay or when the {@link PlayerStartDiggingEvent} is cancelled
-     * to remove the player break animation.
-     *
-     * @param player the player to add the effect to
-     */
-    private static void addEffect(@NotNull Player player) {
-        playersEffect.add(player);
-
-        EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
-        entityEffectPacket.entityId = player.getEntityId();
-        entityEffectPacket.potion = new Potion(
-                PotionEffect.DIG_SLOWDOWN,
-                (byte) -1,
-                0,
-                false,
-                false,
-                false
-        );
-        player.getPlayerConnection().sendPacket(entityEffectPacket);
-    }
-
-    /**
-     * Used to remove the affect from {@link #addEffect(Player)}.
-     * <p>
-     * Called when the player cancelled or finished digging the CustomBlock.
-     *
-     * @param player the player to remove the effect to
-     */
-    public static void removeEffect(@NotNull Player player) {
-        if (playersEffect.contains(player)) {
-            playersEffect.remove(player);
-
-            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-            removeEntityEffectPacket.entityId = player.getEntityId();
-            removeEntityEffectPacket.effect = PotionEffect.DIG_SLOWDOWN;
-            player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
         }
     }
 

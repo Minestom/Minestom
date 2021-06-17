@@ -248,8 +248,6 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
-        player.resetTargetBlock();
-
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
 
