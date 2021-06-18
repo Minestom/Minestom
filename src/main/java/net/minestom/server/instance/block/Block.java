@@ -124,9 +124,4 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
         Comparator STATE = (b1, b2) -> b1.getStateId() == b2.getStateId();
     }
-
-    @FunctionalInterface
-    interface Supplier {
-        @NotNull Block get(short stateId);
-    }
 }
