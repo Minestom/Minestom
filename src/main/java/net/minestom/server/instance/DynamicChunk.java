@@ -86,8 +86,7 @@ public class DynamicChunk extends Chunk {
             this.nbtMap.remove(index);
         }
         // Tickable
-        final boolean tickable = handler != null && handler.isTickable();
-        if (tickable) {
+        if (handler != null && handler.isTickable()) {
             this.tickableMap.put(index, handler);
         } else {
             this.tickableMap.remove(index);
@@ -106,15 +105,19 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        this.tickableMap.forEach((index, handler) -> {
+        if (tickableMap.isEmpty())
+            return;
+        for (var entry : tickableMap.int2ObjectEntrySet()) {
+            final int index = entry.getIntKey();
+
             final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
             final short y = ChunkUtils.blockIndexToChunkPositionY(index);
             final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
             final BlockPosition blockPosition = new BlockPosition(x, y, z);
 
             final Block block = getBlock(blockPosition);
-            handler.tick(BlockHandler.Tick.from(block, instance, blockPosition));
-        });
+            entry.getValue().tick(BlockHandler.Tick.from(block, instance, blockPosition));
+        }
     }
 
     @Override
