@@ -30,8 +30,7 @@ class BlockTest implements Block {
         this.compound = compound;
         this.handler = handler;
 
-        this.unmodifiableProperties = properties != null ?
-                Collections.unmodifiableMap(properties) : null;
+        this.unmodifiableProperties = Collections.unmodifiableMap(properties);
     }
 
     BlockTest(Registry.BlockEntry registry,
