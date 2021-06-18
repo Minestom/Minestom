@@ -94,7 +94,7 @@ public class Palette implements PublicCloneable<Palette> {
 
             final long value = block >> bitIndex & clear;
 
-            final boolean isCurrentAir = Block.fromStateId(hasPalette ? paletteBlockMap.get((short) value) : (short) value).isAir();
+            final boolean isCurrentAir = Block.fromStateId(fromPalette((short) value)).isAir();
 
             block |= clear << bitIndex;
             block ^= clear << bitIndex;
@@ -124,9 +124,7 @@ public class Palette implements PublicCloneable<Palette> {
         final long value = blocks[index] >> bitIndex & MAGIC_MASKS[bitsPerEntry];
 
         // Change to palette value and return
-        return hasPalette ?
-                paletteBlockMap.get((short) value) :
-                (short) value;
+        return fromPalette((short) value);
     }
 
     /**
@@ -250,6 +248,10 @@ public class Palette implements PublicCloneable<Palette> {
      */
     private int getMaxPaletteSize() {
         return 1 << bitsPerEntry;
+    }
+
+    private short fromPalette(short value) {
+        return hasPalette ? paletteBlockMap.get(value) : value;
     }
 
     private static Short2ShortLinkedOpenHashMap createPaletteBlockMap() {
