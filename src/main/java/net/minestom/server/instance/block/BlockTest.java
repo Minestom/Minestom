@@ -81,9 +81,4 @@ class BlockTest implements Block {
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return tag.read(compound);
     }
-
-    @Override
-    public boolean hasTag(@NotNull Tag<?> tag) {
-        return compound.containsKey(tag.getKey());
-    }
 }
