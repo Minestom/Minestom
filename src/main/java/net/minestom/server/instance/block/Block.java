@@ -45,21 +45,23 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @NotNull Block withHandler(@Nullable BlockHandler handler);
 
     @Contract(pure = true)
-    @NotNull String getProperty(@NotNull String property);
-
-    @Contract(pure = true)
-    default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
-        return getProperty(property.getName());
-    }
-
-    @Contract(pure = true)
     @Nullable NBTCompound getNbt();
 
     @Contract(pure = true)
     @Nullable BlockHandler getHandler();
 
     @Contract(pure = true)
-    @NotNull Map<String, String> getPropertiesMap();
+    @NotNull Map<String, String> getProperties();
+
+    @Contract(pure = true)
+    default @NotNull String getProperty(@NotNull String property) {
+        return getProperties().get(property);
+    }
+
+    @Contract(pure = true)
+    default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
+        return getProperty(property.getName());
+    }
 
     @Contract(pure = true)
     @NotNull Registry.BlockEntry registry();

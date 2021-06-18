@@ -19,6 +19,8 @@ class BlockTest implements Block {
     private final NBTCompound compound;
     private final BlockHandler handler;
 
+    private final Map<String, String> unmodifiableProperties;
+
     BlockTest(Registry.BlockEntry registry,
               Map<String, String> properties,
               NBTCompound compound,
@@ -27,6 +29,9 @@ class BlockTest implements Block {
         this.properties = properties;
         this.compound = compound;
         this.handler = handler;
+
+        this.unmodifiableProperties = properties != null ?
+                Collections.unmodifiableMap(properties) : null;
     }
 
     BlockTest(Registry.BlockEntry registry,
@@ -53,11 +58,6 @@ class BlockTest implements Block {
     }
 
     @Override
-    public @NotNull String getProperty(@NotNull String property) {
-        return properties.get(property);
-    }
-
-    @Override
     public @Nullable NBTCompound getNbt() {
         return compound != null ? compound.deepClone() : null;
     }
@@ -68,8 +68,8 @@ class BlockTest implements Block {
     }
 
     @Override
-    public @NotNull Map<String, String> getPropertiesMap() {
-        return Collections.unmodifiableMap(properties);
+    public @NotNull Map<String, String> getProperties() {
+        return unmodifiableProperties;
     }
 
     @Override
