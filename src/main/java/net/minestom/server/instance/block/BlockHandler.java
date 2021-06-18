@@ -54,6 +54,13 @@ public interface BlockHandler {
     default void onTouch(@NotNull Touch touch) {
     }
 
+    default void tick(@NotNull Tick tick) {
+    }
+
+    default boolean isTickable() {
+        return false;
+    }
+
     default @NotNull Collection<Tag<?>> getBlockEntityTags() {
         return Collections.emptyList();
     }
@@ -207,6 +214,34 @@ public interface BlockHandler {
                 @Override
                 public @NotNull Entity touching() {
                     return touching;
+                }
+            };
+        }
+    }
+
+    @ApiStatus.NonExtendable
+    interface Tick {
+        @NotNull Block block();
+
+        @NotNull Instance instance();
+
+        @NotNull BlockPosition blockPosition();
+
+        static @NotNull Tick from(@NotNull Block block, @NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+            return new Tick() {
+                @Override
+                public @NotNull Block block() {
+                    return block;
+                }
+
+                @Override
+                public @NotNull Instance instance() {
+                    return instance;
+                }
+
+                @Override
+                public @NotNull BlockPosition blockPosition() {
+                    return blockPosition;
                 }
             };
         }

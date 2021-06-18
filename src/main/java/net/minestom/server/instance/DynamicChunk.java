@@ -13,6 +13,7 @@ import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.OptionalCallback;
@@ -46,6 +47,7 @@ public class DynamicChunk extends Chunk {
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<BlockHandler> handlerMap = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<NBTCompound> nbtMap = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectOpenHashMap<BlockHandler> tickableMap = new Int2ObjectOpenHashMap<>();
 
     private long lastChangeTime;
 
@@ -58,37 +60,37 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final short blockStateId = block.getStateId();
-        final BlockHandler handler = block.getHandler();
-        final NBTCompound nbt = block.getNbt(); // TODO
-        final boolean updatable = false; // TODO
-        {
-            // Update pathfinder
-            if (columnarSpace != null) {
-                final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-                final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(block);
-                columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
-            }
-        }
-
         this.lastChangeTime = System.currentTimeMillis();
-        {
-            Section section = retrieveSection(y);
-            section.setBlockAt(x, y, z, blockStateId);
+        // Update pathfinder
+        if (columnarSpace != null) {
+            final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
+            final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(block);
+            columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
+        Section section = retrieveSection(y);
+        section.setBlockAt(x, y, z, block.getStateId());
 
         final int index = getBlockIndex(x, y, z);
         // Handler
+        final BlockHandler handler = block.getHandler();
         if (handler != null) {
             this.handlerMap.put(index, handler);
         } else {
             this.handlerMap.remove(index);
         }
         // Nbt
+        final NBTCompound nbt = block.getNbt();
         if (nbt != null) {
             this.nbtMap.put(index, nbt);
         } else {
             this.nbtMap.remove(index);
+        }
+        // Tickable
+        final boolean tickable = handler != null && handler.isTickable();
+        if (tickable) {
+            this.tickableMap.put(index, handler);
+        } else {
+            this.tickableMap.remove(index);
         }
     }
 
@@ -104,7 +106,15 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        // TODO block update
+        this.tickableMap.forEach((index, handler) -> {
+            final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
+            final short y = ChunkUtils.blockIndexToChunkPositionY(index);
+            final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
+            final BlockPosition blockPosition = new BlockPosition(x, y, z);
+
+            final Block block = getBlock(blockPosition);
+            handler.tick(BlockHandler.Tick.from(block, instance, blockPosition));
+        });
     }
 
     @Override
