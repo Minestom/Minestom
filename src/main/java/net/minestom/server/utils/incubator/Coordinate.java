@@ -3,6 +3,13 @@ package net.minestom.server.utils.incubator;
 import org.jetbrains.annotations.NotNull;
 
 public interface Coordinate {
+
+    Coordinate ZERO = of(0, 0, 0);
+
+    static @NotNull Coordinate of(double x, double y, double z) {
+        return new CoordinateImpl(x, y, z);
+    }
+
     @NotNull Coordinate with(double x, double y, double z);
 
     default @NotNull Coordinate with(@NotNull Coordinate coordinate) {
