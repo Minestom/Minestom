@@ -68,7 +68,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     @Override
     default @NotNull NamespaceID namespace() {
-        return NamespaceID.from(registry().namespace());
+        return registry().namespace();
     }
 
     @Override
