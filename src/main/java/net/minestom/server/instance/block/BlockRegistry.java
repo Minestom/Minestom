@@ -2,9 +2,11 @@ package net.minestom.server.instance.block;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -80,7 +82,11 @@ class BlockRegistry {
     }
 
     private static Map<String, String> getPropertyMap(String query) {
-        Map<String, String> result = new HashMap<>();
+        if (query.equals("[]")) {
+            return Collections.emptyMap();
+        }
+        final int capacity = StringUtils.countMatches(query, ',') + 1;
+        Map<String, String> result = new HashMap<>(capacity);
         final String propertiesString = query.substring(1);
         StringBuilder keyBuilder = new StringBuilder();
         StringBuilder valueBuilder = new StringBuilder();

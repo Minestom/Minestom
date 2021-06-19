@@ -14,27 +14,22 @@ import java.util.Objects;
 class BlockTest implements Block {
 
     private final Registry.BlockEntry registry;
-
     private final Map<String, String> properties;
     private final NBTCompound compound;
     private final BlockHandler handler;
 
-    private final Map<String, String> unmodifiableProperties;
-
-    BlockTest(Registry.BlockEntry registry,
-              Map<String, String> properties,
-              NBTCompound compound,
-              BlockHandler handler) {
+    BlockTest(@NotNull Registry.BlockEntry registry,
+              @NotNull Map<String, String> properties,
+              @Nullable NBTCompound compound,
+              @Nullable BlockHandler handler) {
         this.registry = registry;
-        this.properties = properties;
+        this.properties = Collections.unmodifiableMap(properties);
         this.compound = compound;
         this.handler = handler;
-
-        this.unmodifiableProperties = Collections.unmodifiableMap(properties);
     }
 
-    BlockTest(Registry.BlockEntry registry,
-              Map<String, String> properties) {
+    BlockTest(@NotNull Registry.BlockEntry registry,
+              @NotNull Map<String, String> properties) {
         this(registry, properties, null, null);
     }
 
@@ -68,7 +63,7 @@ class BlockTest implements Block {
 
     @Override
     public @NotNull Map<String, String> getProperties() {
-        return unmodifiableProperties;
+        return properties;
     }
 
     @Override
