@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +38,7 @@ public class Registry {
     }
 
     public static class BlockEntry extends Entry {
-        private final String namespace;
+        private final NamespaceID namespace;
         private final int id;
         private final int stateId;
         private final double destroySpeed;
@@ -52,7 +53,7 @@ public class Registry {
 
         private BlockEntry(JsonObject main, JsonObject override) {
             super(main, override);
-            this.namespace = getString("namespace");
+            this.namespace = NamespaceID.from(getString("namespace"));
             this.id = getInt("id");
             this.stateId = getInt("stateId");
             this.destroySpeed = getDouble("hardness");
@@ -66,7 +67,7 @@ public class Registry {
             this.blockEntity = getBoolean("blockEntity");
         }
 
-        public String namespace() {
+        public NamespaceID namespace() {
             return namespace;
         }
 
