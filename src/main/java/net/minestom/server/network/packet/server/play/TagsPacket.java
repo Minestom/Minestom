@@ -58,7 +58,7 @@ public class TagsPacket implements ServerPacket {
                                 writer.writeVarInt(-1);
                                 continue;
                             }
-                            writer.writeVarInt(b.getId());
+                            writer.writeVarInt(b.id());
                         }
                     }
                     break;

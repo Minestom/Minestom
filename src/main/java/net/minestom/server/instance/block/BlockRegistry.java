@@ -40,7 +40,7 @@ class BlockRegistry {
     }
 
     static @Nullable Block getProperties(Block block, Map<String, String> properties) {
-        return getProperties(block.getNamespaceId().asString(), properties);
+        return getProperties(block.namespace().asString(), properties);
     }
 
     static {

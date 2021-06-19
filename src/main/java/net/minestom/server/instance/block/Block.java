@@ -36,7 +36,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     @Contract(pure = true)
     default <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var compound = Objects.requireNonNullElseGet(getNbt(), NBTCompound::new);
+        var compound = Objects.requireNonNullElseGet(nbt(), NBTCompound::new);
         tag.write(compound, value);
         return withNbt(compound);
     }
@@ -45,38 +45,38 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @NotNull Block withHandler(@Nullable BlockHandler handler);
 
     @Contract(pure = true)
-    @Nullable NBTCompound getNbt();
+    @Nullable NBTCompound nbt();
 
     @Contract(pure = true)
-    @Nullable BlockHandler getHandler();
+    @Nullable BlockHandler handler();
 
     @Contract(pure = true)
-    @NotNull Map<String, String> getProperties();
+    @NotNull Map<String, String> properties();
 
     @Contract(pure = true)
-    default @NotNull String getProperty(@NotNull String property) {
-        return getProperties().get(property);
+    default @NotNull String property(@NotNull String property) {
+        return properties().get(property);
     }
 
     @Contract(pure = true)
-    default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
-        return getProperty(property.getName());
+    default <T> @NotNull String property(@NotNull BlockProperty<T> property) {
+        return property(property.getName());
     }
 
     @Contract(pure = true)
     @NotNull Registry.BlockEntry registry();
 
     @Override
-    default @NotNull NamespaceID getNamespaceId() {
+    default @NotNull NamespaceID namespace() {
         return NamespaceID.from(registry().namespace());
     }
 
     @Override
-    default int getId() {
+    default int id() {
         return registry().id();
     }
 
-    default short getStateId() {
+    default short stateId() {
         return (short) registry().stateId();
     }
 
@@ -120,8 +120,8 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     interface Comparator extends BiPredicate<Block, Block> {
         Comparator IDENTITY = (b1, b2) -> b1 == b2;
 
-        Comparator ID = (b1, b2) -> b1.getId() == b2.getId();
+        Comparator ID = (b1, b2) -> b1.id() == b2.id();
 
-        Comparator STATE = (b1, b2) -> b1.getStateId() == b2.getStateId();
+        Comparator STATE = (b1, b2) -> b1.stateId() == b2.stateId();
     }
 }

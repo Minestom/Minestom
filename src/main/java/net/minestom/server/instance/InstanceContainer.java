@@ -149,7 +149,7 @@ public class InstanceContainer extends Instance {
             setAlreadyChanged(blockPosition, block);
 
             final Block previousBlock = chunk.getBlock(blockPosition);
-            final BlockHandler previousHandler = previousBlock.getHandler();
+            final BlockHandler previousHandler = previousBlock.handler();
 
             // Change id based on neighbors
             block = executeBlockPlacementRule(block, blockPosition);
@@ -167,7 +167,7 @@ public class InstanceContainer extends Instance {
                 // Previous destroy
                 previousHandler.onDestroy(BlockHandler.Destroy.from(previousBlock, this, blockPosition));
             }
-            final BlockHandler handler = block.getHandler();
+            final BlockHandler handler = block.handler();
             if (handler != null) {
                 // New placement
                 handler.onPlace(BlockHandler.Placement.from(block, this, blockPosition));
@@ -191,7 +191,7 @@ public class InstanceContainer extends Instance {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         if (changedBlock == null)
             return false;
-        return changedBlock.getId() == block.getId();
+        return changedBlock.id() == block.id();
     }
 
     /**
@@ -285,7 +285,7 @@ public class InstanceContainer extends Instance {
                 EffectPacket effectPacket = new EffectPacket();
                 effectPacket.effectId = 2001; // Block break + block break sound
                 effectPacket.position = blockPosition;
-                effectPacket.data = resultBlock.getStateId();
+                effectPacket.data = resultBlock.stateId();
                 effectPacket.disableRelativeVolume = false;
 
                 PacketUtils.sendGroupedPacket(chunk.getViewers(), effectPacket,
@@ -639,7 +639,7 @@ public class InstanceContainer extends Instance {
     private void sendBlockChange(@NotNull Chunk chunk, @NotNull BlockPosition blockPosition, @NotNull Block block) {
         BlockChangePacket blockChangePacket = new BlockChangePacket();
         blockChangePacket.blockPosition = blockPosition;
-        blockChangePacket.blockStateId = block.getStateId();
+        blockChangePacket.blockStateId = block.stateId();
         chunk.sendPacketToViewers(blockChangePacket);
     }
 

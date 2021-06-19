@@ -2,7 +2,6 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
 import net.minestom.server.tag.Tag;
@@ -156,7 +155,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.canPlaceOn = blocks;
         handleCollection(canPlaceOn, "CanPlaceOn", nbt, () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canPlaceOn.forEach(block -> list.add(new NBTString(block.getName())));
+            canPlaceOn.forEach(block -> list.add(new NBTString(block.name())));
             nbt.set("CanPlaceOn", list);
             return list;
         });
@@ -173,7 +172,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.canDestroy = blocks;
         handleCollection(canDestroy, "CanDestroy", nbt, () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canDestroy.forEach(block -> list.add(new NBTString(block.getName())));
+            canDestroy.forEach(block -> list.add(new NBTString(block.name())));
             nbt.set("CanDestroy", list);
             return list;
         });

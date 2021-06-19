@@ -44,7 +44,7 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     @SuppressWarnings("ConstantConditions")
     @Override
     public int getObjectData() {
-        int id = this.block.getId();
+        int id = this.block.id();
         int metadata = 0; // TODO ?
         return id | (metadata << 12);
     }

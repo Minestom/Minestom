@@ -52,17 +52,17 @@ class BlockTest implements Block {
     }
 
     @Override
-    public @Nullable NBTCompound getNbt() {
+    public @Nullable NBTCompound nbt() {
         return compound != null ? compound.deepClone() : null;
     }
 
     @Override
-    public @Nullable BlockHandler getHandler() {
+    public @Nullable BlockHandler handler() {
         return handler;
     }
 
     @Override
-    public @NotNull Map<String, String> getProperties() {
+    public @NotNull Map<String, String> properties() {
         return properties;
     }
 

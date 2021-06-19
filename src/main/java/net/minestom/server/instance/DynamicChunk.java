@@ -68,18 +68,18 @@ public class DynamicChunk extends Chunk {
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = retrieveSection(y);
-        section.setBlockAt(x, y, z, block.getStateId());
+        section.setBlockAt(x, y, z, block.stateId());
 
         final int index = getBlockIndex(x, y, z);
         // Handler
-        final BlockHandler handler = block.getHandler();
+        final BlockHandler handler = block.handler();
         if (handler != null) {
             this.handlerMap.put(index, handler);
         } else {
             this.handlerMap.remove(index);
         }
         // Nbt
-        final NBTCompound nbt = block.getNbt();
+        final NBTCompound nbt = block.nbt();
         if (nbt != null) {
             this.nbtMap.put(index, nbt);
         } else {

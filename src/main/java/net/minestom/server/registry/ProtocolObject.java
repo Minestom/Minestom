@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 public interface ProtocolObject extends Keyed {
 
-    @NotNull NamespaceID getNamespaceId();
+    @NotNull NamespaceID namespace();
 
     @Override
     default @NotNull Key key() {
-        return getNamespaceId();
+        return namespace();
     }
 
-    default @NotNull String getName() {
-        return getNamespaceId().asString();
+    default @NotNull String name() {
+        return namespace().asString();
     }
 
-    int getId();
+    int id();
 }

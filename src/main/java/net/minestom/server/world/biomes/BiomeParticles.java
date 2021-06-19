@@ -44,8 +44,8 @@ public class BiomeParticles {
         public NBTCompound toNbt() {
             NBTCompound nbtCompound = new NBTCompound();
             nbtCompound.setString("type", type);
-            nbtCompound.setString("Name", block.getName());
-            Map<String, String> propertiesMap = block.getProperties();
+            nbtCompound.setString("Name", block.name());
+            Map<String, String> propertiesMap = block.properties();
             if (propertiesMap.size() != 0) {
                 NBTCompound properties = new NBTCompound();
                 propertiesMap.forEach(properties::setString);

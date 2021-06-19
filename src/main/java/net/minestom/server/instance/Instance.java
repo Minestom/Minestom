@@ -572,7 +572,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
         blockActionPacket.blockPosition = blockPosition;
         blockActionPacket.actionId = actionId;
         blockActionPacket.actionParam = actionParam;
-        blockActionPacket.blockId = block.getId();
+        blockActionPacket.blockId = block.id();
 
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "The chunk at " + blockPosition + " is not loaded!");

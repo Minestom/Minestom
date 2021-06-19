@@ -181,7 +181,7 @@ public class PlayerDiggingListener {
                                               @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
         AcknowledgePlayerDiggingPacket acknowledgePlayerDiggingPacket = new AcknowledgePlayerDiggingPacket();
         acknowledgePlayerDiggingPacket.blockPosition = blockPosition;
-        acknowledgePlayerDiggingPacket.blockStateId = block.getStateId();
+        acknowledgePlayerDiggingPacket.blockStateId = block.stateId();
         acknowledgePlayerDiggingPacket.status = status;
         acknowledgePlayerDiggingPacket.successful = success;
 

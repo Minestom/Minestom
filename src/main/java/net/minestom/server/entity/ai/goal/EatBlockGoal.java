@@ -49,8 +49,8 @@ public class EatBlockGoal extends GoalSelector {
         }
 
         final BlockPosition blockPosition = entityCreature.getPosition().toBlockPosition();
-        final short blockStateIdIn = instance.getBlock(blockPosition.clone().subtract(0, 1, 0)).getStateId();
-        final short blockStateIdBelow = instance.getBlock(blockPosition.clone().subtract(0, 2, 0)).getStateId();
+        final short blockStateIdIn = instance.getBlock(blockPosition.clone().subtract(0, 1, 0)).stateId();
+        final short blockStateIdBelow = instance.getBlock(blockPosition.clone().subtract(0, 2, 0)).stateId();
 
         return eatInMap.containsKey(blockStateIdIn) || eatBelowMap.containsKey(blockStateIdBelow);
     }
@@ -73,8 +73,8 @@ public class EatBlockGoal extends GoalSelector {
         final BlockPosition currentPosition = entityCreature.getPosition().toBlockPosition().clone().subtract(0, 1, 0);
         final BlockPosition belowPosition = currentPosition.clone().subtract(0, 1, 0);
 
-        final short blockStateIdIn = instance.getBlock(currentPosition).getStateId();
-        final short blockStateIdBelow = instance.getBlock(belowPosition).getStateId();
+        final short blockStateIdIn = instance.getBlock(currentPosition).stateId();
+        final short blockStateIdBelow = instance.getBlock(belowPosition).stateId();
         if (eatInMap.containsKey(blockStateIdIn)) {
             instance.setBlock(currentPosition, Block.fromStateId(eatInMap.get(blockStateIdIn)));
         } else if (eatBelowMap.containsKey(blockStateIdBelow)) {

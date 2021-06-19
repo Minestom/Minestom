@@ -607,7 +607,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                             continue;
 
                         final Block block = chunk.getBlock(x, y, z);
-                        final BlockHandler handler = block.getHandler();
+                        final BlockHandler handler = block.handler();
                         if (handler != null) {
                             tmpPosition.setX(x);
                             tmpPosition.setY(y);

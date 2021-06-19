@@ -18,7 +18,7 @@ public class PFBlockDescription implements IBlockDescription {
      * @return the {@link PFBlockDescription} linked to {@code blockStateId}
      */
     public static PFBlockDescription getBlockDescription(Block block) {
-        final short blockStateId = block.getStateId();
+        final short blockStateId = block.stateId();
         if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
             synchronized (BLOCK_DESCRIPTION_MAP) {
                 final PFBlockDescription blockDescription = new PFBlockDescription(block);
@@ -41,26 +41,26 @@ public class PFBlockDescription implements IBlockDescription {
         // TODO: Use Hitbox
         // Return fences, fencegates and walls.
         // It just so happens that their namespace IDs contain "fence".
-        if (block.getNamespaceId().asString().contains("fence")) {
+        if (block.namespace().asString().contains("fence")) {
             return true;
         }
         // Return all walls
         // It just so happens that their namespace IDs all end with "door".
-        return block.getNamespaceId().asString().endsWith("wall");
+        return block.namespace().asString().endsWith("wall");
     }
 
     @Override
     public boolean isClimbable() {
         // Return ladders and vines (including weeping and twisting vines)
         // Note that no other Namespace IDs contain "vine" except vines.
-        return block.compare(Block.LADDER) || block.getNamespaceId().asString().contains("vine");
+        return block.compare(Block.LADDER) || block.namespace().asString().contains("vine");
     }
 
     @Override
     public boolean isDoor() {
         // Return all normal doors and trap doors.
         // It just so happens that their namespace IDs all end with "door".
-        return block.getNamespaceId().asString().endsWith("door");
+        return block.namespace().asString().endsWith("door");
     }
 
     @Override
@@ -85,29 +85,29 @@ public class PFBlockDescription implements IBlockDescription {
         if (isDoor()) {
             return false;
         }
-        if (block.getName().startsWith("potted")) {
+        if (block.name().startsWith("potted")) {
             return false;
         }
         // Skulls & Heads
-        if (block.getName().contains("skull") || block.getName().contains("head")) {
+        if (block.name().contains("skull") || block.name().contains("head")) {
             // NOTE: blocks.getName().contains("head") also matches Piston_Head
             // I could not find out by documentation if piston_head is fully bounded, I would presume it is NOT.
             return false;
         }
         // Carpets
-        if (block.getName().endsWith("carpet")) {
+        if (block.name().endsWith("carpet")) {
             return false;
         }
         // Slabs
-        if (block.getName().contains("slab")) {
+        if (block.name().contains("slab")) {
             return false;
         }
         // Beds
-        if (block.getName().endsWith("bed")) {
+        if (block.name().endsWith("bed")) {
             return false;
         }
         // Glass Panes
-        if (block.getName().endsWith("pane")) {
+        if (block.name().endsWith("pane")) {
             return false;
         }
 
