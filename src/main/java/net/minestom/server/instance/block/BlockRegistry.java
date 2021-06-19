@@ -98,7 +98,7 @@ class BlockRegistry {
                 builder = valueBuilder;
             } else if (c == ',' || c == ']') {
                 // Append current text
-                result.put(keyBuilder.toString(), valueBuilder.toString());
+                result.put(keyBuilder.toString().intern(), valueBuilder.toString().intern());
                 keyBuilder = new StringBuilder();
                 valueBuilder = new StringBuilder();
                 builder = keyBuilder;
