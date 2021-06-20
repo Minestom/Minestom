@@ -1,8 +1,8 @@
 package net.minestom.server.utils.cache;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalListener;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,7 +24,7 @@ public class TemporaryCache<T> {
      * @param duration the time before considering an object unused
      */
     public TemporaryCache(long duration, TimeUnit timeUnit, RemovalListener<UUID, T> removalListener) {
-        this.cache = CacheBuilder.newBuilder()
+        this.cache = Caffeine.newBuilder()
                 .expireAfterWrite(duration, timeUnit)
                 .removalListener(removalListener)
                 .build();
