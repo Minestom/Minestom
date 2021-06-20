@@ -3,6 +3,8 @@ package net.minestom.server.utils.incubator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.UnaryOperator;
+
 public interface Vec {
 
     Vec ZERO = new VecImpl();
@@ -73,6 +75,11 @@ public interface Vec {
     @Contract(pure = true)
     default @NotNull Vec max(@NotNull Vec vec) {
         return with(Math.max(x(), vec.x()), Math.max(y(), vec.y()), Math.max(z(), vec.z()));
+    }
+
+    @Contract(pure = true)
+    default Vec apply(@NotNull UnaryOperator<@NotNull Vec> operator) {
+        return operator.apply(this);
     }
 
     @Contract(pure = true)
