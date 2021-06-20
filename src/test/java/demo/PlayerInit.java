@@ -95,7 +95,7 @@ public class PlayerInit {
                 event.setSpawningInstance(instance);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                player.setRespawnPoint(new Position(0, 42f, 0));
+                player.setRespawnPoint(new Position(0, 82f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();

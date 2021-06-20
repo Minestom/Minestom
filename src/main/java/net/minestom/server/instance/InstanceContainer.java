@@ -320,7 +320,7 @@ public class InstanceContainer extends Instance {
             OptionalCallback.execute(callback, chunk);
         } else {
             if (hasEnabledAutoChunkLoad()) {
-                // Load chunk from StorageLocation or with ChunkGenerator
+                // Use `IChunkLoader` or `ChunkGenerator`
                 retrieveChunk(chunkX, chunkZ, callback);
             } else {
                 // Chunk not loaded, return null
