@@ -13,7 +13,7 @@ public class ResourcePackSendPacket implements ServerPacket {
     public String url = "";
     public String hash = "0000000000000000000000000000000000000000"; // Size 40
     public boolean forced;
-    public Component forcedMessage = Component.empty();
+    public Component forcedMessage;
 
     public ResourcePackSendPacket() {
     }
@@ -30,8 +30,11 @@ public class ResourcePackSendPacket implements ServerPacket {
         writer.writeSizedString(url);
         writer.writeSizedString(hash);
         writer.writeBoolean(forced);
-        if (forced) {
+        if (forcedMessage != null) {
+            writer.writeBoolean(true);
             writer.writeComponent(forcedMessage);
+        } else {
+            writer.writeBoolean(false);
         }
     }
 
@@ -40,8 +43,12 @@ public class ResourcePackSendPacket implements ServerPacket {
         this.url = reader.readSizedString();
         this.hash = reader.readSizedString();
         this.forced = reader.readBoolean();
-        if (forced) {
+
+        final boolean hasMessage = reader.readBoolean();
+        if (hasMessage) {
             this.forcedMessage = reader.readComponent();
+        } else {
+            this.forcedMessage = null;
         }
     }
 
