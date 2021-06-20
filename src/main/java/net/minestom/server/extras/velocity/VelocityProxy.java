@@ -1,7 +1,7 @@
 package net.minestom.server.extras.velocity;
 
-import com.google.common.net.InetAddresses;
 import io.netty.buffer.ByteBuf;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -73,7 +74,12 @@ public final class VelocityProxy {
     }
 
     public static InetAddress readAddress(@NotNull BinaryReader reader) {
-        return InetAddresses.forString(reader.readSizedString());
+        try {
+            return InetAddress.getByName(reader.readSizedString());
+        } catch (UnknownHostException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+            return null;
+        }
     }
 
     public static PlayerSkin readSkin(@NotNull BinaryReader reader) {
