@@ -42,6 +42,10 @@ public class AnvilLoader implements IChunkLoader {
     @Override
     public boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
         LOGGER.debug("Attempt loading at {} {}", chunkX, chunkZ);
+        if (!Files.exists(path)) {
+            // No world folder
+            return false;
+        }
         try {
             Chunk chunk = loadMCA(instance, chunkX, chunkZ, callback);
             return chunk != null;
