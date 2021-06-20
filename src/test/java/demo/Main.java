@@ -15,8 +15,6 @@ import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
-import net.minestom.server.storage.StorageManager;
-import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.time.UpdateOption;
@@ -52,10 +50,6 @@ public class Main {
         commandManager.register(new SetBlockCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
-
-
-        StorageManager storageManager = MinecraftServer.getStorageManager();
-        storageManager.defineDefaultStorageSystem(FileStorageSystem::new);
 
         MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
 
