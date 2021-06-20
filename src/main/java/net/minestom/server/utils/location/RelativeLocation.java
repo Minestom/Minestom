@@ -1,5 +1,6 @@
 package net.minestom.server.utils.location;
 
+import com.google.common.annotations.Beta;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
@@ -23,25 +24,32 @@ public abstract class RelativeLocation<T> {
     }
 
     /**
-     * Gets the location based on the relative fields and {@code entity}.
-     *
-     * @param entity the entity to get the relative position from
-     * @return the location
-     */
-    public T from(@Nullable Entity entity) {
-
-        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
-
-        return from(entityPosition);
-    }
-
-    /**
      * Gets the location based on the relative fields and {@code position}.
      *
      * @param position the relative position
      * @return the location
      */
     public abstract T from(@Nullable Position position);
+
+    @Beta
+    public abstract T fromView(@Nullable Position position);
+
+    /**
+     * Gets the location based on the relative fields and {@code entity}.
+     *
+     * @param entity the entity to get the relative position from
+     * @return the location
+     */
+    public T from(@Nullable Entity entity) {
+        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
+        return from(entityPosition);
+    }
+
+    @Beta
+    public T fromView(@Nullable Entity entity) {
+        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
+        return fromView(entityPosition);
+    }
 
     /**
      * Gets if the 'x' field is relative.

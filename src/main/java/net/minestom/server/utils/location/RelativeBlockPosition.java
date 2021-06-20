@@ -28,4 +28,17 @@ public class RelativeBlockPosition extends RelativeLocation<BlockPosition> {
 
         return new BlockPosition(x, y, z);
     }
+
+    @Override
+    public BlockPosition fromView(@Nullable Position position) {
+        if (!relativeX && !relativeY && !relativeZ) {
+            return location.clone();
+        }
+        final Position entityPosition = position != null ? position : new Position();
+
+        final int x = location.getX() + (relativeX ? (int) entityPosition.getYaw() : 0);
+        final int z = location.getZ() + (relativeZ ? (int) entityPosition.getPitch() : 0);
+
+        return new BlockPosition(x, 0, z);
+    }
 }
