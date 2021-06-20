@@ -2,7 +2,7 @@ package net.minestom.server.utils.incubator;
 
 import org.jetbrains.annotations.NotNull;
 
-public class Pos implements Coordinate {
+public class Pos implements Vec {
     private final double x, y, z;
     private final float yaw, pitch;
 

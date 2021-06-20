@@ -2,18 +2,22 @@ package net.minestom.server.utils.incubator;
 
 import org.jetbrains.annotations.NotNull;
 
-class CoordinateImpl implements Coordinate {
+class VecImpl implements Vec {
     private final double x, y, z;
 
-    public CoordinateImpl(double x, double y, double z) {
+    public VecImpl(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    public VecImpl() {
+        this(0, 0, 0);
+    }
+
     @Override
-    public @NotNull Coordinate with(double x, double y, double z) {
-        return new CoordinateImpl(x, y, z);
+    public @NotNull Vec with(double x, double y, double z) {
+        return new VecImpl(x, y, z);
     }
 
     @Override
