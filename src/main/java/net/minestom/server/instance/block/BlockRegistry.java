@@ -23,6 +23,10 @@ class BlockRegistry {
     private static final Map<String, PropertyEntry> BLOCK_PROPERTY_MAP = new ConcurrentHashMap<>();
 
     static @Nullable Block get(@NotNull String namespace) {
+        if (!namespace.contains(":")) {
+            // Default to minecraft namespace
+            namespace = "minecraft:" + namespace;
+        }
         return NAMESPACE_MAP.get(namespace);
     }
 
