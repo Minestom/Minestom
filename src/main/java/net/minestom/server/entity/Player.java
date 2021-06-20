@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import com.google.common.collect.Queues;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
@@ -87,6 +86,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.UnaryOperator;
 
@@ -119,7 +119,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final Queue<ClientPlayPacket> packets = Queues.newConcurrentLinkedQueue();
+    private final Queue<ClientPlayPacket> packets = new ConcurrentLinkedQueue<>();
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;

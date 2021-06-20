@@ -1,6 +1,5 @@
 package net.minestom.server;
 
-import com.google.common.collect.Queues;
 import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -34,8 +33,8 @@ public final class UpdateManager {
     // TODO make configurable
     private ThreadProvider threadProvider = new SingleThreadProvider();
 
-    private final Queue<LongConsumer> tickStartCallbacks = Queues.newConcurrentLinkedQueue();
-    private final Queue<LongConsumer> tickEndCallbacks = Queues.newConcurrentLinkedQueue();
+    private final Queue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
+    private final Queue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
     private final List<Consumer<TickMonitor>> tickMonitors = new CopyOnWriteArrayList<>();
 
     /**

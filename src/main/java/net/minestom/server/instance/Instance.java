@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import com.google.common.collect.Queues;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -47,6 +46,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 
 /**
@@ -98,7 +98,7 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
     protected UUID uniqueId;
 
     // list of scheduled tasks to be executed during the next instance tick
-    protected final Queue<Consumer<Instance>> nextTick = Queues.newConcurrentLinkedQueue();
+    protected final Queue<Consumer<Instance>> nextTick = new ConcurrentLinkedQueue<>();
 
     // instance custom data
     private Data data;
