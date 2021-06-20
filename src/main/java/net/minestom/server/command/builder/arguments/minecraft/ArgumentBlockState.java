@@ -11,6 +11,7 @@ public class ArgumentBlockState extends Argument<Block> {
 
     public static final int NO_BLOCK = 1;
     public static final int INVALID_BLOCK = 2;
+    public static final int INVALID_PROPERTY = 3;
 
     public ArgumentBlockState(@NotNull String id) {
         super(id);
@@ -29,6 +30,8 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
             return block;
         } else {
+            if (!input.endsWith("]"))
+                throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
             Block block = Block.fromNamespaceId(blockName);
