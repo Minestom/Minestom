@@ -5,11 +5,13 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
+import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
@@ -26,12 +28,14 @@ public class AnvilLoader implements IChunkLoader {
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
     private final Path path;
+    private final Path regionFolder;
 
-    public AnvilLoader(Path path) {
+    public AnvilLoader(@NotNull Path path) {
         this.path = path;
+        this.regionFolder = path.resolve("region");
     }
 
-    public AnvilLoader(String path) {
+    public AnvilLoader(@NotNull String path) {
         this(Path.of(path));
     }
 
@@ -77,11 +81,11 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private RegionFile getMCAFile(int chunkX, int chunkZ) {
-        int regionX = CoordinatesKt.chunkToRegion(chunkX);
-        int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
+        final int regionX = CoordinatesKt.chunkToRegion(chunkX);
+        final int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
         return alreadyLoaded.computeIfAbsent(RegionFile.Companion.createFileName(regionX, regionZ), n -> {
             try {
-                final Path regionPath = path.resolve("region").resolve(n);
+                final Path regionPath = regionFolder.resolve(n);
                 if (!Files.exists(regionPath)) {
                     return null;
                 }
@@ -134,7 +138,103 @@ public class AnvilLoader implements IChunkLoader {
 
     @Override
     public void saveChunk(Chunk chunk, Runnable callback) {
-        // TODO
-        callback.run();
+        final int chunkX = chunk.getChunkX();
+        final int chunkZ = chunk.getChunkZ();
+        RegionFile mcaFile;
+        synchronized (alreadyLoaded) {
+            mcaFile = getMCAFile(chunkX, chunkZ);
+            if (mcaFile == null) {
+                final int regionX = CoordinatesKt.chunkToRegion(chunkX);
+                final int regionZ = CoordinatesKt.chunkToRegion(chunkZ);
+                final String n = RegionFile.Companion.createFileName(regionX, regionZ);
+                File regionFile = new File(regionFolder.toFile(), n);
+                try {
+                    if (!regionFile.exists()) {
+                        if (!regionFile.getParentFile().exists()) {
+                            regionFile.getParentFile().mkdirs();
+                        }
+                        regionFile.createNewFile();
+                    }
+                    mcaFile = new RegionFile(new RandomAccessFile(regionFile, "rw"), regionX, regionZ);
+                    alreadyLoaded.put(n, mcaFile);
+                } catch (AnvilException | IOException e) {
+                    LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
+        ChunkColumn column;
+        try {
+            column = mcaFile.getOrCreateChunk(chunkX, chunkZ);
+        } catch (AnvilException | IOException e) {
+            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+            e.printStackTrace();
+            return;
+        }
+        save(chunk, column);
+
+        try {
+            LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
+            mcaFile.writeColumn(column);
+        } catch (IOException e) {
+            LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
+            e.printStackTrace();
+            return;
+        }
+
+        if (callback != null)
+            callback.run();
+    }
+
+    private void saveTileEntities(Chunk chunk, ChunkColumn fileChunk) {
+        /*NBTList<NBTCompound> tileEntities = new NBTList<>(NBTTypes.TAG_Compound);
+        for (var index : chunk.getBlockEntities()) {
+            int x = ChunkUtils.blockIndexToChunkPositionX(index);
+            int y = ChunkUtils.blockIndexToChunkPositionY(index);
+            int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+            position.setX(x);
+            position.setY(y);
+            position.setZ(z);
+            CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
+            if (customBlock instanceof VanillaBlock) {
+                NBTCompound nbt = new NBTCompound();
+                nbt.setInt("x", x);
+                nbt.setInt("y", y);
+                nbt.setInt("z", z);
+                nbt.setByte("keepPacked", (byte) 0);
+                Block block = Block.fromStateId(customBlock.getDefaultBlockStateId());
+                Data data = chunk.getBlockData(ChunkUtils.getBlockIndex(x, y, z));
+                customBlock.writeBlockEntity(position, data, nbt);
+                if (block.hasBlockEntity()) {
+                    nbt.setString("id", block.getBlockEntityName().toString());
+                    tileEntities.add(nbt);
+                } else {
+                    LOGGER.warn("Tried to save block entity for a block which is not a block entity? Block is {} at {},{},{}", customBlock, x, y, z);
+                }
+            }
+        }
+        fileChunk.setTileEntities(tileEntities);*/
+    }
+
+    private void save(Chunk chunk, ChunkColumn chunkColumn) {
+        chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
+
+        // TODO: other elements to save
+        saveTileEntities(chunk, chunkColumn);
+
+        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
+            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
+                for (int y = 0; y < 256; y++) { // TODO don't hardcode world height
+                    final Block block = chunk.getBlock(x, y, z);
+                    BlockState state = new BlockState(block.name(), block.properties());
+                    chunkColumn.setBlockState(x, y, z, state);
+
+                    int index = ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3); // https://wiki.vg/Chunk_Format#Biomes
+                    Biome biome = chunk.getBiomes()[index];
+                    chunkColumn.setBiome(x, 0, z, biome.getId());
+                }
+            }
+        }
     }
 }
