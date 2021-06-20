@@ -108,11 +108,10 @@ dependencies {
     testCompileOnly "org.mockito:mockito-core:2.28.2"
 
     // Netty
-    api 'io.netty:netty-handler:4.1.63.Final'
-    api 'io.netty:netty-codec:4.1.63.Final'
-    api 'io.netty:netty-transport-native-epoll:4.1.63.Final:linux-x86_64'
-    api 'io.netty:netty-transport-native-kqueue:4.1.63.Final:osx-x86_64'
-    api 'io.netty.incubator:netty-incubator-transport-native-io_uring:0.0.5.Final:linux-x86_64'
+    api 'io.netty:netty-handler:4.1.65.Final'
+    api 'io.netty:netty-codec:4.1.65.Final'
+    api 'io.netty:netty-transport-native-epoll:4.1.65.Final:linux-x86_64'
+    api 'io.netty:netty-transport-native-kqueue:4.1.65.Final:osx-x86_64'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.5.4'
