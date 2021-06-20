@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Interface implemented to change the way chunks are loaded/saved.
  * <p>
- * See {@link MinestomBasicChunkLoader} for the default implementation used in {@link InstanceContainer}.
+ * See {@link AnvilLoader} for the default implementation used in {@link InstanceContainer}.
  */
 public interface IChunkLoader {
 

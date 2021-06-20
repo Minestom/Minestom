@@ -157,7 +157,7 @@ public class DynamicChunk extends Chunk {
     /**
      * Serialize this {@link Chunk} based on {@link #readChunk(BinaryReader, ChunkCallback)}
      * <p>
-     * It is also used by the default {@link IChunkLoader} which is {@link MinestomBasicChunkLoader}
+     * Currently used by {@link StorageChunkLoader}.
      *
      * @return the serialized chunk data
      */

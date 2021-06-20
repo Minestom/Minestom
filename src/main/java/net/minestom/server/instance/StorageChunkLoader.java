@@ -19,9 +19,9 @@ import org.slf4j.LoggerFactory;
  * <p>
  * The key used in the {@link StorageLocation} is defined by {@link #getChunkKey(int, int)} and should NOT be changed.
  */
-public class MinestomBasicChunkLoader implements IChunkLoader {
+public class StorageChunkLoader implements IChunkLoader {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(MinestomBasicChunkLoader.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(StorageChunkLoader.class);
     private final InstanceContainer instanceContainer;
 
     /**
@@ -33,7 +33,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
      *
      * @param instanceContainer the {@link InstanceContainer} linked to this loader
      */
-    public MinestomBasicChunkLoader(InstanceContainer instanceContainer) {
+    public StorageChunkLoader(InstanceContainer instanceContainer) {
         this.instanceContainer = instanceContainer;
     }
 
@@ -78,7 +78,7 @@ public class MinestomBasicChunkLoader implements IChunkLoader {
             BinaryReader reader = new BinaryReader(bytes);
             // Create the chunk object using the instance's ChunkSupplier to support multiple implementations
             Chunk chunk = instanceContainer.getChunkSupplier().createChunk(instance, null, chunkX, chunkZ);
-            // Execute the callback once all blocks are placed (allow for multithreaded implementations)
+            // Execute the callback once all blocks are placed (allow for multi-threaded implementations)
             chunk.readChunk(reader, callback);
             return true;
         }
