@@ -25,19 +25,17 @@ public class MainDemo {
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
         // Set the ChunkGenerator
         instanceContainer.setChunkGenerator(new GeneratorDemo());
-        // Enable the auto chunk loading (when players come close)
-        instanceContainer.enableAutoChunkLoad(true);
 
         // Add an event callback to specify the spawning instance (and the spawn position)
         GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
-        globalEventHandler.addEventCallback(PlayerLoginEvent.class, event -> {
+        globalEventHandler.addListener(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
             event.setSpawningInstance(instanceContainer);
             player.setRespawnPoint(new Position(0, 42, 0));
         });
 
         // Start the server on port 25565
-        minecraftServer.start("localhost", 25565);
+        minecraftServer.start("0.0.0.0", 25565);
     }
 
     private static class GeneratorDemo implements ChunkGenerator {
