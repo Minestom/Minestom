@@ -83,6 +83,11 @@ public interface Vec {
     }
 
     @Contract(pure = true)
+    default @NotNull Pos asPosition() {
+        return new Pos(x(), y(), z());
+    }
+
+    @Contract(pure = true)
     double x();
 
     @Contract(pure = true)
