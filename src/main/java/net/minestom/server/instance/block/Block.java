@@ -32,6 +32,15 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     @Contract(pure = true)
+    default @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties) {
+        Block block = this;
+        for (var entry : properties.entrySet()) {
+            block = block.withProperty(entry.getKey(), entry.getValue());
+        }
+        return block;
+    }
+
+    @Contract(pure = true)
     @NotNull Block withNbt(@Nullable NBTCompound compound);
 
     @Contract(pure = true)

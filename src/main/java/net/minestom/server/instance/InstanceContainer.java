@@ -89,8 +89,8 @@ public class InstanceContainer extends Instance {
         // Set the default chunk supplier using DynamicChunk
         setChunkSupplier(DynamicChunk::new);
 
-        // Set the default chunk loader which use the instance's StorageLocation and ChunkSupplier to save and load chunks
-        setChunkLoader(new MinestomBasicChunkLoader(this));
+        // Set the default chunk loader which use the Anvil format
+        setChunkLoader(new AnvilLoader("world"));
 
         // Get instance data from the saved data if a StorageLocation is defined
         if (storageLocation != null) {
