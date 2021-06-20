@@ -1,6 +1,5 @@
 package net.minestom.server.scoreboard;
 
-import com.google.common.collect.MapMaker;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.text.Component;
@@ -22,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
@@ -72,7 +72,7 @@ public class Team implements PacketGroupingAudience {
      */
     private Component suffix;
 
-    private final Set<Player> playerMembers = Collections.newSetFromMap(new MapMaker().weakKeys().makeMap());
+    private final Set<Player> playerMembers = ConcurrentHashMap.newKeySet();
     private boolean isPlayerMembersUpToDate;
 
     // Adventure

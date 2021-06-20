@@ -1,7 +1,5 @@
 package net.minestom.server.entity;
 
-import com.google.common.annotations.Beta;
-import com.google.common.collect.Queues;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -55,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -129,7 +128,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
-    protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
+    protected final Queue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
 
     // Tick related
     private long ticks;
@@ -1601,12 +1600,12 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
         return (Acquirable<T>) acquirable;
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
         return (Acquirable<T>) acquirable;
     }

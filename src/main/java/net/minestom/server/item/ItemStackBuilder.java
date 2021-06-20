@@ -1,8 +1,8 @@
 package net.minestom.server.item;
 
-import com.google.common.annotations.Beta;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.metadata.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -100,7 +100,7 @@ public class ItemStackBuilder {
         return this;
     }
 
-    @Beta
+    @ApiStatus.Experimental
     @Contract(value = "_ -> this")
     public @NotNull ItemStackBuilder stackingRule(@Nullable StackingRule stackingRule) {
         this.stackingRule = stackingRule;

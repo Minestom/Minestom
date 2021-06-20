@@ -1,7 +1,7 @@
 package net.minestom.server.utils.mojang;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minestom.server.MinecraftServer;
@@ -17,12 +17,12 @@ import java.util.concurrent.TimeUnit;
  */
 public final class MojangUtils {
 
-    private static final Cache<String, JsonObject> UUID_CACHE = CacheBuilder.newBuilder()
+    private static final Cache<String, JsonObject> UUID_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .softValues()
             .build();
 
-    private static final Cache<String, JsonObject> USERNAME_CACHE = CacheBuilder.newBuilder()
+    private static final Cache<String, JsonObject> USERNAME_CACHE = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .softValues()
             .build();
