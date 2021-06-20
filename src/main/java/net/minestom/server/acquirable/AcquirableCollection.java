@@ -1,15 +1,15 @@
 package net.minestom.server.acquirable;
 
-import com.google.common.annotations.Beta;
 import net.minestom.server.thread.TickThread;
 import net.minestom.server.utils.async.AsyncUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-@Beta
+@ApiStatus.Experimental
 public class AcquirableCollection<E> implements Collection<Acquirable<E>> {
 
     private final Collection<Acquirable<E>> acquirableCollection;

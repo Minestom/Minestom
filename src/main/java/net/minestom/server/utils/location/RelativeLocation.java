@@ -1,8 +1,8 @@
 package net.minestom.server.utils.location;
 
-import com.google.common.annotations.Beta;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.Position;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +31,7 @@ public abstract class RelativeLocation<T> {
      */
     public abstract T from(@Nullable Position position);
 
-    @Beta
+    @ApiStatus.Experimental
     public abstract T fromView(@Nullable Position position);
 
     /**
@@ -45,7 +45,7 @@ public abstract class RelativeLocation<T> {
         return from(entityPosition);
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public T fromView(@Nullable Entity entity) {
         final Position entityPosition = entity != null ? entity.getPosition() : new Position();
         return fromView(entityPosition);
