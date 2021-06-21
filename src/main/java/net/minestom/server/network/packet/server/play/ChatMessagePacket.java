@@ -26,16 +26,14 @@ public class ChatMessagePacket implements ComponentHoldingServerPacket {
     public ChatPosition position;
     public UUID uuid;
 
-    public ChatMessagePacket() {
-        this.message = Component.empty();
-        this.position = ChatPosition.SYSTEM_MESSAGE;
-        this.uuid = NULL_UUID;
-    }
-
     public ChatMessagePacket(@NotNull Component message, @NotNull ChatPosition position, @Nullable UUID uuid) {
         this.message = message;
         this.position = position;
         this.uuid = Objects.requireNonNullElse(uuid, NULL_UUID);
+    }
+
+    public ChatMessagePacket() {
+        this(Component.empty(), ChatPosition.SYSTEM_MESSAGE, NULL_UUID);
     }
 
     @Override

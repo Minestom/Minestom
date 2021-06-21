@@ -637,10 +637,7 @@ public class InstanceContainer extends Instance {
      * @param block         the new block
      */
     private void sendBlockChange(@NotNull Chunk chunk, @NotNull BlockPosition blockPosition, @NotNull Block block) {
-        BlockChangePacket blockChangePacket = new BlockChangePacket();
-        blockChangePacket.blockPosition = blockPosition;
-        blockChangePacket.blockStateId = block.stateId();
-        chunk.sendPacketToViewers(blockChangePacket);
+        chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
     }
 
     @Override
