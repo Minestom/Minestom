@@ -11,7 +11,6 @@ import net.minestom.server.tag.TagWritable;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
@@ -23,11 +22,11 @@ import java.util.List;
 public class CampfireHandler implements BlockHandler {
 
     public static final Tag<List<ItemStack>> ITEMS = Tag.View(new TagSerializer<>() {
-        private final Tag<NBT> internal = Tag.NBT("Items");
+        private final Tag<NBTList<NBTCompound>> internal = Tag.NBT("Items");
 
         @Override
         public @Nullable List<ItemStack> read(@NotNull TagReadable reader) {
-            NBTList<NBTCompound> item = (NBTList<NBTCompound>) reader.getTag(internal);
+            NBTList<NBTCompound> item = reader.getTag(internal);
             List<ItemStack> result = new ArrayList<>();
             assert item != null;
             item.forEach(nbtCompound -> {

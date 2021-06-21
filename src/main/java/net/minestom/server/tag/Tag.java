@@ -62,7 +62,7 @@ public class Tag<T> {
     @Contract(value = "_, _ -> new", pure = true)
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
-        return new Tag<R>(key,
+        return new Tag<>(key,
                 // Read
                 nbtCompound -> {
                     final var old = readFunction.apply(nbtCompound);
@@ -155,17 +155,15 @@ public class Tag<T> {
                 (nbtCompound, value) -> nbtCompound.setString(key, value));
     }
 
-    public static @NotNull Tag<NBT> NBT(@NotNull String key) {
+    public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
         return new Tag<>(key,
                 nbt -> {
-                    var currentNBT = nbt.get(key);
-
+                    final var currentNBT = nbt.get(key);
                     // Avoid a NPE when cloning a null variable.
                     if (currentNBT == null) {
                         return null;
                     }
-
-                    return currentNBT.deepClone();
+                    return (T) currentNBT.deepClone();
                 },
                 ((nbt, value) -> nbt.set(key, value.deepClone())));
     }
