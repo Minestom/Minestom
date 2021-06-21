@@ -96,6 +96,9 @@ public class AnvilLoader implements IChunkLoader {
         if (callback != null) {
             callback.accept(chunk);
         }
+
+        mcaFile.forget(fileChunk);
+
         return chunk;
     }
 
