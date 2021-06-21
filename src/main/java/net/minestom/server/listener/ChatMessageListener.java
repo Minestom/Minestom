@@ -5,8 +5,10 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.AbstractPlayerChatEvent;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChatEvent;
+import net.minestom.server.event.player.PlayerPostChatEvent;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
@@ -51,7 +53,7 @@ public class ChatMessageListener {
 
         // Call the event
         EventDispatcher.callCancellable(playerChatEvent, () -> {
-            final Function<PlayerChatEvent, Component> formatFunction = playerChatEvent.getChatFormatFunction();
+            final Function<AbstractPlayerChatEvent, Component> formatFunction = playerChatEvent.getChatFormatFunction();
 
             Component textObject;
 
@@ -68,6 +70,7 @@ public class ChatMessageListener {
                 // delegate to the messenger to avoid sending messages we shouldn't be
                 Messenger.sendMessage(recipients, textObject, ChatPosition.CHAT, player.getUuid());
             }
+            EventDispatcher.call(new PlayerPostChatEvent(playerChatEvent));
         });
     }
 

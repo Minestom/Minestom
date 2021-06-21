@@ -3,8 +3,8 @@ package net.minestom.server.event.player;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.AbstractPlayerChatEvent;
 import net.minestom.server.event.trait.CancellableEvent;
-import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,13 +17,13 @@ import java.util.function.Supplier;
  * Called every time a {@link Player} write and send something in the chat.
  * The event can be cancelled to do not send anything, and the format can be changed.
  */
-public class PlayerChatEvent implements PlayerEvent, CancellableEvent {
+public class PlayerChatEvent implements AbstractPlayerChatEvent, CancellableEvent {
 
     private final Player player;
     private final Collection<Player> recipients;
     private final Supplier<Component> defaultChatFormat;
     private String message;
-    private Function<PlayerChatEvent, Component> chatFormat;
+    private Function<AbstractPlayerChatEvent, Component> chatFormat;
 
     private boolean cancelled;
 
@@ -43,7 +43,7 @@ public class PlayerChatEvent implements PlayerEvent, CancellableEvent {
      * @deprecated Use {@link #setChatFormat(Function)}
      */
     @Deprecated
-    public void setChatFormatJson(@Nullable Function<PlayerChatEvent, JsonMessage> chatFormat) {
+    public void setChatFormatJson(@Nullable Function<AbstractPlayerChatEvent, JsonMessage> chatFormat) {
         this.chatFormat = chatFormat == null ? null : chatFormat.andThen(JsonMessage::asComponent);
     }
 
@@ -52,26 +52,16 @@ public class PlayerChatEvent implements PlayerEvent, CancellableEvent {
      *
      * @param chatFormat the custom chat format, null to use the default one
      */
-    public void setChatFormat(@Nullable Function<PlayerChatEvent, Component> chatFormat) {
+    public void setChatFormat(@Nullable Function<AbstractPlayerChatEvent, Component> chatFormat) {
         this.chatFormat = chatFormat;
     }
 
-    /**
-     * Those are the players who will receive the message.
-     * <p>
-     * It can be modified to add or remove recipient.
-     *
-     * @return a modifiable list of message targets
-     */
+    @Override
     public @NotNull Collection<Player> getRecipients() {
         return recipients;
     }
 
-    /**
-     * Gets the message sent.
-     *
-     * @return the sender's message
-     */
+    @Override
     public @NotNull String getMessage() {
         return message;
     }
@@ -85,17 +75,12 @@ public class PlayerChatEvent implements PlayerEvent, CancellableEvent {
         this.message = message;
     }
 
-    /**
-     * Used to retrieve the chat format for this message.
-     * <p>
-     * If null, the default format will be used.
-     *
-     * @return the chat format which will be used, null if this is the default one
-     */
-    public @Nullable Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
+    @Override
+    public @Nullable Function<@NotNull AbstractPlayerChatEvent, @NotNull Component> getChatFormatFunction() {
         return chatFormat;
     }
 
+    @Override
     public @NotNull Supplier<@NotNull Component> getDefaultChatFormat() {
         return defaultChatFormat;
     }
