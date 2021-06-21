@@ -277,7 +277,7 @@ public class Palette implements PublicCloneable<Palette> {
      * @return the section index of the position
      */
     public static int getSectionIndex(int x, int y, int z) {
-        y %= CHUNK_SECTION_SIZE;
+        y = Math.floorMod(y, CHUNK_SECTION_SIZE);
         return y << 8 | z << 4 | x;
     }
 

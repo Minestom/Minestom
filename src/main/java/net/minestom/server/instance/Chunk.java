@@ -1,6 +1,5 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.data.Data;
@@ -25,7 +24,6 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,8 +47,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * you should store the chunk coordinates instead.
  */
 public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, DataContainer {
-
-    protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
 
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
