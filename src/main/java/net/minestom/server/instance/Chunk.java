@@ -145,28 +145,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     public abstract long getLastChangeTime();
 
     /**
-     * Serializes the chunk into bytes.
-     *
-     * @return the serialized chunk, can be null if this chunk cannot be serialized
-     * @see #readChunk(BinaryReader, ChunkCallback) which should be able to read what is written in this method
-     */
-    public abstract byte[] getSerializedData();
-
-    /**
-     * Reads the chunk from binary.
-     * <p>
-     * Used if the chunk is loaded from file.
-     *
-     * @param reader   the data reader
-     *                 WARNING: the data will not necessary be read directly in the same thread,
-     *                 be sure that the data is only used for this reading.
-     * @param callback the optional callback to execute once the chunk is done reading
-     *                 WARNING: this need to be called to notify the instance.
-     * @see #getSerializedData() which is responsible for the serialized data given
-     */
-    public abstract void readChunk(@NotNull BinaryReader reader, @Nullable ChunkCallback callback);
-
-    /**
      * Creates a {@link ChunkDataPacket} with this chunk data ready to be written.
      *
      * @return a new chunk data packet
