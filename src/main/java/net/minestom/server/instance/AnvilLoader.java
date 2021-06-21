@@ -57,31 +57,46 @@ public class AnvilLoader implements IChunkLoader {
 
     private Chunk loadMCA(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) throws IOException, AnvilException {
         RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
-        if (mcaFile != null) {
-            ChunkColumn fileChunk = mcaFile.getChunk(chunkX, chunkZ);
-            if (fileChunk != null) {
-                Biome[] biomes;
-                if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
-                    int[] fileChunkBiomes = fileChunk.getBiomes();
-                    biomes = new Biome[fileChunkBiomes.length];
-                    for (int i = 0; i < fileChunkBiomes.length; i++) {
-                        final int id = fileChunkBiomes[i];
-                        biomes[i] = Objects.requireNonNullElse(BIOME_MANAGER.getById(id), BIOME);
-                    }
-                } else {
-                    biomes = new Biome[1024]; // TODO don't hardcode
-                    Arrays.fill(biomes, BIOME);
-                }
-                Chunk chunk = new DynamicChunk(instance, biomes, chunkX, chunkZ);
-                placeBlocks(chunk, fileChunk);
-                loadTileEntities(chunk, fileChunk);
-                if (callback != null) {
-                    callback.accept(chunk);
-                }
-                return chunk;
+        if (mcaFile == null)
+            return null;
+        ChunkColumn fileChunk = mcaFile.getChunk(chunkX, chunkZ);
+        if (fileChunk == null)
+            return null;
+
+        Biome[] biomes;
+        if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
+            int[] fileChunkBiomes = fileChunk.getBiomes();
+            biomes = new Biome[fileChunkBiomes.length];
+            for (int i = 0; i < fileChunkBiomes.length; i++) {
+                final int id = fileChunkBiomes[i];
+                biomes[i] = Objects.requireNonNullElse(BIOME_MANAGER.getById(id), BIOME);
+            }
+        } else {
+            biomes = new Biome[1024]; // TODO don't hardcode
+            Arrays.fill(biomes, BIOME);
+        }
+        Chunk chunk = new DynamicChunk(instance, biomes, chunkX, chunkZ);
+
+        // Blocks
+        {
+            placeBlocks(chunk, fileChunk);
+            loadTileEntities(chunk, fileChunk);
+        }
+
+        // Lights
+        {
+            final var chunkSections = fileChunk.getSections();
+            for (var chunkSection : chunkSections) {
+                Section section = chunk.getSection(chunkSection.getY());
+                section.setSkyLight(chunkSection.getSkyLights());
+                section.setBlockLight(chunkSection.getBlockLights());
             }
         }
-        return null;
+
+        if (callback != null) {
+            callback.accept(chunk);
+        }
+        return chunk;
     }
 
     private RegionFile getMCAFile(int chunkX, int chunkZ) {

@@ -16,6 +16,7 @@ import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -108,9 +109,9 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
-    public abstract @NotNull Map<Integer, Section> getSections();
+    public abstract @NotNull TreeMap<Integer, Section> getSections();
 
-    public abstract @Nullable Section getSection(int section);
+    public abstract @NotNull Section getSection(int section);
 
     /**
      * Executes a chunk tick.
@@ -296,31 +297,53 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     @NotNull
     public UpdateLightPacket getLightPacket() {
-        // TODO do not hardcode light
+        long skyMask = 0;
+        long blockMask = 0;
+        long emptySkyMask = 0;
+        long emptyBlockMask = 0;
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
 
-        // Creates a light packet for the given number of sections with all block light at max and no sky light.
+
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
 
-        final int sectionCount = (getInstance().getDimensionType().getTotalHeight() / 16) + 2;
-        final int maskLength = (int) Math.ceil((double) sectionCount / 64);
+        updateLightPacket.skyLightMask = new long[]{skyMask};
+        updateLightPacket.blockLightMask = new long[]{blockMask};
+        updateLightPacket.emptySkyLightMask = new long[]{emptySkyMask};
+        updateLightPacket.emptyBlockLightMask = new long[]{emptyBlockMask};
 
-        updateLightPacket.skyLightMask = new long[maskLength];
-        updateLightPacket.blockLightMask = new long[maskLength];
-        updateLightPacket.emptySkyLightMask = new long[maskLength];
-        updateLightPacket.emptyBlockLightMask = new long[maskLength];
-        // Set all block light and no sky light
-        Arrays.fill(updateLightPacket.blockLightMask, -1L);
-        Arrays.fill(updateLightPacket.emptySkyLightMask, -1L);
+        updateLightPacket.skyLight = skyLights;
+        updateLightPacket.blockLight = blockLights;
 
-        byte[] bytes = new byte[2048];
-        Arrays.fill(bytes, (byte) 0xFF);
-        final List<byte[]> temp = new ArrayList<>(sectionCount);
-        for (int i = 0; i < sectionCount; ++i) {
-            temp.add(bytes);
+        emptySkyMask |= 1L << 0;
+        emptyBlockMask |= 1L << 0;
+        emptySkyMask |= 1L << 17;
+        emptyBlockMask |= 1L << 17;
+
+        final var sections = getSections();
+        for (var entry : sections.entrySet()) {
+            final int index = entry.getKey() + 1;
+            final Section section = entry.getValue();
+
+            final var skyLight = section.getSkyLight();
+            final var blockLight = section.getBlockLight();
+
+            if (!ArrayUtils.empty(skyLight)) {
+                skyLights.add(skyLight);
+                skyMask |= 1L << index;
+            } else {
+                emptySkyMask |= 1L << index;
+            }
+
+            if (!ArrayUtils.empty(blockLight)) {
+                blockLights.add(blockLight);
+                blockMask |= 1L << index;
+            } else {
+                emptyBlockMask |= 1L << index;
+            }
         }
-        updateLightPacket.blockLight = temp;
         return updateLightPacket;
     }
 

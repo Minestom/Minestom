@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
@@ -28,6 +27,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -42,7 +42,7 @@ public class DynamicChunk extends Chunk {
      */
     private static final int DATA_FORMAT_VERSION = 1;
 
-    protected final Int2ObjectRBTreeMap<Section> sectionMap = new Int2ObjectRBTreeMap<>();
+    protected final TreeMap<Integer, Section> sectionMap = new TreeMap<>();
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<BlockHandler> handlerMap = new Int2ObjectOpenHashMap<>();
@@ -94,13 +94,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull Map<Integer, Section> getSections() {
+    public @NotNull TreeMap<Integer, Section> getSections() {
         return sectionMap;
     }
 
     @Override
-    public @Nullable Section getSection(int section) {
-        return sectionMap.get(section);
+    public @NotNull Section getSection(int section) {
+        return sectionMap.computeIfAbsent(section, key -> new Section());
     }
 
     @Override
@@ -348,7 +348,7 @@ public class DynamicChunk extends Chunk {
         packet.biomes = biomes;
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
-        packet.sections = sectionMap.clone(); // TODO deep clone
+        packet.sections = (Map<Integer, Section>) sectionMap.clone(); // TODO deep clone
         packet.handlerMap = handlerMap.clone();
         packet.nbtMap = nbtMap.clone();
 
@@ -361,8 +361,8 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
-        for (var entry : sectionMap.int2ObjectEntrySet()) {
-            dynamicChunk.sectionMap.put(entry.getIntKey(), entry.getValue().clone());
+        for (var entry : sectionMap.entrySet()) {
+            dynamicChunk.sectionMap.put(entry.getKey(), entry.getValue().clone());
         }
         dynamicChunk.handlerMap.putAll(handlerMap);
         dynamicChunk.nbtMap.putAll(nbtMap);
@@ -379,6 +379,6 @@ public class DynamicChunk extends Chunk {
 
     private @NotNull Section retrieveSection(int y) {
         final int sectionIndex = ChunkUtils.getSectionAt(y);
-        return sectionMap.computeIfAbsent(sectionIndex, key -> new Section());
+        return getSection(sectionIndex);
     }
 }

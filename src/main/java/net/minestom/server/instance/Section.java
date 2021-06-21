@@ -8,6 +8,9 @@ public class Section implements PublicCloneable<Section> {
 
     private final Palette palette;
 
+    private byte[] skyLight = new byte[0];
+    private byte[] blockLight = new byte[0];
+
     private Section(Palette palette) {
         this.palette = palette;
     }
@@ -26,6 +29,22 @@ public class Section implements PublicCloneable<Section> {
         x = toChunkCoordinate(x);
         z = toChunkCoordinate(z);
         palette.setBlockAt(x, y, z, blockId);
+    }
+
+    public byte[] getSkyLight() {
+        return skyLight;
+    }
+
+    public void setSkyLight(byte[] skyLight) {
+        this.skyLight = skyLight;
+    }
+
+    public byte[] getBlockLight() {
+        return blockLight;
+    }
+
+    public void setBlockLight(byte[] blockLight) {
+        this.blockLight = blockLight;
     }
 
     public void clean() {
