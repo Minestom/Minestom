@@ -3,6 +3,11 @@ package net.minestom.server.utils.block;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.StringUtils;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BlockUtils {
 
@@ -49,5 +54,34 @@ public class BlockUtils {
 
     public boolean equals(Block block) {
         return getBlock() == block;
+    }
+
+    public static Map<String, String> parseProperties(String query) {
+        if (!query.startsWith("[") || !query.endsWith("]") ||
+                query.equals("[]")) {
+            return Collections.emptyMap();
+        }
+        final int capacity = StringUtils.countMatches(query, ',') + 1;
+        Map<String, String> result = new HashMap<>(capacity);
+        final String propertiesString = query.substring(1);
+        StringBuilder keyBuilder = new StringBuilder();
+        StringBuilder valueBuilder = new StringBuilder();
+        StringBuilder builder = keyBuilder;
+        for (int i = 0; i < propertiesString.length(); i++) {
+            final char c = propertiesString.charAt(i);
+            if (c == '=') {
+                // Switch to value builder
+                builder = valueBuilder;
+            } else if (c == ',' || c == ']') {
+                // Append current text
+                result.put(keyBuilder.toString().intern(), valueBuilder.toString().intern());
+                keyBuilder = new StringBuilder();
+                valueBuilder = new StringBuilder();
+                builder = keyBuilder;
+            } else if (c != ' ') {
+                builder.append(c);
+            }
+        }
+        return result;
     }
 }

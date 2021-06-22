@@ -5,6 +5,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class ArgumentBlockState extends Argument<Block> {
@@ -14,7 +15,7 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY = 3;
 
     public ArgumentBlockState(@NotNull String id) {
-        super(id);
+        super(id, true, false);
     }
 
     @Override
@@ -39,26 +40,9 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
 
             // Compute properties
-            final String propertiesString = input.substring(nbtIndex + 1, input.length() - 1);
-            StringBuilder keyBuilder = new StringBuilder();
-            StringBuilder valueBuilder = new StringBuilder();
-            StringBuilder builder = keyBuilder;
-            for (int i = 0; i < propertiesString.length(); i++) {
-                final char c = propertiesString.charAt(i);
-                if (c == '=') {
-                    // Switch to value builder
-                    builder = valueBuilder;
-                } else if (c == ',') {
-                    // Append current text
-                    block = block.withProperty(keyBuilder.toString(), valueBuilder.toString());
-                    keyBuilder = new StringBuilder();
-                    valueBuilder = new StringBuilder();
-                    builder = keyBuilder;
-                } else if (c != ' ') {
-                    builder.append(c);
-                }
-            }
-            return block.withProperty(keyBuilder.toString(), valueBuilder.toString());
+            final String query = input.substring(nbtIndex);
+            final var propertyMap = BlockUtils.parseProperties(query);
+            return block.withProperties(propertyMap);
         }
     }
 

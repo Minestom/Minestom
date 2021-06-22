@@ -2,12 +2,10 @@ package net.minestom.server.instance.block;
 
 import com.google.gson.JsonObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -77,39 +75,11 @@ class BlockRegistry {
             final String query = stateEntry.getKey();
             JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
             final int stateId = stateOverride.get("stateId").getAsInt();
-            final var propertyMap = getPropertyMap(query);
+            final var propertyMap = BlockUtils.parseProperties(query);
             final Block block = new BlockTest(Registry.block(object, stateOverride), propertyMap);
             BLOCK_STATE_MAP.put(stateId, block);
             propertyEntry.propertyMap.put(propertyMap, block);
         });
         BLOCK_PROPERTY_MAP.put(namespace, propertyEntry);
-    }
-
-    private static Map<String, String> getPropertyMap(String query) {
-        if (query.equals("[]")) {
-            return Collections.emptyMap();
-        }
-        final int capacity = StringUtils.countMatches(query, ',') + 1;
-        Map<String, String> result = new HashMap<>(capacity);
-        final String propertiesString = query.substring(1);
-        StringBuilder keyBuilder = new StringBuilder();
-        StringBuilder valueBuilder = new StringBuilder();
-        StringBuilder builder = keyBuilder;
-        for (int i = 0; i < propertiesString.length(); i++) {
-            final char c = propertiesString.charAt(i);
-            if (c == '=') {
-                // Switch to value builder
-                builder = valueBuilder;
-            } else if (c == ',' || c == ']') {
-                // Append current text
-                result.put(keyBuilder.toString().intern(), valueBuilder.toString().intern());
-                keyBuilder = new StringBuilder();
-                valueBuilder = new StringBuilder();
-                builder = keyBuilder;
-            } else if (c != ' ') {
-                builder.append(c);
-            }
-        }
-        return result;
     }
 }
