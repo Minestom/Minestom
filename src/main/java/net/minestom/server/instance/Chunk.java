@@ -277,11 +277,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
 
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[]{emptySkyMask};
-        updateLightPacket.emptyBlockLightMask = new long[]{emptyBlockMask};
-
         updateLightPacket.skyLight = skyLights;
         updateLightPacket.blockLight = blockLights;
 
@@ -312,6 +307,12 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
                 emptyBlockMask |= 1L << index;
             }
         }
+
+        updateLightPacket.skyLightMask = new long[]{skyMask};
+        updateLightPacket.blockLightMask = new long[]{blockMask};
+        updateLightPacket.emptySkyLightMask = new long[]{emptySkyMask};
+        updateLightPacket.emptyBlockLightMask = new long[]{emptyBlockMask};
+
         return updateLightPacket;
     }
 
