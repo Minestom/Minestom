@@ -162,7 +162,7 @@ public class InstanceContainer extends Instance {
             if (previousHandler != null) {
                 // Previous destroy
                 final var destroy = player != null ?
-                        new BlockHandler.PlayerDestroy(block, this, blockPosition, player) :
+                        new BlockHandler.PlayerDestroy(previousBlock, this, blockPosition, player) :
                         BlockHandler.Destroy.from(previousBlock, this, blockPosition);
                 previousHandler.onDestroy(destroy);
             }
