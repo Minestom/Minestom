@@ -53,7 +53,7 @@ public class Registry {
 
         private BlockEntry(JsonObject main, JsonObject override) {
             super(main, override);
-            this.namespace = NamespaceID.from(getString("namespace"));
+            this.namespace = NamespaceID.from(getString("namespaceId"));
             this.id = getInt("id");
             this.stateId = getInt("stateId");
             this.destroySpeed = getDouble("hardness");

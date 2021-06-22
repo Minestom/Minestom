@@ -52,9 +52,6 @@ class BlockRegistry {
             final String blockNamespace = entry.getKey();
             final JsonObject blockObject = entry.getValue().getAsJsonObject();
             final JsonObject stateObject = blockObject.remove("states").getAsJsonObject();
-            blockObject.remove("properties");
-
-            blockObject.addProperty("namespace", blockNamespace);
 
             retrieveState(blockNamespace, blockObject, stateObject);
             final int defaultState = blockObject.get("defaultStateId").getAsInt();
