@@ -53,7 +53,7 @@ public class DynamicChunk extends Chunk {
         Section section = retrieveSection(y);
         section.setBlockAt(x, y, z, block.stateId());
 
-        final int index = getBlockIndex(x, y, z);
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
         if (handler != null) {
@@ -93,9 +93,9 @@ public class DynamicChunk extends Chunk {
         for (var entry : tickableMap.int2ObjectEntrySet()) {
             final int index = entry.getIntKey();
 
-            final byte x = ChunkUtils.blockIndexToChunkPositionX(index);
-            final short y = ChunkUtils.blockIndexToChunkPositionY(index);
-            final byte z = ChunkUtils.blockIndexToChunkPositionZ(index);
+            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+            final int y = ChunkUtils.blockIndexToChunkPositionY(index);
+            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
             final BlockPosition blockPosition = new BlockPosition(x, y, z);
 
             final Block block = getBlock(blockPosition);

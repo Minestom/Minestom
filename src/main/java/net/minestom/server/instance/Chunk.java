@@ -18,10 +18,7 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -36,9 +33,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * A chunk is a part of an {@link Instance}, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.
  * Should contains all the blocks located at those positions and manage their tick updates.
  * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
- * <p>
- * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
- * allowing you to implement your own storage solution if needed.
  * <p>
  * You can create your own implementation of this class by extending it
  * and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
@@ -471,17 +465,5 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         this.loaded = false;
         ChunkDataPacket.CACHE.invalidate(getIdentifier());
         UpdateLightPacket.CACHE.invalidate(getIdentifier());
-    }
-
-    /**
-     * Gets the index of a position, used to store blocks.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the block index
-     */
-    protected int getBlockIndex(int x, int y, int z) {
-        return ChunkUtils.getBlockIndex(x, y, z);
     }
 }

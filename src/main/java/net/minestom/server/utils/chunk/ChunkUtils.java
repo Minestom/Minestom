@@ -1,7 +1,5 @@
 package net.minestom.server.utils.chunk;
 
-import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.longs.LongList;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
@@ -32,7 +30,7 @@ public final class ChunkUtils {
      * @param eachCallback the optional callback when a chunk get loaded
      * @param endCallback  the optional callback when all the chunks have been loaded
      */
-    public static void optionalLoadAll(@NotNull Instance instance, @NotNull long[] chunks,
+    public static void optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
                                        @Nullable ChunkCallback eachCallback, @Nullable ChunkCallback endCallback) {
         final int length = chunks.length;
         AtomicInteger counter = new AtomicInteger(0);
@@ -176,7 +174,7 @@ public final class ChunkUtils {
      * @param range    how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    public static @NotNull long[] getChunksInRange(@NotNull Position position, int range) {
+    public static long @NotNull [] getChunksInRange(@NotNull Position position, int range) {
         long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
         int xDistance = 0;
         int xDirection = 1;
@@ -218,45 +216,7 @@ public final class ChunkUtils {
     }
 
     /**
-     * Gets all the loaded neighbours of a chunk and itself, no diagonals.
-     *
-     * @param instance the instance of the chunks
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @return an array containing all the loaded neighbours chunk index
-     */
-    @NotNull
-    public static long[] getNeighbours(@NotNull Instance instance, int chunkX, int chunkZ) {
-        LongList chunks = new LongArrayList();
-        // Constants used to loop through the neighbors
-        final int[] posX = {1, 0, -1};
-        final int[] posZ = {1, 0, -1};
-
-        for (int x : posX) {
-            for (int z : posZ) {
-
-                // No diagonal check
-                if ((Math.abs(x) + Math.abs(z)) == 2)
-                    continue;
-
-                final int targetX = chunkX + x;
-                final int targetZ = chunkZ + z;
-                final Chunk chunk = instance.getChunk(targetX, targetZ);
-                if (ChunkUtils.isLoaded(chunk)) {
-                    // Chunk is loaded, add it
-                    final long index = getChunkIndex(targetX, targetZ);
-                    chunks.add(index);
-                }
-
-            }
-        }
-        return chunks.toArray(new long[0]);
-    }
-
-    /**
      * Gets the block index of a position.
-     * <p>
-     * This can be cast as a short as long as you don't mind receiving a negative value (not array-friendly).
      *
      * @param x the block X
      * @param y the block Y
@@ -267,10 +227,10 @@ public final class ChunkUtils {
         x = x % Chunk.CHUNK_SIZE_X;
         z = z % Chunk.CHUNK_SIZE_Z;
 
-        short index = (short) (x & 0x000F);
-        index |= (y << 4) & 0x0FF0;
-        index |= (z << 12) & 0xF000;
-        return index & 0xffff;
+        int index = x & 0xF; // 4 bits
+        index |= (y << 24) & 0x0FFFFFF0; // 24 bits
+        index |= (z << 28) & 0xF0000000; // 4 bits
+        return index;
     }
 
     /**
@@ -295,7 +255,7 @@ public final class ChunkUtils {
      * @return the X coordinate of the block index
      */
     public static int blockIndexToPositionX(int index, int chunkX) {
-        return (int) blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
+        return blockIndexToChunkPositionX(index) + Chunk.CHUNK_SIZE_X * chunkX;
     }
 
     /**
@@ -316,7 +276,7 @@ public final class ChunkUtils {
      * @return the Z coordinate of the block index
      */
     public static int blockIndexToPositionZ(int index, int chunkZ) {
-        return (int) blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
+        return blockIndexToChunkPositionZ(index) + Chunk.CHUNK_SIZE_Z * chunkZ;
     }
 
     /**
@@ -325,18 +285,18 @@ public final class ChunkUtils {
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position X (O-15) of the specified index
      */
-    public static byte blockIndexToChunkPositionX(int index) {
-        return (byte) (index & 0xF);
+    public static int blockIndexToChunkPositionX(int index) {
+        return index & 0xF; // 0-4 bits
     }
 
     /**
      * Converts a block index to a chunk position Y.
      *
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
-     * @return the chunk position Y (O-255) of the specified index
+     * @return the chunk position Y of the specified index
      */
-    public static short blockIndexToChunkPositionY(int index) {
-        return (short) (index >>> 4 & 0xFF);
+    public static int blockIndexToChunkPositionY(int index) {
+        return (index >> 4) & 0x0FFFFFF; // 4-28 bits
     }
 
     /**
@@ -345,8 +305,8 @@ public final class ChunkUtils {
      * @param index an index computed from {@link #getBlockIndex(int, int, int)}
      * @return the chunk position Z (O-15) of the specified index
      */
-    public static byte blockIndexToChunkPositionZ(int index) {
-        return (byte) (index >> 12 & 0xF);
+    public static int blockIndexToChunkPositionZ(int index) {
+        return (index >> 28) & 0xF; // 28-32 bits
     }
 
     /**
