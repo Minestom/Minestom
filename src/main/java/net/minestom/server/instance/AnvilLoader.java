@@ -152,13 +152,13 @@ public class AnvilLoader implements IChunkLoader {
     private void loadTileEntities(Chunk loadedChunk, ChunkColumn fileChunk) {
         for (NBTCompound te : fileChunk.getTileEntities()) {
             final String tileEntityID = te.getString("id");
-            final var x = te.getInt("x");
-            final var y = te.getInt("y");
-            final var z = te.getInt("z");
             if (tileEntityID == null) {
                 LOGGER.warn("Tile entity has failed to load due to invalid namespace");
                 continue;
             }
+            final var x = te.getInt("x");
+            final var y = te.getInt("y");
+            final var z = te.getInt("z");
             if (x == null || y == null || z == null) {
                 LOGGER.warn("Tile entity " + tileEntityID + " has failed to load due to invalid coordinate");
                 continue;
@@ -255,9 +255,9 @@ public class AnvilLoader implements IChunkLoader {
                     if (handler != null) {
                         NBTCompound nbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
                         nbt.setString("id", handler.getNamespaceId().asString());
-                        nbt.setInt("x", x);
+                        nbt.setInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
                         nbt.setInt("y", y);
-                        nbt.setInt("z", z);
+                        nbt.setInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
                         nbt.setByte("keepPacked", (byte) 0);
                         tileEntities.add(nbt);
                     }
