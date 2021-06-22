@@ -5,7 +5,10 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.permission.Permission;
+import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +23,7 @@ public class ConsoleSender implements CommandSender {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleSender.class);
 
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
+    private final NBTCompound nbtCompound = new NBTCompound();
 
     @Override
     public void sendMessage(@NotNull String message) {
@@ -46,5 +50,15 @@ public class ConsoleSender implements CommandSender {
     @Override
     public ConsoleSender asConsole() {
         return this;
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbtCompound);
+    }
+
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        tag.write(nbtCompound, value);
     }
 }
