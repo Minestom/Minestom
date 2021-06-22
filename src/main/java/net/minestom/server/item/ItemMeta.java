@@ -117,11 +117,6 @@ public class ItemMeta implements TagReadable, Writeable {
         return tag.read(nbt);
     }
 
-    @Override
-    public boolean hasTag(@NotNull Tag<?> tag) {
-        return nbt.containsKey(tag.getKey());
-    }
-
     public @NotNull NBTCompound toNBT() {
         return nbt.deepClone();
     }
