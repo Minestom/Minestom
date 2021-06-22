@@ -1,5 +1,7 @@
 package net.minestom.server.instance.block;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
@@ -10,21 +12,27 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 class BlockTest implements Block {
 
+    private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .weakValues()
+            .build();
+
     private final Registry.BlockEntry registry;
     private final Map<String, String> properties;
-    private final NBTCompound compound;
+    private final NBTCompound nbt;
     private final BlockHandler handler;
 
     BlockTest(@NotNull Registry.BlockEntry registry,
               @NotNull Map<String, String> properties,
-              @Nullable NBTCompound compound,
+              @Nullable NBTCompound nbt,
               @Nullable BlockHandler handler) {
         this.registry = registry;
         this.properties = Collections.unmodifiableMap(properties);
-        this.compound = compound;
+        this.nbt = nbt;
         this.handler = handler;
     }
 
@@ -43,17 +51,19 @@ class BlockTest implements Block {
 
     @Override
     public @NotNull Block withNbt(@Nullable NBTCompound compound) {
-        return new BlockTest(registry, properties, compound, handler);
+        final var cachedNbt = NBT_CACHE.get(compound, c -> compound);
+        return new BlockTest(registry, properties, cachedNbt, handler);
     }
 
     @Override
     public @NotNull Block withHandler(@Nullable BlockHandler handler) {
-        return new BlockTest(registry, properties, compound, handler);
+        return new BlockTest(registry, properties, nbt, handler);
     }
 
     @Override
     public @Nullable NBTCompound nbt() {
-        return compound != null ? compound.deepClone() : null;
+        // TODO return immutable compound without clone
+        return nbt != null ? nbt.deepClone() : null;
     }
 
     @Override
@@ -73,8 +83,8 @@ class BlockTest implements Block {
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        if (compound == null)
+        if (nbt == null)
             return null;
-        return tag.read(compound);
+        return tag.read(nbt);
     }
 }
