@@ -63,13 +63,13 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @NotNull Map<String, String> properties();
 
     @Contract(pure = true)
-    default @NotNull String property(@NotNull String property) {
+    default @NotNull String getProperty(@NotNull String property) {
         return properties().get(property);
     }
 
     @Contract(pure = true)
-    default <T> @NotNull String property(@NotNull BlockProperty<T> property) {
-        return property(property.getName());
+    default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
+        return getProperty(property.getName());
     }
 
     @Contract(pure = true)
