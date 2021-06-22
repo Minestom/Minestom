@@ -17,6 +17,7 @@ import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
@@ -43,8 +44,6 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import net.minestom.server.event.handler.EventHandler;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -145,6 +144,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
     public void scheduleNextTick(@NotNull Consumer<Instance> callback) {
         this.nextTick.add(callback);
     }
+
+    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}

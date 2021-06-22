@@ -112,6 +112,39 @@ public interface BlockHandler {
         }
     }
 
+    final class PlayerPlacement implements Placement {
+        private final Block block;
+        private final Instance instance;
+        private final BlockPosition blockPosition;
+        private final Player player;
+
+        public PlayerPlacement(Block block, Instance instance, BlockPosition blockPosition, Player player) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+            this.player = player;
+        }
+
+        @Override
+        public @NotNull Block block() {
+            return block;
+        }
+
+        @Override
+        public @NotNull Instance instance() {
+            return instance;
+        }
+
+        @Override
+        public @NotNull BlockPosition blockPosition() {
+            return blockPosition;
+        }
+
+        public @NotNull Player player() {
+            return player;
+        }
+    }
+
     @ApiStatus.NonExtendable
     interface Destroy {
         @NotNull Block block();
@@ -137,6 +170,39 @@ public interface BlockHandler {
                     return blockPosition;
                 }
             };
+        }
+    }
+
+    final class PlayerDestroy implements Destroy {
+        private final Block block;
+        private final Instance instance;
+        private final BlockPosition blockPosition;
+        private final Player player;
+
+        public PlayerDestroy(Block block, Instance instance, BlockPosition blockPosition, Player player) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+            this.player = player;
+        }
+
+        @Override
+        public @NotNull Block block() {
+            return block;
+        }
+
+        @Override
+        public @NotNull Instance instance() {
+            return instance;
+        }
+
+        @Override
+        public @NotNull BlockPosition blockPosition() {
+            return blockPosition;
+        }
+
+        public @NotNull Player player() {
+            return player;
         }
     }
 

@@ -31,6 +31,11 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition) {
+        return instanceContainer.placeBlock(player, block, blockPosition);
+    }
+
+    @Override
     public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
         return instanceContainer.breakBlock(player, blockPosition);
     }

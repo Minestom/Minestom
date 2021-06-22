@@ -106,13 +106,13 @@ public class InstanceContainer extends Instance {
     public synchronized void setBlock(int x, int y, int z, @NotNull Block block) {
         final Chunk chunk = getChunkAt(x, z);
         if (ChunkUtils.isLoaded(chunk)) {
-            UNSAFE_setBlock(chunk, x, y, z, block);
+            UNSAFE_setBlock(chunk, x, y, z, block, null);
         } else {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             final int chunkX = ChunkUtils.getChunkCoordinate(x);
             final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-            loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, block));
+            loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, block, null));
         }
     }
 
@@ -127,20 +127,16 @@ public class InstanceContainer extends Instance {
      * @param z     the block Z
      * @param block the block to place
      */
-    private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block) {
-
+    private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
+                                 @Nullable Player player) {
         // Cannot place block in a read-only chunk
         if (chunk.isReadOnly()) {
             return;
         }
-
         synchronized (chunk) {
-
             // Refresh the last block change time
             this.lastBlockChangeTime = System.currentTimeMillis();
-
             final BlockPosition blockPosition = new BlockPosition(x, y, z);
-
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
@@ -165,85 +161,29 @@ public class InstanceContainer extends Instance {
 
             if (previousHandler != null) {
                 // Previous destroy
-                previousHandler.onDestroy(BlockHandler.Destroy.from(previousBlock, this, blockPosition));
+                final var destroy = player != null ?
+                        new BlockHandler.PlayerDestroy(block, this, blockPosition, player) :
+                        BlockHandler.Destroy.from(previousBlock, this, blockPosition);
+                previousHandler.onDestroy(destroy);
             }
             final BlockHandler handler = block.handler();
             if (handler != null) {
                 // New placement
-                handler.onPlace(BlockHandler.Placement.from(block, this, blockPosition));
+                final var placement = player != null ?
+                        new BlockHandler.PlayerPlacement(block, this, blockPosition, player) :
+                        BlockHandler.Placement.from(block, this, blockPosition);
+                handler.onPlace(placement);
             }
         }
     }
 
-    private void setAlreadyChanged(@NotNull BlockPosition blockPosition, Block block) {
-        currentlyChangingBlocks.put(blockPosition, block);
-    }
-
-    /**
-     * Has this block already changed since last update?
-     * Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace.
-     *
-     * @param blockPosition the block position
-     * @param block         the block
-     * @return true if the block changed since the last update
-     */
-    private boolean isAlreadyChanged(@NotNull BlockPosition blockPosition, @NotNull Block block) {
-        final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
-        if (changedBlock == null)
+    @Override
+    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition) {
+        final Chunk chunk = getChunkAt(blockPosition);
+        if (!ChunkUtils.isLoaded(chunk))
             return false;
-        return changedBlock.id() == block.id();
-    }
-
-    /**
-     * Calls the {@link BlockPlacementRule} for the specified block state id.
-     *
-     * @param block         the block to modify
-     * @param blockPosition the block position
-     * @return the modified block state id
-     */
-    private Block executeBlockPlacementRule(Block block, @NotNull BlockPosition blockPosition) {
-        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
-        if (blockPlacementRule != null) {
-            return blockPlacementRule.blockUpdate(this, blockPosition, block);
-        }
-        return block;
-    }
-
-    /**
-     * Executed when a block is modified, this is used to modify the states of neighbours blocks.
-     * <p>
-     * For example, this can be used for redstone wires which need an understanding of its neighborhoods to take the right shape.
-     *
-     * @param blockPosition the position of the modified block
-     */
-    private void executeNeighboursBlockPlacementRule(@NotNull BlockPosition blockPosition) {
-        for (int offsetX = -1; offsetX < 2; offsetX++) {
-            for (int offsetY = -1; offsetY < 2; offsetY++) {
-                for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
-                    if (offsetX == 0 && offsetY == 0 && offsetZ == 0)
-                        continue;
-                    final int neighborX = blockPosition.getX() + offsetX;
-                    final int neighborY = blockPosition.getY() + offsetY;
-                    final int neighborZ = blockPosition.getZ() + offsetZ;
-                    final Chunk chunk = getChunkAt(neighborX, neighborZ);
-
-                    // Do not try to get neighbour in an unloaded chunk
-                    if (chunk == null)
-                        continue;
-
-                    final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
-                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborBlock);
-                    if (neighborBlockPlacementRule != null) {
-                        final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
-                        final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
-                                neighborPosition, neighborBlock);
-                        if (neighborBlock != newNeighborBlock) {
-                            setBlock(neighborPosition, newNeighborBlock);
-                        }
-                    }
-                }
-            }
-        }
+        UNSAFE_setBlock(chunk, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block, player);
+        return true;
     }
 
     @Override
@@ -697,6 +637,77 @@ public class InstanceContainer extends Instance {
                 UPDATE_MANAGER.signalChunkUnload(chunk);
             }
             this.scheduledChunksToRemove.clear();
+        }
+    }
+
+    private void setAlreadyChanged(@NotNull BlockPosition blockPosition, Block block) {
+        currentlyChangingBlocks.put(blockPosition, block);
+    }
+
+    /**
+     * Has this block already changed since last update?
+     * Prevents StackOverflow with blocks trying to modify their position in onDestroy or onPlace.
+     *
+     * @param blockPosition the block position
+     * @param block         the block
+     * @return true if the block changed since the last update
+     */
+    private boolean isAlreadyChanged(@NotNull BlockPosition blockPosition, @NotNull Block block) {
+        final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
+        if (changedBlock == null)
+            return false;
+        return changedBlock.id() == block.id();
+    }
+
+    /**
+     * Calls the {@link BlockPlacementRule} for the specified block state id.
+     *
+     * @param block         the block to modify
+     * @param blockPosition the block position
+     * @return the modified block state id
+     */
+    private Block executeBlockPlacementRule(Block block, @NotNull BlockPosition blockPosition) {
+        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
+        if (blockPlacementRule != null) {
+            return blockPlacementRule.blockUpdate(this, blockPosition, block);
+        }
+        return block;
+    }
+
+    /**
+     * Executed when a block is modified, this is used to modify the states of neighbours blocks.
+     * <p>
+     * For example, this can be used for redstone wires which need an understanding of its neighborhoods to take the right shape.
+     *
+     * @param blockPosition the position of the modified block
+     */
+    private void executeNeighboursBlockPlacementRule(@NotNull BlockPosition blockPosition) {
+        for (int offsetX = -1; offsetX < 2; offsetX++) {
+            for (int offsetY = -1; offsetY < 2; offsetY++) {
+                for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
+                    if (offsetX == 0 && offsetY == 0 && offsetZ == 0)
+                        continue;
+                    final int neighborX = blockPosition.getX() + offsetX;
+                    final int neighborY = blockPosition.getY() + offsetY;
+                    final int neighborZ = blockPosition.getZ() + offsetZ;
+                    final Chunk chunk = getChunkAt(neighborX, neighborZ);
+
+                    // Do not try to get neighbour in an unloaded chunk
+                    if (chunk == null)
+                        continue;
+
+                    final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
+                    final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborBlock);
+                    if (neighborBlockPlacementRule != null) {
+                        final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
+                        final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
+                                neighborPosition, neighborBlock);
+                        if (neighborBlock != newNeighborBlock) {
+                            setBlock(neighborPosition, newNeighborBlock);
+                        }
+                    }
+                }
+            }
         }
     }
 
