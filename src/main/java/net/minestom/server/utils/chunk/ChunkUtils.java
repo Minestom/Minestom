@@ -228,7 +228,7 @@ public final class ChunkUtils {
         z = z % Chunk.CHUNK_SIZE_Z;
 
         int index = x & 0xF; // 4 bits
-        index |= (y << 24) & 0x0FFFFFF0; // 24 bits
+        index |= (y << 4) & 0x0FFFFFF0; // 24 bits
         index |= (z << 28) & 0xF0000000; // 4 bits
         return index;
     }
