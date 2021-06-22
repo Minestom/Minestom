@@ -8,6 +8,7 @@ import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
@@ -59,6 +60,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @Contract(pure = true)
     @Nullable BlockHandler handler();
 
+    @Unmodifiable
     @Contract(pure = true)
     @NotNull Map<String, String> properties();
 
