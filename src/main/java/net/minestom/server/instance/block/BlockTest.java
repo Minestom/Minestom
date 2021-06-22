@@ -73,6 +73,8 @@ class BlockTest implements Block {
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        if (compound == null)
+            return null;
         return tag.read(compound);
     }
 }
