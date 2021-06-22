@@ -1,6 +1,9 @@
 package net.minestom.server.command;
 
+import java.util.UUID;
+
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
@@ -12,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Main implementations are {@link Player} and {@link ConsoleSender}.
  */
-public interface CommandSender extends PermissionHandler, Audience, Taggable {
+public interface CommandSender extends PermissionHandler, Audience, Taggable, Identified {
 
     /**
      * Sends a raw string message.
@@ -81,4 +84,11 @@ public interface CommandSender extends PermissionHandler, Audience, Taggable {
     default ConsoleSender asConsole() {
         throw new ClassCastException("CommandSender is not the ConsoleSender");
     }
+
+    /**
+     * Gets the UUID for this command sender.
+     *
+     * @return the UUID
+     */
+    @NotNull UUID getUuid();
 }
