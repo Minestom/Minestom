@@ -6,7 +6,10 @@ import org.jetbrains.annotations.Nullable;
  * Represents an element which can have a {@link Data} attached to it.
  * <p>
  * The data will always be optional and can therefore be null.
+ *
+ * @deprecated switch to the Tag API instead
  */
+@Deprecated
 public interface DataContainer {
 
     /**
