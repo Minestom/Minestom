@@ -2,12 +2,15 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTList;
+import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +43,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public boolean loadChunk(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
+    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
         LOGGER.debug("Attempt loading at {} {}", chunkX, chunkZ);
         if (!Files.exists(path)) {
             // No world folder
@@ -79,7 +82,7 @@ public class AnvilLoader implements IChunkLoader {
 
         // Blocks
         {
-            placeBlocks(chunk, fileChunk);
+            loadBlocks(chunk, fileChunk);
             loadTileEntities(chunk, fileChunk);
         }
 
@@ -131,7 +134,7 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    private void placeBlocks(Chunk chunk, ChunkColumn fileChunk) {
+    private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 for (int y = 0; y < 256; y++) { // TODO don't hardcode height
@@ -209,54 +212,37 @@ public class AnvilLoader implements IChunkLoader {
             callback.run();
     }
 
-    private void saveTileEntities(Chunk chunk, ChunkColumn fileChunk) {
-        /*NBTList<NBTCompound> tileEntities = new NBTList<>(NBTTypes.TAG_Compound);
-        for (var index : chunk.getBlockEntities()) {
-            int x = ChunkUtils.blockIndexToChunkPositionX(index);
-            int y = ChunkUtils.blockIndexToChunkPositionY(index);
-            int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-            position.setX(x);
-            position.setY(y);
-            position.setZ(z);
-            CustomBlock customBlock = chunk.getCustomBlock(x, y, z);
-            if (customBlock instanceof VanillaBlock) {
-                NBTCompound nbt = new NBTCompound();
-                nbt.setInt("x", x);
-                nbt.setInt("y", y);
-                nbt.setInt("z", z);
-                nbt.setByte("keepPacked", (byte) 0);
-                Block block = Block.fromStateId(customBlock.getDefaultBlockStateId());
-                Data data = chunk.getBlockData(ChunkUtils.getBlockIndex(x, y, z));
-                customBlock.writeBlockEntity(position, data, nbt);
-                if (block.hasBlockEntity()) {
-                    nbt.setString("id", block.getBlockEntityName().toString());
-                    tileEntities.add(nbt);
-                } else {
-                    LOGGER.warn("Tried to save block entity for a block which is not a block entity? Block is {} at {},{},{}", customBlock, x, y, z);
-                }
-            }
-        }
-        fileChunk.setTileEntities(tileEntities);*/
-    }
-
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
+        NBTList<NBTCompound> tileEntities = new NBTList<>(NBTTypes.TAG_Compound);
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
-
-        // TODO: other elements to save
-        saveTileEntities(chunk, chunkColumn);
-
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 for (int y = 0; y < 256; y++) { // TODO don't hardcode world height
                     final Block block = chunk.getBlock(x, y, z);
+
+                    // Block
                     BlockState state = new BlockState(block.name(), block.properties());
                     chunkColumn.setBlockState(x, y, z, state);
 
+                    // Biome
                     int index = ((y >> 2) & 63) << 4 | ((z >> 2) & 3) << 2 | ((x >> 2) & 3); // https://wiki.vg/Chunk_Format#Biomes
                     Biome biome = chunk.getBiomes()[index];
                     chunkColumn.setBiome(x, 0, z, biome.getId());
+
+                    // Tile entity
+                    final BlockHandler handler = block.handler();
+                    if (handler != null) {
+                        NBTCompound nbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                        nbt.setString("id", handler.getNamespaceId().asString());
+                        nbt.setInt("x", x);
+                        nbt.setInt("y", y);
+                        nbt.setInt("z", z);
+                        nbt.setByte("keepPacked", (byte) 0);
+                        tileEntities.add(nbt);
+                    }
                 }
             }
         }
+        chunkColumn.setTileEntities(tileEntities);
     }
 }

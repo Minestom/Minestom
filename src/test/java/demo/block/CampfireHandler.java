@@ -27,8 +27,9 @@ public class CampfireHandler implements BlockHandler {
         @Override
         public @Nullable List<ItemStack> read(@NotNull TagReadable reader) {
             NBTList<NBTCompound> item = reader.getTag(internal);
+            if (item == null)
+                return null;
             List<ItemStack> result = new ArrayList<>();
-            assert item != null;
             item.forEach(nbtCompound -> {
                 int amount = nbtCompound.getAsByte("Count");
                 String id = nbtCompound.getString("id");
