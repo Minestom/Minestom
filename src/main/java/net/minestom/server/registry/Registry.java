@@ -41,7 +41,7 @@ public class Registry {
         private final NamespaceID namespace;
         private final int id;
         private final int stateId;
-        private final double destroySpeed;
+        private final double hardness;
         private final double explosionResistance;
         private final double friction;
         private final double speedFactor;
@@ -56,7 +56,7 @@ public class Registry {
             this.namespace = NamespaceID.from(getString("namespaceId"));
             this.id = getInt("id");
             this.stateId = getInt("stateId");
-            this.destroySpeed = getDouble("hardness");
+            this.hardness = getDouble("hardness");
             this.explosionResistance = getDouble("explosionResistance");
             this.friction = getDouble("friction");
             this.speedFactor = getDouble("speedFactor");
@@ -79,8 +79,8 @@ public class Registry {
             return stateId;
         }
 
-        public double destroySpeed() {
-            return destroySpeed;
+        public double hardness() {
+            return hardness;
         }
 
         public double explosionResistance() {
