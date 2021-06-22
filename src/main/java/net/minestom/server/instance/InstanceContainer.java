@@ -190,21 +190,18 @@ public class InstanceContainer extends Instance {
     public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
-
         // Cancel if the chunk is read-only
         if (chunk.isReadOnly()) {
             return false;
         }
-
         // Chunk unloaded, stop here
         if (!ChunkUtils.isLoaded(chunk))
             return false;
+        final Block block = getBlock(blockPosition);
 
         final int x = blockPosition.getX();
         final int y = blockPosition.getY();
         final int z = blockPosition.getZ();
-
-        final Block block = getBlock(x, y, z);
 
         // The player probably have a wrong version of this chunk section, send it
         if (block.isAir()) {
@@ -218,7 +215,7 @@ public class InstanceContainer extends Instance {
         if (allowed) {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
-            setBlock(x, y, z, resultBlock);
+            UNSAFE_setBlock(chunk, x, y, z, resultBlock, player);
 
             // Send the block break effect packet
             {
