@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.entity.pathfinding.PFBlockDescription;
 import net.minestom.server.instance.block.Block;
@@ -17,6 +19,7 @@ import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -24,6 +27,11 @@ import java.util.TreeMap;
  * WARNING: not thread-safe.
  */
 public class DynamicChunk extends Chunk {
+
+    private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
+            .expireAfterWrite(5, TimeUnit.MINUTES)
+            .weakValues()
+            .build();
 
     protected final TreeMap<Integer, Section> sectionMap = new TreeMap<>();
 
@@ -64,7 +72,8 @@ public class DynamicChunk extends Chunk {
         // Nbt
         final NBTCompound nbt = block.nbt();
         if (nbt != null) {
-            this.nbtMap.put(index, nbt);
+            final var cachedNbt = NBT_CACHE.get(nbt, compound -> nbt);
+            this.nbtMap.put(index, cachedNbt);
         } else {
             this.nbtMap.remove(index);
         }
