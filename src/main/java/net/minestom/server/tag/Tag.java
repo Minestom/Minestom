@@ -212,4 +212,12 @@ public class Tag<T> {
                 nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
                 (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
     }
+
+    /**
+     * @deprecated use {@link #Structure(String, TagSerializer)} instead
+     */
+    @Deprecated
+    public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+        return Structure(key, serializer);
+    }
 }
