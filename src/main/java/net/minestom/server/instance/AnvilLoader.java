@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
@@ -26,6 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
+    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     private static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
     private static final Biome BIOME = Biome.PLAINS;
 
@@ -122,18 +124,6 @@ public class AnvilLoader implements IChunkLoader {
         });
     }
 
-    private void loadTileEntities(Chunk loadedChunk, ChunkColumn fileChunk) {
-        for (NBTCompound te : fileChunk.getTileEntities()) {
-            final String tileEntityID = te.getString("id");
-            final int x = te.getInt("x") + loadedChunk.getChunkX() * 16;
-            final int y = te.getInt("y");
-            final int z = te.getInt("z") + loadedChunk.getChunkZ() * 16;
-            if (tileEntityID != null) {
-                // TODO load BlockHandler and place
-            }
-        }
-    }
-
     private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -156,6 +146,37 @@ public class AnvilLoader implements IChunkLoader {
                     }
                 }
             }
+        }
+    }
+
+    private void loadTileEntities(Chunk loadedChunk, ChunkColumn fileChunk) {
+        for (NBTCompound te : fileChunk.getTileEntities()) {
+            final String tileEntityID = te.getString("id");
+            final var x = te.getInt("x");
+            final var y = te.getInt("y");
+            final var z = te.getInt("z");
+            if (tileEntityID == null) {
+                LOGGER.warn("Tile entity has failed to load due to invalid namespace");
+                continue;
+            }
+            if (x == null || y == null || z == null) {
+                LOGGER.warn("Tile entity " + tileEntityID + " has failed to load due to invalid coordinate");
+                continue;
+            }
+            final var handler = BLOCK_MANAGER.getHandler(tileEntityID);
+            if (handler == null) {
+                LOGGER.warn("Block " + tileEntityID + " does not have any corresponding handler, world will load anyway.");
+                continue;
+            }
+            // Remove anvil tags
+            te.removeTag("id")
+                    .removeTag("x").removeTag("y").removeTag("z")
+                    .removeTag("keepPacked");
+            // Place block
+            final Block block = loadedChunk.getBlock(x, y, z)
+                    .withHandler(handler)
+                    .withNbt(te);
+            loadedChunk.setBlock(x, y, z, block);
         }
     }
 
