@@ -69,9 +69,4 @@ public class ConsoleSender implements CommandSender {
     public @NotNull Pointers pointers() {
         return this.pointers;
     }
-
-    @Override
-    public @NotNull UUID getUuid() {
-        return this.identity.uuid();
-    }
 }

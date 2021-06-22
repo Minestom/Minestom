@@ -84,11 +84,4 @@ public interface CommandSender extends PermissionHandler, Audience, Taggable, Id
     default ConsoleSender asConsole() {
         throw new ClassCastException("CommandSender is not the ConsoleSender");
     }
-
-    /**
-     * Gets the UUID for this command sender.
-     *
-     * @return the UUID
-     */
-    @NotNull UUID getUuid();
 }
