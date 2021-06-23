@@ -11,7 +11,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 class BlockTest implements Block {
@@ -45,8 +44,12 @@ class BlockTest implements Block {
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
         properties.put(property, value);
-        final Block block = BlockRegistry.getProperties(this, properties);
-        return Objects.requireNonNull(block);
+        Block block = BlockRegistry.getProperties(name(), properties);
+        if (block == null)
+            throw new IllegalArgumentException("Invalid property: " + property + ":" + value);
+        if (nbt != null || handler != null)
+            return new BlockTest(block.registry(), block.properties(), nbt, handler);
+        return block;
     }
 
     @Override

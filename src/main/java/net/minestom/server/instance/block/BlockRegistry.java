@@ -41,10 +41,6 @@ class BlockRegistry {
         return entry.propertyMap.get(properties);
     }
 
-    static @Nullable Block getProperties(Block block, Map<String, String> properties) {
-        return getProperties(block.namespace().asString(), properties);
-    }
-
     static {
         // Load data from file
         JsonObject blocks = Registry.load(Registry.Resource.BLOCK);
