@@ -13,6 +13,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
@@ -55,6 +56,12 @@ public class BlockPlacementListener {
         // FIXME: onUseOnBlock
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, blockFace);
         EventDispatcher.call(playerBlockInteractEvent);
+        if (!playerBlockInteractEvent.isCancelled()) {
+            final var handler = interactedBlock.handler();
+            if (handler != null) {
+                handler.onInteract(BlockHandler.Interaction.from(interactedBlock, instance, blockPosition, player, hand));
+            }
+        }
         if (playerBlockInteractEvent.isBlockingItemUse()) {
             return;
         }

@@ -62,9 +62,7 @@ public final class EntityUtils {
         // TODO: check entire bounding box
         final BlockPosition blockPosition = entityPosition.toBlockPosition().subtract(0, 1, 0);
         try {
-            final Block block = chunk.getBlock(blockPosition.getX(),
-                    blockPosition.getY(),
-                    blockPosition.getZ());
+            final Block block = chunk.getBlock(blockPosition);
             return block.isSolid();
         } catch (NullPointerException e) {
             // Probably an entity at the border of an unloaded chunk
