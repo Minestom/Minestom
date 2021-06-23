@@ -16,10 +16,8 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -403,7 +401,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         // Only send loaded chunk
         if (!isLoaded())
             return;
-
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getLightPacket());
         playerConnection.sendPacket(createChunkPacket());
@@ -415,48 +412,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         }
         sendPacketToViewers(getLightPacket());
         sendPacketToViewers(createChunkPacket());
-    }
-
-    /**
-     * Sends a full {@link ChunkDataPacket} to {@code player}.
-     *
-     * @param player the player to update the chunk to
-     */
-    public synchronized void sendChunkUpdate(@NotNull Player player) {
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(createChunkPacket());
-    }
-
-    /**
-     * Sends a full {@link ChunkDataPacket} to all chunk viewers.
-     */
-    public synchronized void sendChunkUpdate() {
-        PacketUtils.sendGroupedPacket(getViewers(), createChunkPacket());
-    }
-
-    /**
-     * Sends a chunk section update packet to {@code player}.
-     *
-     * @param section the section to update
-     * @param player  the player to send the packet to
-     * @throws IllegalArgumentException if {@code section} is not a valid section
-     */
-    public synchronized void sendChunkSectionUpdate(int section, @NotNull Player player) {
-        if (!PlayerUtils.isNettyClient(player))
-            return;
-        player.getPlayerConnection().sendPacket(createChunkSectionUpdatePacket(section));
-    }
-
-    /**
-     * Gets the {@link ChunkDataPacket} to update a single chunk section.
-     *
-     * @param section the chunk section to update
-     * @return the {@link ChunkDataPacket} to update a single chunk section
-     */
-    protected @NotNull ChunkDataPacket createChunkSectionUpdatePacket(int section) {
-        ChunkDataPacket chunkDataPacket = createChunkPacket();
-        chunkDataPacket.sections.entrySet().removeIf(entry -> entry.getKey() != section);
-        return chunkDataPacket;
     }
 
     /**

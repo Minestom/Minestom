@@ -205,7 +205,7 @@ public class InstanceContainer extends Instance {
 
         // The player probably have a wrong version of this chunk section, send it
         if (block.isAir()) {
-            chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(y), player);
+            chunk.sendChunk(player);
             return false;
         }
 

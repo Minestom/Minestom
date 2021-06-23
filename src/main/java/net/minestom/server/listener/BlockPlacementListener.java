@@ -171,7 +171,7 @@ public class BlockPlacementListener {
 
         // Refresh chunk section if needed
         if (refreshChunk) {
-            chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(blockPosition.getY()), player);
+            chunk.sendChunk(player);
         }
     }
 
