@@ -67,7 +67,7 @@ public class Registry {
             this.blockEntity = getBoolean("blockEntity");
         }
 
-        public NamespaceID namespace() {
+        public @NotNull NamespaceID namespace() {
             return namespace;
         }
 

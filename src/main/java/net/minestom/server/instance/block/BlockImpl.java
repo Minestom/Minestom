@@ -44,7 +44,7 @@ class BlockImpl implements Block {
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
         properties.put(property, value);
-        Block block = BlockRegistry.getProperties(name(), properties);
+        Block block = BlockLoader.getProperties(name(), properties);
         if (block == null)
             throw new IllegalArgumentException("Invalid property: " + property + ":" + value);
         if (nbt != null || handler != null)
@@ -54,7 +54,8 @@ class BlockImpl implements Block {
 
     @Override
     public @NotNull Block withNbt(@Nullable NBTCompound compound) {
-        final var cachedNbt = NBT_CACHE.get(compound, c -> compound);
+        final var clonedNbt = compound != null ? compound.deepClone() : null;
+        final var cachedNbt = NBT_CACHE.get(clonedNbt, c -> clonedNbt);
         return new BlockImpl(registry, properties, cachedNbt, handler);
     }
 
