@@ -10,6 +10,7 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.batch.ChunkGenerationBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
@@ -106,13 +107,13 @@ public class InstanceContainer extends Instance {
     public synchronized void setBlock(int x, int y, int z, @NotNull Block block) {
         final Chunk chunk = getChunkAt(x, z);
         if (ChunkUtils.isLoaded(chunk)) {
-            UNSAFE_setBlock(chunk, x, y, z, block, null);
+            UNSAFE_setBlock(chunk, x, y, z, block, null, null);
         } else {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             final int chunkX = ChunkUtils.getChunkCoordinate(x);
             final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-            loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, block, null));
+            loadChunk(chunkX, chunkZ, c -> UNSAFE_setBlock(c, x, y, z, block, null, null));
         }
     }
 
@@ -128,7 +129,7 @@ public class InstanceContainer extends Instance {
      * @param block the block to place
      */
     private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                 @Nullable Player player) {
+                                 @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy) {
         // Cannot place block in a read-only chunk
         if (chunk.isReadOnly()) {
             return;
@@ -161,28 +162,27 @@ public class InstanceContainer extends Instance {
 
             if (previousHandler != null) {
                 // Previous destroy
-                final var destroy = player != null ?
-                        new BlockHandler.PlayerDestroy(previousBlock, this, blockPosition, player) :
-                        BlockHandler.Destroy.from(previousBlock, this, blockPosition);
-                previousHandler.onDestroy(destroy);
+                previousHandler.onDestroy(Objects.requireNonNullElseGet(destroy,
+                        () -> BlockHandler.Destroy.from(previousBlock, this, blockPosition)));
             }
             final BlockHandler handler = block.handler();
             if (handler != null) {
                 // New placement
-                final var placement = player != null ?
-                        new BlockHandler.PlayerPlacement(block, this, blockPosition, player) :
-                        BlockHandler.Placement.from(block, this, blockPosition);
-                handler.onPlace(placement);
+                final Block finalBlock = block;
+                handler.onPlace(Objects.requireNonNullElseGet(placement,
+                        () -> BlockHandler.Placement.from(finalBlock, this, blockPosition)));
             }
         }
     }
 
     @Override
-    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition) {
+    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition,
+                              @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
         final Chunk chunk = getChunkAt(blockPosition);
         if (!ChunkUtils.isLoaded(chunk))
             return false;
-        UNSAFE_setBlock(chunk, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block, player);
+        UNSAFE_setBlock(chunk, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block,
+                new BlockHandler.PlayerPlacement(block, this, blockPosition, player, blockFace, cursorX, cursorY, cursorZ), null);
         return true;
     }
 
@@ -215,7 +215,8 @@ public class InstanceContainer extends Instance {
         if (allowed) {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
-            UNSAFE_setBlock(chunk, x, y, z, resultBlock, player);
+            UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
+                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player));
 
             // Send the block break effect packet
             {

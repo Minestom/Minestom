@@ -142,7 +142,8 @@ public class BlockPlacementListener {
                         final boolean placementRuleCheck = resultBlock != null;
                         if (placementRuleCheck) {
                             // Place the block
-                            instance.placeBlock(player, resultBlock, blockPosition);
+                            instance.placeBlock(player, resultBlock, blockPosition,
+                                    blockFace, packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ);
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand

@@ -117,12 +117,19 @@ public interface BlockHandler {
         private final Instance instance;
         private final BlockPosition blockPosition;
         private final Player player;
+        private final BlockFace blockFace;
+        private final float cursorX, cursorY, cursorZ;
 
-        public PlayerPlacement(Block block, Instance instance, BlockPosition blockPosition, Player player) {
+        public PlayerPlacement(Block block, Instance instance, BlockPosition blockPosition, Player player,
+                               BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
             this.player = player;
+            this.blockFace = blockFace;
+            this.cursorX = cursorX;
+            this.cursorY = cursorY;
+            this.cursorZ = cursorZ;
         }
 
         @Override
@@ -142,6 +149,22 @@ public interface BlockHandler {
 
         public @NotNull Player player() {
             return player;
+        }
+
+        public @NotNull BlockFace blockFace() {
+            return blockFace;
+        }
+
+        public float cursorX() {
+            return cursorX;
+        }
+
+        public float cursorY() {
+            return cursorY;
+        }
+
+        public float cursorZ() {
+            return cursorZ;
         }
     }
 

@@ -22,10 +22,7 @@ import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.event.trait.InstanceEvent;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockGetter;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.BlockSetter;
+import net.minestom.server.instance.block.*;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
@@ -145,7 +142,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
         this.nextTick.add(callback);
     }
 
-    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition);
+    @ApiStatus.Internal
+    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition,
+                                       @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -155,6 +154,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ev
      * @param blockPosition the {@link BlockPosition} of the broken block
      * @return true if the block has been broken, false if it has been cancelled
      */
+    @ApiStatus.Internal
     public abstract boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition);
 
     /**
