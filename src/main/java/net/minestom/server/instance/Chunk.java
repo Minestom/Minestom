@@ -265,11 +265,8 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     public UpdateLightPacket getLightPacket() {
         long skyMask = 0;
         long blockMask = 0;
-        long emptySkyMask = 0;
-        long emptyBlockMask = 0;
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
-
 
         UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
         updateLightPacket.chunkX = getChunkX();
@@ -277,11 +274,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
 
         updateLightPacket.skyLight = skyLights;
         updateLightPacket.blockLight = blockLights;
-
-        emptySkyMask |= 1L << 0;
-        emptyBlockMask |= 1L << 0;
-        emptySkyMask |= 1L << 17;
-        emptyBlockMask |= 1L << 17;
 
         final var sections = getSections();
         for (var entry : sections.entrySet()) {
@@ -294,23 +286,17 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
             if (!ArrayUtils.empty(skyLight)) {
                 skyLights.add(skyLight);
                 skyMask |= 1L << index;
-            } else {
-                emptySkyMask |= 1L << index;
             }
-
             if (!ArrayUtils.empty(blockLight)) {
                 blockLights.add(blockLight);
                 blockMask |= 1L << index;
-            } else {
-                emptyBlockMask |= 1L << index;
             }
         }
 
         updateLightPacket.skyLightMask = new long[]{skyMask};
         updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[]{emptySkyMask};
-        updateLightPacket.emptyBlockLightMask = new long[]{emptyBlockMask};
-
+        updateLightPacket.emptySkyLightMask = new long[0];
+        updateLightPacket.emptyBlockLightMask = new long[0];
         return updateLightPacket;
     }
 
