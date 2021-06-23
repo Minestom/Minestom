@@ -67,7 +67,6 @@ public final class MinecraftServer {
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
     public static final String VERSION_NAME = "1.17";
-    public static final String VERSION_NAME_UNDERSCORED = VERSION_NAME.replace('.', '_');
     public static final int PROTOCOL_VERSION = 755;
 
     // Threads
@@ -332,7 +331,8 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the manager handling {@link BlockPlacementRule}.
+     * Gets the manager handling {@link net.minestom.server.instance.block.BlockHandler block handlers}
+     * and {@link BlockPlacementRule placement rules}.
      *
      * @return the block manager
      */
@@ -615,6 +615,7 @@ public final class MinecraftServer {
 
     /**
      * Gets if the built in Minestom terminal is enabled.
+     *
      * @return true if the terminal is enabled
      */
     public static boolean isTerminalEnabled() {

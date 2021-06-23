@@ -22,7 +22,7 @@ public class PFInstanceSpace implements IInstanceSpace {
     @Override
     public IBlockObject blockObjectAt(int x, int y, int z) {
         final Block block = instance.getBlock(x, y, z);
-        return PFBlockObject.getBlockObject(block);
+        return PFBlock.get(block);
     }
 
     @Override
@@ -31,7 +31,6 @@ public class PFInstanceSpace implements IInstanceSpace {
         if (chunk == null) {
             return null;
         }
-
         return chunkSpaceMap.computeIfAbsent(chunk, c -> {
             final PFColumnarSpace cs = new PFColumnarSpace(this, c);
             c.setColumnarSpace(cs);

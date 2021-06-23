@@ -1,39 +1,51 @@
 package net.minestom.server.entity.pathfinding;
 
 import com.extollit.gaming.ai.path.model.IBlockDescription;
+import com.extollit.gaming.ai.path.model.IBlockObject;
+import com.extollit.linalg.immutable.AxisAlignedBBox;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.instance.block.Block;
+import org.jetbrains.annotations.NotNull;
 
-public class PFBlockDescription implements IBlockDescription {
+public class PFBlock implements IBlockDescription, IBlockObject {
 
-    private static final Short2ObjectMap<PFBlockDescription> BLOCK_DESCRIPTION_MAP = new Short2ObjectOpenHashMap<>();
+    private static final Short2ObjectMap<PFBlock> BLOCK_DESCRIPTION_MAP = new Short2ObjectOpenHashMap<>();
 
     /**
-     * Gets the {@link PFBlockDescription} linked to the block state id.
+     * Gets the {@link PFBlock} linked to the block state id.
      * <p>
      * Cache the result if it is not already.
      *
      * @param block the block
-     * @return the {@link PFBlockDescription} linked to {@code blockStateId}
+     * @return the {@link PFBlock} linked to {@code blockStateId}
      */
-    public static PFBlockDescription getBlockDescription(Block block) {
+    public static @NotNull PFBlock get(@NotNull Block block) {
         final short blockStateId = block.stateId();
         if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
             synchronized (BLOCK_DESCRIPTION_MAP) {
-                final PFBlockDescription blockDescription = new PFBlockDescription(block);
-                BLOCK_DESCRIPTION_MAP.put(blockStateId, blockDescription);
-                return blockDescription;
+                if (!BLOCK_DESCRIPTION_MAP.containsKey(blockStateId)) {
+                    final var pfBlock = new PFBlock(block);
+                    BLOCK_DESCRIPTION_MAP.put(blockStateId, pfBlock);
+                    return pfBlock;
+                }
             }
         }
-
         return BLOCK_DESCRIPTION_MAP.get(blockStateId);
     }
 
     private final Block block;
 
-    public PFBlockDescription(Block block) {
+    public PFBlock(Block block) {
         this.block = block;
+    }
+
+    @Override
+    public AxisAlignedBBox bounds() {
+        return new AxisAlignedBBox(
+                0, 0, 0,
+                1, 1, 1
+        );
     }
 
     @Override
@@ -135,4 +147,5 @@ public class PFBlockDescription implements IBlockDescription {
     public boolean isIncinerating() {
         return block == Block.LAVA || block == Block.FIRE || block == Block.SOUL_FIRE;
     }
+
 }

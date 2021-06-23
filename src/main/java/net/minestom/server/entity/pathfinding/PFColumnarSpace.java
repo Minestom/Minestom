@@ -22,7 +22,7 @@ public class PFColumnarSpace implements IColumnarSpace {
     @Override
     public IBlockDescription blockAt(int x, int y, int z) {
         final Block block = chunk.getBlock(x, y, z);
-        return PFBlockDescription.getBlockDescription(block);
+        return PFBlock.get(block);
     }
 
     @Override

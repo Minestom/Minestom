@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.entity.pathfinding.PFBlockDescription;
+import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
@@ -47,7 +47,7 @@ public class DynamicChunk extends Chunk {
         // Update pathfinder
         if (columnarSpace != null) {
             final ColumnarOcclusionFieldList columnarOcclusionFieldList = columnarSpace.occlusionFields();
-            final PFBlockDescription blockDescription = PFBlockDescription.getBlockDescription(block);
+            final var blockDescription = PFBlock.get(block);
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
         Section section = retrieveSection(y);
