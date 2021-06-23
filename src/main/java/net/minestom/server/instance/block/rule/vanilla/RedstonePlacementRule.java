@@ -4,11 +4,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockProperties;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class RedstonePlacementRule extends BlockPlacementRule {
 
@@ -22,7 +23,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
 
         String east = "none";
         String north = "none";
-        int power = 0;
+        String power = "0";
         String south = "none";
         String west = "none";
 
@@ -87,12 +88,12 @@ public class RedstonePlacementRule extends BlockPlacementRule {
         }
 
         // TODO power
-
-        return Block.REDSTONE_WIRE.withProperty(BlockProperties.REDSTONE_WIRE.EAST_REDSTONE, east)
-                .withProperty(BlockProperties.REDSTONE_WIRE.NORTH_REDSTONE, north)
-                .withProperty(BlockProperties.REDSTONE_WIRE.SOUTH_REDSTONE, south)
-                .withProperty(BlockProperties.REDSTONE_WIRE.WEST_REDSTONE, west)
-                .withProperty(BlockProperties.REDSTONE_WIRE.POWER, power);
+        return Block.REDSTONE_WIRE.withProperties(Map.of(
+                "east", east,
+                "north", north,
+                "south", south,
+                "west", west,
+                "power", power));
     }
 
     @Override

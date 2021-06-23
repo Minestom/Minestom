@@ -28,11 +28,6 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @NotNull Block withProperty(@NotNull String property, @NotNull String value);
 
     @Contract(pure = true)
-    default <T> @NotNull Block withProperty(@NotNull BlockProperty<T> property, @NotNull T value) {
-        return withProperty(property.getName(), value.toString());
-    }
-
-    @Contract(pure = true)
     default @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties) {
         Block block = this;
         for (var entry : properties.entrySet()) {
@@ -67,11 +62,6 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     @Contract(pure = true)
     default @NotNull String getProperty(@NotNull String property) {
         return properties().get(property);
-    }
-
-    @Contract(pure = true)
-    default <T> @NotNull String getProperty(@NotNull BlockProperty<T> property) {
-        return getProperty(property.getName());
     }
 
     @Contract(pure = true)

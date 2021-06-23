@@ -5,11 +5,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockProperties;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class StairsPlacementRule extends BlockPlacementRule {
 
@@ -29,12 +30,14 @@ public class StairsPlacementRule extends BlockPlacementRule {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
-        boolean waterlogged = false; // waiting for water to be implemented
+        String waterlogged = "false"; // waiting for water to be implemented
 
-        return block.withProperty(BlockProperties.FACING, facing.toString())
-                .withProperty(BlockProperties.HALF, half.toString())
-                .withProperty(BlockProperties.STAIRS_SHAPE, shape.toString())
-                .withProperty(BlockProperties.WATERLOGGED, waterlogged);
+        return block.withProperties(Map.of(
+                "facing", facing.toString(),
+                "half", half.toString(),
+                "shape", shape.toString(),
+                "waterlogged", waterlogged));
+
     }
 
     private enum Shape {
