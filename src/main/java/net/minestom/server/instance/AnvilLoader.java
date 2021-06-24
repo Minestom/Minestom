@@ -166,7 +166,9 @@ public class AnvilLoader implements IChunkLoader {
                     .removeTag("x").removeTag("y").removeTag("z")
                     .removeTag("keepPacked");
             // Place block
-            loadedChunk.setBlock(x, y, z, block.withNbt(te));
+            final var finalBlock = te.getSize() > 0 ?
+                    block.withNbt(te) : block;
+            loadedChunk.setBlock(x, y, z, finalBlock);
         }
     }
 
