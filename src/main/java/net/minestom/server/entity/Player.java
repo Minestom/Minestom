@@ -1482,11 +1482,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);
+            //playerConnection.sendPacket(unloadChunkPacket);
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk != null)
+            if (chunk != null) {
                 chunk.removeViewer(this);
+            }
         }
 
         // Load new chunks
