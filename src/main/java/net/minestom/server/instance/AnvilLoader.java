@@ -143,32 +143,30 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadTileEntities(Chunk loadedChunk, ChunkColumn fileChunk) {
         for (NBTCompound te : fileChunk.getTileEntities()) {
-            final String tileEntityID = te.getString("id");
-            if (tileEntityID == null) {
-                LOGGER.warn("Tile entity has failed to load due to invalid namespace");
-                continue;
-            }
             final var x = te.getInt("x");
             final var y = te.getInt("y");
             final var z = te.getInt("z");
             if (x == null || y == null || z == null) {
-                LOGGER.warn("Tile entity {} has failed to load due to invalid coordinate", tileEntityID);
+                LOGGER.warn("Tile entity has failed to load due to invalid coordinate");
                 continue;
             }
-            final var handler = BLOCK_MANAGER.getHandler(tileEntityID);
-            if (handler == null) {
-                LOGGER.warn("Block {} does not have any corresponding handler, world will load anyway.", tileEntityID);
-                continue;
+            Block block = loadedChunk.getBlock(x, y, z);
+
+            final String tileEntityID = te.getString("id");
+            if (tileEntityID != null) {
+                final var handler = BLOCK_MANAGER.getHandler(tileEntityID);
+                if (handler == null) {
+                    LOGGER.warn("Block {} does not have any corresponding handler, world will load anyway.", tileEntityID);
+                    continue;
+                }
+                block = block.withHandler(handler);
             }
             // Remove anvil tags
             te.removeTag("id")
                     .removeTag("x").removeTag("y").removeTag("z")
                     .removeTag("keepPacked");
             // Place block
-            final Block block = loadedChunk.getBlock(x, y, z)
-                    .withHandler(handler)
-                    .withNbt(te);
-            loadedChunk.setBlock(x, y, z, block);
+            loadedChunk.setBlock(x, y, z, block.withNbt(te));
         }
     }
 
