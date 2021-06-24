@@ -1,30 +1,38 @@
 package net.minestom.server.instance.block;
 
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.block.BlockUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Loads {@link Block blocks} from file.
  */
+@ApiStatus.Internal
 class BlockLoader {
 
+    // Maps do not need to be thread-safe as they are fully populated
+    // in the static initializer, should not be modified during runtime
+
     // Block namespace -> registry data
-    private static final Map<String, Block> NAMESPACE_MAP = new ConcurrentHashMap<>();
-    // Block id -> registry data
-    private static final Map<Integer, Block> BLOCK_ID_MAP = new ConcurrentHashMap<>();
-    // Block state -> block object
-    private static final Map<Integer, Block> BLOCK_STATE_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, Block> NAMESPACE_MAP = new HashMap<>();
     // Block namespace -> properties map to block access
-    private static final Map<String, PropertyEntry> BLOCK_PROPERTY_MAP = new ConcurrentHashMap<>();
+    private static final Map<String, PropertyEntry> BLOCK_PROPERTY_MAP = new HashMap<>();
+    // Block id -> registry data
+    private static final Int2ObjectMap<Block> BLOCK_ID_MAP = new Int2ObjectOpenHashMap<>();
+    // Block state -> block object
+    private static final Int2ObjectMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
 
     static @Nullable Block get(@NotNull String namespace) {
-        if (!namespace.contains(":")) {
+        if (namespace.indexOf(':') == -1) {
             // Default to minecraft namespace
             namespace = "minecraft:" + namespace;
         }
