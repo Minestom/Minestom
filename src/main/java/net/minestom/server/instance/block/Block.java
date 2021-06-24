@@ -65,6 +65,8 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     /**
      * Creates a new block with a tag value modified.
+     * <p>
+     * Equivalent to getting {@link #nbt()}, applying the tag and calling {@link #withNbt(NBTCompound)}.
      *
      * @param tag   the tag to modify
      * @param value the tag value, null to remove
@@ -89,6 +91,8 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     /**
      * Returns an unmodifiable view to the block nbt.
+     * <p>
+     * Be aware that {@link Tag tags} directly affect the block nbt.
      *
      * @return the block nbt, null if not present
      */
