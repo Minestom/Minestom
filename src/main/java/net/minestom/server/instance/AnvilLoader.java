@@ -238,10 +238,13 @@ public class AnvilLoader implements IChunkLoader {
                     chunkColumn.setBiome(x, 0, z, biome.getId());
 
                     // Tile entity
+                    var nbt = block.nbt();
                     final BlockHandler handler = block.handler();
-                    if (handler != null) {
-                        NBTCompound nbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                        nbt.setString("id", handler.getNamespaceId().asString());
+                    if (nbt != null || handler != null) {
+                        nbt = Objects.requireNonNullElseGet(nbt, NBTCompound::new);
+                        if (handler != null) {
+                            nbt.setString("id", handler.getNamespaceId().asString());
+                        }
                         nbt.setInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
                         nbt.setInt("y", y);
                         nbt.setInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
