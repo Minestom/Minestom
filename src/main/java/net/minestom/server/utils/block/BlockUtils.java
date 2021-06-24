@@ -53,7 +53,7 @@ public class BlockUtils {
     }
 
     public boolean equals(Block block) {
-        return getBlock() == block;
+        return getBlock().compare(block);
     }
 
     public static Map<String, String> parseProperties(String query) {
