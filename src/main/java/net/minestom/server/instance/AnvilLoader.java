@@ -154,10 +154,10 @@ public class AnvilLoader implements IChunkLoader {
 
             final String tileEntityID = te.getString("id");
             if (tileEntityID != null) {
-                final var handler = BLOCK_MANAGER.getHandler(tileEntityID);
+                var handler = BLOCK_MANAGER.getHandler(tileEntityID);
                 if (handler == null) {
-                    LOGGER.warn("Block {} does not have any corresponding handler, world will load anyway.", tileEntityID);
-                    continue;
+                    LOGGER.warn("Block {} does not have any corresponding handler, default to dummy.", tileEntityID);
+                    handler = BlockHandler.Dummy.get(tileEntityID);
                 }
                 block = block.withHandler(handler);
             }

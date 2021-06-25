@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockHandler)}.
@@ -280,6 +282,30 @@ public interface BlockHandler {
 
         public @NotNull BlockPosition getBlockPosition() {
             return blockPosition;
+        }
+    }
+
+    /**
+     * Handler used for loaded blocks with unknown namespace
+     * in order to do not lose the information while saving, and for runtime debugging purpose.
+     */
+    class Dummy implements BlockHandler {
+        private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
+
+        @ApiStatus.Internal
+        public static @NotNull BlockHandler get(@NotNull String namespace) {
+            return DUMMY_CACHE.computeIfAbsent(namespace, s -> new Dummy(NamespaceID.from(namespace)));
+        }
+
+        private final NamespaceID namespaceID;
+
+        private Dummy(NamespaceID namespaceID) {
+            this.namespaceID = namespaceID;
+        }
+
+        @Override
+        public @NotNull NamespaceID getNamespaceId() {
+            return namespaceID;
         }
     }
 }
