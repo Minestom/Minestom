@@ -45,6 +45,10 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      */
     @NotNull Collection<Player> getPlayers();
 
+    /**
+     * Broadcast a ServerPacket to all players of this audience
+     * @param packet the packet to broadcast
+     */
     default void sendGroupedPacket(ServerPacket packet) {
         PacketUtils.sendGroupedPacket(this.getPlayers(), packet);
     }
