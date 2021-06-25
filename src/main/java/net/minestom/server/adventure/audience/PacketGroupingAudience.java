@@ -14,6 +14,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
@@ -44,6 +45,14 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      */
     @NotNull Collection<Player> getPlayers();
 
+    /**
+     * Broadcast a ServerPacket to all players of this audience
+     * @param packet the packet to broadcast
+     */
+    default void sendGroupedPacket(ServerPacket packet) {
+        PacketUtils.sendGroupedPacket(this.getPlayers(), packet);
+    }
+
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
         Messenger.sendMessage(this.getPlayers(), message, ChatPosition.fromMessageType(type), source.uuid());
@@ -51,28 +60,28 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void sendActionBar(@NotNull Component message) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new ActionBarPacket(message));
+        sendGroupedPacket(new ActionBarPacket(message));
     }
 
     @Override
     default void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new PlayerListHeaderAndFooterPacket(header, footer));
+        sendGroupedPacket(new PlayerListHeaderAndFooterPacket(header, footer));
     }
 
     @Override
     default void showTitle(@NotNull Title title) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new SetTitleTextPacket(title.title()));
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new SetTitleSubTitlePacket(title.subtitle()));
+        sendGroupedPacket(new SetTitleTextPacket(title.title()));
+        sendGroupedPacket(new SetTitleSubTitlePacket(title.subtitle()));
     }
 
     @Override
     default void clearTitle() {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new ClearTitlesPacket());
+        sendGroupedPacket(new ClearTitlesPacket());
     }
 
     @Override
     default void resetTitle() {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), new ClearTitlesPacket(true));
+        sendGroupedPacket(new ClearTitlesPacket(true));
     }
 
     @Override
@@ -87,13 +96,13 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void playSound(@NotNull Sound sound, double x, double y, double z) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
+        sendGroupedPacket(AdventurePacketConvertor.createSoundPacket(sound, x, y, z));
     }
 
     @Override
     default void playSound(@NotNull Sound sound, Sound.@NotNull Emitter emitter) {
         if (emitter != Sound.Emitter.self()) {
-            PacketUtils.sendGroupedPacket(this.getPlayers(), AdventurePacketConvertor.createSoundPacket(sound, emitter));
+            sendGroupedPacket(AdventurePacketConvertor.createSoundPacket(sound, emitter));
         } else {
             // if we're playing on self, we need to delegate to each audience member
             for (Audience audience : this.audiences()) {
@@ -104,7 +113,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
 
     @Override
     default void stopSound(@NotNull SoundStop stop) {
-        PacketUtils.sendGroupedPacket(this.getPlayers(), AdventurePacketConvertor.createSoundStopPacket(stop));
+        sendGroupedPacket(AdventurePacketConvertor.createSoundStopPacket(stop));
     }
 
 
