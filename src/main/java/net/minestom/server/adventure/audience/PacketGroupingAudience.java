@@ -14,6 +14,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.NotNull;
@@ -43,6 +44,10 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @return the connections
      */
     @NotNull Collection<Player> getPlayers();
+
+    default void sendGroupedPacket(ServerPacket packet) {
+        PacketUtils.sendGroupedPacket(this.getPlayers(), packet);
+    }
 
     @Override
     default void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
