@@ -163,14 +163,14 @@ public class InstanceContainer extends Instance {
             if (previousHandler != null) {
                 // Previous destroy
                 previousHandler.onDestroy(Objects.requireNonNullElseGet(destroy,
-                        () -> BlockHandler.Destroy.from(previousBlock, this, blockPosition)));
+                        () -> new BlockHandler.Destroy(previousBlock, this, blockPosition)));
             }
             final BlockHandler handler = block.handler();
             if (handler != null) {
                 // New placement
                 final Block finalBlock = block;
                 handler.onPlace(Objects.requireNonNullElseGet(placement,
-                        () -> BlockHandler.Placement.from(finalBlock, this, blockPosition)));
+                        () -> new BlockHandler.Placement(finalBlock, this, blockPosition)));
             }
         }
     }

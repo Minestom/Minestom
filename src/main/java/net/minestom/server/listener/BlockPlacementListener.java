@@ -59,7 +59,7 @@ public class BlockPlacementListener {
         if (!playerBlockInteractEvent.isCancelled()) {
             final var handler = interactedBlock.handler();
             if (handler != null) {
-                handler.onInteract(BlockHandler.Interaction.from(interactedBlock, instance, blockPosition, player, hand));
+                handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockPosition, player, hand));
             }
         }
         if (playerBlockInteractEvent.isBlockingItemUse()) {

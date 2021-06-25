@@ -99,7 +99,7 @@ public class DynamicChunk extends Chunk {
             final BlockPosition blockPosition = new BlockPosition(x, y, z);
 
             final Block block = getBlock(blockPosition);
-            entry.getValue().tick(BlockHandler.Tick.from(block, instance, blockPosition));
+            entry.getValue().tick(new BlockHandler.Tick(block, instance, blockPosition));
         }
     }
 

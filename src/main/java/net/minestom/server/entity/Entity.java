@@ -618,7 +618,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                             // checks that we are actually in the block, and not just here because of a rounding error
                             if (boundingBox.intersect(tmpPosition)) {
                                 // TODO: replace with check with custom block bounding box
-                                handler.onTouch(BlockHandler.Touch.from(block, instance, tmpPosition, this));
+                                handler.onTouch(new BlockHandler.Touch(block, instance, tmpPosition, this));
                             }
                         }
                     }

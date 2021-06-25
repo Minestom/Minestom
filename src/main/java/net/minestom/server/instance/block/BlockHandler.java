@@ -85,46 +85,40 @@ public interface BlockHandler {
      * and record pattern for the implementations (https://openjdk.java.net/jeps/405).
      */
     @ApiStatus.NonExtendable
-    interface Placement {
-        @NotNull Block block();
-
-        @NotNull Instance instance();
-
-        @NotNull BlockPosition blockPosition();
-
-        static @NotNull Placement from(@NotNull Block block, @NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-            return new Placement() {
-                @Override
-                public @NotNull Block block() {
-                    return block;
-                }
-
-                @Override
-                public @NotNull Instance instance() {
-                    return instance;
-                }
-
-                @Override
-                public @NotNull BlockPosition blockPosition() {
-                    return blockPosition;
-                }
-            };
-        }
-    }
-
-    final class PlayerPlacement implements Placement {
+    class Placement {
         private final Block block;
         private final Instance instance;
         private final BlockPosition blockPosition;
+
+        @ApiStatus.Internal
+        public Placement(Block block, Instance instance, BlockPosition blockPosition) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+        }
+
+        public @NotNull Block getBlock() {
+            return block;
+        }
+
+        public @NotNull Instance getInstance() {
+            return instance;
+        }
+
+        public @NotNull BlockPosition getBlockPosition() {
+            return blockPosition;
+        }
+    }
+
+    final class PlayerPlacement extends Placement {
         private final Player player;
         private final BlockFace blockFace;
         private final float cursorX, cursorY, cursorZ;
 
-        public PlayerPlacement(Block block, Instance instance, BlockPosition blockPosition, Player player,
-                               BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
+        @ApiStatus.Internal
+        public PlayerPlacement(Block block, Instance instance, BlockPosition blockPosition,
+                               Player player, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+            super(block, instance, blockPosition);
             this.player = player;
             this.blockFace = blockFace;
             this.cursorX = cursorX;
@@ -132,207 +126,160 @@ public interface BlockHandler {
             this.cursorZ = cursorZ;
         }
 
-        @Override
-        public @NotNull Block block() {
-            return block;
-        }
-
-        @Override
-        public @NotNull Instance instance() {
-            return instance;
-        }
-
-        @Override
-        public @NotNull BlockPosition blockPosition() {
-            return blockPosition;
-        }
-
-        public @NotNull Player player() {
+        public @NotNull Player getPlayer() {
             return player;
         }
 
-        public @NotNull BlockFace blockFace() {
+        public @NotNull BlockFace getBlockFace() {
             return blockFace;
         }
 
-        public float cursorX() {
+        public float getCursorX() {
             return cursorX;
         }
 
-        public float cursorY() {
+        public float getCursorY() {
             return cursorY;
         }
 
-        public float cursorZ() {
+        public float getCursorZ() {
             return cursorZ;
         }
     }
 
     @ApiStatus.NonExtendable
-    interface Destroy {
-        @NotNull Block block();
-
-        @NotNull Instance instance();
-
-        @NotNull BlockPosition blockPosition();
-
-        static @NotNull Destroy from(@NotNull Block block, @NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-            return new Destroy() {
-                @Override
-                public @NotNull Block block() {
-                    return block;
-                }
-
-                @Override
-                public @NotNull Instance instance() {
-                    return instance;
-                }
-
-                @Override
-                public @NotNull BlockPosition blockPosition() {
-                    return blockPosition;
-                }
-            };
-        }
-    }
-
-    final class PlayerDestroy implements Destroy {
+    class Destroy {
         private final Block block;
         private final Instance instance;
         private final BlockPosition blockPosition;
-        private final Player player;
 
-        public PlayerDestroy(Block block, Instance instance, BlockPosition blockPosition, Player player) {
+        @ApiStatus.Internal
+        public Destroy(Block block, Instance instance, BlockPosition blockPosition) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
-            this.player = player;
         }
 
-        @Override
-        public @NotNull Block block() {
+        public @NotNull Block getBlock() {
             return block;
         }
 
-        @Override
-        public @NotNull Instance instance() {
+        public @NotNull Instance getInstance() {
             return instance;
         }
 
-        @Override
-        public @NotNull BlockPosition blockPosition() {
+        public @NotNull BlockPosition getBlockPosition() {
             return blockPosition;
         }
+    }
 
-        public @NotNull Player player() {
+    final class PlayerDestroy extends Destroy {
+        private final Player player;
+
+        @ApiStatus.Internal
+        public PlayerDestroy(Block block, Instance instance, BlockPosition blockPosition, Player player) {
+            super(block, instance, blockPosition);
+            this.player = player;
+        }
+
+        public @NotNull Player getPlayer() {
             return player;
         }
     }
 
     @ApiStatus.NonExtendable
-    interface Interaction {
-        @NotNull Block block();
+    class Interaction {
+        private final Block block;
+        private final Instance instance;
+        private final BlockPosition blockPosition;
+        private final Player player;
+        private final Player.Hand hand;
 
-        @NotNull Instance instance();
+        @ApiStatus.Internal
+        public Interaction(Block block, Instance instance, BlockPosition blockPosition, Player player, Player.Hand hand) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+            this.player = player;
+            this.hand = hand;
+        }
 
-        @NotNull BlockPosition blockPosition();
+        public @NotNull Block getBlock() {
+            return block;
+        }
 
-        @NotNull Player player();
+        public @NotNull Instance getInstance() {
+            return instance;
+        }
 
-        @NotNull Player.Hand hand();
+        public @NotNull BlockPosition getBlockPosition() {
+            return blockPosition;
+        }
 
-        static @NotNull Interaction from(@NotNull Block block, @NotNull Instance instance, @NotNull BlockPosition blockPosition,
-                                         @NotNull Player player, @NotNull Player.Hand hand) {
-            return new Interaction() {
-                @Override
-                public @NotNull Block block() {
-                    return block;
-                }
+        public @NotNull Player getPlayer() {
+            return player;
+        }
 
-                @Override
-                public @NotNull Instance instance() {
-                    return instance;
-                }
-
-                @Override
-                public @NotNull BlockPosition blockPosition() {
-                    return blockPosition;
-                }
-
-                @Override
-                public @NotNull Player player() {
-                    return player;
-                }
-
-                @Override
-                public @NotNull Player.Hand hand() {
-                    return hand;
-                }
-            };
+        public @NotNull Player.Hand getHand() {
+            return hand;
         }
     }
 
     @ApiStatus.NonExtendable
-    interface Touch {
-        @NotNull Block block();
+    class Touch {
+        private final Block block;
+        private final Instance instance;
+        private final BlockPosition blockPosition;
+        private final Entity touching;
 
-        @NotNull Instance instance();
+        @ApiStatus.Internal
+        public Touch(Block block, Instance instance, BlockPosition blockPosition, Entity touching) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+            this.touching = touching;
+        }
 
-        @NotNull BlockPosition blockPosition();
+        public @NotNull Block getBlock() {
+            return block;
+        }
 
-        @NotNull Entity touching();
+        public @NotNull Instance getInstance() {
+            return instance;
+        }
 
-        static @NotNull Touch from(@NotNull Block block, @NotNull Instance instance, @NotNull BlockPosition blockPosition,
-                                   @NotNull Entity touching) {
-            return new Touch() {
-                @Override
-                public @NotNull Block block() {
-                    return block;
-                }
+        public @NotNull BlockPosition getBlockPosition() {
+            return blockPosition;
+        }
 
-                @Override
-                public @NotNull Instance instance() {
-                    return instance;
-                }
-
-                @Override
-                public @NotNull BlockPosition blockPosition() {
-                    return blockPosition;
-                }
-
-                @Override
-                public @NotNull Entity touching() {
-                    return touching;
-                }
-            };
+        public @NotNull Entity getTouching() {
+            return touching;
         }
     }
 
     @ApiStatus.NonExtendable
-    interface Tick {
-        @NotNull Block block();
+    class Tick {
+        private final Block block;
+        private final Instance instance;
+        private final BlockPosition blockPosition;
 
-        @NotNull Instance instance();
+        @ApiStatus.Internal
+        public Tick(Block block, Instance instance, BlockPosition blockPosition) {
+            this.block = block;
+            this.instance = instance;
+            this.blockPosition = blockPosition;
+        }
 
-        @NotNull BlockPosition blockPosition();
+        public @NotNull Block getBlock() {
+            return block;
+        }
 
-        static @NotNull Tick from(@NotNull Block block, @NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-            return new Tick() {
-                @Override
-                public @NotNull Block block() {
-                    return block;
-                }
+        public @NotNull Instance getInstance() {
+            return instance;
+        }
 
-                @Override
-                public @NotNull Instance instance() {
-                    return instance;
-                }
-
-                @Override
-                public @NotNull BlockPosition blockPosition() {
-                    return blockPosition;
-                }
-            };
+        public @NotNull BlockPosition getBlockPosition() {
+            return blockPosition;
         }
     }
 }
