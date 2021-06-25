@@ -28,6 +28,8 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.storage.StorageLocation;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
@@ -43,6 +45,7 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -60,7 +63,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockModifier, Tickable, EventHandler<InstanceEvent>, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockModifier, Tickable, TagHandler, PacketGroupingAudience, EventHandler<InstanceEvent>, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -101,6 +104,8 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
     protected final Queue<Consumer<Instance>> nextTick = new ConcurrentLinkedQueue<>();
 
     // instance custom data
+    private final Object nbtLock = new Object();
+    private final NBTCompound nbt = new NBTCompound();
     private Data data;
 
     // the explosion supplier
@@ -1059,6 +1064,20 @@ public abstract class Instance implements BlockModifier, Tickable, EventHandler<
         }
 
         this.worldBorder.update();
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        synchronized (nbtLock) {
+            return tag.read(nbt);
+        }
+    }
+
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        synchronized (nbtLock) {
+            tag.write(nbt, value);
+        }
     }
 
     /**
