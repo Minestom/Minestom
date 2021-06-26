@@ -33,10 +33,13 @@ public class Tag<T> {
     /**
      * Reads the complete tag holder compound.
      * <p>
-     * Writing is not supported.
+     * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompound::deepClone, null, null);
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompound::deepClone, (original, updated) -> {
+        original.clear();
+        updated.getKeys().forEach(s -> original.set(s, Objects.requireNonNull(updated.get(s))));
+    }, null);
 
     private final String key;
     private final Function<NBTCompound, T> readFunction;
