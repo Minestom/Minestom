@@ -164,12 +164,7 @@ public class ItemMeta implements TagReadable, Writeable {
     @Deprecated
     @Contract(pure = true)
     public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
-        var key = tag.getKey();
-        if (nbt.containsKey(key)) {
-            return tag.read(toNBT());
-        } else {
-            return defaultValue;
-        }
+        return tag.defaultValue(defaultValue).read(toNBT());
     }
 
     /**

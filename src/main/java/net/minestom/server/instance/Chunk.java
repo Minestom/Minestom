@@ -16,11 +16,15 @@ import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,7 +42,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, DataContainer {
+public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler, DataContainer {
 
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
@@ -63,6 +67,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     protected PFColumnarSpace columnarSpace;
 
     // Data
+    private final NBTCompound nbt = new NBTCompound();
     protected Data data;
 
     public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
@@ -365,6 +370,16 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public Set<Player> getViewers() {
         return unmodifiableViewers;
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbt);
+    }
+
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        tag.write(nbt, value);
     }
 
     @Nullable

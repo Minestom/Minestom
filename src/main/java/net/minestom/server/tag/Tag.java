@@ -6,7 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
+import java.io.StringReader;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -21,7 +25,36 @@ import java.util.function.Supplier;
 @ApiStatus.NonExtendable
 public class Tag<T> {
 
-    private static final String EMPTY_KEY = "";
+    /**
+     * Handles the snbt of the tag holder.
+     * <p>
+     * Writing will override all tags. Proceed with caution.
+     */
+    @ApiStatus.Experimental
+    public static final Tag<String> SNBT = new Tag<>(null, NBTCompound::toSNBT, (original, snbt) -> {
+        try {
+            final var updated = new SNBTParser(new StringReader(snbt)).parse();
+            if (!(updated instanceof NBTCompound))
+                throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
+            NBTCompound updatedCompound = (NBTCompound) updated;
+            original.clear();
+            updatedCompound.getKeys().forEach(s ->
+                    original.set(s, Objects.requireNonNull(updatedCompound.get(s))));
+        } catch (NBTException e) {
+            e.printStackTrace();
+        }
+    }, null);
+
+    /**
+     * Handles the complete tag holder compound.
+     * <p>
+     * Writing will override all tags. Proceed with caution.
+     */
+    @ApiStatus.Experimental
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompound::deepClone, (original, updated) -> {
+        original.clear();
+        updated.getKeys().forEach(s -> original.set(s, Objects.requireNonNull(updated.get(s))));
+    }, null);
 
     private final String key;
     private final Function<NBTCompound, T> readFunction;
@@ -29,23 +62,31 @@ public class Tag<T> {
 
     private final Supplier<T> defaultValue;
 
-    protected Tag(@NotNull String key,
+    protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompound, T> readFunction,
-                  @NotNull BiConsumer<NBTCompound, T> writeConsumer,
+                  @Nullable BiConsumer<NBTCompound, T> writeConsumer,
                   @Nullable Supplier<T> defaultValue) {
         this.key = key;
         this.readFunction = readFunction;
-        this.writeConsumer = writeConsumer;
+        this.writeConsumer = Objects.requireNonNullElse(writeConsumer, (compound, t) -> {
+        });
         this.defaultValue = defaultValue;
     }
 
-    protected Tag(@NotNull String key,
+    protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompound, T> readFunction,
-                  @NotNull BiConsumer<NBTCompound, T> writeConsumer) {
+                  @Nullable BiConsumer<NBTCompound, T> writeConsumer) {
         this(key, readFunction, writeConsumer, null);
     }
 
-    public @NotNull String getKey() {
+    /**
+     * Returns the key used to navigate inside the holder nbt.
+     * <p>
+     * Can be null if unused (e.g. {@link #View(TagSerializer)}, {@link #SNBT} and {@link #NBT}).
+     *
+     * @return the tag key
+     */
+    public @Nullable String getKey() {
         return key;
     }
 
@@ -96,7 +137,7 @@ public class Tag<T> {
     }
 
     public void write(@NotNull NBTCompound nbtCompound, @Nullable T value) {
-        if (value != null || key.equals(EMPTY_KEY)) {
+        if (key == null || value != null) {
             this.writeConsumer.accept(nbtCompound, value);
         } else {
             nbtCompound.removeTag(key);
@@ -208,7 +249,7 @@ public class Tag<T> {
     }
 
     public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
-        return new Tag<>(EMPTY_KEY,
+        return new Tag<>(null,
                 nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
                 (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
     }
