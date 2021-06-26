@@ -11,6 +11,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 class BlockImpl implements Block {
@@ -53,21 +54,16 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public @NotNull Block withNbt(@Nullable NBTCompound compound) {
-        final var clonedNbt = compound != null ? compound.deepClone() : null;
-        final var cachedNbt = NBT_CACHE.get(clonedNbt, c -> clonedNbt);
+    public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
+        var compound = Objects.requireNonNullElseGet(nbt(), NBTCompound::new);
+        tag.write(compound, value);
+        final var cachedNbt = NBT_CACHE.get(compound, c -> compound);
         return new BlockImpl(registry, properties, cachedNbt, handler);
     }
 
     @Override
     public @NotNull Block withHandler(@Nullable BlockHandler handler) {
         return new BlockImpl(registry, properties, nbt, handler);
-    }
-
-    @Override
-    public @Nullable NBTCompound nbt() {
-        // TODO return immutable compound without clone
-        return nbt != null ? nbt.deepClone() : null;
     }
 
     @Override

@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Unmodifiable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiPredicate;
 
 /**
@@ -55,18 +54,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     /**
-     * Creates a new block with different nbt data.
-     *
-     * @param compound the new block nbt, null to remove
-     * @return a new block with different nbt
-     */
-    @Contract(pure = true)
-    @NotNull Block withNbt(@Nullable NBTCompound compound);
-
-    /**
-     * Creates a new block with a tag value modified.
-     * <p>
-     * Equivalent to getting {@link #nbt()}, applying the tag and calling {@link #withNbt(NBTCompound)}.
+     * Creates a new block with a tag modified.
      *
      * @param tag   the tag to modify
      * @param value the tag value, null to remove
@@ -74,11 +62,19 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
      * @return a new block with the modified tag
      */
     @Contract(pure = true)
-    default <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var compound = Objects.requireNonNullElseGet(nbt(), NBTCompound::new);
-        tag.write(compound, value);
-        return withNbt(compound);
+    <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
+
+    /**
+     * Creates a new block with different nbt data.
+     *
+     * @param compound the new block nbt, null to remove
+     * @return a new block with different nbt
+     */
+    @Contract(pure = true)
+    default @NotNull Block withNbt(@Nullable NBTCompound compound) {
+        return withTag(Tag.NBT, compound);
     }
+
 
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
@@ -97,7 +93,9 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
      * @return the block nbt, null if not present
      */
     @Contract(pure = true)
-    @Nullable NBTCompound nbt();
+    default @Nullable NBTCompound nbt() {
+        return getTag(Tag.NBT);
+    }
 
     /**
      * Returns the block handler.
