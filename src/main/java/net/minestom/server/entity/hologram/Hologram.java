@@ -81,19 +81,39 @@ public class Hologram implements Viewable {
 
         armorStandMeta.setNotifyAboutChanges(false);
 
+        updateDefaultMeta(armorStandMeta);
+
+        armorStandMeta.setNotifyAboutChanges(true);
+
+        this.entity.setInstance(instance, spawnPosition.clone().add(0, getOffsetY(), 0));
+        this.entity.setAutoViewable(autoViewable);
+
+        this.position = spawnPosition;
+        setText(text);
+    }
+
+    /**
+     * Sets the default {@link ArmorStandMeta} flags for this Hologram,
+     * subclasses may override this method to modify the metadata.
+     *
+     * @param armorStandMeta the meta to update
+     */
+    protected void updateDefaultMeta(ArmorStandMeta armorStandMeta) {
         armorStandMeta.setSmall(true);
         armorStandMeta.setHasNoGravity(true);
         armorStandMeta.setCustomName(Component.empty());
         armorStandMeta.setCustomNameVisible(true);
         armorStandMeta.setInvisible(true);
+    }
 
-        armorStandMeta.setNotifyAboutChanges(true);
-
-        this.entity.setInstance(instance, spawnPosition.clone().add(0, OFFSET_Y, 0));
-        this.entity.setAutoViewable(autoViewable);
-
-        this.position = spawnPosition;
-        setText(text);
+    /**
+     * Vertical offset used to center the nametag,
+     * subclasses may override this method to modify the position
+     *
+     * @return the vertical offset used to center the nametag
+     */
+    protected float getOffsetY() {
+        return OFFSET_Y;
     }
 
     /**
@@ -112,7 +132,7 @@ public class Hologram implements Viewable {
      */
     public void setPosition(Position position) {
         checkRemoved();
-        position.add(0, OFFSET_Y, 0);
+        position.add(0, getOffsetY(), 0);
         this.position = position;
         this.entity.teleport(position);
     }
