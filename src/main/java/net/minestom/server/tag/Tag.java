@@ -6,7 +6,10 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
+import java.io.StringReader;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -23,15 +26,27 @@ import java.util.function.Supplier;
 public class Tag<T> {
 
     /**
-     * Reads the snbt of the tags holder.
+     * Handles the snbt of the tag holder.
      * <p>
-     * Writing is not supported.
+     * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<String> SNBT = new Tag<>(null, NBTCompound::toSNBT, null, null);
+    public static final Tag<String> SNBT = new Tag<>(null, NBTCompound::toSNBT, (original, snbt) -> {
+        try {
+            final var updated = new SNBTParser(new StringReader(snbt)).parse();
+            if (!(updated instanceof NBTCompound))
+                throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
+            NBTCompound updatedCompound = (NBTCompound) updated;
+            original.clear();
+            updatedCompound.getKeys().forEach(s ->
+                    original.set(s, Objects.requireNonNull(updatedCompound.get(s))));
+        } catch (NBTException e) {
+            e.printStackTrace();
+        }
+    }, null);
 
     /**
-     * Reads the complete tag holder compound.
+     * Handles the complete tag holder compound.
      * <p>
      * Writing will override all tags. Proceed with caution.
      */
