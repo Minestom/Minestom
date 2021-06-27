@@ -20,6 +20,18 @@ public class ArgumentBlockState extends Argument<Block> {
 
     @Override
     public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input);
+    }
+
+    @Override
+    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
+        argumentNode.parser = "minecraft:block_state";
+
+        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
+    }
+
+    public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0)
             throw new ArgumentSyntaxException("No block type", input, NO_BLOCK);
@@ -44,14 +56,6 @@ public class ArgumentBlockState extends Argument<Block> {
             final var propertyMap = BlockUtils.parseProperties(query);
             return block.withProperties(propertyMap);
         }
-    }
-
-    @Override
-    public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-        argumentNode.parser = "minecraft:block_state";
-
-        nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
     @Override
