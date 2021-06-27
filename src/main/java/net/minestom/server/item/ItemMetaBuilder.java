@@ -103,7 +103,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
         this.enchantmentMap = new HashMap<>(enchantments);
-        handleMap(enchantmentMap, "Enchantments", nbt, () -> {
+        handleMap(enchantmentMap, "Enchantments", () -> {
             NBTUtils.writeEnchant(nbt, "Enchantments", enchantmentMap);
             return nbt.get("Enchantments");
         });
@@ -128,7 +128,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
     public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
         this.attributes = new ArrayList<>(attributes);
 
-        handleCollection(attributes, "AttributeModifiers", nbt, () -> {
+        handleCollection(attributes, "AttributeModifiers", () -> {
             NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
             for (ItemAttribute itemAttribute : attributes) {
                 final UUID uuid = itemAttribute.getUuid();
@@ -151,17 +151,16 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder customModelData(int customModelData) {
         this.customModelData = customModelData;
-        this.nbt.setInt("CustomModelData", customModelData);
+        mutateNbt(compound -> compound.setInt("CustomModelData", customModelData));
         return this;
     }
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
         this.canPlaceOn = new HashSet<>(blocks);
-        handleCollection(canPlaceOn, "CanPlaceOn", nbt, () -> {
+        handleCollection(canPlaceOn, "CanPlaceOn", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
             canPlaceOn.forEach(block -> list.add(new NBTString(block.getName())));
-            nbt.set("CanPlaceOn", list);
             return list;
         });
         return this;
@@ -175,10 +174,9 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canDestroy(@NotNull Set<@NotNull Block> blocks) {
         this.canDestroy = new HashSet<>(blocks);
-        handleCollection(canDestroy, "CanDestroy", nbt, () -> {
+        handleCollection(canDestroy, "CanDestroy", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
             canDestroy.forEach(block -> list.add(new NBTString(block.getName())));
-            nbt.set("CanDestroy", list);
             return list;
         });
         return this;
@@ -296,6 +294,12 @@ public abstract class ItemMetaBuilder implements TagWritable {
         } else {
             nbtCompound.removeTag(key);
         }
+    }
+
+    protected void handleMap(@NotNull Map<?, ?> objects,
+                             @NotNull String key,
+                             @NotNull Supplier<@NotNull NBT> supplier) {
+        mutateNbt(compound -> handleMap(objects, key, compound, supplier));
     }
 
     @Contract(value = "_, _ -> new", pure = true)
