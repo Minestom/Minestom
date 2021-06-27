@@ -529,9 +529,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 Vector newVelocityOut = new Vector();
 
                 // Gravity force
-                final double gravityY = !hasNoGravity() ? Math.min(
-                        gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),
-                        gravityTerminalVelocity) : 0;
+                final double gravityY = hasNoGravity() ? 0 : gravityAcceleration;
 
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
@@ -596,6 +594,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                     this.velocity.setX(velocity.getX() * drag);
                     this.velocity.setZ(velocity.getZ() * drag);
+                    if (!hasNoGravity())
+                        this.velocity.setY(velocity.getY() * (1-gravityDragPerTick));
 
                     if (velocity.equals(new Vector())) {
                         this.velocity.zero();
