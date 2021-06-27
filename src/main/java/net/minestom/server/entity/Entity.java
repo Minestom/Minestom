@@ -162,6 +162,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.eventNode = EventNode.value("entity-" + uuid, EventFilter.ENTITY, this::equals);
+
+        initializeDefaultGravity();
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -1641,6 +1643,94 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
+    }
+
+    /**
+     * Sets the Entity's {@link gravityAcceleration} and {@link gravityDragPerTick} fields to
+     * the default values according to <a href="https://minecraft.fandom.com/wiki/Entity#Motion_of_entities">Motion of entities</a>
+     */
+    @SuppressWarnings("JavadocReference")
+    public void initializeDefaultGravity() {
+        // TODO Add support for these values in the data generator
+        // Acceleration
+        switch (entityType) {
+            // 0
+            case ITEM_FRAME:
+                this.gravityAcceleration = 0;
+                break;
+            // 0.03
+            case EGG:
+            case FISHING_BOBBER:
+            case EXPERIENCE_BOTTLE:
+            case ENDER_PEARL:
+            case POTION:
+            case SNOWBALL:
+                this.gravityAcceleration = 0.03;
+                break;
+            // 0.04
+            case BOAT:
+            case TNT:
+            case FALLING_BLOCK:
+            case ITEM:
+            case MINECART:
+                this.gravityAcceleration = 0.04;
+                break;
+            // 0.05
+            case ARROW:
+            case SPECTRAL_ARROW:
+            case TRIDENT:
+                this.gravityAcceleration = 0.05;
+                break;
+            // 0.06
+            case LLAMA_SPIT:
+                this.gravityAcceleration = 0.06;
+                break;
+            // 0.1
+            case FIREBALL:
+            case WITHER_SKULL:
+            case DRAGON_FIREBALL:
+                this.gravityAcceleration = 0.1;
+                break;
+            // 0.08
+            default:
+                this.gravityAcceleration = 0.08;
+                break;
+        }
+
+        // Drag
+        switch (entityType) {
+            // 0
+            case BOAT:
+                this.gravityDragPerTick = 0;
+                break;
+            // 0.01
+            case LLAMA_SPIT:
+            case ENDER_PEARL:
+            case POTION:
+            case SNOWBALL:
+            case EGG:
+            case TRIDENT:
+            case SPECTRAL_ARROW:
+            case ARROW:
+                this.gravityDragPerTick = 0.01;
+                break;
+            // 0.05
+            case MINECART:
+                this.gravityDragPerTick = 0.05;
+                break;
+            // 0.08
+            case FISHING_BOBBER:
+                this.gravityDragPerTick = 0.08;
+                break;
+            // 0.02
+            default:
+                this.gravityDragPerTick = 0.02;
+                break;
+        }
+
+        // Values are in blocks/tick, convert them to blocks/second
+        gravityAcceleration *= MinecraftServer.TICK_PER_SECOND;
+        gravityDragPerTick *= MinecraftServer.TICK_PER_SECOND;
     }
 
     public enum Pose {
