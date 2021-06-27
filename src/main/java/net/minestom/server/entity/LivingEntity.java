@@ -90,7 +90,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
-        setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
@@ -104,7 +103,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
-        setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
