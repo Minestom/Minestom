@@ -543,7 +543,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
-                        (getVelocity().getY() - gravityY) / tps,
+                        getVelocity().getY() / tps - gravityY,
                         getVelocity().getZ() / tps
                 );
 
