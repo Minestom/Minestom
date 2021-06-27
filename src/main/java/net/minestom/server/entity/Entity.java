@@ -95,7 +95,17 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     protected Vector velocity = new Vector(); // Movement in block per second
     protected boolean hasPhysics = true;
 
+    /**
+     * The amount of drag applied on the Y axle.
+     * <p>
+     * Unit: 1/tick
+     */
     protected double gravityDragPerTick;
+    /**
+     * Acceleration on the Y axle due to gravity
+     * <p>
+     * Unit: blocks/tick
+     */
     protected double gravityAcceleration;
     protected double gravityTerminalVelocity;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
