@@ -1727,10 +1727,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 this.gravityDragPerTick = 0.02;
                 break;
         }
-
-        // Values are in blocks/tick, convert them to blocks/second
-        gravityAcceleration *= MinecraftServer.TICK_PER_SECOND;
-        gravityDragPerTick *= MinecraftServer.TICK_PER_SECOND;
     }
 
     public enum Pose {
