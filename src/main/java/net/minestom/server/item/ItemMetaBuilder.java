@@ -112,7 +112,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("_, _ -> this")
     public @NotNull ItemMetaBuilder enchantment(@NotNull Enchantment enchantment, short level) {
-        this.enchantmentMap = Map.of(enchantment, level);
+        this.enchantmentMap.put(enchantment, level);
         enchantments(enchantmentMap);
         return this;
     }
@@ -251,53 +251,38 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     protected void handleNullable(@Nullable Object value,
                                   @NotNull String key,
-                                  @NotNull NBTCompound nbtCompound,
                                   @NotNull Supplier<@NotNull NBT> supplier) {
-        if (value != null) {
-            nbtCompound.set(key, supplier.get());
-        } else {
-            nbtCompound.removeTag(key);
-        }
-    }
-
-    protected void handleNullable(@Nullable Object value,
-                                  @NotNull String key,
-                                  @NotNull Supplier<@NotNull NBT> supplier) {
-        mutateNbt(compound -> handleNullable(value, key, compound, supplier));
-    }
-
-    protected void handleCollection(@NotNull Collection<?> objects,
-                                    @NotNull String key,
-                                    @NotNull NBTCompound nbtCompound,
-                                    @NotNull Supplier<@NotNull NBT> supplier) {
-        if (!objects.isEmpty()) {
-            nbtCompound.set(key, supplier.get());
-        } else {
-            nbtCompound.removeTag(key);
-        }
+        mutateNbt(compound -> {
+            if (value != null) {
+                compound.set(key, supplier.get());
+            } else {
+                compound.removeTag(key);
+            }
+        });
     }
 
     protected void handleCollection(@NotNull Collection<?> objects,
                                     @NotNull String key,
                                     @NotNull Supplier<@NotNull NBT> supplier) {
-        mutateNbt(compound -> handleCollection(objects, key, compound, supplier));
-    }
-
-    protected void handleMap(@NotNull Map<?, ?> objects,
-                             @NotNull String key,
-                             @NotNull NBTCompound nbtCompound,
-                             @NotNull Supplier<@NotNull NBT> supplier) {
-        if (!objects.isEmpty()) {
-            nbtCompound.set(key, supplier.get());
-        } else {
-            nbtCompound.removeTag(key);
-        }
+        mutateNbt(compound -> {
+            if (!objects.isEmpty()) {
+                compound.set(key, supplier.get());
+            } else {
+                compound.removeTag(key);
+            }
+        });
     }
 
     protected void handleMap(@NotNull Map<?, ?> objects,
                              @NotNull String key,
                              @NotNull Supplier<@NotNull NBT> supplier) {
-        mutateNbt(compound -> handleMap(objects, key, compound, supplier));
+        mutateNbt(compound -> {
+            if (!objects.isEmpty()) {
+                compound.set(key, supplier.get());
+            } else {
+                compound.removeTag(key);
+            }
+        });
     }
 
     @Contract(value = "_, _ -> new", pure = true)
