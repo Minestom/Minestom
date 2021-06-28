@@ -107,7 +107,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Unit: blocks/tick
      */
     protected double gravityAcceleration;
-    protected double gravityTerminalVelocity;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
     private boolean autoViewable;
@@ -998,15 +997,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     }
 
     /**
-     * Gets the maximum gravity velocity.
-     *
-     * @return the maximum gravity velocity in block
-     */
-    public double getGravityTerminalVelocity() {
-        return gravityTerminalVelocity;
-    }
-
-    /**
      * Gets the number of tick this entity has been applied gravity.
      *
      * @return the number of tick of which gravity has been consequently applied
@@ -1020,13 +1010,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param gravityDragPerTick      the gravity drag per tick in block
      * @param gravityAcceleration     the gravity acceleration in block
-     * @param gravityTerminalVelocity the gravity terminal velocity (maximum) in block
      * @see <a href="https://minecraft.gamepedia.com/Entity#Motion_of_entities">Entities motion</a>
      */
-    public void setGravity(double gravityDragPerTick, double gravityAcceleration, double gravityTerminalVelocity) {
+    public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;
         this.gravityAcceleration = gravityAcceleration;
-        this.gravityTerminalVelocity = gravityTerminalVelocity;
     }
 
     /**
