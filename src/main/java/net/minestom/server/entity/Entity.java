@@ -1748,9 +1748,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      */
     public void takeKnockback(final float strength, final double x, final double z) {
         if (strength > 0) {
-            final Vector velocityModifier = new Vector(x, 0d, z).normalize().multiply(strength);
+            //TODO check possible side effects of unnatural TPS (other than 20TPS)
+            final Vector velocityModifier = new Vector(x, 0d, z).normalize().multiply(strength * MinecraftServer.TICK_PER_SECOND / 2);
             this.velocity.setX(velocity.getX() / 2d - velocityModifier.getX());
-            this.velocity.setY(onGround ? Math.min(.4d, velocity.getY() / 2d + strength) : velocity.getY());
+            this.velocity.setY(onGround ? Math.min(.4d, velocity.getY() / 2d + strength) * MinecraftServer.TICK_PER_SECOND : velocity.getY());
             this.velocity.setZ(velocity.getZ() / 2d - velocityModifier.getZ());
         }
     }
