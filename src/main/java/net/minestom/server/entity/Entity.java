@@ -1648,7 +1648,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * the default values according to <a href="https://minecraft.fandom.com/wiki/Entity#Motion_of_entities">Motion of entities</a>
      */
     @SuppressWarnings("JavadocReference")
-    public void initializeDefaultGravity() {
+    private void initializeDefaultGravity() {
         // TODO Add support for these values in the data generator
         // Acceleration
         switch (entityType) {
