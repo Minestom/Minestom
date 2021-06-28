@@ -204,15 +204,13 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
 
-    protected void mutateNbt(Consumer<NBTCompound> consumer) {
+    protected synchronized void mutateNbt(Consumer<NBTCompound> consumer) {
         if (built) {
             built = false;
             final var currentNbt = nbt;
             NBT_UPDATER.compareAndSet(this, currentNbt, currentNbt.deepClone());
         }
-        synchronized (this) {
-            consumer.accept(nbt);
-        }
+        consumer.accept(nbt);
     }
 
     protected synchronized NBTCompound nbt() {
