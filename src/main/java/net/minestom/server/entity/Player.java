@@ -1531,9 +1531,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
         final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
 
-        // Update client render distance
-        updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
-
         // Unload old chunks
         for (int index : oldChunks) {
             final long chunkIndex = lastVisibleChunks[index];
@@ -2082,6 +2079,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshFlying(boolean flying) {
         this.flying = flying;
+        setNoGravity(flying);
     }
 
     /**

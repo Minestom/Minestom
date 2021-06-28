@@ -100,7 +100,7 @@ public class EntityProjectile extends Entity {
         super.velocity.setX(dx);
         super.velocity.setY(dy);
         super.velocity.setZ(dz);
-        super.velocity.multiply(20 * power);
+        super.velocity.multiply(power);
         setView(
                 (float) Math.toDegrees(Math.atan2(dx, dz)),
                 (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))

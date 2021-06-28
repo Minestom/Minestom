@@ -21,49 +21,49 @@ public class CollisionUtils {
      * Moves an entity with physics applied (ie checking against blocks)
      *
      * @param entity        the entity to move
-     * @param deltaPosition
      * @param positionOut   the Position object in which the new position will be saved
-     * @param velocityOut   the Vector object in which the new velocity will be saved
-     * @return whether this entity is on the ground
      */
-    public static boolean handlePhysics(@NotNull Entity entity,
-                                        @NotNull Vector deltaPosition,
-                                        @NotNull Position positionOut,
-                                        @NotNull Vector velocityOut) {
+    public static void handlePhysics(@NotNull Entity entity, @NotNull Position positionOut) {
         // TODO handle collisions with nearby entities (should it be done here?)
+        // TODO fix calculation for large velocities
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
         final Position currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
+        final Vector velocity = entity.getVelocity();
 
         Vector intermediaryPosition = new Vector();
-        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
+        final boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, velocity.getY(),
                 intermediaryPosition,
-                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+                velocity.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace()
+        );
 
-        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
+        final boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, velocity.getX(),
                 intermediaryPosition,
-                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+                velocity.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace()
+        );
 
-        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
+        final boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, velocity.getZ(),
                 intermediaryPosition,
-                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+                velocity.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace()
+        );
 
         positionOut.setX(intermediaryPosition.getX());
         positionOut.setY(intermediaryPosition.getY());
         positionOut.setZ(intermediaryPosition.getZ());
-        velocityOut.copy(deltaPosition);
+
         if (xCollision) {
-            velocityOut.setX(0f);
+            velocity.setX(0f);
         }
         if (yCollision) {
-            velocityOut.setY(0f);
+            entity.setOnGround(velocity.getY() < 0);
+            velocity.setY(0f);
+        } else {
+            entity.setOnGround(false);
         }
         if (zCollision) {
-            velocityOut.setZ(0f);
+            velocity.setZ(0f);
         }
-
-        return yCollision && deltaPosition.getY() < 0;
     }
 
     /**
