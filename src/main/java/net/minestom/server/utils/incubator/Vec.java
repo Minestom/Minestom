@@ -87,6 +87,13 @@ public interface Vec {
         return new Pos(x(), y(), z());
     }
 
+    default @NotNull Vec asBlockPosition() {
+        final int castedY = (int) y();
+        return with((int) Math.floor(x()),
+                (y() == castedY) ? castedY : castedY + 1,
+                (int) Math.floor(z()));
+    }
+
     @Contract(pure = true)
     double x();
 
