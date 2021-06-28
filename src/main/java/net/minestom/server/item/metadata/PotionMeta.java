@@ -52,7 +52,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
 
         public Builder potionType(@NotNull PotionType potionType) {
             this.potionType = potionType;
-            this.nbt.setString("Potion", potionType.getNamespaceID().asString());
+            mutateNbt(compound -> compound.setString("Potion", potionType.getNamespaceID().asString()));
             return this;
         }
 
@@ -71,14 +71,14 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
 
                 potionList.add(potionCompound);
             }
-            this.nbt.set("CustomPotionEffects", potionList);
+            mutateNbt(compound -> compound.set("CustomPotionEffects", potionList));
 
             return this;
         }
 
         public Builder color(@NotNull Color color) {
             this.color = color;
-            this.nbt.setInt("CustomPotionColor", color.asRGB());
+            mutateNbt(compound -> compound.setInt("CustomPotionColor", color.asRGB()));
             return this;
         }
 

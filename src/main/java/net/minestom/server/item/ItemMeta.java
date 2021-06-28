@@ -51,7 +51,7 @@ public class ItemMeta implements TagReadable, Writeable {
         this.canDestroy = new HashSet<>(metaBuilder.canDestroy);
         this.canPlaceOn = new HashSet<>(metaBuilder.canPlaceOn);
 
-        this.nbt = metaBuilder.nbt;
+        this.nbt = metaBuilder.nbt();
         this.emptyBuilder = metaBuilder.getSupplier().get();
     }
 
