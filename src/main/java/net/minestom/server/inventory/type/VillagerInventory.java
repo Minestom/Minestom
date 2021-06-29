@@ -1,5 +1,6 @@
 package net.minestom.server.inventory.type;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
@@ -11,7 +12,12 @@ public class VillagerInventory extends Inventory {
 
     protected TradeListPacket tradeListPacket;
 
-    public VillagerInventory(String title) {
+    public VillagerInventory(@NotNull Component title) {
+        super(InventoryType.MERCHANT, title);
+        setupPacket();
+    }
+
+    public VillagerInventory(@NotNull String title) {
         super(InventoryType.MERCHANT, title);
         setupPacket();
     }
