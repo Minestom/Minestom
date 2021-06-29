@@ -16,7 +16,10 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.event.player.*;
+import net.minestom.server.event.player.PlayerDeathEvent;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -33,6 +36,7 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.incubator.Vec;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -41,6 +45,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.UnaryOperator;
 
 public class PlayerInit {
 
@@ -153,6 +158,14 @@ public class PlayerInit {
     private static AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public static void init() {
+        UnaryOperator<Vec> blockTransform = vec -> vec.withX(x -> x * 2)
+                .withZ(operand -> operand + 5)
+                .withY(20)
+                .mul(Vec.vec(5, 5, 5))
+                .mul(Vec.vec(5))
+                .asBlockPosition();
+        UnaryOperator<Vec> blockTransform2 = vec -> Vec.vec(vec.x()*2, 20, vec.z()+5);
+        var vec = Vec.ZERO.apply(blockTransform).add(Vec.vec(5));
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
         var children = eventHandler.findChildren("demo", Event.class);
