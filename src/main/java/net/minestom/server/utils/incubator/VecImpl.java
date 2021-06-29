@@ -11,8 +11,8 @@ class VecImpl implements Vec {
         this.z = z;
     }
 
-    public VecImpl() {
-        this(0, 0, 0);
+    public VecImpl(double value) {
+        this(value, value, value);
     }
 
     @Override

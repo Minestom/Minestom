@@ -3,11 +3,12 @@ package net.minestom.server.utils.incubator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.DoubleUnaryOperator;
 import java.util.function.UnaryOperator;
 
 public interface Vec {
-
-    Vec ZERO = new VecImpl();
+    Vec ZERO = new VecImpl(0);
+    Vec ONE = new VecImpl(1);
 
     @Contract(pure = true)
     static @NotNull Vec vec(double x, double y, double z) {
@@ -15,27 +16,42 @@ public interface Vec {
     }
 
     @Contract(pure = true)
-    static @NotNull Vec x(double x) {
-        return vec(x, 0, 0);
-    }
-
-    @Contract(pure = true)
-    static @NotNull Vec y(double y) {
-        return vec(0, y, 0);
-    }
-
-    @Contract(pure = true)
-    static @NotNull Vec z(double z) {
-        return vec(0, 0, z);
-    }
-
-    @Contract(pure = true)
-    static @NotNull Vec xz(double x, double z) {
-        return vec(x, 0, z);
+    static @NotNull Vec vec(double value) {
+        return new VecImpl(value);
     }
 
     @Contract(pure = true)
     @NotNull Vec with(double x, double y, double z);
+
+    @Contract(pure = true)
+    default @NotNull Vec withX(@NotNull DoubleUnaryOperator operator) {
+        return with(operator.applyAsDouble(x()), y(), z());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec withX(double x) {
+        return with(x, y(), z());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec withY(@NotNull DoubleUnaryOperator operator) {
+        return with(x(), operator.applyAsDouble(y()), z());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec withY(double y) {
+        return with(x(), y, z());
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec withZ(@NotNull DoubleUnaryOperator operator) {
+        return with(x(), y(), operator.applyAsDouble(z()));
+    }
+
+    @Contract(pure = true)
+    default @NotNull Vec withZ(double z) {
+        return with(x(), y(), z);
+    }
 
     @Contract(pure = true)
     default @NotNull Vec add(@NotNull Vec vec) {
@@ -87,6 +103,7 @@ public interface Vec {
         return new Pos(x(), y(), z());
     }
 
+    @Contract(pure = true)
     default @NotNull Vec asBlockPosition() {
         final int castedY = (int) y();
         return with((int) Math.floor(x()),
