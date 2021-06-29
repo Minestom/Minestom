@@ -36,7 +36,7 @@ public class ArgumentTime extends Argument<Duration> {
 
         TemporalUnit timeUnit;
         if (Character.isDigit(lastChar))
-            timeUnit = Tick.TICKS;
+            timeUnit = Tick.SERVER_TICKS;
         else if (SUFFIXES.contains(lastChar)) {
             input = input.substring(0, input.length() - 1);
 
@@ -45,7 +45,7 @@ public class ArgumentTime extends Argument<Duration> {
             } else if (lastChar == 's') {
                 timeUnit = ChronoUnit.SECONDS;
             } else if (lastChar == 't') {
-                timeUnit = Tick.TICKS;
+                timeUnit = Tick.SERVER_TICKS;
             } else {
                 throw new ArgumentSyntaxException("Time needs to have the unit d, s, t, or none", input, NO_NUMBER);
             }

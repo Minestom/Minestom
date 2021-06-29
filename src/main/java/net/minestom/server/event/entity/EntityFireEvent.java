@@ -35,7 +35,7 @@ public class EntityFireEvent implements EntityEvent, CancellableEvent {
     public long getFireTime(net.minestom.server.utils.time.TimeUnit timeUnit) {
         switch (timeUnit) {
             case TICK:
-                return duration.toMillis() / Tick.TICKS.getDuration().toMillis();
+                return duration.toMillis() / Tick.SERVER_TICKS.getDuration().toMillis();
             case MILLISECOND:
                 return duration.toMillis();
             default:
