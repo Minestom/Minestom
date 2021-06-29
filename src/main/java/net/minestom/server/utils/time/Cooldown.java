@@ -8,7 +8,7 @@ import java.time.temporal.TemporalUnit;
 @SuppressWarnings("removal")
 public final class Cooldown {
 
-    private Duration duration;
+    private final Duration duration;
     private long lastUpdate;
 
     /**
