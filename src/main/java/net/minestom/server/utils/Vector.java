@@ -1,6 +1,5 @@
 package net.minestom.server.utils;
 
-import com.google.common.primitives.Doubles;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
@@ -167,7 +166,7 @@ public class Vector implements PublicCloneable<Vector> {
      * @return angle in radians
      */
     public float angle(@NotNull Vector other) {
-        double dot = Doubles.constrainToRange(dot(other) / (length() * other.length()), -1.0, 1.0);
+        double dot = MathUtils.clamp(dot(other) / (length() * other.length()), -1.0, 1.0);
 
         return (float) Math.acos(dot);
     }

@@ -403,16 +403,11 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.doubleClick(this, null, player, slot, cursor);
-
         if (clickResult == null)
             return false;
-
         if (clickResult.doRefresh())
             update();
-
-        setItemStack(slot, OFFSET, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
-
         return !clickResult.isCancel();
     }
 }

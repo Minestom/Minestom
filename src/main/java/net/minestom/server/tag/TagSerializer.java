@@ -4,7 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Interface used to create custom types compatible with {@link Tag#Custom(String, TagSerializer)}.
+ * Interface used to create custom {@link Tag tags}.
  *
  * @param <T> the type to serialize
  */
@@ -14,7 +14,7 @@ public interface TagSerializer<T> {
      * Reads the custom tag from a {@link TagReadable}.
      *
      * @param reader the reader
-     * @return the deserialized value
+     * @return the deserialized value, null if invalid
      */
     @Nullable T read(@NotNull TagReadable reader);
 
@@ -22,7 +22,7 @@ public interface TagSerializer<T> {
      * Writes the custom tag to a {@link TagWritable}.
      *
      * @param writer the writer
-     * @param value  the value to serialize
+     * @param value  the value to serialize, null to remove
      */
-    void write(@NotNull TagWritable writer, @NotNull T value);
+    void write(@NotNull TagWritable writer, @Nullable T value);
 }

@@ -1,7 +1,7 @@
 package net.minestom.server.command.builder;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -25,7 +25,7 @@ public class CommandDispatcher {
     private final Map<String, Command> commandMap = new HashMap<>();
     private final Set<Command> commands = new HashSet<>();
 
-    private final Cache<String, CommandResult> cache = CacheBuilder.newBuilder()
+    private final Cache<String, CommandResult> cache = Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.SECONDS)
             .build();
 

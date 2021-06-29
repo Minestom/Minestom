@@ -29,6 +29,7 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 public class ExtensionManager {
@@ -379,8 +380,14 @@ public class ExtensionManager {
      */
     @Nullable
     private DiscoveredExtension discoverFromJar(@NotNull File file) {
-        try (ZipFile f = new ZipFile(file);
-             InputStreamReader reader = new InputStreamReader(f.getInputStream(f.getEntry("extension.json")))) {
+        try (ZipFile f = new ZipFile(file);) {
+
+            ZipEntry entry = f.getEntry("extension.json");
+
+            if (entry == null)
+                throw new IllegalStateException("Missing extension.json in extension " + file.getName() + ".");
+
+            InputStreamReader reader = new InputStreamReader(f.getInputStream(entry));
 
             // Initialize DiscoveredExtension from GSON.
             DiscoveredExtension extension = GSON.fromJson(reader, DiscoveredExtension.class);

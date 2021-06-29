@@ -86,35 +86,35 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
 
         public Builder resolved(boolean resolved) {
             this.resolved = resolved;
-            this.nbt.setByte("resolved", (byte) (resolved ? 1 : 0));
+            mutateNbt(compound -> compound.setByte("resolved", (byte) (resolved ? 1 : 0)));
             return this;
         }
 
         public Builder generation(@Nullable WrittenBookGeneration generation) {
             this.generation = generation;
-            handleNullable(generation, "generation", nbt,
+            handleNullable(generation, "generation",
                     () -> new NBTInt(Objects.requireNonNull(generation).ordinal()));
             return this;
         }
 
         public Builder author(@Nullable String author) {
             this.author = author;
-            handleNullable(author, "author", nbt,
+            handleNullable(author, "author",
                     () -> new NBTString(Objects.requireNonNull(author)));
             return this;
         }
 
         public Builder title(@Nullable String title) {
             this.title = title;
-            handleNullable(title, "title", nbt,
+            handleNullable(title, "title",
                     () -> new NBTString(Objects.requireNonNull(title)));
             return this;
         }
 
         public Builder pages(@NotNull List<@NotNull Component> pages) {
-            this.pages = pages;
+            this.pages = new ArrayList<>(pages);
 
-            handleCollection(pages, "pages", nbt, () -> {
+            handleCollection(pages, "pages", () -> {
                 NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
                 for (Component page : pages) {
                     list.add(new NBTString(GsonComponentSerializer.gson().serialize(page)));

@@ -90,7 +90,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
-        setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
@@ -104,7 +103,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
-        setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
@@ -781,4 +779,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         return null;
     }
 
+    /**
+     * Applies knockback
+     * <p>
+     * Note: The strength is reduced based on knockback resistance
+     *
+     * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
+     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
+     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
+     */
+    @Override
+    public void takeKnockback(float strength, final double x, final double z) {
+        strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        super.takeKnockback(strength, x, z);
+    }
 }

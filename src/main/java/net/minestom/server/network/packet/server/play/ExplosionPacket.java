@@ -13,7 +13,8 @@ public class ExplosionPacket implements ServerPacket {
     public byte[] records = new byte[0];
     public float playerMotionX, playerMotionY, playerMotionZ;
 
-    public ExplosionPacket() {}
+    public ExplosionPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -21,7 +22,7 @@ public class ExplosionPacket implements ServerPacket {
         writer.writeFloat(y);
         writer.writeFloat(z);
         writer.writeFloat(radius);
-        writer.writeInt(records.length/3); // each record is 3 bytes long
+        writer.writeVarInt(records.length / 3); // each record is 3 bytes long
         for (byte record : records)
             writer.writeByte(record);
         writer.writeFloat(playerMotionX);

@@ -47,10 +47,6 @@ public final class MathUtils {
         return Direction.HORIZONTAL[directionIndex];
     }
 
-    public static float clampFloat(float t, float a, float b) {
-        return Math.max(a, Math.min(t, b));
-    }
-
     public static boolean isBetween(byte number, byte min, byte max) {
         return number >= min && number <= max;
     }
@@ -84,11 +80,15 @@ public final class MathUtils {
     }
 
     public static int clamp(int value, int min, int max) {
-        if (value < min) {
-            return min;
-        } else {
-            return Math.min(value, max);
-        }
+        return Math.min(Math.max(value, min), max);
+    }
+
+    public static float clamp(float value, float min, float max) {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    public static double clamp(double value, double min, double max) {
+        return Math.min(Math.max(value, min), max);
     }
 
     public static double mod(final double a, final double b) {

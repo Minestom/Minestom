@@ -24,7 +24,9 @@ public interface TagReadable {
      * @param tag the tag to check
      * @return true if the tag is present, false otherwise
      */
-    boolean hasTag(@NotNull Tag<?> tag);
+    default boolean hasTag(@NotNull Tag<?> tag) {
+        return getTag(tag) != null;
+    }
 
     /**
      * Converts an nbt compound to a tag reader.
@@ -37,11 +39,6 @@ public interface TagReadable {
             @Override
             public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
                 return tag.read(compound);
-            }
-
-            @Override
-            public boolean hasTag(@NotNull Tag<?> tag) {
-                return compound.containsKey(tag.getKey());
             }
         };
     }

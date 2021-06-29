@@ -13,9 +13,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.ServerSocketChannel;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.incubator.channel.uring.IOUring;
-import io.netty.incubator.channel.uring.IOUringEventLoopGroup;
-import io.netty.incubator.channel.uring.IOUringServerSocketChannel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.channel.ClientChannel;
@@ -82,14 +79,7 @@ public final class NettyServer {
 
         // Find boss/worker event group
         {
-            if (IOUring.isAvailable()) {
-                boss = new IOUringEventLoopGroup(2);
-                worker = new IOUringEventLoopGroup(workerThreadCount);
-
-                channel = IOUringServerSocketChannel.class;
-
-                LOGGER.info("Using io_uring");
-            } else if (Epoll.isAvailable()) {
+            if (Epoll.isAvailable()) {
                 boss = new EpollEventLoopGroup(2);
                 worker = new EpollEventLoopGroup(workerThreadCount);
 

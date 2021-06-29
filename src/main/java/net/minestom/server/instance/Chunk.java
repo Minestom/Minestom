@@ -16,6 +16,8 @@ import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -27,6 +29,7 @@ import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,7 +50,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements Viewable, Tickable, DataContainer {
+public abstract class Chunk implements Viewable, Tickable, TagHandler, DataContainer {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
@@ -75,6 +78,7 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     protected PFColumnarSpace columnarSpace;
 
     // Data
+    private final NBTCompound nbt = new NBTCompound();
     protected Data data;
 
     public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
@@ -478,6 +482,16 @@ public abstract class Chunk implements Viewable, Tickable, DataContainer {
     @Override
     public Set<Player> getViewers() {
         return unmodifiableViewers;
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbt);
+    }
+
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        tag.write(nbt, value);
     }
 
     @Nullable

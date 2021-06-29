@@ -1,10 +1,10 @@
 package net.minestom.server.attribute;
 
-import io.netty.util.internal.ThreadLocalRandom;
 import net.minestom.server.utils.UniqueIdUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Represent an attribute modifier.

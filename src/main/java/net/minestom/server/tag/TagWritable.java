@@ -18,6 +18,10 @@ public interface TagWritable {
      */
     <T> void setTag(@NotNull Tag<T> tag, @Nullable T value);
 
+    default void removeTag(@NotNull Tag<?> tag) {
+        setTag(tag, null);
+    }
+
     /**
      * Converts an nbt compound to a tag writer.
      *
