@@ -2,6 +2,10 @@ package net.minestom.server.utils.time;
 
 import net.minestom.server.MinecraftServer;
 
+/**
+ * @deprecated Replaced by {@link java.time.temporal.TemporalUnit}
+ */
+@Deprecated(forRemoval = true)
 public enum TimeUnit {
 
     TICK, DAY, HOUR, MINUTE, SECOND, MILLISECOND;

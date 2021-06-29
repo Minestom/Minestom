@@ -4,6 +4,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+/**
+ * @deprecated Replaced by {@link java.time.Duration}
+ */
+@Deprecated(forRemoval = true)
 public class UpdateOption {
 
     private final long value;
