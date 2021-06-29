@@ -9,10 +9,11 @@ import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
 /**
@@ -20,16 +21,16 @@ import java.util.function.Function;
  */
 public class CombinedAttackGoal extends GoalSelector {
 
-    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private final int meleeRangeSquared;
     private final int meleeDelay;
-    private final TimeUnit meleeTimeUnit;
+    private final TemporalUnit meleeTimeUnit;
     private final int rangedRangeSquared;
     private final double rangedPower;
     private final double rangedSpread;
     private final int rangedDelay;
-    private final TimeUnit rangedTimeUnit;
+    private final TemporalUnit rangedTimeUnit;
     private final int desirableRangeSquared;
     private final boolean comeClose;
 
@@ -52,7 +53,7 @@ public class CombinedAttackGoal extends GoalSelector {
      */
     public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
                               int meleeRange, int rangedRange, double rangedPower, double rangedSpread,
-                              int delay, TimeUnit timeUnit,
+                              int delay, TemporalUnit timeUnit,
                               int desirableRange, boolean comeClose) {
         this(
                 entityCreature,
@@ -76,8 +77,8 @@ public class CombinedAttackGoal extends GoalSelector {
      * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
      */
     public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
-                              int meleeRange, int meleeDelay, TimeUnit meleeTimeUnit,
-                              int rangedRange, double rangedPower, double rangedSpread, int rangedDelay, TimeUnit rangedTimeUnit,
+                              int meleeRange, int meleeDelay, TemporalUnit meleeTimeUnit,
+                              int rangedRange, double rangedPower, double rangedSpread, int rangedDelay, TemporalUnit rangedTimeUnit,
                               int desirableRange, boolean comeClose) {
         super(entityCreature);
         this.meleeRangeSquared = meleeRange * meleeRange;
