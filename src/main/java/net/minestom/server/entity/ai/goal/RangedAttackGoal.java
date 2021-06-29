@@ -9,19 +9,20 @@ import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
 public class RangedAttackGoal extends GoalSelector {
 
-    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private long lastShot;
     private final int delay;
-    private final TimeUnit timeUnit;
+    private final TemporalUnit timeUnit;
     private final int attackRangeSquared;
     private final int desirableRangeSquared;
     private final boolean comeClose;
@@ -43,7 +44,7 @@ public class RangedAttackGoal extends GoalSelector {
      * @param power          shot power (1 for normal).
      * @param timeUnit       the unit of the delay.
      */
-    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread, @NotNull TimeUnit timeUnit) {
+    public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread, @NotNull TemporalUnit timeUnit) {
         super(entityCreature);
         this.delay = delay;
         this.timeUnit = timeUnit;
