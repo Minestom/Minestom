@@ -2,6 +2,7 @@ package net.minestom.server.utils.time;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
@@ -48,5 +49,9 @@ public class UpdateOption {
      */
     public long toMilliseconds() {
         return temporalUnit.getDuration().multipliedBy(value).toMillis();
+    }
+
+    public Duration toDuration() {
+        return Duration.ofMillis(toMilliseconds());
     }
 }
