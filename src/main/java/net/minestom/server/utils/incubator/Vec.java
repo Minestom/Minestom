@@ -8,17 +8,22 @@ import java.util.function.DoubleUnaryOperator;
 import java.util.function.UnaryOperator;
 
 public interface Vec {
-    Vec ZERO = new VecImpl(0);
-    Vec ONE = new VecImpl(1);
+    Vec ZERO = vec(0);
+    Vec ONE = vec(1);
 
     @Contract(pure = true)
     static @NotNull Vec vec(double x, double y, double z) {
-        return new VecImpl(x, y, z);
+        return new VecImpl.Vec3(x, y, z);
+    }
+
+    @Contract(pure = true)
+    static @NotNull Vec vec(double x, double z) {
+        return new VecImpl.Tuple(x, z);
     }
 
     @Contract(pure = true)
     static @NotNull Vec vec(double value) {
-        return new VecImpl(value);
+        return new VecImpl.Single(value);
     }
 
     @Contract(pure = true)
