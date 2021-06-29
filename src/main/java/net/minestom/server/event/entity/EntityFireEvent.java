@@ -3,7 +3,6 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.utils.time.Tick;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -16,10 +15,8 @@ public class EntityFireEvent implements EntityEvent, CancellableEvent {
 
     private boolean cancelled;
 
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public EntityFireEvent(Entity entity, int duration, net.minestom.server.utils.time.TimeUnit timeUnit) {
-        this(entity, Duration.ofMillis(timeUnit.toMilliseconds(duration)));
+    public EntityFireEvent(Entity entity, int duration, TemporalUnit temporalUnit) {
+        this(entity, Duration.of(duration, temporalUnit));
     }
 
     public EntityFireEvent(Entity entity, Duration duration) {
@@ -27,34 +24,12 @@ public class EntityFireEvent implements EntityEvent, CancellableEvent {
         setFireTime(duration);
     }
 
-    /**
-     * @deprecated Replaced by {@link #getFireTime(TemporalUnit)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public long getFireTime(net.minestom.server.utils.time.TimeUnit timeUnit) {
-        switch (timeUnit) {
-            case TICK:
-                return duration.toMillis() / Tick.SERVER_TICKS.getDuration().toMillis();
-            case MILLISECOND:
-                return duration.toMillis();
-            default:
-                // Unexpected
-                return -1;
-        }
-    }
-
     public long getFireTime(TemporalUnit temporalUnit) {
         return duration.toNanos() / temporalUnit.getDuration().toNanos();
     }
 
-    /**
-     * @deprecated Replaced by {@link #setFireTime(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public void setFireTime(int duration, net.minestom.server.utils.time.TimeUnit timeUnit) {
-        setFireTime(Duration.ofMillis(timeUnit.toMilliseconds(duration)));
+    public void setFireTime(int duration, TemporalUnit temporalUnit) {
+        setFireTime(Duration.of(duration, temporalUnit));
     }
 
     public void setFireTime(Duration duration) {
