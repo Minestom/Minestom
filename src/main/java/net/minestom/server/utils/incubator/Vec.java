@@ -24,6 +24,11 @@ public interface Vec {
     @NotNull Vec with(double x, double y, double z);
 
     @Contract(pure = true)
+    default @NotNull Vec with(Operator operator) {
+        return operator.apply(x(), y(), z());
+    }
+
+    @Contract(pure = true)
     default @NotNull Vec withX(@NotNull DoubleUnaryOperator operator) {
         return with(operator.applyAsDouble(x()), y(), z());
     }
@@ -119,4 +124,9 @@ public interface Vec {
 
     @Contract(pure = true)
     double z();
+
+    @FunctionalInterface
+    interface Operator {
+        @NotNull Vec apply(double x, double y, double z);
+    }
 }

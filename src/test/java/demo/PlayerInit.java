@@ -164,8 +164,9 @@ public class PlayerInit {
                 .mul(Vec.vec(5, 5, 5))
                 .mul(Vec.vec(5))
                 .asBlockPosition();
-        UnaryOperator<Vec> blockTransform2 = vec -> Vec.vec(vec.x()*2, 20, vec.z()+5);
+        UnaryOperator<Vec> blockTransform2 = vec -> Vec.vec(vec.x() * 2, 20, vec.z() + 5);
         var vec = Vec.ZERO.apply(blockTransform).add(Vec.vec(5));
+        var vec2 = Vec.ZERO.with((x, y, z) -> Vec.vec(x + 5, y / 5, z * 5));
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
         var children = eventHandler.findChildren("demo", Event.class);
