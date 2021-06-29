@@ -158,6 +158,13 @@ public class ArgumentType {
     }
 
     /**
+     * @see ArgumentSoundEvent
+     */
+    public static ArgumentSoundEvent SoundEvent(@NotNull String id) {
+        return new ArgumentSoundEvent(id);
+    }
+
+    /**
      * @see ArgumentBlockState
      */
     public static ArgumentBlockState BlockState(@NotNull String id) {
