@@ -183,9 +183,9 @@ public interface Vec {
      * @param vec the other vector
      * @return angle in radians
      */
-    default float angle(@NotNull Vec vec) {
+    default double angle(@NotNull Vec vec) {
         final double dot = MathUtils.clamp(dot(vec) / (length() * vec.length()), -1.0, 1.0);
-        return (float) Math.acos(dot);
+        return Math.acos(dot);
     }
 
     /**
