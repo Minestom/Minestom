@@ -11,7 +11,7 @@ import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents an argument giving an {@link EntityType}.
+ * Represents an argument giving an {@link Sound.Type}.
  */
 public class ArgumentSound extends ArgumentRegistry<Sound.Type> {
 
