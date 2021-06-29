@@ -158,10 +158,10 @@ public class ArgumentType {
     }
 
     /**
-     * @see ArgumentSoundEvent
+     * @see ArgumentSound
      */
-    public static ArgumentSoundEvent SoundEvent(@NotNull String id) {
-        return new ArgumentSoundEvent(id);
+    public static ArgumentSound Sound(@NotNull String id) {
+        return new ArgumentSound(id);
     }
 
     /**

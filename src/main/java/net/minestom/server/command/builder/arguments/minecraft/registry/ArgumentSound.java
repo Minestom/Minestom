@@ -1,5 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.entity.EntityType;
@@ -11,15 +13,21 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents an argument giving an {@link EntityType}.
  */
-public class ArgumentSoundEvent extends ArgumentRegistry<SoundEvent> {
+public class ArgumentSound extends ArgumentRegistry<Sound.Type> {
 
-    public ArgumentSoundEvent(String id) {
+    public ArgumentSound(String id) {
         super(id);
     }
 
     @Override
-    public SoundEvent getRegistry(@NotNull String value) {
-        return Registries.getSoundEvent(value);
+    public Sound.Type getRegistry(@NotNull String value) {
+        SoundEvent soundEvent = Registries.getSoundEvent(value);
+
+        if (soundEvent == null) {
+            return () -> Key.key(value); // Instance of Sound.Type
+        }
+
+        return soundEvent;
     }
 
     @Override
