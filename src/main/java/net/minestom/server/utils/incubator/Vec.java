@@ -71,7 +71,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec add(double value) {
-        return add(Vec.vec(value));
+        return add(vec(value));
     }
 
     @Contract(pure = true)
@@ -81,7 +81,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec sub(double value) {
-        return sub(Vec.vec(value));
+        return sub(vec(value));
     }
 
     @Contract(pure = true)
@@ -91,7 +91,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec mul(double value) {
-        return mul(Vec.vec(value));
+        return mul(vec(value));
     }
 
     @Contract(pure = true)
@@ -101,7 +101,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec div(double value) {
-        return div(Vec.vec(value));
+        return div(vec(value));
     }
 
     @Contract(pure = true)
@@ -121,7 +121,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec min(double value) {
-        return min(Vec.vec(value));
+        return min(vec(value));
     }
 
     @Contract(pure = true)
@@ -131,7 +131,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec max(double value) {
-        return max(Vec.vec(value));
+        return max(vec(value));
     }
 
     @Contract(pure = true)

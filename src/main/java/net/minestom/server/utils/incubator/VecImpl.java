@@ -3,7 +3,6 @@ package net.minestom.server.utils.incubator;
 import org.jetbrains.annotations.NotNull;
 
 class VecImpl {
-
     static class Vec3 implements Vec {
         private final double x, y, z;
 
@@ -18,22 +17,22 @@ class VecImpl {
         }
 
         @Override
-        public @NotNull Vec with(double x, double y, double z) {
+        public final @NotNull Vec with(double x, double y, double z) {
             return new Vec3(x, y, z);
         }
 
         @Override
-        public double x() {
+        public final double x() {
             return x;
         }
 
         @Override
-        public double y() {
+        public final double y() {
             return y;
         }
 
         @Override
-        public double z() {
+        public final double z() {
             return z;
         }
     }
@@ -47,22 +46,22 @@ class VecImpl {
         }
 
         @Override
-        public @NotNull Vec with(double x, double y, double z) {
+        public final @NotNull Vec with(double x, double y, double z) {
             return new Vec3(x, y, z);
         }
 
         @Override
-        public double x() {
+        public final double x() {
             return x;
         }
 
         @Override
-        public double y() {
+        public final double y() {
             return 0;
         }
 
         @Override
-        public double z() {
+        public final double z() {
             return z;
         }
     }
@@ -75,22 +74,22 @@ class VecImpl {
         }
 
         @Override
-        public @NotNull Vec with(double x, double y, double z) {
+        public final @NotNull Vec with(double x, double y, double z) {
             return new Vec3(x, y, z);
         }
 
         @Override
-        public double x() {
+        public final double x() {
             return value;
         }
 
         @Override
-        public double y() {
+        public final double y() {
             return value;
         }
 
         @Override
-        public double z() {
+        public final double z() {
             return value;
         }
     }
