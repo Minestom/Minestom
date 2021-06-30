@@ -4,7 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.map.Framebuffer;
 import net.minestom.server.map.MapColors;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.time.TimeUnit;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -12,6 +11,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
+import java.time.temporal.TemporalUnit;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -71,7 +71,7 @@ public abstract class GLFWCapableBuffer {
         GL.createCapabilities();
     }
 
-    public Task setupRenderLoop(long period, TimeUnit unit, Runnable rendering) {
+    public Task setupRenderLoop(long period, TemporalUnit unit, Runnable rendering) {
         return MinecraftServer.getSchedulerManager()
                 .buildTask(new Runnable() {
                     private boolean first = true;
@@ -97,7 +97,7 @@ public abstract class GLFWCapableBuffer {
 
     /**
      * Called in render after glFlush to read the pixel buffer contents and convert it to map colors.
-     * Only call if you do not use {@link #render(Runnable)} nor {@link #setupRenderLoop(long, TimeUnit, Runnable)}
+     * Only call if you do not use {@link #render(Runnable)} nor {@link #setupRenderLoop(long, TemporalUnit, Runnable)}
      */
     public void prepareMapColors() {
         if(onlyMapColors) {
