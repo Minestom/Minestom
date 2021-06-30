@@ -47,6 +47,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -1034,7 +1035,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      * @param unit     in what unit is the time expressed
      * @param position the location of the block to update
      */
-    public abstract void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position);
+    public abstract void scheduleUpdate(int time, @NotNull TemporalUnit unit, @NotNull BlockPosition position);
 
     /**
      * Performs a single tick in the instance, including scheduled tasks from {@link #scheduleNextTick(Consumer)}.
