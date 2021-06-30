@@ -12,6 +12,9 @@ public class TimeUnit {
     public static final TemporalUnit SERVER_TICK = Tick.SERVER_TICKS;
     public static final TemporalUnit CLIENT_TICK = Tick.CLIENT_TICKS;
 
+    private TimeUnit() {
+    }
+
     public static long getMillis(long amount, TemporalUnit unit) {
         return unit.getDuration().multipliedBy(amount).toMillis();
     }
