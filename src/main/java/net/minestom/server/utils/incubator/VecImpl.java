@@ -2,6 +2,8 @@ package net.minestom.server.utils.incubator;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 final class VecImpl {
     static final class Vec3 implements Vec {
         private final double x, y, z;
@@ -35,6 +37,23 @@ final class VecImpl {
         public final double z() {
             return z;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Vec)) return false;
+            return VecImpl.equals(this, (Vec) o);
+        }
+
+        @Override
+        public int hashCode() {
+            return VecImpl.hashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return VecImpl.toString(this);
+        }
     }
 
     static final class Tuple implements Vec {
@@ -64,6 +83,23 @@ final class VecImpl {
         public final double z() {
             return z;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Vec)) return false;
+            return VecImpl.equals(this, (Vec) o);
+        }
+
+        @Override
+        public int hashCode() {
+            return VecImpl.hashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return VecImpl.toString(this);
+        }
     }
 
     static final class Single implements Vec {
@@ -92,5 +128,40 @@ final class VecImpl {
         public final double z() {
             return value;
         }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Vec)) return false;
+            return VecImpl.equals(this, (Vec) o);
+        }
+
+        @Override
+        public int hashCode() {
+            return VecImpl.hashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return VecImpl.toString(this);
+        }
+    }
+
+    private static boolean equals(@NotNull Vec vec1, @NotNull Vec vec2) {
+        return Double.compare(vec1.x(), vec2.x()) == 0 &&
+                Double.compare(vec1.y(), vec2.y()) == 0 &&
+                Double.compare(vec1.z(), vec2.z()) == 0;
+    }
+
+    private static int hashCode(@NotNull Vec vec) {
+        return Objects.hash(vec.x(), vec.y(), vec.z());
+    }
+
+    private static @NotNull String toString(@NotNull Vec vec) {
+        return "Vec3{" +
+                "x=" + vec.x() +
+                ", y=" + vec.y() +
+                ", z=" + vec.z() +
+                '}';
     }
 }
