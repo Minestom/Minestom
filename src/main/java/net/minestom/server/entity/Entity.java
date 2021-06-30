@@ -1624,10 +1624,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param cooldown custom cooldown for position synchronization.
      */
     public void setCustomSynchronizationCooldown(@Nullable Duration cooldown) {
-        if (cooldown == null) {
-            this.customSynchronizationCooldown = null;
-            return;
-        }
         this.customSynchronizationCooldown = cooldown;
     }
 
