@@ -246,14 +246,43 @@ public interface Vec {
      * @param o the other vector
      * @return the same vector
      */
-    default @NotNull Vec crossProduct(@NotNull Vec o) {
+    default @NotNull Vec cross(@NotNull Vec o) {
         return with(y() * o.z() - o.y() * z(),
                 z() * o.x() - o.z() * x(),
                 x() * o.y() - o.x() * y());
     }
 
+    /**
+     * Calculates a linear interpolation between this vector with another
+     * vector.
+     *
+     * @param vec   the other vector
+     * @param alpha The alpha value, must be between 0.0 and 1.0
+     * @return Linear interpolated vector
+     */
+    default @NotNull Vec lerp(@NotNull Vec vec, double alpha) {
+        final double x = x();
+        final double y = y();
+        final double z = z();
+        return with(x + (alpha * (vec.x() - x)),
+                y + (alpha * (vec.y() - y)),
+                z + (alpha * (vec.z() - z)));
+    }
+
+    default @NotNull Vec interpolate(@NotNull Vec target, double alpha, @NotNull Interpolation interpolation) {
+        return lerp(target, interpolation.apply(alpha));
+    }
+
     @FunctionalInterface
     interface Operator {
         @NotNull Vec apply(double x, double y, double z);
+    }
+
+    @FunctionalInterface
+    interface Interpolation {
+        Interpolation LINEAR = a -> a;
+        Interpolation SMOOTH = a -> a * a * (3 - 2 * a);
+
+        double apply(double a);
     }
 }
