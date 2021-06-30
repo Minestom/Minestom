@@ -1615,7 +1615,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     @SuppressWarnings("removal")
     @Deprecated(forRemoval = true)
     public void setCustomSynchronizationCooldown(@Nullable net.minestom.server.utils.time.UpdateOption cooldown) {
-        setCustomSynchronizationCooldown(cooldown == null ? null : Duration.ofMillis(cooldown.toMilliseconds()));
+        setCustomSynchronizationCooldown(cooldown != null ? Duration.ofMillis(cooldown.toMilliseconds()) : null);
     }
 
     /**
