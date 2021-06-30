@@ -432,7 +432,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
     @SuppressWarnings("removal")
     @Deprecated(forRemoval = true)
     public void setTimeUpdate(@Nullable net.minestom.server.utils.time.UpdateOption timeUpdate) {
-        setTimeUpdate(timeUpdate.toDuration());
+        setTimeUpdate(timeUpdate == null ? null : timeUpdate.toDuration());
     }
 
     /**
