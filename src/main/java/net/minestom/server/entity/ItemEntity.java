@@ -242,7 +242,7 @@ public class ItemEntity extends Entity {
      * @param temporalUnit the unit of the delay
      */
     public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
-        this.pickupDelay = temporalUnit.getDuration().multipliedBy(delay).toMillis();
+        this.pickupDelay = TimeUnit.getMillis(delay, temporalUnit);
     }
 
     /**

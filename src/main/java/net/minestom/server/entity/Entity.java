@@ -1536,7 +1536,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             this.scheduledRemoveTime = 0;
             return;
         }
-        this.scheduledRemoveTime = System.currentTimeMillis() + temporalUnit.getDuration().multipliedBy(delay).toMillis();
+        this.scheduledRemoveTime = System.currentTimeMillis() + TimeUnit.getMillis(delay, temporalUnit);
     }
 
     /**

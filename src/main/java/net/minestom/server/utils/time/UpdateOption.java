@@ -48,7 +48,7 @@ public class UpdateOption {
      * @return the converted milliseconds based on the time value and the unit
      */
     public long toMilliseconds() {
-        return temporalUnit.getDuration().multipliedBy(value).toMillis();
+        return TimeUnit.getMillis(value, temporalUnit);
     }
 
     public Duration toDuration() {
