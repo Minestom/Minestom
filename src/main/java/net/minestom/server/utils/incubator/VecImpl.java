@@ -2,8 +2,8 @@ package net.minestom.server.utils.incubator;
 
 import org.jetbrains.annotations.NotNull;
 
-class VecImpl {
-    static class Vec3 implements Vec {
+final class VecImpl {
+    static final class Vec3 implements Vec {
         private final double x, y, z;
 
         Vec3(double x, double y, double z) {
@@ -37,7 +37,7 @@ class VecImpl {
         }
     }
 
-    static class Tuple implements Vec {
+    static final class Tuple implements Vec {
         private final double x, z;
 
         Tuple(double x, double z) {
@@ -66,7 +66,7 @@ class VecImpl {
         }
     }
 
-    static class Single implements Vec {
+    static final class Single implements Vec {
         private final double value;
 
         Single(double value) {
