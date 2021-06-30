@@ -6,11 +6,10 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.time.Tick;
+import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 /**
@@ -36,16 +35,16 @@ public class ArgumentTime extends Argument<Duration> {
 
         TemporalUnit timeUnit;
         if (Character.isDigit(lastChar))
-            timeUnit = Tick.SERVER_TICKS;
+            timeUnit = TimeUnit.SERVER_TICK;
         else if (SUFFIXES.contains(lastChar)) {
             input = input.substring(0, input.length() - 1);
 
             if (lastChar == 'd') {
-                timeUnit = ChronoUnit.DAYS;
+                timeUnit = TimeUnit.DAY;
             } else if (lastChar == 's') {
-                timeUnit = ChronoUnit.SECONDS;
+                timeUnit = TimeUnit.SECOND;
             } else if (lastChar == 't') {
-                timeUnit = Tick.SERVER_TICKS;
+                timeUnit = TimeUnit.SERVER_TICK;
             } else {
                 throw new ArgumentSyntaxException("Time needs to have the unit d, s, t, or none", input, NO_NUMBER);
             }
