@@ -14,10 +14,6 @@ final class VecImpl {
             this.z = z;
         }
 
-        public Vec3(double value) {
-            this(value, value, value);
-        }
-
         @Override
         public final @NotNull Vec with(double x, double y, double z) {
             return new Vec3(x, y, z);
