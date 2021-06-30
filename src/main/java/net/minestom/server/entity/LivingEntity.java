@@ -30,12 +30,11 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.Tick;
+import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,7 +43,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     // ItemStack pickup
     protected boolean canPickupItem;
-    protected Cooldown itemPickupCooldown = new Cooldown(Duration.of(5, Tick.SERVER_TICKS));
+    protected Cooldown itemPickupCooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     protected boolean isDead;
 
@@ -318,7 +317,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param duration duration in ticks of the effect
      */
     public void setFireForDuration(int duration) {
-        setFireForDuration(duration, Tick.SERVER_TICKS);
+        setFireForDuration(duration, TimeUnit.SERVER_TICK);
     }
 
     /**
@@ -334,7 +333,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Do not start fire event if the fire needs to be removed (< 0 duration)
         if (duration > 0) {
             EventDispatcher.callCancellable(entityFireEvent, () -> {
-                final long fireTime = entityFireEvent.getFireTime(ChronoUnit.MILLIS);
+                final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
                 fireExtinguishTime = System.currentTimeMillis() + fireTime;
             });
