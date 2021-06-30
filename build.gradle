@@ -36,6 +36,11 @@ allprojects {
             name 'sponge'
             url 'https://repo.spongepowered.org/maven'
         }
+
+        // Registry files
+        flatDir {
+            dirs 'data'
+        }
     }
     javadoc {
         options {
@@ -164,6 +169,8 @@ dependencies {
     }
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
+
+    implementation name: 'minestom-data-1.17'
 
     // Adventure, for user-interface
     api "net.kyori:adventure-api:$adventureVersion"
