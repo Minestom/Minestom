@@ -36,9 +36,7 @@ final class VecImpl {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Vec)) return false;
-            return VecImpl.equals(this, (Vec) o);
+            return VecImpl.equals(this, o);
         }
 
         @Override
@@ -82,9 +80,7 @@ final class VecImpl {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Vec)) return false;
-            return VecImpl.equals(this, (Vec) o);
+            return VecImpl.equals(this, o);
         }
 
         @Override
@@ -127,9 +123,7 @@ final class VecImpl {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Vec)) return false;
-            return VecImpl.equals(this, (Vec) o);
+            return VecImpl.equals(this, o);
         }
 
         @Override
@@ -143,7 +137,10 @@ final class VecImpl {
         }
     }
 
-    private static boolean equals(@NotNull Vec vec1, @NotNull Vec vec2) {
+    private static boolean equals(@NotNull Vec vec1, Object o) {
+        if (vec1 == o) return true;
+        if (!(o instanceof Vec)) return false;
+        Vec vec2 = (Vec) o;
         return Double.compare(vec1.x(), vec2.x()) == 0 &&
                 Double.compare(vec1.y(), vec2.y()) == 0 &&
                 Double.compare(vec1.z(), vec2.z()) == 0;
