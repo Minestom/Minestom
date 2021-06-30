@@ -74,6 +74,7 @@ public class ItemEntity extends Entity {
      * @deprecated Replaced by {@link #setMergeDelay(Duration)}
      */
     @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
     public static void setMergeUpdateOption(@Nullable net.minestom.server.utils.time.UpdateOption mergeUpdateOption) {
         setMergeDelay(mergeUpdateOption == null ? null : mergeUpdateOption.toDuration());
     }
