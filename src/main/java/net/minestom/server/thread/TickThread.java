@@ -44,7 +44,6 @@ public class TickThread extends Thread {
     }
 
     protected static class BatchRunnable implements Runnable {
-
         private static final AtomicReferenceFieldUpdater<BatchRunnable, TickContext> CONTEXT_UPDATER =
                 AtomicReferenceFieldUpdater.newUpdater(BatchRunnable.class, TickContext.class, "tickContext");
 
@@ -57,20 +56,15 @@ public class TickThread extends Thread {
         public void run() {
             Check.notNull(tickThread, "The linked BatchThread cannot be null!");
             while (!stop) {
-                LockSupport.park(tickThread);
-                if (stop)
-                    break;
-                TickContext localContext = tickContext;
+                final TickContext localContext = tickContext;
                 // The context is necessary to control the tick rates
-                if (localContext == null) {
-                    continue;
+                if (localContext != null) {
+                    // Execute tick
+                    localContext.runnable.run();
+                    localContext.countDownLatch.countDown();
+                    CONTEXT_UPDATER.compareAndSet(this, localContext, null);
                 }
-
-                // Execute tick
-                localContext.runnable.run();
-
-                localContext.countDownLatch.countDown();
-                CONTEXT_UPDATER.compareAndSet(this, localContext, null);
+                LockSupport.park(this);
             }
         }
 
@@ -93,5 +87,4 @@ public class TickThread extends Thread {
             this.runnable = runnable;
         }
     }
-
 }
