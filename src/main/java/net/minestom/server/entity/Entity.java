@@ -1530,17 +1530,29 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param delay    the time before removing the entity,
      *                 0 to cancel the removing
      * @param temporalUnit the unit of the delay
+     * @deprecated Replaced by {@link #scheduleRemove(Duration)}
      */
+    @Deprecated
     public void scheduleRemove(long delay, @NotNull TemporalUnit temporalUnit) {
-        if (delay == 0) { // Cancel the scheduled remove
-            this.scheduledRemoveTime = 0;
-            return;
-        }
-        this.scheduledRemoveTime = System.currentTimeMillis() + TimeUnit.getMillis(delay, temporalUnit);
+        scheduleRemove(Duration.of(delay, temporalUnit));
     }
 
     /**
-     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(long, TemporalUnit)}.
+     * Triggers {@link #remove()} after the specified time.
+     *
+     * @param delay    the time before removing the entity,
+     *                 0 to cancel the removing
+     */
+    public void scheduleRemove(Duration delay) {
+        if (delay.isZero()) { // Cancel the scheduled remove
+            this.scheduledRemoveTime = 0;
+            return;
+        }
+        this.scheduledRemoveTime = System.currentTimeMillis() + delay.toMillis();
+    }
+
+    /**
+     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(Duration)}.
      *
      * @return true if the entity removal has been scheduled
      */
