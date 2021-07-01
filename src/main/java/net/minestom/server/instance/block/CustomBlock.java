@@ -179,7 +179,7 @@ public abstract class CustomBlock {
         if (updateFrequency == null)
             return false;
 
-        return !updateFrequency.isZero();
+        return !updateFrequency.isNegative() && !updateFrequency.isZero();
     }
 
 
