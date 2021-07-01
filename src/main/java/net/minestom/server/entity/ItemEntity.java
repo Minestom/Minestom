@@ -228,7 +228,7 @@ public class ItemEntity extends Entity {
     }
 
     /**
-     * Gets the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TemporalUnit)}.
+     * Gets the pickup delay in milliseconds, defined by {@link #setPickupDelay(Duration)}.
      *
      * @return the pickup delay
      */
@@ -241,9 +241,21 @@ public class ItemEntity extends Entity {
      *
      * @param delay    the pickup delay
      * @param temporalUnit the unit of the delay
+     *
+     * @deprecated Replaced by {@link #setPickupDelay(Duration)}
      */
+    @Deprecated
     public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
-        this.pickupDelay = TimeUnit.getMillis(delay, temporalUnit);
+        setPickupDelay(Duration.of(delay, temporalUnit));
+    }
+
+    /**
+     * Sets the pickup delay of the ItemEntity.
+     *
+     * @param delay    the pickup delay
+     */
+    public void setPickupDelay(Duration delay) {
+        this.pickupDelay = delay.toMillis();
     }
 
     /**
