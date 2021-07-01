@@ -49,16 +49,12 @@ public class PlayerInit {
             .addListener(EntityAttackEvent.class, event -> {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
+
+                entity.takeKnockback(0.4f, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
+
                 if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    Vector velocity = source.getPosition().clone().getDirection().multiply(4);
-                    velocity.setY(3.5f);
-                    target.setVelocity(velocity);
                     target.damage(DamageType.fromEntity(source), 5);
-                } else {
-                    Vector velocity = source.getPosition().clone().getDirection().multiply(3);
-                    velocity.setY(3f);
-                    entity.setVelocity(velocity);
                 }
 
                 if (source instanceof Player) {

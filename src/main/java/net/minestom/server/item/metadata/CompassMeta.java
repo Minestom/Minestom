@@ -45,18 +45,20 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
         public Builder lodestoneTracked(boolean lodestoneTracked) {
             this.lodestoneTracked = lodestoneTracked;
-            this.nbt.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0));
+            mutateNbt(compound -> compound.setByte("LodestoneTracked", (byte) (lodestoneTracked ? 1 : 0)));
             return this;
         }
 
         public Builder lodestoneDimension(@Nullable String lodestoneDimension) {
             this.lodestoneDimension = lodestoneDimension;
 
-            if (lodestoneDimension != null) {
-                this.nbt.setString("LodestoneDimension", lodestoneDimension);
-            } else {
-                this.nbt.removeTag("LodestoneDimension");
-            }
+            mutateNbt(compound -> {
+                if (lodestoneDimension != null) {
+                    compound.setString("LodestoneDimension", lodestoneDimension);
+                } else {
+                    compound.removeTag("LodestoneDimension");
+                }
+            });
 
             return this;
         }
@@ -64,15 +66,17 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
         public Builder lodestonePosition(@Nullable Position lodestonePosition) {
             this.lodestonePosition = lodestonePosition;
 
-            if (lodestonePosition != null) {
-                NBTCompound posCompound = new NBTCompound();
-                posCompound.setInt("X", (int) lodestonePosition.getX());
-                posCompound.setInt("Y", (int) lodestonePosition.getY());
-                posCompound.setInt("Z", (int) lodestonePosition.getZ());
-                this.nbt.set("LodestonePos", posCompound);
-            } else {
-                this.nbt.removeTag("LodestonePos");
-            }
+            mutateNbt(compound -> {
+                if (lodestonePosition != null) {
+                    NBTCompound posCompound = new NBTCompound();
+                    posCompound.setInt("X", (int) lodestonePosition.getX());
+                    posCompound.setInt("Y", (int) lodestonePosition.getY());
+                    posCompound.setInt("Z", (int) lodestonePosition.getZ());
+                    compound.set("LodestonePos", posCompound);
+                } else {
+                    compound.removeTag("LodestonePos");
+                }
+            });
 
             return this;
         }

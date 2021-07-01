@@ -108,16 +108,8 @@ public final class UpdateManager {
         // Tick all instances
         MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
                 instance.tick(tickStart));
-
         // Tick all chunks (and entities inside)
-        final CountDownLatch countDownLatch = threadProvider.update(tickStart);
-
-        // Wait tick end
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.threadProvider.updateAndAwait(tickStart);
 
         // Clear removed entities & update threads
         long tickTime = System.currentTimeMillis() - tickStart;

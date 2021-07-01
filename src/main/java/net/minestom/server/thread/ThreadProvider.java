@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
@@ -29,6 +29,8 @@ public abstract class ThreadProvider {
     private final ArrayDeque<Chunk> chunks = new ArrayDeque<>();
     private final Set<Entity> updatableEntities = ConcurrentHashMap.newKeySet();
     private final Set<Entity> removedEntities = ConcurrentHashMap.newKeySet();
+
+    private final Phaser phaser = new Phaser(1);
 
     public ThreadProvider(int threadCount) {
         this.threads = new ArrayList<>(threadCount);
@@ -112,24 +114,23 @@ public abstract class ThreadProvider {
      *
      * @param time the tick time in milliseconds
      */
-    public synchronized @NotNull CountDownLatch update(long time) {
-        CountDownLatch countDownLatch = new CountDownLatch(threads.size());
-        for (TickThread thread : threads) {
+    public void updateAndAwait(long time) {
+        for (var entry : threadChunkMap.entrySet()) {
+            final TickThread thread = entry.getKey();
+            final var chunkEntries = entry.getValue();
+            if (chunkEntries == null || chunkEntries.isEmpty()) {
+                // Nothing to tick
+                continue;
+            }
             // Execute tick
-            thread.runnable.startTick(countDownLatch, () -> {
-                final var chunkEntries = threadChunkMap.get(thread);
-                if (chunkEntries == null || chunkEntries.isEmpty()) {
-                    // Nothing to tick
-                    Acquirable.refreshEntries(Collections.emptySet());
-                    return;
-                }
-
+            this.phaser.register();
+            thread.runnable.startTick(phaser, () -> {
                 Acquirable.refreshEntries(chunkEntries);
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
                 chunkEntries.forEach(chunkEntry -> {
-                    Chunk chunk = chunkEntry.chunk;
+                    final Chunk chunk = chunkEntry.chunk;
                     if (!ChunkUtils.isLoaded(chunk))
                         return;
                     chunk.tick(time);
@@ -138,18 +139,18 @@ public abstract class ThreadProvider {
                         for (Entity entity : entities) {
                             if (lock.hasQueuedThreads()) {
                                 lock.unlock();
-                                // #acquire callbacks should be called here
+                                // #acquire() callbacks should be called here
                                 lock.lock();
                             }
                             entity.tick(time);
                         }
                     }
                 });
-                Acquirable.refreshEntries(Collections.emptySet());
                 lock.unlock();
+                // #acquire() callbacks
             });
         }
-        return countDownLatch;
+        this.phaser.arriveAndAwaitAdvance();
     }
 
     /**
