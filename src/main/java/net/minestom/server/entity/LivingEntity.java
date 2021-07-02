@@ -328,10 +328,20 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @see #setOnFire(boolean) if you want it to be permanent without any event callback
      */
     public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(this, temporalUnit.getDuration().multipliedBy(duration));
+        setFireForDuration(Duration.of(duration, temporalUnit));
+    }
+
+    /**
+     * Sets fire to this entity for a given duration.
+     *
+     * @param duration duration of the effect
+     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
+     */
+    public void setFireForDuration(Duration duration) {
+        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration);
 
         // Do not start fire event if the fire needs to be removed (< 0 duration)
-        if (duration > 0) {
+        if (duration.toMillis() > 0) {
             EventDispatcher.callCancellable(entityFireEvent, () -> {
                 final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
