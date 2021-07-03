@@ -29,7 +29,7 @@ public interface Pos extends Point {
     @NotNull Pos withCoord(double x, double y, double z);
 
     @Contract(pure = true)
-    default @NotNull Pos withCoord(Vec vec) {
+    default @NotNull Pos withCoord(@NotNull Vec vec) {
         return withCoord(vec.x(), vec.y(), vec.z());
     }
 
