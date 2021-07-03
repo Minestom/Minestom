@@ -7,28 +7,66 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.UnaryOperator;
 
-public interface Vec {
+/**
+ * Represents an immutable 3D vector.
+ */
+public interface Vec extends Point {
     Vec ZERO = vec(0);
     Vec ONE = vec(1);
 
+    /**
+     * Creates a new vec with the 3 coordinates set.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return the created vec
+     */
     @Contract(pure = true)
     static @NotNull Vec vec(double x, double y, double z) {
         return new VecImpl.Vec3(x, y, z);
     }
 
+    /**
+     * Creates a new vec with the [x;z] coordinates set. Y is set to 0.
+     *
+     * @param x the X coordinate
+     * @param z the Z coordinate
+     * @return the created vec
+     */
     @Contract(pure = true)
     static @NotNull Vec vec(double x, double z) {
         return new VecImpl.Tuple(x, z);
     }
 
+    /**
+     * Creates a vec with all 3 coordinates sharing the same value.
+     *
+     * @param value the coordinates
+     * @return the created vec
+     */
     @Contract(pure = true)
     static @NotNull Vec vec(double value) {
         return new VecImpl.Single(value);
     }
 
+    /**
+     * Creates a new vec of the same type with the specified coordinates.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return the creates vec
+     */
     @Contract(pure = true)
     @NotNull Vec with(double x, double y, double z);
 
+    /**
+     * Creates a new vec with coordinated depending on {@code this}.
+     *
+     * @param operator the operator
+     * @return the created vec
+     */
     @Contract(pure = true)
     default @NotNull Vec with(@NotNull Operator operator) {
         return operator.apply(x(), y(), z());
@@ -71,7 +109,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec add(double value) {
-        return add(vec(value));
+        return with(x() + value, y() + value, z() + value);
     }
 
     @Contract(pure = true)
@@ -81,7 +119,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec sub(double value) {
-        return sub(vec(value));
+        return with(x() - value, y() - value, z() - value);
     }
 
     @Contract(pure = true)
@@ -91,7 +129,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec mul(double value) {
-        return mul(vec(value));
+        return with(x() * value, y() * value, z() * value);
     }
 
     @Contract(pure = true)
@@ -101,7 +139,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec div(double value) {
-        return div(vec(value));
+        return with(x() / value, y() / value, z() / value);
     }
 
     @Contract(pure = true)
@@ -121,7 +159,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec min(double value) {
-        return min(vec(value));
+        return with(Math.min(x(), value), Math.min(y(), value), Math.min(z(), value));
     }
 
     @Contract(pure = true)
@@ -131,7 +169,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Vec max(double value) {
-        return max(vec(value));
+        return with(Math.max(x(), value), Math.max(y(), value), Math.max(z(), value));
     }
 
     @Contract(pure = true)
@@ -141,7 +179,7 @@ public interface Vec {
 
     @Contract(pure = true)
     default @NotNull Pos asPosition() {
-        return new Pos(x(), y(), z());
+        return Pos.pos(this);
     }
 
     @Contract(pure = true)
@@ -151,15 +189,6 @@ public interface Vec {
                 (y() == castedY) ? castedY : castedY + 1,
                 (int) Math.floor(z()));
     }
-
-    @Contract(pure = true)
-    double x();
-
-    @Contract(pure = true)
-    double y();
-
-    @Contract(pure = true)
-    double z();
 
     /**
      * Gets the magnitude of the vector squared.
