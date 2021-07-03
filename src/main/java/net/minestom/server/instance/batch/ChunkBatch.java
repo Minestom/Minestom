@@ -224,9 +224,11 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      */
     private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
-        ChunkDataPacket chunkDataPacket = chunk.createChunkPacket();
-        // TODO update all sections from `updatedSections`
-        PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket);
+        if (options.shouldSendUpdate()) {
+            ChunkDataPacket chunkDataPacket = chunk.createChunkPacket();
+            // TODO update all sections from `updatedSections`
+            PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket);
+        }
 
         if (instance instanceof InstanceContainer) {
             // FIXME: put method in Instance instead
