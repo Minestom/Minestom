@@ -670,7 +670,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Gets the time in ms between two fire damage applications.
      *
      * @return the time in ms
-     * @see #setFireDamagePeriod(long, TemporalUnit)
+     * @see #setFireDamagePeriod(Duration)
      */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
@@ -683,8 +683,16 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param temporalUnit     the time unit
      */
     public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TemporalUnit temporalUnit) {
-        fireDamagePeriod = TimeUnit.getMillis(fireDamagePeriod, temporalUnit);
-        this.fireDamagePeriod = fireDamagePeriod;
+        setFireDamagePeriod(Duration.of(fireDamagePeriod, temporalUnit));
+    }
+
+    /**
+     * Changes the delay between two fire damage applications.
+     *
+     * @param fireDamagePeriod the delay
+     */
+    public void setFireDamagePeriod(Duration fireDamagePeriod) {
+        this.fireDamagePeriod = fireDamagePeriod.toMillis();
     }
 
     /**
