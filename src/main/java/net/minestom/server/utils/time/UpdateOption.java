@@ -48,10 +48,10 @@ public class UpdateOption {
      * @return the converted milliseconds based on the time value and the unit
      */
     public long toMilliseconds() {
-        return TimeUnit.getMillis(value, temporalUnit);
+        return toDuration().toMillis();
     }
 
     public Duration toDuration() {
-        return Duration.ofMillis(toMilliseconds());
+        return Duration.of(value, temporalUnit);
     }
 }
