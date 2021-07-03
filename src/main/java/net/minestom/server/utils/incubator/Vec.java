@@ -67,107 +67,107 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec with(@NotNull Operator operator) {
-        return operator.apply(x(), y(), z());
+        return operator.apply(x, y, z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec withX(@NotNull DoubleUnaryOperator operator) {
-        return new Vec(operator.applyAsDouble(x()), y(), z());
+        return new Vec(operator.applyAsDouble(x), y, z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec withX(double x) {
-        return new Vec(x, y(), z());
+        return new Vec(x, y, z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec withY(@NotNull DoubleUnaryOperator operator) {
-        return new Vec(x(), operator.applyAsDouble(y()), z());
+        return new Vec(x, operator.applyAsDouble(y), z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec withY(double y) {
-        return new Vec(x(), y, z());
+        return new Vec(x, y, z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec withZ(@NotNull DoubleUnaryOperator operator) {
-        return new Vec(x(), y(), operator.applyAsDouble(z()));
+        return new Vec(x, y, operator.applyAsDouble(z));
     }
 
     @Contract(pure = true)
     public @NotNull Vec withZ(double z) {
-        return new Vec(x(), y(), z);
+        return new Vec(x, y, z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec add(@NotNull Point point) {
-        return new Vec(x() + point.x(), y() + point.y(), z() + point.z());
+        return new Vec(x + point.x(), y + point.y(), z + point.z());
     }
 
     @Contract(pure = true)
     public @NotNull Vec add(double value) {
-        return new Vec(x() + value, y() + value, z() + value);
+        return new Vec(x + value, y + value, z + value);
     }
 
     @Contract(pure = true)
     public @NotNull Vec sub(@NotNull Point point) {
-        return new Vec(x() - point.x(), y() - point.y(), z() - point.z());
+        return new Vec(x - point.x(), y - point.y(), z - point.z());
     }
 
     @Contract(pure = true)
     public @NotNull Vec sub(double value) {
-        return new Vec(x() - value, y() - value, z() - value);
+        return new Vec(x - value, y - value, z - value);
     }
 
     @Contract(pure = true)
     public @NotNull Vec mul(@NotNull Point point) {
-        return new Vec(x() * point.x(), y() * point.y(), z() * point.z());
+        return new Vec(x * point.x(), y * point.y(), z * point.z());
     }
 
     @Contract(pure = true)
     public @NotNull Vec mul(double value) {
-        return new Vec(x() * value, y() * value, z() * value);
+        return new Vec(x * value, y * value, z * value);
     }
 
     @Contract(pure = true)
     public @NotNull Vec div(@NotNull Point point) {
-        return new Vec(x() / point.x(), y() / point.y(), z() / point.z());
+        return new Vec(x / point.x(), y / point.y(), z / point.z());
     }
 
     @Contract(pure = true)
     public @NotNull Vec div(double value) {
-        return new Vec(x() / value, y() / value, z() / value);
+        return new Vec(x / value, y / value, z / value);
     }
 
     @Contract(pure = true)
     public @NotNull Vec neg() {
-        return new Vec(-x(), -y(), -z());
+        return new Vec(-x, -y, -z);
     }
 
     @Contract(pure = true)
     public @NotNull Vec abs() {
-        return new Vec(Math.abs(x()), Math.abs(y()), Math.abs(z()));
+        return new Vec(Math.abs(x), Math.abs(y), Math.abs(z));
     }
 
     @Contract(pure = true)
     public @NotNull Vec min(@NotNull Point point) {
-        return new Vec(Math.min(x(), point.x()), Math.min(y(), point.y()), Math.min(z(), point.z()));
+        return new Vec(Math.min(x, point.x()), Math.min(y, point.y()), Math.min(z, point.z()));
     }
 
     @Contract(pure = true)
     public @NotNull Vec min(double value) {
-        return new Vec(Math.min(x(), value), Math.min(y(), value), Math.min(z(), value));
+        return new Vec(Math.min(x, value), Math.min(y, value), Math.min(z, value));
     }
 
     @Contract(pure = true)
     public @NotNull Vec max(@NotNull Point point) {
-        return new Vec(Math.max(x(), point.x()), Math.max(y(), point.y()), Math.max(z(), point.z()));
+        return new Vec(Math.max(x, point.x()), Math.max(y, point.y()), Math.max(z, point.z()));
     }
 
     @Contract(pure = true)
     public @NotNull Vec max(double value) {
-        return new Vec(Math.max(x(), value), Math.max(y(), value), Math.max(z(), value));
+        return new Vec(Math.max(x, value), Math.max(y, value), Math.max(z, value));
     }
 
     @Contract(pure = true)
@@ -187,7 +187,7 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public double lengthSquared() {
-        return MathUtils.square(x()) + MathUtils.square(y()) + MathUtils.square(z());
+        return MathUtils.square(x) + MathUtils.square(y) + MathUtils.square(z);
     }
 
     /**
@@ -212,7 +212,7 @@ public final class Vec implements Point {
     @Contract(pure = true)
     public @NotNull Vec normalize() {
         final double length = length();
-        return new Vec(x() / length, y() / length, z() / length);
+        return new Vec(x / length, y / length, z / length);
     }
 
     /**
@@ -227,9 +227,9 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public double distance(@NotNull Vec vec) {
-        return Math.sqrt(MathUtils.square(x() - vec.x()) +
-                MathUtils.square(y() - vec.y()) +
-                MathUtils.square(z() - vec.z()));
+        return Math.sqrt(MathUtils.square(x - vec.x) +
+                MathUtils.square(y - vec.y) +
+                MathUtils.square(z - vec.z));
     }
 
     /**
@@ -240,9 +240,9 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public double distanceSquared(@NotNull Vec vec) {
-        return MathUtils.square(x() - vec.x()) +
-                MathUtils.square(y() - vec.y()) +
-                MathUtils.square(z() - vec.z());
+        return MathUtils.square(x - vec.x) +
+                MathUtils.square(y - vec.y) +
+                MathUtils.square(z - vec.z);
     }
 
     /**
@@ -266,7 +266,7 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public double dot(@NotNull Vec vec) {
-        return x() * vec.x() + y() * vec.y() + z() * vec.z();
+        return x * vec.x + y * vec.y + z * vec.z;
     }
 
     /**
@@ -283,9 +283,9 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec cross(@NotNull Vec o) {
-        return new Vec(y() * o.z() - o.y() * z(),
-                z() * o.x() - o.z() * x(),
-                x() * o.y() - o.x() * y());
+        return new Vec(y * o.z - o.y * z,
+                z * o.x - o.z * x,
+                x * o.y - o.x * y);
     }
 
     /**
@@ -298,12 +298,9 @@ public final class Vec implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec lerp(@NotNull Vec vec, double alpha) {
-        final double x = x();
-        final double y = y();
-        final double z = z();
-        return new Vec(x + (alpha * (vec.x() - x)),
-                y + (alpha * (vec.y() - y)),
-                z + (alpha * (vec.z() - z)));
+        return new Vec(x + (alpha * (vec.x - x)),
+                y + (alpha * (vec.y - y)),
+                z + (alpha * (vec.z - z)));
     }
 
     @Contract(pure = true)

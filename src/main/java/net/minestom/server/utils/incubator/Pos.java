@@ -3,6 +3,8 @@ package net.minestom.server.utils.incubator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.DoubleUnaryOperator;
+
 public final class Pos implements Point {
     private final double x, y, z;
     private final float yaw, pitch;
@@ -50,6 +52,26 @@ public final class Pos implements Point {
         return new Pos(x, y, z, yaw, pitch);
     }
 
+    @Contract(pure = true)
+    public @NotNull Pos withYaw(float yaw) {
+        return new Pos(x, y, z, yaw, pitch);
+    }
+
+    @Contract(pure = true)
+    public @NotNull Pos withYaw(@NotNull DoubleUnaryOperator operator) {
+        return new Pos(x, y, z, (float) operator.applyAsDouble(yaw), pitch);
+    }
+
+    @Contract(pure = true)
+    public @NotNull Pos withPitch(float pitch) {
+        return new Pos(x, y, z, yaw, pitch);
+    }
+
+    @Contract(pure = true)
+    public @NotNull Pos withPitch(@NotNull DoubleUnaryOperator operator) {
+        return new Pos(x, y, z, yaw, (float) operator.applyAsDouble(pitch));
+    }
+
     @Override
     public double x() {
         return x;
@@ -77,6 +99,6 @@ public final class Pos implements Point {
 
     @Contract(pure = true)
     public @NotNull Vec asVec() {
-        return Vec.vec(x(), y(), z());
+        return Vec.vec(x, y, z);
     }
 }
