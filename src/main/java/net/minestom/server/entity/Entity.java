@@ -1530,9 +1530,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param delay    the time before removing the entity,
      *                 0 to cancel the removing
      * @param temporalUnit the unit of the delay
-     * @deprecated Replaced by {@link #scheduleRemove(Duration)}
      */
-    @Deprecated
     public void scheduleRemove(long delay, @NotNull TemporalUnit temporalUnit) {
         scheduleRemove(Duration.of(delay, temporalUnit));
     }

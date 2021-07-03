@@ -241,10 +241,7 @@ public class ItemEntity extends Entity {
      *
      * @param delay    the pickup delay
      * @param temporalUnit the unit of the delay
-     *
-     * @deprecated Replaced by {@link #setPickupDelay(Duration)}
      */
-    @Deprecated
     public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
         setPickupDelay(Duration.of(delay, temporalUnit));
     }
