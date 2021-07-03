@@ -24,13 +24,11 @@ public class CombinedAttackGoal extends GoalSelector {
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private final int meleeRangeSquared;
-    private final int meleeDelay;
-    private final TemporalUnit meleeTimeUnit;
+    private final Duration meleeDelay;
     private final int rangedRangeSquared;
     private final double rangedPower;
     private final double rangedSpread;
-    private final int rangedDelay;
-    private final TemporalUnit rangedTimeUnit;
+    private final Duration rangedDelay;
     private final int desirableRangeSquared;
     private final boolean comeClose;
 
@@ -66,6 +64,28 @@ public class CombinedAttackGoal extends GoalSelector {
     /**
      * @param entityCreature the entity to add the goal to.
      * @param meleeRange     the allowed range the entity can hit others in melee.
+     * @param rangedRange    the allowed range the entity can shoot others.
+     * @param rangedPower    shot power (1 for normal).
+     * @param rangedSpread   shot spread (0 for best accuracy).
+     * @param delay          the delay between any attacks.
+     * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
+     * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
+     */
+    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+                              int meleeRange, int rangedRange, double rangedPower, double rangedSpread,
+                              Duration delay,
+                              int desirableRange, boolean comeClose) {
+        this(
+                entityCreature,
+                meleeRange, delay,
+                rangedRange, rangedPower, rangedSpread, delay,
+                desirableRange, comeClose
+        );
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to.
+     * @param meleeRange     the allowed range the entity can hit others in melee.
      * @param meleeDelay     the delay between melee attacks.
      * @param meleeTimeUnit  the unit of the melee delay.
      * @param rangedRange    the allowed range the entity can shoot others.
@@ -80,15 +100,32 @@ public class CombinedAttackGoal extends GoalSelector {
                               int meleeRange, int meleeDelay, TemporalUnit meleeTimeUnit,
                               int rangedRange, double rangedPower, double rangedSpread, int rangedDelay, TemporalUnit rangedTimeUnit,
                               int desirableRange, boolean comeClose) {
+        this(entityCreature, meleeRange, Duration.of(meleeDelay, meleeTimeUnit), rangedRange, rangedPower, rangedSpread,
+                Duration.of(rangedDelay, rangedTimeUnit), desirableRange, comeClose);
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to.
+     * @param meleeRange     the allowed range the entity can hit others in melee.
+     * @param meleeDelay     the delay between melee attacks.
+     * @param rangedRange    the allowed range the entity can shoot others.
+     * @param rangedPower    shot power (1 for normal).
+     * @param rangedSpread   shot spread (0 for best accuracy).
+     * @param rangedDelay    the delay between ranged attacks.
+     * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
+     * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
+     */
+    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+                              int meleeRange, Duration meleeDelay,
+                              int rangedRange, double rangedPower, double rangedSpread, Duration rangedDelay,
+                              int desirableRange, boolean comeClose) {
         super(entityCreature);
         this.meleeRangeSquared = meleeRange * meleeRange;
         this.meleeDelay = meleeDelay;
-        this.meleeTimeUnit = meleeTimeUnit;
         this.rangedRangeSquared = rangedRange * rangedRange;
         this.rangedPower = rangedPower;
         this.rangedSpread = rangedSpread;
         this.rangedDelay = rangedDelay;
-        this.rangedTimeUnit = rangedTimeUnit;
         this.desirableRangeSquared = desirableRange * desirableRange;
         this.comeClose = comeClose;
         Check.argCondition(desirableRange > rangedRange, "Desirable range can not exceed ranged range!");
@@ -130,12 +167,12 @@ public class CombinedAttackGoal extends GoalSelector {
         boolean comeClose = false;
         // First of all, checking if to perform melee or ranged attack depending on the distance to target.
         if (distanceSquared <= this.meleeRangeSquared) {
-            if (!Cooldown.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.meleeDelay)) {
                 this.entityCreature.attack(target, true);
                 this.lastAttack = time;
             }
         } else if (distanceSquared <= this.rangedRangeSquared) {
-            if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedDelay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     // If target is on line of entity sight, ranged attack can be performed
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
