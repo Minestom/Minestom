@@ -21,8 +21,7 @@ public class RangedAttackGoal extends GoalSelector {
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private long lastShot;
-    private final int delay;
-    private final TemporalUnit timeUnit;
+    private final Duration delay;
     private final int attackRangeSquared;
     private final int desirableRangeSquared;
     private final boolean comeClose;
@@ -45,9 +44,21 @@ public class RangedAttackGoal extends GoalSelector {
      * @param timeUnit       the unit of the delay.
      */
     public RangedAttackGoal(@NotNull EntityCreature entityCreature, int delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread, @NotNull TemporalUnit timeUnit) {
+        this(entityCreature, Duration.of(delay, timeUnit), attackRange, desirableRange, comeClose, power, spread);
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to.
+     * @param delay          the delay between each shots.
+     * @param attackRange    the allowed range the entity can shoot others.
+     * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
+     * @param comeClose      whether entity should go as close as possible to the target whether target is not in line of sight.
+     * @param spread         shot spread (0 for best accuracy).
+     * @param power          shot power (1 for normal).
+     */
+    public RangedAttackGoal(@NotNull EntityCreature entityCreature, Duration delay, int attackRange, int desirableRange, boolean comeClose, double power, double spread) {
         super(entityCreature);
         this.delay = delay;
-        this.timeUnit = timeUnit;
         this.attackRangeSquared = attackRange * attackRange;
         this.desirableRangeSquared = desirableRange * desirableRange;
         this.comeClose = comeClose;
@@ -91,7 +102,7 @@ public class RangedAttackGoal extends GoalSelector {
         double distanceSquared = this.entityCreature.getDistanceSquared(target);
         boolean comeClose = false;
         if (distanceSquared <= this.attackRangeSquared) {
-            if (!Cooldown.hasCooldown(time, this.lastShot, this.timeUnit, this.delay)) {
+            if (!Cooldown.hasCooldown(time, this.lastShot, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
 
