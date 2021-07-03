@@ -102,7 +102,7 @@ public abstract class GLFWCapableBuffer {
 
     /**
      * Called in render after glFlush to read the pixel buffer contents and convert it to map colors.
-     * Only call if you do not use {@link #render(Runnable)} nor {@link #setupRenderLoop(long, TemporalUnit, Runnable)}
+     * Only call if you do not use {@link #render(Runnable)} nor {@link #setupRenderLoop}
      */
     public void prepareMapColors() {
         if(onlyMapColors) {
