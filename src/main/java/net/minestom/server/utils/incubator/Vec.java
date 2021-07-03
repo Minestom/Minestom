@@ -4,15 +4,24 @@ import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.UnaryOperator;
 
 /**
  * Represents an immutable 3D vector.
  */
-public interface Vec extends Point {
-    Vec ZERO = vec(0);
-    Vec ONE = vec(1);
+public final class Vec implements Point {
+    public static final Vec ZERO = vec(0);
+    public static final Vec ONE = vec(1);
+
+    private final double x, y, z;
+
+    private Vec(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
 
     /**
      * Creates a new vec with the 3 coordinates set.
@@ -23,8 +32,8 @@ public interface Vec extends Point {
      * @return the created vec
      */
     @Contract(pure = true)
-    static @NotNull Vec vec(double x, double y, double z) {
-        return new VecImpl.Vec3(x, y, z);
+    public static @NotNull Vec vec(double x, double y, double z) {
+        return new Vec(x, y, z);
     }
 
     /**
@@ -35,8 +44,8 @@ public interface Vec extends Point {
      * @return the created vec
      */
     @Contract(pure = true)
-    static @NotNull Vec vec(double x, double z) {
-        return new VecImpl.Tuple(x, z);
+    public static @NotNull Vec vec(double x, double z) {
+        return new Vec(x, 0, z);
     }
 
     /**
@@ -46,20 +55,9 @@ public interface Vec extends Point {
      * @return the created vec
      */
     @Contract(pure = true)
-    static @NotNull Vec vec(double value) {
-        return new VecImpl.Single(value);
+    public static @NotNull Vec vec(double value) {
+        return new Vec(value, value, value);
     }
-
-    /**
-     * Creates a new vec of the same type with the specified coordinates.
-     *
-     * @param x the X coordinate
-     * @param y the Y coordinate
-     * @param z the Z coordinate
-     * @return the creates vec
-     */
-    @Contract(pure = true)
-    @NotNull Vec with(double x, double y, double z);
 
     /**
      * Creates a new vec with coordinated depending on {@code this}.
@@ -68,126 +66,118 @@ public interface Vec extends Point {
      * @return the created vec
      */
     @Contract(pure = true)
-    default @NotNull Vec with(@NotNull Operator operator) {
+    public @NotNull Vec with(@NotNull Operator operator) {
         return operator.apply(x(), y(), z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec withX(@NotNull DoubleUnaryOperator operator) {
-        return with(operator.applyAsDouble(x()), y(), z());
+    public @NotNull Vec withX(@NotNull DoubleUnaryOperator operator) {
+        return new Vec(operator.applyAsDouble(x()), y(), z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec withX(double x) {
-        return with(x, y(), z());
+    public @NotNull Vec withX(double x) {
+        return new Vec(x, y(), z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec withY(@NotNull DoubleUnaryOperator operator) {
-        return with(x(), operator.applyAsDouble(y()), z());
+    public @NotNull Vec withY(@NotNull DoubleUnaryOperator operator) {
+        return new Vec(x(), operator.applyAsDouble(y()), z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec withY(double y) {
-        return with(x(), y, z());
+    public @NotNull Vec withY(double y) {
+        return new Vec(x(), y, z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec withZ(@NotNull DoubleUnaryOperator operator) {
-        return with(x(), y(), operator.applyAsDouble(z()));
+    public @NotNull Vec withZ(@NotNull DoubleUnaryOperator operator) {
+        return new Vec(x(), y(), operator.applyAsDouble(z()));
     }
 
     @Contract(pure = true)
-    default @NotNull Vec withZ(double z) {
-        return with(x(), y(), z);
+    public @NotNull Vec withZ(double z) {
+        return new Vec(x(), y(), z);
     }
 
     @Contract(pure = true)
-    default @NotNull Vec add(@NotNull Vec vec) {
-        return with(x() + vec.x(), y() + vec.y(), z() + vec.z());
+    public @NotNull Vec add(@NotNull Vec vec) {
+        return new Vec(x() + vec.x(), y() + vec.y(), z() + vec.z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec add(double value) {
-        return with(x() + value, y() + value, z() + value);
+    public @NotNull Vec add(double value) {
+        return new Vec(x() + value, y() + value, z() + value);
     }
 
     @Contract(pure = true)
-    default @NotNull Vec sub(@NotNull Vec vec) {
-        return with(x() - vec.x(), y() - vec.y(), z() - vec.z());
+    public @NotNull Vec sub(@NotNull Vec vec) {
+        return new Vec(x() - vec.x(), y() - vec.y(), z() - vec.z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec sub(double value) {
-        return with(x() - value, y() - value, z() - value);
+    public @NotNull Vec sub(double value) {
+        return new Vec(x() - value, y() - value, z() - value);
     }
 
     @Contract(pure = true)
-    default @NotNull Vec mul(@NotNull Vec vec) {
-        return with(x() * vec.x(), y() * vec.y(), z() * vec.z());
+    public @NotNull Vec mul(@NotNull Vec vec) {
+        return new Vec(x() * vec.x(), y() * vec.y(), z() * vec.z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec mul(double value) {
-        return with(x() * value, y() * value, z() * value);
+    public @NotNull Vec mul(double value) {
+        return new Vec(x() * value, y() * value, z() * value);
     }
 
     @Contract(pure = true)
-    default @NotNull Vec div(@NotNull Vec vec) {
-        return with(x() / vec.x(), y() / vec.y(), z() / vec.z());
+    public @NotNull Vec div(@NotNull Vec vec) {
+        return new Vec(x() / vec.x(), y() / vec.y(), z() / vec.z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec div(double value) {
-        return with(x() / value, y() / value, z() / value);
+    public @NotNull Vec div(double value) {
+        return new Vec(x() / value, y() / value, z() / value);
     }
 
     @Contract(pure = true)
-    default @NotNull Vec neg() {
-        return with(-x(), -y(), -z());
+    public @NotNull Vec neg() {
+        return new Vec(-x(), -y(), -z());
     }
 
     @Contract(pure = true)
-    default @NotNull Vec abs() {
-        return with(Math.abs(x()), Math.abs(y()), Math.abs(z()));
+    public @NotNull Vec abs() {
+        return new Vec(Math.abs(x()), Math.abs(y()), Math.abs(z()));
     }
 
     @Contract(pure = true)
-    default @NotNull Vec min(@NotNull Vec vec) {
-        return with(Math.min(x(), vec.x()), Math.min(y(), vec.y()), Math.min(z(), vec.z()));
+    public @NotNull Vec min(@NotNull Vec vec) {
+        return new Vec(Math.min(x(), vec.x()), Math.min(y(), vec.y()), Math.min(z(), vec.z()));
     }
 
     @Contract(pure = true)
-    default @NotNull Vec min(double value) {
-        return with(Math.min(x(), value), Math.min(y(), value), Math.min(z(), value));
+    public @NotNull Vec min(double value) {
+        return new Vec(Math.min(x(), value), Math.min(y(), value), Math.min(z(), value));
     }
 
     @Contract(pure = true)
-    default @NotNull Vec max(@NotNull Vec vec) {
-        return with(Math.max(x(), vec.x()), Math.max(y(), vec.y()), Math.max(z(), vec.z()));
+    public @NotNull Vec max(@NotNull Vec vec) {
+        return new Vec(Math.max(x(), vec.x()), Math.max(y(), vec.y()), Math.max(z(), vec.z()));
     }
 
     @Contract(pure = true)
-    default @NotNull Vec max(double value) {
-        return with(Math.max(x(), value), Math.max(y(), value), Math.max(z(), value));
+    public @NotNull Vec max(double value) {
+        return new Vec(Math.max(x(), value), Math.max(y(), value), Math.max(z(), value));
     }
 
     @Contract(pure = true)
-    default Vec apply(@NotNull UnaryOperator<@NotNull Vec> operator) {
+    public Vec apply(@NotNull UnaryOperator<@NotNull Vec> operator) {
         return operator.apply(this);
     }
 
     @Contract(pure = true)
-    default @NotNull Pos asPosition() {
+    public @NotNull Pos asPosition() {
         return Pos.pos(this);
-    }
-
-    @Contract(pure = true)
-    default @NotNull Vec asBlockPosition() {
-        final int castedY = (int) y();
-        return with((int) Math.floor(x()),
-                (y() == castedY) ? castedY : castedY + 1,
-                (int) Math.floor(z()));
     }
 
     /**
@@ -196,7 +186,7 @@ public interface Vec extends Point {
      * @return the magnitude
      */
     @Contract(pure = true)
-    default double lengthSquared() {
+    public double lengthSquared() {
         return MathUtils.square(x()) + MathUtils.square(y()) + MathUtils.square(z());
     }
 
@@ -210,7 +200,7 @@ public interface Vec extends Point {
      * @return the magnitude
      */
     @Contract(pure = true)
-    default double length() {
+    public double length() {
         return Math.sqrt(lengthSquared());
     }
 
@@ -220,9 +210,9 @@ public interface Vec extends Point {
      * @return the same vector
      */
     @Contract(pure = true)
-    default @NotNull Vec normalize() {
+    public @NotNull Vec normalize() {
         final double length = length();
-        return with(x() / length, y() / length, z() / length);
+        return new Vec(x() / length, y() / length, z() / length);
     }
 
     /**
@@ -236,7 +226,7 @@ public interface Vec extends Point {
      * @return the distance
      */
     @Contract(pure = true)
-    default double distance(@NotNull Vec vec) {
+    public double distance(@NotNull Vec vec) {
         return Math.sqrt(MathUtils.square(x() - vec.x()) +
                 MathUtils.square(y() - vec.y()) +
                 MathUtils.square(z() - vec.z()));
@@ -249,7 +239,7 @@ public interface Vec extends Point {
      * @return the squared distance
      */
     @Contract(pure = true)
-    default double distanceSquared(@NotNull Vec vec) {
+    public double distanceSquared(@NotNull Vec vec) {
         return MathUtils.square(x() - vec.x()) +
                 MathUtils.square(y() - vec.y()) +
                 MathUtils.square(z() - vec.z());
@@ -262,7 +252,7 @@ public interface Vec extends Point {
      * @return angle in radians
      */
     @Contract(pure = true)
-    default double angle(@NotNull Vec vec) {
+    public double angle(@NotNull Vec vec) {
         final double dot = MathUtils.clamp(dot(vec) / (length() * vec.length()), -1.0, 1.0);
         return Math.acos(dot);
     }
@@ -275,7 +265,7 @@ public interface Vec extends Point {
      * @return dot product
      */
     @Contract(pure = true)
-    default double dot(@NotNull Vec vec) {
+    public double dot(@NotNull Vec vec) {
         return x() * vec.x() + y() * vec.y() + z() * vec.z();
     }
 
@@ -292,8 +282,8 @@ public interface Vec extends Point {
      * @return the same vector
      */
     @Contract(pure = true)
-    default @NotNull Vec cross(@NotNull Vec o) {
-        return with(y() * o.z() - o.y() * z(),
+    public @NotNull Vec cross(@NotNull Vec o) {
+        return new Vec(y() * o.z() - o.y() * z(),
                 z() * o.x() - o.z() * x(),
                 x() * o.y() - o.x() * y());
     }
@@ -307,32 +297,55 @@ public interface Vec extends Point {
      * @return Linear interpolated vector
      */
     @Contract(pure = true)
-    default @NotNull Vec lerp(@NotNull Vec vec, double alpha) {
+    public @NotNull Vec lerp(@NotNull Vec vec, double alpha) {
         final double x = x();
         final double y = y();
         final double z = z();
-        return with(x + (alpha * (vec.x() - x)),
+        return new Vec(x + (alpha * (vec.x() - x)),
                 y + (alpha * (vec.y() - y)),
                 z + (alpha * (vec.z() - z)));
     }
 
     @Contract(pure = true)
-    default @NotNull Vec interpolate(@NotNull Vec target, double alpha, @NotNull Interpolation interpolation) {
+    public @NotNull Vec interpolate(@NotNull Vec target, double alpha, @NotNull Interpolation interpolation) {
         return lerp(target, interpolation.apply(alpha));
     }
 
-    @Contract(pure = true)
-    default boolean eq(@NotNull Vec vec) {
-        return VecImpl.equals(this, vec);
+    @Override
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vec vec = (Vec) o;
+        return Double.compare(vec.x, x) == 0 && Double.compare(vec.y, y) == 0 && Double.compare(vec.z, z) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
     }
 
     @FunctionalInterface
-    interface Operator {
+    public interface Operator {
         @NotNull Vec apply(double x, double y, double z);
     }
 
     @FunctionalInterface
-    interface Interpolation {
+    public interface Interpolation {
         Interpolation LINEAR = a -> a;
         Interpolation SMOOTH = a -> a * a * (3 - 2 * a);
 
