@@ -101,8 +101,8 @@ public final class Vec implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Vec add(@NotNull Vec vec) {
-        return new Vec(x() + vec.x(), y() + vec.y(), z() + vec.z());
+    public @NotNull Vec add(@NotNull Point point) {
+        return new Vec(x() + point.x(), y() + point.y(), z() + point.z());
     }
 
     @Contract(pure = true)
@@ -111,8 +111,8 @@ public final class Vec implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Vec sub(@NotNull Vec vec) {
-        return new Vec(x() - vec.x(), y() - vec.y(), z() - vec.z());
+    public @NotNull Vec sub(@NotNull Point point) {
+        return new Vec(x() - point.x(), y() - point.y(), z() - point.z());
     }
 
     @Contract(pure = true)
@@ -121,8 +121,8 @@ public final class Vec implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Vec mul(@NotNull Vec vec) {
-        return new Vec(x() * vec.x(), y() * vec.y(), z() * vec.z());
+    public @NotNull Vec mul(@NotNull Point point) {
+        return new Vec(x() * point.x(), y() * point.y(), z() * point.z());
     }
 
     @Contract(pure = true)
@@ -131,8 +131,8 @@ public final class Vec implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Vec div(@NotNull Vec vec) {
-        return new Vec(x() / vec.x(), y() / vec.y(), z() / vec.z());
+    public @NotNull Vec div(@NotNull Point point) {
+        return new Vec(x() / point.x(), y() / point.y(), z() / point.z());
     }
 
     @Contract(pure = true)
@@ -151,8 +151,8 @@ public final class Vec implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Vec min(@NotNull Vec vec) {
-        return new Vec(Math.min(x(), vec.x()), Math.min(y(), vec.y()), Math.min(z(), vec.z()));
+    public @NotNull Vec min(@NotNull Point point) {
+        return new Vec(Math.min(x(), point.x()), Math.min(y(), point.y()), Math.min(z(), point.z()));
     }
 
     @Contract(pure = true)
@@ -161,8 +161,8 @@ public final class Vec implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Vec max(@NotNull Vec vec) {
-        return new Vec(Math.max(x(), vec.x()), Math.max(y(), vec.y()), Math.max(z(), vec.z()));
+    public @NotNull Vec max(@NotNull Point point) {
+        return new Vec(Math.max(x(), point.x()), Math.max(y(), point.y()), Math.max(z(), point.z()));
     }
 
     @Contract(pure = true)
