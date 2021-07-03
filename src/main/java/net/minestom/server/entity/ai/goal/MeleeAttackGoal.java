@@ -23,8 +23,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
     private long lastHit;
     private final double range;
-    private final int delay;
-    private final TemporalUnit timeUnit;
+    private final Duration delay;
 
     private boolean stop;
     private Entity cachedTarget;
@@ -36,10 +35,18 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param timeUnit       the unit of the delay
      */
     public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, int delay, @NotNull TemporalUnit timeUnit) {
+        this(entityCreature, range, Duration.of(delay, timeUnit));
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to
+     * @param range          the allowed range the entity can attack others.
+     * @param delay          the delay between each attacks
+     */
+    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, Duration delay) {
         super(entityCreature);
         this.range = range;
         this.delay = delay;
-        this.timeUnit = timeUnit;
     }
 
     public @NotNull Cooldown getCooldown() {
@@ -74,7 +81,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Attack the target entity
             if (entityCreature.getDistance(target) <= range) {
-                if (!Cooldown.hasCooldown(time, lastHit, timeUnit, delay)) {
+                if (!Cooldown.hasCooldown(time, lastHit, delay)) {
                     entityCreature.attack(target, true);
                     this.lastHit = time;
                 }
