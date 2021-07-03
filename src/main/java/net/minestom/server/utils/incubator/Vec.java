@@ -12,16 +12,10 @@ import java.util.function.UnaryOperator;
  * Represents an immutable 3D vector.
  */
 public final class Vec implements Point {
-    public static final Vec ZERO = vec(0);
-    public static final Vec ONE = vec(1);
+    public static final Vec ZERO = new Vec(0);
+    public static final Vec ONE = new Vec(1);
 
     private final double x, y, z;
-
-    private Vec(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
 
     /**
      * Creates a new vec with the 3 coordinates set.
@@ -29,11 +23,11 @@ public final class Vec implements Point {
      * @param x the X coordinate
      * @param y the Y coordinate
      * @param z the Z coordinate
-     * @return the created vec
      */
-    @Contract(pure = true)
-    public static @NotNull Vec vec(double x, double y, double z) {
-        return new Vec(x, y, z);
+    public Vec(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     /**
@@ -41,22 +35,18 @@ public final class Vec implements Point {
      *
      * @param x the X coordinate
      * @param z the Z coordinate
-     * @return the created vec
      */
-    @Contract(pure = true)
-    public static @NotNull Vec vec(double x, double z) {
-        return new Vec(x, 0, z);
+    public Vec(double x, double z) {
+        this(x, 0, z);
     }
 
     /**
      * Creates a vec with all 3 coordinates sharing the same value.
      *
      * @param value the coordinates
-     * @return the created vec
      */
-    @Contract(pure = true)
-    public static @NotNull Vec vec(double value) {
-        return new Vec(value, value, value);
+    public Vec(double value) {
+        this(value, value, value);
     }
 
     /**
@@ -177,7 +167,7 @@ public final class Vec implements Point {
 
     @Contract(pure = true)
     public @NotNull Pos asPosition() {
-        return Pos.pos(this);
+        return new Pos(x, y, z);
     }
 
     /**

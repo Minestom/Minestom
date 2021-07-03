@@ -40,7 +40,7 @@ public interface Point {
     @Contract(pure = true)
     default @NotNull Point asBlockPosition() {
         final int castedY = (int) y();
-        return Vec.vec((int) Math.floor(x()),
+        return new Vec((int) Math.floor(x()),
                 (y() == castedY) ? castedY : castedY + 1,
                 (int) Math.floor(z()));
     }

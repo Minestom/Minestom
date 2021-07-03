@@ -157,11 +157,11 @@ public class PlayerInit {
         UnaryOperator<Vec> blockTransform = vec -> vec.withX(x -> x * 2)
                 .withZ(operand -> operand + 5)
                 .withY(20)
-                .mul(Vec.vec(5, 5, 5))
+                .mul(new Vec(5))
                 .mul(5);
-        UnaryOperator<Vec> blockTransform2 = vec -> Vec.vec(vec.x() * 2, 20, vec.z() + 5);
-        var vec = Vec.ZERO.apply(blockTransform).add(Vec.vec(5));
-        var vec2 = Vec.ZERO.with((x, y, z) -> Vec.vec(x + 5, y / 5, z * 5));
+        UnaryOperator<Vec> blockTransform2 = vec -> new Vec(vec.x() * 2, 20, vec.z() + 5);
+        var vec = Vec.ZERO.apply(blockTransform).add(new Vec(5));
+        var vec2 = Vec.ZERO.with((x, y, z) -> new Vec(x + 5, y / 5, z * 5));
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
         var children = eventHandler.findChildren("demo", Event.class);

@@ -9,7 +9,7 @@ public final class Pos implements Point {
     private final double x, y, z;
     private final float yaw, pitch;
 
-    private Pos(double x, double y, double z, float yaw, float pitch) {
+    public Pos(double x, double y, double z, float yaw, float pitch) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -17,24 +17,16 @@ public final class Pos implements Point {
         this.pitch = pitch;
     }
 
-    @Contract(pure = true)
-    static @NotNull Pos pos(double x, double y, double z, float yaw, float pitch) {
-        return new Pos(x, y, z, yaw, pitch);
+    public Pos(double x, double y, double z) {
+        this(x, y, z, 0, 0);
     }
 
-    @Contract(pure = true)
-    static @NotNull Pos pos(@NotNull Vec vec, float yaw, float pitch) {
-        return pos(vec.x(), vec.y(), vec.z(), yaw, pitch);
+    public Pos(@NotNull Vec vec, float yaw, float pitch) {
+        this(vec.x(), vec.y(), vec.z(), yaw, pitch);
     }
 
-    @Contract(pure = true)
-    static @NotNull Pos pos(double x, double y, double z) {
-        return new Pos(x, y, z, 0, 0);
-    }
-
-    @Contract(pure = true)
-    static @NotNull Pos pos(@NotNull Vec vec) {
-        return pos(vec.x(), vec.y(), vec.z());
+    public Pos(@NotNull Vec vec) {
+        this(vec.x(), vec.y(), vec.z(), 0, 0);
     }
 
     @Contract(pure = true)
@@ -99,6 +91,6 @@ public final class Pos implements Point {
 
     @Contract(pure = true)
     public @NotNull Vec asVec() {
-        return Vec.vec(x, y, z);
+        return new Vec(x, y, z);
     }
 }
