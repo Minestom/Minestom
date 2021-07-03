@@ -162,6 +162,16 @@ public interface Vec {
     double z();
 
     /**
+     * Gets the magnitude of the vector squared.
+     *
+     * @return the magnitude
+     */
+    @Contract(pure = true)
+    default double lengthSquared() {
+        return MathUtils.square(x()) + MathUtils.square(y()) + MathUtils.square(z());
+    }
+
+    /**
      * Gets the magnitude of the vector, defined as sqrt(x^2+y^2+z^2). The
      * value of this method is not cached and uses a costly square-root
      * function, so do not repeatedly call this method to get the vector's
@@ -170,8 +180,9 @@ public interface Vec {
      *
      * @return the magnitude
      */
+    @Contract(pure = true)
     default double length() {
-        return Math.sqrt(MathUtils.square(x()) + MathUtils.square(y()) + MathUtils.square(z()));
+        return Math.sqrt(lengthSquared());
     }
 
     /**
@@ -179,6 +190,7 @@ public interface Vec {
      *
      * @return the same vector
      */
+    @Contract(pure = true)
     default @NotNull Vec normalize() {
         final double length = length();
         return with(x() / length, y() / length, z() / length);
@@ -194,6 +206,7 @@ public interface Vec {
      * @param vec the other vector
      * @return the distance
      */
+    @Contract(pure = true)
     default double distance(@NotNull Vec vec) {
         return Math.sqrt(MathUtils.square(x() - vec.x()) +
                 MathUtils.square(y() - vec.y()) +
@@ -206,6 +219,7 @@ public interface Vec {
      * @param vec the other vector
      * @return the squared distance
      */
+    @Contract(pure = true)
     default double distanceSquared(@NotNull Vec vec) {
         return MathUtils.square(x() - vec.x()) +
                 MathUtils.square(y() - vec.y()) +
@@ -218,6 +232,7 @@ public interface Vec {
      * @param vec the other vector
      * @return angle in radians
      */
+    @Contract(pure = true)
     default double angle(@NotNull Vec vec) {
         final double dot = MathUtils.clamp(dot(vec) / (length() * vec.length()), -1.0, 1.0);
         return Math.acos(dot);
@@ -230,6 +245,7 @@ public interface Vec {
      * @param vec the other vector
      * @return dot product
      */
+    @Contract(pure = true)
     default double dot(@NotNull Vec vec) {
         return x() * vec.x() + y() * vec.y() + z() * vec.z();
     }
@@ -246,6 +262,7 @@ public interface Vec {
      * @param o the other vector
      * @return the same vector
      */
+    @Contract(pure = true)
     default @NotNull Vec cross(@NotNull Vec o) {
         return with(y() * o.z() - o.y() * z(),
                 z() * o.x() - o.z() * x(),
@@ -260,6 +277,7 @@ public interface Vec {
      * @param alpha The alpha value, must be between 0.0 and 1.0
      * @return Linear interpolated vector
      */
+    @Contract(pure = true)
     default @NotNull Vec lerp(@NotNull Vec vec, double alpha) {
         final double x = x();
         final double y = y();
@@ -269,8 +287,14 @@ public interface Vec {
                 z + (alpha * (vec.z() - z)));
     }
 
+    @Contract(pure = true)
     default @NotNull Vec interpolate(@NotNull Vec target, double alpha, @NotNull Interpolation interpolation) {
         return lerp(target, interpolation.apply(alpha));
+    }
+
+    @Contract(pure = true)
+    default boolean eq(@NotNull Vec vec) {
+        return VecImpl.equals(this, vec);
     }
 
     @FunctionalInterface

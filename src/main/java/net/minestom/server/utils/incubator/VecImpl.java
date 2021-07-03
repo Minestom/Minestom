@@ -137,7 +137,7 @@ final class VecImpl {
         }
     }
 
-    private static boolean equals(@NotNull Vec vec1, Object o) {
+    static boolean equals(@NotNull Vec vec1, Object o) {
         if (vec1 == o) return true;
         if (!(o instanceof Vec)) return false;
         Vec vec2 = (Vec) o;
@@ -146,11 +146,11 @@ final class VecImpl {
                 Double.compare(vec1.z(), vec2.z()) == 0;
     }
 
-    private static int hashCode(@NotNull Vec vec) {
+    static int hashCode(@NotNull Vec vec) {
         return Objects.hash(vec.x(), vec.y(), vec.z());
     }
 
-    private static @NotNull String toString(@NotNull Vec vec) {
+    static @NotNull String toString(@NotNull Vec vec) {
         return "Vec3{" +
                 "x=" + vec.x() +
                 ", y=" + vec.y() +
