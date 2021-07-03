@@ -71,8 +71,7 @@ public class TaskBuilder {
      */
     @NotNull
     public TaskBuilder delay(long time, @NotNull TemporalUnit unit) {
-        this.delay = TimeUnit.getMillis(time, unit);
-        return this;
+        return delay(Duration.of(time, unit));
     }
 
     /**
@@ -111,8 +110,7 @@ public class TaskBuilder {
      */
     @NotNull
     public TaskBuilder repeat(long time, @NotNull TemporalUnit unit) {
-        this.repeat = TimeUnit.getMillis(time, unit);
-        return this;
+        return repeat(Duration.of(time, unit));
     }
 
     /**
