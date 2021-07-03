@@ -7,6 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +32,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     // Available for other implementations to handle.
     protected final CountDownLatch readyLatch;
     private final BatchOption options;
+
+    private volatile BatchOption inverseOption = new BatchOption();
 
     public AbsoluteBlockBatch() {
         this(new BatchOption());
@@ -118,7 +121,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     protected AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
-        final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch() : null;
+        final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
             for (Long2ObjectMap.Entry<ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
@@ -155,5 +158,15 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         }
 
         return inverse;
+    }
+
+    @ApiStatus.Experimental
+    public @NotNull BatchOption getInverseOption() {
+        return inverseOption;
+    }
+
+    @ApiStatus.Experimental
+    public void setInverseOption(@NotNull BatchOption inverseOption) {
+        this.inverseOption = inverseOption;
     }
 }
