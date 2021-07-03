@@ -1,6 +1,5 @@
 package net.minestom.server.utils.time;
 
-import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
@@ -19,9 +18,5 @@ public class TimeUnit {
     public static final TemporalUnit TICK = CLIENT_TICK;
 
     private TimeUnit() {
-    }
-
-    public static long getMillis(long amount, TemporalUnit unit) {
-        return Duration.of(amount, unit).toMillis();
     }
 }
