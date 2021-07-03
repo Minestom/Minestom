@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
 import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -72,6 +73,10 @@ public abstract class GLFWCapableBuffer {
     }
 
     public Task setupRenderLoop(long period, TemporalUnit unit, Runnable rendering) {
+        return setupRenderLoop(Duration.of(period, unit), rendering);
+    }
+
+    public Task setupRenderLoop(Duration period, Runnable rendering) {
         return MinecraftServer.getSchedulerManager()
                 .buildTask(new Runnable() {
                     private boolean first = true;
@@ -85,7 +90,7 @@ public abstract class GLFWCapableBuffer {
                         render(rendering);
                     }
                 })
-                .repeat(period, unit)
+                .repeat(period)
                 .schedule();
     }
 
