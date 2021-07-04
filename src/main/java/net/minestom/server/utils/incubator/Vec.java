@@ -315,7 +315,7 @@ public final class Vec implements Point {
      * @return a new, rotated vector
      */
     @NotNull
-    public Vector rotateAroundY(double angle) {
+    public Vec rotateAroundY(double angle) {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
         
@@ -337,7 +337,7 @@ public final class Vec implements Point {
      * @return a new, rotated vector
      */
     @NotNull
-    public Vector rotateAroundZ(double angle) {
+    public Vec rotateAroundZ(double angle) {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
         
