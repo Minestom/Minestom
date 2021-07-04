@@ -134,7 +134,7 @@ public class BlockPlacementListener {
                             continue;
 
                         // Marker Armor Stands should not prevent block placement
-                        if(entity.getEntityType() == EntityType.ARMOR_STAND) {
+                        if(entity.getEntityMeta() instanceof ArmorStandMeta) {
                             ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
                             if(armorStandMeta.isMarker()) {
                                 continue;
