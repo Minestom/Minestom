@@ -5,10 +5,13 @@ import net.minestom.server.data.DataContainer;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +22,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public abstract class AbstractInventory implements InventoryClickHandler, DataContainer {
+public abstract class AbstractInventory implements InventoryClickHandler, TagHandler, DataContainer {
 
     private final int size;
     protected final ItemStack[] itemStacks;
@@ -29,6 +32,8 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
     // the click processor which process all the clicks in the inventory
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
+    private final Object nbtLock = new Object();
+    private final NBTCompound nbt = new NBTCompound();
     private Data data;
 
     protected AbstractInventory(int size) {
@@ -207,6 +212,20 @@ public abstract class AbstractInventory implements InventoryClickHandler, DataCo
             final ItemStack itemStack = itemStacks[i];
             Check.notNull(itemStack, "The item array cannot contain any null element!");
             setItemStack(i, itemStack);
+        }
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        synchronized (nbtLock) {
+            return tag.read(nbt);
+        }
+    }
+
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        synchronized (nbtLock) {
+            tag.write(nbt, value);
         }
     }
 

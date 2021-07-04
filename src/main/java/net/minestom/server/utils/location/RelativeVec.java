@@ -28,4 +28,17 @@ public class RelativeVec extends RelativeLocation<Vector> {
 
         return new Vector(x, y, z);
     }
+
+    @Override
+    public Vector fromView(@Nullable Position position) {
+        if (!relativeX && !relativeY && !relativeZ) {
+            return location.clone();
+        }
+        final Position entityPosition = position != null ? position : new Position();
+
+        final double x = location.getX() + (relativeX ? entityPosition.getYaw() : 0);
+        final double z = location.getZ() + (relativeZ ? entityPosition.getPitch() : 0);
+
+        return new Vector(x, 0, z);
+    }
 }

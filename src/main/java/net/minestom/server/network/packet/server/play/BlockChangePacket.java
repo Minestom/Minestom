@@ -12,8 +12,13 @@ public class BlockChangePacket implements ServerPacket {
     public BlockPosition blockPosition;
     public int blockStateId;
 
+    public BlockChangePacket(BlockPosition blockPosition, int blockStateId) {
+        this.blockPosition = blockPosition;
+        this.blockStateId = blockStateId;
+    }
+
     public BlockChangePacket() {
-        blockPosition = new BlockPosition(0,0,0);
+        this(new BlockPosition(0, 0, 0), 0);
     }
 
     @Override

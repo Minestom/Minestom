@@ -1,12 +1,9 @@
 package net.minestom.server.utils;
 
-import com.velocitypowered.natives.compression.VelocityCompressor;
-import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
@@ -21,8 +18,9 @@ import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.ByteBuffer;
 import java.util.Collection;
-import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
 
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuf}
@@ -31,7 +29,7 @@ import java.util.zip.DataFormatException;
 public final class PacketUtils {
 
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
-    private static final ThreadLocal<VelocityCompressor> COMPRESSOR = ThreadLocal.withInitial(() -> Natives.compress.get().create(4));
+    private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
 
     private PacketUtils() {
     }
@@ -189,27 +187,35 @@ public final class PacketUtils {
      * <p>
      * {@code packetBuffer} needs to be the packet content without any header (if you want to use it to write a Minecraft packet).
      *
-     * @param compressor        the deflater for zlib compression
+     * @param deflater          the deflater for zlib compression
      * @param packetBuffer      the buffer containing all the packet fields
      * @param compressionTarget the buffer which will receive the compressed version of {@code packetBuffer}
      */
-    public static void compressBuffer(@NotNull VelocityCompressor compressor, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
+    public static void compressBuffer(@NotNull Deflater deflater, @NotNull ByteBuf packetBuffer, @NotNull ByteBuf compressionTarget) {
         final int packetLength = packetBuffer.readableBytes();
         final boolean compression = packetLength > MinecraftServer.getCompressionThreshold();
         Utils.writeVarInt(compressionTarget, compression ? packetLength : 0);
         if (compression) {
-            compress(compressor, packetBuffer, compressionTarget);
+            compress(deflater, packetBuffer, compressionTarget);
         } else {
             compressionTarget.writeBytes(packetBuffer);
         }
     }
 
-    private static void compress(@NotNull VelocityCompressor compressor, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
-        try {
-            compressor.deflate(uncompressed, compressed);
-        } catch (DataFormatException e) {
-            e.printStackTrace();
+    private static void compress(@NotNull Deflater deflater, @NotNull ByteBuf uncompressed, @NotNull ByteBuf compressed) {
+        deflater.setInput(uncompressed.nioBuffer());
+        deflater.finish();
+
+        while (!deflater.finished()) {
+            ByteBuffer nioBuffer = compressed.nioBuffer(compressed.writerIndex(), compressed.writableBytes());
+            compressed.writerIndex(deflater.deflate(nioBuffer) + compressed.writerIndex());
+
+            if (compressed.writableBytes() == 0) {
+                compressed.ensureWritable(8192);
+            }
         }
+
+        deflater.reset();
     }
 
     public static void writeFramedPacket(@NotNull ByteBuf buffer,

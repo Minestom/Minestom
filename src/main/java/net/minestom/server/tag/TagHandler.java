@@ -1,10 +1,10 @@
 package net.minestom.server.tag;
 
-import com.google.common.annotations.Beta;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Represents an element which can read and write {@link Tag tags}.
  */
-@Beta
+@ApiStatus.Experimental
 public interface TagHandler extends TagReadable, TagWritable {
 }

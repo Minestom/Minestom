@@ -16,10 +16,8 @@
 
 package net.minestom.server.network.netty.codec;
 
-import com.velocitypowered.natives.compression.VelocityCompressor;
-import com.velocitypowered.natives.util.MoreByteBufUtils;
-import com.velocitypowered.natives.util.Natives;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
 import io.netty.handler.codec.DecoderException;
@@ -27,6 +25,8 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 
 import java.util.List;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 
 public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
@@ -34,7 +34,8 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     private final int threshold;
 
-    private final VelocityCompressor compressor = Natives.compress.get().create(4);
+    private final Deflater deflater = new Deflater();
+    private final Inflater inflater = new Inflater();
 
     public PacketCompressor(int threshold) {
         this.threshold = threshold;
@@ -42,7 +43,7 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, ByteBuf from, ByteBuf to) {
-        PacketUtils.compressBuffer(compressor, from, to);
+        PacketUtils.compressBuffer(deflater, from, to);
     }
 
     @Override
@@ -61,19 +62,17 @@ public class PacketCompressor extends ByteToMessageCodec<ByteBuf> {
                     throw new DecoderException("Badly compressed packet - size of " + claimedUncompressedSize + " is larger than protocol maximum of " + MAX_SIZE);
                 }
 
+                // TODO optimize to do not initialize arrays each time
 
-                ByteBuf compatibleIn = MoreByteBufUtils.ensureCompatible(ctx.alloc(), compressor, in);
-                ByteBuf uncompressed = MoreByteBufUtils.preferredBuffer(ctx.alloc(), compressor, claimedUncompressedSize);
-                try {
-                    compressor.inflate(compatibleIn, uncompressed, claimedUncompressedSize);
-                    out.add(uncompressed);
-                    in.clear();
-                } catch (Exception e) {
-                    uncompressed.release();
-                    throw e;
-                } finally {
-                    compatibleIn.release();
-                }
+                byte[] input = new byte[in.readableBytes()];
+                in.readBytes(input);
+
+                inflater.setInput(input);
+                byte[] output = new byte[claimedUncompressedSize];
+                inflater.inflate(output);
+                inflater.reset();
+
+                out.add(Unpooled.wrappedBuffer(output));
             }
         }
     }

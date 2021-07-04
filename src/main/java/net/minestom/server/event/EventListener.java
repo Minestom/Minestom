@@ -39,18 +39,7 @@ public interface EventListener<T extends Event> {
      */
     @Contract(pure = true)
     static <T extends Event> @NotNull EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
-        return new EventListener<>() {
-            @Override
-            public @NotNull Class<T> getEventType() {
-                return eventType;
-            }
-
-            @Override
-            public @NotNull Result run(@NotNull T event) {
-                listener.accept(event);
-                return Result.SUCCESS;
-            }
-        };
+        return builder(eventType).handler(listener).build();
     }
 
     class Builder<T extends Event> {

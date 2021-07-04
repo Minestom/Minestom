@@ -1,6 +1,5 @@
 package net.minestom.server.acquirable;
 
-import com.google.common.annotations.Beta;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.thread.TickThread;
@@ -14,13 +13,15 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-@Beta
+@ApiStatus.Experimental
 public interface Acquirable<T> {
 
     /**
      * Gets all the {@link Entity entities} being ticked in the current thread.
      * <p>
      * Useful when you want to ensure that no acquisition is ever done.
+     * <p>
+     * Be aware that the entity stream is only updated at the beginning of the thread tick.
      *
      * @return the entities ticked in the current thread
      */

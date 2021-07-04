@@ -6,7 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.nbt.SNBTParser;
 
+import java.io.StringReader;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -21,29 +25,68 @@ import java.util.function.Supplier;
 @ApiStatus.NonExtendable
 public class Tag<T> {
 
+    /**
+     * Handles the snbt of the tag holder.
+     * <p>
+     * Writing will override all tags. Proceed with caution.
+     */
+    @ApiStatus.Experimental
+    public static final Tag<String> SNBT = new Tag<>(null, NBTCompound::toSNBT, (original, snbt) -> {
+        try {
+            final var updated = new SNBTParser(new StringReader(snbt)).parse();
+            if (!(updated instanceof NBTCompound))
+                throw new IllegalArgumentException("'" + snbt + "' is not a compound!");
+            NBTCompound updatedCompound = (NBTCompound) updated;
+            original.clear();
+            updatedCompound.getKeys().forEach(s ->
+                    original.set(s, Objects.requireNonNull(updatedCompound.get(s))));
+        } catch (NBTException e) {
+            e.printStackTrace();
+        }
+    }, null);
+
+    /**
+     * Handles the complete tag holder compound.
+     * <p>
+     * Writing will override all tags. Proceed with caution.
+     */
+    @ApiStatus.Experimental
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompound::deepClone, (original, updated) -> {
+        original.clear();
+        updated.getKeys().forEach(s -> original.set(s, Objects.requireNonNull(updated.get(s))));
+    }, null);
+
     private final String key;
     private final Function<NBTCompound, T> readFunction;
     private final BiConsumer<NBTCompound, T> writeConsumer;
 
     private final Supplier<T> defaultValue;
 
-    protected Tag(@NotNull String key,
+    protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompound, T> readFunction,
-                  @NotNull BiConsumer<NBTCompound, T> writeConsumer,
+                  @Nullable BiConsumer<NBTCompound, T> writeConsumer,
                   @Nullable Supplier<T> defaultValue) {
         this.key = key;
         this.readFunction = readFunction;
-        this.writeConsumer = writeConsumer;
+        this.writeConsumer = Objects.requireNonNullElse(writeConsumer, (compound, t) -> {
+        });
         this.defaultValue = defaultValue;
     }
 
-    protected Tag(@NotNull String key,
+    protected Tag(@Nullable String key,
                   @NotNull Function<NBTCompound, T> readFunction,
-                  @NotNull BiConsumer<NBTCompound, T> writeConsumer) {
+                  @Nullable BiConsumer<NBTCompound, T> writeConsumer) {
         this(key, readFunction, writeConsumer, null);
     }
 
-    public @NotNull String getKey() {
+    /**
+     * Returns the key used to navigate inside the holder nbt.
+     * <p>
+     * Can be null if unused (e.g. {@link #View(TagSerializer)}, {@link #SNBT} and {@link #NBT}).
+     *
+     * @return the tag key
+     */
+    public @Nullable String getKey() {
         return key;
     }
 
@@ -60,7 +103,7 @@ public class Tag<T> {
     @Contract(value = "_, _ -> new", pure = true)
     public <R> Tag<R> map(@NotNull Function<T, R> readMap,
                           @NotNull Function<R, T> writeMap) {
-        return new Tag<R>(key,
+        return new Tag<>(key,
                 // Read
                 nbtCompound -> {
                     final var old = readFunction.apply(nbtCompound);
@@ -85,20 +128,24 @@ public class Tag<T> {
     }
 
     public @Nullable T read(@NotNull NBTCompound nbtCompound) {
-        if (nbtCompound.containsKey(key)) {
-            return readFunction.apply(nbtCompound);
-        } else {
+        T result = readFunction.apply(nbtCompound);
+        if (result == null) {
             final var supplier = defaultValue;
-            return supplier != null ? supplier.get() : null;
+            result = supplier != null ? supplier.get() : null;
         }
+        return result;
     }
 
     public void write(@NotNull NBTCompound nbtCompound, @Nullable T value) {
-        if (value != null) {
+        if (key == null || value != null) {
             this.writeConsumer.accept(nbtCompound, value);
         } else {
             nbtCompound.removeTag(key);
         }
+    }
+
+    public void writeUnsafe(@NotNull NBTCompound nbtCompound, @Nullable Object value) {
+        write(nbtCompound, (T) value);
     }
 
     public static @NotNull Tag<Byte> Byte(@NotNull String key) {
@@ -149,17 +196,15 @@ public class Tag<T> {
                 (nbtCompound, value) -> nbtCompound.setString(key, value));
     }
 
-    public static @NotNull Tag<NBT> NBT(@NotNull String key) {
+    public static <T extends NBT> @NotNull Tag<T> NBT(@NotNull String key) {
         return new Tag<>(key,
                 nbt -> {
-                    var currentNBT = nbt.get(key);
-
+                    final var currentNBT = nbt.get(key);
                     // Avoid a NPE when cloning a null variable.
                     if (currentNBT == null) {
                         return null;
                     }
-
-                    return currentNBT.deepClone();
+                    return (T) currentNBT.deepClone();
                 },
                 ((nbt, value) -> nbt.set(key, value.deepClone())));
     }
@@ -176,7 +221,15 @@ public class Tag<T> {
                 (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
-    public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+    /**
+     * Create a wrapper around a compound.
+     *
+     * @param key        the tag key
+     * @param serializer the tag serializer
+     * @param <T>        the tag type
+     * @return the created tag
+     */
+    public static <T> @NotNull Tag<T> Structure(@NotNull String key, @NotNull TagSerializer<T> serializer) {
         return new Tag<>(key,
                 nbtCompound -> {
                     final var compound = nbtCompound.getCompound(key);
@@ -193,5 +246,19 @@ public class Tag<T> {
                     }
                     serializer.write(TagWritable.fromCompound(compound), value);
                 });
+    }
+
+    public static <T> @NotNull Tag<T> View(@NotNull TagSerializer<T> serializer) {
+        return new Tag<>(null,
+                nbtCompound -> serializer.read(TagReadable.fromCompound(nbtCompound)),
+                (nbtCompound, value) -> serializer.write(TagWritable.fromCompound(nbtCompound), value));
+    }
+
+    /**
+     * @deprecated use {@link #Structure(String, TagSerializer)} instead
+     */
+    @Deprecated
+    public static <T> @NotNull Tag<T> Custom(@NotNull String key, @NotNull TagSerializer<T> serializer) {
+        return Structure(key, serializer);
     }
 }

@@ -3,8 +3,10 @@ package net.minestom.server.entity.hologram;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.type.decoration.EntityArmorStand;
+import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.validate.Check;
@@ -19,7 +21,7 @@ public class Hologram implements Viewable {
 
     private static final float OFFSET_Y = -0.9875f;
 
-    private final HologramEntity entity;
+    private final Entity entity;
 
     private Position position;
     private Component text;
@@ -73,8 +75,21 @@ public class Hologram implements Viewable {
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
      */
     public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable) {
-        this.entity = new HologramEntity(spawnPosition.clone().add(0, OFFSET_Y, 0));
-        this.entity.setInstance(instance);
+        this.entity = new Entity(EntityType.ARMOR_STAND);
+
+        ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
+
+        armorStandMeta.setNotifyAboutChanges(false);
+
+        armorStandMeta.setSmall(true);
+        armorStandMeta.setHasNoGravity(true);
+        armorStandMeta.setCustomName(Component.empty());
+        armorStandMeta.setCustomNameVisible(true);
+        armorStandMeta.setInvisible(true);
+
+        armorStandMeta.setNotifyAboutChanges(true);
+
+        this.entity.setInstance(instance, spawnPosition.clone().add(0, OFFSET_Y, 0));
         this.entity.setAutoViewable(autoViewable);
 
         this.position = spawnPosition;
@@ -166,7 +181,7 @@ public class Hologram implements Viewable {
      *
      * @return the hologram entity
      */
-    public HologramEntity getEntity() {
+    public Entity getEntity() {
         return entity;
     }
 
@@ -200,25 +215,5 @@ public class Hologram implements Viewable {
      */
     private void checkRemoved() {
         Check.stateCondition(isRemoved(), "You cannot interact with a removed Hologram");
-    }
-
-
-    public static class HologramEntity extends EntityArmorStand {
-
-        /**
-         * Constructs a new {@link HologramEntity} with the given {@code spawnPosition}.
-         *
-         * @param spawnPosition The spawn position of this hologram entity.
-         */
-        public HologramEntity(Position spawnPosition) {
-            super(spawnPosition);
-            setSmall(true);
-
-            setNoGravity(true);
-            setCustomName(Component.empty());
-            setCustomNameVisible(true);
-            setInvisible(true);
-        }
-
     }
 }

@@ -35,8 +35,12 @@ public class ResourcePack {
         return new ResourcePack(url, hash);
     }
 
-    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @NotNull Component forcedMessage) {
+    public static ResourcePack forced(@NotNull String url, @Nullable String hash, @Nullable Component forcedMessage) {
         return new ResourcePack(url, hash, true, forcedMessage);
+    }
+
+    public static ResourcePack forced(@NotNull String url, @Nullable String hash) {
+        return forced(url, hash, null);
     }
 
     /**

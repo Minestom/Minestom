@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import com.google.common.annotations.Beta;
 import net.minestom.server.command.builder.arguments.minecraft.*;
 import net.minestom.server.command.builder.arguments.minecraft.registry.*;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
@@ -11,6 +10,7 @@ import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBl
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec2;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3;
 import net.minestom.server.command.builder.parser.ArgumentParser;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -248,7 +248,7 @@ public class ArgumentType {
      * <p>
      * Note: this feature is in beta and is very likely to change depending on feedback.
      */
-    @Beta
+    @ApiStatus.Experimental
     public static Argument<?>[] generate(@NotNull String format) {
         return ArgumentParser.generate(format);
     }
@@ -269,32 +269,5 @@ public class ArgumentType {
     @Deprecated
     public static ArgumentEntity Entities(@NotNull String id) {
         return new ArgumentEntity(id);
-    }
-
-    /**
-     * @see ArgumentDynamicWord
-     * @deprecated will be replaced soon
-     */
-    @Deprecated
-    public static ArgumentDynamicWord DynamicWord(@NotNull String id, @NotNull SuggestionType suggestionType) {
-        return new ArgumentDynamicWord(id, suggestionType);
-    }
-
-    /**
-     * @see ArgumentDynamicWord
-     * @deprecated will be replaced soon
-     */
-    @Deprecated
-    public static ArgumentDynamicWord DynamicWord(@NotNull String id) {
-        return DynamicWord(id, SuggestionType.ASK_SERVER);
-    }
-
-    /**
-     * @see ArgumentDynamicStringArray
-     * @deprecated will be replaced soon
-     */
-    @Deprecated
-    public static ArgumentDynamicStringArray DynamicStringArray(@NotNull String id) {
-        return new ArgumentDynamicStringArray(id);
     }
 }

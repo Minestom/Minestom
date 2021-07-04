@@ -263,13 +263,6 @@ public class PlayerDiggingListener {
      */
     private static void sendAcknowledgePacket(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId,
                                               @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
-        AcknowledgePlayerDiggingPacket acknowledgePlayerDiggingPacket = new AcknowledgePlayerDiggingPacket();
-        acknowledgePlayerDiggingPacket.blockPosition = blockPosition;
-        acknowledgePlayerDiggingPacket.blockStateId = blockStateId;
-        acknowledgePlayerDiggingPacket.status = status;
-        acknowledgePlayerDiggingPacket.successful = success;
-
-        player.getPlayerConnection().sendPacket(acknowledgePlayerDiggingPacket);
+        player.getPlayerConnection().sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, blockStateId, status, success));
     }
-
 }

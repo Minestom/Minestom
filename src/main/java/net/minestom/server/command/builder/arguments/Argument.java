@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import com.google.common.annotations.Beta;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
@@ -8,6 +7,7 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -210,8 +210,8 @@ public abstract class Argument<T> {
     /**
      * Gets the suggestion callback of the argument
      *
-     * @see #setSuggestionCallback
      * @return the suggestion callback of the argument, null if it doesn't exist
+     * @see #setSuggestionCallback
      */
     @Nullable
     public SuggestionCallback getSuggestionCallback() {
@@ -226,7 +226,6 @@ public abstract class Argument<T> {
      * @param suggestionCallback The suggestion callback to set.
      * @return 'this' for chaining
      */
-    @Beta
     public Argument<T> setSuggestionCallback(@NotNull SuggestionCallback suggestionCallback) {
         this.suggestionCallback = suggestionCallback;
         return this;
@@ -248,7 +247,7 @@ public abstract class Argument<T> {
      * @param <O>    The type of output expected.
      * @return A new ArgumentMap that can get this complex object type.
      */
-    @Beta
+    @ApiStatus.Experimental
     public <O> @NotNull ArgumentMap<T, O> map(@NotNull ArgumentMap.Mapper<T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }

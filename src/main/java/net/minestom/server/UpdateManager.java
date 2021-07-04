@@ -1,6 +1,5 @@
 package net.minestom.server;
 
-import com.google.common.collect.Queues;
 import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -34,8 +33,8 @@ public final class UpdateManager {
     // TODO make configurable
     private ThreadProvider threadProvider = new SingleThreadProvider();
 
-    private final Queue<LongConsumer> tickStartCallbacks = Queues.newConcurrentLinkedQueue();
-    private final Queue<LongConsumer> tickEndCallbacks = Queues.newConcurrentLinkedQueue();
+    private final Queue<LongConsumer> tickStartCallbacks = new ConcurrentLinkedQueue<>();
+    private final Queue<LongConsumer> tickEndCallbacks = new ConcurrentLinkedQueue<>();
     private final List<Consumer<TickMonitor>> tickMonitors = new CopyOnWriteArrayList<>();
 
     /**
@@ -109,16 +108,8 @@ public final class UpdateManager {
         // Tick all instances
         MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
                 instance.tick(tickStart));
-
         // Tick all chunks (and entities inside)
-        final CountDownLatch countDownLatch = threadProvider.update(tickStart);
-
-        // Wait tick end
-        try {
-            countDownLatch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        this.threadProvider.updateAndAwait(tickStart);
 
         // Clear removed entities & update threads
         long tickTime = System.currentTimeMillis() - tickStart;

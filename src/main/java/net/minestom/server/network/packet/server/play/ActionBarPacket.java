@@ -9,13 +9,14 @@ import org.jetbrains.annotations.NotNull;
 
 public class ActionBarPacket implements ServerPacket {
 
-    public Component actionBarText = Component.empty();
+    public Component actionBarText;
 
-    public ActionBarPacket() {
+    public ActionBarPacket(@NotNull Component actionBarText) {
+        this.actionBarText = actionBarText;
     }
 
-    public ActionBarPacket(Component actionBarText) {
-        this.actionBarText = actionBarText;
+    public ActionBarPacket() {
+        this(Component.empty());
     }
 
     @Override

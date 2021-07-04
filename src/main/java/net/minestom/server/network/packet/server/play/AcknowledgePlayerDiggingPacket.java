@@ -10,12 +10,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class AcknowledgePlayerDiggingPacket implements ServerPacket {
 
-    public BlockPosition blockPosition = new BlockPosition(0,0,0);
+    public BlockPosition blockPosition;
     public int blockStateId;
-    public ClientPlayerDiggingPacket.Status status = ClientPlayerDiggingPacket.Status.STARTED_DIGGING;
+    public ClientPlayerDiggingPacket.Status status;
     public boolean successful;
 
-    public AcknowledgePlayerDiggingPacket() {}
+    public AcknowledgePlayerDiggingPacket(@NotNull BlockPosition blockPosition, int blockStateId,
+                                          @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
+        this.blockPosition = blockPosition;
+        this.blockStateId = blockStateId;
+        this.status = status;
+        this.successful = success;
+    }
+
+    public AcknowledgePlayerDiggingPacket() {
+        this(new BlockPosition(0, 0, 0), 0, ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

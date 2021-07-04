@@ -1,7 +1,5 @@
 package net.minestom.server.entity;
 
-import com.google.common.annotations.Beta;
-import com.google.common.collect.Queues;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -35,6 +33,8 @@ import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
@@ -51,9 +51,11 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,7 +67,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -93,9 +95,18 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     protected Vector velocity = new Vector(); // Movement in block per second
     protected boolean hasPhysics = true;
 
+    /**
+     * The amount of drag applied on the Y axle.
+     * <p>
+     * Unit: 1/tick
+     */
     protected double gravityDragPerTick;
+    /**
+     * Acceleration on the Y axle due to gravity
+     * <p>
+     * Unit: blocks/tick
+     */
     protected double gravityAcceleration;
-    protected double gravityTerminalVelocity;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
     private boolean autoViewable;
@@ -103,6 +114,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
     private Data data;
+    private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -128,7 +140,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
 
     // list of scheduled tasks to be executed during the next entity tick
-    protected final Queue<Consumer<Entity>> nextTick = Queues.newConcurrentLinkedQueue();
+    protected final Queue<Consumer<Entity>> nextTick = new ConcurrentLinkedQueue<>();
 
     // Tick related
     private long ticks;
@@ -159,6 +171,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
         this.eventNode = EventNode.value("entity-" + uuid, EventFilter.ENTITY, this::equals);
+
+        initializeDefaultGravity();
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -524,13 +538,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 Vector newVelocityOut = new Vector();
 
                 // Gravity force
-                final double gravityY = !hasNoGravity() ? Math.min(
-                        gravityDragPerTick + (gravityAcceleration * (double) gravityTickCount),
-                        gravityTerminalVelocity) : 0;
+                final double gravityY = hasNoGravity() ? 0 : gravityAcceleration;
 
                 final Vector deltaPos = new Vector(
                         getVelocity().getX() / tps,
-                        (getVelocity().getY() - gravityY) / tps,
+                        getVelocity().getY() / tps - gravityY,
                         getVelocity().getZ() / tps
                 );
 
@@ -591,6 +603,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                     this.velocity.setX(velocity.getX() * drag);
                     this.velocity.setZ(velocity.getZ() * drag);
+                    if (!hasNoGravity())
+                        this.velocity.setY(velocity.getY() * (1-gravityDragPerTick));
 
                     if (velocity.equals(new Vector())) {
                         this.velocity.zero();
@@ -983,15 +997,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     }
 
     /**
-     * Gets the maximum gravity velocity.
-     *
-     * @return the maximum gravity velocity in block
-     */
-    public double getGravityTerminalVelocity() {
-        return gravityTerminalVelocity;
-    }
-
-    /**
      * Gets the number of tick this entity has been applied gravity.
      *
      * @return the number of tick of which gravity has been consequently applied
@@ -1005,13 +1010,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param gravityDragPerTick      the gravity drag per tick in block
      * @param gravityAcceleration     the gravity acceleration in block
-     * @param gravityTerminalVelocity the gravity terminal velocity (maximum) in block
      * @see <a href="https://minecraft.gamepedia.com/Entity#Motion_of_entities">Entities motion</a>
      */
-    public void setGravity(double gravityDragPerTick, double gravityAcceleration, double gravityTerminalVelocity) {
+    public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
         this.gravityDragPerTick = gravityDragPerTick;
         this.gravityAcceleration = gravityAcceleration;
-        this.gravityTerminalVelocity = gravityTerminalVelocity;
     }
 
     /**
@@ -1620,14 +1623,125 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
         return (Acquirable<T>) acquirable;
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public <T extends Entity> @NotNull Acquirable<T> getAcquirable(@NotNull Class<T> clazz) {
         return (Acquirable<T>) acquirable;
+    }
+
+    @Override
+    public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
+        return tag.read(nbtCompound);
+    }
+
+    @Override
+    public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
+        tag.write(nbtCompound, value);
+    }
+
+    /**
+     * Sets the Entity's {@link gravityAcceleration} and {@link gravityDragPerTick} fields to
+     * the default values according to <a href="https://minecraft.fandom.com/wiki/Entity#Motion_of_entities">Motion of entities</a>
+     */
+    @SuppressWarnings("JavadocReference")
+    private void initializeDefaultGravity() {
+        // TODO Add support for these values in the data generator
+        // Acceleration
+        switch (entityType) {
+            // 0
+            case ITEM_FRAME:
+                this.gravityAcceleration = 0;
+                break;
+            // 0.03
+            case EGG:
+            case FISHING_BOBBER:
+            case EXPERIENCE_BOTTLE:
+            case ENDER_PEARL:
+            case POTION:
+            case SNOWBALL:
+                this.gravityAcceleration = 0.03;
+                break;
+            // 0.04
+            case BOAT:
+            case TNT:
+            case FALLING_BLOCK:
+            case ITEM:
+            case MINECART:
+                this.gravityAcceleration = 0.04;
+                break;
+            // 0.05
+            case ARROW:
+            case SPECTRAL_ARROW:
+            case TRIDENT:
+                this.gravityAcceleration = 0.05;
+                break;
+            // 0.06
+            case LLAMA_SPIT:
+                this.gravityAcceleration = 0.06;
+                break;
+            // 0.1
+            case FIREBALL:
+            case WITHER_SKULL:
+            case DRAGON_FIREBALL:
+                this.gravityAcceleration = 0.1;
+                break;
+            // 0.08
+            default:
+                this.gravityAcceleration = 0.08;
+                break;
+        }
+
+        // Drag
+        switch (entityType) {
+            // 0
+            case BOAT:
+                this.gravityDragPerTick = 0;
+                break;
+            // 0.01
+            case LLAMA_SPIT:
+            case ENDER_PEARL:
+            case POTION:
+            case SNOWBALL:
+            case EGG:
+            case TRIDENT:
+            case SPECTRAL_ARROW:
+            case ARROW:
+                this.gravityDragPerTick = 0.01;
+                break;
+            // 0.05
+            case MINECART:
+                this.gravityDragPerTick = 0.05;
+                break;
+            // 0.08
+            case FISHING_BOBBER:
+                this.gravityDragPerTick = 0.08;
+                break;
+            // 0.02
+            default:
+                this.gravityDragPerTick = 0.02;
+                break;
+        }
+    }
+
+    /**
+     * Applies knockback to the entity
+     *
+     * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
+     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
+     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
+     */
+    public void takeKnockback(final float strength, final double x, final double z) {
+        if (strength > 0) {
+            //TODO check possible side effects of unnatural TPS (other than 20TPS)
+            final Vector velocityModifier = new Vector(x, 0d, z).normalize().multiply(strength * MinecraftServer.TICK_PER_SECOND / 2);
+            this.velocity.setX(velocity.getX() / 2d - velocityModifier.getX());
+            this.velocity.setY(onGround ? Math.min(.4d, velocity.getY() / 2d + strength) * MinecraftServer.TICK_PER_SECOND : velocity.getY());
+            this.velocity.setZ(velocity.getZ() / 2d - velocityModifier.getZ());
+        }
     }
 
     public enum Pose {

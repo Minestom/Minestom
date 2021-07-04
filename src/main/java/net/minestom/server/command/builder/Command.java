@@ -1,13 +1,15 @@
 package net.minestom.server.command.builder;
 
-import com.google.common.annotations.Beta;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.arguments.*;
-import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
+import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentLiteral;
+import net.minestom.server.command.builder.arguments.ArgumentType;
+import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
 import net.minestom.server.utils.StringUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -219,7 +221,7 @@ public class Command {
      * @param format   the syntax format
      * @return the newly created {@link CommandSyntax syntaxes}.
      */
-    @Beta
+    @ApiStatus.Experimental
     public @NotNull Collection<CommandSyntax> addSyntax(@NotNull CommandExecutor executor, @NotNull String format) {
         return addSyntax(executor, ArgumentType.generate(format));
     }
@@ -286,19 +288,6 @@ public class Command {
     }
 
     /**
-     * Allows for tab auto completion, this is called everytime the player press a key in the chat
-     * when in a dynamic argument ({@link ArgumentDynamicWord} (when {@link SuggestionType#ASK_SERVER} is used)
-     * and {@link ArgumentDynamicStringArray}).
-     *
-     * @param sender the command sender
-     * @param text   the whole player's text
-     * @return the array containing all the suggestion for the current arg (split SPACE), can be null
-     */
-    public @Nullable String[] onDynamicWrite(@NotNull CommandSender sender, @NotNull String text) {
-        return null;
-    }
-
-    /**
      * Called when a {@link CommandSender} executes this command before any syntax callback.
      * <p>
      * WARNING: the {@link CommandCondition} is not executed, and all the {@link CommandSyntax} are not checked,
@@ -313,7 +302,7 @@ public class Command {
     public void globalListener(@NotNull CommandSender sender, @NotNull CommandContext context, @NotNull String command) {
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public @NotNull Set<String> getSyntaxesStrings() {
         Set<String> syntaxes = new HashSet<>();
 
@@ -331,7 +320,7 @@ public class Command {
         return syntaxes;
     }
 
-    @Beta
+    @ApiStatus.Experimental
     public @NotNull String getSyntaxesTree() {
         Node commandNode = new Node();
         commandNode.names.addAll(Arrays.asList(getNames()));

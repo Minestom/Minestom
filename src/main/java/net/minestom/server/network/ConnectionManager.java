@@ -305,7 +305,9 @@ public final class ConnectionManager {
      * or even {@link AsyncPlayerPreLoginEvent}.
      *
      * @param playerInitialization the {@link Player} initialization consumer
+     * @deprecated use the event API instead
      */
+    @Deprecated
     public void addPlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
         this.playerInitializations.add(playerInitialization);
     }
