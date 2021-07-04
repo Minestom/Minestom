@@ -5,6 +5,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
+/**
+ * Represents a position containing coordinates and a view.
+ * <p>
+ * To become record and primitive.
+ */
 public final class Pos implements Point {
     private final double x, y, z;
     private final float yaw, pitch;
@@ -21,12 +26,12 @@ public final class Pos implements Point {
         this(x, y, z, 0, 0);
     }
 
-    public Pos(@NotNull Vec vec, float yaw, float pitch) {
-        this(vec.x(), vec.y(), vec.z(), yaw, pitch);
+    public Pos(@NotNull Point point, float yaw, float pitch) {
+        this(point.x(), point.y(), point.z(), yaw, pitch);
     }
 
-    public Pos(@NotNull Vec vec) {
-        this(vec.x(), vec.y(), vec.z(), 0, 0);
+    public Pos(@NotNull Point point) {
+        this(point, 0, 0);
     }
 
     @Contract(pure = true)
@@ -35,8 +40,8 @@ public final class Pos implements Point {
     }
 
     @Contract(pure = true)
-    public @NotNull Pos withCoord(@NotNull Vec vec) {
-        return withCoord(vec.x(), vec.y(), vec.z());
+    public @NotNull Pos withCoord(@NotNull Point point) {
+        return withCoord(point.x(), point.y(), point.z());
     }
 
     @Contract(pure = true)

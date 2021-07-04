@@ -1,11 +1,16 @@
 package net.minestom.server.utils.incubator;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents a 3D point.
+ * <p>
+ * Can either be a {@link Pos} or {@link Vec}.
+ * Interface will become {@code sealed} in the future.
  */
+@ApiStatus.NonExtendable
 public interface Point {
 
     /**

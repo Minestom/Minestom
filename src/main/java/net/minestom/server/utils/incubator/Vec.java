@@ -10,6 +10,8 @@ import java.util.function.UnaryOperator;
 
 /**
  * Represents an immutable 3D vector.
+ * <p>
+ * To become record and primitive.
  */
 public final class Vec implements Point {
     public static final Vec ZERO = new Vec(0);
