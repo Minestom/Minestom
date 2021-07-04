@@ -32,6 +32,7 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.TextAction;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
@@ -93,6 +94,11 @@ public class PlayerInit {
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Position(0, 42f, 0));
+
+                player.sendMessage(Component.text("Random teleport")
+                        .clickEvent(TextAction.runCallback(() -> {
+                            player.teleport(new Position(x, 42, z));
+                        }, null, null, null)));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();

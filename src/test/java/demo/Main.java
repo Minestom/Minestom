@@ -20,6 +20,7 @@ import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.storage.systems.FileStorageSystem;
+import net.minestom.server.utils.TextAction;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -104,6 +105,8 @@ public class Main {
         PlayerInit.init();
 
         OptifineSupport.enable();
+
+        TextAction.enable();
 
         //VelocityProxy.enable("rBeJJ79W4MVU");
         //BungeeCordProxy.enable();
