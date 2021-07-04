@@ -14,6 +14,7 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -80,7 +81,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
         if (removalAnimationDelay > 0) {
             // Needed for proper death animation (wait for it to finish before destroying the entity)
-            scheduleRemove(removalAnimationDelay, TimeUnit.MILLISECOND);
+            scheduleRemove(Duration.of(removalAnimationDelay, TimeUnit.MILLISECOND));
         } else {
             // Instant removal without animation playback
             remove();

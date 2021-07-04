@@ -20,13 +20,13 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.SoftReference;
+import java.time.Duration;
 import java.util.Set;
 
 /**
@@ -143,10 +143,10 @@ public class DynamicChunk extends Chunk {
             final CustomBlock customBlock = getCustomBlock(index);
 
             // Update cooldown
-            final UpdateOption updateOption = customBlock.getUpdateOption();
-            if (updateOption != null) {
+            final Duration updateFrequency = customBlock.getUpdateFrequency();
+            if (updateFrequency != null) {
                 final long lastUpdate = updatableBlocksLastUpdate.get(index);
-                final boolean hasCooldown = Cooldown.hasCooldown(time, lastUpdate, updateOption);
+                final boolean hasCooldown = Cooldown.hasCooldown(time, lastUpdate, updateFrequency);
                 if (hasCooldown)
                     continue;
 

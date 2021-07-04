@@ -14,12 +14,12 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -67,12 +67,12 @@ public abstract class CustomBlock {
     }
 
     /**
-     * Calling delay depends on {@link #getUpdateOption()} which should be overridden.
+     * Calling delay depends on {@link #getUpdateFrequency()} which should be overridden.
      *
      * @param instance      the instance of the block
      * @param blockPosition the position of the block
      * @param data          the data associated with the block
-     * @throws UnsupportedOperationException if {@link #getUpdateOption()}
+     * @throws UnsupportedOperationException if {@link #getUpdateFrequency()}
      *                                       is not null but the update method is not overridden
      */
     public void update(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @Nullable Data data) {
@@ -89,7 +89,7 @@ public abstract class CustomBlock {
      * @return the update option of the block, null if not any
      */
     @Nullable
-    public UpdateOption getUpdateOption() {
+    public Duration getUpdateFrequency() {
         return null;
     }
 
@@ -172,14 +172,14 @@ public abstract class CustomBlock {
     /**
      * Gets if this {@link CustomBlock} requires any tick update.
      *
-     * @return true if {@link #getUpdateOption()} is not null and the value is positive
+     * @return true if {@link #getUpdateFrequency()} is not null and the value is positive
      */
     public boolean hasUpdate() {
-        final UpdateOption updateOption = getUpdateOption();
-        if (updateOption == null)
+        final Duration updateFrequency = getUpdateFrequency();
+        if (updateFrequency == null)
             return false;
 
-        return updateOption.getValue() > 0;
+        return !updateFrequency.isNegative() && !updateFrequency.isZero();
     }
 
 

@@ -2,16 +2,22 @@ package net.minestom.server.utils.time;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.Objects;
 
+/**
+ * @deprecated Replaced by {@link java.time.Duration}
+ */
+@Deprecated(forRemoval = true)
 public class UpdateOption {
 
     private final long value;
-    private final TimeUnit timeUnit;
+    private final TemporalUnit temporalUnit;
 
-    public UpdateOption(long value, @NotNull TimeUnit timeUnit) {
+    public UpdateOption(long value, @NotNull TemporalUnit temporalUnit) {
         this.value = value;
-        this.timeUnit = timeUnit;
+        this.temporalUnit = temporalUnit;
     }
 
     public long getValue() {
@@ -19,13 +25,13 @@ public class UpdateOption {
     }
 
     @NotNull
-    public TimeUnit getTimeUnit() {
-        return timeUnit;
+    public TemporalUnit getTemporalUnit() {
+        return temporalUnit;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value, timeUnit);
+        return Objects.hash(value, temporalUnit);
     }
 
     @Override
@@ -33,7 +39,7 @@ public class UpdateOption {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UpdateOption updateOption = (UpdateOption) o;
-        return Objects.equals(value, updateOption.value) && Objects.equals(timeUnit, updateOption.timeUnit);
+        return Objects.equals(value, updateOption.value) && Objects.equals(temporalUnit, updateOption.temporalUnit);
     }
 
     /**
@@ -42,6 +48,10 @@ public class UpdateOption {
      * @return the converted milliseconds based on the time value and the unit
      */
     public long toMilliseconds() {
-        return timeUnit.toMilliseconds(value);
+        return toDuration().toMillis();
+    }
+
+    public Duration toDuration() {
+        return Duration.of(value, temporalUnit);
     }
 }
