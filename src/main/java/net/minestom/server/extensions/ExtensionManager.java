@@ -26,8 +26,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -127,25 +127,23 @@ public class ExtensionManager {
 
         // Initialize folders
         {
-            // Make extensions folder if necessary
-            if (!Files.exists(extensionFolder)) {
-                try {
-                    Files.createDirectories(extensionFolder);
-                } catch (IOException exception) {
-                    LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
-                    return;
-                }
+            // Make extensions folder
+            try {
+                Files.createDirectories(extensionFolder);
+            } catch (IOException exception) {
+                LOGGER.error("Could not find or create the extension folder, extensions will not be loaded!");
+                return;
             }
 
-            // Make dependencies folder if necessary
-            if (!Files.exists(dependenciesFolder)) {
-                try {
-                    Files.createDirectories(dependenciesFolder);
-                } catch (IOException exception) {
-                    LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
-                    return;
-                }
+
+            // Make dependencies folder
+            try {
+                Files.createDirectories(dependenciesFolder);
+            } catch (IOException exception) {
+                LOGGER.error("Could not find nor create the extension dependencies folder, extensions will not be loaded!");
+                return;
             }
+
         }
 
         // Periodically cleanup observers
@@ -330,19 +328,20 @@ public class ExtensionManager {
         List<DiscoveredExtension> extensions = new LinkedList<>();
 
         try {
-            Files.walk(extensionFolder).forEach(file -> {
-                if (Files.isDirectory(file)) {
-                    return;
-                }
+            Files.walkFileTree(extensionFolder, EnumSet.noneOf(FileVisitOption.class), 1, new SimpleFileVisitor<>() {
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                    // Ignore non .jar files
+                    if (!file.getFileName().endsWith(".jar")) {
+                        return FileVisitResult.CONTINUE;
+                    }
 
-                // Ignore non .jar files
-                if (!file.getFileName().endsWith(".jar")) {
-                    return;
-                }
+                    DiscoveredExtension extension = discoverFromJar(file.toFile()); // TODO newer java versions allow nio zips.
+                    if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
+                        extensions.add(extension);
+                    }
 
-                DiscoveredExtension extension = discoverFromJar(file.toFile()); // TODO newer java versions allow nio zips.
-                if (extension != null && extension.loadStatus == DiscoveredExtension.LoadStatus.LOAD_SUCCESS) {
-                    extensions.add(extension);
+                    return FileVisitResult.CONTINUE
                 }
             });
         } catch (IOException exception) {
