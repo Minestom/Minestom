@@ -279,6 +279,72 @@ public final class Vec implements Point {
                 z * o.x - o.z * x,
                 x * o.y - o.x * y);
     }
+    
+    /**
+     * Rotates the vector around the x axis.
+     * <p>
+     * This piece of math is based on the standard rotation matrix for vectors
+     * in three dimensional space. This matrix can be found here:
+     * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+     * Matrix</a>.
+     *
+     * @param angle the angle to rotate the vector about. This angle is passed
+     *              in radians
+     * @return a new, rotated vector
+     */
+    @NotNull
+    public Vec rotateAroundX(double angle) {
+        double angleCos = Math.cos(angle);
+        double angleSin = Math.sin(angle);
+        
+        double newY = angleCos * y - angleSin * z;
+        double newZ = angleSin * y + angleCos * z;
+        return new Vec(x, newY, newZ);
+    }
+
+    /**
+     * Rotates the vector around the y axis.
+     * <p>
+     * This piece of math is based on the standard rotation matrix for vectors
+     * in three dimensional space. This matrix can be found here:
+     * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+     * Matrix</a>.
+     *
+     * @param angle the angle to rotate the vector about. This angle is passed
+     *              in radians
+     * @return a new, rotated vector
+     */
+    @NotNull
+    public Vector rotateAroundY(double angle) {
+        double angleCos = Math.cos(angle);
+        double angleSin = Math.sin(angle);
+        
+        double newX =  angleCos * x + angleSin * z;
+        double newZ = -angleSin * x + angleCos * z;
+        return new Vec(newX, y, newZ);
+    }
+
+    /**
+     * Rotates the vector around the z axis
+     * <p>
+     * This piece of math is based on the standard rotation matrix for vectors
+     * in three dimensional space. This matrix can be found here:
+     * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
+     * Matrix</a>.
+     *
+     * @param angle the angle to rotate the vector about. This angle is passed
+     *              in radians
+     * @return a new, rotated vector
+     */
+    @NotNull
+    public Vector rotateAroundZ(double angle) {
+        double angleCos = Math.cos(angle);
+        double angleSin = Math.sin(angle);
+        
+        double newX = angleCos * x - angleSin * y;
+        double newY = angleSin * x + angleCos * y;
+        return new Vec(newX, newY, z);
+    }
 
     /**
      * Calculates a linear interpolation between this vector with another
