@@ -31,10 +31,11 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,7 +43,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     // ItemStack pickup
     protected boolean canPickupItem;
-    protected Cooldown itemPickupCooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    protected Cooldown itemPickupCooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     protected boolean isDead;
 
@@ -316,21 +317,31 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param duration duration in ticks of the effect
      */
     public void setFireForDuration(int duration) {
-        setFireForDuration(duration, TimeUnit.TICK);
+        setFireForDuration(duration, TimeUnit.SERVER_TICK);
     }
 
     /**
      * Sets fire to this entity for a given duration.
      *
      * @param duration duration of the effect
-     * @param unit     unit used to express the duration
+     * @param temporalUnit     unit used to express the duration
      * @see #setOnFire(boolean) if you want it to be permanent without any event callback
      */
-    public void setFireForDuration(int duration, TimeUnit unit) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration, unit);
+    public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
+        setFireForDuration(Duration.of(duration, temporalUnit));
+    }
+
+    /**
+     * Sets fire to this entity for a given duration.
+     *
+     * @param duration duration of the effect
+     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
+     */
+    public void setFireForDuration(Duration duration) {
+        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration);
 
         // Do not start fire event if the fire needs to be removed (< 0 duration)
-        if (duration > 0) {
+        if (duration.toMillis() > 0) {
             EventDispatcher.callCancellable(entityFireEvent, () -> {
                 final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
@@ -659,7 +670,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Gets the time in ms between two fire damage applications.
      *
      * @return the time in ms
-     * @see #setFireDamagePeriod(long, TimeUnit)
+     * @see #setFireDamagePeriod(Duration)
      */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
@@ -669,11 +680,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Changes the delay between two fire damage applications.
      *
      * @param fireDamagePeriod the delay
-     * @param timeUnit         the time unit
+     * @param temporalUnit     the time unit
      */
-    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TimeUnit timeUnit) {
-        fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
-        this.fireDamagePeriod = fireDamagePeriod;
+    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TemporalUnit temporalUnit) {
+        setFireDamagePeriod(Duration.of(fireDamagePeriod, temporalUnit));
+    }
+
+    /**
+     * Changes the delay between two fire damage applications.
+     *
+     * @param fireDamagePeriod the delay
+     */
+    public void setFireDamagePeriod(Duration fireDamagePeriod) {
+        this.fireDamagePeriod = fireDamagePeriod.toMillis();
     }
 
     /**

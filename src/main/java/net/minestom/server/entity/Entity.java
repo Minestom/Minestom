@@ -46,13 +46,14 @@ import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -127,8 +128,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
     // Network synchronization, send the absolute position of the entity each X milliseconds
-    private static final UpdateOption SYNCHRONIZATION_COOLDOWN = new UpdateOption(1, TimeUnit.MINUTE);
-    private UpdateOption customSynchronizationCooldown;
+    private static final Duration SYNCHRONIZATION_COOLDOWN = Duration.of(1, TimeUnit.MINUTE);
+    private Duration customSynchronizationCooldown;
     private long lastAbsoluteSynchronizationTime;
 
     // Events
@@ -1142,7 +1143,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Sets the entity in fire visually.
      * <p>
      * WARNING: if you want to apply damage or specify a duration,
-     * see {@link LivingEntity#setFireForDuration(int, TimeUnit)}.
+     * see {@link LivingEntity#setFireForDuration(int, TemporalUnit)}.
      *
      * @param fire should the entity be set in fire
      */
@@ -1528,18 +1529,28 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param delay    the time before removing the entity,
      *                 0 to cancel the removing
-     * @param timeUnit the unit of the delay
+     * @param temporalUnit the unit of the delay
      */
-    public void scheduleRemove(long delay, @NotNull TimeUnit timeUnit) {
-        if (delay == 0) { // Cancel the scheduled remove
-            this.scheduledRemoveTime = 0;
-            return;
-        }
-        this.scheduledRemoveTime = System.currentTimeMillis() + timeUnit.toMilliseconds(delay);
+    public void scheduleRemove(long delay, @NotNull TemporalUnit temporalUnit) {
+        scheduleRemove(Duration.of(delay, temporalUnit));
     }
 
     /**
-     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(long, TimeUnit)}.
+     * Triggers {@link #remove()} after the specified time.
+     *
+     * @param delay    the time before removing the entity,
+     *                 0 to cancel the removing
+     */
+    public void scheduleRemove(Duration delay) {
+        if (delay.isZero()) { // Cancel the scheduled remove
+            this.scheduledRemoveTime = 0;
+            return;
+        }
+        this.scheduledRemoveTime = System.currentTimeMillis() + delay.toMillis();
+    }
+
+    /**
+     * Gets if the entity removal has been scheduled with {@link #scheduleRemove(Duration)}.
      *
      * @return true if the entity removal has been scheduled
      */
@@ -1609,8 +1620,20 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Set custom cooldown for position synchronization.
      *
      * @param cooldown custom cooldown for position synchronization.
+     * @deprecated Replaced by {@link #setCustomSynchronizationCooldown(Duration)}
      */
-    public void setCustomSynchronizationCooldown(@Nullable UpdateOption cooldown) {
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    public void setCustomSynchronizationCooldown(@Nullable net.minestom.server.utils.time.UpdateOption cooldown) {
+        setCustomSynchronizationCooldown(cooldown != null ? Duration.ofMillis(cooldown.toMilliseconds()) : null);
+    }
+
+    /**
+     * Set custom cooldown for position synchronization.
+     *
+     * @param cooldown custom cooldown for position synchronization.
+     */
+    public void setCustomSynchronizationCooldown(@Nullable Duration cooldown) {
         this.customSynchronizationCooldown = cooldown;
     }
 
@@ -1619,7 +1642,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         return HoverEvent.showEntity(ShowEntity.of(this.entityType, this.uuid));
     }
 
-    private UpdateOption getSynchronizationCooldown() {
+    private Duration getSynchronizationCooldown() {
         return Objects.requireNonNullElse(this.customSynchronizationCooldown, SYNCHRONIZATION_COOLDOWN);
     }
 

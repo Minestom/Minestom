@@ -20,6 +20,8 @@ public interface Acquirable<T> {
      * Gets all the {@link Entity entities} being ticked in the current thread.
      * <p>
      * Useful when you want to ensure that no acquisition is ever done.
+     * <p>
+     * Be aware that the entity stream is only updated at the beginning of the thread tick.
      *
      * @return the entities ticked in the current thread
      */

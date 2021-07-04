@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
  * An object which manages all the {@link Task}'s.
  * <p>
  * {@link Task} first need to be built with {@link #buildTask(Runnable)}, you can then specify a delay with as example
- * {@link TaskBuilder#delay(long, net.minestom.server.utils.time.TimeUnit)}
- * or {@link TaskBuilder#repeat(long, net.minestom.server.utils.time.TimeUnit)},
+ * {@link TaskBuilder#delay(long, java.time.temporal.TemporalUnit)}
+ * or {@link TaskBuilder#repeat(long, java.time.temporal.TemporalUnit)},
  * and to finally schedule: {@link TaskBuilder#schedule()}.
  * <p>
  * Shutdown tasks are built with {@link #buildShutdownTask(Runnable)} and are executed, as the name implies, when the server stops.
