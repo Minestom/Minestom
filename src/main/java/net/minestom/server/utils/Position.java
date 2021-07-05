@@ -1,8 +1,7 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.clone.PublicCloneable;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -10,8 +9,11 @@ import java.util.Objects;
 /**
  * Represents a position.
  * The instance is not contained.
+ *
+ * @deprecated use {@link net.minestom.server.utils.coordinate.Pos} instead
  */
-public class Position implements PublicCloneable<Position> {
+@Deprecated
+public class Position implements Point {
 
     private double x, y, z;
     private float yaw, pitch;
@@ -201,15 +203,24 @@ public class Position implements PublicCloneable<Position> {
         this.z = position.getZ();
     }
 
-    @NotNull
     @Override
-    public Position clone() {
-        try {
-            return (Position) super.clone();
-        } catch (CloneNotSupportedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public @NotNull Position clone() {
+        return new Position(x, y, z, yaw, pitch);
     }
 
     /**
@@ -368,9 +379,9 @@ public class Position implements PublicCloneable<Position> {
      */
     private float fixYaw(float yaw) {
         yaw = yaw % 360;
-        if(yaw < -180.0F) {
+        if (yaw < -180.0F) {
             yaw += 360.0F;
-        } else if(yaw > 180.0F) {
+        } else if (yaw > 180.0F) {
             yaw -= 360.0F;
         }
         return yaw;

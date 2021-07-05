@@ -1,8 +1,7 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.clone.PublicCloneable;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -11,8 +10,11 @@ import java.util.Objects;
 
 /**
  * Represents the position of a block, so with integers instead of floating numbers.
+ *
+ * @deprecated use {@link net.minestom.server.utils.coordinate.Vec} instead
  */
-public class BlockPosition implements PublicCloneable<BlockPosition> {
+@Deprecated
+public class BlockPosition implements Point {
 
     private int x, y, z;
 
@@ -212,15 +214,24 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
                 MathUtils.square(getZ() - blockPosition.getZ());
     }
 
-    @NotNull
     @Override
-    public BlockPosition clone() {
-        try {
-            return (BlockPosition) super.clone();
-        } catch (CloneNotSupportedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public @NotNull Point clone() {
+        return new BlockPosition(x, y, z);
     }
 
     /**
