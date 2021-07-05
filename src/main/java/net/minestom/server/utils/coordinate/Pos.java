@@ -1,4 +1,4 @@
-package net.minestom.server.utils.incubator;
+package net.minestom.server.utils.coordinate;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

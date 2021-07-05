@@ -1,4 +1,4 @@
-package net.minestom.server.utils.incubator;
+package net.minestom.server.utils.coordinate;
 
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
@@ -205,36 +205,6 @@ public final class Vec implements Point {
     public @NotNull Vec normalize() {
         final double length = length();
         return new Vec(x / length, y / length, z / length);
-    }
-
-    /**
-     * Gets the distance between this vector and another. The value of this
-     * method is not cached and uses a costly square-root function, so do not
-     * repeatedly call this method to get the vector's magnitude. NaN will be
-     * returned if the inner result of the sqrt() function overflows, which
-     * will be caused if the distance is too long.
-     *
-     * @param vec the other vector
-     * @return the distance
-     */
-    @Contract(pure = true)
-    public double distance(@NotNull Vec vec) {
-        return Math.sqrt(MathUtils.square(x - vec.x) +
-                MathUtils.square(y - vec.y) +
-                MathUtils.square(z - vec.z));
-    }
-
-    /**
-     * Gets the squared distance between this vector and another.
-     *
-     * @param vec the other vector
-     * @return the squared distance
-     */
-    @Contract(pure = true)
-    public double distanceSquared(@NotNull Vec vec) {
-        return MathUtils.square(x - vec.x) +
-                MathUtils.square(y - vec.y) +
-                MathUtils.square(z - vec.z);
     }
 
     /**

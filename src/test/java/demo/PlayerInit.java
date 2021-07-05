@@ -36,7 +36,7 @@ import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.incubator.Vec;
+import net.minestom.server.utils.coordinate.Vec;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
