@@ -391,7 +391,7 @@ public final class Vec implements Point {
     }
 
     @FunctionalInterface
-    interface Operator {
+    public interface Operator {
         @NotNull Vec apply(double x, double y, double z);
     }
 

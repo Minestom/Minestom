@@ -204,7 +204,7 @@ public final class Pos implements Point {
     }
 
     @FunctionalInterface
-    interface Operator {
+    public interface Operator {
         @NotNull Pos apply(double x, double y, double z);
     }
 }
