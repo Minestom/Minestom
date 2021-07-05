@@ -182,7 +182,7 @@ public class InstanceContainer extends Instance {
         final Chunk chunk = getChunkAt(blockPosition);
         if (!ChunkUtils.isLoaded(chunk))
             return false;
-        UNSAFE_setBlock(chunk, (int) blockPosition.x(), (int) blockPosition.y(), (int) blockPosition.z(), block,
+        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block,
                 new BlockHandler.PlayerPlacement(block, this, blockPosition, player, blockFace, cursorX, cursorY, cursorZ), null);
         return true;
     }
@@ -200,10 +200,9 @@ public class InstanceContainer extends Instance {
             return false;
         final Block block = getBlock(blockPosition);
 
-        final int x = (int) blockPosition.x();
-        final int y = (int) blockPosition.y();
-        final int z = (int) blockPosition.z();
-
+        final int x = blockPosition.blockX();
+        final int y = blockPosition.blockY();
+        final int z = blockPosition.blockZ();
         // The player probably have a wrong version of this chunk section, send it
         if (block.isAir()) {
             chunk.sendChunk(player);

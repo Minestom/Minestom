@@ -6,6 +6,7 @@ import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.function.DoubleUnaryOperator;
 
 // TODO: pool block positions?
 
@@ -228,6 +229,96 @@ public class BlockPosition implements Point {
     @Override
     public double z() {
         return z;
+    }
+
+    @Override
+    public @NotNull Point withX(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withX(double x) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(double y) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double value) {
+        return null;
     }
 
     @Override

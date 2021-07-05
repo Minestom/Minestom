@@ -18,9 +18,9 @@ public class WallPlacementRule extends BlockPlacementRule {
 
     @Override
     public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
-        final int x = (int) blockPosition.x();
-        final int y = (int) blockPosition.y();
-        final int z = (int) blockPosition.z();
+        final int x = blockPosition.blockX();
+        final int y = blockPosition.blockY();
+        final int z = blockPosition.blockZ();
 
         String east = "none";
         String north = "none";

@@ -5,11 +5,12 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnPositionPacket implements ServerPacket {
 
-    public int x, y, z;
+    public Point position = Vec.ZERO;
     public float angle;
 
     public SpawnPositionPacket() {
@@ -17,16 +18,13 @@ public class SpawnPositionPacket implements ServerPacket {
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeBlockPosition(x, y, z);
+        writer.writeBlockPosition(position);
         writer.writeFloat(angle);
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        Point pos = reader.readBlockPosition();
-        this.x = (int) pos.x();
-        this.y = (int) pos.y();
-        this.z = (int) pos.z();
+        this.position = reader.readBlockPosition();
         this.angle = reader.readFloat();
     }
 

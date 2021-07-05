@@ -4,7 +4,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Vec;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class BlockUtils {
     }
 
     public BlockUtils getRelativeTo(int x, int y, int z) {
-        return new BlockUtils(instance, new Vec(x, y, z).add(position));
+        return new BlockUtils(instance, position.add(x, y, z));
     }
 
     public BlockUtils above() {

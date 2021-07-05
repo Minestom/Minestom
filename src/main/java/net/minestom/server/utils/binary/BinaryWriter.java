@@ -268,7 +268,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeBlockPosition(@NotNull Point point) {
-        writeBlockPosition((int) point.x(), (int) point.y(), (int) point.z());
+        writeBlockPosition(point.blockX(), point.blockY(), point.blockZ());
     }
 
     public void writeBlockPosition(int x, int y, int z) {

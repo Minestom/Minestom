@@ -5,6 +5,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.DoubleUnaryOperator;
+
 /**
  * Represents a 3D point.
  * <p>
@@ -52,6 +54,60 @@ public interface Point {
     default int blockZ() {
         return MathUtils.floor(z());
     }
+
+    @Contract(pure = true)
+    @NotNull Point withX(@NotNull DoubleUnaryOperator operator);
+
+    @Contract(pure = true)
+    @NotNull Point withX(double x);
+
+    @Contract(pure = true)
+    @NotNull Point withY(@NotNull DoubleUnaryOperator operator);
+
+    @Contract(pure = true)
+    @NotNull Point withY(double y);
+
+    @Contract(pure = true)
+    @NotNull Point withZ(@NotNull DoubleUnaryOperator operator);
+
+    @Contract(pure = true)
+    @NotNull Point withZ(double z);
+
+    @Contract(pure = true)
+    @NotNull Point add(double x, double y, double z);
+
+    @Contract(pure = true)
+    @NotNull Point add(@NotNull Point point);
+
+    @Contract(pure = true)
+    @NotNull Point add(double value);
+
+    @Contract(pure = true)
+    @NotNull Point sub(double x, double y, double z);
+
+    @Contract(pure = true)
+    @NotNull Point sub(@NotNull Point point);
+
+    @Contract(pure = true)
+    @NotNull Point sub(double value);
+
+    @Contract(pure = true)
+    @NotNull Point mul(double x, double y, double z);
+
+    @Contract(pure = true)
+    @NotNull Point mul(@NotNull Point point);
+
+    @Contract(pure = true)
+    @NotNull Point mul(double value);
+
+    @Contract(pure = true)
+    @NotNull Point div(double x, double y, double z);
+
+    @Contract(pure = true)
+    @NotNull Point div(@NotNull Point point);
+
+    @Contract(pure = true)
+    @NotNull Point div(double value);
 
     /**
      * Gets the distance between this point and another. The value of this

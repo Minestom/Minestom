@@ -238,9 +238,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(serverDifficultyPacket);
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
-        spawnPositionPacket.x = (int) respawnPoint.getX();
-        spawnPositionPacket.y = (int) respawnPoint.getY();
-        spawnPositionPacket.z = (int) respawnPoint.getZ();
+        spawnPositionPacket.position = respawnPoint;
         playerConnection.sendPacket(spawnPositionPacket);
 
         // Add player to list with spawning skin

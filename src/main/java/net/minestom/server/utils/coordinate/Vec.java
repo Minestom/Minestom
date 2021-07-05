@@ -52,84 +52,110 @@ public final class Vec implements Point {
     }
 
     /**
-     * Creates a new vec with coordinated depending on {@code this}.
+     * Creates a new point with coordinated depending on {@code this}.
      *
      * @param operator the operator
-     * @return the created vec
+     * @return the created point
      */
     @Contract(pure = true)
     public @NotNull Vec with(@NotNull Operator operator) {
         return operator.apply(x, y, z);
     }
 
+    @Override
     @Contract(pure = true)
     public @NotNull Vec withX(@NotNull DoubleUnaryOperator operator) {
         return new Vec(operator.applyAsDouble(x), y, z);
     }
 
+    @Override
     @Contract(pure = true)
     public @NotNull Vec withX(double x) {
         return new Vec(x, y, z);
     }
 
+    @Override
     @Contract(pure = true)
     public @NotNull Vec withY(@NotNull DoubleUnaryOperator operator) {
         return new Vec(x, operator.applyAsDouble(y), z);
     }
 
+    @Override
     @Contract(pure = true)
     public @NotNull Vec withY(double y) {
         return new Vec(x, y, z);
     }
 
+    @Override
     @Contract(pure = true)
     public @NotNull Vec withZ(@NotNull DoubleUnaryOperator operator) {
         return new Vec(x, y, operator.applyAsDouble(z));
     }
 
+    @Override
     @Contract(pure = true)
     public @NotNull Vec withZ(double z) {
         return new Vec(x, y, z);
     }
 
-    @Contract(pure = true)
+    @Override
+    public @NotNull Vec add(double x, double y, double z) {
+        return new Vec(this.x + x, this.y + y, this.z + z);
+    }
+
+    @Override
     public @NotNull Vec add(@NotNull Point point) {
-        return new Vec(x + point.x(), y + point.y(), z + point.z());
+        return add(point.x(), point.y(), point.z());
     }
 
-    @Contract(pure = true)
+    @Override
     public @NotNull Vec add(double value) {
-        return new Vec(x + value, y + value, z + value);
+        return add(value, value, value);
     }
 
-    @Contract(pure = true)
+    @Override
+    public @NotNull Vec sub(double x, double y, double z) {
+        return new Vec(this.x - x, this.y - y, this.z - z);
+    }
+
+    @Override
     public @NotNull Vec sub(@NotNull Point point) {
-        return new Vec(x - point.x(), y - point.y(), z - point.z());
+        return sub(point.x(), point.y(), point.z());
     }
 
-    @Contract(pure = true)
+    @Override
     public @NotNull Vec sub(double value) {
-        return new Vec(x - value, y - value, z - value);
+        return sub(value, value, value);
     }
 
-    @Contract(pure = true)
+    @Override
+    public @NotNull Vec mul(double x, double y, double z) {
+        return new Vec(this.x * x, this.y * y, this.z * z);
+    }
+
+    @Override
     public @NotNull Vec mul(@NotNull Point point) {
-        return new Vec(x * point.x(), y * point.y(), z * point.z());
+        return mul(point.x(), point.y(), point.z());
     }
 
-    @Contract(pure = true)
+    @Override
     public @NotNull Vec mul(double value) {
-        return new Vec(x * value, y * value, z * value);
+        return mul(value, value, value);
     }
 
-    @Contract(pure = true)
+    @Override
+    public @NotNull Vec div(double x, double y, double z) {
+        return new Vec(this.x / x, this.y / y, this.z / z);
+    }
+
+    @Override
     public @NotNull Vec div(@NotNull Point point) {
-        return new Vec(x / point.x(), y / point.y(), z / point.z());
+        return div(point.x(), point.y(), point.z());
     }
 
-    @Contract(pure = true)
+    @Override
     public @NotNull Vec div(double value) {
-        return new Vec(x / value, y / value, z / value);
+        return div(value, value, value);
     }
 
     @Contract(pure = true)
@@ -249,7 +275,7 @@ public final class Vec implements Point {
                 z * o.x - o.z * x,
                 x * o.y - o.x * y);
     }
-    
+
     /**
      * Rotates the vector around the x axis.
      * <p>
@@ -266,7 +292,7 @@ public final class Vec implements Point {
     public @NotNull Vec rotateAroundX(double angle) {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
-        
+
         double newY = angleCos * y - angleSin * z;
         double newZ = angleSin * y + angleCos * z;
         return new Vec(x, newY, newZ);
@@ -288,8 +314,8 @@ public final class Vec implements Point {
     public @NotNull Vec rotateAroundY(double angle) {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
-        
-        double newX =  angleCos * x + angleSin * z;
+
+        double newX = angleCos * x + angleSin * z;
         double newZ = -angleSin * x + angleCos * z;
         return new Vec(newX, y, newZ);
     }
@@ -310,7 +336,7 @@ public final class Vec implements Point {
     public @NotNull Vec rotateAroundZ(double angle) {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
-        
+
         double newX = angleCos * x - angleSin * y;
         double newY = angleSin * x + angleCos * y;
         return new Vec(newX, newY, z);
@@ -365,7 +391,7 @@ public final class Vec implements Point {
     }
 
     @FunctionalInterface
-    public interface Operator {
+    interface Operator {
         @NotNull Vec apply(double x, double y, double z);
     }
 

@@ -70,18 +70,122 @@ public final class Pos implements Point {
     }
 
     @Override
+    @Contract(pure = true)
     public double x() {
         return x;
     }
 
     @Override
+    @Contract(pure = true)
     public double y() {
         return y;
     }
 
     @Override
+    @Contract(pure = true)
     public double z() {
         return z;
+    }
+
+    @Contract(pure = true)
+    public @NotNull Pos with(@NotNull Operator operator) {
+        return operator.apply(x, y, z);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Pos withX(@NotNull DoubleUnaryOperator operator) {
+        return new Pos(operator.applyAsDouble(x), y, z);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Pos withX(double x) {
+        return new Pos(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Pos withY(@NotNull DoubleUnaryOperator operator) {
+        return new Pos(x, operator.applyAsDouble(y), z);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Pos withY(double y) {
+        return new Pos(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Point withZ(@NotNull DoubleUnaryOperator operator) {
+        return new Pos(x, y, operator.applyAsDouble(z));
+    }
+
+    @Override
+    @Contract(pure = true)
+    public @NotNull Point withZ(double z) {
+        return new Pos(x, y, z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull Pos add(double x, double y, double z) {
+        return new Pos(this.x + x, this.y + y, this.z + z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull Pos add(@NotNull Point point) {
+        return add(point.x(), point.y(), point.z());
+    }
+
+    @Override
+    public @NotNull Pos add(double value) {
+        return add(value, value, value);
+    }
+
+    @Override
+    public @NotNull Pos sub(double x, double y, double z) {
+        return new Pos(this.x - x, this.y - y, this.z - z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull Pos sub(@NotNull Point point) {
+        return sub(point.x(), point.y(), point.z());
+    }
+
+    @Override
+    public @NotNull Pos sub(double value) {
+        return sub(value, value, value);
+    }
+
+    @Override
+    public @NotNull Pos mul(double x, double y, double z) {
+        return new Pos(this.x * x, this.y * y, this.z * z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull Pos mul(@NotNull Point point) {
+        return mul(point.x(), point.y(), point.z());
+    }
+
+    @Override
+    public @NotNull Pos mul(double value) {
+        return mul(value, value, value);
+    }
+
+    @Override
+    public @NotNull Pos div(double x, double y, double z) {
+        return new Pos(this.x / x, this.y / y, this.z / z, yaw, pitch);
+    }
+
+    @Override
+    public @NotNull Pos div(@NotNull Point point) {
+        return div(point.x(), point.y(), point.z());
+    }
+
+    @Override
+    public @NotNull Pos div(double value) {
+        return div(value, value, value);
     }
 
     @Contract(pure = true)
@@ -97,5 +201,10 @@ public final class Pos implements Point {
     @Contract(pure = true)
     public @NotNull Vec asVec() {
         return new Vec(x, y, z);
+    }
+
+    @FunctionalInterface
+    interface Operator {
+        @NotNull Pos apply(double x, double y, double z);
     }
 }
