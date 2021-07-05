@@ -2,9 +2,14 @@ package net.minestom.server.utils;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.clone.PublicCloneable;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
-public class Vector implements PublicCloneable<Vector> {
+/**
+ * @deprecated use {@link net.minestom.server.utils.coordinate.Vec} instead
+ */
+@Deprecated
+public class Vector implements Point {
 
     private static final double epsilon = 0.000001;
 
@@ -484,15 +489,24 @@ public class Vector implements PublicCloneable<Vector> {
                 '}';
     }
 
-    @NotNull
     @Override
-    public Vector clone() {
-        try {
-            return (Vector) super.clone();
-        } catch (CloneNotSupportedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            throw new IllegalStateException("Weird thing happened");
-        }
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public @NotNull Vector clone() {
+        return new Vector(x,y,z);
     }
 
     public double getX() {

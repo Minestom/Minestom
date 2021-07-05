@@ -80,4 +80,13 @@ public interface Point {
                 (y() == castedY) ? castedY : castedY + 1,
                 (int) Math.floor(z()));
     }
+
+    /**
+     * @deprecated present for backward compatibility
+     */
+    @Deprecated
+    @Contract(pure = true)
+    default @NotNull Point clone() {
+        return this;
+    }
 }
