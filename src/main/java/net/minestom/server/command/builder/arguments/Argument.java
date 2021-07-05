@@ -240,7 +240,7 @@ public abstract class Argument<T> {
         return suggestionCallback != null;
     }
 
-    /**
+    /**mapper
      * Maps this argument's output to another result.
      *
      * @param mapper The mapper to use (this argument's input = desired output)
@@ -250,6 +250,20 @@ public abstract class Argument<T> {
     @ApiStatus.Experimental
     public <O> @NotNull ArgumentMap<T, O> map(@NotNull ArgumentMap.Mapper<T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
+    }
+
+    /**
+     * Maps this argument's output to another result.
+     *
+     * @param filterer The filterer to use (validates inputs, returns input)
+     * @return A new ArgumentMap that filters using this filterer.
+     */
+    @ApiStatus.Experimental
+    public @NotNull ArgumentMap<T, T> filter(@NotNull ArgumentMap.Filterer<T> filterer) {
+        return this.map((input) -> {
+            filterer.accept(input);
+            return input;
+        });
     }
 
     @Override
