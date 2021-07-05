@@ -17,7 +17,8 @@ import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
+
+import java.time.Duration;
 
 public class Main {
 
@@ -99,7 +100,7 @@ public class Main {
         //MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
-        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(new UpdateOption(1, TimeUnit.DAY)));
+        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
 
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));

@@ -6,13 +6,13 @@ import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTTypes;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
@@ -98,7 +98,7 @@ public class PotionMeta extends ItemMeta implements ItemMetaBuilder.Provider<Pot
                 for (NBTCompound potionCompound : customEffectList) {
                     final byte id = potionCompound.getAsByte("Id");
                     final byte amplifier = potionCompound.getAsByte("Amplifier");
-                    final int duration = potionCompound.containsKey("Duration") ? potionCompound.getNumber("Duration").intValue() : (int) TimeUnit.SECOND.toMilliseconds(30);
+                    final int duration = potionCompound.containsKey("Duration") ? potionCompound.getNumber("Duration").intValue() : (int) Duration.ofSeconds(30).toMillis();
                     final boolean ambient = potionCompound.containsKey("Ambient") ? potionCompound.getAsByte("Ambient") == 1 : false;
                     final boolean showParticles = potionCompound.containsKey("ShowParticles") ? potionCompound.getAsByte("ShowParticles") == 1 : true;
                     final boolean showIcon = potionCompound.containsKey("ShowIcon") ? potionCompound.getAsByte("ShowIcon") == 1 : true;

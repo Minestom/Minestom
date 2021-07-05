@@ -35,6 +35,7 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
 import java.util.Set;
@@ -76,7 +77,7 @@ public class PlayerInit {
 
                 Position position = player.getPosition().clone().add(0, 1.5f, 0);
                 ItemEntity itemEntity = new ItemEntity(droppedItem, position);
-                itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
+                itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
                 itemEntity.setInstance(player.getInstance());
                 Vector velocity = player.getPosition().clone().getDirection().multiply(6);
                 itemEntity.setVelocity(velocity);
@@ -142,6 +143,6 @@ public class PlayerInit {
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.TICK).schedule();
+        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
     }
 }

@@ -37,7 +37,6 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -45,6 +44,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -78,7 +79,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
     // The time of the instance
     private long time;
     private int timeRate = 1;
-    private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.SECOND);
+    private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
 
     // Field for tick events
@@ -409,7 +410,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
      * @return the client update rate for time related packet
      */
     @Nullable
-    public UpdateOption getTimeUpdate() {
+    public Duration getTimeUpdate() {
         return timeUpdate;
     }
 
@@ -421,7 +422,21 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
      *
      * @param timeUpdate the new update rate concerning time
      */
-    public void setTimeUpdate(@Nullable UpdateOption timeUpdate) {
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    public void setTimeUpdate(@Nullable net.minestom.server.utils.time.UpdateOption timeUpdate) {
+        setTimeUpdate(timeUpdate != null ? timeUpdate.toDuration() : null);
+    }
+
+    /**
+     * Changes the rate at which the client is updated about the time
+     * <p>
+     * Setting it to null means that the client will never know about time change
+     * (but will still change server-side)
+     *
+     * @param timeUpdate the new update rate concerning time
+     */
+    public void setTimeUpdate(@Nullable Duration timeUpdate) {
         this.timeUpdate = timeUpdate;
     }
 
