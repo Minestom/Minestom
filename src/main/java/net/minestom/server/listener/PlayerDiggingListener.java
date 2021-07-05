@@ -14,13 +14,14 @@ import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
         final ClientPlayerDiggingPacket.Status status = packet.status;
-        final BlockPosition blockPosition = packet.blockPosition;
+        final Point blockPosition = packet.blockPosition;
 
         final Instance instance = player.getInstance();
 
@@ -137,7 +138,7 @@ public class PlayerDiggingListener {
 
     private static void breakBlock(Instance instance,
                                    Player player,
-                                   BlockPosition blockPosition, Block block,
+                                   Point blockPosition, Block block,
                                    ClientPlayerDiggingPacket.Status status) {
         // Unverified block break, client is fully responsible
         final boolean result = instance.breakBlock(player, blockPosition);
@@ -177,7 +178,7 @@ public class PlayerDiggingListener {
      * @param status        the status of the digging
      * @param success       true to notify of a success, false otherwise
      */
-    private static void sendAcknowledgePacket(@NotNull Player player, @NotNull BlockPosition blockPosition, Block block,
+    private static void sendAcknowledgePacket(@NotNull Player player, @NotNull Point blockPosition, Block block,
                                               @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
         player.getPlayerConnection().sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, block.stateId(), status, success));
     }

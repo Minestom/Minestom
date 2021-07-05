@@ -1,6 +1,7 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.clone.PublicCloneable;
 import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
@@ -230,7 +231,7 @@ public class BlockPosition implements Point {
     }
 
     @Override
-    public @NotNull Point clone() {
+    public @NotNull BlockPosition clone() {
         return new BlockPosition(x, y, z);
     }
 

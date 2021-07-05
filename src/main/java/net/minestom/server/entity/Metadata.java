@@ -1,7 +1,6 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
@@ -14,6 +13,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -106,11 +106,11 @@ public class Metadata {
         }, reader -> new Vector(reader.readFloat(), reader.readFloat(), reader.readFloat()));
     }
 
-    public static Value<BlockPosition> Position(@NotNull BlockPosition value) {
+    public static Value<Point> Position(@NotNull Point value) {
         return new Value<>(TYPE_POSITION, value, writer -> writer.writeBlockPosition(value), BinaryReader::readBlockPosition);
     }
 
-    public static Value<BlockPosition> OptPosition(@Nullable BlockPosition value) {
+    public static Value<Point> OptPosition(@Nullable Point value) {
         return new Value<>(TYPE_OPTPOSITION, value, writer -> {
             final boolean present = value != null;
             writer.writeBoolean(present);

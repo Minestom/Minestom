@@ -6,6 +6,7 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -15,7 +16,7 @@ public class PlayerBlockPlaceEvent implements PlayerEvent, BlockEvent, Cancellab
 
     private final Player player;
     private Block block;
-    private final BlockPosition blockPosition;
+    private final Point blockPosition;
     private final Player.Hand hand;
 
     private boolean consumeBlock;
@@ -23,7 +24,7 @@ public class PlayerBlockPlaceEvent implements PlayerEvent, BlockEvent, Cancellab
     private boolean cancelled;
 
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
-                                 @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand) {
+                                 @NotNull Point blockPosition, @NotNull Player.Hand hand) {
         this.player = player;
         this.block = block;
         this.blockPosition = blockPosition;
@@ -55,8 +56,7 @@ public class PlayerBlockPlaceEvent implements PlayerEvent, BlockEvent, Cancellab
      *
      * @return the block position
      */
-    @NotNull
-    public BlockPosition getBlockPosition() {
+    public @NotNull Point getBlockPosition() {
         return blockPosition;
     }
 
@@ -65,8 +65,7 @@ public class PlayerBlockPlaceEvent implements PlayerEvent, BlockEvent, Cancellab
      *
      * @return the hand used
      */
-    @NotNull
-    public Player.Hand getHand() {
+    public @NotNull Player.Hand getHand() {
         return hand;
     }
 

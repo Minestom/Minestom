@@ -4,13 +4,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -33,13 +32,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition,
+    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
                               @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
         return instanceContainer.placeBlock(player, block, blockPosition, blockFace, cursorX, cursorY, cursorZ);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
         return instanceContainer.breakBlock(player, blockPosition);
     }
 

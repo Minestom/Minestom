@@ -4,8 +4,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -90,10 +90,10 @@ public interface BlockHandler {
     class Placement {
         private final Block block;
         private final Instance instance;
-        private final BlockPosition blockPosition;
+        private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Placement(Block block, Instance instance, BlockPosition blockPosition) {
+        public Placement(Block block, Instance instance, Point blockPosition) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
@@ -107,7 +107,7 @@ public interface BlockHandler {
             return instance;
         }
 
-        public @NotNull BlockPosition getBlockPosition() {
+        public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -118,7 +118,7 @@ public interface BlockHandler {
         private final float cursorX, cursorY, cursorZ;
 
         @ApiStatus.Internal
-        public PlayerPlacement(Block block, Instance instance, BlockPosition blockPosition,
+        public PlayerPlacement(Block block, Instance instance, Point blockPosition,
                                Player player, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
             super(block, instance, blockPosition);
             this.player = player;
@@ -153,10 +153,10 @@ public interface BlockHandler {
     class Destroy {
         private final Block block;
         private final Instance instance;
-        private final BlockPosition blockPosition;
+        private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Destroy(Block block, Instance instance, BlockPosition blockPosition) {
+        public Destroy(Block block, Instance instance, Point blockPosition) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
@@ -170,7 +170,7 @@ public interface BlockHandler {
             return instance;
         }
 
-        public @NotNull BlockPosition getBlockPosition() {
+        public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
     }
@@ -179,7 +179,7 @@ public interface BlockHandler {
         private final Player player;
 
         @ApiStatus.Internal
-        public PlayerDestroy(Block block, Instance instance, BlockPosition blockPosition, Player player) {
+        public PlayerDestroy(Block block, Instance instance, Point blockPosition, Player player) {
             super(block, instance, blockPosition);
             this.player = player;
         }
@@ -193,12 +193,12 @@ public interface BlockHandler {
     class Interaction {
         private final Block block;
         private final Instance instance;
-        private final BlockPosition blockPosition;
+        private final Point blockPosition;
         private final Player player;
         private final Player.Hand hand;
 
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, BlockPosition blockPosition, Player player, Player.Hand hand) {
+        public Interaction(Block block, Instance instance, Point blockPosition, Player player, Player.Hand hand) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
@@ -214,7 +214,7 @@ public interface BlockHandler {
             return instance;
         }
 
-        public @NotNull BlockPosition getBlockPosition() {
+        public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
 
@@ -231,11 +231,11 @@ public interface BlockHandler {
     class Touch {
         private final Block block;
         private final Instance instance;
-        private final BlockPosition blockPosition;
+        private final Point blockPosition;
         private final Entity touching;
 
         @ApiStatus.Internal
-        public Touch(Block block, Instance instance, BlockPosition blockPosition, Entity touching) {
+        public Touch(Block block, Instance instance, Point blockPosition, Entity touching) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
@@ -250,7 +250,7 @@ public interface BlockHandler {
             return instance;
         }
 
-        public @NotNull BlockPosition getBlockPosition() {
+        public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
 
@@ -263,10 +263,10 @@ public interface BlockHandler {
     class Tick {
         private final Block block;
         private final Instance instance;
-        private final BlockPosition blockPosition;
+        private final Point blockPosition;
 
         @ApiStatus.Internal
-        public Tick(Block block, Instance instance, BlockPosition blockPosition) {
+        public Tick(Block block, Instance instance, Point blockPosition) {
             this.block = block;
             this.instance = instance;
             this.blockPosition = blockPosition;
@@ -280,7 +280,7 @@ public interface BlockHandler {
             return instance;
         }
 
-        public @NotNull BlockPosition getBlockPosition() {
+        public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
     }

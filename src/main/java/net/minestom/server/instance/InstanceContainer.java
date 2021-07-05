@@ -24,13 +24,13 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -177,18 +177,18 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition,
+    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
                               @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
         final Chunk chunk = getChunkAt(blockPosition);
         if (!ChunkUtils.isLoaded(chunk))
             return false;
-        UNSAFE_setBlock(chunk, blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(), block,
+        UNSAFE_setBlock(chunk, (int) blockPosition.x(), (int) blockPosition.y(), (int) blockPosition.z(), block,
                 new BlockHandler.PlayerPlacement(block, this, blockPosition, player, blockFace, cursorX, cursorY, cursorZ), null);
         return true;
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         // Cancel if the chunk is read-only
@@ -200,9 +200,9 @@ public class InstanceContainer extends Instance {
             return false;
         final Block block = getBlock(blockPosition);
 
-        final int x = blockPosition.getX();
-        final int y = blockPosition.getY();
-        final int z = blockPosition.getZ();
+        final int x = (int) blockPosition.x();
+        final int y = (int) blockPosition.y();
+        final int z = (int) blockPosition.z();
 
         // The player probably have a wrong version of this chunk section, send it
         if (block.isAir()) {

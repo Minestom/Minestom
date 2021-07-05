@@ -6,12 +6,14 @@ import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
 
     public Player.Hand hand = Player.Hand.MAIN;
-    public BlockPosition blockPosition = new BlockPosition(0,0,0);
+    public Point blockPosition = Vec.ZERO;
     public BlockFace blockFace = BlockFace.TOP;
     public float cursorPositionX, cursorPositionY, cursorPositionZ;
     public boolean insideBlock;

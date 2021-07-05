@@ -10,6 +10,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -164,7 +165,7 @@ public class BinaryReader extends InputStream {
         return readBytes(available());
     }
 
-    public BlockPosition readBlockPosition() {
+    public Point readBlockPosition() {
         final long value = buffer.readLong();
         return SerializerUtils.longToBlockPosition(value);
     }

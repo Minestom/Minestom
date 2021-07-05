@@ -5,7 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -17,10 +17,10 @@ public class WallPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Block block) {
-        final int x = blockPosition.getX();
-        final int y = blockPosition.getY();
-        final int z = blockPosition.getZ();
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
+        final int x = (int) blockPosition.x();
+        final int y = (int) blockPosition.y();
+        final int z = (int) blockPosition.z();
 
         String east = "none";
         String north = "none";
@@ -56,7 +56,7 @@ public class WallPlacementRule extends BlockPlacementRule {
 
     @Override
     public Block blockPlace(@NotNull Instance instance,
-                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
                             @NotNull Player pl) {
         return block;
     }

@@ -5,8 +5,9 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.block.BlockUtils;
+import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -18,7 +19,7 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Block block) {
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
         BlockUtils blockUtils = new BlockUtils(instance, blockPosition);
 
         String east = "none";
@@ -98,9 +99,9 @@ public class RedstonePlacementRule extends BlockPlacementRule {
 
     @Override
     public Block blockPlace(@NotNull Instance instance,
-                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
                             @NotNull Player pl) {
-        final Block belowBlock = instance.getBlock(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
+        final Block belowBlock = instance.getBlock(new Vec(0, -1, 0).add(blockPosition));
         return belowBlock.isSolid() ? block : null;
     }
 }

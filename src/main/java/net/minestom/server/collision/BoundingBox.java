@@ -2,8 +2,8 @@ package net.minestom.server.collision;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -57,17 +57,16 @@ public class BoundingBox {
      * @param blockPosition the position to check
      * @return true if the bounding box intersects with the position, false otherwise
      */
-    public boolean intersect(@NotNull BlockPosition blockPosition) {
-
+    public boolean intersectWithBlock(@NotNull Point blockPosition) {
         final double offsetX = 1;
-        final double x = blockPosition.getX();
+        final double x = blockPosition.x();
         final double maxX = x + offsetX;
 
         final boolean checkX = getMinX() < maxX && getMaxX() > x;
         if (!checkX)
             return false;
 
-        final double y = blockPosition.getY();
+        final double y = blockPosition.y();
         final double maxY = y + 0.99999;
 
         final boolean checkY = getMinY() < maxY && getMaxY() > y;
@@ -75,7 +74,7 @@ public class BoundingBox {
             return false;
 
         final double offsetZ = 1;
-        final double z = blockPosition.getZ();
+        final double z = blockPosition.z();
         final double maxZ = z + offsetZ;
 
         // Z check
@@ -88,8 +87,8 @@ public class BoundingBox {
                 (z >= getMinZ() && z <= getMaxZ());
     }
 
-    public boolean intersect(@NotNull Position position) {
-        return intersect(position.getX(), position.getY(), position.getZ());
+    public boolean intersect(@NotNull Point point) {
+        return intersect(point.x(), point.y(), point.z());
     }
 
     /**

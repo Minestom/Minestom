@@ -4,14 +4,11 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockPlacementRule {
-
-    public static final int CANCEL_CODE = -1;
-
     private final Block block;
 
     public BlockPlacementRule(@NotNull Block block) {
@@ -26,7 +23,7 @@ public abstract class BlockPlacementRule {
      * @param currentBlock  the current block
      * @return the updated block
      */
-    public abstract @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Block currentBlock);
+    public abstract @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block currentBlock);
 
     /**
      * Called when the block is placed.
@@ -39,7 +36,7 @@ public abstract class BlockPlacementRule {
      * @return the block to place, {@code null} to cancel
      */
     public abstract @Nullable Block blockPlace(@NotNull Instance instance,
-                                               @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+                                               @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
                                                @NotNull Player pl);
 
     public @NotNull Block getBlock() {

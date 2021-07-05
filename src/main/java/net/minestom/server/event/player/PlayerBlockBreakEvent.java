@@ -5,7 +5,7 @@ import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerBlockBreakEvent implements PlayerEvent, BlockEvent, CancellableEvent {
@@ -13,12 +13,12 @@ public class PlayerBlockBreakEvent implements PlayerEvent, BlockEvent, Cancellab
     private final Player player;
     private final Block block;
     private Block resultBlock;
-    private final BlockPosition blockPosition;
+    private final Point blockPosition;
 
     private boolean cancelled;
 
     public PlayerBlockBreakEvent(@NotNull Player player,
-                                 @NotNull Block block, @NotNull Block resultBlock, @NotNull BlockPosition blockPosition) {
+                                 @NotNull Block block, @NotNull Block resultBlock, @NotNull Point blockPosition) {
         this.player = player;
 
         this.block = block;
@@ -59,7 +59,7 @@ public class PlayerBlockBreakEvent implements PlayerEvent, BlockEvent, Cancellab
      *
      * @return the block position
      */
-    public @NotNull BlockPosition getBlockPosition() {
+    public @NotNull Point getBlockPosition() {
         return blockPosition;
     }
 

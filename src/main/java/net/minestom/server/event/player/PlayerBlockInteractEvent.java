@@ -7,6 +7,7 @@ import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +19,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, Cancel
     private final Player player;
     private final Player.Hand hand;
     private final Block block;
-    private final BlockPosition blockPosition;
+    private final Point blockPosition;
     private final BlockFace blockFace;
 
     /**
@@ -30,7 +31,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, Cancel
     private boolean cancelled;
 
     public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
-                                    @NotNull Block block, @NotNull BlockPosition blockPosition,
+                                    @NotNull Block block, @NotNull Point blockPosition,
                                     @NotNull BlockFace blockFace) {
         this.player = player;
         this.hand = hand;
@@ -62,8 +63,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, Cancel
      *
      * @return the block position
      */
-    @NotNull
-    public BlockPosition getBlockPosition() {
+    public @NotNull Point getBlockPosition() {
         return blockPosition;
     }
 
@@ -72,8 +72,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, Cancel
      *
      * @return the hand used
      */
-    @NotNull
-    public Player.Hand getHand() {
+    public @NotNull Player.Hand getHand() {
         return hand;
     }
 
@@ -82,8 +81,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, Cancel
      *
      * @return the block face
      */
-    @NotNull
-    public BlockFace getBlockFace() {
+    public @NotNull BlockFace getBlockFace() {
         return blockFace;
     }
 

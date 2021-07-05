@@ -37,12 +37,12 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.coordinate.Vec;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -588,7 +588,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                     this.velocity.setX(velocity.getX() * drag);
                     this.velocity.setZ(velocity.getZ() * drag);
                     if (!hasNoGravity())
-                        this.velocity.setY(velocity.getY() * (1-gravityDragPerTick));
+                        this.velocity.setY(velocity.getY() * (1 - gravityDragPerTick));
 
                     if (velocity.equals(new Vector())) {
                         this.velocity.zero();
@@ -613,7 +613,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             final int maxY = (int) Math.ceil(boundingBox.getMaxY());
             final int minZ = (int) Math.floor(boundingBox.getMinZ());
             final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
-            final BlockPosition tmpPosition = new BlockPosition(0, 0, 0); // allow reuse
             for (int y = minY; y <= maxY; y++) {
                 for (int x = minX; x <= maxX; x++) {
                     for (int z = minZ; z <= maxZ; z++) {
@@ -624,13 +623,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                         final Block block = chunk.getBlock(x, y, z);
                         final BlockHandler handler = block.handler();
                         if (handler != null) {
-                            tmpPosition.setX(x);
-                            tmpPosition.setY(y);
-                            tmpPosition.setZ(z);
+                            final var blockPosition = new Vec(x, y, z);
                             // checks that we are actually in the block, and not just here because of a rounding error
-                            if (boundingBox.intersect(tmpPosition)) {
+                            if (boundingBox.intersectWithBlock(blockPosition)) {
                                 // TODO: replace with check with custom block bounding box
-                                handler.onTouch(new BlockHandler.Touch(block, instance, tmpPosition, this));
+                                handler.onTouch(new BlockHandler.Touch(block, instance, blockPosition, this));
                             }
                         }
                     }
@@ -990,8 +987,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     /**
      * Changes the gravity of the entity.
      *
-     * @param gravityDragPerTick      the gravity drag per tick in block
-     * @param gravityAcceleration     the gravity acceleration in block
+     * @param gravityDragPerTick  the gravity drag per tick in block
+     * @param gravityAcceleration the gravity acceleration in block
      * @see <a href="https://minecraft.gamepedia.com/Entity#Motion_of_entities">Entities motion</a>
      */
     public void setGravity(double gravityDragPerTick, double gravityAcceleration) {
@@ -1508,8 +1505,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     /**
      * Triggers {@link #remove()} after the specified time.
      *
-     * @param delay    the time before removing the entity,
-     *                 0 to cancel the removing
+     * @param delay        the time before removing the entity,
+     *                     0 to cancel the removing
      * @param temporalUnit the unit of the delay
      */
     public void scheduleRemove(long delay, @NotNull TemporalUnit temporalUnit) {
@@ -1519,8 +1516,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     /**
      * Triggers {@link #remove()} after the specified time.
      *
-     * @param delay    the time before removing the entity,
-     *                 0 to cancel the removing
+     * @param delay the time before removing the entity,
+     *              0 to cancel the removing
      */
     public void scheduleRemove(Duration delay) {
         if (delay.isZero()) { // Cancel the scheduled remove
@@ -1735,8 +1732,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Applies knockback to the entity
      *
      * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
-     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
-     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
+     * @param x        knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
+     * @param z        knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
      */
     public void takeKnockback(final float strength, final double x, final double z) {
         if (strength > 0) {

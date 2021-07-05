@@ -34,6 +34,7 @@ import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -45,7 +46,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -62,7 +62,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockGetter, BlockSetter, Tickable,TagHandler, EventHandler<InstanceEvent>, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockGetter, BlockSetter, Tickable, TagHandler, EventHandler<InstanceEvent>, DataContainer, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -149,7 +149,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
     }
 
     @ApiStatus.Internal
-    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull BlockPosition blockPosition,
+    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
                                        @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ);
 
     /**
@@ -157,11 +157,11 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
      * and send particle packets
      *
      * @param player        the {@link Player} who break the block
-     * @param blockPosition the {@link BlockPosition} of the broken block
+     * @param blockPosition the position of the broken block
      * @return true if the block has been broken, false if it has been cancelled
      */
     @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition);
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
@@ -615,6 +615,17 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
     }
 
     /**
+     * Gets the {@link Chunk} at the given {@link Point}, null if not loaded.
+     *
+     * @param point the chunk position
+     * @return the chunk at the given position, null if not loaded
+     */
+    @Nullable
+    public Chunk getChunkAt(@NotNull Point point) {
+        return getChunkAt(point.x(), point.z());
+    }
+
+    /**
      * Checks if the {@link Chunk} at the position is loaded.
      *
      * @param chunkX the chunk X
@@ -623,28 +634,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable,Tag
      */
     public boolean isChunkLoaded(int chunkX, int chunkZ) {
         return getChunk(chunkX, chunkZ) != null;
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
-     *
-     * @param blockPosition the chunk position
-     * @return the chunk at the given position, null if not loaded
-     */
-    @Nullable
-    public Chunk getChunkAt(@NotNull BlockPosition blockPosition) {
-        return getChunkAt(blockPosition.getX(), blockPosition.getZ());
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given {@link Position}, null if not loaded.
-     *
-     * @param position the chunk position
-     * @return the chunk at the given position, null if not loaded
-     */
-    @Nullable
-    public Chunk getChunkAt(@NotNull Position position) {
-        return getChunkAt(position.getX(), position.getZ());
     }
 
     /**

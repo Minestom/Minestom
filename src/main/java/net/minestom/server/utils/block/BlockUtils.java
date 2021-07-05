@@ -2,8 +2,9 @@ package net.minestom.server.utils.block;
 
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Vec;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,16 +13,15 @@ import java.util.Map;
 public class BlockUtils {
 
     private final Instance instance;
-    private final BlockPosition position;
+    private final Point position;
 
-    public BlockUtils(Instance instance, BlockPosition position) {
+    public BlockUtils(Instance instance, Point position) {
         this.instance = instance;
         this.position = position;
     }
 
     public BlockUtils getRelativeTo(int x, int y, int z) {
-        BlockPosition position = this.position.clone().add(x, y, z);
-        return new BlockUtils(instance, position);
+        return new BlockUtils(instance, new Vec(x, y, z).add(position));
     }
 
     public BlockUtils above() {

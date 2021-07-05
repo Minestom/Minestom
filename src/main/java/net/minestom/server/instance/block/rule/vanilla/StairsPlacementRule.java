@@ -7,6 +7,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,14 +20,14 @@ public class StairsPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Block block) {
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
         return block;
     }
 
     @Override
     public Block blockPlace(@NotNull Instance instance,
                             @NotNull Block block, @NotNull BlockFace blockFace,
-                            @NotNull BlockPosition blockPosition, @NotNull Player player) {
+                            @NotNull Point blockPosition, @NotNull Player player) {
         Facing facing = this.getFacing(player);
         Shape shape = this.getShape(instance, blockPosition, facing);
         BlockFace half = BlockFace.BOTTOM; // waiting for new block faces to be implemented
@@ -75,8 +76,10 @@ public class StairsPlacementRule extends BlockPlacementRule {
         }
 
         @NotNull
-        public Pair<@Nullable Shape, @Nullable Facing> getFront(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-            return this.getProperties(instance, blockPosition.clone().add(this.front));
+        public Pair<@Nullable Shape, @Nullable Facing> getFront(@NotNull Instance instance, @NotNull Point blockPosition) {
+            // TODO FIX
+            return null;
+            //return this.getProperties(instance, blockPosition.clone().add(this.front));
         }
 
         @NotNull
@@ -87,7 +90,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
         @NotNull
         private Pair<@Nullable Shape, @Nullable Facing> getProperties(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
             Block block = instance.getBlock(blockPosition);
-            if (block == null) {
+            if (block.isAir()) {
                 return Pair.of(null, null);
             }
             Block state = instance.getBlock(blockPosition);
@@ -104,14 +107,16 @@ public class StairsPlacementRule extends BlockPlacementRule {
     }
 
     @NotNull
-    private Shape getShape(@NotNull Instance instance, @NotNull BlockPosition blockPosition, @NotNull Facing facing) {
-        Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
+    private Shape getShape(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Facing facing) {
+        // TODO FIX
+        return null;
+        /*Pair<Shape, Facing> front = facing.getFront(instance, blockPosition);
         Pair<Shape, Facing> back = facing.getBack(instance, blockPosition);
         Shape shape = this.getShapeFromSide(front, facing, Shape.INNER_RIGHT, Shape.INNER_LEFT);
         if (shape == null) {
             shape = this.getShapeFromSide(back, facing, Shape.OUTER_RIGHT, Shape.OUTER_LEFT);
         }
-        return shape == null ? Shape.STRAIGHT : shape;
+        return shape == null ? Shape.STRAIGHT : shape;*/
     }
 
     @Nullable

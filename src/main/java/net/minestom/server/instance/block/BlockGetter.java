@@ -1,6 +1,6 @@
 package net.minestom.server.instance.block;
 
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public interface BlockGetter {
@@ -9,10 +9,10 @@ public interface BlockGetter {
     /**
      * Gets block from given position.
      *
-     * @param blockPosition position to get the block from
+     * @param point position to get the block from
      * @return Block at given position.
      */
-    default @NotNull Block getBlock(@NotNull BlockPosition blockPosition) {
-        return getBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    default @NotNull Block getBlock(@NotNull Point point) {
+        return getBlock(point.blockX(), point.blockY(), point.blockZ());
     }
 }

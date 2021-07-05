@@ -38,6 +38,21 @@ public interface Point {
     @Contract(pure = true)
     double z();
 
+    @Contract(pure = true)
+    default int blockX() {
+        return MathUtils.floor(x());
+    }
+
+    @Contract(pure = true)
+    default int blockY() {
+        return MathUtils.floor(y());
+    }
+
+    @Contract(pure = true)
+    default int blockZ() {
+        return MathUtils.floor(z());
+    }
+
     /**
      * Gets the distance between this point and another. The value of this
      * method is not cached and uses a costly square-root function, so do not
@@ -66,27 +81,5 @@ public interface Point {
         return MathUtils.square(x() - point.x()) +
                 MathUtils.square(y() - point.y()) +
                 MathUtils.square(z() - point.z());
-    }
-
-    /**
-     * Converts all coordinates to integers.
-     *
-     * @return a new point representing a block position
-     */
-    @Contract(pure = true)
-    default @NotNull Point asBlockPosition() {
-        final int castedY = (int) y();
-        return new Vec((int) Math.floor(x()),
-                (y() == castedY) ? castedY : castedY + 1,
-                (int) Math.floor(z()));
-    }
-
-    /**
-     * @deprecated present for backward compatibility
-     */
-    @Deprecated
-    @Contract(pure = true)
-    default @NotNull Point clone() {
-        return this;
     }
 }
