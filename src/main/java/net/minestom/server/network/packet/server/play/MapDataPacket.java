@@ -73,11 +73,15 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         locked = reader.readBoolean();
         trackingPosition = reader.readBoolean();
 
-        int iconCount = reader.readVarInt();
-        icons = new Icon[iconCount];
-        for (int i = 0; i < iconCount; i++) {
-            icons[i] = new Icon();
-            icons[i].read(reader);
+        if (trackingPosition) {
+            int iconCount = reader.readVarInt();
+            icons = new Icon[iconCount];
+            for (int i = 0; i < iconCount; i++) {
+                icons[i] = new Icon();
+                icons[i].read(reader);
+            }
+        } else {
+            icons = new Icon[0];
         }
 
         columns = reader.readByte();
