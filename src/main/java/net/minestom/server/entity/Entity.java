@@ -38,7 +38,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -549,27 +548,23 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 }
 
                 // Update velocity
-                if (hasVelocity() || !newVelocity.isZero()) {
-                    this.velocity.copy(newVelocity);
-                    this.velocity.multiply(tps);
+                if (hasVelocity() || !newVelocity.equals(Vec.ZERO)) {
+                    velocity = newVelocity.mul(tps); // Convert from blocks/tick to blocks/sec
 
                     final Block block = finalChunk.getBlock(position);
                     final double drag = block.registry().friction();
                     if (onGround) {
                         // Stop player velocity
                         if (isNettyClient) {
-                            this.velocity.zero();
+                            velocity = Vec.ZERO;
                         }
                     }
 
-                    this.velocity.setX(velocity.getX() * drag);
-                    this.velocity.setZ(velocity.getZ() * drag);
-                    if (!hasNoGravity())
-                        this.velocity.setY(velocity.getY() * (1 - gravityDragPerTick));
-
-                    if (velocity.equals(new Vector())) {
-                        this.velocity.zero();
-                    }
+                    velocity = velocity.with((x, y, z) -> new Vec(
+                            x * drag,
+                            !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
+                            z * drag
+                    )).with(Vec.Operator.EPSILON);
                 }
 
                 // Synchronization and packets...
