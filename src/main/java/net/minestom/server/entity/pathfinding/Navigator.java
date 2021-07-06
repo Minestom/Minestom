@@ -75,16 +75,11 @@ public class Navigator {
         // Update 'position' view
         PositionUtils.lookAlong(position, dx, direction.y(), dz);
 
-        Position newPosition = new Position();
-        Vector newVelocityOut = new Vector();
-
         // Prevent ghosting
-        CollisionUtils.handlePhysics(entity,
-                new Vector(speedX, speedY, speedZ),
-                newPosition, newVelocityOut);
+        final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
 
         // Will move the entity during Entity#tick
-        position.copyCoordinates(newPosition);
+        entity.refreshPosition(physicsResult.getNewPosition());
     }
 
     public void jump(float height) {

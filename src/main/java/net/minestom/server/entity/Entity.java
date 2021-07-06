@@ -508,26 +508,30 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
-                final double newX = position.x() + velocity.x() / tps;
-                final double newY = position.y() + velocity.y() / tps;
-                final double newZ = position.z() + velocity.z() / tps;
-                Position newPosition = new Position(newX, newY, newZ);
-
-                Vector newVelocityOut = new Vector();
+                final Pos newPosition;
+                final Vec newVelocity;
 
                 // Gravity force
                 final double gravityY = hasNoGravity() ? 0 : gravityAcceleration;
 
-                final Vector deltaPos = new Vector(
-                        getVelocity().getX() / tps,
-                        getVelocity().getY() / tps - gravityY,
-                        getVelocity().getZ() / tps
+                final Vec deltaPos = new Vec(
+                        getVelocity().x() / tps,
+                        getVelocity().y() / tps - gravityY,
+                        getVelocity().z() / tps
                 );
 
                 if (this.hasPhysics) {
-                    this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
+                    final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+                    this.onGround = physicsResult.isOnGround();
+                    newPosition = physicsResult.getNewPosition();
+                    newVelocity = physicsResult.getNewVelocity();
                 } else {
-                    newVelocityOut = deltaPos;
+                    newVelocity = deltaPos;
+                    newPosition = new Pos(
+                        position.x() + velocity.x() / tps,
+                        position.y() + velocity.y() / tps,
+                        position.z() + velocity.z() / tps
+                    );
                 }
 
                 // World border collision
@@ -545,8 +549,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 }
 
                 // Update velocity
-                if (hasVelocity() || !newVelocityOut.isZero()) {
-                    this.velocity.copy(newVelocityOut);
+                if (hasVelocity() || !newVelocity.isZero()) {
+                    this.velocity.copy(newVelocity);
                     this.velocity.multiply(tps);
 
                     final Block block = finalChunk.getBlock(position);

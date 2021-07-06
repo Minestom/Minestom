@@ -5,67 +5,46 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Pos;
 import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class CollisionUtils {
 
-    private static final Vector Y_AXIS = new Vector(0, 1, 0);
-    private static final Vector X_AXIS = new Vector(1, 0, 0);
-    private static final Vector Z_AXIS = new Vector(0, 0, 1);
+    private static final Vec Y_AXIS = new Vec(0, 1, 0);
+    private static final Vec X_AXIS = new Vec(1, 0, 0);
+    private static final Vec Z_AXIS = new Vec(0, 0, 1);
 
     /**
      * Moves an entity with physics applied (ie checking against blocks)
      *
      * @param entity        the entity to move
-     * @param deltaPosition
-     * @param positionOut   the Position object in which the new position will be saved
-     * @param velocityOut   the Vector object in which the new velocity will be saved
-     * @return whether this entity is on the ground
+     * @return the result of physics simulation
      */
-    public static boolean handlePhysics(@NotNull Entity entity,
-                                        @NotNull Vector deltaPosition,
-                                        @NotNull Position positionOut,
-                                        @NotNull Vector velocityOut) {
+    public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition) {
         // TODO handle collisions with nearby entities (should it be done here?)
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
-        final Position currentPosition = entity.getPosition();
+        final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        Vector intermediaryPosition = new Vector();
-        boolean yCollision = stepAxis(instance, originChunk, currentPosition.toVector(), Y_AXIS, deltaPosition.getY(),
-                intermediaryPosition,
-                deltaPosition.getY() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+        final StepResult yCollision = stepAxis(instance, originChunk, currentPosition.asVec(), Y_AXIS, deltaPosition.y(),
+                deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
 
-        boolean xCollision = stepAxis(instance, originChunk, intermediaryPosition, X_AXIS, deltaPosition.getX(),
-                intermediaryPosition,
-                deltaPosition.getX() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+        final StepResult xCollision = stepAxis(instance, originChunk, yCollision.newPosition, X_AXIS, deltaPosition.x(),
+                deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
 
-        boolean zCollision = stepAxis(instance, originChunk, intermediaryPosition, Z_AXIS, deltaPosition.getZ(),
-                intermediaryPosition,
-                deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+        final StepResult zCollision = stepAxis(instance, originChunk, xCollision.newPosition, Z_AXIS, deltaPosition.z(),
+                deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
-        positionOut.setX(intermediaryPosition.getX());
-        positionOut.setY(intermediaryPosition.getY());
-        positionOut.setZ(intermediaryPosition.getZ());
-        velocityOut.copy(deltaPosition);
-        if (xCollision) {
-            velocityOut.setX(0f);
-        }
-        if (yCollision) {
-            velocityOut.setY(0f);
-        }
-        if (zCollision) {
-            velocityOut.setZ(0f);
-        }
-
-        return yCollision && deltaPosition.getY() < 0;
+        return new PhysicsResult(currentPosition.withCoord(zCollision.newPosition),
+                deltaPosition.with(((x, y, z) -> new Vec(
+                        xCollision.foundCollision ? 0 : x,
+                        yCollision.foundCollision ? 0 : y,
+                        zCollision.foundCollision ? 0 : z
+                ))), yCollision.foundCollision && deltaPosition.y() < 0);
     }
 
     /**
@@ -76,111 +55,82 @@ public class CollisionUtils {
      * @param startPosition starting position for stepping, can be intermediary position from last step
      * @param axis          step direction. Works best if unit vector and aligned to an axis
      * @param stepAmount    how much to step in the direction (in blocks)
-     * @param positionOut   the vector in which to store the new position
      * @param corners       the corners to check against
-     * @return true if a collision has been found
+     * @return result of the step
      */
-    private static boolean stepAxis(Instance instance,
-                                    Chunk originChunk,
-                                    Vector startPosition, Vector axis,
-                                    double stepAmount, Vector positionOut,
-                                    Vector... corners) {
-        positionOut.copy(startPosition);
+    private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, Vec... corners) {
         if (corners.length == 0)
-            return false; // avoid degeneracy in following computations
-        // perform copies to allow in place modifications
-        // prevents making a lot of new objects. Well at least it reduces the count
-        BlockPosition[] cornerPositions = new BlockPosition[corners.length];
-        Vector[] cornersCopy = new Vector[corners.length];
-        for (int i = 0; i < corners.length; i++) {
-            cornersCopy[i] = corners[i].clone();
-            cornerPositions[i] = new BlockPosition(corners[i]);
-        }
+            return new StepResult(startPosition, false); // avoid degeneracy in following computations
 
+        final Vec[] originalCorners = corners.clone();
         final double sign = Math.signum(stepAmount);
         final int blockLength = (int) stepAmount;
         final double remainingLength = stepAmount - blockLength;
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            if (!stepOnce(instance, originChunk, axis, sign, cornersCopy, cornerPositions)) {
-                collisionFound = true;
-            }
-            if (collisionFound) {
-                break;
-            }
+            final OneStepResult oneStepResult = stepOnce(instance, originChunk, axis, sign, corners);
+            corners = oneStepResult.newCorners;
+            if (collisionFound = oneStepResult.foundCollision) break;
         }
 
         // add remainingLength
         if (!collisionFound) {
-            Vector direction = new Vector();
-            direction.copy(axis);
-            collisionFound = !stepOnce(instance, originChunk, direction, remainingLength, cornersCopy, cornerPositions);
+            final OneStepResult oneStepResult = stepOnce(instance, originChunk, axis, remainingLength, corners);
+            corners = oneStepResult.newCorners;
+            collisionFound = oneStepResult.foundCollision;
         }
 
         // find the corner which moved the least
         double smallestDisplacement = Double.POSITIVE_INFINITY;
         for (int i = 0; i < corners.length; i++) {
-            final double displacement = corners[i].distance(cornersCopy[i]);
+            final double displacement = originalCorners[i].distance(corners[i]);
             if (displacement < smallestDisplacement) {
                 smallestDisplacement = displacement;
             }
         }
 
-        positionOut.copy(startPosition);
-        positionOut.add(smallestDisplacement * axis.getX() * sign, smallestDisplacement * axis.getY() * sign, smallestDisplacement * axis.getZ() * sign);
-        return collisionFound;
+        return new StepResult(startPosition.add(new Vec(smallestDisplacement).mul(axis).mul(sign)), collisionFound);
     }
 
     /**
      * Steps once (by a length of 1 block) on the given axis.
      *
-     * @param instance        instance to get blocks from
-     * @param axis            the axis to move along
-     * @param amount
-     * @param cornersCopy     the corners of the bounding box to consider (mutable)
-     * @param cornerPositions the corners, converted to BlockPosition (mutable)
-     * @return false if this method encountered a collision
+     * @param instance  instance to get blocks from
+     * @param axis      the axis to move along
+     * @param corners   the corners of the bounding box to consider
+     * @return the result of one step
      */
-    private static boolean stepOnce(Instance instance,
-                                    Chunk originChunk,
-                                    Vector axis, double amount, Vector[] cornersCopy, BlockPosition[] cornerPositions) {
+    private static OneStepResult stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
         final double sign = Math.signum(amount);
-        for (int cornerIndex = 0; cornerIndex < cornersCopy.length; cornerIndex++) {
-            Vector corner = cornersCopy[cornerIndex];
-            BlockPosition blockPos = cornerPositions[cornerIndex];
-            corner.add(axis.getX() * amount, axis.getY() * amount, axis.getZ() * amount);
-            blockPos.setX((int) Math.floor(corner.getX()));
-            blockPos.setY((int) Math.floor(corner.getY()));
-            blockPos.setZ((int) Math.floor(corner.getZ()));
+        Vec[] newCorners = new Vec[corners.length];
+        for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
+            final Vec originalCorner = corners[cornerIndex];
+            final Vec corner = originalCorner.add(axis.mul(amount));
 
-            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, blockPos);
+            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, corner);
             if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
-                return false;
+                return new OneStepResult(corners, true);
             }
 
-            final Block block = chunk.getBlock(blockPos);
+            final Block block = chunk.getBlock(corner);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                corner.subtract(axis.getX() * amount, axis.getY() * amount, axis.getZ() * amount);
+                newCorners[cornerIndex] = originalCorner.with(((x, y, z) -> new Vec(
+                        Math.abs(axis.x()) > 10e-16 ? originalCorner.blockX() - axis.x() * sign : x,
+                        Math.abs(axis.y()) > 10e-16 ? originalCorner.blockY() - axis.y() * sign : y,
+                        Math.abs(axis.z()) > 10e-16 ? originalCorner.blockZ() - axis.z() * sign : z
+                )));
 
-                if (Math.abs(axis.getX()) > 10e-16) {
-                    corner.setX(blockPos.getX() - axis.getX() * sign);
-                }
-                if (Math.abs(axis.getY()) > 10e-16) {
-                    corner.setY(blockPos.getY() - axis.getY() * sign);
-                }
-                if (Math.abs(axis.getZ()) > 10e-16) {
-                    corner.setZ(blockPos.getZ() - axis.getZ() * sign);
-                }
-
-                return false;
+                return new OneStepResult(newCorners, true);
             }
+
+            newCorners[cornerIndex] = corner;
         }
-        return true;
+        return new OneStepResult(newCorners, false);
     }
 
     /**
@@ -213,4 +163,47 @@ public class CollisionUtils {
         throw new IllegalStateException("Something weird happened...");
     }
 
+    public static class PhysicsResult {
+        private final Pos newPosition;
+        private final Vec newVelocity;
+        private final boolean isOnGround;
+
+        public PhysicsResult(Pos newPosition, Vec newVelocity, boolean isOnGround) {
+            this.newPosition = newPosition;
+            this.newVelocity = newVelocity;
+            this.isOnGround = isOnGround;
+        }
+
+        public Pos getNewPosition() {
+            return newPosition;
+        }
+
+        public Vec getNewVelocity() {
+            return newVelocity;
+        }
+
+        public boolean isOnGround() {
+            return isOnGround;
+        }
+    }
+
+    private static class StepResult {
+        private final Vec newPosition;
+        private final boolean foundCollision;
+
+        public StepResult(Vec newPosition, boolean foundCollision) {
+            this.newPosition = newPosition;
+            this.foundCollision = foundCollision;
+        }
+    }
+
+    private static class OneStepResult {
+        private final Vec[] newCorners;
+        private final boolean foundCollision;
+
+        public OneStepResult(Vec[] newCorners, boolean foundCollision) {
+            this.newCorners = newCorners;
+            this.foundCollision = foundCollision;
+        }
+    }
 }
