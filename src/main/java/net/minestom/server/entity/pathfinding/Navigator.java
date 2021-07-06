@@ -9,8 +9,6 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.coordinate.Pos;
@@ -79,7 +77,7 @@ public class Navigator {
         final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
 
         // Will move the entity during Entity#tick
-        entity.refreshPosition(physicsResult.getNewPosition());
+        entity.refreshPosition(physicsResult.newPosition());
     }
 
     public void jump(float height) {

@@ -523,8 +523,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 if (this.hasPhysics) {
                     final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
                     this.onGround = physicsResult.isOnGround();
-                    newPosition = physicsResult.getNewPosition();
-                    newVelocity = physicsResult.getNewVelocity();
+                    newPosition = physicsResult.newPosition();
+                    newVelocity = physicsResult.newVelocity();
                 } else {
                     newVelocity = deltaPos;
                     newPosition = new Pos(
