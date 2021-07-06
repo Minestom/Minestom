@@ -1,8 +1,10 @@
 package net.minestom.server.utils.coordinate;
 
+import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
 
 /**
@@ -11,6 +13,8 @@ import java.util.function.DoubleUnaryOperator;
  * To become record and primitive.
  */
 public final class Pos implements Point {
+    public static final Pos ZERO = new Pos(0, 0, 0);
+
     private final double x, y, z;
     private final float yaw, pitch;
 
@@ -32,6 +36,10 @@ public final class Pos implements Point {
 
     public Pos(@NotNull Point point) {
         this(point, 0, 0);
+    }
+
+    public static @NotNull Pos fromPosition(@NotNull Position position) {
+        return new Pos(position.getX(), position.getY(), position.getZ(), position.getYaw(), position.getPitch());
     }
 
     @Contract(pure = true)
@@ -67,6 +75,33 @@ public final class Pos implements Point {
     @Contract(pure = true)
     public @NotNull Pos withPitch(@NotNull DoubleUnaryOperator operator) {
         return new Pos(x, y, z, yaw, (float) operator.applyAsDouble(pitch));
+    }
+
+    /**
+     * Checks if two positions have a similar view (yaw/pitch).
+     *
+     * @param position the position to compare
+     * @return true if the two positions have the same view
+     */
+    public boolean sameView(@NotNull Pos position) {
+        return Float.compare(position.yaw, yaw) == 0 &&
+                Float.compare(position.pitch, pitch) == 0;
+    }
+
+    /**
+     * Gets a unit-vector pointing in the direction that this Location is
+     * facing.
+     *
+     * @return a vector pointing the direction of this location's {@link
+     * #pitch() pitch} and {@link #yaw() yaw}
+     */
+    public @NotNull Vec direction() {
+        final float rotX = yaw;
+        final float rotY = pitch;
+        final double xz = Math.cos(Math.toRadians(rotY));
+        return new Vec(-xz * Math.sin(Math.toRadians(rotX)),
+                -Math.sin(Math.toRadians(rotY)),
+                xz * Math.cos(Math.toRadians(rotX)));
     }
 
     @Override
@@ -201,6 +236,23 @@ public final class Pos implements Point {
     @Contract(pure = true)
     public @NotNull Vec asVec() {
         return new Vec(x, y, z);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Pos pos = (Pos) o;
+        return Double.compare(pos.x, x) == 0 &&
+                Double.compare(pos.y, y) == 0 &&
+                Double.compare(pos.z, z) == 0 &&
+                Float.compare(pos.yaw, yaw) == 0 &&
+                Float.compare(pos.pitch, pitch) == 0;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z, yaw, pitch);
     }
 
     @FunctionalInterface

@@ -42,20 +42,6 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         this(entityType, UUID.randomUUID());
     }
 
-    @Deprecated
-    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
-        heal();
-    }
-
-    @Deprecated
-    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        this(entityType, spawnPosition);
-        if (instance != null) {
-            setInstance(instance);
-        }
-    }
-
     @Override
     public void update(long time) {
         // AI

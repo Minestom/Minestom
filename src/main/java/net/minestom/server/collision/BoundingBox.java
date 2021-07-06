@@ -150,7 +150,7 @@ public class BoundingBox {
      * @return the min X
      */
     public double getMinX() {
-        return entity.getPosition().getX() - (x / 2);
+        return entity.getPosition().x() - (x / 2);
     }
 
     /**
@@ -159,7 +159,7 @@ public class BoundingBox {
      * @return the max X
      */
     public double getMaxX() {
-        return entity.getPosition().getX() + (x / 2);
+        return entity.getPosition().x() + (x / 2);
     }
 
     /**
@@ -168,7 +168,7 @@ public class BoundingBox {
      * @return the min Y
      */
     public double getMinY() {
-        return entity.getPosition().getY();
+        return entity.getPosition().y();
     }
 
     /**
@@ -177,7 +177,7 @@ public class BoundingBox {
      * @return the max Y
      */
     public double getMaxY() {
-        return entity.getPosition().getY() + y;
+        return entity.getPosition().y() + y;
     }
 
     /**
@@ -186,7 +186,7 @@ public class BoundingBox {
      * @return the min Z
      */
     public double getMinZ() {
-        return entity.getPosition().getZ() - (z / 2);
+        return entity.getPosition().z() - (z / 2);
     }
 
     /**
@@ -195,7 +195,7 @@ public class BoundingBox {
      * @return the max Z
      */
     public double getMaxZ() {
-        return entity.getPosition().getZ() + (z / 2);
+        return entity.getPosition().z() + (z / 2);
     }
 
     /**

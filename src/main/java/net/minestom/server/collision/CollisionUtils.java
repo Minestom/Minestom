@@ -9,6 +9,8 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class CollisionUtils {
@@ -190,8 +192,8 @@ public class CollisionUtils {
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
     @NotNull
-    public static Position applyWorldBorder(@NotNull Instance instance,
-                                            @NotNull Position currentPosition, @NotNull Position newPosition) {
+    public static Point applyWorldBorder(@NotNull Instance instance,
+                                         @NotNull Point currentPosition, @NotNull Point newPosition) {
         final WorldBorder worldBorder = instance.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
         switch (collisionAxis) {
@@ -200,13 +202,13 @@ public class CollisionUtils {
                 return newPosition;
             case BOTH:
                 // Apply Y velocity/gravity
-                return new Position(currentPosition.getX(), newPosition.getY(), currentPosition.getZ());
+                return new Vec(currentPosition.x(), newPosition.y(), currentPosition.z());
             case X:
                 // Apply Y/Z velocity/gravity
-                return new Position(currentPosition.getX(), newPosition.getY(), newPosition.getZ());
+                return new Vec(currentPosition.x(), newPosition.y(), newPosition.z());
             case Z:
                 // Apply X/Y velocity/gravity
-                return new Position(newPosition.getX(), newPosition.getY(), currentPosition.getZ());
+                return new Vec(newPosition.x(), newPosition.y(), currentPosition.z());
         }
         throw new IllegalStateException("Something weird happened...");
     }

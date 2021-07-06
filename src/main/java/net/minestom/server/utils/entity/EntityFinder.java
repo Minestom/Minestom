@@ -156,19 +156,19 @@ public class EntityFinder {
         // Diff X/Y/Z
         if (dx != null || dy != null || dz != null) {
             result = result.stream().filter(entity -> {
-                final Position entityPosition = entity.getPosition();
+                final var entityPosition = entity.getPosition();
                 if (dx != null && !MathUtils.isBetweenUnordered(
-                        entityPosition.getX(),
+                        entityPosition.x(),
                         startPosition.getX(), dx))
                     return false;
 
                 if (dy != null && !MathUtils.isBetweenUnordered(
-                        entityPosition.getY(),
+                        entityPosition.y(),
                         startPosition.getY(), dy))
                     return false;
 
                 if (dz != null && !MathUtils.isBetweenUnordered(
-                        entityPosition.getZ(),
+                        entityPosition.z(),
                         startPosition.getZ(), dz))
                     return false;
 
@@ -231,12 +231,12 @@ public class EntityFinder {
                                 // RANDOM is handled below
                                 return 1;
                             case FURTHEST:
-                                return startPosition.getDistance(ent1.getPosition()) >
-                                        startPosition.getDistance(ent2.getPosition()) ?
+                                return startPosition.distance(ent1.getPosition()) >
+                                        startPosition.distance(ent2.getPosition()) ?
                                         1 : 0;
                             case NEAREST:
-                                return startPosition.getDistance(ent1.getPosition()) <
-                                        startPosition.getDistance(ent2.getPosition()) ?
+                                return startPosition.distance(ent1.getPosition()) <
+                                        startPosition.distance(ent2.getPosition()) ?
                                         1 : 0;
                         }
                         return 1;
@@ -346,7 +346,7 @@ public class EntityFinder {
             Collection<Player> instancePlayers = instance != null ?
                     instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
             for (Player player : instancePlayers) {
-                final double distance = player.getPosition().getDistance(startPosition);
+                final double distance = player.getPosition().distance(startPosition);
                 if (distance < closestDistance) {
                     entity = player;
                     closestDistance = distance;

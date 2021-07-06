@@ -155,7 +155,7 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     @NotNull
     private Facing getFacing(@NotNull Player player) {
-        float degrees = (player.getPosition().getYaw() - 90) % 360;
+        float degrees = (player.getPosition().yaw() - 90) % 360;
         if (degrees < 0) {
             degrees += 360;
         }

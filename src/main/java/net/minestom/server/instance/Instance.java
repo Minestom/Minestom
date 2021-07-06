@@ -35,6 +35,7 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Pos;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -309,10 +310,10 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * <p>
      * Always returning false allow entities to survive in the void.
      *
-     * @param position the position in the world
-     * @return true iif position is inside the void
+     * @param point the point in the world
+     * @return true if the point is inside the void
      */
-    public abstract boolean isInVoid(@NotNull Position position);
+    public abstract boolean isInVoid(@NotNull Point point);
 
     /**
      * Gets if the instance has been registered in {@link InstanceManager}.
@@ -535,12 +536,12 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     /**
      * Loads the chunk at the given {@link Position} with a callback.
      *
-     * @param position the chunk position
+     * @param point the chunk position
      * @param callback the optional callback to run when the chunk is loaded
      */
-    public void loadChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
+    public void loadChunk(@NotNull Point point, @Nullable ChunkCallback callback) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
+        final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
         loadChunk(chunkX, chunkZ, callback);
     }
 
@@ -548,12 +549,12 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
      * at the given {@link Position} with a callback.
      *
-     * @param position the chunk position
+     * @param point the chunk position
      * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
      */
-    public void loadOptionalChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
+    public void loadOptionalChunk(@NotNull Point point, @Nullable ChunkCallback callback) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
+        final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
         loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
@@ -703,7 +704,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         EventDispatcher.callCancellable(event, () -> {
-            final Position entityPosition = entity.getPosition();
+            final Pos entityPosition = entity.getPosition();
             final boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {

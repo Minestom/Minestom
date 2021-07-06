@@ -2,6 +2,8 @@ package net.minestom.server.utils.location;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Pos;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @param <T> the location type
  */
-public abstract class RelativeLocation<T> {
+public abstract class RelativeLocation<T extends Point> {
 
     protected T location;
     protected boolean relativeX, relativeY, relativeZ;
@@ -41,13 +43,13 @@ public abstract class RelativeLocation<T> {
      * @return the location
      */
     public T from(@Nullable Entity entity) {
-        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
+        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
         return from(entityPosition);
     }
 
     @ApiStatus.Experimental
     public T fromView(@Nullable Entity entity) {
-        final Position entityPosition = entity != null ? entity.getPosition() : new Position();
+        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
         return fromView(entityPosition);
     }
 

@@ -5,6 +5,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -228,7 +229,7 @@ public class BlockIterator implements Iterator<BlockPosition> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Position pos, double yOffset, int maxDistance) {
+    public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
         this(pos.toVector(), pos.getDirection(), yOffset, maxDistance);
     }
 
@@ -242,7 +243,7 @@ public class BlockIterator implements Iterator<BlockPosition> {
      *                by this value
      */
 
-    public BlockIterator(@NotNull Position pos, double yOffset) {
+    public BlockIterator(@NotNull Pos pos, double yOffset) {
         this(pos.toVector(), pos.getDirection(), yOffset, 0);
     }
 
@@ -254,7 +255,7 @@ public class BlockIterator implements Iterator<BlockPosition> {
      * @param pos The position for the start of the ray trace
      */
 
-    public BlockIterator(@NotNull Position pos) {
+    public BlockIterator(@NotNull Pos pos) {
         this(pos, 0f);
     }
 

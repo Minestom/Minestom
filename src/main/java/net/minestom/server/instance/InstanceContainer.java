@@ -19,7 +19,6 @@ import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -385,9 +384,9 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Position position) {
+    public boolean isInVoid(@NotNull Point point) {
         // TODO: customizable
-        return position.getY() < -64;
+        return point.y() < -64;
     }
 
     /**

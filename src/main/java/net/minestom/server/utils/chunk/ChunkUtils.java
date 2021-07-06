@@ -6,6 +6,7 @@ import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.callback.OptionalCallback;
+import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -103,8 +104,8 @@ public final class ChunkUtils {
         return originChunk;
     }
 
-    public static Chunk retrieve(Instance instance, Chunk originChunk, Position position) {
-        return retrieve(instance, originChunk, position.getX(), position.getZ());
+    public static Chunk retrieve(Instance instance, Chunk originChunk, Point position) {
+        return retrieve(instance, originChunk, position.x(), position.z());
     }
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, BlockPosition blockPosition) {
@@ -170,11 +171,11 @@ public final class ChunkUtils {
     /**
      * Gets the chunks in range of a position.
      *
-     * @param position the initial position
+     * @param point the initial point
      * @param range    how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    public static long @NotNull [] getChunksInRange(@NotNull Position position, int range) {
+    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
         long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
         int xDistance = 0;
         int xDirection = 1;
@@ -184,8 +185,8 @@ public final class ChunkUtils {
         int corner = 0;
 
         for (int i = 0; i < visibleChunks.length; i++) {
-            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + position.getX());
-            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + position.getZ());
+            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + point.x());
+            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + point.z());
             visibleChunks[i] = getChunkIndex(chunkX, chunkZ);
 
             if (corner % 2 == 0) {

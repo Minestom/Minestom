@@ -26,9 +26,9 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
+import net.minestom.server.utils.coordinate.Vec;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -90,26 +90,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
-        this(entityType, uuid, new Position());
+        super(entityType, uuid);
         initEquipments();
     }
 
     public LivingEntity(@NotNull EntityType entityType) {
         this(entityType, UUID.randomUUID());
-    }
-
-    /**
-     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
-     */
-    @Deprecated
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
-        super(entityType, uuid, spawnPosition);
-        initEquipments();
-    }
-
-    @Deprecated
-    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     private void initEquipments() {
@@ -300,7 +286,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         setHealth(0);
 
         // Reset velocity
-        velocity.zero();
+        this.velocity = Vec.ZERO;
 
         // Remove passengers if any
         if (hasPassenger()) {
@@ -323,8 +309,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets fire to this entity for a given duration.
      *
-     * @param duration duration of the effect
-     * @param temporalUnit     unit used to express the duration
+     * @param duration     duration of the effect
+     * @param temporalUnit unit used to express the duration
      * @see #setOnFire(boolean) if you want it to be permanent without any event callback
      */
     public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
@@ -804,8 +790,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Note: The strength is reduced based on knockback resistance
      *
      * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
-     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
-     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
+     * @param x        knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
+     * @param z        knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {

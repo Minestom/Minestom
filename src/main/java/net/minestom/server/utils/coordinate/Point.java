@@ -1,6 +1,7 @@
 package net.minestom.server.utils.coordinate;
 
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -137,5 +138,28 @@ public interface Point {
         return MathUtils.square(x() - point.x()) +
                 MathUtils.square(y() - point.y()) +
                 MathUtils.square(z() - point.z());
+    }
+
+    /**
+     * Checks it two points have similar (x/y/z).
+     *
+     * @param point the point to compare
+     * @return true if the two positions are similar
+     */
+    default boolean samePoint(@NotNull Point point) {
+        return Double.compare(point.x(), x()) == 0 &&
+                Double.compare(point.y(), y()) == 0 &&
+                Double.compare(point.z(), z()) == 0;
+    }
+
+    /**
+     * Gets if two points are in the same chunk.
+     *
+     * @param point the point to compare two
+     * @return true if 'this' is in the same chunk as {@code position}
+     */
+    default boolean inSameChunk(@NotNull Point point) {
+        return ChunkUtils.getChunkCoordinate(x()) == ChunkUtils.getChunkCoordinate(point.x()) &&
+                ChunkUtils.getChunkCoordinate(z()) == ChunkUtils.getChunkCoordinate(point.z());
     }
 }

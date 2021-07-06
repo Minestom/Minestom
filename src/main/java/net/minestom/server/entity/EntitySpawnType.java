@@ -21,10 +21,10 @@ public enum EntitySpawnType {
                 ObjectDataProvider objectDataProvider = (ObjectDataProvider) entity.getEntityMeta();
                 packet.data = objectDataProvider.getObjectData();
                 if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
-                    Vector velocity = entity.getVelocityForPacket();
-                    packet.velocityX = (short) velocity.getX();
-                    packet.velocityY = (short) velocity.getY();
-                    packet.velocityZ = (short) velocity.getZ();
+                    final var velocity = entity.getVelocityForPacket();
+                    packet.velocityX = (short) velocity.x();
+                    packet.velocityY = (short) velocity.y();
+                    packet.velocityZ = (short) velocity.z();
                 }
             }
             return packet;
@@ -38,11 +38,11 @@ public enum EntitySpawnType {
             packet.entityUuid = entity.getUuid();
             packet.entityType = entity.getEntityType().ordinal();
             packet.position = entity.getPosition();
-            packet.headPitch = entity.getPosition().getPitch();
-            Vector velocity = entity.getVelocityForPacket();
-            packet.velocityX = (short) velocity.getX();
-            packet.velocityY = (short) velocity.getY();
-            packet.velocityZ = (short) velocity.getZ();
+            packet.headPitch = entity.getPosition().pitch();
+            final var velocity = entity.getVelocityForPacket();
+            packet.velocityX = (short) velocity.x();
+            packet.velocityY = (short) velocity.y();
+            packet.velocityZ = (short) velocity.z();
             return packet;
         }
     },
