@@ -77,7 +77,7 @@ public class Navigator {
         final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
 
         // Will move the entity during Entity#tick
-        entity.refreshPosition(physicsResult.newPosition());
+        entity.teleport(physicsResult.newPosition());
     }
 
     public void jump(float height) {
