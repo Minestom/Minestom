@@ -392,6 +392,15 @@ public final class Vec implements Point {
 
     @FunctionalInterface
     public interface Operator {
+        /**
+         * Checks each axis' value, if it's below {@code 1E-6} then it gets replaced with {@code 0}
+         */
+        Operator EPSILON = (x, y, z) -> new Vec(
+                Math.abs(x) < 1E-6 ? 0 : x,
+                Math.abs(y) < 1E-6 ? 0 : y,
+                Math.abs(z) < 1E-6 ? 0 : z
+        );
+
         @NotNull Vec apply(double x, double y, double z);
     }
 
