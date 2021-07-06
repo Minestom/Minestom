@@ -38,7 +38,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -508,26 +507,30 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
             if (applyVelocity) {
                 final float tps = MinecraftServer.TICK_PER_SECOND;
-                final double newX = position.x() + velocity.x() / tps;
-                final double newY = position.y() + velocity.y() / tps;
-                final double newZ = position.z() + velocity.z() / tps;
-                Position newPosition = new Position(newX, newY, newZ);
-
-                Vector newVelocityOut = new Vector();
+                final Pos newPosition;
+                final Vec newVelocity;
 
                 // Gravity force
                 final double gravityY = hasNoGravity() ? 0 : gravityAcceleration;
 
-                final Vector deltaPos = new Vector(
-                        getVelocity().getX() / tps,
-                        getVelocity().getY() / tps - gravityY,
-                        getVelocity().getZ() / tps
+                final Vec deltaPos = new Vec(
+                        getVelocity().x() / tps,
+                        getVelocity().y() / tps - gravityY,
+                        getVelocity().z() / tps
                 );
 
                 if (this.hasPhysics) {
-                    this.onGround = CollisionUtils.handlePhysics(this, deltaPos, newPosition, newVelocityOut);
+                    final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+                    this.onGround = physicsResult.isOnGround();
+                    newPosition = physicsResult.newPosition();
+                    newVelocity = physicsResult.newVelocity();
                 } else {
-                    newVelocityOut = deltaPos;
+                    newVelocity = deltaPos;
+                    newPosition = new Pos(
+                        position.x() + velocity.x() / tps,
+                        position.y() + velocity.y() / tps,
+                        position.z() + velocity.z() / tps
+                    );
                 }
 
                 // World border collision
@@ -545,27 +548,23 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 }
 
                 // Update velocity
-                if (hasVelocity() || !newVelocityOut.isZero()) {
-                    this.velocity.copy(newVelocityOut);
-                    this.velocity.multiply(tps);
+                if (hasVelocity() || !newVelocity.equals(Vec.ZERO)) {
+                    velocity = newVelocity.mul(tps); // Convert from blocks/tick to blocks/sec
 
                     final Block block = finalChunk.getBlock(position);
                     final double drag = block.registry().friction();
                     if (onGround) {
                         // Stop player velocity
                         if (isNettyClient) {
-                            this.velocity.zero();
+                            velocity = Vec.ZERO;
                         }
                     }
 
-                    this.velocity.setX(velocity.getX() * drag);
-                    this.velocity.setZ(velocity.getZ() * drag);
-                    if (!hasNoGravity())
-                        this.velocity.setY(velocity.getY() * (1 - gravityDragPerTick));
-
-                    if (velocity.equals(new Vector())) {
-                        this.velocity.zero();
-                    }
+                    velocity = velocity.with((x, y, z) -> new Vec(
+                            x * drag,
+                            !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
+                            z * drag
+                    )).with(Vec.Operator.EPSILON);
                 }
 
                 // Synchronization and packets...
