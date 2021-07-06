@@ -174,11 +174,11 @@ public class CollisionUtils {
             this.isOnGround = isOnGround;
         }
 
-        public Pos getNewPosition() {
+        public Pos newPosition() {
             return newPosition;
         }
 
-        public Vec getNewVelocity() {
+        public Vec newVelocity() {
             return newVelocity;
         }
 
