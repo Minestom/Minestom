@@ -5,7 +5,9 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
+import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
@@ -14,7 +16,7 @@ import java.util.NoSuchElementException;
 /**
  * This class performs ray tracing and iterates along blocks on a line
  */
-public class BlockIterator implements Iterator<BlockPosition> {
+public class BlockIterator implements Iterator<Point> {
 
     private final int maxDistance;
 
@@ -22,7 +24,7 @@ public class BlockIterator implements Iterator<BlockPosition> {
 
     private boolean end = false;
 
-    private BlockPosition[] blockQueue = new BlockPosition[3];
+    private Point[] blockQueue = new Point[3];
     private int currentBlock = 0;
     private int currentDistance = 0;
     private int maxDistanceInt;
@@ -50,7 +52,7 @@ public class BlockIterator implements Iterator<BlockPosition> {
      *                    trace. Setting this value above 140 may lead to problems with
      *                    unloaded chunks. A value of 0 indicates no limit
      */
-    public BlockIterator(@NotNull Vector start, @NotNull Vector direction, double yOffset, int maxDistance) {
+    public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, int maxDistance) {
         this.maxDistance = maxDistance;
 
         Vector startClone = start.clone();
@@ -173,8 +175,8 @@ public class BlockIterator implements Iterator<BlockPosition> {
 
     }
 
-    private boolean blockEquals(@NotNull BlockPosition a, @NotNull BlockPosition b) {
-        return a.getX() == b.getX() && a.getY() == b.getY() && a.getZ() == b.getZ();
+    private boolean blockEquals(@NotNull Point a, @NotNull Point b) {
+        return a.x() == b.x() && a.y() == b.y() && a.z() == b.z();
     }
 
     private BlockFace getXFace(@NotNull Vector direction) {

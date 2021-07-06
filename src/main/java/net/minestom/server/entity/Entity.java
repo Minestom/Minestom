@@ -527,9 +527,9 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 } else {
                     newVelocity = deltaPos;
                     newPosition = new Pos(
-                        position.x() + velocity.x() / tps,
-                        position.y() + velocity.y() / tps,
-                        position.z() + velocity.z() / tps
+                            position.x() + velocity.x() / tps,
+                            position.y() + velocity.y() / tps,
+                            position.z() + velocity.z() / tps
                     );
                 }
 
@@ -1296,7 +1296,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Updates internal fields and sends updates
      *
      * @param position the new position
-     * @see #refreshCoordinate(Pos)
      * @see #sendPositionUpdate(boolean)
      */
     @ApiStatus.Internal
@@ -1353,7 +1352,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 refreshCurrentChunk(newChunk);
             }
         }
-        this.lastPosition = position;
     }
 
     /**

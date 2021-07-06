@@ -71,10 +71,11 @@ public class Navigator {
         final double speedZ = Math.sin(radians) * speed;
 
         // Update 'position' view
-        PositionUtils.lookAlong(position, dx, direction.y(), dz);
+        final var view = PositionUtils.lookAlong(position, dx, direction.y(), dz);
+        entity.setView(view.yaw(), view.pitch());
 
         // Prevent ghosting
-        final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
+        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
 
         // Will move the entity during Entity#tick
         entity.teleport(physicsResult.newPosition());

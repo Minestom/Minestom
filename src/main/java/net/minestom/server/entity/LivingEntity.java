@@ -26,8 +26,8 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
+import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.coordinate.Vec;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -723,11 +723,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param maxDistance The max distance to scan
      * @return A list of {@link BlockPosition} in this entities line of sight
      */
-    public List<BlockPosition> getLineOfSight(int maxDistance) {
-        List<BlockPosition> blocks = new ArrayList<>();
-        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+    public List<Point> getLineOfSight(int maxDistance) {
+        List<Point> blocks = new ArrayList<>();
+        Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
-            BlockPosition position = it.next();
+            final Point position = it.next();
             if (!getInstance().getBlock(position).isAir()) blocks.add(position);
         }
         return blocks;
@@ -742,12 +742,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return if the current entity has line of sight to the given one.
      */
     public boolean hasLineOfSight(Entity entity) {
-        Vector start = getPosition().toVector().add(0D, getEyeHeight(), 0D);
-        Vector end = entity.getPosition().toVector().add(0D, getEyeHeight(), 0D);
-        Vector direction = end.subtract(start);
-        int maxDistance = (int) Math.ceil(direction.length());
+        final var start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final var end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final var direction = end.sub(start);
+        final int maxDistance = (int) Math.ceil(direction.length());
 
-        Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        Iterator<Point> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
             Block block = getInstance().getBlock(it.next());
             if (!block.isAir() && !block.isLiquid()) {
@@ -761,13 +761,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Gets the target (not-air) {@link BlockPosition} of the entity.
      *
      * @param maxDistance The max distance to scan before returning null
-     * @return The {@link BlockPosition} targeted by this entity, null if non are found
+     * @return The block position targeted by this entity, null if non are found
      */
-    public BlockPosition getTargetBlockPosition(int maxDistance) {
-        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+    public Point getTargetBlockPosition(int maxDistance) {
+        Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
-            BlockPosition position = it.next();
-            if (getInstance().getBlock(position) != Block.AIR) return position;
+            final Point position = it.next();
+            if (!getInstance().getBlock(position).isAir()) return position;
         }
         return null;
     }
