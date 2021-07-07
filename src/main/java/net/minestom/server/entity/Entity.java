@@ -1284,20 +1284,20 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     }
 
     /**
-     * Updates internal fields and sends updates
+     * Updates internal fields and sends updates.
      *
      * @param position the new position
      * @see #sendPositionUpdate(boolean)
      */
     @ApiStatus.Internal
     public void refreshPosition(@NotNull final Pos position, boolean ignoreView) {
+        if (!position.samePoint(this.position)) {
+            refreshCoordinate(position);
+        }
         if (!ignoreView) {
             this.position = position;
         } else {
             this.position = this.position.withCoord(position);
-        }
-        if (!position.samePoint(this.position)) {
-            refreshCoordinate(position);
         }
         sendPositionUpdate(true);
     }

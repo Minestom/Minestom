@@ -73,7 +73,6 @@ public final class Pos implements Point {
          * x = -Opp
          * z = Adj
          */
-        final double _2PI = 2 * Math.PI;
         final double x = point.x();
         final double z = point.z();
         if (x == 0 && z == 0) {
@@ -81,6 +80,7 @@ public final class Pos implements Point {
         }
         final double theta = Math.atan2(-x, z);
         final double xz = Math.sqrt(MathUtils.square(x) + MathUtils.square(z));
+        final double _2PI = 2 * Math.PI;
         return withView((float) Math.toDegrees((theta + _2PI) % _2PI),
                 (float) Math.toDegrees(Math.atan(-point.y() / xz)));
     }
