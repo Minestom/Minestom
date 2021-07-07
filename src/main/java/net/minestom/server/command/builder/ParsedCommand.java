@@ -37,6 +37,10 @@ public class ParsedCommand {
      */
     @Nullable
     public CommandData execute(@NotNull CommandSender source) {
+        if (command.shouldRemove()) {
+            command.unregisterSelf(true);
+            return null;
+        }
         // Global listener
         command.globalListener(source, context, commandString);
         // Command condition check
@@ -46,6 +50,10 @@ public class ParsedCommand {
             if (!result)
                 return null;
         }
+        if (!command.canBeUsedBy(source)) {
+            return null;
+        }
+        command.incrementUsageCounter();
         // Condition is respected
         if (executor != null) {
             // An executor has been found

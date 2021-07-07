@@ -3,8 +3,10 @@ package demo;
 import demo.generator.ChunkGeneratorDemo;
 import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
@@ -16,7 +18,10 @@ import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.event.player.*;
+import net.minestom.server.event.player.PlayerDeathEvent;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
@@ -38,6 +43,7 @@ import net.minestom.server.world.DimensionType;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
@@ -93,6 +99,17 @@ public class PlayerInit {
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Position(0, 42f, 0));
+
+                // Command test
+                final String commandName = MinecraftServer.getCommandManager().register(Command.builder(((command, sender, context) -> {
+                   sender.asPlayer().getInventory().addItemStack(ItemStack.of(Material.DIAMOND));
+                })).maxUsage(5).whitelistedSenders(List.of(player)).build());
+
+                MinecraftServer.getCommandManager().register(Command.builder(((command, sender, context) -> {
+                    sender.sendMessage(command.getTimeUntilExpiration().toString());
+                })).ttl(Duration.ofSeconds(90)).hidden(false).build());
+
+                player.sendMessage(Component.text("Get 1 diamond (only usable 5 times)").clickEvent(ClickEvent.runCommand("/"+commandName)));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();

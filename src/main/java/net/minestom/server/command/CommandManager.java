@@ -3,6 +3,7 @@ package net.minestom.server.command;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
@@ -47,8 +48,9 @@ public final class CommandManager {
      *
      * @param command the command to register
      * @throws IllegalStateException if a command with the same name already exists
+     * @return the registered command's name
      */
-    public synchronized void register(@NotNull Command command) {
+    public synchronized String register(@NotNull Command command) {
         Check.stateCondition(commandExists(command.getName()),
                 "A command with the name " + command.getName() + " is already registered!");
         if (command.getAliases() != null) {
@@ -58,6 +60,7 @@ public final class CommandManager {
             }
         }
         this.dispatcher.register(command);
+        return command.getName();
     }
 
     /**
@@ -255,6 +258,7 @@ public final class CommandManager {
                 return -1;
             }
         }
+        if (!command.canBeSeenBy(sender)) return -1;
 
         // The main root of this command
         IntList cmdChildren = new IntArrayList();
@@ -450,5 +454,23 @@ public final class CommandManager {
         rootChildren.add(node);
         nodes.add(commandNode);
         return node;
+    }
+
+    /**
+     * Sends a {@link DeclareCommandsPacket} to the specified players
+     * @param players players receiving the packet
+     */
+    public void updateDeclaredCommands(Collection<Player> players) {
+        for (Player player:
+                players) {
+            player.getPlayerConnection().sendPacket(createDeclareCommandsPacket(player));
+        }
+    }
+
+    /**
+     * Sends a {@link DeclareCommandsPacket} to online players.
+     */
+    public void updateDeclaredCommands() {
+        updateDeclaredCommands(MinecraftServer.getConnectionManager().getOnlinePlayers());
     }
 }
