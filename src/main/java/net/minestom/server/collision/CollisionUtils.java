@@ -69,16 +69,12 @@ public class CollisionUtils {
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            final OneStepResult oneStepResult = stepOnce(instance, originChunk, axis, sign, corners);
-            corners = oneStepResult.newCorners;
-            if (collisionFound = oneStepResult.foundCollision) break;
+            if (collisionFound = stepOnce(instance, originChunk, axis, sign, corners)) break;
         }
 
         // add remainingLength
         if (!collisionFound) {
-            final OneStepResult oneStepResult = stepOnce(instance, originChunk, axis, remainingLength, corners);
-            corners = oneStepResult.newCorners;
-            collisionFound = oneStepResult.foundCollision;
+            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, corners);
         }
 
         // find the corner which moved the least
@@ -99,38 +95,37 @@ public class CollisionUtils {
      * @param instance  instance to get blocks from
      * @param axis      the axis to move along
      * @param corners   the corners of the bounding box to consider
-     * @return the result of one step
+     * @return true if found collision
      */
-    private static OneStepResult stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
+    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
         final double sign = Math.signum(amount);
-        Vec[] newCorners = new Vec[corners.length];
         for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
             final Vec originalCorner = corners[cornerIndex];
-            final Vec corner = originalCorner.add(axis.mul(amount));
+            final Vec newCorner = originalCorner.add(axis.mul(amount));
 
-            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, corner);
+            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
-                return new OneStepResult(corners, true);
+                return true;
             }
 
-            final Block block = chunk.getBlock(corner);
+            final Block block = chunk.getBlock(newCorner);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                newCorners[cornerIndex] = originalCorner.with(((x, y, z) -> new Vec(
-                        Math.abs(axis.x()) > 10e-16 ? originalCorner.blockX() - axis.x() * sign : x,
-                        Math.abs(axis.y()) > 10e-16 ? originalCorner.blockY() - axis.y() * sign : y,
-                        Math.abs(axis.z()) > 10e-16 ? originalCorner.blockZ() - axis.z() * sign : z
+                corners[cornerIndex] = originalCorner.with(((x, y, z) -> new Vec(
+                        Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : x,
+                        Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : y,
+                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : z
                 )));
 
-                return new OneStepResult(newCorners, true);
+                return true;
             }
 
-            newCorners[cornerIndex] = corner;
+            corners[cornerIndex] = newCorner;
         }
-        return new OneStepResult(newCorners, false);
+        return false;
     }
 
     /**
@@ -193,16 +188,6 @@ public class CollisionUtils {
 
         public StepResult(Vec newPosition, boolean foundCollision) {
             this.newPosition = newPosition;
-            this.foundCollision = foundCollision;
-        }
-    }
-
-    private static class OneStepResult {
-        private final Vec[] newCorners;
-        private final boolean foundCollision;
-
-        public OneStepResult(Vec[] newCorners, boolean foundCollision) {
-            this.newCorners = newCorners;
             this.foundCollision = foundCollision;
         }
     }

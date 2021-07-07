@@ -531,28 +531,31 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                 // Apply the position if changed
                 if (!finalVelocityPosition.samePoint(position)) {
-                    refreshCoordinate(finalVelocityPosition);
+                    refreshPosition((Pos) finalVelocityPosition, true);
                     sendPositionUpdate(true);
                 }
 
                 // Update velocity
                 if (hasVelocity() || !newVelocity.equals(Vec.ZERO)) {
-                    velocity = newVelocity.mul(tps); // Convert from blocks/tick to blocks/sec
-
-                    final Block block = finalChunk.getBlock(position);
-                    final double drag = block.registry().friction();
-                    if (onGround) {
+                    if (onGround && isNettyClient) {
                         // Stop player velocity
-                        if (isNettyClient) {
-                            velocity = Vec.ZERO;
-                        }
-                    }
+                        velocity = Vec.ZERO;
+                    } else {
+                        final Block block = finalChunk.getBlock(position);
+                        final double drag = block.registry().friction();
 
-                    velocity = velocity.with((x, y, z) -> new Vec(
-                            x * drag,
-                            !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
-                            z * drag
-                    )).with(Vec.Operator.EPSILON);
+                        velocity = newVelocity
+                                // Convert from blocks/tick to blocks/sec
+                                .mul(tps)
+                                // Apply drag
+                                .with((x, y, z) -> new Vec(
+                                        x * drag,
+                                        !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
+                                        z * drag
+                                ))
+                                // Prevent infinitely decreasing velocity
+                                .with(Vec.Operator.EPSILON);
+                    }
                 }
 
                 // Synchronization and packets...
