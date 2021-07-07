@@ -531,7 +531,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                 // Apply the position if changed
                 if (!finalVelocityPosition.samePoint(position)) {
-                    refreshCoordinate(finalVelocityPosition);
+                    refreshPosition((Pos) finalVelocityPosition, true);
                     sendPositionUpdate(true);
                 }
 
@@ -1318,7 +1318,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
-        position = position.withCoord(newPosition);
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
                 passenger.refreshCoordinate(newPosition);
