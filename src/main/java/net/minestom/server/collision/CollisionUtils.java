@@ -74,7 +74,7 @@ public class CollisionUtils {
 
         // add remainingLength
         if (!collisionFound) {
-            collisionFound = stepOnce(instance, originChunk, axis, sign, corners);
+            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, corners);
         }
 
         // find the corner which moved the least
