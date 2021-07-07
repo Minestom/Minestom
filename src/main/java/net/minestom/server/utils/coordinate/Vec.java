@@ -1,5 +1,6 @@
 package net.minestom.server.utils.coordinate;
 
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -156,6 +157,11 @@ public final class Vec implements Point {
     @Override
     public @NotNull Vec div(double value) {
         return div(value, value, value);
+    }
+
+    @Override
+    public @NotNull Vec relative(@NotNull BlockFace face) {
+        return (Vec) Point.super.relative(face);
     }
 
     @Contract(pure = true)
@@ -399,6 +405,12 @@ public final class Vec implements Point {
                 Math.abs(x) < 1E-6 ? 0 : x,
                 Math.abs(y) < 1E-6 ? 0 : y,
                 Math.abs(z) < 1E-6 ? 0 : z
+        );
+
+        Operator FLOOR = (x, y, z) -> new Vec(
+                MathUtils.floor(x),
+                MathUtils.floor(y),
+                MathUtils.floor(z)
         );
 
         @NotNull Vec apply(double x, double y, double z);

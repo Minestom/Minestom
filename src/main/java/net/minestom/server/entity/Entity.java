@@ -308,16 +308,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     }
 
     /**
-     * Changes the view of the entity.
-     * Only the yaw and pitch are used.
-     *
-     * @param position the new view
-     */
-    public void setView(@NotNull Position position) {
-        setView(position.getYaw(), position.getPitch());
-    }
-
-    /**
      * When set to true, the entity will automatically get new viewers when they come too close.
      * This can be use to have complete control over which player can see it, without having to deal with
      * raw packets.
@@ -485,9 +475,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             }
         }
 
-        sendPositionUpdate(false);
         final boolean isNettyClient = PlayerUtils.isNettyClient(this);
-
         // Entity tick
         {
 

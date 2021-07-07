@@ -44,13 +44,13 @@ public abstract class RelativeLocation<T extends Point> {
      */
     public T from(@Nullable Entity entity) {
         final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
-        return from(entityPosition);
+        return null;//from(entityPosition); FIXME
     }
 
     @ApiStatus.Experimental
     public T fromView(@Nullable Entity entity) {
         final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
-        return fromView(entityPosition);
+        return null;//fromView(entityPosition); FIXME
     }
 
     /**

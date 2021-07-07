@@ -51,7 +51,7 @@ public class PlayerInit {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
 
-                entity.takeKnockback(0.4f, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
+                entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
 
                 if (entity instanceof Player) {
                     Player target = (Player) entity;

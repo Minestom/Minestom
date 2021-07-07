@@ -1,5 +1,7 @@
 package net.minestom.server.utils.coordinate;
 
+import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +57,32 @@ public final class Pos implements Point {
     @Contract(pure = true)
     public @NotNull Pos withView(float yaw, float pitch) {
         return new Pos(x, y, z, yaw, pitch);
+    }
+
+    /**
+     * Sets the yaw and pitch to point
+     * in the direction of the point.
+     */
+    @Contract(pure = true)
+    public @NotNull Pos withDirection(@NotNull Point point) {
+        /*
+         * Sin = Opp / Hyp
+         * Cos = Adj / Hyp
+         * Tan = Opp / Adj
+         *
+         * x = -Opp
+         * z = Adj
+         */
+        final double _2PI = 2 * Math.PI;
+        final double x = point.x();
+        final double z = point.z();
+        if (x == 0 && z == 0) {
+            return withPitch(point.y() > 0 ? -90f : 90f);
+        }
+        final double theta = Math.atan2(-x, z);
+        final double xz = Math.sqrt(MathUtils.square(x) + MathUtils.square(z));
+        return withView((float) Math.toDegrees((theta + _2PI) % _2PI),
+                (float) Math.toDegrees(Math.atan(-point.y() / xz)));
     }
 
     @Contract(pure = true)
@@ -221,6 +249,11 @@ public final class Pos implements Point {
     @Override
     public @NotNull Pos div(double value) {
         return div(value, value, value);
+    }
+
+    @Override
+    public @NotNull Pos relative(@NotNull BlockFace face) {
+        return (Pos) Point.super.relative(face);
     }
 
     @Contract(pure = true)

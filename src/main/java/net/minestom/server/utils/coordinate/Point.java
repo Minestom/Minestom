@@ -1,5 +1,6 @@
 package net.minestom.server.utils.coordinate;
 
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -109,6 +110,25 @@ public interface Point {
 
     @Contract(pure = true)
     @NotNull Point div(double value);
+
+    @Contract(pure = true)
+    default @NotNull Point relative(@NotNull BlockFace face) {
+        switch (face) {
+            case BOTTOM:
+                return sub(0, 1, 0);
+            case TOP:
+                return add(0, 1, 0);
+            case NORTH:
+                return sub(0, 0, 1);
+            case SOUTH:
+                return add(0, 0, 1);
+            case WEST:
+                return sub(1, 0, 0);
+            case EAST:
+                return add(1, 0, 0);
+        }
+        return this; // should never be called
+    }
 
     /**
      * Gets the distance between this point and another. The value of this

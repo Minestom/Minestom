@@ -8,6 +8,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.Position;
+import net.minestom.server.utils.coordinate.Pos;
 import net.minestom.server.utils.location.RelativeVec;
 
 public class TeleportCommand extends Command {
@@ -40,7 +41,7 @@ public class TeleportCommand extends Command {
         final RelativeVec relativeVec = context.get("pos");
         final Position position = relativeVec.from(player).toPosition();
 
-        player.teleport(position);
+        player.teleport(new Pos(position));
         player.sendMessage(Component.text("You have been teleported to " + position));
     }
 

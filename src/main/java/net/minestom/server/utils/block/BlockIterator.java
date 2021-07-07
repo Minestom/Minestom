@@ -55,9 +55,8 @@ public class BlockIterator implements Iterator<Point> {
     public BlockIterator(@NotNull Vec start, @NotNull Vec direction, double yOffset, int maxDistance) {
         this.maxDistance = maxDistance;
 
-        Vector startClone = start.clone();
 
-        startClone.setY(startClone.getY() + yOffset);
+        Vec startClone = start.withY(y -> y+yOffset);
 
         currentDistance = 0;
 
@@ -69,7 +68,7 @@ public class BlockIterator implements Iterator<Point> {
         double secondPosition = 0;
         double thirdPosition = 0;
 
-        BlockPosition startBlock = new BlockPosition(floor(startClone.getX()), floor(startClone.getY()), floor(startClone.getZ()));
+        Vec startBlock = startClone.with(Vec.Operator.FLOOR);
 
         if (getXLength(direction) > mainDirection) {
             mainFace = getXFace(direction);
@@ -133,18 +132,18 @@ public class BlockIterator implements Iterator<Point> {
             thirdError = -thirdStep + 1;
         }
 
-        BlockPosition lastBlock;
+        Vec lastBlock;
 
-        lastBlock = startBlock.getRelative(mainFace.getOppositeFace());
+        lastBlock = startBlock.relative(mainFace.getOppositeFace());
 
         if (secondError < 0) {
             secondError += gridSize;
-            lastBlock = lastBlock.getRelative(secondFace.getOppositeFace());
+            lastBlock = lastBlock.relative(secondFace.getOppositeFace());
         }
 
         if (thirdError < 0) {
             thirdError += gridSize;
-            lastBlock = lastBlock.getRelative(thirdFace.getOppositeFace());
+            lastBlock = lastBlock.relative(thirdFace.getOppositeFace());
         }
 
         // This means that when the variables are positive, it means that the coord=1 boundary has been crossed
@@ -179,44 +178,44 @@ public class BlockIterator implements Iterator<Point> {
         return a.x() == b.x() && a.y() == b.y() && a.z() == b.z();
     }
 
-    private BlockFace getXFace(@NotNull Vector direction) {
-        return ((direction.getX() > 0) ? BlockFace.EAST : BlockFace.WEST);
+    private BlockFace getXFace(@NotNull Point direction) {
+        return ((direction.x() > 0) ? BlockFace.EAST : BlockFace.WEST);
     }
 
-    private BlockFace getYFace(@NotNull Vector direction) {
-        return ((direction.getY() > 0) ? BlockFace.TOP : BlockFace.BOTTOM);
+    private BlockFace getYFace(@NotNull Point direction) {
+        return ((direction.y() > 0) ? BlockFace.TOP : BlockFace.BOTTOM);
     }
 
-    private BlockFace getZFace(@NotNull Vector direction) {
-        return ((direction.getZ() > 0) ? BlockFace.SOUTH : BlockFace.NORTH);
+    private BlockFace getZFace(@NotNull Point direction) {
+        return ((direction.z() > 0) ? BlockFace.SOUTH : BlockFace.NORTH);
     }
 
-    private double getXLength(@NotNull Vector direction) {
-        return Math.abs(direction.getX());
+    private double getXLength(@NotNull Point direction) {
+        return Math.abs(direction.x());
     }
 
-    private double getYLength(@NotNull Vector direction) {
-        return Math.abs(direction.getY());
+    private double getYLength(@NotNull Point direction) {
+        return Math.abs(direction.y());
     }
 
-    private double getZLength(@NotNull Vector direction) {
-        return Math.abs(direction.getZ());
+    private double getZLength(@NotNull Point direction) {
+        return Math.abs(direction.z());
     }
 
     private double getPosition(double direction, double position, int blockPosition) {
         return direction > 0 ? (position - blockPosition) : (blockPosition + 1 - position);
     }
 
-    private double getXPosition(@NotNull Vector direction, @NotNull Vector position, @NotNull BlockPosition block) {
-        return getPosition(direction.getX(), position.getX(), block.getX());
+    private double getXPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
+        return getPosition(direction.x(), position.x(), block.blockX());
     }
 
-    private double getYPosition(@NotNull Vector direction, @NotNull Vector position, @NotNull BlockPosition block) {
-        return getPosition(direction.getY(), position.getY(), block.getY());
+    private double getYPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
+        return getPosition(direction.y(), position.y(), block.blockY());
     }
 
-    private double getZPosition(@NotNull Vector direction, @NotNull Vector position, @NotNull BlockPosition block) {
-        return getPosition(direction.getZ(), position.getZ(), block.getZ());
+    private double getZPosition(@NotNull Point direction, @NotNull Point position, @NotNull Point block) {
+        return getPosition(direction.z(), position.z(), block.blockZ());
     }
 
     /**
@@ -232,7 +231,7 @@ public class BlockIterator implements Iterator<Point> {
      *                    unloaded chunks. A value of 0 indicates no limit
      */
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
-        this(pos.toVector(), pos.getDirection(), yOffset, maxDistance);
+        this(pos.asVec(), pos.direction(), yOffset, maxDistance);
     }
 
     /**
@@ -246,7 +245,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset) {
-        this(pos.toVector(), pos.getDirection(), yOffset, 0);
+        this(pos.asVec(), pos.direction(), yOffset, 0);
     }
 
     /**
@@ -305,7 +304,7 @@ public class BlockIterator implements Iterator<Point> {
      */
     @Override
     @NotNull
-    public BlockPosition next() throws NoSuchElementException {
+    public Point next() throws NoSuchElementException {
         scan();
         if (currentBlock <= -1) {
             throw new NoSuchElementException();
@@ -337,29 +336,29 @@ public class BlockIterator implements Iterator<Point> {
         thirdError += thirdStep;
 
         if (secondError > 0 && thirdError > 0) {
-            blockQueue[2] = blockQueue[0].getRelative(mainFace);
+            blockQueue[2] = blockQueue[0].relative(mainFace);
             if (((long) secondStep) * ((long) thirdError) < ((long) thirdStep) * ((long) secondError)) {
-                blockQueue[1] = blockQueue[2].getRelative(secondFace);
-                blockQueue[0] = blockQueue[1].getRelative(thirdFace);
+                blockQueue[1] = blockQueue[2].relative(secondFace);
+                blockQueue[0] = blockQueue[1].relative(thirdFace);
             } else {
-                blockQueue[1] = blockQueue[2].getRelative(thirdFace);
-                blockQueue[0] = blockQueue[1].getRelative(secondFace);
+                blockQueue[1] = blockQueue[2].relative(thirdFace);
+                blockQueue[0] = blockQueue[1].relative(secondFace);
             }
             thirdError -= gridSize;
             secondError -= gridSize;
             currentBlock = 2;
         } else if (secondError > 0) {
-            blockQueue[1] = blockQueue[0].getRelative(mainFace);
-            blockQueue[0] = blockQueue[1].getRelative(secondFace);
+            blockQueue[1] = blockQueue[0].relative(mainFace);
+            blockQueue[0] = blockQueue[1].relative(secondFace);
             secondError -= gridSize;
             currentBlock = 1;
         } else if (thirdError > 0) {
-            blockQueue[1] = blockQueue[0].getRelative(mainFace);
-            blockQueue[0] = blockQueue[1].getRelative(thirdFace);
+            blockQueue[1] = blockQueue[0].relative(mainFace);
+            blockQueue[0] = blockQueue[1].relative(thirdFace);
             thirdError -= gridSize;
             currentBlock = 1;
         } else {
-            blockQueue[0] = blockQueue[0].getRelative(mainFace);
+            blockQueue[0] = blockQueue[0].relative(mainFace);
             currentBlock = 0;
         }
     }

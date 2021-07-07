@@ -7,10 +7,8 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.utils.coordinate.Pos;
 import net.minestom.server.utils.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -130,7 +128,7 @@ public class EntityProjectile extends Entity {
      * @return if an arrow is stuck in block / hit an entity.
      */
     @SuppressWarnings("ConstantConditions")
-    private boolean isStuck(Point pos, Point posNow) {
+    private boolean isStuck(Pos pos, Pos posNow) {
         if (pos.samePoint(posNow)) {
             return true;
         }
@@ -144,25 +142,21 @@ public class EntityProjectile extends Entity {
           For each point we will be checking blocks and entities we're in.
          */
         double part = .25D; // half of the bounding box
-        Vector dir = posNow.toVector().subtract(pos.toVector());
+        final var dir = posNow.sub(pos).asVec();
         int parts = (int) Math.ceil(dir.length() / part);
-        Position direction = dir.normalize().multiply(part).toPosition();
+        final var direction = dir.normalize().mul(part).asPosition();
         for (int i = 0; i < parts; ++i) {
             // If we're at last part, we can't just add another direction-vector, because we can exceed end point.
             if (i == parts - 1) {
-                pos.setX(posNow.getX());
-                pos.setY(posNow.getY());
-                pos.setZ(posNow.getZ());
+                pos = posNow;
             } else {
-                pos.add(direction);
+                pos = pos.add(direction);
             }
-            BlockPosition bpos = pos.toBlockPosition();
-            Block block = instance.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
+            Block block = instance.getBlock(pos.sub(0, 1, 0));
             if (!block.isAir() && !block.isLiquid()) {
                 teleport(pos);
                 return true;
             }
-
             Chunk currentChunk = instance.getChunkAt(pos);
             if (currentChunk != chunk) {
                 chunk = currentChunk;
@@ -178,8 +172,9 @@ public class EntityProjectile extends Entity {
             if (getAliveTicks() < 3) {
                 continue;
             }
+            final Pos finalPos = pos;
             Optional<Entity> victimOptional = entities.stream()
-                    .filter(entity -> entity.getBoundingBox().intersect(pos))
+                    .filter(entity -> entity.getBoundingBox().intersect(finalPos))
                     .findAny();
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
