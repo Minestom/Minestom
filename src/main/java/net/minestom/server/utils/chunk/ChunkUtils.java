@@ -4,7 +4,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
@@ -89,14 +88,6 @@ public final class ChunkUtils {
         return chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ;
     }
 
-    public static boolean same(@NotNull Position pos1, @NotNull Position pos2) {
-        final int x1 = getChunkCoordinate(pos1.getX());
-        final int z1 = getChunkCoordinate(pos1.getZ());
-        final int x2 = getChunkCoordinate(pos2.getX());
-        final int z2 = getChunkCoordinate(pos2.getZ());
-        return x1 == x2 && z1 == z2;
-    }
-
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         if (!ChunkUtils.same(originChunk, x, z)) {
             return instance.getChunkAt(x, z);
@@ -172,7 +163,7 @@ public final class ChunkUtils {
      * Gets the chunks in range of a position.
      *
      * @param point the initial point
-     * @param range    how far should it retrieves chunk
+     * @param range how far should it retrieves chunk
      * @return an array containing chunks index
      */
     public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {

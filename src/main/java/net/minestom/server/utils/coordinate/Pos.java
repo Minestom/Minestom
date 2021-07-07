@@ -288,6 +288,17 @@ public final class Pos implements Point {
         return Objects.hash(x, y, z, yaw, pitch);
     }
 
+    @Override
+    public String toString() {
+        return "Pos{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", yaw=" + yaw +
+                ", pitch=" + pitch +
+                '}';
+    }
+
     @FunctionalInterface
     public interface Operator {
         @NotNull Pos apply(double x, double y, double z);
