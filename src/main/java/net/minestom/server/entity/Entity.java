@@ -537,22 +537,25 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                 // Update velocity
                 if (hasVelocity() || !newVelocity.equals(Vec.ZERO)) {
-                    velocity = newVelocity.mul(tps); // Convert from blocks/tick to blocks/sec
-
-                    final Block block = finalChunk.getBlock(position);
-                    final double drag = block.registry().friction();
-                    if (onGround) {
+                    if (onGround && isNettyClient) {
                         // Stop player velocity
-                        if (isNettyClient) {
-                            velocity = Vec.ZERO;
-                        }
-                    }
+                        velocity = Vec.ZERO;
+                    } else {
+                        final Block block = finalChunk.getBlock(position);
+                        final double drag = block.registry().friction();
 
-                    velocity = velocity.with((x, y, z) -> new Vec(
-                            x * drag,
-                            !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
-                            z * drag
-                    )).with(Vec.Operator.EPSILON);
+                        velocity = newVelocity
+                                // Convert from blocks/tick to blocks/sec
+                                .mul(tps)
+                                // Apply drag
+                                .with((x, y, z) -> new Vec(
+                                        x * drag,
+                                        !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
+                                        z * drag
+                                ))
+                                // Prevent infinitely decreasing velocity
+                                .with(Vec.Operator.EPSILON);
+                    }
                 }
 
                 // Synchronization and packets...
@@ -1315,6 +1318,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
+        position = position.withCoord(newPosition);
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
                 passenger.refreshCoordinate(newPosition);
