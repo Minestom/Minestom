@@ -532,7 +532,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 // Apply the position if changed
                 if (!finalVelocityPosition.samePoint(position)) {
                     refreshPosition((Pos) finalVelocityPosition, true);
-                    sendPositionUpdate(true);
                 }
 
                 // Update velocity
