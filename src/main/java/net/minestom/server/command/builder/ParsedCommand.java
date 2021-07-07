@@ -3,9 +3,14 @@ package net.minestom.server.command.builder;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.conditions.RemoverCondition;
+import net.minestom.server.command.builder.condition.conditions.UseCountCondition;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Represents a {@link Command} ready to be executed (already parsed).
@@ -37,23 +42,28 @@ public class ParsedCommand {
      */
     @Nullable
     public CommandData execute(@NotNull CommandSender source) {
-        if (command.shouldRemove()) {
-            command.unregisterSelf(true);
-            return null;
-        }
         // Global listener
         command.globalListener(source, context, commandString);
+        final Set<UseCountCondition> useCountConditions = new HashSet<>();
         // Command condition check
-        final CommandCondition condition = command.getCondition();
-        if (condition != null) {
-            final boolean result = condition.canUse(source, commandString);
-            if (!result)
+        for (CommandCondition condition : command.getConditions().values()) {
+            if (condition instanceof RemoverCondition) {
+                if (((RemoverCondition) condition).shouldRemove()) {
+                    MinecraftServer.getCommandManager().updateDeclaredCommands(command.unregisterSelf());
+                    command.unregisterSelf();
+                    return null;
+                }
+            }
+
+            if (condition instanceof UseCountCondition) {
+                useCountConditions.add((UseCountCondition) condition);
+            }
+
+            if (!condition.canUse(source, commandString)) {
                 return null;
+            }
         }
-        if (!command.canBeUsedBy(source)) {
-            return null;
-        }
-        command.incrementUsageCounter();
+        useCountConditions.forEach(UseCountCondition::incrementUseCount);
         // Condition is respected
         if (executor != null) {
             // An executor has been found

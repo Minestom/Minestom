@@ -2,7 +2,6 @@ package net.minestom.server.command.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import kotlin.Pair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -10,6 +9,7 @@ import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.conditions.RemoverCondition;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -56,20 +56,12 @@ public class Command {
     private final String[] names;
 
     private CommandExecutor defaultExecutor;
-    private CommandCondition condition;
+    private final Map<Class<? extends CommandCondition>, CommandCondition> conditions = new HashMap<>();
+    private final Map<Class<? extends CommandCondition>, CommandCondition> unmodifiableConditions = Collections.unmodifiableMap(conditions);
 
     private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
 
-    private Duration ttl;
-    private long expireAt;
-    private boolean removeAfterTtlExpires;
-    private Integer maxUsage;
-    private int useCount;
-    private boolean removeAfterNoUsageLeft;
-    private List<CommandSender> whitelistedSenders;
-    private List<CommandSender> blacklistedSenders;
-    private boolean hidden;
     private final Set<Command> parents;
 
     private static final Set<Command> commands = new HashSet<>();
@@ -77,42 +69,17 @@ public class Command {
     static {
         MinecraftServer.getSchedulerManager()
                 .buildTask(() -> {
-                    final List<Command> toRemove = commands.stream().filter(Command::shouldRemove).collect(Collectors.toList());
+                    final List<Command> toRemove = commands.stream()
+                            .filter(x -> x.conditions.values().stream()
+                                    .filter(y -> y instanceof RemoverCondition)
+                                    .anyMatch(y -> ((RemoverCondition)y).shouldRemove())).collect(Collectors.toList());
                     if (toRemove.size() > 0) {
                         MinecraftServer.getCommandManager().updateDeclaredCommands(
-                                toRemove.stream().map(x -> x.unregisterSelf(false))
+                                toRemove.stream().map(Command::unregisterSelf)
                                         .flatMap(Collection::stream).collect(Collectors.toList()));
                     }
                 })
                 .repeat(Duration.ofMinutes(1)).schedule();
-    }
-
-    public Command(String name,
-                   String[] aliases,
-                   Duration ttl,
-                   boolean removeAfterTtlExpires,
-                   Integer maxUsage,
-                   boolean removeAfterNoUsageLeft,
-                   List<CommandSender> whitelistedSenders,
-                   List<CommandSender> blacklistedSenders,
-                   boolean hidden) {
-        this.name = name;
-        this.aliases = aliases;
-        this.subcommands = new ArrayList<>();
-        this.syntaxes = new ArrayList<>();
-        this.removeAfterTtlExpires = removeAfterTtlExpires;
-        this.maxUsage = maxUsage;
-        this.removeAfterNoUsageLeft = removeAfterNoUsageLeft;
-        this.whitelistedSenders = whitelistedSenders;
-        this.blacklistedSenders = blacklistedSenders;
-        this.hidden = hidden;
-
-        this.parents = new HashSet<>();
-        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
-
-        commands.add(this);
-
-        setTtl(ttl);
     }
 
     /**
@@ -123,7 +90,14 @@ public class Command {
      * @see #Command(String)
      */
     public Command(@NotNull String name, @Nullable String... aliases) {
-        this(name, aliases, null, true, null, true, null, null, false);
+        this.name = name;
+        this.aliases = aliases;
+        this.parents = new HashSet<>();
+        this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
+        this.subcommands = new ArrayList<>();
+        this.syntaxes = new ArrayList<>();
+
+        commands.add(this);
     }
 
     /**
@@ -136,29 +110,33 @@ public class Command {
         this(name, new String[0]);
     }
 
-    /**
-     * Gets the {@link CommandCondition}.
-     * <p>
-     * It is called after the parsing and just before the execution no matter the syntax used and can be used to check permissions or
-     * the {@link CommandSender} type.
-     * <p>
-     * Worth mentioning that the condition is also used to know if the command known from a player (at connection).
-     *
-     * @return the command condition, null if not any
-     */
+
     @Nullable
-    public CommandCondition getCondition() {
-        return condition;
+    public <T extends CommandCondition> T getCondition(Class<T> clazz) {
+        return (T) conditions.get(clazz);
+    }
+
+    public Map<Class<? extends CommandCondition>, CommandCondition> getConditions() {
+        return unmodifiableConditions;
     }
 
     /**
      * Sets the {@link CommandCondition}.
      *
      * @param commandCondition the new command condition, null to do not call anything
-     * @see #getCondition()
      */
+    @Deprecated
     public void setCondition(@Nullable CommandCondition commandCondition) {
-        this.condition = commandCondition;
+        addConditions(commandCondition);
+    }
+
+    public void addConditions(CommandCondition ...conditions) {
+        final Set<Player> affectedPlayers = new HashSet<>();
+        for (CommandCondition condition : conditions) {
+            this.conditions.put(condition.getClass(), condition);
+            affectedPlayers.addAll(condition.getAffectedPlayers());
+        }
+        MinecraftServer.getCommandManager().updateDeclaredCommands(affectedPlayers);
     }
 
     /**
@@ -491,20 +469,7 @@ public class Command {
                         array.add(String.join(StringUtils.SPACE, arguments))));
     }
 
-    public boolean shouldRemove() {
-        return (removeAfterTtlExpires && (ttl != null && expireAt <= System.currentTimeMillis())) ||
-                        (removeAfterNoUsageLeft && (maxUsage != null && useCount >= maxUsage));
-    }
-
-    public static CommandBuilder builder(CommandBuilder.DefaultExecutor defaultExecutor) {
-        return new CommandBuilder(defaultExecutor);
-    }
-
-    public static CommandBuilder builder() {
-        return builder(null);
-    }
-
-    protected Collection<Player> unregisterSelf(boolean sendUpdate) {
+    Collection<Player> unregisterSelf() {
         for (Command parent : parents) {
             if (parent == null) {
                 MinecraftServer.getCommandManager().unregister(this);
@@ -513,24 +478,8 @@ public class Command {
             }
         }
         commands.remove(this);
-        //Send update
-        if (!hidden) {
-            Collection<Player> affectedPlayers;
-            if (whitelistedSenders != null || blacklistedSenders != null) {
-                affectedPlayers = new ArrayList<>();
-                if (whitelistedSenders != null)
-                    affectedPlayers.addAll(whitelistedSenders.stream().filter(CommandSender::isPlayer).map(CommandSender::asPlayer).collect(Collectors.toList()));
-                if (blacklistedSenders != null)
-                    affectedPlayers.addAll(blacklistedSenders.stream().filter(CommandSender::isPlayer).map(CommandSender::asPlayer).collect(Collectors.toList()));
-            } else {
-                affectedPlayers = MinecraftServer.getConnectionManager().getOnlinePlayers();
-            }
-            if (sendUpdate)
-                MinecraftServer.getCommandManager().updateDeclaredCommands(affectedPlayers);
-            return affectedPlayers;
-        } else {
-            return Collections.emptyList();
-        }
+
+        return conditions.values().stream().map(CommandCondition::getAffectedPlayers).flatMap(Collection::stream).collect(Collectors.toUnmodifiableSet());
     }
 
     void addParent(@Nullable Command command) {
@@ -541,195 +490,9 @@ public class Command {
         parents.remove(command);
     }
 
-    public Duration getTtl() {
-        return ttl;
-    }
-
-    public void setTtl(Duration ttl) {
-        this.ttl = ttl;
-        if (ttl != null)
-            expireAt = System.currentTimeMillis() + ttl.toMillis();
-    }
-
-    public boolean isRemoveAfterTtlExpires() {
-        return removeAfterTtlExpires;
-    }
-
-    public void setRemoveAfterTtlExpires(boolean removeAfterTtlExpires) {
-        this.removeAfterTtlExpires = removeAfterTtlExpires;
-    }
-
-    public @Nullable Integer getMaxUsage() {
-        return maxUsage;
-    }
-
-    public void setMaxUsage(Integer maxUsage) {
-        this.maxUsage = maxUsage;
-    }
-
-    public boolean isRemoveAfterNoUsageLeft() {
-        return removeAfterNoUsageLeft;
-    }
-
-    public void setRemoveAfterNoUsageLeft(boolean removeAfterNoUsageLeft) {
-        this.removeAfterNoUsageLeft = removeAfterNoUsageLeft;
-    }
-
-    public boolean isHidden() {
-        return hidden;
-    }
-
-    public void setHidden(boolean hidden) {
-        final boolean update = this.hidden != hidden;
-        this.hidden = hidden;
-        if (update) MinecraftServer.getCommandManager().updateDeclaredCommands();
-    }
-
-    public void setWhitelistedSenders(@Nullable List<CommandSender> whitelistedSenders) {
-        this.whitelistedSenders = whitelistedSenders;
-    }
-
-    public void setBlacklistedSenders(@Nullable List<CommandSender> blacklistedSenders) {
-        this.blacklistedSenders = blacklistedSenders;
-    }
-
-    public @Nullable List<CommandSender> getWhitelistedSenders() {
-        return whitelistedSenders;
-    }
-
-    public @Nullable List<CommandSender> getBlacklistedSenders() {
-        return blacklistedSenders;
-    }
-
-    public boolean canBeSeenBy(CommandSender sender) {
-        return !hidden && canBeUsedBy(sender);
-    }
-
-    public boolean canBeUsedBy(CommandSender sender) {
-        return (blacklistedSenders == null || !blacklistedSenders.contains(sender)) && (whitelistedSenders == null || whitelistedSenders.contains(sender));
-    }
-
-    public int getUseCount() {
-        return useCount;
-    }
-
-    public @Nullable Duration getTimeUntilExpiration() {
-        if (ttl == null) return null;
-        return Duration.ofMillis(expireAt - System.currentTimeMillis());
-    }
-
-    void incrementUsageCounter() {
-        useCount++;
-    }
-
     private static final class Node {
         private final Set<String> names = new HashSet<>();
         private final Set<Node> nodes = new HashSet<>();
         private final List<List<String>> arguments = new ArrayList<>();
-    }
-
-    public static class CommandBuilder {
-        private String name = null;
-        private String[] aliases = new String[0];
-        private final DefaultExecutor defaultExecutor;
-        private Duration ttl = null;
-        private boolean removeAfterTtlExpires = true;
-        private Integer maxUsage = null;
-        private boolean removeAfterNoUsageLeft = true;
-        private List<CommandSender> whitelistedSenders = null;
-        private List<CommandSender> blacklistedSenders = null;
-        private Boolean hidden = null;
-        private final List<Command> subcommands = new ArrayList<>();
-        private final List<Pair<SyntaxExecutor, Argument<?>[]>> syntaxes = new ArrayList<>();
-
-        CommandBuilder(DefaultExecutor defaultExecutor) {
-            this.defaultExecutor = defaultExecutor;
-        }
-
-        public Command.CommandBuilder name(String name) {
-            this.name = name;
-            return this;
-        }
-
-        public Command.CommandBuilder aliases(String ...aliases) {
-            this.aliases = aliases;
-            return this;
-        }
-
-        public Command.CommandBuilder ttl(Duration ttl) {
-            this.ttl = ttl;
-            return this;
-        }
-
-        public Command.CommandBuilder removeAfterTtlExpires(boolean removeAfterTtlExpires) {
-            this.removeAfterTtlExpires = removeAfterTtlExpires;
-            return this;
-        }
-
-        public Command.CommandBuilder maxUsage(Integer maxUsage) {
-            this.maxUsage = maxUsage;
-            return this;
-        }
-
-        public Command.CommandBuilder removeAfterNoUsageLeft(boolean removeAfterNoUsageLeft) {
-            this.removeAfterNoUsageLeft = removeAfterNoUsageLeft;
-            return this;
-        }
-
-        public Command.CommandBuilder whitelistedSenders(List<CommandSender> whitelistedSenders) {
-            this.whitelistedSenders = whitelistedSenders;
-            return this;
-        }
-
-        public Command.CommandBuilder blacklistedSenders(List<CommandSender> blacklistedSenders) {
-            this.blacklistedSenders = blacklistedSenders;
-            return this;
-        }
-
-        public Command.CommandBuilder hidden(boolean hidden) {
-            this.hidden = hidden;
-            return this;
-        }
-
-        public Command.CommandBuilder subcommand(Command subcommand) {
-            subcommands.add(subcommand);
-            return this;
-        }
-
-        public Command.CommandBuilder syntax(SyntaxExecutor syntaxExecutor, Argument<?> ...arguments) {
-            syntaxes.add(new Pair<>(syntaxExecutor, arguments));
-            return this;
-        }
-
-        public Command build() {
-            // If the command is built without name hide it if it wasn't explicitly set to visible
-            if (name == null) {
-                name = UUID.randomUUID().toString();
-                if (hidden == null) {
-                    hidden = true;
-                }
-            } else {
-                if (hidden == null) {
-                    hidden = false;
-                }
-            }
-            Command c = new Command(name, aliases, ttl, removeAfterTtlExpires, maxUsage, removeAfterNoUsageLeft, whitelistedSenders, blacklistedSenders, hidden);
-            c.setDefaultExecutor((sender, context) -> defaultExecutor.apply(c, sender, context));
-            for (Command subcommand : subcommands) {
-                c.addSubcommand(subcommand);
-            }
-            for (Pair<SyntaxExecutor, Argument<?>[]> syntax : syntaxes) {
-                c.addSyntax((sender, context) -> syntax.component1().apply(c, sender, context, syntax.component2()), syntax.component2());
-            }
-            return c;
-        }
-
-        public interface DefaultExecutor {
-            void apply(@NotNull Command command, @NotNull CommandSender sender, @NotNull CommandContext context);
-        }
-
-        public interface SyntaxExecutor {
-            void apply(@NotNull Command command, @NotNull CommandSender sender, @NotNull CommandContext context, @NotNull Argument<?>[] arguments);
-        }
     }
 }

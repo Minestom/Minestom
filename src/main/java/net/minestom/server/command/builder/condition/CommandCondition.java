@@ -1,8 +1,13 @@
 package net.minestom.server.command.builder.condition;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.Set;
 
 /**
  * Used to know if the {@link CommandSender} is allowed to run the command or a specific syntax.
@@ -28,4 +33,8 @@ public interface CommandCondition {
      * @return true if the sender has the right to use the command, false otherwise
      */
     boolean canUse(@NotNull CommandSender sender, @Nullable String commandString);
+
+    default Collection<Player> getAffectedPlayers() {
+        return MinecraftServer.getConnectionManager().getOnlinePlayers();
+    }
 }

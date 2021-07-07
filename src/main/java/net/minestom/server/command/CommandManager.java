@@ -8,6 +8,8 @@ import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.conditions.RemoverCondition;
+import net.minestom.server.command.builder.condition.conditions.UseCountCondition;
 import net.minestom.server.command.builder.parser.ArgumentQueryResult;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.CommandQueryResult;
@@ -251,14 +253,11 @@ public final class CommandManager {
                                  Map<Argument<?>, Integer> argumentIdentityMap,
                                  List<Pair<String, NodeMaker.Request>> nodeRequests) {
         // Check if player should see this command
-        final CommandCondition commandCondition = command.getCondition();
-        if (commandCondition != null) {
-            // Do not show command if return false
-            if (!commandCondition.canUse(sender, null)) {
+        for (CommandCondition condition : command.getConditions().values()) {
+            if (!condition.canUse(sender, null)) {
                 return -1;
             }
         }
-        if (!command.canBeSeenBy(sender)) return -1;
 
         // The main root of this command
         IntList cmdChildren = new IntArrayList();
