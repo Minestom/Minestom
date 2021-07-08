@@ -66,11 +66,11 @@ public class ResourcePackSendPacket implements ComponentHoldingServerPacket {
 
     @Override
     public @NotNull Collection<Component> components() {
-        List<Component> components = new ArrayList<>();
         if (forcedMessage != null) {
-            components.add(forcedMessage);
+            return Collections.singleton(forcedMessage);
+        } else {
+            return Collections.emptyList();
         }
-        return components;
     }
 
     @Override
