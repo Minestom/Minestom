@@ -5,8 +5,7 @@ import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**

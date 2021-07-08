@@ -2,14 +2,14 @@ package net.minestom.server.command.builder.arguments.relative;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.Vector;
-import net.minestom.server.utils.location.RelativeVec;
 import net.minestom.server.utils.StringUtils;
+import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a {@link Vector} with 2 floating numbers (x;z) which can take relative coordinates.
+ * Represents a {@link Vec} with 2 floating numbers (x;z) which can take relative coordinates.
  * <p>
  * Example: -1.2 ~
  */
@@ -23,13 +23,12 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
     @Override
     public RelativeVec parse(@NotNull String input) throws ArgumentSyntaxException {
         final String[] split = input.split(StringUtils.SPACE);
-
         // Check if the value has enough element to be correct
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }
 
-        Vector vector = new Vector();
+        double x = 0, z = 0;
         boolean relativeX = false;
         boolean relativeZ = false;
 
@@ -47,18 +46,18 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
                         final String potentialNumber = element.substring(1);
                         final float number = Float.parseFloat(potentialNumber);
                         if (i == 0) {
-                            vector.setX(number);
+                            x = number;
                         } else if (i == 1) {
-                            vector.setZ(number);
+                            z = number;
                         }
                     }
 
                 } else {
                     final float number = Float.parseFloat(element);
                     if (i == 0) {
-                        vector.setX(number);
+                        x = number;
                     } else if (i == 1) {
-                        vector.setZ(number);
+                        z = number;
                     }
                 }
             } catch (NumberFormatException e) {
@@ -66,7 +65,7 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
             }
         }
 
-        return new RelativeVec(vector, relativeX, false, relativeZ);
+        return new RelativeVec(new Vec(x, z), relativeX, false, relativeZ);
     }
 
     @Override

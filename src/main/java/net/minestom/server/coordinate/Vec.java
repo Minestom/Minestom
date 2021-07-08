@@ -1,12 +1,12 @@
-package net.minestom.server.utils.coordinate;
+package net.minestom.server.coordinate;
 
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.DoubleUnaryOperator;
-import java.util.function.UnaryOperator;
 
 /**
  * Represents an immutable 3D vector.
@@ -58,7 +58,7 @@ public final class Vec implements Point {
      * @return the created point
      */
     @Contract(pure = true)
-    public @NotNull Vec with(@NotNull Operator operator) {
+    public @NotNull Vec apply(@NotNull Operator operator) {
         return operator.apply(x, y, z);
     }
 
@@ -158,6 +158,11 @@ public final class Vec implements Point {
         return div(value, value, value);
     }
 
+    @Override
+    public @NotNull Vec relative(@NotNull BlockFace face) {
+        return (Vec) Point.super.relative(face);
+    }
+
     @Contract(pure = true)
     public @NotNull Vec neg() {
         return new Vec(-x, -y, -z);
@@ -186,11 +191,6 @@ public final class Vec implements Point {
     @Contract(pure = true)
     public @NotNull Vec max(double value) {
         return new Vec(Math.max(x, value), Math.max(y, value), Math.max(z, value));
-    }
-
-    @Contract(pure = true)
-    public Vec apply(@NotNull UnaryOperator<@NotNull Vec> operator) {
-        return operator.apply(this);
     }
 
     @Contract(pure = true)
@@ -392,6 +392,21 @@ public final class Vec implements Point {
 
     @FunctionalInterface
     public interface Operator {
+        /**
+         * Checks each axis' value, if it's below {@code 1E-6} then it gets replaced with {@code 0}
+         */
+        Operator EPSILON = (x, y, z) -> new Vec(
+                Math.abs(x) < 1E-6 ? 0 : x,
+                Math.abs(y) < 1E-6 ? 0 : y,
+                Math.abs(z) < 1E-6 ? 0 : z
+        );
+
+        Operator FLOOR = (x, y, z) -> new Vec(
+                MathUtils.floor(x),
+                MathUtils.floor(y),
+                MathUtils.floor(z)
+        );
+
         @NotNull Vec apply(double x, double y, double z);
     }
 

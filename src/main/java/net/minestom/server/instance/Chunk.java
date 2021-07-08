@@ -2,6 +2,8 @@ package net.minestom.server.instance;
 
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
@@ -15,10 +17,9 @@ import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.biomes.Biome;
@@ -208,13 +209,12 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     }
 
     /**
-     * Creates a {@link Position} object based on this chunk.
+     * Gets the world position of this chunk.
      *
      * @return the position of this chunk
      */
-    @NotNull
-    public Position toPosition() {
-        return new Position(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+    public @NotNull Point toPosition() {
+        return new Vec(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
     /**

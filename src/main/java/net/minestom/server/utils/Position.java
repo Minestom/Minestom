@@ -1,7 +1,7 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -11,7 +11,7 @@ import java.util.function.DoubleUnaryOperator;
  * Represents a position.
  * The instance is not contained.
  *
- * @deprecated use {@link net.minestom.server.utils.coordinate.Pos} instead
+ * @deprecated use {@link net.minestom.server.coordinate.Pos} instead
  */
 @Deprecated
 public class Position implements Point {

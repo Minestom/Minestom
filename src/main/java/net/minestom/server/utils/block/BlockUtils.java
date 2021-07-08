@@ -3,7 +3,7 @@ package net.minestom.server.utils.block;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 
 import java.util.Collections;
 import java.util.HashMap;

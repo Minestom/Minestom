@@ -2,9 +2,9 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -106,8 +106,8 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public AbsoluteBlockBatch apply(@NotNull Instance instance, @NotNull BlockPosition position, @Nullable Runnable callback) {
-        return apply(instance, position.getX(), position.getY(), position.getZ(), callback);
+    public AbsoluteBlockBatch apply(@NotNull Instance instance, @NotNull Point position, @Nullable Runnable callback) {
+        return apply(instance, position.blockX(), position.blockY(), position.blockZ(), callback);
     }
 
     /**

@@ -2,30 +2,30 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerPositionAndLookPacket implements ServerPacket {
 
-    public Position position;
+    public Pos position;
     public byte flags;
     public int teleportId;
     public boolean dismountVehicle;
 
     public PlayerPositionAndLookPacket() {
-        position = new Position();
+        position = Pos.ZERO;
     }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeDouble(position.getX());
-        writer.writeDouble(position.getY());
-        writer.writeDouble(position.getZ());
+        writer.writeDouble(position.x());
+        writer.writeDouble(position.y());
+        writer.writeDouble(position.z());
 
-        writer.writeFloat(position.getYaw());
-        writer.writeFloat(position.getPitch());
+        writer.writeFloat(position.yaw());
+        writer.writeFloat(position.pitch());
 
         writer.writeByte(flags);
         writer.writeVarInt(teleportId);
@@ -34,7 +34,7 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        position = new Position(reader.readDouble(), reader.readDouble(), reader.readDouble(), reader.readFloat(), reader.readFloat());
+        position = new Pos(reader.readDouble(), reader.readDouble(), reader.readDouble(), reader.readFloat(), reader.readFloat());
 
         flags = reader.readByte();
         teleportId = reader.readVarInt();

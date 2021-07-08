@@ -30,8 +30,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
@@ -51,7 +51,7 @@ public class PlayerInit {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
 
-                entity.takeKnockback(0.4f, Math.sin(source.getPosition().getYaw() * 0.017453292), -Math.cos(source.getPosition().getYaw() * 0.017453292));
+                entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
 
                 if (entity instanceof Player) {
                     Player target = (Player) entity;
@@ -75,11 +75,11 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 ItemStack droppedItem = event.getItemStack();
 
-                Position position = player.getPosition().clone().add(0, 1.5f, 0);
-                ItemEntity itemEntity = new ItemEntity(droppedItem, position);
+                Pos playerPos = player.getPosition();
+                ItemEntity itemEntity = new ItemEntity(droppedItem);
                 itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
-                itemEntity.setInstance(player.getInstance());
-                Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
+                Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
@@ -91,7 +91,7 @@ public class PlayerInit {
                 event.setSpawningInstance(instance);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                player.setRespawnPoint(new Position(0, 42f, 0));
+                player.setRespawnPoint(new Pos(0, 42f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();

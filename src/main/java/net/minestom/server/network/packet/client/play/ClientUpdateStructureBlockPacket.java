@@ -4,8 +4,8 @@ import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {

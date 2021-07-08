@@ -1,6 +1,8 @@
-package net.minestom.server.utils.coordinate;
+package net.minestom.server.coordinate;
 
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -109,6 +111,25 @@ public interface Point {
     @Contract(pure = true)
     @NotNull Point div(double value);
 
+    @Contract(pure = true)
+    default @NotNull Point relative(@NotNull BlockFace face) {
+        switch (face) {
+            case BOTTOM:
+                return sub(0, 1, 0);
+            case TOP:
+                return add(0, 1, 0);
+            case NORTH:
+                return sub(0, 0, 1);
+            case SOUTH:
+                return add(0, 0, 1);
+            case WEST:
+                return sub(1, 0, 0);
+            case EAST:
+                return add(1, 0, 0);
+        }
+        return this; // should never be called
+    }
+
     /**
      * Gets the distance between this point and another. The value of this
      * method is not cached and uses a costly square-root function, so do not
@@ -137,5 +158,28 @@ public interface Point {
         return MathUtils.square(x() - point.x()) +
                 MathUtils.square(y() - point.y()) +
                 MathUtils.square(z() - point.z());
+    }
+
+    /**
+     * Checks it two points have similar (x/y/z).
+     *
+     * @param point the point to compare
+     * @return true if the two positions are similar
+     */
+    default boolean samePoint(@NotNull Point point) {
+        return Double.compare(point.x(), x()) == 0 &&
+                Double.compare(point.y(), y()) == 0 &&
+                Double.compare(point.z(), z()) == 0;
+    }
+
+    /**
+     * Gets if two points are in the same chunk.
+     *
+     * @param point the point to compare two
+     * @return true if 'this' is in the same chunk as {@code position}
+     */
+    default boolean inSameChunk(@NotNull Point point) {
+        return ChunkUtils.getChunkCoordinate(x()) == ChunkUtils.getChunkCoordinate(point.x()) &&
+                ChunkUtils.getChunkCoordinate(z()) == ChunkUtils.getChunkCoordinate(point.z());
     }
 }

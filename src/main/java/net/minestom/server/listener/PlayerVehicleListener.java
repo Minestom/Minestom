@@ -6,7 +6,7 @@ import net.minestom.server.entity.metadata.other.BoatMeta;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
-import net.minestom.server.utils.Position;
+import net.minestom.server.coordinate.Pos;
 
 public class PlayerVehicleListener {
 
@@ -19,11 +19,10 @@ public class PlayerVehicleListener {
 
     public static void vehicleMoveListener(ClientVehicleMovePacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
-
         if (vehicle == null)
             return;
 
-        final Position newPosition = new Position((float) packet.x, (float) packet.y, (float) packet.z, packet.yaw, packet.pitch);
+        final var newPosition = new Pos(packet.x, packet.y, packet.z, packet.yaw, packet.pitch);
         vehicle.refreshPosition(newPosition);
 
         // This packet causes weird screen distortion
@@ -39,7 +38,6 @@ public class PlayerVehicleListener {
 
     public static void boatSteerListener(ClientSteerBoatPacket packet, Player player) {
         final Entity vehicle = player.getVehicle();
-
         if (!(vehicle.getEntityMeta() instanceof BoatMeta))
             return;
 
@@ -47,5 +45,4 @@ public class PlayerVehicleListener {
         boat.setLeftPaddleTurning(packet.leftPaddleTurning);
         boat.setRightPaddleTurning(packet.rightPaddleTurning);
     }
-
 }

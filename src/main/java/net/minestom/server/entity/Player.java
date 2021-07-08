@@ -26,6 +26,9 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -130,7 +133,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private byte heldSlot;
 
-    private Position respawnPoint;
+    private Pos respawnPoint;
 
     private int food;
     private float foodSaturation;
@@ -179,7 +182,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
-        setRespawnPoint(new Position(0, 0, 0));
+        setRespawnPoint(Pos.ZERO);
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -520,9 +523,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param spawnPosition the new position of the player
      */
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
-
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
                 !spawnPosition.inSameChunk(this.position);
@@ -557,7 +559,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * if the player is not in any instance).
      *
      * @param instance the new player instance
-     * @see #setInstance(Instance, Position)
+     * @see #setInstance(Instance, Pos)
      */
     @Override
     public void setInstance(@NotNull Instance instance) {
@@ -569,14 +571,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * Does add the player to {@code instance}, remove all viewable entities and call {@link PlayerSpawnEvent}.
      * <p>
-     * UNSAFE: only called with {@link #setInstance(Instance, Position)}.
+     * UNSAFE: only called with {@link #setInstance(Instance, Pos)}.
      *
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
      * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
      *                      chunks
      */
-    private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
+    private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
@@ -700,17 +702,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from the {@link SoundEvent} enum.
-     *
-     * @see #playSound(SoundEvent, SoundCategory, int, int, int, float, float)
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
-    }
-
-    /**
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
@@ -736,17 +727,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from an identifier (represents a custom sound in a resource pack).
-     *
-     * @see #playSound(String, SoundCategory, int, int, int, float, float)
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
-    }
-
-    /**
      * Plays a sound directly to the player (constant volume).
      *
      * @param sound         the sound to play
@@ -768,7 +748,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(@NotNull Sound sound) {
-        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
+        this.playSound(sound, this.position.x(), this.position.y(), this.position.z());
     }
 
     @Override
@@ -807,7 +787,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
         EffectPacket packet = new EffectPacket();
         packet.effectId = effect.getId();
-        packet.position = new BlockPosition(x, y, z);
+        packet.position = new Vec(x, y, z);
         packet.data = data;
         packet.disableRelativeVolume = disableRelativeVolume;
         playerConnection.sendPacket(packet);
@@ -1294,14 +1274,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         facePosition(facePoint, entity.getPosition(), entity, targetPoint);
     }
 
-    private void facePosition(@NotNull FacePoint facePoint, @NotNull Position targetPosition,
+    private void facePosition(@NotNull FacePoint facePoint, @NotNull Point targetPosition,
                               @Nullable Entity entity, @Nullable FacePoint targetPoint) {
         FacePlayerPacket facePlayerPacket = new FacePlayerPacket();
         facePlayerPacket.entityFacePosition = facePoint == FacePoint.EYE ?
                 FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
-        facePlayerPacket.targetX = targetPosition.getX();
-        facePlayerPacket.targetY = targetPosition.getY();
-        facePlayerPacket.targetZ = targetPosition.getZ();
+        facePlayerPacket.targetX = targetPosition.x();
+        facePlayerPacket.targetY = targetPosition.y();
+        facePlayerPacket.targetZ = targetPosition.z();
         if (entity != null) {
             facePlayerPacket.entityId = entity.getEntityId();
             facePlayerPacket.entityFacePosition = targetPoint == FacePoint.EYE ?
@@ -1329,13 +1309,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Used to retrieve the default spawn point.
      * <p>
-     * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
+     * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Pos)}.
      *
      * @return a copy of the default respawn point
      */
-    @NotNull
-    public Position getRespawnPoint() {
-        return respawnPoint.clone();
+    public @NotNull Pos getRespawnPoint() {
+        return respawnPoint;
     }
 
     /**
@@ -1343,7 +1322,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param respawnPoint the player respawn point
      */
-    public void setRespawnPoint(@NotNull Position respawnPoint) {
+    public void setRespawnPoint(@NotNull Pos respawnPoint) {
         this.respawnPoint = respawnPoint;
     }
 
@@ -1365,8 +1344,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         {
             // Send new chunks
-            final BlockPosition pos = position.toBlockPosition();
-            final Chunk chunk = instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+            final Chunk chunk = instance.getChunkAt(position);
             Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
             refreshVisibleChunks(chunk);
         }
@@ -1903,7 +1881,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void synchronizePosition(boolean includeSelf) {
         if (includeSelf) {
             final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-            positionAndLookPacket.position = position.clone();
+            positionAndLookPacket.position = position;
             positionAndLookPacket.flags = 0x00;
             positionAndLookPacket.teleportId = teleportId.incrementAndGet();
             playerConnection.sendPacket(positionAndLookPacket);
@@ -2324,7 +2302,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
         entityHeadLookPacket.entityId = getEntityId();
-        entityHeadLookPacket.yaw = position.getYaw();
+        entityHeadLookPacket.yaw = position.yaw();
         connection.sendPacket(entityHeadLookPacket);
     }
 

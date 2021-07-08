@@ -1,6 +1,7 @@
 package net.minestom.demo.largeframebuffers;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.event.player.PlayerSpawnEvent;
@@ -8,7 +9,6 @@ import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.utils.Position;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,12 +35,12 @@ public class MainDemo {
             // Set the spawning instance
             player.addEventCallback(PlayerLoginEvent.class, event -> {
                 event.setSpawningInstance(instanceContainer);
-                player.setRespawnPoint(new Position(0, 45, 0));
+                player.setRespawnPoint(new Pos(0, 45, 0));
             });
 
             // Teleport the player at spawn
             player.addEventCallback(PlayerSpawnEvent.class, event -> {
-                player.teleport(new Position(0, 45, 0));
+                player.teleport(new Pos(0, 45, 0));
                 player.setGameMode(GameMode.CREATIVE);
             });
         });

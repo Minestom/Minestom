@@ -6,6 +6,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
@@ -29,12 +31,9 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -309,10 +308,10 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * <p>
      * Always returning false allow entities to survive in the void.
      *
-     * @param position the position in the world
-     * @return true iif position is inside the void
+     * @param point the point in the world
+     * @return true if the point is inside the void
      */
-    public abstract boolean isInVoid(@NotNull Position position);
+    public abstract boolean isInVoid(@NotNull Point point);
 
     /**
      * Gets if the instance has been registered in {@link InstanceManager}.
@@ -533,27 +532,27 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     /**
-     * Loads the chunk at the given {@link Position} with a callback.
+     * Loads the chunk at the given {@link Point} with a callback.
      *
-     * @param position the chunk position
+     * @param point    the chunk position
      * @param callback the optional callback to run when the chunk is loaded
      */
-    public void loadChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
+    public void loadChunk(@NotNull Point point, @Nullable ChunkCallback callback) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
+        final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
         loadChunk(chunkX, chunkZ, callback);
     }
 
     /**
      * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
-     * at the given {@link Position} with a callback.
+     * at the given {@link Point} with a callback.
      *
-     * @param position the chunk position
+     * @param point    the chunk position
      * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
      */
-    public void loadOptionalChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
+    public void loadOptionalChunk(@NotNull Point point, @Nullable ChunkCallback callback) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
+        final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
         loadOptionalChunk(chunkX, chunkZ, callback);
     }
 
@@ -586,7 +585,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param actionParam   the action parameter, depends on the block
      * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
-    public void sendBlockAction(@NotNull BlockPosition blockPosition, byte actionId, byte actionParam) {
+    public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
         final Block block = getBlock(blockPosition);
 
         BlockActionPacket blockActionPacket = new BlockActionPacket();
@@ -601,14 +600,13 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     /**
-     * Gets the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
+     * Gets the {@link Chunk} at the given block position, null if not loaded.
      *
      * @param x the X position
      * @param z the Z position
      * @return the chunk at the given position, null if not loaded
      */
-    @Nullable
-    public Chunk getChunkAt(double x, double z) {
+    public @Nullable Chunk getChunkAt(double x, double z) {
         final int chunkX = ChunkUtils.getChunkCoordinate(x);
         final int chunkZ = ChunkUtils.getChunkCoordinate(z);
         return getChunk(chunkX, chunkZ);
@@ -620,8 +618,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param point the chunk position
      * @return the chunk at the given position, null if not loaded
      */
-    @Nullable
-    public Chunk getChunkAt(@NotNull Point point) {
+    public @Nullable Chunk getChunkAt(@NotNull Point point) {
         return getChunkAt(point.x(), point.z());
     }
 
@@ -703,7 +700,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         EventDispatcher.callCancellable(event, () -> {
-            final Position entityPosition = entity.getPosition();
+            final Pos entityPosition = entity.getPosition();
             final boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {

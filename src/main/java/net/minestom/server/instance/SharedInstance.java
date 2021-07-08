@@ -4,9 +4,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -119,8 +118,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Position position) {
-        return instanceContainer.isInVoid(position);
+    public boolean isInVoid(@NotNull Point point) {
+        return instanceContainer.isInVoid(point);
     }
 
     /**

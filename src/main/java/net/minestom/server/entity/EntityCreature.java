@@ -2,6 +2,7 @@ package net.minestom.server.entity;
 
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
@@ -9,7 +10,6 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,20 +42,6 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         this(entityType, UUID.randomUUID());
     }
 
-    @Deprecated
-    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
-        heal();
-    }
-
-    @Deprecated
-    public EntityCreature(@NotNull EntityType entityType, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        this(entityType, spawnPosition);
-        if (instance != null) {
-            setInstance(instance);
-        }
-    }
-
     @Override
     public void update(long time) {
         // AI
@@ -69,7 +55,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
 
         super.setInstance(instance, spawnPosition);

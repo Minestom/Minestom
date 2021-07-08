@@ -2,6 +2,7 @@ package net.minestom.demo.largeframebuffers;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -19,7 +20,6 @@ import net.minestom.server.map.framebuffers.LargeGLFWFramebuffer;
 import net.minestom.server.map.framebuffers.LargeGraphics2DFramebuffer;
 import net.minestom.server.map.framebuffers.MapColorRenderer;
 import net.minestom.server.network.packet.server.play.MapDataPacket;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.awt.*;
@@ -86,8 +86,7 @@ public class Demo {
 
         itemFrameMeta.setNotifyAboutChanges(true);
 
-        itemFrame.setInstance(instance, new Position(x, y, z));
-        itemFrame.getPosition().setYaw(180f);
+        itemFrame.setInstance(instance, new Pos(x, y, z, 180, 0));
     }
 
     private static void setupMaps(Instance instance, int mapIDStart, int zCoordinate) {

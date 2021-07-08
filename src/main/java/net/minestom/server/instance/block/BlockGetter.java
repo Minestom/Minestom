@@ -1,6 +1,6 @@
 package net.minestom.server.instance.block;
 
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public interface BlockGetter {

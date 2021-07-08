@@ -24,8 +24,8 @@ import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacement
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.Set;

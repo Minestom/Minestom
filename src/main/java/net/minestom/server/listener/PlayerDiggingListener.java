@@ -13,8 +13,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerDiggingListener {
@@ -150,11 +149,10 @@ public class PlayerDiggingListener {
 
         if (!result) {
             if (block.isSolid()) {
-                final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
-
+                final var playerPosition = player.getPosition();
                 // Teleport the player back if he broke a solid block just below him
-                if (playerBlockPosition.subtract(0, 1, 0).equals(blockPosition))
-                    player.teleport(player.getPosition());
+                if (playerPosition.sub(0, 1, 0).samePoint(blockPosition))
+                    player.teleport(playerPosition);
             }
         }
     }

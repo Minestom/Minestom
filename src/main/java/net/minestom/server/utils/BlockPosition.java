@@ -1,8 +1,7 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.clone.PublicCloneable;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
@@ -13,7 +12,7 @@ import java.util.function.DoubleUnaryOperator;
 /**
  * Represents the position of a block, so with integers instead of floating numbers.
  *
- * @deprecated use {@link net.minestom.server.utils.coordinate.Vec} instead
+ * @deprecated use {@link net.minestom.server.coordinate.Vec} instead
  */
 @Deprecated
 public class BlockPosition implements Point {

@@ -1,44 +1,106 @@
 package net.minestom.server.utils.location;
 
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
- * Represents a relative {@link Vector}.
- *
- * @see RelativeLocation
+ * Represents a location which can have fields relative to an {@link Entity} position.
  */
-public class RelativeVec extends RelativeLocation<Vector> {
+public final class RelativeVec {
 
-    public RelativeVec(Vector location, boolean relativeX, boolean relativeY, boolean relativeZ) {
-        super(location, relativeX, relativeY, relativeZ);
+    private final Vec vec;
+    private final boolean relativeX, relativeY, relativeZ;
+
+    public RelativeVec(@NotNull Vec vec, boolean relativeX, boolean relativeY, boolean relativeZ) {
+        this.vec = vec;
+        this.relativeX = relativeX;
+        this.relativeY = relativeY;
+        this.relativeZ = relativeZ;
     }
 
-    @Override
-    public Vector from(@Nullable Position position) {
+    /**
+     * Gets the location based on the relative fields and {@code position}.
+     *
+     * @param point the relative position
+     * @return the location
+     */
+    public @NotNull Vec from(@Nullable Point point) {
         if (!relativeX && !relativeY && !relativeZ) {
-            return location.clone();
+            return vec;
         }
-        final Position entityPosition = position != null ? position : new Position();
-
-        final double x = location.getX() + (relativeX ? entityPosition.getX() : 0);
-        final double y = location.getY() + (relativeY ? entityPosition.getY() : 0);
-        final double z = location.getZ() + (relativeZ ? entityPosition.getZ() : 0);
-
-        return new Vector(x, y, z);
+        final var absolute = Objects.requireNonNullElse(point, Vec.ZERO);
+        final double x = vec.x() + (relativeX ? absolute.x() : 0);
+        final double y = vec.y() + (relativeY ? absolute.y() : 0);
+        final double z = vec.z() + (relativeZ ? absolute.z() : 0);
+        return new Vec(x, y, z);
     }
 
-    @Override
-    public Vector fromView(@Nullable Position position) {
+    @ApiStatus.Experimental
+    public Vec fromView(@Nullable Pos point) {
         if (!relativeX && !relativeY && !relativeZ) {
-            return location.clone();
+            return vec;
         }
-        final Position entityPosition = position != null ? position : new Position();
+        final var absolute = Objects.requireNonNullElse(point, Pos.ZERO);
+        final double x = vec.x() + (relativeX ? absolute.yaw() : 0);
+        final double z = vec.z() + (relativeZ ? absolute.pitch() : 0);
+        return new Vec(x, 0, z);
+    }
 
-        final double x = location.getX() + (relativeX ? entityPosition.getYaw() : 0);
-        final double z = location.getZ() + (relativeZ ? entityPosition.getPitch() : 0);
+    /**
+     * Gets the location based on the relative fields and {@code entity}.
+     *
+     * @param entity the entity to get the relative position from
+     * @return the location
+     */
+    public @NotNull Vec from(@Nullable Entity entity) {
+        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
+        return from(entityPosition);
+    }
 
-        return new Vector(x, 0, z);
+    public @NotNull Vec fromSender(@Nullable CommandSender sender) {
+        final var entityPosition = sender instanceof Player ? ((Player) sender).getPosition() : Pos.ZERO;
+        return from(entityPosition);
+    }
+
+    @ApiStatus.Experimental
+    public @NotNull Vec fromView(@Nullable Entity entity) {
+        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
+        return fromView(entityPosition);
+    }
+
+    /**
+     * Gets if the 'x' field is relative.
+     *
+     * @return true if the 'x' field is relative
+     */
+    public boolean isRelativeX() {
+        return relativeX;
+    }
+
+    /**
+     * Gets if the 'y' field is relative.
+     *
+     * @return true if the 'y' field is relative
+     */
+    public boolean isRelativeY() {
+        return relativeY;
+    }
+
+    /**
+     * Gets if the 'z' field is relative.
+     *
+     * @return true if the 'z' field is relative
+     */
+    public boolean isRelativeZ() {
+        return relativeZ;
     }
 }

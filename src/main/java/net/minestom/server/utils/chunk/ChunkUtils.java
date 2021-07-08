@@ -1,10 +1,11 @@
 package net.minestom.server.utils.chunk;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.callback.OptionalCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,14 +89,6 @@ public final class ChunkUtils {
         return chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ;
     }
 
-    public static boolean same(@NotNull Position pos1, @NotNull Position pos2) {
-        final int x1 = getChunkCoordinate(pos1.getX());
-        final int z1 = getChunkCoordinate(pos1.getZ());
-        final int x2 = getChunkCoordinate(pos2.getX());
-        final int z2 = getChunkCoordinate(pos2.getZ());
-        return x1 == x2 && z1 == z2;
-    }
-
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         if (!ChunkUtils.same(originChunk, x, z)) {
             return instance.getChunkAt(x, z);
@@ -103,12 +96,8 @@ public final class ChunkUtils {
         return originChunk;
     }
 
-    public static Chunk retrieve(Instance instance, Chunk originChunk, Position position) {
-        return retrieve(instance, originChunk, position.getX(), position.getZ());
-    }
-
-    public static Chunk retrieve(Instance instance, Chunk originChunk, BlockPosition blockPosition) {
-        return retrieve(instance, originChunk, blockPosition.getX(), blockPosition.getZ());
+    public static Chunk retrieve(Instance instance, Chunk originChunk, Point position) {
+        return retrieve(instance, originChunk, position.x(), position.z());
     }
 
     /**
@@ -170,11 +159,11 @@ public final class ChunkUtils {
     /**
      * Gets the chunks in range of a position.
      *
-     * @param position the initial position
-     * @param range    how far should it retrieves chunk
+     * @param point the initial point
+     * @param range how far should it retrieves chunk
      * @return an array containing chunks index
      */
-    public static long @NotNull [] getChunksInRange(@NotNull Position position, int range) {
+    public static long @NotNull [] getChunksInRange(@NotNull Point point, int range) {
         long[] visibleChunks = new long[MathUtils.square(range * 2 + 1)];
         int xDistance = 0;
         int xDirection = 1;
@@ -184,8 +173,8 @@ public final class ChunkUtils {
         int corner = 0;
 
         for (int i = 0; i < visibleChunks.length; i++) {
-            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + position.getX());
-            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + position.getZ());
+            final int chunkX = getChunkCoordinate(xDistance * Chunk.CHUNK_SIZE_X + point.x());
+            final int chunkZ = getChunkCoordinate(zDistance * Chunk.CHUNK_SIZE_Z + point.z());
             visibleChunks[i] = getChunkIndex(chunkX, chunkZ);
 
             if (corner % 2 == 0) {
@@ -239,12 +228,11 @@ public final class ChunkUtils {
      * @param chunkZ the chunk Z
      * @return the instance position of the block located in {@code index}
      */
-    @NotNull
-    public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
+    public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
         final int x = blockIndexToPositionX(index, chunkX);
         final int y = blockIndexToPositionY(index);
         final int z = blockIndexToPositionZ(index, chunkZ);
-        return new BlockPosition(x, y, z);
+        return new Vec(x, y, z);
     }
 
     /**

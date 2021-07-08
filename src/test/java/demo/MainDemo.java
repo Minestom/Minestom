@@ -7,7 +7,7 @@ import net.minestom.server.event.player.PlayerLoginEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.Position;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public class MainDemo {
         globalEventHandler.addListener(PlayerLoginEvent.class, event -> {
             final Player player = event.getPlayer();
             event.setSpawningInstance(instanceContainer);
-            player.setRespawnPoint(new Position(0, 42, 0));
+            player.setRespawnPoint(new Pos(0, 42, 0));
         });
 
         // Start the server on port 25565

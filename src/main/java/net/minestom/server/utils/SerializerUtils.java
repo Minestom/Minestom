@@ -1,7 +1,7 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 
 public final class SerializerUtils {
 
