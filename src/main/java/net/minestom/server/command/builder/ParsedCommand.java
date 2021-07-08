@@ -34,8 +34,7 @@ public class ParsedCommand {
     /**
      * Executes the command for the given source.
      * <p>
-     * The command will not be executed if {@link Command#getCondition()}
-     * is not validated.
+     * The command will not be executed if any of {@link Command#getConditions()} fails.
      *
      * @param source the command source
      * @return the command data, null if none
@@ -44,26 +43,7 @@ public class ParsedCommand {
     public CommandData execute(@NotNull CommandSender source) {
         // Global listener
         command.globalListener(source, context, commandString);
-        final Set<UseCountCondition> useCountConditions = new HashSet<>();
-        // Command condition check
-        for (CommandCondition condition : command.getConditions().values()) {
-            if (condition instanceof RemoverCondition) {
-                if (((RemoverCondition) condition).shouldRemove()) {
-                    MinecraftServer.getCommandManager().updateDeclaredCommands(command.unregisterSelf());
-                    command.unregisterSelf();
-                    return null;
-                }
-            }
-
-            if (condition instanceof UseCountCondition) {
-                useCountConditions.add((UseCountCondition) condition);
-            }
-
-            if (!condition.canUse(source, commandString)) {
-                return null;
-            }
-        }
-        useCountConditions.forEach(UseCountCondition::incrementUseCount);
+        if (!checkConditions(source)) return null;
         // Condition is respected
         if (executor != null) {
             // An executor has been found
@@ -99,6 +79,37 @@ public class ParsedCommand {
         }
 
         return context.getReturnData();
+    }
+
+    /**
+     * Checks conditions and increments {@link UseCountCondition}s and checks
+     * if the command or syntax needs to be removed, if so remove them.
+     *
+     * @return {@code true} if the sender can execute this command
+     */
+    private boolean checkConditions(@NotNull CommandSender source) {
+        final Set<UseCountCondition> useCountConditions = new HashSet<>();
+        // Command condition check
+        for (CommandCondition condition : command.getConditions().values()) {
+            if (condition instanceof RemoverCondition) {
+                if (((RemoverCondition) condition).shouldRemove()) {
+                    MinecraftServer.getCommandManager().updateDeclaredCommands(command.unregisterSelf());
+                    // TODO be able to unregister syntaxes too
+                    command.unregisterSelf();
+                    return false;
+                }
+            }
+
+            if (condition instanceof UseCountCondition) {
+                useCountConditions.add((UseCountCondition) condition);
+            }
+
+            if (!condition.canUse(source, commandString)) {
+                return false;
+            }
+        }
+        useCountConditions.forEach(UseCountCondition::incrementUseCount);
+        return true;
     }
 
     @NotNull
