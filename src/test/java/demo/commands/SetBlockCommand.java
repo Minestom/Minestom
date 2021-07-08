@@ -16,7 +16,7 @@ public class SetBlockCommand extends Command {
             RelativeVec relativeVec = context.get("position");
             Block block = context.get("block");
             final Player player = sender.asPlayer();
-            player.getInstance().setBlock(relativeVec.from(player).toPosition().toBlockPosition(), block);
+            player.getInstance().setBlock(relativeVec.from(player), block);
         }, RelativeVec3("position"), BlockState("block"));
     }
 }

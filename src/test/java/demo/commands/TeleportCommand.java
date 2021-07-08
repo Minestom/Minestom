@@ -6,9 +6,9 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.entity.Player;
-import net.minestom.server.utils.Position;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Player;
 import net.minestom.server.utils.location.RelativeVec;
 
 public class TeleportCommand extends Command {
@@ -32,17 +32,15 @@ public class TeleportCommand extends Command {
             Player player = (Player) sender;
             player.teleport(pl.getPosition());
         }
-        sender.sendMessage(Component.text("Teleported to player "+playerName));
+        sender.sendMessage(Component.text("Teleported to player " + playerName));
     }
 
     private void onPositionTeleport(CommandSender sender, CommandContext context) {
         final Player player = sender.asPlayer();
 
         final RelativeVec relativeVec = context.get("pos");
-        final Position position = relativeVec.from(player).toPosition();
-
+        final Vec position = relativeVec.from(player);
         player.teleport(new Pos(position));
         player.sendMessage(Component.text("You have been teleported to " + position));
     }
-
 }
