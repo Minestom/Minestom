@@ -1,16 +1,20 @@
 package net.minestom.server.utils.location;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+
+import static net.minestom.server.command.builder.arguments.relative.ArgumentRelative.*;
 
 /**
  * Represents a location which can have fields relative to an {@link Entity} position.
@@ -102,5 +106,36 @@ public final class RelativeVec {
      */
     public boolean isRelativeZ() {
         return relativeZ;
+    }
+
+    public static RelativeVec parse(String input) throws ArgumentSyntaxException {
+        final String[] split = input.split(StringUtils.SPACE);
+        // Check if the value has enough element to be correct
+        if (split.length != 3 && split.length != 2) {
+            throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
+        }
+
+        double[] coordinates = new double[split.length];
+        boolean[] isRelative = new boolean[split.length];
+        for (int i = 0; i < split.length; i++) {
+            final String element = split[i];
+            try {
+                if (element.startsWith(RELATIVE_CHAR)) {
+                    isRelative[i] = true;
+
+                    if (element.length() != RELATIVE_CHAR.length()) {
+                        final String potentialNumber = element.substring(1);
+                        coordinates[i] = Float.parseFloat(potentialNumber);
+                    }
+                } else {
+                    coordinates[i] = Float.parseFloat(element);
+                }
+            } catch (NumberFormatException e) {
+                throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
+            }
+        }
+
+        return new RelativeVec(split.length == 3 ? new Vec(coordinates[0], coordinates[1], coordinates[2]) : new Vec(coordinates[0], coordinates[1]),
+                isRelative[0], split.length == 3 && isRelative[1], isRelative[split.length == 3 ? 2 : 1]);
     }
 }
