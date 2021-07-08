@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.condition.conditions;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.condition.CommandCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +35,10 @@ public class TtlCondition implements RemoverCondition {
 
     public boolean shouldRemove() {
         return removeAfterTtlExpires && System.currentTimeMillis() > expireAt;
+    }
+
+    public Duration timeUntilExpiration() {
+        return Duration.ofMillis(expireAt-System.currentTimeMillis());
     }
 
     @Override
