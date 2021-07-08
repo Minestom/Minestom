@@ -2,8 +2,8 @@ package net.minestom.server.collision;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 /**

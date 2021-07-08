@@ -1,6 +1,6 @@
 package net.minestom.server.utils.position;
 
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public final class PositionUtils {

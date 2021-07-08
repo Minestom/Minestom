@@ -6,7 +6,7 @@ import net.minestom.server.entity.metadata.other.BoatMeta;
 import net.minestom.server.network.packet.client.play.ClientSteerBoatPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Pos;
 
 public class PlayerVehicleListener {
 

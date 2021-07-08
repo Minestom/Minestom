@@ -6,7 +6,7 @@ import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerPositionListener {

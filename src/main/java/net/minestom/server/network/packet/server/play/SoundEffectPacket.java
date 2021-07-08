@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class SoundEffectPacket implements ServerPacket {

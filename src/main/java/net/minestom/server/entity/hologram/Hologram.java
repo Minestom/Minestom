@@ -8,8 +8,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 

@@ -6,9 +6,9 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Pos;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class CollisionUtils {

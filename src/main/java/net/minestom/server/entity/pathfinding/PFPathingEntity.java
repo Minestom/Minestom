@@ -8,7 +8,7 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public class PFPathingEntity implements IPathingEntity {

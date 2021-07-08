@@ -10,7 +10,7 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;

@@ -5,7 +5,7 @@ import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**

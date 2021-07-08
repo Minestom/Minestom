@@ -6,8 +6,8 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;

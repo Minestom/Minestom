@@ -30,8 +30,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.coordinate.Pos;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 

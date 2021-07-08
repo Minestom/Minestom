@@ -1,14 +1,12 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.clone.PublicCloneable;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
 /**
- * @deprecated use {@link net.minestom.server.utils.coordinate.Vec} instead
+ * @deprecated use {@link net.minestom.server.coordinate.Vec} instead
  */
 @Deprecated
 public class Vector implements Point {

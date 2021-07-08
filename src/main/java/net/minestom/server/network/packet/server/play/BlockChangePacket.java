@@ -4,8 +4,8 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockChangePacket implements ServerPacket {

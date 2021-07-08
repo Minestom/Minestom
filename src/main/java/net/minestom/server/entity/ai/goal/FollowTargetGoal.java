@@ -4,7 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;

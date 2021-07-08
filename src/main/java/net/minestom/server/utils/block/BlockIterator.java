@@ -2,9 +2,9 @@ package net.minestom.server.utils.block;
 
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Pos;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;

@@ -3,7 +3,7 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 /**

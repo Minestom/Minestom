@@ -8,7 +8,7 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.ai.goal.RandomStrollGoal;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Vec;
 
 public class ChickenCreature extends EntityCreature {
 

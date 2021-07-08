@@ -5,7 +5,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

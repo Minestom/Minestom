@@ -7,9 +7,9 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Pos;
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

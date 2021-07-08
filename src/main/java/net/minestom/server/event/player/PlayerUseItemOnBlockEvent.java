@@ -5,7 +5,7 @@ import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.coordinate.Point;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**

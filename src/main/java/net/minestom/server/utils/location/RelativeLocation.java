@@ -2,8 +2,8 @@ package net.minestom.server.utils.location;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.coordinate.Point;
-import net.minestom.server.utils.coordinate.Pos;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

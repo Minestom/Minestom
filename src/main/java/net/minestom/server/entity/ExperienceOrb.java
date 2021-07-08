@@ -1,6 +1,6 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.utils.coordinate.Vec;
+import net.minestom.server.coordinate.Vec;
 
 import java.util.Comparator;
 
