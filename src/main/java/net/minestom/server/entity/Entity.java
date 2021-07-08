@@ -547,13 +547,13 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                                 // Convert from blocks/tick to blocks/sec
                                 .mul(tps)
                                 // Apply drag
-                                .with((x, y, z) -> new Vec(
+                                .apply((x, y, z) -> new Vec(
                                         x * drag,
                                         !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
                                         z * drag
                                 ))
                                 // Prevent infinitely decreasing velocity
-                                .with(Vec.Operator.EPSILON);
+                                .apply(Vec.Operator.EPSILON);
                     }
                 }
 

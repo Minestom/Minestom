@@ -40,7 +40,7 @@ public class CollisionUtils {
                 deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
         return new PhysicsResult(currentPosition.withCoord(zCollision.newPosition),
-                deltaPosition.with(((x, y, z) -> new Vec(
+                deltaPosition.apply(((x, y, z) -> new Vec(
                         xCollision.foundCollision ? 0 : x,
                         yCollision.foundCollision ? 0 : y,
                         zCollision.foundCollision ? 0 : z
@@ -114,7 +114,7 @@ public class CollisionUtils {
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                corners[cornerIndex] = originalCorner.with(((x, y, z) -> new Vec(
+                corners[cornerIndex] = originalCorner.apply(((x, y, z) -> new Vec(
                         Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : x,
                         Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : y,
                         Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : z

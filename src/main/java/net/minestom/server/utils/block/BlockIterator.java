@@ -2,9 +2,6 @@ package net.minestom.server.utils.block;
 
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.coordinate.Point;
 import net.minestom.server.utils.coordinate.Pos;
 import net.minestom.server.utils.coordinate.Vec;
@@ -68,7 +65,7 @@ public class BlockIterator implements Iterator<Point> {
         double secondPosition = 0;
         double thirdPosition = 0;
 
-        Vec startBlock = startClone.with(Vec.Operator.FLOOR);
+        Vec startBlock = startClone.apply(Vec.Operator.FLOOR);
 
         if (getXLength(direction) > mainDirection) {
             mainFace = getXFace(direction);
