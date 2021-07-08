@@ -22,7 +22,11 @@ public class ArgumentRelativeVec2 extends ArgumentRelative<RelativeVec> {
     @NotNull
     @Override
     public RelativeVec parse(@NotNull String input) throws ArgumentSyntaxException {
-        return RelativeVec.parse(input);
+        final String[] split = input.split(StringUtils.SPACE);
+        if (split.length != 2) {
+            throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
+        }
+        return RelativeVec.parse(split);
     }
 
     @Override

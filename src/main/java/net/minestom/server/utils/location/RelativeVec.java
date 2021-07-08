@@ -108,17 +108,16 @@ public final class RelativeVec {
         return relativeZ;
     }
 
-    public static RelativeVec parse(String input) throws ArgumentSyntaxException {
-        final String[] split = input.split(StringUtils.SPACE);
+    public static RelativeVec parse(String[] input) throws ArgumentSyntaxException {
         // Check if the value has enough element to be correct
-        if (split.length != 3 && split.length != 2) {
-            throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
+        if (input.length != 3 && input.length != 2) {
+            throw new ArgumentSyntaxException("Invalid number of values", String.join(StringUtils.SPACE, input), INVALID_NUMBER_COUNT_ERROR);
         }
 
-        double[] coordinates = new double[split.length];
-        boolean[] isRelative = new boolean[split.length];
-        for (int i = 0; i < split.length; i++) {
-            final String element = split[i];
+        double[] coordinates = new double[input.length];
+        boolean[] isRelative = new boolean[input.length];
+        for (int i = 0; i < input.length; i++) {
+            final String element = input[i];
             try {
                 if (element.startsWith(RELATIVE_CHAR)) {
                     isRelative[i] = true;
@@ -131,11 +130,11 @@ public final class RelativeVec {
                     coordinates[i] = Float.parseFloat(element);
                 }
             } catch (NumberFormatException e) {
-                throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
+                throw new ArgumentSyntaxException("Invalid number", String.join(StringUtils.SPACE, input), INVALID_NUMBER_ERROR);
             }
         }
 
-        return new RelativeVec(split.length == 3 ? new Vec(coordinates[0], coordinates[1], coordinates[2]) : new Vec(coordinates[0], coordinates[1]),
-                isRelative[0], split.length == 3 && isRelative[1], isRelative[split.length == 3 ? 2 : 1]);
+        return new RelativeVec(input.length == 3 ? new Vec(coordinates[0], coordinates[1], coordinates[2]) : new Vec(coordinates[0], coordinates[1]),
+                isRelative[0], input.length == 3 && isRelative[1], isRelative[input.length == 3 ? 2 : 1]);
     }
 }
