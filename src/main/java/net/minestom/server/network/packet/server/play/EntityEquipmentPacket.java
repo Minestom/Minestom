@@ -1,17 +1,19 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.function.UnaryOperator;
 
-public class EntityEquipmentPacket implements ServerPacket {
+public class EntityEquipmentPacket implements ComponentHoldingServerPacket {
 
     public int entityId;
     public EquipmentSlot[] slots;
@@ -71,4 +73,24 @@ public class EntityEquipmentPacket implements ServerPacket {
         return ServerPacketIdentifier.ENTITY_EQUIPMENT;
     }
 
+    @Override
+    public @NotNull Collection<Component> components() {
+        List<Component> components = new ArrayList<>();
+        for (ItemStack item : this.itemStacks) {
+            components.addAll(item.components());
+        }
+        return components;
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        EntityEquipmentPacket packet = new EntityEquipmentPacket();
+        packet.entityId = this.entityId;
+        packet.slots = Arrays.copyOf(this.slots, this.slots.length);
+        packet.itemStacks = new ItemStack[this.itemStacks.length];
+        for (int i = 0; i < this.itemStacks.length; i++) {
+            packet.itemStacks[i] = this.itemStacks[i].copyWithOperator(operator);
+        }
+        return packet;
+    }
 }

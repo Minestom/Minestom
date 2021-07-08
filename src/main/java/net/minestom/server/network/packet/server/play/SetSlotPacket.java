@@ -1,13 +1,20 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-public class SetSlotPacket implements ServerPacket {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.UnaryOperator;
+
+public class SetSlotPacket implements ComponentHoldingServerPacket {
 
     public byte windowId;
     public short slot;
@@ -49,5 +56,19 @@ public class SetSlotPacket implements ServerPacket {
         setSlotPacket.slot = -1;
         setSlotPacket.itemStack = cursorItem;
         return setSlotPacket;
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        return itemStack.components();
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        SetSlotPacket packet = new SetSlotPacket();
+        packet.windowId = this.windowId;
+        packet.slot = this.slot;
+        packet.itemStack = this.itemStack.copyWithOperator(operator);
+        return packet;
     }
 }

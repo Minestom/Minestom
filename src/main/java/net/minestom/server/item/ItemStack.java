@@ -3,6 +3,7 @@ package net.minestom.server.item;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -12,6 +13,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -24,7 +27,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * An item stack cannot be null, {@link ItemStack#AIR} should be used instead.
  */
-public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
+public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem>, ComponentHolder<ItemStack> {
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
@@ -208,5 +211,27 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
                 this.amount,
                 NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
+    }
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        List<Component> components = new ArrayList<>(this.getLore());
+        if (this.getDisplayName() != null) {
+            components.add(getDisplayName());
+        }
+        return components;
+    }
+
+    @Override
+    public @NotNull ItemStack copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        List<Component> lore = new ArrayList<>();
+        for (Component component : this.getLore()) {
+            lore.add(operator.apply(component));
+        }
+        ItemStack itemStack = withLore(lore);
+        if (itemStack.getDisplayName() != null) {
+            itemStack = itemStack.withDisplayName(operator);
+        }
+        return itemStack;
     }
 }
