@@ -5,6 +5,7 @@ import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -34,8 +35,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public int chunkX, chunkZ;
 
     public Map<Integer, Section> sections = new HashMap<>();
-    public Map<Integer, BlockHandler> handlerMap = new HashMap<>();
-    public Map<Integer, NBTCompound> nbtMap = new HashMap<>();
+    public Map<Integer, DynamicChunk.BlockEntry> entries = new HashMap<>();
 
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
@@ -124,17 +124,18 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         blocks.release();
 
         // Block entities
-        if (handlerMap == null || handlerMap.isEmpty()) {
+        if (entries == null || entries.isEmpty()) {
             writer.writeVarInt(0);
         } else {
             List<NBTCompound> compounds = new ArrayList<>();
-            for (var entry : handlerMap.entrySet()) {
+            for (var entry : entries.entrySet()) {
                 final int index = entry.getKey();
-                final BlockHandler handler = entry.getValue();
+                final var blockEntry = entry.getValue();
+                final BlockHandler handler = blockEntry.handler();
                 final var blockEntityTags = handler.getBlockEntityTags();
                 if (blockEntityTags.isEmpty())
                     continue;
-                final var blockNbt = Objects.requireNonNullElseGet(nbtMap.get(index), NBTCompound::new);
+                final var blockNbt = Objects.requireNonNullElseGet(blockEntry.nbtCompound(), NBTCompound::new);
                 final var resultNbt = new NBTCompound();
 
                 for (Tag<?> tag : blockEntityTags) {
@@ -219,8 +220,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
 
             // Block entities
             final int blockEntityCount = reader.readVarInt();
-            handlerMap = new Int2ObjectOpenHashMap<>();
-            nbtMap = new Int2ObjectOpenHashMap<>();
+
+            entries = new Int2ObjectOpenHashMap<>();
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
                 final String id = tag.getString("id");

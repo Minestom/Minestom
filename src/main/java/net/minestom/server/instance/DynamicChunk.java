@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PFBlock;
@@ -9,14 +11,15 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.ref.SoftReference;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -28,8 +31,7 @@ public class DynamicChunk extends Chunk {
     protected final TreeMap<Integer, Section> sectionMap = new TreeMap<>();
 
     // Key = ChunkUtils#getBlockIndex
-    protected final Int2ObjectOpenHashMap<BlockHandler> handlerMap = new Int2ObjectOpenHashMap<>();
-    protected final Int2ObjectOpenHashMap<NBTCompound> nbtMap = new Int2ObjectOpenHashMap<>();
+    protected final Int2ObjectOpenHashMap<BlockEntry> entries = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<BlockHandler> tickableMap = new Int2ObjectOpenHashMap<>();
 
     private long lastChangeTime;
@@ -56,17 +58,11 @@ public class DynamicChunk extends Chunk {
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
-        if (handler != null) {
-            this.handlerMap.put(index, handler);
-        } else {
-            this.handlerMap.remove(index);
-        }
-        // Nbt
         final NBTCompound nbt = block.nbt();
-        if (nbt != null) {
-            this.nbtMap.put(index, nbt);
+        if (handler != null || nbt != null) {
+            this.entries.put(index, new BlockEntry(handler, nbt));
         } else {
-            this.nbtMap.remove(index);
+            this.entries.remove(index);
         }
         // Tickable
         if (handler != null && handler.isTickable()) {
@@ -115,21 +111,18 @@ public class DynamicChunk extends Chunk {
             return Block.AIR;
         }
         final int index = ChunkUtils.getBlockIndex(x, y, z);
-        final BlockHandler handler = handlerMap.get(index);
-        final NBTCompound nbt = nbtMap.get(index);
-        if (handler != null) {
-            block = block.withHandler(handler);
-        }
-        if (nbt != null) {
-            block = block.withNbt(nbt);
+        final var entry = entries.get(index);
+        if (entry != null) {
+            final BlockHandler handler = entry.handler;
+            final NBTCompound nbt = entry.nbtCompound;
+            if (handler != null) {
+                block = block.withHandler(handler);
+            }
+            if (nbt != null) {
+                block = block.withNbt(nbt);
+            }
         }
         return block;
-    }
-
-    @NotNull
-    @Override
-    public Set<Integer> getBlockEntities() {
-        return nbtMap.keySet();
     }
 
     @Override
@@ -149,8 +142,7 @@ public class DynamicChunk extends Chunk {
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
         packet.sections = (Map<Integer, Section>) sectionMap.clone(); // TODO deep clone
-        packet.handlerMap = handlerMap.clone();
-        packet.nbtMap = nbtMap.clone();
+        packet.entries = entries.clone();
 
         this.cachedPacketTime = getLastChangeTime();
         this.cachedPacket = new SoftReference<>(packet);
@@ -164,21 +156,42 @@ public class DynamicChunk extends Chunk {
         for (var entry : sectionMap.entrySet()) {
             dynamicChunk.sectionMap.put(entry.getKey(), entry.getValue().clone());
         }
-        dynamicChunk.handlerMap.putAll(handlerMap);
-        dynamicChunk.nbtMap.putAll(nbtMap);
-
+        dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
 
     @Override
     public void reset() {
         this.sectionMap.values().forEach(Section::clear);
-        this.handlerMap.clear();
-        this.nbtMap.clear();
+        this.entries.clear();
     }
 
     private @NotNull Section retrieveSection(int y) {
         final int sectionIndex = ChunkUtils.getSectionAt(y);
         return getSection(sectionIndex);
+    }
+
+    @ApiStatus.Internal
+    public static class BlockEntry {
+        private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
+                .expireAfterWrite(5, TimeUnit.MINUTES)
+                .weakValues()
+                .build();
+
+        private final BlockHandler handler;
+        private final NBTCompound nbtCompound;
+
+        public BlockEntry(BlockHandler handler, NBTCompound nbtCompound) {
+            this.handler = handler;
+            this.nbtCompound = nbtCompound != null ? NBT_CACHE.get(nbtCompound, compound -> nbtCompound) : null;
+        }
+
+        public BlockHandler handler() {
+            return handler;
+        }
+
+        public NBTCompound nbtCompound() {
+            return nbtCompound;
+        }
     }
 }

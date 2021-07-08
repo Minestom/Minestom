@@ -20,7 +20,6 @@ import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -118,14 +117,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     @Override
     public abstract void tick(long time);
-
-    /**
-     * Gets all the block entities in this chunk.
-     *
-     * @return the block entities in this chunk
-     */
-    @NotNull
-    public abstract Set<Integer> getBlockEntities();
 
     /**
      * Gets the last time that this chunk changed.

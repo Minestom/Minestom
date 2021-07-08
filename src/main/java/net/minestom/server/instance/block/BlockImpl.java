@@ -1,7 +1,5 @@
 package net.minestom.server.instance.block;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
@@ -12,15 +10,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.TimeUnit;
 
 class BlockImpl implements Block {
-
-    private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
-            .expireAfterWrite(5, TimeUnit.MINUTES)
-            .weakValues()
-            .build();
-
     private final Registry.BlockEntry registry;
     private final Map<String, String> properties;
     private final NBTCompound nbt;
@@ -57,8 +48,7 @@ class BlockImpl implements Block {
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
         var compound = Objects.requireNonNullElseGet(nbt(), NBTCompound::new);
         tag.write(compound, value);
-        final var cachedNbt = NBT_CACHE.get(compound, c -> compound);
-        return new BlockImpl(registry, properties, cachedNbt, handler);
+        return new BlockImpl(registry, properties, compound, handler);
     }
 
     @Override
