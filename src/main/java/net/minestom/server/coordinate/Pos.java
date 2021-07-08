@@ -46,10 +46,6 @@ public final class Pos implements Point {
         return new Pos(point.x(), point.y(), point.z());
     }
 
-    public static @NotNull Pos fromPosition(@NotNull Position position) {
-        return new Pos(position.getX(), position.getY(), position.getZ(), position.getYaw(), position.getPitch());
-    }
-
     @Contract(pure = true)
     public @NotNull Pos withCoord(double x, double y, double z) {
         return new Pos(x, y, z, yaw, pitch);

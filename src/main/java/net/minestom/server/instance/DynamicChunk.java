@@ -2,14 +2,12 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.Cooldown;
-import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +15,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.ref.SoftReference;
 import java.util.Map;
-import java.time.Duration;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -99,7 +96,7 @@ public class DynamicChunk extends Chunk {
             final int x = ChunkUtils.blockIndexToChunkPositionX(index);
             final int y = ChunkUtils.blockIndexToChunkPositionY(index);
             final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-            final BlockPosition blockPosition = new BlockPosition(x, y, z);
+            final Vec blockPosition = new Vec(x, y, z);
 
             final Block block = getBlock(blockPosition);
             entry.getValue().tick(new BlockHandler.Tick(block, instance, blockPosition));

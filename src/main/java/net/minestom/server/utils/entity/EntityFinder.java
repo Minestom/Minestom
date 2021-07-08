@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -33,7 +35,7 @@ public class EntityFinder {
     private EntitySort entitySort = EntitySort.ARBITRARY;
 
     // Position
-    private Position startPosition = new Position();
+    private Point startPosition = Vec.ZERO;
     private Float dx, dy, dz;
     private IntRange distance;
 
@@ -159,17 +161,17 @@ public class EntityFinder {
                 final var entityPosition = entity.getPosition();
                 if (dx != null && !MathUtils.isBetweenUnordered(
                         entityPosition.x(),
-                        startPosition.getX(), dx))
+                        startPosition.x(), dx))
                     return false;
 
                 if (dy != null && !MathUtils.isBetweenUnordered(
                         entityPosition.y(),
-                        startPosition.getY(), dy))
+                        startPosition.y(), dy))
                     return false;
 
                 if (dz != null && !MathUtils.isBetweenUnordered(
                         entityPosition.z(),
-                        startPosition.getZ(), dz))
+                        startPosition.z(), dz))
                     return false;
 
                 return true;
@@ -337,7 +339,7 @@ public class EntityFinder {
 
     @NotNull
     private static List<Entity> findTarget(@Nullable Instance instance, @NotNull TargetSelector targetSelector,
-                                           @NotNull Position startPosition, @Nullable Entity self) {
+                                           @NotNull Point startPosition, @Nullable Entity self) {
 
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             Entity entity = null;

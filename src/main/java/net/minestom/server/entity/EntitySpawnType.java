@@ -1,12 +1,11 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Vector;
 
 public enum EntitySpawnType {
     BASE {
@@ -78,7 +77,7 @@ public enum EntitySpawnType {
             if (entity.getEntityMeta() instanceof PaintingMeta) {
                 PaintingMeta paintingMeta = (PaintingMeta) entity.getEntityMeta();
                 packet.motive = paintingMeta.getMotive().ordinal();
-                packet.position = new BlockPosition(
+                packet.position = new Vec(
                         Math.max(0, (paintingMeta.getMotive().getWidth() >> 1) - 1),
                         paintingMeta.getMotive().getHeight() >> 1,
                         0
@@ -98,12 +97,12 @@ public enum EntitySpawnType {
                         break;
                 }
             } else {
-                packet.position = new BlockPosition(0, 0, 0);
+                packet.position = Vec.ZERO;
             }
             return packet;
         }
     };
 
     public abstract ServerPacket getSpawnPacket(Entity entity);
-    
+
 }

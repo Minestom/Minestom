@@ -1,11 +1,12 @@
 package net.minestom.server.utils.chunk;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -97,10 +98,6 @@ public final class ChunkUtils {
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, Point position) {
         return retrieve(instance, originChunk, position.x(), position.z());
-    }
-
-    public static Chunk retrieve(Instance instance, Chunk originChunk, BlockPosition blockPosition) {
-        return retrieve(instance, originChunk, blockPosition.getX(), blockPosition.getZ());
     }
 
     /**
@@ -231,12 +228,11 @@ public final class ChunkUtils {
      * @param chunkZ the chunk Z
      * @return the instance position of the block located in {@code index}
      */
-    @NotNull
-    public static BlockPosition getBlockPosition(int index, int chunkX, int chunkZ) {
+    public static @NotNull Point getBlockPosition(int index, int chunkX, int chunkZ) {
         final int x = blockIndexToPositionX(index, chunkX);
         final int y = blockIndexToPositionY(index);
         final int z = blockIndexToPositionZ(index, chunkZ);
-        return new BlockPosition(x, y, z);
+        return new Vec(x, y, z);
     }
 
     /**

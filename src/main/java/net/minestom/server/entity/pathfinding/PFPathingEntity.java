@@ -5,10 +5,10 @@ import com.extollit.gaming.ai.path.model.IPathingEntity;
 import com.extollit.gaming.ai.path.model.Passibility;
 import com.extollit.linalg.immutable.Vec3d;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
-import net.minestom.server.utils.Position;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 public class PFPathingEntity implements IPathingEntity {
@@ -194,8 +194,7 @@ public class PFPathingEntity implements IPathingEntity {
 
     @Override
     public void moveTo(Vec3d position, Passibility passibility, Gravitation gravitation) {
-        this.targetPosition = new Position(position.x, position.y, position.z);
-
+        this.targetPosition = new Vec(position.x, position.y, position.z);
         final double entityY = entity.getPosition().y();
         if (entityY < targetPosition.y()) {
             this.navigator.jump(1);

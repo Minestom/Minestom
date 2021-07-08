@@ -9,7 +9,7 @@ import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called with {@link EntityProjectile#shoot(Position, double, double)}
+ * Called with {@link EntityProjectile#shoot(Point, double, double)}
  */
 public class EntityShootEvent implements EntityEvent, CancellableEvent {
 

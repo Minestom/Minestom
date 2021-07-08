@@ -26,6 +26,9 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -68,8 +71,6 @@ import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.instance.InstanceUtils;
@@ -701,17 +702,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from the {@link SoundEvent} enum.
-     *
-     * @see #playSound(SoundEvent, SoundCategory, int, int, int, float, float)
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
-    }
-
-    /**
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
@@ -734,17 +724,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         namedSoundEffectPacket.volume = volume;
         namedSoundEffectPacket.pitch = pitch;
         playerConnection.sendPacket(namedSoundEffectPacket);
-    }
-
-    /**
-     * Plays a sound from an identifier (represents a custom sound in a resource pack).
-     *
-     * @see #playSound(String, SoundCategory, int, int, int, float, float)
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
     }
 
     /**
@@ -808,7 +787,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
         EffectPacket packet = new EffectPacket();
         packet.effectId = effect.getId();
-        packet.position = new BlockPosition(x, y, z);
+        packet.position = new Vec(x, y, z);
         packet.data = data;
         packet.disableRelativeVolume = disableRelativeVolume;
         playerConnection.sendPacket(packet);

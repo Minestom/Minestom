@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block.rule.vanilla;
 
 import it.unimi.dsi.fastutil.Pair;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -51,26 +52,26 @@ public class StairsPlacementRule extends BlockPlacementRule {
 
     private enum Facing {
         NORTH(
-                new BlockPosition(0, 0, 1),
-                new BlockPosition(0, 0, -1)
+                new Vec(0, 0, 1),
+                new Vec(0, 0, -1)
         ),
         EAST(
-                new BlockPosition(-1, 0, 0),
-                new BlockPosition(1, 0, 0)
+                new Vec(-1, 0, 0),
+                new Vec(1, 0, 0)
         ),
         SOUTH(
-                new BlockPosition(0, 0, -1),
-                new BlockPosition(0, 0, 1)
+                new Vec(0, 0, -1),
+                new Vec(0, 0, 1)
         ),
         WEST(
-                new BlockPosition(1, 0, 0),
-                new BlockPosition(-1, 0, 0)
+                new Vec(1, 0, 0),
+                new Vec(-1, 0, 0)
         );
 
-        private final BlockPosition front;
-        private final BlockPosition back;
+        private final Point front;
+        private final Point back;
 
-        Facing(@NotNull BlockPosition front, @NotNull BlockPosition back) {
+        Facing(@NotNull Point front, @NotNull Point back) {
             this.front = front;
             this.back = back;
         }
@@ -83,12 +84,12 @@ public class StairsPlacementRule extends BlockPlacementRule {
         }
 
         @NotNull
-        public Pair<@Nullable Shape, @Nullable Facing> getBack(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
-            return this.getProperties(instance, blockPosition.clone().add(this.back));
+        public Pair<@Nullable Shape, @Nullable Facing> getBack(@NotNull Instance instance, @NotNull Point blockPosition) {
+            return this.getProperties(instance, blockPosition.add(this.back));
         }
 
         @NotNull
-        private Pair<@Nullable Shape, @Nullable Facing> getProperties(@NotNull Instance instance, @NotNull BlockPosition blockPosition) {
+        private Pair<@Nullable Shape, @Nullable Facing> getProperties(@NotNull Instance instance, @NotNull Point blockPosition) {
             Block block = instance.getBlock(blockPosition);
             if (block.isAir()) {
                 return Pair.of(null, null);

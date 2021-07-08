@@ -10,7 +10,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -147,11 +146,11 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                 }
 
                 if (resultNbt.getSize() > 0) {
-                    final BlockPosition blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                    final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
                     resultNbt.setString("id", handler.getNamespaceId().asString())
-                            .setInt("x", blockPosition.getX())
-                            .setInt("y", blockPosition.getY())
-                            .setInt("z", blockPosition.getZ());
+                            .setInt("x", blockPosition.blockX())
+                            .setInt("y", blockPosition.blockY())
+                            .setInt("z", blockPosition.blockZ());
                     compounds.add(resultNbt);
                 }
             }

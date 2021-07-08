@@ -1,9 +1,8 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -52,7 +51,7 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if the bounding box intersects at a {@link BlockPosition}.
+     * Used to know if the bounding box intersects at a point.
      *
      * @param blockPosition the position to check
      * @return true if the bounding box intersects with the position, false otherwise

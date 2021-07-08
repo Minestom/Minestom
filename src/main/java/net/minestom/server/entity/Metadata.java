@@ -4,16 +4,15 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
@@ -98,12 +97,12 @@ public class Metadata {
         return new Value<>(TYPE_BOOLEAN, value, writer -> writer.writeBoolean(value), BinaryReader::readBoolean);
     }
 
-    public static Value<Vector> Rotation(@NotNull Vector value) {
+    public static Value<Point> Rotation(@NotNull Point value) {
         return new Value<>(TYPE_ROTATION, value, writer -> {
-            writer.writeFloat((float) value.getX());
-            writer.writeFloat((float) value.getY());
-            writer.writeFloat((float) value.getZ());
-        }, reader -> new Vector(reader.readFloat(), reader.readFloat(), reader.readFloat()));
+            writer.writeFloat((float) value.x());
+            writer.writeFloat((float) value.y());
+            writer.writeFloat((float) value.z());
+        }, reader -> new Vec(reader.readFloat(), reader.readFloat(), reader.readFloat()));
     }
 
     public static Value<Point> Position(@NotNull Point value) {
@@ -339,7 +338,7 @@ public class Metadata {
             case TYPE_STRING:
                 return (Value<T>) String("");
             case TYPE_CHAT:
-                return (Value<T>) Chat(ColoredText.of(""));
+                return (Value<T>) Chat(Component.empty());
             case TYPE_OPTCHAT:
                 return (Value<T>) OptChat((Component) null);
             case TYPE_SLOT:
@@ -347,9 +346,9 @@ public class Metadata {
             case TYPE_BOOLEAN:
                 return (Value<T>) Boolean(false);
             case TYPE_ROTATION:
-                return (Value<T>) Rotation(new Vector());
+                return (Value<T>) Rotation(Vec.ZERO);
             case TYPE_POSITION:
-                return (Value<T>) Position(new BlockPosition(0, 0, 0));
+                return (Value<T>) Position(Vec.ZERO);
             case TYPE_OPTPOSITION:
                 return (Value<T>) OptPosition(null);
             case TYPE_DIRECTION:

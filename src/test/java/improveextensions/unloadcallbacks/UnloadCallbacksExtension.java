@@ -1,6 +1,7 @@
 package improveextensions.unloadcallbacks;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.event.EventCallback;
@@ -10,7 +11,6 @@ import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
@@ -50,7 +50,7 @@ public class UnloadCallbacksExtension extends Extension {
         zombie.addEventCallback(EntityTickEvent.class, e -> {
             zombieTicked = true;
         });
-        zombie.setInstance(instance, new Position(8, 64, 8) /* middle of chunk */);
+        zombie.setInstance(instance, new Vec(8, 64, 8) /* middle of chunk */);
 
         // this callback will be cancelled
         MinecraftServer.getSchedulerManager().buildTask(() -> {

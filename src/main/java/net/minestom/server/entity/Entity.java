@@ -40,7 +40,6 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -872,10 +871,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
     public void setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
         setInstance(instance, Pos.fromPoint(spawnPosition));
-    }
-
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
-        setInstance(instance, Pos.fromPosition(spawnPosition));
     }
 
     /**

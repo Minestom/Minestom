@@ -1,6 +1,8 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
@@ -23,7 +25,6 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
@@ -59,7 +60,7 @@ public class InstanceContainer extends Instance {
     protected final Set<Chunk> scheduledChunksToRemove = new HashSet<>();
 
     private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
-    private final Map<BlockPosition, Block> currentlyChangingBlocks = new HashMap<>();
+    private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
 
     // the chunk loader, used when trying to load/save a chunk from another source
     private IChunkLoader chunkLoader;
@@ -137,7 +138,7 @@ public class InstanceContainer extends Instance {
         synchronized (chunk) {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.currentTimeMillis();
-            final BlockPosition blockPosition = new BlockPosition(x, y, z);
+            final Vec blockPosition = new Vec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
@@ -565,7 +566,7 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Sends a {@link BlockChangePacket} at the specified {@link BlockPosition} to set the block as {@code blockStateId}.
+     * Sends a {@link BlockChangePacket} at the specified position to set the block as {@code blockStateId}.
      * <p>
      * WARNING: this does not change the internal block data, this is strictly visual for the players.
      *
@@ -573,7 +574,7 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the block position
      * @param block         the new block
      */
-    private void sendBlockChange(@NotNull Chunk chunk, @NotNull BlockPosition blockPosition, @NotNull Block block) {
+    private void sendBlockChange(@NotNull Chunk chunk, @NotNull Point blockPosition, @NotNull Block block) {
         chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
     }
 
@@ -637,7 +638,7 @@ public class InstanceContainer extends Instance {
         }
     }
 
-    private void setAlreadyChanged(@NotNull BlockPosition blockPosition, Block block) {
+    private void setAlreadyChanged(@NotNull Point blockPosition, Block block) {
         currentlyChangingBlocks.put(blockPosition, block);
     }
 
@@ -649,7 +650,7 @@ public class InstanceContainer extends Instance {
      * @param block         the block
      * @return true if the block changed since the last update
      */
-    private boolean isAlreadyChanged(@NotNull BlockPosition blockPosition, @NotNull Block block) {
+    private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         if (changedBlock == null)
             return false;
@@ -663,7 +664,7 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the block position
      * @return the modified block state id
      */
-    private Block executeBlockPlacementRule(Block block, @NotNull BlockPosition blockPosition) {
+    private Block executeBlockPlacementRule(Block block, @NotNull Point blockPosition) {
         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
         if (blockPlacementRule != null) {
             return blockPlacementRule.blockUpdate(this, blockPosition, block);
@@ -678,15 +679,15 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull BlockPosition blockPosition) {
+    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition) {
         for (int offsetX = -1; offsetX < 2; offsetX++) {
             for (int offsetY = -1; offsetY < 2; offsetY++) {
                 for (int offsetZ = -1; offsetZ < 2; offsetZ++) {
                     if (offsetX == 0 && offsetY == 0 && offsetZ == 0)
                         continue;
-                    final int neighborX = blockPosition.getX() + offsetX;
-                    final int neighborY = blockPosition.getY() + offsetY;
-                    final int neighborZ = blockPosition.getZ() + offsetZ;
+                    final int neighborX = blockPosition.blockX() + offsetX;
+                    final int neighborY = blockPosition.blockY() + offsetY;
+                    final int neighborZ = blockPosition.blockZ() + offsetZ;
                     final Chunk chunk = getChunkAt(neighborX, neighborZ);
 
                     // Do not try to get neighbour in an unloaded chunk
@@ -696,7 +697,7 @@ public class InstanceContainer extends Instance {
                     final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
                     final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborBlock);
                     if (neighborBlockPlacementRule != null) {
-                        final BlockPosition neighborPosition = new BlockPosition(neighborX, neighborY, neighborZ);
+                        final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
                         final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
                                 neighborPosition, neighborBlock);
                         if (neighborBlock != newNeighborBlock) {

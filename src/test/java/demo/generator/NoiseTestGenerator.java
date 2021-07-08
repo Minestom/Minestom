@@ -3,12 +3,12 @@ package demo.generator;
 import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.interpolation.InterpolationType;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -165,7 +165,7 @@ public class NoiseTestGenerator implements ChunkGenerator {
                 for (int j = -2; j < 18; j++) {
                     if (jNoise2.getNoise(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16) > 0.75) {
                         int y = getHeight(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16);
-                        tree.build(batch, new BlockPosition(i, y, j));
+                        tree.build(batch, new Vec(i, y, j));
                     }
                 }
             }

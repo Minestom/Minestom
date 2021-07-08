@@ -5,6 +5,8 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
@@ -25,10 +27,7 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.block.BlockIterator;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -718,10 +717,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the line of sight in {@link BlockPosition} of the entity.
+     * Gets the line of sight of the entity.
      *
      * @param maxDistance The max distance to scan
-     * @return A list of {@link BlockPosition} in this entities line of sight
+     * @return A list of {@link Point poiints} in this entities line of sight
      */
     public List<Point> getLineOfSight(int maxDistance) {
         List<Point> blocks = new ArrayList<>();
@@ -758,7 +757,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the target (not-air) {@link BlockPosition} of the entity.
+     * Gets the target (not-air) block position of the entity.
      *
      * @param maxDistance The max distance to scan before returning null
      * @return The block position targeted by this entity, null if non are found
