@@ -12,6 +12,9 @@ import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.data.Data;
 import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.metadata.EntityMeta;
@@ -41,9 +44,6 @@ import net.minestom.server.utils.Position;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -868,6 +868,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         instance.UNSAFE_addEntity(this);
         spawn();
         EventDispatcher.call(new EntitySpawnEvent(this, instance));
+    }
+
+    public void setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
+        setInstance(instance, Pos.fromPoint(spawnPosition));
     }
 
     public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {

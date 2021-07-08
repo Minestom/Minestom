@@ -40,6 +40,12 @@ public final class Pos implements Point {
         this(point, 0, 0);
     }
 
+    public static @NotNull Pos fromPoint(@NotNull Point point) {
+        if (point instanceof Pos)
+            return (Pos) point;
+        return new Pos(point.x(), point.y(), point.z());
+    }
+
     public static @NotNull Pos fromPosition(@NotNull Position position) {
         return new Pos(position.getX(), position.getY(), position.getZ(), position.getYaw(), position.getPitch());
     }

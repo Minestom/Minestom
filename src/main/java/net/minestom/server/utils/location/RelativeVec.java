@@ -14,13 +14,11 @@ import java.util.Objects;
 
 /**
  * Represents a location which can have fields relative to an {@link Entity} position.
- *
- * @param <T> the location type
  */
 public final class RelativeVec {
 
     private final Vec vec;
-    private boolean relativeX, relativeY, relativeZ;
+    private final boolean relativeX, relativeY, relativeZ;
 
     public RelativeVec(@NotNull Vec vec, boolean relativeX, boolean relativeY, boolean relativeZ) {
         this.vec = vec;
