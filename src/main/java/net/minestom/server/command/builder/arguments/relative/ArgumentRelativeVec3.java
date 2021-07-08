@@ -23,7 +23,7 @@ public class ArgumentRelativeVec3 extends ArgumentRelative<RelativeVec> {
     @Override
     public RelativeVec parse(@NotNull String input) throws ArgumentSyntaxException {
         final String[] split = input.split(StringUtils.SPACE);
-        if (split.length != 3) {
+        if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }
         return RelativeVec.parse(split);
