@@ -5,12 +5,11 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a {@link Vector} with 2 floating numbers (x;z) which can take relative coordinates.
+ * Represents a {@link Vec} with 2 floating numbers (x;z) which can take relative coordinates.
  * <p>
  * Example: -1.2 ~
  */
