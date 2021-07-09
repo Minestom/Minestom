@@ -35,7 +35,7 @@ public abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }
-        return RelativeVec.parse(split, getRelativeNumberParser());
+        return RelativeVec.parse(split, getRelativeNumberParser(), getAbsoluteNumberParser());
     }
 
     /**
