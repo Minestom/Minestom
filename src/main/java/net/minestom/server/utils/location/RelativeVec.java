@@ -125,10 +125,10 @@ public final class RelativeVec {
 
                     if (element.length() != RELATIVE_CHAR.length()) {
                         final String potentialNumber = element.substring(1);
-                        coordinates[i] = (Double) numberParser.apply(potentialNumber);
+                        coordinates[i] = numberParser.apply(potentialNumber).doubleValue();
                     }
                 } else {
-                    coordinates[i] = (Double) numberParser.apply(element);
+                    coordinates[i] = numberParser.apply(element).doubleValue();
                 }
             } catch (NumberFormatException e) {
                 throw new ArgumentSyntaxException("Invalid number", String.join(StringUtils.SPACE, input), INVALID_NUMBER_ERROR);
