@@ -123,11 +123,10 @@ public final class RelativeVec {
             double double14 = dna11.x() * local.z() + dna12.x() * local.y() + dna13.x() * local.x();
             double double16 = dna11.y() * local.z() + dna12.y() * local.y() + dna13.y() * local.x();
             double double18 = dna11.z() * local.z() + dna12.z() * local.y() + dna13.z() * local.x();
-            return new Vec(double14 + (relativeX ? origin.x() : 0),
-                    double16 + (relativeY ? origin.y() : 0),
-                    double18 + (relativeZ ? origin.z() : 0));
+            return new Vec(double14 + origin.x(),double16 + origin.y(),double18 + origin.z());
         }),
-        UNDEFINED((vec, origin, relativeX, relativeY, relativeZ) -> vec);
+        ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec)),
+        UNDEFINED((vec, origin, relativeX, relativeY, relativeZ) -> Vec.ZERO);
 
         private final CoordinateConverter converter;
 
