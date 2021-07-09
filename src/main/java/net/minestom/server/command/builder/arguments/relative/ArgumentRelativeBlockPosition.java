@@ -35,7 +35,12 @@ public class ArgumentRelativeBlockPosition extends ArgumentRelativeVec {
     }
 
     @Override
-    Function<String, ? extends Number> getNumberParser() {
+    Function<String, ? extends Number> getRelativeNumberParser() {
+        return Double::parseDouble;
+    }
+
+    @Override
+    Function<String, ? extends Number> getAbsoluteNumberParser() {
         return Integer::parseInt;
     }
 }

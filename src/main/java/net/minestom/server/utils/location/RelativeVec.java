@@ -109,7 +109,7 @@ public final class RelativeVec {
         return relativeZ;
     }
 
-    public static RelativeVec parse(String[] input, Function<String, ? extends Number> numberParser) throws ArgumentSyntaxException {
+    public static RelativeVec parse(String[] input, Function<String, ? extends Number> relativeNumberParser, Function<String, ? extends Number> absoluteNumberParser) throws ArgumentSyntaxException {
         // Check if the value has enough element to be correct
         if (input.length != 3 && input.length != 2) {
             throw new ArgumentSyntaxException("Invalid number of values", String.join(StringUtils.SPACE, input), INVALID_NUMBER_COUNT_ERROR);
@@ -125,10 +125,10 @@ public final class RelativeVec {
 
                     if (element.length() != RELATIVE_CHAR.length()) {
                         final String potentialNumber = element.substring(1);
-                        coordinates[i] = numberParser.apply(potentialNumber).doubleValue();
+                        coordinates[i] = relativeNumberParser.apply(potentialNumber).doubleValue();
                     }
                 } else {
-                    coordinates[i] = numberParser.apply(element).doubleValue();
+                    coordinates[i] = absoluteNumberParser.apply(element).doubleValue();
                 }
             } catch (NumberFormatException e) {
                 throw new ArgumentSyntaxException("Invalid number", String.join(StringUtils.SPACE, input), INVALID_NUMBER_ERROR);

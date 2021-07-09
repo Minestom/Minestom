@@ -32,7 +32,12 @@ public class ArgumentRelativeVec2 extends ArgumentRelativeVec {
     }
 
     @Override
-    Function<String, ? extends Number> getNumberParser() {
-        return Float::parseFloat;
+    Function<String, ? extends Number> getRelativeNumberParser() {
+        return Double::parseDouble;
+    }
+
+    @Override
+    Function<String, ? extends Number> getAbsoluteNumberParser() {
+        return Double::parseDouble;
     }
 }

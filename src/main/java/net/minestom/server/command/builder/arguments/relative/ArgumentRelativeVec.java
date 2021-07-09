@@ -25,7 +25,8 @@ public abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         this.numberCount = numberCount;
     }
 
-    abstract Function<String, ? extends Number> getNumberParser();
+    abstract Function<String, ? extends Number> getRelativeNumberParser();
+    abstract Function<String, ? extends Number> getAbsoluteNumberParser();
 
     @NotNull
     @Override
@@ -34,7 +35,7 @@ public abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         if (split.length != getNumberCount()) {
             throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
         }
-        return RelativeVec.parse(split, getNumberParser());
+        return RelativeVec.parse(split, getRelativeNumberParser());
     }
 
     /**
