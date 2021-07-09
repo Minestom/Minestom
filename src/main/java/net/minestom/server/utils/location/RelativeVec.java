@@ -15,7 +15,6 @@ import java.util.Objects;
  * Represents a location which can have fields relative to an {@link Entity} position.
  */
 public final class RelativeVec {
-
     private final Vec vec;
     private final CoordinateType coordinateType;
     private final boolean relativeX, relativeY, relativeZ;
@@ -114,19 +113,19 @@ public final class RelativeVec {
             return new Vec(x, y, z);
         }),
         LOCAL((local, origin, relativeX, relativeY, relativeZ) -> {
-            double double5 = Math.cos(Math.toRadians(origin.yaw() + 90.0f));
-            double double6 = Math.sin(Math.toRadians(origin.yaw() + 90.0f));
-            double double7 = Math.cos(Math.toRadians(-origin.pitch()));
-            double double8 = Math.sin(Math.toRadians(-origin.pitch()));
-            double double9 = Math.cos(Math.toRadians(-origin.pitch() + 90.0f));
-            double double10 = Math.sin(Math.toRadians(-origin.pitch() + 90.0f));
-            Vec dna11 = new Vec(double5 * double7, double8, double6 * double7);
-            Vec dna12 = new Vec(double5 * double9, double10, double6 * double9);
-            Vec dna13 = dna11.cross(dna12).mul(-1);
-            double double14 = dna11.x() * local.z() + dna12.x() * local.y() + dna13.x() * local.x();
-            double double16 = dna11.y() * local.z() + dna12.y() * local.y() + dna13.y() * local.x();
-            double double18 = dna11.z() * local.z() + dna12.z() * local.y() + dna13.z() * local.x();
-            return new Vec(double14 + origin.x(),double16 + origin.y(),double18 + origin.z());
+            final double double5 = Math.cos(Math.toRadians(origin.yaw() + 90.0f));
+            final double double6 = Math.sin(Math.toRadians(origin.yaw() + 90.0f));
+            final double double7 = Math.cos(Math.toRadians(-origin.pitch()));
+            final double double8 = Math.sin(Math.toRadians(-origin.pitch()));
+            final double double9 = Math.cos(Math.toRadians(-origin.pitch() + 90.0f));
+            final double double10 = Math.sin(Math.toRadians(-origin.pitch() + 90.0f));
+            final Vec dna11 = new Vec(double5 * double7, double8, double6 * double7);
+            final Vec dna12 = new Vec(double5 * double9, double10, double6 * double9);
+            final Vec dna13 = dna11.cross(dna12).neg();
+            final double double14 = dna11.x() * local.z() + dna12.x() * local.y() + dna13.x() * local.x();
+            final double double16 = dna11.y() * local.z() + dna12.y() * local.y() + dna13.y() * local.x();
+            final double double18 = dna11.z() * local.z() + dna12.z() * local.y() + dna13.z() * local.x();
+            return new Vec(double14 + origin.x(), double16 + origin.y(), double18 + origin.z());
         }),
         ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec));
 
