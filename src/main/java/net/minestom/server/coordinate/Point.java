@@ -172,6 +172,10 @@ public interface Point {
                 Double.compare(point.z(), z()) == 0;
     }
 
+    default boolean isZero() {
+        return x() == 0 && y() == 0 && z() == 0;
+    }
+
     /**
      * Gets if two points are in the same chunk.
      *

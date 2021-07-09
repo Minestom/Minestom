@@ -914,7 +914,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @return true if velocity is not set to 0
      */
     public boolean hasVelocity() {
-        return !velocity.samePoint(Vec.ZERO);
+        return !velocity.isZero();
     }
 
     /**
