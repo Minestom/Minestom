@@ -128,8 +128,7 @@ public final class RelativeVec {
             double double18 = dna11.z() * local.z() + dna12.z() * local.y() + dna13.z() * local.x();
             return new Vec(double14 + origin.x(),double16 + origin.y(),double18 + origin.z());
         }),
-        ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec)),
-        UNDEFINED((vec, origin, relativeX, relativeY, relativeZ) -> Vec.ZERO);
+        ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec));
 
         private final CoordinateConverter converter;
 

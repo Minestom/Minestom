@@ -46,7 +46,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
         double[] coordinates = new double[split.length];
         boolean[] isRelative = new boolean[split.length];
-        var type = UNDEFINED;
+        RelativeVec.CoordinateType type = null;
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
             try {
@@ -54,7 +54,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
                 if (MODIFIER_CHARS.contains(modifierChar)) {
                     isRelative[i] = true;
 
-                    if (type == UNDEFINED) {
+                    if (type == null) {
                         type = modifierChar == LOCAL_CHAR ? LOCAL : RELATIVE;
                     } else if (type != (modifierChar == LOCAL_CHAR ? LOCAL : RELATIVE)) {
                         throw new ArgumentSyntaxException("Cannot mix world & local coordinates (everything must either use ^ or not)", input, MIXED_TYPE_ERROR);
@@ -65,7 +65,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
                         coordinates[i] = getRelativeNumberParser().apply(potentialNumber).doubleValue();
                     }
                 } else {
-                    if (type == UNDEFINED) {
+                    if (type == null) {
                         type = ABSOLUTE;
                     } else if (type == LOCAL) {
                         throw new ArgumentSyntaxException("Cannot mix world & local coordinates (everything must either use ^ or not)", input, MIXED_TYPE_ERROR);
