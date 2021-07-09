@@ -15,18 +15,21 @@ public class ArgumentGroup extends Argument<CommandContext> {
 
     public static final int INVALID_ARGUMENTS_ERROR = 1;
 
-    private final Argument<?>[] group;
+    private final Argument<?>[] arguments;
 
     public ArgumentGroup(@NotNull String id, @NotNull Argument<?>... group) {
         super(id, true, false);
-        this.group = group;
+        this.arguments = group;
     }
 
-    @NotNull
+    public @NotNull Argument<?>[] getArguments() {
+        return arguments;
+    }
+    
     @Override
-    public CommandContext parse(@NotNull String input) throws ArgumentSyntaxException {
+    public @NotNull CommandContext parse(@NotNull String input) throws ArgumentSyntaxException {
         List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
-        CommandParser.parse(null, group, input.split(StringUtils.SPACE), input, validSyntaxes, null);
+        CommandParser.parse(null, arguments, input.split(StringUtils.SPACE), input, validSyntaxes, null);
 
         CommandContext context = new CommandContext(input);
         CommandParser.findMostCorrectSyntax(validSyntaxes, context);
@@ -39,9 +42,9 @@ public class ArgumentGroup extends Argument<CommandContext> {
 
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
-        for (int i = 0; i < group.length; i++) {
-            final boolean isLast = i == group.length - 1;
-            group[i].processNodes(nodeMaker, executable && isLast);
+        for (int i = 0; i < arguments.length; i++) {
+            final boolean isLast = i == arguments.length - 1;
+            arguments[i].processNodes(nodeMaker, executable && isLast);
         }
     }
 }
