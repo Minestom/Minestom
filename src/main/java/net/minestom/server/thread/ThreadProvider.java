@@ -69,7 +69,7 @@ public abstract class ThreadProvider {
      *
      * @param chunk the chunk
      */
-    public abstract long findThread(@NotNull Chunk chunk);
+    public abstract int findThread(@NotNull Chunk chunk);
 
     /**
      * Defines how often chunks thread should be updated.
@@ -245,7 +245,7 @@ public abstract class ThreadProvider {
 
     private @NotNull ChunkEntry setChunkThread(@NotNull Chunk chunk,
                                                @NotNull Function<TickThread, ChunkEntry> chunkEntrySupplier) {
-        final int threadId = getThreadId(chunk);
+        final int threadId = Math.abs(findThread(chunk)) % threads.size();
         TickThread thread = threads.get(threadId);
         var chunks = threadChunkMap.computeIfAbsent(thread, tickThread -> ConcurrentHashMap.newKeySet());
 
@@ -265,16 +265,6 @@ public abstract class ThreadProvider {
             chunkEntryMap.remove(chunk);
         }
         this.chunks.remove(chunk);
-    }
-
-    /**
-     * Finds the thread id associated to a {@link Chunk}.
-     *
-     * @param chunk the chunk to find the thread id from
-     * @return the chunk thread id
-     */
-    private int getThreadId(@NotNull Chunk chunk) {
-        return (int) (Math.abs(findThread(chunk)) % threads.size());
     }
 
     private void processRemovedEntities() {
