@@ -57,8 +57,11 @@ public final class RelativeVec {
      * @return the location
      */
     public @NotNull Vec from(@Nullable Entity entity) {
-        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
-        return from(entityPosition);
+        if (entity != null) {
+            return from(entity.getPosition().add(0, entity.getEyeHeight(), 0));
+        } else {
+            return from(Pos.ZERO);
+        }
     }
 
     public @NotNull Vec fromSender(@Nullable CommandSender sender) {
