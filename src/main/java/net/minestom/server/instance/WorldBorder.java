@@ -1,11 +1,11 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -166,12 +166,14 @@ public class WorldBorder {
         final double radius = getDiameter() / 2d;
         final boolean checkX = point.x() <= getCenterX() + radius && point.x() >= getCenterX() - radius;
         final boolean checkZ = point.z() <= getCenterZ() + radius && point.z() >= getCenterZ() - radius;
-        if (!checkX && !checkZ) {
-            return CollisionAxis.BOTH;
-        } else if (!checkX) {
-            return CollisionAxis.X;
-        } else if (!checkZ) {
-            return CollisionAxis.Z;
+        if (!checkX || !checkZ) {
+            if (!checkX && !checkZ) {
+                return CollisionAxis.BOTH;
+            } else if (!checkX) {
+                return CollisionAxis.X;
+            } else {
+                return CollisionAxis.Z;
+            }
         }
         return CollisionAxis.NONE;
     }

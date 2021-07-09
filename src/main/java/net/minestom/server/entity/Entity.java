@@ -507,7 +507,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 );
 
                 if (this.hasPhysics) {
-                    final CollisionUtils.PhysicsResult physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+                    final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
                     this.onGround = physicsResult.isOnGround();
                     newPosition = physicsResult.newPosition();
                     newVelocity = physicsResult.newVelocity();
@@ -521,7 +521,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 }
 
                 // World border collision
-                final Point finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+                final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
                 final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
                 if (!ChunkUtils.isLoaded(finalChunk)) {
                     // Entity shouldn't be updated when moving in an unloaded chunk
@@ -530,7 +530,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
                 // Apply the position if changed
                 if (!finalVelocityPosition.samePoint(position)) {
-                    refreshPosition((Pos) finalVelocityPosition, true);
+                    refreshPosition(finalVelocityPosition, true);
                 }
 
                 // Update velocity
