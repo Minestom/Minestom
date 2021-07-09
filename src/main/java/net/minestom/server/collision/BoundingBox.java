@@ -58,14 +58,14 @@ public class BoundingBox {
      */
     public boolean intersectWithBlock(@NotNull Point blockPosition) {
         final double offsetX = 1;
-        final double x = blockPosition.x();
+        final double x = blockPosition.blockX();
         final double maxX = x + offsetX;
 
         final boolean checkX = getMinX() < maxX && getMaxX() > x;
         if (!checkX)
             return false;
 
-        final double y = blockPosition.y();
+        final double y = blockPosition.blockY();
         final double maxY = y + 0.99999;
 
         final boolean checkY = getMinY() < maxY && getMaxY() > y;
@@ -73,7 +73,7 @@ public class BoundingBox {
             return false;
 
         final double offsetZ = 1;
-        final double z = blockPosition.z();
+        final double z = blockPosition.blockZ();
         final double maxZ = z + offsetZ;
 
         // Z check
