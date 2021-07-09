@@ -18,13 +18,21 @@ import java.util.Objects;
 public final class RelativeVec {
 
     private final Vec vec;
-    private final boolean relativeX, relativeY, relativeZ;
+    private boolean relativeX, relativeY, relativeZ;
+    private boolean[] relative;
+    private boolean isLocal;
 
     public RelativeVec(@NotNull Vec vec, boolean relativeX, boolean relativeY, boolean relativeZ) {
         this.vec = vec;
         this.relativeX = relativeX;
         this.relativeY = relativeY;
         this.relativeZ = relativeZ;
+    }
+
+    public RelativeVec(Vec vec, boolean[] relative, boolean isLocal) {
+        this.vec = vec;
+        this.relative = relative;
+        this.isLocal = isLocal;
     }
 
     /**
@@ -62,8 +70,9 @@ public final class RelativeVec {
      * @return the location
      */
     public @NotNull Vec from(@Nullable Entity entity) {
-        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
-        return from(entityPosition);
+        return isLocal ? toGlobal(vec, entity.getPosition(), relative) : toGlobal(vec, entity.getPosition().asVec(), relative);
+//        final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
+//        return from(entityPosition);
     }
 
     public @NotNull Vec fromSender(@Nullable CommandSender sender) {
@@ -104,4 +113,30 @@ public final class RelativeVec {
         return relativeZ;
     }
 
+    public static Vec toGlobal(Vec local, Pos origin, boolean[] axis) {
+        double double5 = Math.cos(Math.toRadians(origin.yaw() + 90.0f));
+        double double6 = Math.sin(Math.toRadians(origin.yaw() + 90.0f));
+        double double7 = Math.cos(Math.toRadians(-origin.pitch()));
+        double double8 = Math.sin(Math.toRadians(-origin.pitch()));
+        double double9 = Math.cos(Math.toRadians(-origin.pitch() + 90.0f));
+        double double10 = Math.sin(Math.toRadians(-origin.pitch() + 90.0f));
+        Vec dna11 = new Vec(double5 * double7, double8, double6 * double7);
+        Vec dna12 = new Vec(double5 * double9, double10, double6 * double9);
+        Vec dna13 = dna11.cross(dna12).mul(-1);
+        double double14 = dna11.x() * local.z() + dna12.x() * local.y() + dna13.x() * local.x();
+        double double16 = dna11.y() * local.z() + dna12.y() * local.y() + dna13.y() * local.x();
+        double double18 = dna11.z() * local.z() + dna12.z() * local.y() + dna13.z() * local.x();
+        return new Vec(double14 + (axis[0] ? origin.x() : 0), double16 + (axis[1] ? origin.y() : 0), double18 + (axis[2] ? origin.z() : 0));
+    }
+
+    public static Vec toGlobal(Vec relative, Vec origin, boolean[] axis) {
+        if (!axis[0] && !axis[1] && !axis[2]) {
+            return relative;
+        }
+        final var absolute = Objects.requireNonNullElse(origin, Vec.ZERO);
+        final double x = relative.x() + (axis[0] ? absolute.x() : 0);
+        final double y = relative.y() + (axis[1] ? absolute.y() : 0);
+        final double z = relative.z() + (axis[2] ? absolute.z() : 0);
+        return new Vec(x, y, z);
+    }
 }

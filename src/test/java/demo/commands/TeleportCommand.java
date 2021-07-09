@@ -39,8 +39,8 @@ public class TeleportCommand extends Command {
         final Player player = sender.asPlayer();
 
         final RelativeVec relativeVec = context.get("pos");
-        final Vec position = relativeVec.from(player);
-        player.teleport(new Pos(position));
+        final Pos position = player.getPosition().withCoord(relativeVec.from(player));
+        player.teleport(position);
         player.sendMessage(Component.text("You have been teleported to " + position));
     }
 }
