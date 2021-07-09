@@ -13,8 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.function.Function;
 
-import static net.minestom.server.command.builder.arguments.relative.ArgumentRelative.*;
+import static net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec.*;
 
 /**
  * Represents a location which can have fields relative to an {@link Entity} position.
@@ -108,7 +109,7 @@ public final class RelativeVec {
         return relativeZ;
     }
 
-    public static RelativeVec parse(String[] input) throws ArgumentSyntaxException {
+    public static RelativeVec parse(String[] input, Function<String, ? extends Number> numberParser) throws ArgumentSyntaxException {
         // Check if the value has enough element to be correct
         if (input.length != 3 && input.length != 2) {
             throw new ArgumentSyntaxException("Invalid number of values", String.join(StringUtils.SPACE, input), INVALID_NUMBER_COUNT_ERROR);
@@ -124,10 +125,10 @@ public final class RelativeVec {
 
                     if (element.length() != RELATIVE_CHAR.length()) {
                         final String potentialNumber = element.substring(1);
-                        coordinates[i] = Float.parseFloat(potentialNumber);
+                        coordinates[i] = (Double) numberParser.apply(potentialNumber);
                     }
                 } else {
-                    coordinates[i] = Float.parseFloat(element);
+                    coordinates[i] = (Double) numberParser.apply(element);
                 }
             } catch (NumberFormatException e) {
                 throw new ArgumentSyntaxException("Invalid number", String.join(StringUtils.SPACE, input), INVALID_NUMBER_ERROR);
