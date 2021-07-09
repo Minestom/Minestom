@@ -80,7 +80,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
         return new RelativeVec(split.length == 3 ?
                 new Vec(coordinates[0], coordinates[1], coordinates[2]) : new Vec(coordinates[0], coordinates[1]),
                 type,
-                isRelative[0], isRelative[1], isRelative[2]);
+                isRelative[0], split.length == 3 && isRelative[1], isRelative[split.length == 3 ? 2 : 1]);
     }
 
     /**
