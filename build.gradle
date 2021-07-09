@@ -164,8 +164,7 @@ dependencies {
     }
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
-    // TODO include registry files
-    //implementation files('data/minestom-data-1.17.jar')
+    implementation 'com.github.Minestom:MinestomDataGenerator:-SNAPSHOT'
 
     // Adventure, for user-interface
     api "net.kyori:adventure-api:$adventureVersion"
