@@ -103,9 +103,6 @@ public final class RelativeVec {
 
     public enum CoordinateType {
         RELATIVE((relative, origin, relativeX, relativeY, relativeZ) -> {
-            if (!relativeX && !relativeY && !relativeZ) {
-                return relative;
-            }
             final var absolute = Objects.requireNonNullElse(origin, Vec.ZERO);
             final double x = relative.x() + (relativeX ? absolute.x() : 0);
             final double y = relative.y() + (relativeY ? absolute.y() : 0);
@@ -113,19 +110,12 @@ public final class RelativeVec {
             return new Vec(x, y, z);
         }),
         LOCAL((local, origin, relativeX, relativeY, relativeZ) -> {
-            final double double5 = Math.cos(Math.toRadians(origin.yaw() + 90.0f));
-            final double double6 = Math.sin(Math.toRadians(origin.yaw() + 90.0f));
-            final double double7 = Math.cos(Math.toRadians(-origin.pitch()));
-            final double double8 = Math.sin(Math.toRadians(-origin.pitch()));
-            final double double9 = Math.cos(Math.toRadians(-origin.pitch() + 90.0f));
-            final double double10 = Math.sin(Math.toRadians(-origin.pitch() + 90.0f));
-            final Vec dna11 = new Vec(double5 * double7, double8, double6 * double7);
-            final Vec dna12 = new Vec(double5 * double9, double10, double6 * double9);
-            final Vec dna13 = dna11.cross(dna12).neg();
-            final double double14 = dna11.x() * local.z() + dna12.x() * local.y() + dna13.x() * local.x();
-            final double double16 = dna11.y() * local.z() + dna12.y() * local.y() + dna13.y() * local.x();
-            final double double18 = dna11.z() * local.z() + dna12.z() * local.y() + dna13.z() * local.x();
-            return new Vec(double14 + origin.x(), double16 + origin.y(), double18 + origin.z());
+            final Vec vec1 = new Vec(Math.cos(Math.toRadians(origin.yaw() + 90.0f)), 0, Math.sin(Math.toRadians(origin.yaw() + 90.0f)));
+            final Vec a = vec1.mul(Math.cos(Math.toRadians(-origin.pitch()))).withY(Math.sin(Math.toRadians(-origin.pitch())));
+            final Vec b = vec1.mul(Math.cos(Math.toRadians(-origin.pitch() + 90.0f))).withY(Math.sin(Math.toRadians(-origin.pitch() + 90.0f)));
+            final Vec c = a.cross(b).neg();
+            final Vec relativePos = a.mul(local.z()).add(b.mul(local.y())).add(c.mul(local.x()));
+            return origin.add(relativePos).asVec();
         }),
         ABSOLUTE(((vec, origin, relativeX1, relativeY1, relativeZ1) -> vec));
 
