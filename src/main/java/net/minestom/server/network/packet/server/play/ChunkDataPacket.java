@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Section;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -35,7 +36,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     public int chunkX, chunkZ;
 
     public Map<Integer, Section> sections = new HashMap<>();
-    public Map<Integer, DynamicChunk.BlockEntry> entries = new HashMap<>();
+    public Map<Integer, Block> entries = new HashMap<>();
 
     private static final byte CHUNK_SECTION_COUNT = 16;
     private static final int MAX_BITS_PER_ENTRY = 16;
@@ -130,14 +131,15 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             List<NBTCompound> compounds = new ArrayList<>();
             for (var entry : entries.entrySet()) {
                 final int index = entry.getKey();
-                final var blockEntry = entry.getValue();
-                final BlockHandler handler = blockEntry.handler();
-                final var blockEntityTags = handler.getBlockEntityTags();
-                if (blockEntityTags.isEmpty())
+                final var block = entry.getValue();
+                final BlockHandler handler = block.handler();
+                if(handler == null)
                     continue;
-                final var blockNbt = Objects.requireNonNullElseGet(blockEntry.nbtCompound(), NBTCompound::new);
+                final var blockEntityTags = handler.getBlockEntityTags();
+                if (blockEntityTags.isEmpty()) // Verify if the block should be sent as block entity to client
+                    continue;
+                final var blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
                 final var resultNbt = new NBTCompound();
-
                 for (Tag<?> tag : blockEntityTags) {
                     final var value = tag.read(blockNbt);
                     if (value != null) {
