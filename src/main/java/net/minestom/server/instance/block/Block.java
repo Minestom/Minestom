@@ -97,6 +97,9 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
         return getTag(Tag.NBT);
     }
 
+    @Contract(pure = true)
+    boolean hasNbt();
+
     /**
      * Returns the block handler.
      *

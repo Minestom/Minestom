@@ -55,8 +55,7 @@ public class DynamicChunk extends Chunk {
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
-        final NBTCompound nbt = block.nbt();
-        if (handler != null || nbt != null) {
+        if (handler != null || block.hasNbt()) {
             this.entries.put(index, block);
         } else {
             this.entries.remove(index);

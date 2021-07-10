@@ -66,6 +66,11 @@ class BlockImpl implements Block {
     }
 
     @Override
+    public boolean hasNbt() {
+        return nbt != null && nbt.getSize() > 0;
+    }
+
+    @Override
     public @Nullable BlockHandler handler() {
         return handler;
     }
