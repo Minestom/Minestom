@@ -58,12 +58,13 @@ public class DynamicChunk extends Chunk {
         final NBTCompound nbt = block.nbt();
         if (handler != null || nbt != null) {
             this.entries.put(index, block);
-            // Block tick
-            if (handler != null && handler.isTickable()) {
-                this.tickableMap.put(index, block);
-            }
         } else {
             this.entries.remove(index);
+        }
+        // Block tick
+        if (handler != null && handler.isTickable()) {
+            this.tickableMap.put(index, block);
+        } else {
             this.tickableMap.remove(index);
         }
     }
