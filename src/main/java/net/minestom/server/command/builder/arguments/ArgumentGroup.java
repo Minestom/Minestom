@@ -9,6 +9,7 @@ import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ArgumentGroup extends Argument<CommandContext> {
@@ -46,5 +47,10 @@ public class ArgumentGroup extends Argument<CommandContext> {
             final boolean isLast = i == arguments.length - 1;
             arguments[i].processNodes(nodeMaker, executable && isLast);
         }
+    }
+
+    @Override
+    public String toString() {
+        return Arrays.deepToString(arguments);
     }
 }
