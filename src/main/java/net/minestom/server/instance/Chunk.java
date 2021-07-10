@@ -4,8 +4,6 @@ import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.EventDispatcher;
@@ -42,8 +40,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler, DataContainer {
-
+public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
@@ -68,7 +65,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
 
     // Data
     private final NBTCompound nbt = new NBTCompound();
-    protected Data data;
 
     public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
@@ -102,7 +98,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
-    public abstract @NotNull TreeMap<Integer, Section> getSections();
+    public abstract @NotNull Map<Integer, Section> getSections();
 
     public abstract @NotNull Section getSection(int section);
 
@@ -371,17 +367,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbt, value);
-    }
-
-    @Nullable
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
     }
 
     /**

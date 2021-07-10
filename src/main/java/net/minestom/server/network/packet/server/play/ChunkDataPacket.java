@@ -5,7 +5,6 @@ import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.instance.DynamicChunk;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -133,7 +132,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                 final int index = entry.getKey();
                 final var block = entry.getValue();
                 final BlockHandler handler = block.handler();
-                if(handler == null)
+                if (handler == null)
                     continue;
                 final var blockEntityTags = handler.getBlockEntityTags();
                 if (blockEntityTags.isEmpty()) // Verify if the block should be sent as block entity to client

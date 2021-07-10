@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
+import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PFBlock;
@@ -11,12 +12,10 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.lang.ref.SoftReference;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -25,7 +24,7 @@ import java.util.TreeMap;
  */
 public class DynamicChunk extends Chunk {
 
-    protected final TreeMap<Integer, Section> sectionMap = new TreeMap<>();
+    protected final Int2ObjectAVLTreeMap<Section> sectionMap = new Int2ObjectAVLTreeMap<>();
 
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
@@ -69,7 +68,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull TreeMap<Integer, Section> getSections() {
+    public @NotNull Map<Integer, Section> getSections() {
         return sectionMap;
     }
 
@@ -129,7 +128,7 @@ public class DynamicChunk extends Chunk {
         packet.biomes = biomes;
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;
-        packet.sections = (Map<Integer, Section>) sectionMap.clone(); // TODO deep clone
+        packet.sections = sectionMap.clone(); // TODO deep clone
         packet.entries = entries.clone();
 
         this.cachedPacketTime = getLastChangeTime();
@@ -141,8 +140,8 @@ public class DynamicChunk extends Chunk {
     @Override
     public Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, biomes.clone(), chunkX, chunkZ);
-        for (var entry : sectionMap.entrySet()) {
-            dynamicChunk.sectionMap.put(entry.getKey(), entry.getValue().clone());
+        for (var entry : sectionMap.int2ObjectEntrySet()) {
+            dynamicChunk.sectionMap.put(entry.getIntKey(), entry.getValue().clone());
         }
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
