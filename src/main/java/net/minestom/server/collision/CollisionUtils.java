@@ -1,7 +1,5 @@
 package net.minestom.server.collision;
 
-import it.unimi.dsi.fastutil.booleans.Boolean2DoubleFunction;
-import it.unimi.dsi.fastutil.doubles.DoubleUnaryOperator;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -11,6 +9,8 @@ import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.function.DoubleUnaryOperator;
 
 public class CollisionUtils {
 
