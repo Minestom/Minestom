@@ -2,9 +2,9 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityPositionPacket implements ServerPacket {
@@ -13,7 +13,8 @@ public class EntityPositionPacket implements ServerPacket {
     public short deltaX, deltaY, deltaZ;
     public boolean onGround;
 
-    public EntityPositionPacket() {}
+    public EntityPositionPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -40,13 +41,13 @@ public class EntityPositionPacket implements ServerPacket {
 
     @NotNull
     public static EntityPositionPacket getPacket(int entityId,
-                                                 @NotNull Position newPosition, @NotNull Position oldPosition,
+                                                 @NotNull Pos newPosition, @NotNull Pos oldPosition,
                                                  boolean onGround) {
         EntityPositionPacket entityPositionPacket = new EntityPositionPacket();
         entityPositionPacket.entityId = entityId;
-        entityPositionPacket.deltaX = (short) ((newPosition.getX() * 32 - oldPosition.getX() * 32) * 128);
-        entityPositionPacket.deltaY = (short) ((newPosition.getY() * 32 - oldPosition.getY() * 32) * 128);
-        entityPositionPacket.deltaZ = (short) ((newPosition.getZ() * 32 - oldPosition.getZ() * 32) * 128);
+        entityPositionPacket.deltaX = (short) ((newPosition.x() * 32 - oldPosition.x() * 32) * 128);
+        entityPositionPacket.deltaY = (short) ((newPosition.y() * 32 - oldPosition.y() * 32) * 128);
+        entityPositionPacket.deltaZ = (short) ((newPosition.z() * 32 - oldPosition.z() * 32) * 128);
         entityPositionPacket.onGround = onGround;
 
         return entityPositionPacket;

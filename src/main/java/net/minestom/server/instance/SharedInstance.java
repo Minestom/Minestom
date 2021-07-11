@@ -1,15 +1,14 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.data.Data;
 import net.minestom.server.entity.Player;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -27,12 +26,18 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void refreshBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId) {
-        this.instanceContainer.refreshBlockStateId(blockPosition, blockStateId);
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        this.instanceContainer.setBlock(x, y, z, block);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition) {
+    public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
+                              @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+        return instanceContainer.placeBlock(player, block, blockPosition, blockFace, cursorX, cursorY, cursorZ);
+    }
+
+    @Override
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
         return instanceContainer.breakBlock(player, blockPosition);
     }
 
@@ -113,28 +118,8 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean isInVoid(@NotNull Position position) {
-        return instanceContainer.isInVoid(position);
-    }
-
-    @Override
-    public void setBlockStateId(int x, int y, int z, short blockStateId, Data data) {
-        this.instanceContainer.setBlockStateId(x, y, z, blockStateId, data);
-    }
-
-    @Override
-    public void setCustomBlock(int x, int y, int z, short customBlockId, Data data) {
-        this.instanceContainer.setCustomBlock(x, y, z, customBlockId, data);
-    }
-
-    @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, Data data) {
-        this.instanceContainer.setSeparateBlocks(x, y, z, blockStateId, customBlockId, data);
-    }
-
-    @Override
-    public void scheduleUpdate(int time, @NotNull TemporalUnit unit, @NotNull BlockPosition position) {
-        this.instanceContainer.scheduleUpdate(time, unit, position);
+    public boolean isInVoid(@NotNull Point point) {
+        return instanceContainer.isInVoid(point);
     }
 
     /**

@@ -3,16 +3,7 @@ package net.minestom.codegen.attribute;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -51,7 +42,7 @@ public final class AttributeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
-        JsonArray attributes = GSON.fromJson(new JsonReader(new InputStreamReader(attributesFile)), JsonArray.class);
+        JsonArray attributes = GSON.fromJson(new InputStreamReader(attributesFile), JsonArray.class);
         List<JavaFile> filesToWrite = new ArrayList<>();
 
         ClassName attributeClassName = ClassName.get("net.minestom.server.attribute", "Attribute");

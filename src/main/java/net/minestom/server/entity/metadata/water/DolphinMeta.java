@@ -1,9 +1,9 @@
 package net.minestom.server.entity.metadata.water;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.EntityMeta;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
 public class DolphinMeta extends WaterAnimalMeta {
@@ -15,11 +15,11 @@ public class DolphinMeta extends WaterAnimalMeta {
     }
 
     @NotNull
-    public BlockPosition getTreasurePosition() {
-        return super.metadata.getIndex(OFFSET, new BlockPosition(0, 0, 0));
+    public Point getTreasurePosition() {
+        return super.metadata.getIndex(OFFSET, Vec.ZERO);
     }
 
-    public void setTreasurePosition(@NotNull BlockPosition value) {
+    public void setTreasurePosition(@NotNull Point value) {
         super.metadata.setIndex(OFFSET, Metadata.Position(value));
     }
 

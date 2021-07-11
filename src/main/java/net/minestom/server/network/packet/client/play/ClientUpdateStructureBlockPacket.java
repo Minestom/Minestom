@@ -1,10 +1,11 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Rotation;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
@@ -16,12 +17,12 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
      */
     public static final byte SHOW_BOUNDING_BOX = 0x4;
 
-    public BlockPosition location = new BlockPosition(0, 0, 0);
+    public Point location = Vec.ZERO;
     public Action action = Action.UPDATE_DATA;
     public Mode mode = Mode.DATA;
     public String name = "";
-    public BlockPosition offset = new BlockPosition(0, 1, 0);
-    public BlockPosition size = new BlockPosition(1, 1, 1);
+    public Point offset = new Vec(0, 1, 0);
+    public Point size = Vec.ONE;
     public Mirror mirror = Mirror.NONE;
     public Rotation rotation = Rotation.NONE;
     public String metadata = "";
@@ -35,12 +36,12 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
         writer.writeVarInt(action.ordinal());
         writer.writeVarInt(mode.ordinal());
         writer.writeSizedString(name);
-        writer.writeByte((byte) offset.getX());
-        writer.writeByte((byte) offset.getY());
-        writer.writeByte((byte) offset.getZ());
-        writer.writeByte((byte) size.getX());
-        writer.writeByte((byte) size.getY());
-        writer.writeByte((byte) size.getZ());
+        writer.writeByte((byte) offset.x());
+        writer.writeByte((byte) offset.y());
+        writer.writeByte((byte) offset.z());
+        writer.writeByte((byte) size.x());
+        writer.writeByte((byte) size.y());
+        writer.writeByte((byte) size.z());
         writer.writeVarInt(mirror.ordinal());
         writer.writeVarInt(toRestrictedRotation(rotation));
         writer.writeSizedString(metadata);
@@ -55,12 +56,12 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
         action = Action.values()[reader.readVarInt()];
         mode = Mode.values()[reader.readVarInt()];
         name = reader.readSizedString(Short.MAX_VALUE);
-        offset = new BlockPosition(
+        offset = new Vec(
                 reader.readByte(),
                 reader.readByte(),
                 reader.readByte()
         );
-        size = new BlockPosition(
+        size = new Vec(
                 reader.readByte(),
                 reader.readByte(),
                 reader.readByte()
@@ -90,22 +91,31 @@ public class ClientUpdateStructureBlockPacket extends ClientPlayPacket {
 
     private int toRestrictedRotation(Rotation rotation) {
         switch (rotation) {
-            case NONE: return 0;
-            case CLOCKWISE: return 1;
-            case FLIPPED: return 2;
-            case COUNTER_CLOCKWISE: return 3;
-            default: throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
+            case NONE:
+                return 0;
+            case CLOCKWISE:
+                return 1;
+            case FLIPPED:
+                return 2;
+            case COUNTER_CLOCKWISE:
+                return 3;
+            default:
+                throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
         }
     }
 
     private Rotation fromRestrictedRotation(int rotation) {
         switch (rotation) {
-            case 0: return Rotation.NONE;
-            case 1: return Rotation.CLOCKWISE;
-            case 2: return Rotation.FLIPPED;
-            case 3: return Rotation.COUNTER_CLOCKWISE;
-            default: throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
+            case 0:
+                return Rotation.NONE;
+            case 1:
+                return Rotation.CLOCKWISE;
+            case 2:
+                return Rotation.FLIPPED;
+            case 3:
+                return Rotation.COUNTER_CLOCKWISE;
+            default:
+                throw new IllegalArgumentException("ClientUpdateStructurePacket#rotation must be a valid 90-degree rotation.");
         }
     }
-
 }

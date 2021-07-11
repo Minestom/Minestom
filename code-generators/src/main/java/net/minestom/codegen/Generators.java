@@ -33,11 +33,7 @@ public class Generators {
         File inputFolder = new File(args[1]); // This will be ignored if resourceMode = true
         File outputFolder = new File(args[2]);
         // Generate blocks
-        new BlockGenerator(
-                resourceMode ? Generators.class.getResourceAsStream("/" + targetVersion + "_blocks.json") : new FileInputStream(new File(inputFolder, targetVersion + "_blocks.json")),
-                resourceMode ? Generators.class.getResourceAsStream("/" + targetVersion + "_block_properties.json") : new FileInputStream(new File(inputFolder, targetVersion + "_block_properties.json")),
-                outputFolder
-        ).generate();
+        new BlockGenerator(Generators.class.getResourceAsStream("/blocks.json"), outputFolder).generate();
         // Generate fluids
         new FluidGenerator(
                 resourceMode ? Generators.class.getResourceAsStream("/" + targetVersion + "_fluids.json") : new FileInputStream(new File(inputFolder, targetVersion + "_fluids.json")),

@@ -1,5 +1,6 @@
 package net.minestom.server.entity.fakeplayer;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.BlockFace;
@@ -13,7 +14,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.validate.Check;
@@ -179,7 +179,7 @@ public class FakePlayerController {
      * @param blockPosition The position of the block to be excavated.
      * @param blockFace     From where the block is struck.
      */
-    public void startDigging(BlockPosition blockPosition, BlockFace blockFace) {
+    public void startDigging(Point blockPosition, BlockFace blockFace) {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.STARTED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
@@ -193,7 +193,7 @@ public class FakePlayerController {
      * @param blockPosition The position of the block to be excavated.
      * @param blockFace     From where the block is struck.
      */
-    public void stopDigging(BlockPosition blockPosition, BlockFace blockFace) {
+    public void stopDigging(Point blockPosition, BlockFace blockFace) {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;
@@ -207,7 +207,7 @@ public class FakePlayerController {
      * @param blockPosition The position of the block to be excavated.
      * @param blockFace     From where the block is struck.
      */
-    public void finishDigging(BlockPosition blockPosition, BlockFace blockFace) {
+    public void finishDigging(Point blockPosition, BlockFace blockFace) {
         ClientPlayerDiggingPacket playerDiggingPacket = new ClientPlayerDiggingPacket();
         playerDiggingPacket.status = ClientPlayerDiggingPacket.Status.FINISHED_DIGGING;
         playerDiggingPacket.blockPosition = blockPosition;

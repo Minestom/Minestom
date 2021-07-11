@@ -2,11 +2,12 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import net.minestom.server.data.Data;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +33,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     protected final CountDownLatch readyLatch;
     private final BatchOption options;
 
+    private volatile BatchOption inverseOption = new BatchOption();
+
     public AbsoluteBlockBatch() {
         this(new BatchOption());
     }
@@ -46,7 +49,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     }
 
     @Override
-    public void setSeparateBlocks(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data) {
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
         final int chunkX = ChunkUtils.getChunkCoordinate(x);
         final int chunkZ = ChunkUtils.getChunkCoordinate(z);
         final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
@@ -58,7 +61,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
         final int relativeX = x - (chunkX * Chunk.CHUNK_SIZE_X);
         final int relativeZ = z - (chunkZ * Chunk.CHUNK_SIZE_Z);
-        chunkBatch.setSeparateBlocks(relativeX, y, relativeZ, blockStateId, customBlockId, data);
+        chunkBatch.setBlock(relativeX, y, relativeZ, block);
     }
 
     @Override
@@ -118,7 +121,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
     protected AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback, boolean safeCallback) {
         if (!this.options.isUnsafeApply()) this.awaitReady();
 
-        final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch() : null;
+        final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
             for (Long2ObjectMap.Entry<ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
@@ -155,5 +158,15 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         }
 
         return inverse;
+    }
+
+    @ApiStatus.Experimental
+    public @NotNull BatchOption getInverseOption() {
+        return inverseOption;
+    }
+
+    @ApiStatus.Experimental
+    public void setInverseOption(@NotNull BatchOption inverseOption) {
+        this.inverseOption = inverseOption;
     }
 }
