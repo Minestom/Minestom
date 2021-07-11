@@ -7,17 +7,13 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
 public class CollisionUtils {
-
-    private static final Vec Y_AXIS = new Vec(0, 1, 0);
-    private static final Vec X_AXIS = new Vec(1, 0, 0);
-    private static final Vec Z_AXIS = new Vec(0, 0, 1);
-
     /**
      * Moves an entity with physics applied (ie checking against blocks)
      *
@@ -25,6 +21,7 @@ public class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition) {
+
         // TODO handle collisions with nearby entities (should it be done here?)
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
@@ -35,7 +32,7 @@ public class CollisionUtils {
         final boolean xCollision, yCollision, zCollision;
 
         if (deltaPosition.y() != 0) {
-            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Y_AXIS, deltaPosition.y(),
+            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Axis.Y, deltaPosition.y(),
                     deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
             yCollision = stepResult.foundCollision;
         } else {
@@ -43,7 +40,7 @@ public class CollisionUtils {
         }
 
         if (deltaPosition.x() != 0) {
-            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, X_AXIS, deltaPosition.x(),
+            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Axis.X, deltaPosition.x(),
                     deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
             xCollision = stepResult.foundCollision;
         } else {
@@ -51,7 +48,7 @@ public class CollisionUtils {
         }
 
         if (deltaPosition.z() != 0) {
-            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Z_AXIS, deltaPosition.z(),
+            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Axis.Z, deltaPosition.z(),
                     deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
             zCollision = stepResult.foundCollision;
         } else {
@@ -78,7 +75,7 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return result of the step
      */
-    private static StepResult stepAxis(Instance instance, Chunk originChunk, Pos startPosition, Vec axis, double stepAmount, Vec... corners) {
+    private static StepResult stepAxis(Instance instance, Chunk originChunk, Pos startPosition, Axis axis, double stepAmount, Vec... corners) {
         if (corners.length == 0)
             return new StepResult(startPosition, false); // avoid degeneracy in following computations
 
@@ -109,14 +106,16 @@ public class CollisionUtils {
 
         int finalCollidingCornerIndex = collidingCornerIndex;
         final DoubleUnaryOperator function = a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign;
-        if (axis.equals(X_AXIS)) {
-            return new StepResult(startPosition.withX(function), collisionFound);
-        } else if (axis.equals(Y_AXIS)) {
-            return new StepResult(startPosition.withY(function), collisionFound);
-        } else if (axis.equals(Z_AXIS)) {
-            return new StepResult(startPosition.withZ(function), collisionFound);
+        switch (axis) {
+            case X:
+                return new StepResult(startPosition.withX(function), collisionFound);
+            case Y:
+                return new StepResult(startPosition.withY(function), collisionFound);
+            case Z:
+                return new StepResult(startPosition.withZ(function), collisionFound);
+            default:
+                throw new IllegalStateException("Get out of the 4th dimension, this method can only handle three.");
         }
-        throw new IllegalStateException("Get out of the 4th dimension, this method can only handle three.");
     }
 
     /**
@@ -127,11 +126,24 @@ public class CollisionUtils {
      * @param corners   the corners of the bounding box to consider
      * @return index of colliding corner, -1 if there is none
      */
-    private static int stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
+    private static int stepOnce(Instance instance, Chunk originChunk, Axis axis, double amount, Vec[] corners) {
         final double sign = Math.signum(amount);
         for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
             final Vec originalCorner = corners[cornerIndex];
-            final Vec newCorner = originalCorner.add(axis.mul(amount));
+            final Vec newCorner;
+            switch (axis) {
+                case X:
+                    newCorner = originalCorner.withX(amount);
+                    break;
+                case Y:
+                    newCorner = originalCorner.withY(amount);
+                    break;
+                case Z:
+                    newCorner = originalCorner.withZ(amount);
+                    break;
+                default:
+                    throw new IllegalStateException();
+            }
 
             Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
@@ -139,17 +151,22 @@ public class CollisionUtils {
                 return cornerIndex;
             }
 
-            final Block block = chunk.getBlock(newCorner);
+            final Block block = chunk.getBlock(newCorner.blockX(), newCorner.blockY(), newCorner.blockZ(), BlockGetter.Condition.NONE);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                corners[cornerIndex] = originalCorner.apply(((x, y, z) -> new Vec(
-                        Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : x,
-                        Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : y,
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : z
-                )));
-
+                switch (axis) {
+                    case X:
+                        corners[cornerIndex] = originalCorner.withX(newCorner.blockX() - sign);
+                        break;
+                    case Y:
+                        corners[cornerIndex] = originalCorner.withY(newCorner.blockY() - sign);
+                        break;
+                    case Z:
+                        corners[cornerIndex] = originalCorner.withZ(newCorner.blockZ() - sign);
+                        break;
+                }
                 return cornerIndex;
             }
 
@@ -219,5 +236,9 @@ public class CollisionUtils {
             this.newPosition = newPosition;
             this.foundCollision = foundCollision;
         }
+    }
+
+    private enum Axis {
+        X, Y, Z;
     }
 }
