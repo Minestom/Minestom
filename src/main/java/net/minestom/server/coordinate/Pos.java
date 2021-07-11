@@ -203,13 +203,13 @@ public final class Pos implements Point {
 
     @Override
     @Contract(pure = true)
-    public @NotNull Point withZ(@NotNull DoubleUnaryOperator operator) {
+    public @NotNull Pos withZ(@NotNull DoubleUnaryOperator operator) {
         return new Pos(x, y, operator.applyAsDouble(z));
     }
 
     @Override
     @Contract(pure = true)
-    public @NotNull Point withZ(double z) {
+    public @NotNull Pos withZ(double z) {
         return new Pos(x, y, z, yaw, pitch);
     }
 
