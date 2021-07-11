@@ -41,7 +41,6 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -847,7 +846,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
      * @return a {@link CompletableFuture} called once the entity's instance has been set,
-     * this is due to chunks needing to load for players
+     * this is due to chunks needing to load
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
@@ -859,11 +858,13 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         this.position = spawnPosition;
         this.isActive = true;
         this.instance = instance;
-        refreshCurrentChunk(instance.getChunkAt(position));
-        instance.UNSAFE_addEntity(this);
-        spawn();
-        EventDispatcher.call(new EntitySpawnEvent(this, instance));
-        return AsyncUtils.NULL_FUTURE;
+        return instance.loadOptionalChunk(position).thenAccept(chunk -> {
+            Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+            refreshCurrentChunk(chunk);
+            instance.UNSAFE_addEntity(this);
+            spawn();
+            EventDispatcher.call(new EntitySpawnEvent(this, instance));
+        });
     }
 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
@@ -875,7 +876,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param instance the new instance of the entity
      * @return a {@link CompletableFuture} called once the entity's instance has been set,
-     * this is due to chunks needing to load for players
+     * this is due to chunks needing to load
      * @throws NullPointerException  if {@code instance} is null
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
