@@ -1,14 +1,13 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class CollisionUtils {
@@ -58,6 +57,7 @@ public class CollisionUtils {
         }
 
         return new PhysicsResult(stepResult.newPosition,
+                deltaPosition.x() == 0 && deltaPosition.z() == 0 && yCollision ? Vec.ZERO :
                 deltaPosition.apply(((x, y, z) -> new Vec(
                         xCollision ? 0 : x,
                         yCollision ? 0 : y,
