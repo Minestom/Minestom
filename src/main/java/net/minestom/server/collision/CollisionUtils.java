@@ -30,21 +30,39 @@ public class CollisionUtils {
         final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        final StepResult yCollision = stepAxis(instance, originChunk, currentPosition.asVec(), Y_AXIS, deltaPosition.y(),
-                deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+        StepResult stepResult = new StepResult(currentPosition.asVec(), false);
+        final boolean xCollision, yCollision, zCollision;
 
-        final StepResult xCollision = stepAxis(instance, originChunk, yCollision.newPosition, X_AXIS, deltaPosition.x(),
-                deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+        if (deltaPosition.y() != 0) {
+            stepResult = stepAxis(instance, originChunk, currentPosition.asVec(), Y_AXIS, deltaPosition.y(),
+                    deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+            yCollision = stepResult.foundCollision;
+        } else {
+            yCollision = false;
+        }
 
-        final StepResult zCollision = stepAxis(instance, originChunk, xCollision.newPosition, Z_AXIS, deltaPosition.z(),
-                deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+        if (deltaPosition.x() != 0) {
+            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, X_AXIS, deltaPosition.x(),
+                    deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+            xCollision = stepResult.foundCollision;
+        } else {
+            xCollision = false;
+        }
 
-        return new PhysicsResult(currentPosition.withCoord(zCollision.newPosition),
+        if (deltaPosition.z() != 0) {
+            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Z_AXIS, deltaPosition.z(),
+                    deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+            zCollision = stepResult.foundCollision;
+        } else {
+            zCollision = false;
+        }
+
+        return new PhysicsResult(currentPosition.withCoord(stepResult.newPosition),
                 deltaPosition.apply(((x, y, z) -> new Vec(
-                        xCollision.foundCollision ? 0 : x,
-                        yCollision.foundCollision ? 0 : y,
-                        zCollision.foundCollision ? 0 : z
-                ))), yCollision.foundCollision && deltaPosition.y() < 0);
+                        xCollision ? 0 : x,
+                        yCollision ? 0 : y,
+                        zCollision ? 0 : z
+                ))), yCollision && deltaPosition.y() < 0);
     }
 
     /**
