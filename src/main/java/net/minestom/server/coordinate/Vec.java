@@ -54,6 +54,19 @@ public final class Vec implements Point {
     }
 
     /**
+     * Converts a {@link Point} into a {@link Vec}.
+     * Will cast if possible, or instantiate a new object.
+     *
+     * @param point the point to convert
+     * @return the converted vector
+     */
+    public static @NotNull Vec fromPoint(@NotNull Point point) {
+        if (point instanceof Vec)
+            return (Vec) point;
+        return new Vec(point.x(), point.y(), point.z());
+    }
+
+    /**
      * Creates a new point with coordinated depending on {@code this}.
      *
      * @param operator the operator
