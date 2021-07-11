@@ -74,7 +74,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
     protected Instance instance;
     protected Chunk currentChunk;
-    protected Pos position = Pos.ZERO;
+    protected Pos position;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
@@ -148,10 +148,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = uuid;
+        this.position = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
-        setPosition(Pos.ZERO);
 
         this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
@@ -856,7 +856,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         if (this.instance != null) {
             this.instance.UNSAFE_removeEntity(this);
         }
-        setPosition(spawnPosition);
+        this.position = spawnPosition;
         this.isActive = true;
         this.instance = instance;
         refreshCurrentChunk(instance.getChunkAt(position));
@@ -1292,9 +1292,9 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             refreshCoordinate(position);
         }
         if (!ignoreView) {
-            setPosition(position);
+            this.position = position;
         } else {
-            setPosition(this.position.withCoord(position));
+            this.position = this.position.withCoord(position);
         }
         sendPositionUpdate(true);
     }
@@ -1315,6 +1315,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param newPosition the new position
      */
     private void refreshCoordinate(Point newPosition) {
+        this.boundingBox.update(newPosition);
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
                 passenger.refreshCoordinate(newPosition);
@@ -1349,12 +1350,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      */
     public @NotNull Pos getPosition() {
         return position;
-    }
-
-    protected void setPosition(Pos position) {
-        if (!this.position.samePoint(position))
-            this.boundingBox.update(position);
-        this.position = position;
     }
 
     /**
