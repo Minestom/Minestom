@@ -48,9 +48,4 @@ public class ArgumentGroup extends Argument<CommandContext> {
             arguments[i].processNodes(nodeMaker, executable && isLast);
         }
     }
-
-    @Override
-    public String toString() {
-        return Arrays.deepToString(arguments);
-    }
 }
