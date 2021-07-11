@@ -577,11 +577,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                         final Block block = chunk.getBlock(x, y, z);
                         final BlockHandler handler = block.handler();
                         if (handler != null) {
-                            final var blockPosition = new Vec(x, y, z);
                             // checks that we are actually in the block, and not just here because of a rounding error
-                            if (boundingBox.intersectWithBlock(blockPosition)) {
+                            if (boundingBox.intersectWithBlock(x, y, z)) {
                                 // TODO: replace with check with custom block bounding box
-                                handler.onTouch(new BlockHandler.Touch(block, instance, blockPosition, this));
+                                handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                             }
                         }
                     }
