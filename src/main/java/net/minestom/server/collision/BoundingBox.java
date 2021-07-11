@@ -51,33 +51,42 @@ public class BoundingBox {
     }
 
     /**
+     * Used to know if the bounding box intersects at a block position.
+     *
+     * @param blockX the block X
+     * @param blockY the block Y
+     * @param blockZ the block Z
+     * @return true if the bounding box intersects with the position, false otherwise
+     */
+    public boolean intersectWithBlock(int blockX, int blockY, int blockZ) {
+        final double offsetX = 1;
+        final double maxX = (double) blockX + offsetX;
+
+        final boolean checkX = getMinX() < maxX && getMaxX() > (double) blockX;
+        if (!checkX)
+            return false;
+
+        final double maxY = (double) blockY + 0.99999;
+
+        final boolean checkY = getMinY() < maxY && getMaxY() > (double) blockY;
+        if (!checkY)
+            return false;
+
+        final double offsetZ = 1;
+        final double maxZ = (double) blockZ + offsetZ;
+
+        // Z check
+        return getMinZ() < maxZ && getMaxZ() > (double) blockZ;
+    }
+
+    /**
      * Used to know if the bounding box intersects at a point.
      *
      * @param blockPosition the position to check
      * @return true if the bounding box intersects with the position, false otherwise
      */
     public boolean intersectWithBlock(@NotNull Point blockPosition) {
-        final double offsetX = 1;
-        final double x = blockPosition.blockX();
-        final double maxX = x + offsetX;
-
-        final boolean checkX = getMinX() < maxX && getMaxX() > x;
-        if (!checkX)
-            return false;
-
-        final double y = blockPosition.blockY();
-        final double maxY = y + 0.99999;
-
-        final boolean checkY = getMinY() < maxY && getMaxY() > y;
-        if (!checkY)
-            return false;
-
-        final double offsetZ = 1;
-        final double z = blockPosition.blockZ();
-        final double maxZ = z + offsetZ;
-
-        // Z check
-        return getMinZ() < maxZ && getMaxZ() > z;
+        return intersectWithBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
     }
 
     public boolean intersect(double x, double y, double z) {

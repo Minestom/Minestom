@@ -29,6 +29,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -40,8 +41,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -56,10 +56,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -257,30 +254,27 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param chunks   the chunk indexes to load before teleporting the entity,
      *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
      *                 can be null or empty to only load the chunk at {@code position}
-     * @param callback the optional callback executed, even if auto chunk is not enabled
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public void teleport(@NotNull Pos position, @Nullable long[] chunks, @Nullable Runnable callback) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @Nullable long[] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-        final ChunkCallback endCallback = (chunk) -> {
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
+        final Runnable endCallback = () -> {
             refreshPosition(position);
             synchronizePosition(true);
-            OptionalCallback.execute(callback);
+            completableFuture.complete(null);
         };
 
         if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(position, endCallback);
+            instance.loadOptionalChunk(position).thenRun(endCallback);
         } else {
-            ChunkUtils.optionalLoadAll(instance, chunks, null, endCallback);
+            ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
+        return completableFuture;
     }
 
-    public void teleport(@NotNull Pos position, @Nullable Runnable callback) {
-        teleport(position, null, callback);
-    }
-
-    public void teleport(@NotNull Pos position) {
-        teleport(position, null);
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
+        return teleport(position, null);
     }
 
     /**
@@ -580,15 +574,15 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                         final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
                         if (!ChunkUtils.isLoaded(chunk))
                             continue;
-
-                        final Block block = chunk.getBlock(x, y, z);
+                        final Block block = chunk.getBlock(x, y, z, BlockGetter.Condition.CACHED);
+                        if (block == null)
+                            continue;
                         final BlockHandler handler = block.handler();
                         if (handler != null) {
-                            final var blockPosition = new Vec(x, y, z);
                             // checks that we are actually in the block, and not just here because of a rounding error
-                            if (boundingBox.intersectWithBlock(blockPosition)) {
+                            if (boundingBox.intersectWithBlock(x, y, z)) {
                                 // TODO: replace with check with custom block bounding box
-                                handler.onTouch(new BlockHandler.Touch(block, instance, blockPosition, this));
+                                handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                             }
                         }
                     }
@@ -852,9 +846,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         if (this.instance != null) {
@@ -867,21 +863,24 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         instance.UNSAFE_addEntity(this);
         spawn();
         EventDispatcher.call(new EntitySpawnEvent(this, instance));
+        return AsyncUtils.NULL_FUTURE;
     }
 
-    public void setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
-        setInstance(instance, Pos.fromPoint(spawnPosition));
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
+        return setInstance(instance, Pos.fromPoint(spawnPosition));
     }
 
     /**
      * Changes the entity instance.
      *
      * @param instance the new instance of the entity
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
      * @throws NullPointerException  if {@code instance} is null
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.position);
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
+        return setInstance(instance, this.position);
     }
 
     /**

@@ -130,8 +130,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      *
      * @return a new chunk data packet
      */
-    @NotNull
-    public abstract ChunkDataPacket createChunkPacket();
+    public abstract @NotNull ChunkDataPacket createChunkPacket();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -143,8 +142,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      * @param chunkZ   the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
-    @NotNull
-    public abstract Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
@@ -158,8 +156,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      *
      * @return the chunk identifier
      */
-    @NotNull
-    public UUID getIdentifier() {
+    public @NotNull UUID getIdentifier() {
         return identifier;
     }
 
@@ -168,8 +165,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      *
      * @return the linked instance
      */
-    @NotNull
-    public Instance getInstance() {
+    public @NotNull Instance getInstance() {
         return instance;
     }
 

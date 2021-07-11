@@ -69,7 +69,7 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -86,6 +86,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -434,7 +435,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
+        teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
     }
 
     @Override
@@ -521,9 +522,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
+     * @return
      */
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
@@ -543,14 +545,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback =
-                    chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
-
-            ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
+            return ChunkUtils.optionalLoadAll(instance, visibleChunks, null)
+                    .thenAccept(chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
             spawnPlayer(instance, spawnPosition, false, false, false);
+            return AsyncUtils.NULL_FUTURE;
         }
     }
 
@@ -559,11 +560,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * if the player is not in any instance).
      *
      * @param instance the new player instance
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
      * @see #setInstance(Instance, Pos)
      */
     @Override
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
+        return setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
     }
 
     /**
@@ -1472,7 +1475,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+            this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;

@@ -96,12 +96,15 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull Block getBlock(int x, int y, int z) {
+    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         // Verify if the block object is present
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
-        final var entry = entries.get(index);
+        final var entry = !entries.isEmpty() ?
+                entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
         if (entry != null) {
             return entry;
+        }
+        if (condition != Condition.NONE) {
+            return null;
         }
         // Retrieve the block from state id
         final Section section = retrieveSection(y);
