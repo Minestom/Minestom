@@ -238,7 +238,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         final Chunk chunk = getChunk(chunkX, chunkZ);
         if (chunk != null) {
             // Chunk already loaded
@@ -306,17 +306,17 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
         return chunkLoader.saveChunk(chunk);
     }
 
     @Override
-    public CompletableFuture<Void> saveChunksToStorage() {
+    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
         Collection<Chunk> chunksCollection = chunks.values();
         return chunkLoader.saveChunks(chunksCollection);
     }
 
-    protected CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
+    protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         final Runnable loader = () -> chunkLoader.loadChunk(this, chunkX, chunkZ)
                 .whenComplete((chunk, throwable) -> {
@@ -331,8 +331,7 @@ public class InstanceContainer extends Instance {
                         });
                     } else {
                         // Not present
-                        createChunk(chunkX, chunkZ).whenComplete((c, t) ->
-                                completableFuture.complete(c));
+                        createChunk(chunkX, chunkZ).thenAccept(completableFuture::complete);
                     }
                 });
         if (chunkLoader.supportsParallelLoading()) {
@@ -344,7 +343,7 @@ public class InstanceContainer extends Instance {
         return completableFuture;
     }
 
-    protected CompletableFuture<Chunk> createChunk(int chunkX, int chunkZ) {
+    protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
         Biome[] biomes = new Biome[Biome.getBiomeCount(getDimensionType())];
         if (chunkGenerator == null) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
@@ -365,13 +364,12 @@ public class InstanceContainer extends Instance {
         if (chunkGenerator != null && chunk.shouldGenerate()) {
             // Execute the chunk generator to populate the chunk
             final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
-
             return chunkBatch.generate(chunkGenerator)
                     .whenComplete((c, t) -> chunkRegisterCallback.accept(c));
         } else {
             // No chunk generator, execute the callback with the empty chunk
-            return CompletableFuture.completedFuture(chunk)
-                    .whenComplete((c, t) -> chunkRegisterCallback.accept(c));
+            chunkRegisterCallback.accept(chunk);
+            return CompletableFuture.completedFuture(chunk);
         }
     }
 

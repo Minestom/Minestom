@@ -43,7 +43,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
+    public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadChunk(chunkX, chunkZ);
     }
 
@@ -63,12 +63,12 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
+    public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
         return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
-    public CompletableFuture<Void> saveChunksToStorage() {
+    public @NotNull CompletableFuture<Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
     }
 

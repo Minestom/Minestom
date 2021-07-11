@@ -31,8 +31,8 @@ public final class ChunkUtils {
      * @param eachCallback the optional callback when a chunk get loaded
      * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
-    public static CompletableFuture<Chunk> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
-                                                           @Nullable ChunkCallback eachCallback) {
+    public static @NotNull CompletableFuture<@Nullable Chunk> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
+                                                                              @Nullable ChunkCallback eachCallback) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         final int length = chunks.length;
         AtomicInteger counter = new AtomicInteger(0);

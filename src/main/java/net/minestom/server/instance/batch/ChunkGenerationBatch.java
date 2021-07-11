@@ -24,7 +24,7 @@ public class ChunkGenerationBatch extends ChunkBatch {
         chunk.setBlock(x, y, z, block);
     }
 
-    public CompletableFuture<Chunk> generate(@NotNull ChunkGenerator chunkGenerator) {
+    public @NotNull CompletableFuture<@NotNull Chunk> generate(@NotNull ChunkGenerator chunkGenerator) {
         final CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         BLOCK_BATCH_POOL.execute(() -> {
             synchronized (chunk) {

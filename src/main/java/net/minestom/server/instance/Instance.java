@@ -167,8 +167,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
+     * @return a {@link CompletableFuture} completed once the chunk has been loaded
      */
-    public abstract CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ);
+    public abstract @NotNull CompletableFuture<@NotNull Chunk> loadChunk(int chunkX, int chunkZ);
 
     /**
      * Loads the chunk if the chunk is already loaded or if
@@ -176,9 +177,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
-     * @return a {@link CompletableFuture} completed once the chunk has been processed
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, can be null if not loaded
      */
-    public abstract @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ);
+    public abstract @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ);
 
     /**
      * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
@@ -200,30 +201,29 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param chunkZ the chunk Z
      * @return the chunk at the specified position, null if not loaded
      */
-    @Nullable
-    public abstract Chunk getChunk(int chunkX, int chunkZ);
+    public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
      * Saves a {@link Chunk} to permanent storage.
      *
      * @param chunk the {@link Chunk} to save
+     * @return future called when the chunk is done saving
      */
-    public abstract CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk);
+    public abstract @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
-     * @param callback optional callback called when the chunks are done saving
+     * @return future called when the chunks are done saving
      */
-    public abstract CompletableFuture<Void> saveChunksToStorage();
+    public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
      * Gets the instance {@link ChunkGenerator}.
      *
      * @return the {@link ChunkGenerator} of the instance
      */
-    @Nullable
-    public abstract ChunkGenerator getChunkGenerator();
+    public abstract @Nullable ChunkGenerator getChunkGenerator();
 
     /**
      * Changes the instance {@link ChunkGenerator}.
@@ -237,8 +237,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return an unmodifiable containing all the instance chunks
      */
-    @NotNull
-    public abstract Collection<Chunk> getChunks();
+    public abstract @NotNull Collection<@NotNull Chunk> getChunks();
 
     /**
      * Gets the instance {@link StorageLocation}.
@@ -489,9 +488,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     /**
      * Loads the chunk at the given {@link Point} with a callback.
      *
-     * @param point    the chunk position
+     * @param point the chunk position
      */
-    public CompletableFuture<Chunk> loadChunk(@NotNull Point point) {
+    public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
         final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
         final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
         return loadChunk(chunkX, chunkZ);
@@ -502,9 +501,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * at the given {@link Point} with a callback.
      *
      * @param point the chunk position
-     * @return a {@link CompletableFuture} completed once the chunk has been processed
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
      */
-    public @NotNull CompletableFuture<Chunk> loadOptionalChunk(@NotNull Point point) {
+    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
         final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
         final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
         return loadOptionalChunk(chunkX, chunkZ);
