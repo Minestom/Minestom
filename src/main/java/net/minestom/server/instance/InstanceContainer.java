@@ -281,8 +281,7 @@ public class InstanceContainer extends Instance {
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
-        final Chunk chunk = chunks.get(index);
-        return ChunkUtils.isLoaded(chunk) ? chunk : null;
+        return chunks.get(index);
     }
 
     /**
