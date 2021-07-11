@@ -86,6 +86,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -518,12 +519,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * Be aware that because chunk operations are expensive,
      * it is possible for this method to be non-blocking when retrieving chunks is required.
-     *
-     * @param instance      the new player instance
+     *  @param instance      the new player instance
      * @param spawnPosition the new position of the player
+     * @return
      */
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
@@ -543,14 +544,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback =
-                    chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
-
-            ChunkUtils.optionalLoadAll(instance, visibleChunks, null).thenAccept(endCallback);
+            return ChunkUtils.optionalLoadAll(instance, visibleChunks, null)
+                    .thenAccept(chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
             spawnPlayer(instance, spawnPosition, false, false, false);
+            return CompletableFuture.completedFuture(null);
         }
     }
 

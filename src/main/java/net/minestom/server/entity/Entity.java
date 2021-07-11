@@ -845,8 +845,9 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
+     * @return
      */
-    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         if (this.instance != null) {
@@ -859,10 +860,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         instance.UNSAFE_addEntity(this);
         spawn();
         EventDispatcher.call(new EntitySpawnEvent(this, instance));
+        return CompletableFuture.completedFuture(null);
     }
 
-    public void setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
-        setInstance(instance, Pos.fromPoint(spawnPosition));
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
+        return setInstance(instance, Pos.fromPoint(spawnPosition));
     }
 
     /**
