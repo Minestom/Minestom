@@ -59,7 +59,7 @@ public class CollisionUtils {
         }
 
         return new PhysicsResult(stepResult.newPosition,
-                deltaPosition.x() == 0 && deltaPosition.z() == 0 && yCollision ? Vec.ZERO :
+                deltaPosition.x() == 0 && deltaPosition.z() == 0 && (yCollision || deltaPosition.y() == 0) ? Vec.ZERO :
                 deltaPosition.apply(((x, y, z) -> new Vec(
                         xCollision ? 0 : x,
                         yCollision ? 0 : y,
