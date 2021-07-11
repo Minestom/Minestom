@@ -69,7 +69,7 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -519,7 +519,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * Be aware that because chunk operations are expensive,
      * it is possible for this method to be non-blocking when retrieving chunks is required.
-     *  @param instance      the new player instance
+     *
+     * @param instance      the new player instance
      * @param spawnPosition the new position of the player
      * @return
      */
@@ -550,7 +551,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
             spawnPlayer(instance, spawnPosition, false, false, false);
-            return CompletableFuture.completedFuture(null);
+            return AsyncUtils.NULL_FUTURE;
         }
     }
 

@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,7 +56,7 @@ public interface IChunkLoader {
             } catch (InterruptedException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
-            return CompletableFuture.completedFuture(null);
+            return AsyncUtils.NULL_FUTURE;
         } else {
             CompletableFuture<Void> completableFuture = new CompletableFuture<>();
             AtomicInteger counter = new AtomicInteger();

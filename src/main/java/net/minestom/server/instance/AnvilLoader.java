@@ -5,6 +5,7 @@ import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
@@ -196,7 +197,7 @@ public class AnvilLoader implements IChunkLoader {
                 } catch (AnvilException | IOException e) {
                     LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
                     EXCEPTION_MANAGER.handleException(e);
-                    return CompletableFuture.completedFuture(null);
+                    return AsyncUtils.NULL_FUTURE;
                 }
             }
         }
@@ -206,7 +207,7 @@ public class AnvilLoader implements IChunkLoader {
         } catch (AnvilException | IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);
-            return CompletableFuture.completedFuture(null);
+            return AsyncUtils.NULL_FUTURE;
         }
         save(chunk, column);
         try {
@@ -215,9 +216,9 @@ public class AnvilLoader implements IChunkLoader {
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);
-            return CompletableFuture.completedFuture(null);
+            return AsyncUtils.NULL_FUTURE;
         }
-        return CompletableFuture.completedFuture(null);
+        return AsyncUtils.NULL_FUTURE;
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {

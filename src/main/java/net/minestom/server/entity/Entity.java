@@ -40,6 +40,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -844,8 +845,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
-     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      * @return
+     * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
@@ -860,7 +861,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         instance.UNSAFE_addEntity(this);
         spawn();
         EventDispatcher.call(new EntitySpawnEvent(this, instance));
-        return CompletableFuture.completedFuture(null);
+        return AsyncUtils.NULL_FUTURE;
     }
 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
