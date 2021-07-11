@@ -30,11 +30,11 @@ public class CollisionUtils {
         final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        StepResult stepResult = new StepResult(currentPosition.asVec(), false);
+        StepResult stepResult = new StepResult(currentPosition, false);
         final boolean xCollision, yCollision, zCollision;
 
         if (deltaPosition.y() != 0) {
-            stepResult = stepAxis(instance, originChunk, currentPosition.asVec(), Y_AXIS, deltaPosition.y(),
+            stepResult = stepAxis(instance, originChunk, stepResult.newPosition, Y_AXIS, deltaPosition.y(),
                     deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
             yCollision = stepResult.foundCollision;
         } else {
@@ -57,7 +57,7 @@ public class CollisionUtils {
             zCollision = false;
         }
 
-        return new PhysicsResult(currentPosition.withCoord(stepResult.newPosition),
+        return new PhysicsResult(stepResult.newPosition,
                 deltaPosition.apply(((x, y, z) -> new Vec(
                         xCollision ? 0 : x,
                         yCollision ? 0 : y,
@@ -76,7 +76,7 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return result of the step
      */
-    private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, Vec... corners) {
+    private static StepResult stepAxis(Instance instance, Chunk originChunk, Pos startPosition, Vec axis, double stepAmount, Vec... corners) {
         if (corners.length == 0)
             return new StepResult(startPosition, false); // avoid degeneracy in following computations
 
@@ -105,7 +105,15 @@ public class CollisionUtils {
             }
         }
 
-        return new StepResult(startPosition.add(new Vec(originalCorners[collidingCornerIndex].distance(corners[collidingCornerIndex])).mul(axis).mul(sign)), collisionFound);
+        int finalCollidingCornerIndex = collidingCornerIndex;
+        if (axis.equals(X_AXIS)) {
+            return new StepResult(startPosition.withX(a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign), collisionFound);
+        } else if (axis.equals(Y_AXIS)) {
+            return new StepResult(startPosition.withY(a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign), collisionFound);
+        } else if (axis.equals(Z_AXIS)) {
+            return new StepResult(startPosition.withZ(a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign), collisionFound);
+        }
+        throw new IllegalStateException("Get out of the 4th dimension, this method can only handle three.");
     }
 
     /**
@@ -201,10 +209,10 @@ public class CollisionUtils {
     }
 
     private static class StepResult {
-        private final Vec newPosition;
+        private final Pos newPosition;
         private final boolean foundCollision;
 
-        public StepResult(Vec newPosition, boolean foundCollision) {
+        public StepResult(Pos newPosition, boolean foundCollision) {
             this.newPosition = newPosition;
             this.foundCollision = foundCollision;
         }
