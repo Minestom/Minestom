@@ -133,13 +133,13 @@ public class CollisionUtils {
             final Vec newCorner;
             switch (axis) {
                 case X:
-                    newCorner = originalCorner.withX(amount);
+                    newCorner = originalCorner.withX(a -> a + amount);
                     break;
                 case Y:
-                    newCorner = originalCorner.withY(amount);
+                    newCorner = originalCorner.withY(a -> a + amount);
                     break;
                 case Z:
-                    newCorner = originalCorner.withZ(amount);
+                    newCorner = originalCorner.withZ(a -> a + amount);
                     break;
                 default:
                     throw new IllegalStateException();
