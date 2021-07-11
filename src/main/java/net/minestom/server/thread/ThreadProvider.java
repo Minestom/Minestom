@@ -133,7 +133,11 @@ public abstract class ThreadProvider {
                     final Chunk chunk = chunkEntry.chunk;
                     if (!ChunkUtils.isLoaded(chunk))
                         return;
-                    chunk.tick(time);
+                    try {
+                        chunk.tick(time);
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
                     final var entities = chunkEntry.entities;
                     if (!entities.isEmpty()) {
                         for (Entity entity : entities) {
@@ -142,7 +146,11 @@ public abstract class ThreadProvider {
                                 // #acquire() callbacks should be called here
                                 lock.lock();
                             }
-                            entity.tick(time);
+                            try {
+                                entity.tick(time);
+                            } catch (Exception e) {
+                                MinecraftServer.getExceptionManager().handleException(e);
+                            }
                         }
                     }
                 });
