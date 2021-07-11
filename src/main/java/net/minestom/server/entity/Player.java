@@ -434,7 +434,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
+        teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
     }
 
     @Override
@@ -546,7 +546,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final ChunkCallback endCallback =
                     chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
 
-            ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
+            ChunkUtils.optionalLoadAll(instance, visibleChunks, null).thenAccept(endCallback);
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
@@ -1472,7 +1472,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+            this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;

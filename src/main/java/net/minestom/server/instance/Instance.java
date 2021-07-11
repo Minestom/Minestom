@@ -32,7 +32,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -46,6 +45,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
@@ -165,23 +165,20 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
      *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @param callback optional consumer called after the chunk has been generated,
-     *                 the returned chunk will never be null
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
      */
-    public abstract void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
+    public abstract CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ);
 
     /**
      * Loads the chunk if the chunk is already loaded or if
      * {@link #hasEnabledAutoChunkLoad()} returns true.
      *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @param callback optional consumer called after the chunk has tried to be loaded,
-     *                 contains a chunk if it is successful, null otherwise
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return a {@link CompletableFuture} completed once the chunk has been processed
      */
-    public abstract void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
+    public abstract @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ);
 
     /**
      * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
@@ -209,17 +206,16 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     /**
      * Saves a {@link Chunk} to permanent storage.
      *
-     * @param chunk    the {@link Chunk} to save
-     * @param callback optional callback called when the {@link Chunk} is done saving
+     * @param chunk the {@link Chunk} to save
      */
-    public abstract void saveChunkToStorage(@NotNull Chunk chunk, @Nullable Runnable callback);
+    public abstract CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
      * @param callback optional callback called when the chunks are done saving
      */
-    public abstract void saveChunksToStorage(@Nullable Runnable callback);
+    public abstract CompletableFuture<Void> saveChunksToStorage();
 
     /**
      * Gets the instance {@link ChunkGenerator}.
@@ -258,35 +254,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param storageLocation the new {@link StorageLocation} of the instance
      */
     public abstract void setStorageLocation(@Nullable StorageLocation storageLocation);
-
-    /**
-     * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
-     * Could be read from disk, or generated from scratch.
-     * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
-     * that this chunk has been loaded.
-     * <p>
-     * WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.
-     *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk X
-     * @param callback the optional callback executed once the {@link Chunk} has been retrieved
-     */
-    protected abstract void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
-
-    /**
-     * Called to generated a new {@link Chunk} from scratch.
-     * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
-     * that this chunk has been loaded.
-     * <p>
-     * This is where you can put your chunk generation code.
-     *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @param callback the optional callback executed with the newly created {@link Chunk}
-     */
-    protected abstract void createChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
 
     /**
      * When set to true, chunks will load automatically when requested.
@@ -520,40 +487,27 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     /**
-     * Loads the {@link Chunk} at the given position without any callback.
-     * <p>
-     * WARNING: this is a non-blocking task.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     */
-    public void loadChunk(int chunkX, int chunkZ) {
-        loadChunk(chunkX, chunkZ, null);
-    }
-
-    /**
      * Loads the chunk at the given {@link Point} with a callback.
      *
      * @param point    the chunk position
-     * @param callback the optional callback to run when the chunk is loaded
      */
-    public void loadChunk(@NotNull Point point, @Nullable ChunkCallback callback) {
+    public CompletableFuture<Chunk> loadChunk(@NotNull Point point) {
         final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
         final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
-        loadChunk(chunkX, chunkZ, callback);
+        return loadChunk(chunkX, chunkZ);
     }
 
     /**
      * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
      * at the given {@link Point} with a callback.
      *
-     * @param point    the chunk position
-     * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
+     * @param point the chunk position
+     * @return a {@link CompletableFuture} completed once the chunk has been processed
      */
-    public void loadOptionalChunk(@NotNull Point point, @Nullable ChunkCallback callback) {
+    public @NotNull CompletableFuture<Chunk> loadOptionalChunk(@NotNull Point point) {
         final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
         final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
-        loadOptionalChunk(chunkX, chunkZ, callback);
+        return loadOptionalChunk(chunkX, chunkZ);
     }
 
     /**
@@ -634,22 +588,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     /**
-     * Saves a {@link Chunk} without any callback.
-     *
-     * @param chunk the chunk to save
-     */
-    public void saveChunkToStorage(@NotNull Chunk chunk) {
-        saveChunkToStorage(chunk, null);
-    }
-
-    /**
-     * Saves all {@link Chunk} without any callback.
-     */
-    public void saveChunksToStorage() {
-        saveChunksToStorage(null);
-    }
-
-    /**
      * Gets the instance unique id.
      *
      * @return the instance unique id
@@ -723,7 +661,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
             });
 
             // Load the chunk if not already (or throw an error if auto chunk load is disabled)
-            loadOptionalChunk(entityPosition, chunk -> {
+            loadOptionalChunk(entityPosition).thenAccept(chunk -> {
                 Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
                 UNSAFE_addEntityToChunk(entity, chunk);
             });

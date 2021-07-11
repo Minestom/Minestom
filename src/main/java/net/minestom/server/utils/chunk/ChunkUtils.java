@@ -4,12 +4,12 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class ChunkUtils {
@@ -19,23 +19,23 @@ public final class ChunkUtils {
     }
 
     /**
-     * Executes {@link Instance#loadOptionalChunk(int, int, ChunkCallback)} for the array of chunks {@code chunks}
+     * Executes {@link Instance#loadOptionalChunk(int, int)} for the array of chunks {@code chunks}
      * with multiple callbacks, {@code eachCallback} which is executed each time a new chunk is loaded and
      * {@code endCallback} when all the chunks in the array have been loaded.
      * <p>
-     * Be aware that {@link Instance#loadOptionalChunk(int, int, ChunkCallback)} can give a null chunk in the callback
+     * Be aware that {@link Instance#loadOptionalChunk(int, int)} can give a null chunk in the callback
      * if {@link Instance#hasEnabledAutoChunkLoad()} returns false and the chunk is not already loaded.
      *
      * @param instance     the instance to load the chunks from
      * @param chunks       the chunks to loaded, long value from {@link #getChunkIndex(int, int)}
      * @param eachCallback the optional callback when a chunk get loaded
-     * @param endCallback  the optional callback when all the chunks have been loaded
+     * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
-    public static void optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
-                                       @Nullable ChunkCallback eachCallback, @Nullable ChunkCallback endCallback) {
+    public static CompletableFuture<Chunk> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
+                                                           @Nullable ChunkCallback eachCallback) {
+        CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         final int length = chunks.length;
         AtomicInteger counter = new AtomicInteger(0);
-
         for (long visibleChunk : chunks) {
             final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
             final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
@@ -45,16 +45,17 @@ public final class ChunkUtils {
                 final boolean isLast = counter.get() == length - 1;
                 if (isLast) {
                     // This is the last chunk to be loaded , spawn player
-                    OptionalCallback.execute(endCallback, chunk);
+                    completableFuture.complete(chunk);
                 } else {
                     // Increment the counter of current loaded chunks
                     counter.incrementAndGet();
                 }
             };
 
-            // WARNING: if auto load is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(chunkX, chunkZ, callback);
+            // WARNING: if auto-load is disabled and no chunks are loaded beforehand, player will be stuck.
+            instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(callback);
         }
+        return completableFuture;
     }
 
     /**

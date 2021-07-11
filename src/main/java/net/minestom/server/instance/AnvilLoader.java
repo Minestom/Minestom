@@ -5,8 +5,6 @@ import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
@@ -26,6 +24,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class AnvilLoader implements IChunkLoader {
@@ -49,28 +48,27 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public boolean loadChunk(@NotNull Instance instance, int chunkX, int chunkZ, ChunkCallback callback) {
+    public @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         LOGGER.debug("Attempt loading at {} {}", chunkX, chunkZ);
         if (!Files.exists(path)) {
             // No world folder
-            return false;
+            return CompletableFuture.completedFuture(null);
         }
         try {
-            final Chunk chunk = loadMCA(instance, chunkX, chunkZ, callback);
-            return chunk != null;
+            return loadMCA(instance, chunkX, chunkZ);
         } catch (IOException | AnvilException e) {
             EXCEPTION_MANAGER.handleException(e);
         }
-        return false;
+        return CompletableFuture.completedFuture(null);
     }
 
-    private @Nullable Chunk loadMCA(Instance instance, int chunkX, int chunkZ, ChunkCallback callback) throws IOException, AnvilException {
+    private @NotNull CompletableFuture<@Nullable Chunk> loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException, AnvilException {
         final RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
         if (mcaFile == null)
-            return null;
+            return CompletableFuture.completedFuture(null);
         final ChunkColumn fileChunk = mcaFile.getChunk(chunkX, chunkZ);
         if (fileChunk == null)
-            return null;
+            return CompletableFuture.completedFuture(null);
 
         Biome[] biomes;
         if (fileChunk.getGenerationStatus().compareTo(ChunkColumn.GenerationStatus.Biomes) > 0) {
@@ -95,9 +93,8 @@ public class AnvilLoader implements IChunkLoader {
             section.setSkyLight(chunkSection.getSkyLights());
             section.setBlockLight(chunkSection.getBlockLights());
         }
-        OptionalCallback.execute(callback, chunk);
         mcaFile.forget(fileChunk);
-        return chunk;
+        return CompletableFuture.completedFuture(chunk);
     }
 
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
@@ -174,8 +171,9 @@ public class AnvilLoader implements IChunkLoader {
 
     // TODO: find a way to unload MCAFiles when an entire region is unloaded
 
+
     @Override
-    public void saveChunk(Chunk chunk, Runnable callback) {
+    public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
         RegionFile mcaFile;
@@ -198,7 +196,7 @@ public class AnvilLoader implements IChunkLoader {
                 } catch (AnvilException | IOException e) {
                     LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
                     EXCEPTION_MANAGER.handleException(e);
-                    return;
+                    return CompletableFuture.completedFuture(null);
                 }
             }
         }
@@ -208,7 +206,7 @@ public class AnvilLoader implements IChunkLoader {
         } catch (AnvilException | IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);
-            return;
+            return CompletableFuture.completedFuture(null);
         }
         save(chunk, column);
         try {
@@ -217,9 +215,9 @@ public class AnvilLoader implements IChunkLoader {
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);
-            return;
+            return CompletableFuture.completedFuture(null);
         }
-        OptionalCallback.execute(callback);
+        return CompletableFuture.completedFuture(null);
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
