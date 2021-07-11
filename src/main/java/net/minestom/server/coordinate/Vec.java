@@ -17,6 +17,8 @@ public final class Vec implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
 
+    public static final double EPSILON = 1E-6;
+
     private final double x, y, z;
 
     /**
@@ -234,6 +236,15 @@ public final class Vec implements Point {
     }
 
     /**
+     * Returns if a vector is normalized
+     *
+     * @return whether the vector is normalised
+     */
+    public boolean isNormalized() {
+        return Math.abs(lengthSquared() - 1) < EPSILON;
+    }
+
+    /**
      * Gets the angle between this vector and another in radians.
      *
      * @param vec the other vector
@@ -277,10 +288,10 @@ public final class Vec implements Point {
     }
 
     /**
-     * Rotates the vector around the x axis.
+     * Rotates the vector around the x-axis.
      * <p>
      * This piece of math is based on the standard rotation matrix for vectors
-     * in three dimensional space. This matrix can be found here:
+     * in three-dimensional space. This matrix can be found here:
      * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
      * Matrix</a>.
      *
@@ -299,10 +310,10 @@ public final class Vec implements Point {
     }
 
     /**
-     * Rotates the vector around the y axis.
+     * Rotates the vector around the y-axis.
      * <p>
      * This piece of math is based on the standard rotation matrix for vectors
-     * in three dimensional space. This matrix can be found here:
+     * in three-dimensional space. This matrix can be found here:
      * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
      * Matrix</a>.
      *
@@ -324,7 +335,7 @@ public final class Vec implements Point {
      * Rotates the vector around the z axis
      * <p>
      * This piece of math is based on the standard rotation matrix for vectors
-     * in three dimensional space. This matrix can be found here:
+     * in three-dimensional space. This matrix can be found here:
      * <a href="https://en.wikipedia.org/wiki/Rotation_matrix#Basic_rotations">Rotation
      * Matrix</a>.
      *
@@ -381,6 +392,69 @@ public final class Vec implements Point {
     }
 
     /**
+     * Rotates the vector around a given arbitrary axis in 3 dimensional space.
+     *
+     * <p>
+     * Rotation will follow the general Right-Hand-Rule, which means rotation
+     * will be counterclockwise when the axis is pointing towards the observer.
+     * <p>
+     * This method will always make sure the provided axis is a unit vector, to
+     * not modify the length of the vector when rotating. If you are experienced
+     * with the scaling of a non-unit axis vector, you can use
+     * {@link Vec#rotateAroundNonUnitAxis(Vec, double)}.
+     *
+     * @param axis  the axis to rotate the vector around. If the passed vector is
+     *              not of length 1, it gets copied and normalized before using it for the
+     *              rotation. Please use {@link Vec#normalize()} on the instance before
+     *              passing it to this method
+     * @param angle the angle to rotate the vector around the axis
+     * @return a new vector
+     */
+    @Contract(pure = true)
+    public @NotNull Vec rotateAroundAxis(@NotNull Vec axis, double angle) throws IllegalArgumentException {
+        return rotateAroundNonUnitAxis(axis.isNormalized() ? axis : axis.normalize(), angle);
+    }
+
+    /**
+     * Rotates the vector around a given arbitrary axis in 3 dimensional space.
+     *
+     * <p>
+     * Rotation will follow the general Right-Hand-Rule, which means rotation
+     * will be counterclockwise when the axis is pointing towards the observer.
+     * <p>
+     * Note that the vector length will change accordingly to the axis vector
+     * length. If the provided axis is not a unit vector, the rotated vector
+     * will not have its previous length. The scaled length of the resulting
+     * vector will be related to the axis vector. If you are not perfectly sure
+     * about the scaling of the vector, use
+     * {@link Vec#rotateAroundAxis(Vec, double)}
+     *
+     * @param axis  the axis to rotate the vector around.
+     * @param angle the angle to rotate the vector around the axis
+     * @return a new vector
+     */
+    @Contract(pure = true)
+    public @NotNull Vec rotateAroundNonUnitAxis(@NotNull Vec axis, double angle) throws IllegalArgumentException {
+        double x = x(), y = y(), z = z();
+        double x2 = axis.x(), y2 = axis.y(), z2 = axis.z();
+        double cosTheta = Math.cos(angle);
+        double sinTheta = Math.sin(angle);
+        double dotProduct = this.dot(axis);
+
+        double newX = x2 * dotProduct * (1d - cosTheta)
+                + x * cosTheta
+                + (-z2 * y + y2 * z) * sinTheta;
+        double newY = y2 * dotProduct * (1d - cosTheta)
+                + y * cosTheta
+                + (z2 * x - x2 * z) * sinTheta;
+        double newZ = z2 * dotProduct * (1d - cosTheta)
+                + z * cosTheta
+                + (-y2 * x + x2 * y) * sinTheta;
+
+        return new Vec(newX, newY, newZ);
+    }
+
+    /**
      * Calculates a linear interpolation between this vector with another
      * vector.
      *
@@ -431,12 +505,12 @@ public final class Vec implements Point {
     @FunctionalInterface
     public interface Operator {
         /**
-         * Checks each axis' value, if it's below {@code 1E-6} then it gets replaced with {@code 0}
+         * Checks each axis' value, if it's below {@code Vec#EPSILON} then it gets replaced with {@code 0}
          */
         Operator EPSILON = (x, y, z) -> new Vec(
-                Math.abs(x) < 1E-6 ? 0 : x,
-                Math.abs(y) < 1E-6 ? 0 : y,
-                Math.abs(z) < 1E-6 ? 0 : z
+                Math.abs(x) < Vec.EPSILON ? 0 : x,
+                Math.abs(y) < Vec.EPSILON ? 0 : y,
+                Math.abs(z) < Vec.EPSILON ? 0 : z
         );
 
         Operator FLOOR = (x, y, z) -> new Vec(
