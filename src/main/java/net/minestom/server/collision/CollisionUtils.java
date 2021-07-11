@@ -68,25 +68,26 @@ public class CollisionUtils {
         final double remainingLength = stepAmount - blockLength;
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
+        int collidingCornerIndex = 0;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            if (collisionFound = stepOnce(instance, originChunk, axis, sign, corners)) break;
+            final int cornerIndex = stepOnce(instance, originChunk, axis, sign, corners);
+            if (cornerIndex > -1) {
+                collisionFound = true;
+                collidingCornerIndex = cornerIndex;
+                break;
+            }
         }
 
         // add remainingLength
         if (!collisionFound) {
-            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, corners);
-        }
-
-        // find the corner which moved the least
-        double smallestDisplacement = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < corners.length; i++) {
-            final double displacement = originalCorners[i].distance(corners[i]);
-            if (displacement < smallestDisplacement) {
-                smallestDisplacement = displacement;
+            final int cornerIndex = stepOnce(instance, originChunk, axis, remainingLength, corners);
+            if (cornerIndex > -1) {
+                collisionFound = true;
+                collidingCornerIndex = cornerIndex;
             }
         }
 
-        return new StepResult(startPosition.add(new Vec(smallestDisplacement).mul(axis).mul(sign)), collisionFound);
+        return new StepResult(startPosition.add(new Vec(originalCorners[collidingCornerIndex].distance(corners[collidingCornerIndex])).mul(axis).mul(sign)), collisionFound);
     }
 
     /**
@@ -95,9 +96,9 @@ public class CollisionUtils {
      * @param instance  instance to get blocks from
      * @param axis      the axis to move along
      * @param corners   the corners of the bounding box to consider
-     * @return true if found collision
+     * @return index of colliding corner, -1 if there is none
      */
-    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
+    private static int stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
         final double sign = Math.signum(amount);
         for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
             final Vec originalCorner = corners[cornerIndex];
@@ -106,7 +107,7 @@ public class CollisionUtils {
             Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
-                return true;
+                return cornerIndex;
             }
 
             final Block block = chunk.getBlock(newCorner);
@@ -120,12 +121,12 @@ public class CollisionUtils {
                         Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : z
                 )));
 
-                return true;
+                return cornerIndex;
             }
 
             corners[cornerIndex] = newCorner;
         }
-        return false;
+        return -1;
     }
 
     /**
