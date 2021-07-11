@@ -172,6 +172,16 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     public abstract @NotNull CompletableFuture<@NotNull Chunk> loadChunk(int chunkX, int chunkZ);
 
     /**
+     * Loads the chunk at the given {@link Point} with a callback.
+     *
+     * @param point the chunk position
+     */
+    public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
+        return loadChunk(ChunkUtils.getChunkCoordinate(point.x()),
+                ChunkUtils.getChunkCoordinate(point.z()));
+    }
+
+    /**
      * Loads the chunk if the chunk is already loaded or if
      * {@link #hasEnabledAutoChunkLoad()} returns true.
      *
@@ -180,6 +190,18 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return a {@link CompletableFuture} completed once the chunk has been processed, can be null if not loaded
      */
     public abstract @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ);
+
+    /**
+     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
+     * at the given {@link Point} with a callback.
+     *
+     * @param point the chunk position
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
+     */
+    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
+        return loadOptionalChunk(ChunkUtils.getChunkCoordinate(point.x()),
+                ChunkUtils.getChunkCoordinate(point.z()));
+    }
 
     /**
      * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
@@ -191,6 +213,18 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @param chunk the chunk to unload
      */
     public abstract void unloadChunk(@NotNull Chunk chunk);
+
+    /**
+     * Unloads the chunk at the given position.
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     */
+    public void unloadChunk(int chunkX, int chunkZ) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        Check.notNull(chunk, "The chunk at {0}:{1} is already unloaded", chunkX, chunkZ);
+        unloadChunk(chunk);
+    }
 
     /**
      * Gets the loaded {@link Chunk} at a position.
@@ -485,42 +519,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         return Collections.unmodifiableSet(entities);
     }
 
-    /**
-     * Loads the chunk at the given {@link Point} with a callback.
-     *
-     * @param point the chunk position
-     */
-    public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
-        return loadChunk(chunkX, chunkZ);
-    }
-
-    /**
-     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
-     * at the given {@link Point} with a callback.
-     *
-     * @param point the chunk position
-     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
-     */
-    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(point.x());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(point.z());
-        return loadOptionalChunk(chunkX, chunkZ);
-    }
-
-    /**
-     * Unloads the chunk at the given position.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     */
-    public void unloadChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        Check.notNull(chunk, "The chunk at " + chunkX + ":" + chunkZ + " is already unloaded");
-        unloadChunk(chunk);
-    }
-
     @Override
     public @NotNull Block getBlock(int x, int y, int z) {
         final Chunk chunk = getChunkAt(x, z);
@@ -573,17 +571,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public @Nullable Chunk getChunkAt(@NotNull Point point) {
         return getChunkAt(point.x(), point.z());
-    }
-
-    /**
-     * Checks if the {@link Chunk} at the position is loaded.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return true if the chunk is loaded, false otherwise
-     */
-    public boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return getChunk(chunkX, chunkZ) != null;
     }
 
     /**
