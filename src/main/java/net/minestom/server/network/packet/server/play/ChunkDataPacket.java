@@ -8,6 +8,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.tag.Tag;
@@ -184,20 +185,21 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
             }
 
             // Data
-            /*this.paletteStorage = new PaletteStorage(8, 1);
             int blockArrayLength = reader.readVarInt();
             if (maskCount > 0) {
                 final long mask = masks[0]; // TODO support for variable size
-                for (int section = 0; section < CHUNK_SECTION_COUNT; section++) {
-                    boolean hasSection = (mask & 1 << section) != 0;
+                for (int sectionIndex = 0; sectionIndex < CHUNK_SECTION_COUNT; sectionIndex++) {
+                    boolean hasSection = (mask & 1 << sectionIndex) != 0;
                     if (!hasSection)
                         continue;
+                    final Section section = sections.computeIfAbsent(sectionIndex, i -> new Section());
+                    final Palette palette = section.getPalette();
                     short blockCount = reader.readShort();
                     byte bitsPerEntry = reader.readByte();
 
                     // Resize palette if necessary
-                    if (bitsPerEntry > paletteStorage.getSection(section).getBitsPerEntry()) {
-                        paletteStorage.getSection(section).resize(bitsPerEntry);
+                    if (bitsPerEntry > palette.getBitsPerEntry()) {
+                        palette.resize(bitsPerEntry);
                     }
 
                     // Retrieve palette values
@@ -205,19 +207,19 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
                         int paletteSize = reader.readVarInt();
                         for (int i = 0; i < paletteSize; i++) {
                             final int paletteValue = reader.readVarInt();
-                            paletteStorage.getSection(section).getPaletteBlockMap().put((short) i, (short) paletteValue);
-                            paletteStorage.getSection(section).getBlockPaletteMap().put((short) paletteValue, (short) i);
+                            palette.getPaletteBlockMap().put((short) i, (short) paletteValue);
+                            palette.getBlockPaletteMap().put((short) paletteValue, (short) i);
                         }
                     }
 
                     // Read blocks
                     int dataLength = reader.readVarInt();
-                    long[] data = paletteStorage.getSection(section).getBlocks();
+                    long[] data = palette.getBlocks();
                     for (int i = 0; i < dataLength; i++) {
                         data[i] = reader.readLong();
                     }
                 }
-            }*/
+            }
 
             // Block entities
             final int blockEntityCount = reader.readVarInt();
