@@ -42,36 +42,87 @@ public interface Point {
     @Contract(pure = true)
     double z();
 
+    /**
+     * Gets the floored value of the X component
+     *
+     * @return the block X
+     */
     @Contract(pure = true)
     default int blockX() {
         return MathUtils.floor(x());
     }
 
+    /**
+     * Gets the floored value of the X component
+     *
+     * @return the block X
+     */
     @Contract(pure = true)
     default int blockY() {
         return MathUtils.floor(y());
     }
 
+    /**
+     * Gets the floored value of the X component
+     *
+     * @return the block X
+     */
     @Contract(pure = true)
     default int blockZ() {
         return MathUtils.floor(z());
     }
 
+    /**
+     * Creates a point with a modified X coordinate based on its value.
+     *
+     * @param operator the operator providing the current X coordinate and returning the new
+     * @return a new point
+     */
     @Contract(pure = true)
     @NotNull Point withX(@NotNull DoubleUnaryOperator operator);
 
+    /**
+     * Creates a point with the specified X coordinate.
+     *
+     * @param x the new X coordinate
+     * @return a new point
+     */
     @Contract(pure = true)
     @NotNull Point withX(double x);
 
+    /**
+     * Creates a point with a modified Y coordinate based on its value.
+     *
+     * @param operator the operator providing the current Y coordinate and returning the new
+     * @return a new point
+     */
     @Contract(pure = true)
     @NotNull Point withY(@NotNull DoubleUnaryOperator operator);
 
+    /**
+     * Creates a point with the specified Y coordinate.
+     *
+     * @param y the new Y coordinate
+     * @return a new point
+     */
     @Contract(pure = true)
     @NotNull Point withY(double y);
 
+    /**
+     * Creates a point with a modified Z coordinate based on its value.
+     *
+     * @param operator the operator providing the current Z coordinate and returning the new
+     * @return a new point
+     */
     @Contract(pure = true)
     @NotNull Point withZ(@NotNull DoubleUnaryOperator operator);
 
+    /**
+     * Creates a point with the specified Z coordinate.
+     *
+     * @param z the new Z coordinate
+     * @return a new point
+     */
     @Contract(pure = true)
     @NotNull Point withZ(double z);
 
@@ -126,8 +177,9 @@ public interface Point {
                 return sub(1, 0, 0);
             case EAST:
                 return add(1, 0, 0);
+            default: // should never be called
+                return this;
         }
-        return this; // should never be called
     }
 
     /**
@@ -172,6 +224,12 @@ public interface Point {
                 Double.compare(point.z(), z()) == 0;
     }
 
+    /**
+     * Gets if the three coordinates {@link #x()}, {@link #y()} and {@link #z()}
+     * are equals to {@code 0}.
+     *
+     * @return true if the three coordinates are zero
+     */
     default boolean isZero() {
         return x() == 0 && y() == 0 && z() == 0;
     }
@@ -180,7 +238,7 @@ public interface Point {
      * Gets if two points are in the same chunk.
      *
      * @param point the point to compare two
-     * @return true if 'this' is in the same chunk as {@code position}
+     * @return true if 'this' is in the same chunk as {@code point}
      */
     default boolean inSameChunk(@NotNull Point point) {
         return ChunkUtils.getChunkCoordinate(x()) == ChunkUtils.getChunkCoordinate(point.x()) &&

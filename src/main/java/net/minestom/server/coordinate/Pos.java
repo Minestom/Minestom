@@ -2,7 +2,6 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,12 +39,27 @@ public final class Pos implements Point {
         this(point, 0, 0);
     }
 
+    /**
+     * Converts a {@link Point} into a {@link Pos}.
+     * Will cast if possible, or instantiate a new object.
+     *
+     * @param point the point to convert
+     * @return the converted position
+     */
     public static @NotNull Pos fromPoint(@NotNull Point point) {
         if (point instanceof Pos)
             return (Pos) point;
         return new Pos(point.x(), point.y(), point.z());
     }
 
+    /**
+     * Changes the 3 coordinates of this position.
+     *
+     * @param x the X coordinate
+     * @param y the Y coordinate
+     * @param z the Z coordinate
+     * @return a new position
+     */
     @Contract(pure = true)
     public @NotNull Pos withCoord(double x, double y, double z) {
         return new Pos(x, y, z, yaw, pitch);
@@ -152,9 +166,15 @@ public final class Pos implements Point {
         return z;
     }
 
+    /**
+     * Returns a new position based on this position fields.
+     *
+     * @param operator the operator deconstructing this object and providing a new position
+     * @return the new position
+     */
     @Contract(pure = true)
-    public @NotNull Pos with(@NotNull Operator operator) {
-        return operator.apply(x, y, z);
+    public @NotNull Pos apply(@NotNull Operator operator) {
+        return operator.apply(x, y, z, yaw, pitch);
     }
 
     @Override
@@ -303,6 +323,6 @@ public final class Pos implements Point {
 
     @FunctionalInterface
     public interface Operator {
-        @NotNull Pos apply(double x, double y, double z);
+        @NotNull Pos apply(double x, double y, double z, float yaw, float pitch);
     }
 }
