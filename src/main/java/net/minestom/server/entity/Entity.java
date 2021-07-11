@@ -74,7 +74,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
     protected Instance instance;
     protected Chunk currentChunk;
-    protected Pos position;
+    protected Pos position = Pos.ZERO;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
@@ -148,10 +148,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         this.id = generateId();
         this.entityType = entityType;
         this.uuid = uuid;
-        this.position = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
         setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
+        setPosition(Pos.ZERO);
 
         this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
 
@@ -803,7 +803,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * @param z the bounding box Z size
      */
     public void setBoundingBox(double x, double y, double z) {
-        this.boundingBox = new BoundingBox(this, x, y, z);
+        this.boundingBox = new BoundingBox(getPosition(), x, y, z);
     }
 
     /**
@@ -856,7 +856,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         if (this.instance != null) {
             this.instance.UNSAFE_removeEntity(this);
         }
-        this.position = spawnPosition;
+        setPosition(spawnPosition);
         this.isActive = true;
         this.instance = instance;
         refreshCurrentChunk(instance.getChunkAt(position));
@@ -1292,9 +1292,9 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             refreshCoordinate(position);
         }
         if (!ignoreView) {
-            this.position = position;
+            setPosition(position);
         } else {
-            this.position = this.position.withCoord(position);
+            setPosition(this.position.withCoord(position));
         }
         sendPositionUpdate(true);
     }
@@ -1349,6 +1349,12 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      */
     public @NotNull Pos getPosition() {
         return position;
+    }
+
+    protected void setPosition(Pos position) {
+        if (!this.position.samePoint(position))
+            this.boundingBox.update(position);
+        this.position = position;
     }
 
     /**
