@@ -29,6 +29,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
@@ -573,8 +574,9 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                         final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
                         if (!ChunkUtils.isLoaded(chunk))
                             continue;
-
-                        final Block block = chunk.getBlock(x, y, z);
+                        final Block block = chunk.getBlock(x, y, z, BlockGetter.Condition.CACHED);
+                        if (block == null)
+                            continue;
                         final BlockHandler handler = block.handler();
                         if (handler != null) {
                             // checks that we are actually in the block, and not just here because of a rounding error

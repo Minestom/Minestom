@@ -520,11 +520,11 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     @Override
-    public @NotNull Block getBlock(int x, int y, int z) {
+    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "The chunk at {0}:{1} is not loaded", x, z);
         synchronized (chunk) {
-            return chunk.getBlock(x, y, z);
+            return chunk.getBlock(x, y, z, condition);
         }
     }
 
