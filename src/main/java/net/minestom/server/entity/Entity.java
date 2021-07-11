@@ -857,6 +857,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             this.instance.UNSAFE_removeEntity(this);
         }
         this.position = spawnPosition;
+        this.boundingBox.update(spawnPosition);
         this.isActive = true;
         this.instance = instance;
         refreshCurrentChunk(instance.getChunkAt(position));

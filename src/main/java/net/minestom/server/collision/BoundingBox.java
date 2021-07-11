@@ -33,7 +33,7 @@ public class BoundingBox {
      * @param z      the depth size
      */
     public BoundingBox(@NotNull Point point, double x, double y, double z) {
-        this.point = point;
+        update(point);
         this.x = x;
         this.y = y;
         this.z = z;
@@ -269,7 +269,7 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getBottomFace() {
-        return bottomFace;
+        return bottomFace.clone();
     }
 
     /**
@@ -279,7 +279,7 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getTopFace() {
-        return topFace;
+        return topFace.clone();
     }
 
     /**
@@ -289,7 +289,7 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getLeftFace() {
-        return leftFace;
+        return leftFace.clone();
     }
 
     /**
@@ -299,7 +299,7 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getRightFace() {
-        return rightFace;
+        return rightFace.clone();
     }
 
     /**
@@ -309,7 +309,7 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getFrontFace() {
-        return frontFace;
+        return frontFace.clone();
     }
 
     /**
@@ -319,7 +319,7 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getBackFace() {
-        return backFace;
+        return backFace.clone();
     }
 
     @Override
