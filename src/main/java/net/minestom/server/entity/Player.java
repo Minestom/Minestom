@@ -560,11 +560,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * if the player is not in any instance).
      *
      * @param instance the new player instance
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
      * @see #setInstance(Instance, Pos)
      */
     @Override
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
+        return setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
     }
 
     /**

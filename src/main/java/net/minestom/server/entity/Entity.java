@@ -845,7 +845,8 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      *
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
-     * @return
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
@@ -872,11 +873,13 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      * Changes the entity instance.
      *
      * @param instance the new instance of the entity
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
      * @throws NullPointerException  if {@code instance} is null
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.position);
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
+        return setInstance(instance, this.position);
     }
 
     /**
