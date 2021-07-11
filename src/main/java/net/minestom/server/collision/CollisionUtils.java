@@ -1,5 +1,7 @@
 package net.minestom.server.collision;
 
+import it.unimi.dsi.fastutil.booleans.Boolean2DoubleFunction;
+import it.unimi.dsi.fastutil.doubles.DoubleUnaryOperator;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -106,12 +108,13 @@ public class CollisionUtils {
         }
 
         int finalCollidingCornerIndex = collidingCornerIndex;
+        final DoubleUnaryOperator function = a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign;
         if (axis.equals(X_AXIS)) {
-            return new StepResult(startPosition.withX(a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign), collisionFound);
+            return new StepResult(startPosition.withX(function), collisionFound);
         } else if (axis.equals(Y_AXIS)) {
-            return new StepResult(startPosition.withY(a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign), collisionFound);
+            return new StepResult(startPosition.withY(function), collisionFound);
         } else if (axis.equals(Z_AXIS)) {
-            return new StepResult(startPosition.withZ(a -> a + originalCorners[finalCollidingCornerIndex].distance(corners[finalCollidingCornerIndex]) * sign), collisionFound);
+            return new StepResult(startPosition.withZ(function), collisionFound);
         }
         throw new IllegalStateException("Get out of the 4th dimension, this method can only handle three.");
     }
