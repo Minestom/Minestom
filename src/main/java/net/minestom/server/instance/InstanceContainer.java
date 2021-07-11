@@ -318,7 +318,7 @@ public class InstanceContainer extends Instance {
 
     protected CompletableFuture<Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
-        chunkLoader.loadChunk(this, chunkX, chunkZ)
+        final Runnable loader = () -> chunkLoader.loadChunk(this, chunkX, chunkZ)
                 .whenComplete((chunk, throwable) -> {
                     if (chunk != null) {
                         // Successfully loaded
@@ -335,7 +335,11 @@ public class InstanceContainer extends Instance {
                                 completableFuture.complete(c));
                     }
                 });
-
+        if (chunkLoader.supportsParallelLoading()) {
+            CompletableFuture.runAsync(loader);
+        } else {
+            loader.run();
+        }
         // Chunk is being loaded
         return completableFuture;
     }

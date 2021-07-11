@@ -254,4 +254,14 @@ public class AnvilLoader implements IChunkLoader {
         }
         chunkColumn.setTileEntities(tileEntities);
     }
+
+    @Override
+    public boolean supportsParallelLoading() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsParallelSaving() {
+        return true;
+    }
 }

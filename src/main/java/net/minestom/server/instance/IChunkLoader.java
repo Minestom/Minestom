@@ -1,7 +1,6 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.thread.MinestomThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,7 +32,7 @@ public interface IChunkLoader {
      *
      * @param chunk the {@link Chunk} to save
      * @return a {@link CompletableFuture} executed when the {@link Chunk} is done saving,
-     * * should be called even if the saving failed (you can throw an exception).
+     * should be called even if the saving failed (you can throw an exception).
      */
     @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk);
 
@@ -44,7 +43,7 @@ public interface IChunkLoader {
      *
      * @param chunks the chunks to save
      * @return a {@link CompletableFuture} executed when the {@link Chunk} is done saving,
-     * * should be called even if the saving failed (you can throw an exception).
+     * should be called even if the saving failed (you can throw an exception).
      */
     default @NotNull CompletableFuture<Void> saveChunks(@NotNull Collection<Chunk> chunks) {
         if (supportsParallelSaving()) {
