@@ -18,6 +18,7 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
@@ -55,10 +56,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
 
-        super.setInstance(instance, spawnPosition);
+        return super.setInstance(instance, spawnPosition);
     }
 
     @Override

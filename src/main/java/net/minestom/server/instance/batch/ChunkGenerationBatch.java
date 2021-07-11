@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 public class ChunkGenerationBatch extends ChunkBatch {
     private final InstanceContainer instance;
@@ -23,7 +24,8 @@ public class ChunkGenerationBatch extends ChunkBatch {
         chunk.setBlock(x, y, z, block);
     }
 
-    public void generate(@NotNull ChunkGenerator chunkGenerator, @Nullable ChunkCallback callback) {
+    public @NotNull CompletableFuture<@NotNull Chunk> generate(@NotNull ChunkGenerator chunkGenerator) {
+        final CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         BLOCK_BATCH_POOL.execute(() -> {
             synchronized (chunk) {
                 final List<ChunkPopulator> populators = chunkGenerator.getPopulators();
@@ -40,10 +42,10 @@ public class ChunkGenerationBatch extends ChunkBatch {
                 // Update the chunk.
                 this.chunk.sendChunk();
                 this.instance.refreshLastBlockChangeTime();
-                if (callback != null)
-                    this.instance.scheduleNextTick(inst -> callback.accept(this.chunk));
+                completableFuture.complete(chunk);
             }
         });
+        return completableFuture;
     }
 
     @Override

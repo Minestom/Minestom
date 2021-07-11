@@ -3,6 +3,7 @@ package net.minestom.server.entity.fakeplayer;
 import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.attribute.Attribute;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
@@ -16,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
@@ -118,10 +120,10 @@ public class FakePlayer extends Player implements NavigableEntity {
     }
 
     @Override
-    public void setInstance(@NotNull Instance instance) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
 
-        super.setInstance(instance);
+        return super.setInstance(instance, spawnPosition);
     }
 
     @Override
