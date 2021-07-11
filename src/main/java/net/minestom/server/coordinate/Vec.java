@@ -347,6 +347,39 @@ public final class Vec implements Point {
         return rotateAroundX(angleX).rotateAroundY(angleY).rotateAroundZ(angleZ);
     }
 
+    @Contract(pure = true)
+    public @NotNull Vec rotateFromView(float yawDegrees, float pitchDegrees) {
+        double yaw = Math.toRadians(-1 * (yawDegrees + 90));
+        double pitch = Math.toRadians(-pitchDegrees);
+
+        double cosYaw = Math.cos(yaw);
+        double cosPitch = Math.cos(pitch);
+        double sinYaw = Math.sin(yaw);
+        double sinPitch = Math.sin(pitch);
+
+        double initialX, initialY, initialZ;
+        double x, y, z;
+
+        // Z_Axis rotation (Pitch)
+        initialX = x();
+        initialY = y();
+        x = initialX * cosPitch - initialY * sinPitch;
+        y = initialX * sinPitch + initialY * cosPitch;
+
+        // Y_Axis rotation (Yaw)
+        initialZ = z();
+        initialX = x;
+        z = initialZ * cosYaw - initialX * sinYaw;
+        x = initialZ * sinYaw + initialX * cosYaw;
+
+        return new Vec(x, y, z);
+    }
+
+    @Contract(pure = true)
+    public @NotNull Vec rotateFromView(@NotNull Pos pos) {
+        return rotateFromView(pos.yaw(), pos.pitch());
+    }
+
     /**
      * Calculates a linear interpolation between this vector with another
      * vector.
