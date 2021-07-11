@@ -342,6 +342,11 @@ public final class Vec implements Point {
         return new Vec(newX, newY, z);
     }
 
+    @Contract(pure = true)
+    public @NotNull Vec rotate(double angleX, double angleY, double angleZ) {
+        return rotateAroundX(angleX).rotateAroundY(angleY).rotateAroundZ(angleZ);
+    }
+
     /**
      * Calculates a linear interpolation between this vector with another
      * vector.
