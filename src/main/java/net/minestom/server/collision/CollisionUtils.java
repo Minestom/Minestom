@@ -1,11 +1,16 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.entity.EntityBlockCollideEvent;
+import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -21,7 +26,7 @@ public class CollisionUtils {
      * Moves an entity with physics applied (ie checking against blocks)
      *
      * @param entity        the entity to move
-     * @param deltaPosition
+     * @param deltaPosition the distance and direction to try move
      * @param positionOut   the Position object in which the new position will be saved
      * @param velocityOut   the Vector object in which the new velocity will be saved
      * @return whether this entity is on the ground
@@ -49,19 +54,43 @@ public class CollisionUtils {
                 intermediaryPosition,
                 deltaPosition.getZ() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
 
-        positionOut.setX(intermediaryPosition.getX());
-        positionOut.setY(intermediaryPosition.getY());
-        positionOut.setZ(intermediaryPosition.getZ());
         velocityOut.copy(deltaPosition);
-        if (xCollision) {
-            velocityOut.setX(0f);
+
+        // Exit out if no collision was detected or velocity is zero
+        if (!(xCollision || yCollision || zCollision)) {
+            positionOut.copy(intermediaryPosition);
+            return false;
         }
-        if (yCollision) {
-            velocityOut.setY(0f);
+
+        if (velocityOut.lengthSquared() == 0) {
+            positionOut.copy(intermediaryPosition);
+            return yCollision;
         }
-        if (zCollision) {
-            velocityOut.setZ(0f);
+
+        // Get the collision direction
+        Vector collisionDirection = deltaPosition.normalize();
+
+        // Call event
+        EntityBlockCollideEvent event = new EntityBlockCollideEvent(entity, instance, collisionDirection);
+
+        MinecraftServer.getGlobalEventHandler().call(event);
+
+        // If the event is cancelled, add the correct displacement
+        if (event.isCancelled()) {
+
+            positionOut.copy(currentPosition);
+            positionOut.setX(positionOut.getX() + deltaPosition.getX());
+            positionOut.setY(positionOut.getY() + deltaPosition.getY());
+            positionOut.setZ(positionOut.getZ() + deltaPosition.getZ());
+
+            return yCollision && deltaPosition.getY() < 0;
         }
+
+        positionOut.copy(intermediaryPosition);
+
+        if (xCollision) velocityOut.setX(0f);
+        if (yCollision) velocityOut.setY(0f);
+        if (zCollision) velocityOut.setZ(0f);
 
         return yCollision && deltaPosition.getY() < 0;
     }
