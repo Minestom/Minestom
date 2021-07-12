@@ -515,6 +515,15 @@ public final class Vec implements Point {
         return Objects.hash(x, y, z);
     }
 
+    @Override
+    public String toString() {
+        return "Vec{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                '}';
+    }
+
     @FunctionalInterface
     public interface Operator {
         /**
