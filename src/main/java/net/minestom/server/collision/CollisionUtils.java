@@ -151,7 +151,7 @@ public class CollisionUtils {
                 return cornerIndex;
             }
 
-            final Block block = chunk.getBlock(newCorner.blockX(), newCorner.blockY(), newCorner.blockZ(), BlockGetter.Condition.NONE);
+            final Block block = chunk.getBlock(newCorner);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
