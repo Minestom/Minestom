@@ -24,10 +24,13 @@ public interface BlockGetter {
     enum Condition {
         /**
          * Returns a block no matter what.
+         * {@link Block#AIR} being the default result.
          */
         NONE,
         /**
          * Returns a block only if it has a handler or nbt.
+         * <p>
+         * Should be more performant than {@link #NONE}.
          */
         CACHED
     }

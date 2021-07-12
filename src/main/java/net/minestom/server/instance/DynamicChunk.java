@@ -100,19 +100,14 @@ public class DynamicChunk extends Chunk {
         // Verify if the block object is present
         final var entry = !entries.isEmpty() ?
                 entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
-        if (entry != null) {
+        if (entry != null || condition == Condition.CACHED) {
             return entry;
-        }
-        if (condition != Condition.NONE) {
-            return null;
         }
         // Retrieve the block from state id
         final Section section = retrieveSection(y);
         final short blockStateId = section.getBlockAt(x, y, z);
-        if (blockStateId == -1) {
-            return Block.AIR;
-        }
-        return Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR);
+        return blockStateId > 0 ?
+                Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR) : Block.AIR;
     }
 
     @Override
