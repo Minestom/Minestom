@@ -10,78 +10,22 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BoundingBox {
 
-    private Point point;
+    private final Entity entity;
     private final double x, y, z;
-    private double minX;
-    private double maxX;
-    private double maxY;
-    private double minZ;
-    private double maxZ;
-    private Vec[] bottomFace;
-    private Vec[] topFace;
-    private Vec[] leftFace;
-    private Vec[] rightFace;
-    private Vec[] frontFace;
-    private Vec[] backFace;
 
     /**
      * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.
      *
-     * @param point  the entity"s location
+     * @param entity the linked entity
      * @param x      the width size
      * @param y      the height size
      * @param z      the depth size
      */
-    public BoundingBox(@NotNull Point point, double x, double y, double z) {
-        update(point);
+    public BoundingBox(@NotNull Entity entity, double x, double y, double z) {
+        this.entity = entity;
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-
-    public void update(Point point) {
-        this.point = point;
-        minX = point.x() - (this.x / 2);
-        maxX = point.x() + (x / 2);
-        maxY = point.y() + y;
-        minZ = point.z() - (z / 2);
-        maxZ = point.z() + (z / 2);
-        bottomFace = new Vec[]{
-                new Vec(getMinX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-        };
-        topFace = new Vec[]{
-                new Vec(getMinX(), getMaxY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ()),
-        };
-        leftFace = new Vec[]{
-                new Vec(getMinX(), getMinY(), getMinZ()),
-                new Vec(getMinX(), getMaxY(), getMinZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-        };
-        rightFace = new Vec[]{
-                new Vec(getMaxX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-        };
-        frontFace = new Vec[]{
-                new Vec(getMinX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMinZ()),
-                new Vec(getMinX(), getMaxY(), getMinZ()),
-        };
-        backFace = new Vec[]{
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ()),
-        };
     }
 
     /**
@@ -165,7 +109,7 @@ public class BoundingBox {
      */
     @NotNull
     public BoundingBox expand(double x, double y, double z) {
-        return new BoundingBox(point, this.x + x, this.y + y, this.z + z);
+        return new BoundingBox(entity, this.x + x, this.y + y, this.z + z);
     }
 
     /**
@@ -178,7 +122,7 @@ public class BoundingBox {
      */
     @NotNull
     public BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(point, this.x - x, this.y - y, this.z - z);
+        return new BoundingBox(entity, this.x - x, this.y - y, this.z - z);
     }
 
     /**
@@ -214,7 +158,7 @@ public class BoundingBox {
      * @return the min X
      */
     public double getMinX() {
-        return minX;
+        return entity.getPosition().x() - (x / 2);
     }
 
     /**
@@ -223,7 +167,7 @@ public class BoundingBox {
      * @return the max X
      */
     public double getMaxX() {
-        return maxX;
+        return entity.getPosition().x() + (x / 2);
     }
 
     /**
@@ -232,7 +176,7 @@ public class BoundingBox {
      * @return the min Y
      */
     public double getMinY() {
-        return point.y();
+        return entity.getPosition().y();
     }
 
     /**
@@ -241,7 +185,7 @@ public class BoundingBox {
      * @return the max Y
      */
     public double getMaxY() {
-        return maxY;
+        return entity.getPosition().y() + y;
     }
 
     /**
@@ -250,7 +194,7 @@ public class BoundingBox {
      * @return the min Z
      */
     public double getMinZ() {
-        return minZ;
+        return entity.getPosition().z() - (z / 2);
     }
 
     /**
@@ -259,7 +203,7 @@ public class BoundingBox {
      * @return the max Z
      */
     public double getMaxZ() {
-        return maxZ;
+        return entity.getPosition().z() + (z / 2);
     }
 
     /**
@@ -269,7 +213,12 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getBottomFace() {
-        return bottomFace.clone();
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMinY(), getMaxZ()),
+                new Vec(getMinX(), getMinY(), getMaxZ()),
+        };
     }
 
     /**
@@ -279,7 +228,12 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getTopFace() {
-        return topFace.clone();
+        return new Vec[]{
+                new Vec(getMinX(), getMaxY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                new Vec(getMinX(), getMaxY(), getMaxZ()),
+        };
     }
 
     /**
@@ -289,7 +243,12 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getLeftFace() {
-        return leftFace.clone();
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMinZ()),
+                new Vec(getMinX(), getMaxY(), getMinZ()),
+                new Vec(getMinX(), getMaxY(), getMaxZ()),
+                new Vec(getMinX(), getMinY(), getMaxZ()),
+        };
     }
 
     /**
@@ -299,7 +258,12 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getRightFace() {
-        return rightFace.clone();
+        return new Vec[]{
+                new Vec(getMaxX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                new Vec(getMaxX(), getMinY(), getMaxZ()),
+        };
     }
 
     /**
@@ -309,7 +273,12 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getFrontFace() {
-        return frontFace.clone();
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMinZ()),
+                new Vec(getMinX(), getMaxY(), getMinZ()),
+        };
     }
 
     /**
@@ -319,7 +288,12 @@ public class BoundingBox {
      */
     @NotNull
     public Vec[] getBackFace() {
-        return backFace.clone();
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMaxZ()),
+                new Vec(getMaxX(), getMinY(), getMaxZ()),
+                new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                new Vec(getMinX(), getMaxY(), getMaxZ()),
+        };
     }
 
     @Override
