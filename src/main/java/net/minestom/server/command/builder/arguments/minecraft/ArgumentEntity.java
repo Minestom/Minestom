@@ -7,10 +7,10 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -90,6 +90,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     @NotNull
     public static EntityFinder staticParse(@NotNull String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {

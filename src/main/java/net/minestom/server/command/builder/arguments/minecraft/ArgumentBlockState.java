@@ -31,6 +31,10 @@ public class ArgumentBlockState extends Argument<Block> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     public static Block staticParse(@NotNull String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0)

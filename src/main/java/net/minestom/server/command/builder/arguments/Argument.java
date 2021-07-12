@@ -67,15 +67,27 @@ public abstract class Argument<T> {
     }
 
     /**
+     * Parses an argument, using {@link Argument#getId()} as the input
+     *
+     * @param argument the argument, with the input as id
+     * @param <T>      the result type
+     * @return the parsed result
+     * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
+     */
+    @ApiStatus.Experimental
+    public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
+        return argument.parse(argument.getId());
+    }
+
+    /**
      * Parses the given input, and throw an {@link ArgumentSyntaxException}
-     * if the input cannot be convert to {@code T}
+     * if the input cannot be converted to {@code T}
      *
      * @param input the argument to parse
      * @return the parsed argument
      * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    @NotNull
-    public abstract T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
 
     /**
      * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
