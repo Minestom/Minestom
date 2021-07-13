@@ -90,7 +90,11 @@ public final class ChunkUtils {
     }
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
-        return ChunkUtils.same(originChunk, x, z) ? originChunk : instance.getChunkAt(x, z);
+        final int chunkX = getChunkCoordinate(x);
+        final int chunkZ = getChunkCoordinate(z);
+        final boolean sameChunk = originChunk.getChunkX() == chunkX &&
+                originChunk.getChunkZ() == chunkZ;
+        return sameChunk ? originChunk : instance.getChunk(chunkX, chunkZ);
     }
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, Point position) {
