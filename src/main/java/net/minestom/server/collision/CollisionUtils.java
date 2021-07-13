@@ -1,14 +1,13 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class CollisionUtils {
@@ -20,7 +19,7 @@ public class CollisionUtils {
     /**
      * Moves an entity with physics applied (ie checking against blocks)
      *
-     * @param entity        the entity to move
+     * @param entity the entity to move
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition) {
@@ -30,21 +29,35 @@ public class CollisionUtils {
         final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        final StepResult yCollision = stepAxis(instance, originChunk, currentPosition.asVec(), Y_AXIS, deltaPosition.y(),
-                deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+        Vec stepVec = currentPosition.asVec();
+        boolean xCheck = false, yCheck = false, zCheck = false;
 
-        final StepResult xCollision = stepAxis(instance, originChunk, yCollision.newPosition, X_AXIS, deltaPosition.x(),
-                deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+        if (deltaPosition.y() != 0) {
+            final StepResult yCollision = stepAxis(instance, originChunk, stepVec, Y_AXIS, deltaPosition.y(),
+                    deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+            yCheck = yCollision.foundCollision;
+            stepVec = yCollision.newPosition;
+        }
 
-        final StepResult zCollision = stepAxis(instance, originChunk, xCollision.newPosition, Z_AXIS, deltaPosition.z(),
-                deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+        if (deltaPosition.x() != 0) {
+            final StepResult xCollision = stepAxis(instance, originChunk, stepVec, X_AXIS, deltaPosition.x(),
+                    deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+            xCheck = xCollision.foundCollision;
+            stepVec = xCollision.newPosition;
+        }
 
-        return new PhysicsResult(currentPosition.withCoord(zCollision.newPosition),
-                deltaPosition.apply(((x, y, z) -> new Vec(
-                        xCollision.foundCollision ? 0 : x,
-                        yCollision.foundCollision ? 0 : y,
-                        zCollision.foundCollision ? 0 : z
-                ))), yCollision.foundCollision && deltaPosition.y() < 0);
+        if (deltaPosition.z() != 0) {
+            final StepResult zCollision = stepAxis(instance, originChunk, stepVec, Z_AXIS, deltaPosition.z(),
+                    deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+            zCheck = zCollision.foundCollision;
+            stepVec = zCollision.newPosition;
+        }
+
+        return new PhysicsResult(currentPosition.samePoint(stepVec) ? currentPosition : currentPosition.withCoord(stepVec),
+                new Vec(xCheck ? 0 : deltaPosition.x(),
+                        yCheck ? 0 : deltaPosition.y(),
+                        zCheck ? 0 : deltaPosition.z()),
+                yCheck && deltaPosition.y() < 0);
     }
 
     /**
@@ -69,7 +82,8 @@ public class CollisionUtils {
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            if (collisionFound = stepOnce(instance, originChunk, axis, sign, corners)) break;
+            collisionFound = stepOnce(instance, originChunk, axis, sign, corners);
+            if (collisionFound) break;
         }
 
         // add remainingLength
@@ -92,9 +106,9 @@ public class CollisionUtils {
     /**
      * Steps once (by a length of 1 block) on the given axis.
      *
-     * @param instance  instance to get blocks from
-     * @param axis      the axis to move along
-     * @param corners   the corners of the bounding box to consider
+     * @param instance instance to get blocks from
+     * @param axis     the axis to move along
+     * @param corners  the corners of the bounding box to consider
      * @return true if found collision
      */
     private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
@@ -102,27 +116,22 @@ public class CollisionUtils {
         for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
             final Vec originalCorner = corners[cornerIndex];
             final Vec newCorner = originalCorner.add(axis.mul(amount));
-
-            Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
+            final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
                 // Collision at chunk border
                 return true;
             }
-
             final Block block = chunk.getBlock(newCorner);
 
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                corners[cornerIndex] = originalCorner.apply(((x, y, z) -> new Vec(
-                        Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : x,
-                        Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : y,
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : z
-                )));
-
+                corners[cornerIndex] = new Vec(
+                        Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : originalCorner.x(),
+                        Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : originalCorner.y(),
+                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z());
                 return true;
             }
-
             corners[cornerIndex] = newCorner;
         }
         return false;
@@ -137,7 +146,7 @@ public class CollisionUtils {
      * @return the position with the world border collision applied (can be {@code newPosition} if not changed)
      */
     public static @NotNull Pos applyWorldBorder(@NotNull Instance instance,
-                                         @NotNull Pos currentPosition, @NotNull Pos newPosition) {
+                                                @NotNull Pos currentPosition, @NotNull Pos newPosition) {
         final WorldBorder worldBorder = instance.getWorldBorder();
         final WorldBorder.CollisionAxis collisionAxis = worldBorder.getCollisionAxis(newPosition);
         switch (collisionAxis) {
