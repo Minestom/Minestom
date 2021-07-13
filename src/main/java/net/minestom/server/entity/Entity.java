@@ -479,9 +479,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             }
 
             // Velocity
+            final boolean noGravity = hasNoGravity();
             boolean applyVelocity;
             // Non-player entities with either velocity or gravity enabled
-            applyVelocity = !isNettyClient && (hasVelocity() || !hasNoGravity());
+            applyVelocity = !isNettyClient && (hasVelocity() || !noGravity);
             // Players with a velocity applied (client is responsible for gravity)
             applyVelocity |= isNettyClient && hasVelocity();
 
@@ -490,13 +491,11 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 final Pos newPosition;
                 final Vec newVelocity;
 
-                // Gravity force
-                final double gravityY = hasNoGravity() ? 0 : gravityAcceleration;
-
+                final Vec currentVelocity = getVelocity();
                 final Vec deltaPos = new Vec(
-                        getVelocity().x() / tps,
-                        getVelocity().y() / tps - gravityY,
-                        getVelocity().z() / tps
+                        currentVelocity.x() / tps,
+                        currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
+                        currentVelocity.z() / tps
                 );
 
                 if (this.hasPhysics) {
@@ -527,21 +526,21 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 }
 
                 // Update velocity
-                if (hasVelocity() || !newVelocity.equals(Vec.ZERO)) {
+                if (hasVelocity() || !newVelocity.isZero()) {
                     if (onGround && isNettyClient) {
                         // Stop player velocity
-                        velocity = Vec.ZERO;
+                        this.velocity = Vec.ZERO;
                     } else {
                         final Block block = finalChunk.getBlock(position);
                         final double drag = block.registry().friction();
 
-                        velocity = newVelocity
-                                // Convert from blocks/tick to blocks/sec
+                        this.velocity = newVelocity
+                                // Convert from block/tick to block/sec
                                 .mul(tps)
                                 // Apply drag
                                 .apply((x, y, z) -> new Vec(
                                         x * drag,
-                                        !hasNoGravity() ? y * (1 - gravityDragPerTick) : y,
+                                        !noGravity ? y * (1 - gravityDragPerTick) : y,
                                         z * drag
                                 ))
                                 // Prevent infinitely decreasing velocity
