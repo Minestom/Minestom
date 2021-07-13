@@ -1,6 +1,8 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -24,8 +26,6 @@ import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacement
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.validate.Check;
 
 import java.util.Set;
@@ -139,7 +139,7 @@ public class BlockPlacementListener {
 
                 if (!intersect) {
                     // BlockPlaceEvent check
-                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, placementPosition, packet.hand);
+                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand);
                     playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                     EventDispatcher.call(playerBlockPlaceEvent);
