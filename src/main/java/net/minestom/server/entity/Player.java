@@ -529,7 +529,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
-                !spawnPosition.inSameChunk(this.position);
+                !spawnPosition.sameChunk(this.position);
 
         if (needWorldRefresh) {
             // TODO: Handle player reconnections, must be false in that case too

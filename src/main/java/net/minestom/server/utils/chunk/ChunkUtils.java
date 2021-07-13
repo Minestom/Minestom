@@ -84,11 +84,6 @@ public final class ChunkUtils {
         return isLoaded(chunk);
     }
 
-    public static boolean same(@NotNull Chunk chunk, double x, double z) {
-        return chunk.getChunkX() == getChunkCoordinate(x) &&
-                chunk.getChunkZ() == getChunkCoordinate(z);
-    }
-
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);

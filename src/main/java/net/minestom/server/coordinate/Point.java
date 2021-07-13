@@ -240,7 +240,7 @@ public interface Point {
      * @param point the point to compare two
      * @return true if 'this' is in the same chunk as {@code point}
      */
-    default boolean inSameChunk(@NotNull Point point) {
+    default boolean sameChunk(@NotNull Point point) {
         return ChunkUtils.getChunkCoordinate(x()) == ChunkUtils.getChunkCoordinate(point.x()) &&
                 ChunkUtils.getChunkCoordinate(z()) == ChunkUtils.getChunkCoordinate(point.z());
     }
