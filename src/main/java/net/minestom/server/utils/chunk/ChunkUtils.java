@@ -90,10 +90,7 @@ public final class ChunkUtils {
     }
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
-        if (!ChunkUtils.same(originChunk, x, z)) {
-            return instance.getChunkAt(x, z);
-        }
-        return originChunk;
+        return ChunkUtils.same(originChunk, x, z) ? originChunk : instance.getChunkAt(x, z);
     }
 
     public static Chunk retrieve(Instance instance, Chunk originChunk, Point position) {
@@ -105,9 +102,8 @@ public final class ChunkUtils {
      * @return the chunk X or Z based on the argument
      */
     public static int getChunkCoordinate(double xz) {
-        final int coordinate = (int) Math.floor(xz);
         assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        return Math.floorDiv(coordinate, Chunk.CHUNK_SIZE_X);
+        return Math.floorDiv(MathUtils.floor(xz), Chunk.CHUNK_SIZE_X);
     }
 
     /**
