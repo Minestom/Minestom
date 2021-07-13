@@ -48,7 +48,7 @@ public class DynamicChunk extends Chunk {
             final var blockDescription = PFBlock.get(block);
             columnarOcclusionFieldList.onBlockChanged(x, y, z, blockDescription, 0);
         }
-        Section section = retrieveSection(y);
+        Section section = getSection(ChunkUtils.getSectionAt(y));
         section.setBlockAt(x, y, z, block.stateId());
 
         final int index = ChunkUtils.getBlockIndex(x, y, z);
@@ -104,7 +104,9 @@ public class DynamicChunk extends Chunk {
             return entry;
         }
         // Retrieve the block from state id
-        final Section section = retrieveSection(y);
+        final Section section = getOptionalSection(y);
+        if (section == null)
+            return Block.AIR;
         final short blockStateId = section.getBlockAt(x, y, z);
         return blockStateId > 0 ?
                 Objects.requireNonNullElse(Block.fromStateId(blockStateId), Block.AIR) : Block.AIR;
@@ -151,8 +153,8 @@ public class DynamicChunk extends Chunk {
         this.entries.clear();
     }
 
-    private @NotNull Section retrieveSection(int y) {
+    private @Nullable Section getOptionalSection(int y) {
         final int sectionIndex = ChunkUtils.getSectionAt(y);
-        return getSection(sectionIndex);
+        return sectionMap.get(sectionIndex);
     }
 }
