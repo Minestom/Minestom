@@ -1287,13 +1287,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
      */
     @ApiStatus.Internal
     public void refreshPosition(@NotNull final Pos position, boolean ignoreView) {
-        if (!position.samePoint(this.position)) {
+        final var previousPosition = this.position;
+        this.position = ignoreView ? previousPosition.withCoord(position) : position;
+        if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
-        }
-        if (!ignoreView) {
-            this.position = position;
-        } else {
-            this.position = this.position.withCoord(position);
         }
         sendPositionUpdate(true);
     }
@@ -1316,6 +1313,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     private void refreshCoordinate(Point newPosition) {
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
+                passenger.position = passenger.position.withCoord(newPosition);
                 passenger.refreshCoordinate(newPosition);
             }
         }
