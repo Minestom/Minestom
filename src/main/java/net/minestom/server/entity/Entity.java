@@ -523,6 +523,9 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                 // Apply the position if changed
                 if (!finalVelocityPosition.samePoint(position)) {
                     refreshPosition(finalVelocityPosition, true);
+                    if (!isNettyClient) {
+                        synchronizePosition(true);
+                    }
                 }
 
                 // Update velocity
@@ -548,10 +551,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
                     }
                 }
 
-                // Synchronization and packets...
-                if (!isNettyClient) {
-                    synchronizePosition(true);
-                }
                 // Verify if velocity packet has to be sent
                 if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
                     sendPacketToViewersAndSelf(getVelocityPacket());
