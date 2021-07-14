@@ -1,7 +1,5 @@
 package net.minestom.codegen.fluid;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
@@ -41,7 +39,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray fluids = GSON.fromJson(new InputStreamReader(fluidsFile), JsonArray.class);
+        JsonObject fluids = GSON.fromJson(new InputStreamReader(fluidsFile), JsonObject.class);
         ClassName fluidClassName = ClassName.get("net.minestom.server.fluid", "Fluid");
 
         // Particle
@@ -122,18 +120,15 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement f : fluids) {
-            JsonObject fluid = f.getAsJsonObject();
-
-            String fluidName = fluid.get("name").getAsString();
-
-            fluidClass.addEnumConstant(fluidName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    fluid.get("id").getAsString()
+        fluids.entrySet().forEach(entry -> {
+            final String fluidName = entry.getKey();
+            fluidClass.addEnumConstant(toConstant(fluidName), TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                            fluidName
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

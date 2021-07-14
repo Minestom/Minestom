@@ -40,11 +40,12 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         }
         // Important classes we use alot
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
+        ClassName blockClassName = ClassName.get("net.minestom.server.instance.block", "Block");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
         ClassName blockCN = ClassName.get("net.minestom.server.instance.block", "Block");
         ParameterizedTypeName blocksCNSupplier = ParameterizedTypeName.get(ClassName.get(Supplier.class), blockCN);
 
-        JsonArray items = GSON.fromJson(new InputStreamReader(itemsFile), JsonArray.class);
+        JsonObject items = GSON.fromJson(new InputStreamReader(itemsFile), JsonObject.class);
         ClassName itemClassName = ClassName.get("net.minestom.server.item", "Material");
 
         // Item
@@ -232,26 +233,28 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement i : items) {
-            JsonObject item = i.getAsJsonObject();
+        items.entrySet().forEach(entry -> {
+            final String itemNamespace = entry.getKey();
+            final String itemConstant = toConstant(itemNamespace);
 
-            String itemName = item.get("name").getAsString();
+            JsonObject item = entry.getValue().getAsJsonObject();
+
             TypeSpec.Builder enumConst;
             if (!(item.get("blockId").getAsString().equals("minecraft:air"))) {
                 enumConst = TypeSpec.anonymousClassBuilder(
-                        "$T.from($S), (byte) $L, () -> $T.getBlock($S)",
+                        "$T.from($S), (byte) $L, () -> $T.$L",
                         namespaceIDClassName,
-                        item.get("id").getAsString(),
+                        itemNamespace,
                         item.get("maxStackSize").getAsInt(),
                         // Supplier
-                        registriesClassName,
-                        item.get("blockId").getAsString()
+                        blockClassName,
+                        toConstant(item.get("blockId").getAsString())
                 );
             } else {
                 enumConst = TypeSpec.anonymousClassBuilder(
                         "$T.from($S), (byte) $L, () -> null",
                         namespaceIDClassName,
-                        item.get("id").getAsString(),
+                        itemNamespace,
                         item.get("maxStackSize").getAsInt()
                 );
             }
@@ -326,8 +329,8 @@ public final class MaterialGenerator extends MinestomCodeGenerator {
 
 
             }
-            itemClass.addEnumConstant(itemName, enumConst.build());
-        }
+            itemClass.addEnumConstant(itemConstant, enumConst.build());
+        });
 
         // Write files to outputFolder
         writeFiles(

@@ -1,7 +1,5 @@
 package net.minestom.codegen.sound;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
@@ -41,7 +39,7 @@ public final class SoundEventGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray sounds = GSON.fromJson(new InputStreamReader(soundsFile), JsonArray.class);
+        JsonObject sounds = GSON.fromJson(new InputStreamReader(soundsFile), JsonObject.class);
         ClassName soundClassName = ClassName.get("net.minestom.server.sound", "SoundEvent");
         // Sound
         TypeSpec.Builder soundClass = TypeSpec.enumBuilder(soundClassName)
@@ -121,17 +119,16 @@ public final class SoundEventGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement s : sounds) {
-            JsonObject sound = s.getAsJsonObject();
-
-            String soundName = sound.get("name").getAsString();
-            soundClass.addEnumConstant(soundName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    sound.get("id").getAsString()
+        sounds.entrySet().forEach(entry -> {
+            final String soundNamespace = entry.getKey();
+            final String soundConstant = toConstant(soundNamespace).replace(".", "_");
+            soundClass.addEnumConstant(soundConstant, TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                            soundNamespace
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(
