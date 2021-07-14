@@ -371,7 +371,7 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         if (!viewers.remove(player)) {
             return false;
         }
-        player.getPlayerConnection().sendPacket(DestroyEntityPacket.of(getEntityId()));
+        player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));
         player.viewableEntities.remove(this);
         return true;
     }

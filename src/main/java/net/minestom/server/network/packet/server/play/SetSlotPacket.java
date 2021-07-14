@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class SetSlotPacket implements ServerPacket {
 
     public byte windowId;
+    public int stateId;
     public short slot;
     public ItemStack itemStack;
 
@@ -20,6 +21,7 @@ public class SetSlotPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
+        writer.writeVarInt(stateId);
         writer.writeShort(slot);
         writer.writeItemStack(itemStack);
     }
@@ -27,6 +29,7 @@ public class SetSlotPacket implements ServerPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         windowId = reader.readByte();
+        stateId = reader.readVarInt();
         slot = reader.readShort();
         itemStack = reader.readItemStack();
     }
