@@ -18,6 +18,10 @@ public class DestroyEntitiesPacket implements ServerPacket {
         this(new int[]{entityId});
     }
 
+    public DestroyEntitiesPacket() {
+        this(0);
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarIntArray(entityIds);
