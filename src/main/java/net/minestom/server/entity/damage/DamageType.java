@@ -29,7 +29,7 @@ public class DamageType implements TagHandler, DataContainer {
     public static final DamageType ON_FIRE = new DamageType("attack.onFire") {
         @Override
         protected SoundEvent getPlayerSound(@NotNull Player player) {
-            return SoundEvent.PLAYER_HURT_ON_FIRE;
+            return SoundEvent.ENTITY_PLAYER_HURT_ON_FIRE;
         }
     };
     private final String identifier;
@@ -148,11 +148,11 @@ public class DamageType implements TagHandler, DataContainer {
     }
 
     protected SoundEvent getGenericSound(@NotNull LivingEntity entity) {
-        return SoundEvent.GENERIC_HURT;
+        return SoundEvent.ENTITY_GENERIC_HURT;
     }
 
     protected SoundEvent getPlayerSound(@NotNull Player player) {
-        return SoundEvent.PLAYER_HURT;
+        return SoundEvent.ENTITY_PLAYER_HURT;
     }
 
     @Override
