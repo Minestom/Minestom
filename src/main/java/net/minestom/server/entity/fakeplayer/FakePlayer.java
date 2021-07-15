@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.event.EventListener;
 import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
@@ -54,12 +55,15 @@ public class FakePlayer extends Player implements NavigableEntity {
         this.fakePlayerController = new FakePlayerController(this);
 
         if (spawnCallback != null) {
-            addEventCallback(PlayerSpawnEvent.class,
-                    event -> {
-                        if (event.isFirstSpawn()) {
-                            spawnCallback.accept(this);
-                        }
-                    });
+            // FIXME
+            MinecraftServer.getGlobalEventHandler().addListener(
+                    EventListener.builder(PlayerSpawnEvent.class)
+                            .expireCount(1)
+                            .handler(event -> {
+                                if (event.isFirstSpawn()) {
+                                    spawnCallback.accept(this);
+                                }
+                            }).build());
         }
 
         CONNECTION_MANAGER.startPlayState(this, option.isRegistered());

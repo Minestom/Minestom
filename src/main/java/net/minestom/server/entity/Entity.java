@@ -15,16 +15,9 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.metadata.EntityMeta;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.*;
-import net.minestom.server.event.handler.EventHandler;
-import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -65,7 +58,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * To create your own entity you probably want to extends {@link LivingEntity} or {@link EntityCreature} instead.
  */
-public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, DataContainer, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
+public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter {
 
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
@@ -103,7 +96,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     private final int id;
     protected final Set<Player> viewers = ConcurrentHashMap.newKeySet();
     private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
-    private Data data;
     private final NBTCompound nbtCompound = new NBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
@@ -120,9 +112,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
     private static final Duration SYNCHRONIZATION_COOLDOWN = Duration.of(1, TimeUnit.MINUTE);
     private Duration customSynchronizationCooldown;
     private long lastAbsoluteSynchronizationTime;
-
-    // Events
-    private final EventNode<EntityEvent> eventNode;
 
     protected Metadata metadata = new Metadata(this);
     protected EntityMeta entityMeta;
@@ -158,8 +147,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
-
-        this.eventNode = EventNode.value("entity-" + uuid, EventFilter.ENTITY, this::equals);
 
         initializeDefaultGravity();
     }
@@ -403,16 +390,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
             getViewers().forEach(this::removeViewer0);
             viewers.forEach(this::addViewer0);
         }
-    }
-
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
     }
 
     @NotNull
@@ -713,19 +690,6 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         if (getInstance().isInVoid(this.position)) {
             remove();
         }
-    }
-
-    @Override
-    public @NotNull EventNode<EntityEvent> getEventNode() {
-        return eventNode;
-    }
-
-    @Override
-    public synchronized <V extends EntityEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
-        if (eventNode.getParent() == null) {
-            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
-        }
-        return EventHandler.super.addEventCallback(eventClass, eventCallback);
     }
 
     /**

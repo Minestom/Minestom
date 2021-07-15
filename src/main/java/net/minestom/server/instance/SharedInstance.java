@@ -4,10 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.storage.StorageLocation;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -89,16 +86,6 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public StorageLocation getStorageLocation() {
-        return instanceContainer.getStorageLocation();
-    }
-
-    @Override
-    public void setStorageLocation(StorageLocation storageLocation) {
-        this.instanceContainer.setStorageLocation(storageLocation);
-    }
-
-    @Override
     public void enableAutoChunkLoad(boolean enable) {
         instanceContainer.enableAutoChunkLoad(enable);
     }
@@ -118,8 +105,7 @@ public class SharedInstance extends Instance {
      *
      * @return the associated {@link InstanceContainer}
      */
-    @NotNull
-    public InstanceContainer getInstanceContainer() {
+    public @NotNull InstanceContainer getInstanceContainer() {
         return instanceContainer;
     }
 }

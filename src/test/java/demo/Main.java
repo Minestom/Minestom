@@ -56,7 +56,7 @@ public class Main {
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
-        MinecraftServer.getGlobalEventHandler().addEventCallback(ServerListPingEvent.class, event -> {
+        MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
             responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
             responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));

@@ -3,8 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.SerializableData;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
@@ -45,9 +43,6 @@ public class InstanceContainer extends Instance {
     private static final String UUID_KEY = "uuid";
     private static final String DATA_KEY = "data";
 
-    // the storage location of this instance, can be null
-    private StorageLocation storageLocation;
-
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
@@ -77,30 +72,17 @@ public class InstanceContainer extends Instance {
     /**
      * Creates an {@link InstanceContainer}.
      *
-     * @param uniqueId        the unique id of the instance
-     * @param dimensionType   the dimension type of the instance
-     * @param storageLocation the {@link StorageLocation} of the instance,
-     *                        can be null if you do not wish to save the instance later on
+     * @param uniqueId      the unique id of the instance
+     * @param dimensionType the dimension type of the instance
      */
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType, @Nullable StorageLocation storageLocation) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
         super(uniqueId, dimensionType);
-
-        this.storageLocation = storageLocation;
 
         // Set the default chunk supplier using DynamicChunk
         setChunkSupplier(DynamicChunk::new);
 
         // Set the default chunk loader which use the Anvil format
         setChunkLoader(new AnvilLoader("world"));
-
-        // Get instance data from the saved data if a StorageLocation is defined
-        if (storageLocation != null) {
-            // Retrieve instance data
-            this.uniqueId = storageLocation.getOrDefault(UUID_KEY, UUID.class, uniqueId);
-
-            final Data data = storageLocation.getOrDefault(DATA_KEY, SerializableData.class, null);
-            setData(data);
-        }
     }
 
     @Override
@@ -284,26 +266,6 @@ public class InstanceContainer extends Instance {
         return chunks.get(index);
     }
 
-    /**
-     * Saves the instance ({@link #getUniqueId()} {@link #getData()}) and call {@link #saveChunksToStorage()}.
-     * <p>
-     * WARNING: {@link #getData()} needs to be a {@link SerializableData} in order to be saved.
-     */
-    public CompletableFuture<Void> saveInstance() {
-        Check.notNull(getStorageLocation(), "You cannot save the instance if no StorageLocation has been defined");
-
-        this.storageLocation.set(UUID_KEY, getUniqueId(), UUID.class);
-        final Data data = getData();
-        if (data != null) {
-            // Save the instance data
-            Check.stateCondition(!(data instanceof SerializableData),
-                    "Instance#getData needs to be a SerializableData in order to be saved");
-            this.storageLocation.set(DATA_KEY, (SerializableData) getData(), SerializableData.class);
-        }
-
-        return saveChunksToStorage();
-    }
-
     @Override
     public @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk) {
         return chunkLoader.saveChunk(chunk);
@@ -454,7 +416,7 @@ public class InstanceContainer extends Instance {
      * @see #getSrcInstance() to retrieve the "creation source" of the copied instance
      */
     public synchronized InstanceContainer copy() {
-        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType(), null);
+        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
         copiedInstance.srcInstance = this;
         copiedInstance.lastBlockChangeTime = lastBlockChangeTime;
 
@@ -530,19 +492,9 @@ public class InstanceContainer extends Instance {
      *
      * @return the chunks of this instance
      */
-    @NotNull
-    public Collection<Chunk> getChunks() {
+    @Override
+    public @NotNull Collection<@NotNull Chunk> getChunks() {
         return Collections.unmodifiableCollection(chunks.values());
-    }
-
-    @Override
-    public StorageLocation getStorageLocation() {
-        return storageLocation;
-    }
-
-    @Override
-    public void setStorageLocation(StorageLocation storageLocation) {
-        this.storageLocation = storageLocation;
     }
 
     /**

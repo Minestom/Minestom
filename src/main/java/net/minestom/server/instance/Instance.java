@@ -9,25 +9,18 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
-import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
-import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.*;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
@@ -61,7 +54,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockGetter, BlockSetter, Tickable, TagHandler, EventHandler<InstanceEvent>, DataContainer, PacketGroupingAudience {
+public abstract class Instance implements BlockGetter, BlockSetter, Tickable, TagHandler, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -84,8 +77,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
 
-    private final EventNode<InstanceEvent> eventNode;
-
     // Entities present in this instance
     protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
     protected final Set<Player> players = ConcurrentHashMap.newKeySet();
@@ -104,7 +95,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     // instance custom data
     private final Object nbtLock = new Object();
     private final NBTCompound nbt = new NBTCompound();
-    private Data data;
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
@@ -128,8 +118,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         this.dimensionType = dimensionType;
 
         this.worldBorder = new WorldBorder(this);
-
-        this.eventNode = EventNode.value("instance-" + uniqueId, EventFilter.INSTANCE, this::equals);
 
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
@@ -272,21 +260,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable containing all the instance chunks
      */
     public abstract @NotNull Collection<@NotNull Chunk> getChunks();
-
-    /**
-     * Gets the instance {@link StorageLocation}.
-     *
-     * @return the {@link StorageLocation} of the instance
-     */
-    @Nullable
-    public abstract StorageLocation getStorageLocation();
-
-    /**
-     * Changes the instance {@link StorageLocation}.
-     *
-     * @param storageLocation the new {@link StorageLocation} of the instance
-     */
-    public abstract void setStorageLocation(@Nullable StorageLocation storageLocation);
 
     /**
      * When set to true, chunks will load automatically when requested.
@@ -578,35 +551,11 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the instance unique id
      */
-    @NotNull
-    public UUID getUniqueId() {
+    public @NotNull UUID getUniqueId() {
         return uniqueId;
     }
 
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
-    }
-
-    @Override
-    public @NotNull EventNode<InstanceEvent> getEventNode() {
-        return eventNode;
-    }
-
-    @Override
-    public synchronized <V extends InstanceEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
-        if (eventNode.getParent() == null) {
-            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
-        }
-        return EventHandler.super.addEventCallback(eventClass, eventCallback);
-    }
-
-    // UNSAFE METHODS (need most of time to be synchronized)
+    // UNSAFE METHODS (need most of the time to be synchronized)
 
     /**
      * Used when called {@link Entity#setInstance(Instance)}, it is used to refresh viewable chunks

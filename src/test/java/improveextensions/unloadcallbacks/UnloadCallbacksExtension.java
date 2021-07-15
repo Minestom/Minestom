@@ -4,7 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
@@ -16,6 +15,7 @@ import org.junit.jupiter.api.Assertions;
 import org.opentest4j.AssertionFailedError;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 public class UnloadCallbacksExtension extends Extension {
 
@@ -25,7 +25,7 @@ public class UnloadCallbacksExtension extends Extension {
     private boolean tickedScheduledTransient = false;
     private boolean zombieTicked = false;
     private boolean instanceTicked = false;
-    private final EventCallback<InstanceTickEvent> callback = this::onTick;
+    private final Consumer<InstanceTickEvent> callback = this::onTick;
 
     private void onTick(InstanceTickEvent e) {
         ticked1 = true;
@@ -35,20 +35,22 @@ public class UnloadCallbacksExtension extends Extension {
     public void initialize() {
         GlobalEventHandler globalEvents = MinecraftServer.getGlobalEventHandler();
         // this callback will be automatically removed when unloading the extension
-        globalEvents.addEventCallback(InstanceTickEvent.class, callback);
+        globalEvents.addListener(InstanceTickEvent.class, callback);
         // this one too
-        globalEvents.addEventCallback(InstanceTickEvent.class, e -> ticked2 = true);
+        globalEvents.addListener(InstanceTickEvent.class, e -> ticked2 = true);
 
         Instance instance = MinecraftServer.getInstanceManager().getInstances().stream().findFirst().orElseThrow();
 
         // add an event callback on an instance
-        instance.addEventCallback(InstanceTickEvent.class, e -> instanceTicked = true);
+        globalEvents.addListener(InstanceTickEvent.class, e -> instanceTicked = true);
         instance.loadChunk(0, 0);
 
         // add an event callback on an entity
         EntityCreature zombie = new EntityCreature(EntityType.ZOMBIE);
-        zombie.addEventCallback(EntityTickEvent.class, e -> {
-            zombieTicked = true;
+        globalEvents.addListener(EntityTickEvent.class, entityTickEvent -> {
+            if (entityTickEvent.getEntity() == zombie) {
+                zombieTicked = true;
+            }
         });
         zombie.setInstance(instance, new Vec(8, 64, 8) /* middle of chunk */);
 
