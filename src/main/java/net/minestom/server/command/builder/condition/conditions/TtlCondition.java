@@ -1,19 +1,17 @@
 package net.minestom.server.command.builder.condition.conditions;
 
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.condition.ComplexCondition;
+import net.minestom.server.command.builder.condition.RemoveCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 
-public class TtlCondition implements RemoverCondition {
+public class TtlCondition implements ComplexCondition {
     private Duration ttl;
     private final boolean removeAfterTtlExpires;
     private long expireAt;
-
-    static {
-        REMOVER_CONDITIONS.add(TtlCondition.class);
-    }
 
     public TtlCondition(Duration ttl) {
         this(ttl, true);

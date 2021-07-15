@@ -1,13 +1,13 @@
 package net.minestom.server.command.builder.condition.conditions;
 
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.ExecuteCondition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class WhitelistCondition implements CommandCondition {
+public class WhitelistCondition implements ExecuteCondition {
     private final List<CommandSender> whitelistedSenders;
 
     public WhitelistCondition(List<CommandSender> whitelistedSenders) {
