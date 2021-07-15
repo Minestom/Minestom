@@ -5,7 +5,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.metadata.other.ItemFrameMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -34,10 +33,6 @@ public class Demo {
     }
 
     private static void initDemo() {
-        MinecraftServer.getConnectionManager().addPlayerInitialization(player -> {
-            player.setGameMode(GameMode.CREATIVE);
-        });
-
         InstanceManager instances = MinecraftServer.getInstanceManager();
         Instance instance = instances.getInstances().stream().findAny().get();
 
