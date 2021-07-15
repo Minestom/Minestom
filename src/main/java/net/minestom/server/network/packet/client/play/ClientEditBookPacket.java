@@ -36,6 +36,10 @@ public class ClientEditBookPacket extends ClientPlayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(slot);
         writer.writeStringArray(pages);
-        writer.writeSizedString(title);
+        final boolean hasTitle = title != null;
+        writer.writeBoolean(hasTitle);
+        if (hasTitle) {
+            writer.writeSizedString(title);
+        }
     }
 }
