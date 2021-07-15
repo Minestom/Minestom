@@ -198,24 +198,12 @@ public class InstanceContainer extends Instance {
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player));
-
             // Send the block break effect packet
-            {
-                EffectPacket effectPacket = new EffectPacket();
-                effectPacket.effectId = 2001; // Block break + block break sound
-                effectPacket.position = blockPosition;
-                effectPacket.data = resultBlock.stateId();
-                effectPacket.disableRelativeVolume = false;
-
-                PacketUtils.sendGroupedPacket(chunk.getViewers(), effectPacket,
-                        (viewer) -> {
-                            // Prevent the block breaker to play the particles and sound two times
-                            return !viewer.equals(player);
-                        });
-            }
-
+            PacketUtils.sendGroupedPacket(chunk.getViewers(),
+                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, resultBlock.stateId(), false),
+                    // Prevent the block breaker to play the particles and sound two times
+                    (viewer) -> !viewer.equals(player));
         }
-
         return allowed;
     }
 

@@ -1,11 +1,11 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class EffectPacket implements ServerPacket {
@@ -15,8 +15,15 @@ public class EffectPacket implements ServerPacket {
     public int data;
     public boolean disableRelativeVolume;
 
+    public EffectPacket(int effectId, Point position, int data, boolean disableRelativeVolume) {
+        this.effectId = effectId;
+        this.position = position;
+        this.data = data;
+        this.disableRelativeVolume = disableRelativeVolume;
+    }
+
     public EffectPacket() {
-        position = Vec.ZERO;
+        this(0, Vec.ZERO, 0, false);
     }
 
     @Override
