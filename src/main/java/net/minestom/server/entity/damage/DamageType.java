@@ -2,8 +2,6 @@ package net.minestom.server.entity.damage;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.chat.JsonMessage;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -19,10 +17,8 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
  * and retrieved in {@link net.minestom.server.event.entity.EntityDamageEvent}.
  * <p>
  * This class can be extended if you need to include custom fields and/or methods.
- * Be aware that this class implements {@link DataContainer}
- * so you can add your own data to an already existing damage type without any wrapper.
  */
-public class DamageType implements TagHandler, DataContainer {
+public class DamageType implements TagHandler {
 
     public static final DamageType VOID = new DamageType("attack.outOfWorld");
     public static final DamageType GRAVITY = new DamageType("attack.fall");
@@ -35,7 +31,6 @@ public class DamageType implements TagHandler, DataContainer {
     private final String identifier;
     private final Object nbtLock = new Object();
     private final NBTCompound nbt = new NBTCompound();
-    private Data data;
 
     /**
      * Creates a new damage type.
@@ -153,16 +148,6 @@ public class DamageType implements TagHandler, DataContainer {
 
     protected SoundEvent getPlayerSound(@NotNull Player player) {
         return SoundEvent.ENTITY_PLAYER_HURT;
-    }
-
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(Data data) {
-        this.data = data;
     }
 
     @Override
