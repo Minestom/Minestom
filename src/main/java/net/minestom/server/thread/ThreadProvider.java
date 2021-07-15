@@ -129,7 +129,7 @@ public abstract class ThreadProvider {
 
                 final ReentrantLock lock = thread.getLock();
                 lock.lock();
-                chunkEntries.forEach(chunkEntry -> {
+                for (var chunkEntry : chunkEntries) {
                     final Chunk chunk = chunkEntry.chunk;
                     if (!ChunkUtils.isLoaded(chunk))
                         return;
@@ -153,7 +153,7 @@ public abstract class ThreadProvider {
                             }
                         }
                     }
-                });
+                }
                 lock.unlock();
                 // #acquire() callbacks
             });
