@@ -39,4 +39,9 @@ public class ServerSender implements CommandSender {
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
     }
+
+    @Override
+    public int getPermissionLevel() {
+        return 4;
+    }
 }

@@ -53,6 +53,11 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
+    public int getPermissionLevel() {
+        return 4;
+    }
+
+    @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return tag.read(nbtCompound);
     }
