@@ -9,6 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -50,6 +52,10 @@ class BlockLoader {
     static @Nullable Block getProperties(String namespace, Map<String, String> properties) {
         final var entry = BLOCK_PROPERTY_MAP.get(namespace);
         return entry.propertyMap.get(properties);
+    }
+
+    static Collection<Block> values() {
+        return Collections.unmodifiableCollection(NAMESPACE_MAP.values());
     }
 
     static {

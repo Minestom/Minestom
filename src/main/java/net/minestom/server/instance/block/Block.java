@@ -11,6 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.function.BiPredicate;
 
@@ -170,6 +171,10 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     default boolean compare(@NotNull Block block) {
         return compare(block, Comparator.ID);
+    }
+
+    static @NotNull Collection<@NotNull Block> values() {
+        return BlockLoader.values();
     }
 
     static Block fromNamespaceId(@NotNull String namespaceID) {
