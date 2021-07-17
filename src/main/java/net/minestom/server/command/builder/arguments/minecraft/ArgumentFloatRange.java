@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.math.FloatRange;
@@ -21,7 +22,8 @@ public class ArgumentFloatRange extends ArgumentRange<FloatRange> {
 
     @NotNull
     @Override
-    public FloatRange parse(@NotNull String input) throws ArgumentSyntaxException {
+    public FloatRange parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readUnquotedString();
         try {
             if (input.contains("..")) {
                 final int index = input.indexOf('.');

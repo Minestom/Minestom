@@ -18,22 +18,25 @@ public class ArgumentCommand extends Argument<CommandResult> {
     private String shortcut = "";
 
     public ArgumentCommand(@NotNull String id) {
-        super(id, true, true);
+        super(id, true);
     }
 
     @NotNull
     @Override
-    public CommandResult parse(@NotNull String input) throws ArgumentSyntaxException {
-        final String commandString = !shortcut.isEmpty() ?
-                shortcut + StringUtils.SPACE + input
-                : input;
-        CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
-        CommandResult result = dispatcher.parse(commandString);
-
-        if (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS)
-            throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);
-
-        return result;
+    public CommandResult parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readRemaining();
+        // FIXME: 2021. 07. 17.
+//        final String commandString = !shortcut.isEmpty() ?
+//                shortcut + StringUtils.SPACE + input
+//                : input;
+//        CommandDispatcher dispatcher = MinecraftServer.getCommandManager().getDispatcher();
+//        CommandResult result = dispatcher.parse(commandString);
+//
+//        if (onlyCorrect && result.getType() != CommandResult.Type.SUCCESS)
+//            throw new ArgumentSyntaxException("Invalid command", input, INVALID_COMMAND_ERROR);
+//
+//        return result;
+        return new CommandResult();
     }
 
     @Override

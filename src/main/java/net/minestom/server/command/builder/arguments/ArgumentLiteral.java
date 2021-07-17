@@ -15,7 +15,8 @@ public class ArgumentLiteral extends Argument<String> {
 
     @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
+    public String parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readUnquotedString();
         if (!input.equals(getId()))
             throw new ArgumentSyntaxException("Invalid literal value", input, INVALID_VALUE_ERROR);
 

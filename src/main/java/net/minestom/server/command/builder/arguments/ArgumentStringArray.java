@@ -16,13 +16,12 @@ import java.util.regex.Pattern;
 public class ArgumentStringArray extends Argument<String[]> {
 
     public ArgumentStringArray(String id) {
-        super(id, true, true);
+        super(id, true);
     }
 
-    @NotNull
     @Override
-    public String[] parse(@NotNull String input) {
-        return input.split(Pattern.quote(StringUtils.SPACE));
+    public String @NotNull [] parse(@NotNull ArgumentReader reader) {
+        return reader.readRemaining().split(Pattern.quote(StringUtils.SPACE));
     }
 
     @Override

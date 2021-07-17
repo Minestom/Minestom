@@ -30,7 +30,8 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
     @NotNull
     @Override
-    public E parse(@NotNull String input) throws ArgumentSyntaxException {
+    public E parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readUnquotedString();
         for (E value : this.values) {
             if (this.format.formatter.apply(value.name()).equals(input)) {
                 return value;

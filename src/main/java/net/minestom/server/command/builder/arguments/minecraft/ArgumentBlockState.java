@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -15,12 +16,12 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int INVALID_PROPERTY = 3;
 
     public ArgumentBlockState(@NotNull String id) {
-        super(id, true, false);
+        super(id);
     }
 
     @Override
-    public @NotNull Block parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
+    public @NotNull Block parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        return staticParse(reader.readUnquotedString());
     }
 
     @Override

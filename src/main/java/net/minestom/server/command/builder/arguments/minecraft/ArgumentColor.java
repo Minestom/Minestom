@@ -4,6 +4,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +25,8 @@ public class ArgumentColor extends Argument<Style> {
 
     @NotNull
     @Override
-    public Style parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Style parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readUnquotedString();
 
         // check for colour
         NamedTextColor color = NamedTextColor.NAMES.value(input);

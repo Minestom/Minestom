@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -53,7 +54,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     private boolean onlyPlayers;
 
     public ArgumentEntity(String id) {
-        super(id, true);
+        super(id);
     }
 
     public ArgumentEntity singleEntity(boolean singleEntity) {
@@ -68,8 +69,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     @NotNull
     @Override
-    public EntityFinder parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, onlySingleEntity, onlyPlayers);
+    public EntityFinder parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        return staticParse(reader.readUnquotedString(), onlySingleEntity, onlyPlayers);
     }
 
     @Override

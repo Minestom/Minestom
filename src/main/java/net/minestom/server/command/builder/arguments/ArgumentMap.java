@@ -16,15 +16,15 @@ public class ArgumentMap<I, O> extends Argument<O> {
     final Mapper<I, O> mapper;
 
     protected ArgumentMap(@NotNull Argument<I> argument, @NotNull Mapper<I, O> mapper) {
-        super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+        super(argument.getId(), argument.isHasToBeLast());
 
         this.argument = argument;
         this.mapper = mapper;
     }
 
     @Override
-    public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
-        return mapper.accept(argument.parse(input));
+    public @NotNull O parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        return mapper.accept(argument.parse(reader));
     }
 
     @Override

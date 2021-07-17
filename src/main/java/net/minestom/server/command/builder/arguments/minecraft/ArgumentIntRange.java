@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -22,8 +23,8 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
 
     @NotNull
     @Override
-    public IntRange parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
+    public IntRange parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        return staticParse(reader.readUnquotedString());
     }
 
     /**

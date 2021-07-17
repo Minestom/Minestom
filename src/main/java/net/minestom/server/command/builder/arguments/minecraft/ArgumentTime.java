@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.time.TimeUnit;
@@ -30,7 +31,8 @@ public class ArgumentTime extends Argument<Duration> {
 
     @NotNull
     @Override
-    public Duration parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Duration parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        String input = reader.readUnquotedString();
         final char lastChar = input.charAt(input.length() - 1);
 
         TemporalUnit timeUnit;

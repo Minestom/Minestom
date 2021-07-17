@@ -18,23 +18,25 @@ public class ArgumentGroup extends Argument<CommandContext> {
     private final Argument<?>[] group;
 
     public ArgumentGroup(@NotNull String id, @NotNull Argument<?>... group) {
-        super(id, true, false);
+        super(id);
         this.group = group;
     }
 
     @NotNull
     @Override
-    public CommandContext parse(@NotNull String input) throws ArgumentSyntaxException {
-        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
-        CommandParser.parse(null, group, input.split(StringUtils.SPACE), input, validSyntaxes, null);
-
-        CommandContext context = new CommandContext(input);
-        CommandParser.findMostCorrectSyntax(validSyntaxes, context);
-        if (validSyntaxes.isEmpty()) {
-            throw new ArgumentSyntaxException("Invalid arguments", input, INVALID_ARGUMENTS_ERROR);
-        }
-
-        return context;
+    public CommandContext parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        // FIXME: 2021. 07. 17. Implement parsing
+//        List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>();
+//        CommandParser.parse(null, group, input.split(StringUtils.SPACE), input, validSyntaxes, null);
+//
+//        CommandContext context = new CommandContext(input);
+//        CommandParser.findMostCorrectSyntax(validSyntaxes, context);
+//        if (validSyntaxes.isEmpty()) {
+//            throw new ArgumentSyntaxException("Invalid arguments", input, INVALID_ARGUMENTS_ERROR);
+//        }
+//
+//        return context;
+        return new CommandContext("");
     }
 
     @Override

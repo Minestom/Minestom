@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.relative;
 
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.StringUtils;
@@ -28,7 +29,7 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
     private final int numberCount;
 
     public ArgumentRelativeVec(@NotNull String id, int numberCount) {
-        super(id, true);
+        super(id);
         this.numberCount = numberCount;
     }
 
@@ -38,11 +39,18 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     @NotNull
     @Override
-    public RelativeVec parse(@NotNull String input) throws ArgumentSyntaxException {
-        final String[] split = input.split(StringUtils.SPACE);
-        if (split.length != getNumberCount()) {
-            throw new ArgumentSyntaxException("Invalid number of values", input, INVALID_NUMBER_COUNT_ERROR);
+    public RelativeVec parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String[] split = new String[numberCount];
+
+        try {
+            for (int i = 0; i < split.length; i++) {
+                split[i] = reader.readUnquotedString();
+            }
+        } catch (Exception e) {
+            throw new ArgumentSyntaxException("Invalid number of values", split.length + "", INVALID_NUMBER_COUNT_ERROR);
         }
+
+        final String input = String.join(" ", split);
 
         double[] coordinates = new double[split.length];
         boolean[] isRelative = new boolean[split.length];

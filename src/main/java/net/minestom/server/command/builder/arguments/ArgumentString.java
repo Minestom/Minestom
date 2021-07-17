@@ -22,13 +22,13 @@ public class ArgumentString extends Argument<String> {
     public static final int QUOTE_ERROR = 1;
 
     public ArgumentString(String id) {
-        super(id, true);
+        super(id);
     }
 
     @NotNull
     @Override
-    public String parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
+    public String parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        return reader.readSmartString();
     }
 
     @Override
