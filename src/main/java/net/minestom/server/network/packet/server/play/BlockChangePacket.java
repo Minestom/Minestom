@@ -1,11 +1,12 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockChangePacket implements ServerPacket {
@@ -16,6 +17,10 @@ public class BlockChangePacket implements ServerPacket {
     public BlockChangePacket(Point blockPosition, int blockStateId) {
         this.blockPosition = blockPosition;
         this.blockStateId = blockStateId;
+    }
+
+    public BlockChangePacket(Point blockPosition, Block block) {
+        this(blockPosition, block.stateId());
     }
 
     public BlockChangePacket() {

@@ -1,11 +1,11 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,10 +42,10 @@ public interface BlockHandler {
      * menu, this prevents the player from placing a block when opening it for instance).
      *
      * @param interaction the interaction details
-     * @return true if this block blocks normal item use, false otherwise
+     * @return true to let the block interaction happens, false to cancel
      */
     default boolean onInteract(@NotNull Interaction interaction) {
-        return false;
+        return true;
     }
 
     /**
