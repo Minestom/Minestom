@@ -18,15 +18,14 @@ import java.util.function.Supplier;
  * <p>
  * You can create your own with your own special conditions.
  * <p>
- * Arguments are parsed using {@link #parse(String)}.
+ * Arguments are parsed using {@link #parse(ArgumentReader)}.
  *
  * @param <T> the type of this parsed argument
  */
 public abstract class Argument<T> {
 
     private final String id;
-    protected final boolean allowSpace;
-    protected final boolean useRemaining;
+    private final boolean hasToBeLast;
 
     private ArgumentCallback callback;
 
@@ -35,35 +34,23 @@ public abstract class Argument<T> {
     private SuggestionCallback suggestionCallback;
 
     /**
-     * Creates a new argument.
+     * Creates a new argument
      *
-     * @param id           the id of the argument, used to retrieve the parsed value
-     * @param allowSpace   true if the argument can/should have spaces in it
-     * @param useRemaining true if the argument will always take the rest of the command arguments
+     * @param id the id of the argument, used to retrieve the parsed value
+     * @param hasToBeLast if {@code true} the argument can only be passed as the last arg to a syntax
      */
-    public Argument(@NotNull String id, boolean allowSpace, boolean useRemaining) {
+    public Argument(@NotNull String id, boolean hasToBeLast) {
         this.id = id;
-        this.allowSpace = allowSpace;
-        this.useRemaining = useRemaining;
+        this.hasToBeLast = hasToBeLast;
     }
 
     /**
-     * Creates a new argument with {@code useRemaining} sets to false.
-     *
-     * @param id         the id of the argument, used to retrieve the parsed value
-     * @param allowSpace true if the argument can/should have spaces in it
-     */
-    public Argument(@NotNull String id, boolean allowSpace) {
-        this(id, allowSpace, false);
-    }
-
-    /**
-     * Creates a new argument with {@code useRemaining} and {@code allowSpace} sets to false.
+     * Creates a new argument
      *
      * @param id the id of the argument, used to retrieve the parsed value
      */
     public Argument(@NotNull String id) {
-        this(id, false, false);
+        this(id, false);
     }
 
     /**
@@ -76,18 +63,18 @@ public abstract class Argument<T> {
      */
     @ApiStatus.Experimental
     public static <T> @NotNull T parse(@NotNull Argument<T> argument) throws ArgumentSyntaxException {
-        return argument.parse(argument.getId());
+        return argument.parse(new ArgumentReader(argument.getId()));
     }
 
     /**
      * Parses the given input, and throw an {@link ArgumentSyntaxException}
      * if the input cannot be converted to {@code T}
      *
-     * @param input the argument to parse
+     * @param reader an argument reader, for more info see {@link ArgumentReader}
      * @return the parsed argument
      * @throws ArgumentSyntaxException if {@code value} is not valid
      */
-    public abstract @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException;
+    public abstract @NotNull T parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException;
 
     /**
      * Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.
@@ -124,27 +111,6 @@ public abstract class Argument<T> {
     @NotNull
     public String getId() {
         return id;
-    }
-
-    /**
-     * Gets if the argument can contain space.
-     *
-     * @return true if the argument allows space, false otherwise
-     */
-    public boolean allowSpace() {
-        return allowSpace;
-    }
-
-    /**
-     * Gets if the argument always use all the remaining characters.
-     * <p>
-     * ex: /help I am a test - will always give you "I am a test"
-     * if the first and single argument does use the remaining.
-     *
-     * @return true if the argument use all the remaining characters, false otherwise
-     */
-    public boolean useRemaining() {
-        return useRemaining;
     }
 
     /**
@@ -250,6 +216,10 @@ public abstract class Argument<T> {
      */
     public boolean hasSuggestion() {
         return suggestionCallback != null;
+    }
+
+    public boolean isHasToBeLast() {
+        return hasToBeLast;
     }
 
     /**

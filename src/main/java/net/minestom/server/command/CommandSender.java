@@ -86,4 +86,10 @@ public interface CommandSender extends PermissionHandler, Audience, TagHandler {
     default ConsoleSender asConsole() {
         throw new ClassCastException("CommandSender is not the ConsoleSender");
     }
+
+    /**
+     * @see <a href="https://minecraft.fandom.com/wiki/Permission_level">Permission level</a>
+     * @return the sender's permission level
+     */
+    int getPermissionLevel();
 }

@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -32,8 +33,9 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
     @NotNull
     @Override
-    public ItemStack parse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
+    public ItemStack parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        // TODO: 2021. 07. 17. Implement proper reading to allow this as an intermediate argument
+        return staticParse(reader.readRemaining());
     }
 
     @Override

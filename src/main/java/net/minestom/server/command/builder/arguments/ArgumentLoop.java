@@ -18,41 +18,19 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
 
     @SafeVarargs
     public ArgumentLoop(@NotNull String id, @NotNull Argument<T>... arguments) {
-        super(id, true, true);
+        super(id);
         this.arguments.addAll(Arrays.asList(arguments));
     }
 
     @NotNull
     @Override
-    public List<T> parse(@NotNull String input) throws ArgumentSyntaxException {
+    public List<T> parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        // FIXME: 2021. 07. 17. Loop properly, maybe use ArgumentGroup?
         List<T> result = new ArrayList<>();
-        final String[] split = input.split(StringUtils.SPACE);
 
-        final StringBuilder builder = new StringBuilder();
-        boolean success = false;
-        for (String s : split) {
-            builder.append(s);
-
-            for (Argument<T> argument : arguments) {
-                try {
-                    final String inputString = builder.toString();
-                    final T value = argument.parse(inputString);
-                    success = true;
-                    result.add(value);
-                    break;
-                } catch (ArgumentSyntaxException ignored) {
-                    success = false;
-                }
-            }
-            if (success) {
-                builder.setLength(0); // Clear
-            } else {
-                builder.append(StringUtils.SPACE);
-            }
-        }
-
-        if (result.isEmpty() || !success) {
-            throw new ArgumentSyntaxException("Invalid loop, there is no valid argument found", input, INVALID_INPUT_ERROR);
+        for (Argument<T> argument : arguments) {
+            final T value = argument.parse(reader);
+            result.add(value);
         }
 
         return result;

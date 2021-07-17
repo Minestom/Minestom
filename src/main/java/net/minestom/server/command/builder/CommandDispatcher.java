@@ -47,6 +47,7 @@ public class CommandDispatcher {
         }
 
         this.commands.add(command);
+        command.addParent(null);
     }
 
     public void unregister(@NotNull Command command) {
@@ -60,6 +61,7 @@ public class CommandDispatcher {
         }
 
         this.commands.remove(command);
+        command.removeParent(null);
 
         // Clear cache
         this.cache.invalidateAll();

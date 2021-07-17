@@ -1898,6 +1898,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player permission level
      */
+    @Override
     public int getPermissionLevel() {
         return permissionLevel;
     }

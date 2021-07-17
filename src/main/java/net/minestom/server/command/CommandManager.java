@@ -3,10 +3,13 @@ package net.minestom.server.command;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.*;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.conditions.RemoverCondition;
+import net.minestom.server.command.builder.condition.conditions.UseCountCondition;
 import net.minestom.server.command.builder.parser.ArgumentQueryResult;
 import net.minestom.server.command.builder.parser.CommandParser;
 import net.minestom.server.command.builder.parser.CommandQueryResult;
@@ -47,8 +50,9 @@ public final class CommandManager {
      *
      * @param command the command to register
      * @throws IllegalStateException if a command with the same name already exists
+     * @return the registered command's name
      */
-    public synchronized void register(@NotNull Command command) {
+    public synchronized String register(@NotNull Command command) {
         Check.stateCondition(commandExists(command.getName()),
                 "A command with the name " + command.getName() + " is already registered!");
         if (command.getAliases() != null) {
@@ -58,6 +62,7 @@ public final class CommandManager {
             }
         }
         this.dispatcher.register(command);
+        return command.getName();
     }
 
     /**
@@ -248,10 +253,8 @@ public final class CommandManager {
                                  Map<Argument<?>, Integer> argumentIdentityMap,
                                  List<Pair<String, NodeMaker.Request>> nodeRequests) {
         // Check if player should see this command
-        final CommandCondition commandCondition = command.getCondition();
-        if (commandCondition != null) {
-            // Do not show command if return false
-            if (!commandCondition.canUse(sender, null)) {
+        for (CommandCondition condition : command.getConditions().values()) {
+            if (!condition.canUse(sender, null)) {
                 return -1;
             }
         }
@@ -450,5 +453,23 @@ public final class CommandManager {
         rootChildren.add(node);
         nodes.add(commandNode);
         return node;
+    }
+
+    /**
+     * Sends a {@link DeclareCommandsPacket} to the specified players
+     * @param players players receiving the packet
+     */
+    public void updateDeclaredCommands(Collection<Player> players) {
+        for (Player player:
+                players) {
+            player.getPlayerConnection().sendPacket(createDeclareCommandsPacket(player));
+        }
+    }
+
+    /**
+     * Sends a {@link DeclareCommandsPacket} to online players.
+     */
+    public void updateDeclaredCommands() {
+        updateDeclaredCommands(MinecraftServer.getConnectionManager().getOnlinePlayers());
     }
 }

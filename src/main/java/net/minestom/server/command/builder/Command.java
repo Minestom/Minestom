@@ -2,12 +2,15 @@ package net.minestom.server.command.builder;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentLiteral;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.ArgumentWord;
 import net.minestom.server.command.builder.condition.CommandCondition;
+import net.minestom.server.command.builder.condition.conditions.RemoverCondition;
+import net.minestom.server.entity.Player;
 import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -15,11 +18,13 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -51,10 +56,31 @@ public class Command {
     private final String[] names;
 
     private CommandExecutor defaultExecutor;
-    private CommandCondition condition;
+    private final Map<Class<? extends CommandCondition>, CommandCondition> conditions = new HashMap<>();
+    private final Map<Class<? extends CommandCondition>, CommandCondition> unmodifiableConditions = Collections.unmodifiableMap(conditions);
 
     private final List<Command> subcommands;
     private final List<CommandSyntax> syntaxes;
+
+    private final Set<Command> parents;
+
+    private static final Set<Command> commands = new HashSet<>();
+
+    static {
+        MinecraftServer.getSchedulerManager()
+                .buildTask(() -> {
+                    final List<Command> toRemove = commands.stream()
+                            .filter(x -> x.conditions.values().stream()
+                                    .filter(y -> y instanceof RemoverCondition)
+                                    .anyMatch(y -> ((RemoverCondition)y).shouldRemove())).collect(Collectors.toList());
+                    if (toRemove.size() > 0) {
+                        MinecraftServer.getCommandManager().updateDeclaredCommands(
+                                toRemove.stream().map(Command::unregisterSelf)
+                                        .flatMap(Collection::stream).collect(Collectors.toList()));
+                    }
+                })
+                .repeat(Duration.ofMinutes(1)).schedule();
+    }
 
     /**
      * Creates a {@link Command} with a name and one or multiple aliases.
@@ -66,10 +92,12 @@ public class Command {
     public Command(@NotNull String name, @Nullable String... aliases) {
         this.name = name;
         this.aliases = aliases;
+        this.parents = new HashSet<>();
         this.names = Stream.concat(Arrays.stream(aliases), Stream.of(name)).toArray(String[]::new);
-
         this.subcommands = new ArrayList<>();
         this.syntaxes = new ArrayList<>();
+
+        commands.add(this);
     }
 
     /**
@@ -82,29 +110,33 @@ public class Command {
         this(name, new String[0]);
     }
 
-    /**
-     * Gets the {@link CommandCondition}.
-     * <p>
-     * It is called after the parsing and just before the execution no matter the syntax used and can be used to check permissions or
-     * the {@link CommandSender} type.
-     * <p>
-     * Worth mentioning that the condition is also used to know if the command known from a player (at connection).
-     *
-     * @return the command condition, null if not any
-     */
+
     @Nullable
-    public CommandCondition getCondition() {
-        return condition;
+    public <T extends CommandCondition> T getCondition(Class<T> clazz) {
+        return (T) conditions.get(clazz);
+    }
+
+    public Map<Class<? extends CommandCondition>, CommandCondition> getConditions() {
+        return unmodifiableConditions;
     }
 
     /**
      * Sets the {@link CommandCondition}.
      *
      * @param commandCondition the new command condition, null to do not call anything
-     * @see #getCondition()
      */
+    @Deprecated
     public void setCondition(@Nullable CommandCondition commandCondition) {
-        this.condition = commandCondition;
+        addConditions(commandCondition);
+    }
+
+    public void addConditions(CommandCondition ...conditions) {
+        final Set<Player> affectedPlayers = new HashSet<>();
+        for (CommandCondition condition : conditions) {
+            this.conditions.put(condition.getClass(), condition);
+            affectedPlayers.addAll(condition.getAffectedPlayers());
+        }
+        MinecraftServer.getCommandManager().updateDeclaredCommands(affectedPlayers);
     }
 
     /**
@@ -121,6 +153,12 @@ public class Command {
 
     public void addSubcommand(@NotNull Command command) {
         this.subcommands.add(command);
+        command.addParent(this);
+    }
+
+    public void removeSubcommand(Command command) {
+        this.subcommands.remove(command);
+        command.removeParent(this);
     }
 
     @NotNull
@@ -431,10 +469,30 @@ public class Command {
                         array.add(String.join(StringUtils.SPACE, arguments))));
     }
 
+    Collection<Player> unregisterSelf() {
+        for (Command parent : parents) {
+            if (parent == null) {
+                MinecraftServer.getCommandManager().unregister(this);
+            } else {
+                parent.removeSubcommand(this);
+            }
+        }
+        commands.remove(this);
+
+        return conditions.values().stream().map(CommandCondition::getAffectedPlayers).flatMap(Collection::stream).collect(Collectors.toUnmodifiableSet());
+    }
+
+    void addParent(@Nullable Command command) {
+        parents.add(command);
+    }
+
+    void removeParent(@Nullable Command command) {
+        parents.remove(command);
+    }
+
     private static final class Node {
         private final Set<String> names = new HashSet<>();
         private final Set<Node> nodes = new HashSet<>();
         private final List<List<String>> arguments = new ArrayList<>();
     }
-
 }

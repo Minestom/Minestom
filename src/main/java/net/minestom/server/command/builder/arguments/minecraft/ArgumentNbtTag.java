@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import org.jetbrains.annotations.NotNull;
@@ -28,7 +29,8 @@ public class ArgumentNbtTag extends Argument<NBT> {
 
     @NotNull
     @Override
-    public NBT parse(@NotNull String input) throws ArgumentSyntaxException {
+    public NBT parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        final String input = reader.readUnquotedJson();
         try {
             return new SNBTParser(new StringReader(input)).parse();
         } catch (NBTException e) {

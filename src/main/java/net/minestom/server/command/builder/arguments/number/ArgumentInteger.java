@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.number;
 
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.arguments.ArgumentReader;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -14,7 +15,9 @@ public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     @NotNull
     @Override
-    public Integer parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Integer parse(@NotNull ArgumentReader reader) throws ArgumentSyntaxException {
+        // TODO: 2021. 07. 17. Use ArgumentReader for reading, low priority
+        final String input = reader.readUnquotedString();
         try {
             final int value = Integer.parseInt(parseValue(input), getRadix(input));
 
