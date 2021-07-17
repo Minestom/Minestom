@@ -81,7 +81,7 @@ public class ArgumentReader {
     ///////////////////////////////////////////////////////////////////////////
 
     public Integer readInteger() throws ArgumentSyntaxException {
-        final String numberString = readNumber(NumberSystem.BASE_10);
+        final String numberString = readUnquotedString();
         try {
             return Integer.parseInt(numberString);
         } catch (Exception e) {
@@ -90,7 +90,7 @@ public class ArgumentReader {
     }
 
     public Double readDouble() throws ArgumentSyntaxException {
-        final String numberString = readNumber(NumberSystem.BASE_10);
+        final String numberString = readUnquotedString();
         try {
             return Double.parseDouble(numberString);
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class ArgumentReader {
     }
 
     public Float readFloat() throws ArgumentSyntaxException {
-        final String numberString = readNumber(NumberSystem.BASE_10);
+        final String numberString = readUnquotedString();
         try {
             return Float.parseFloat(numberString);
         } catch (Exception e) {
@@ -129,25 +129,13 @@ public class ArgumentReader {
         return readUntil(quoteType == SINGLE_QUOTE ? SINGLE_QUOTED_STRING_END : DOUBLE_QUOTED_STRING_END);
     }
 
+    public String readUnquotedJson() {
+        throw new UnsupportedOperationException("Not implemented");
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Reader utils
     ///////////////////////////////////////////////////////////////////////////
-
-    /**
-     * Reads a number from the arguments and returns it as a string, the cursor automatically
-     * skips the next character after the number end
-     * @param numberSystem the expected number system
-     * @return the number as a string
-     */
-    public String readNumber(NumberSystem numberSystem) {
-        final int start = cursorPosition;
-        while (canRead()) {
-            if (!numberSystem.charCondition.check(read())) {
-                break;
-            }
-        }
-        return arguments.substring(start, cursorPosition);
-    }
 
     public String readUntil(CharCondition charCondition) {
         final int start = cursorPosition;
@@ -165,19 +153,6 @@ public class ArgumentReader {
             return c;
         } else {
             throw new ArgumentSyntaxException("Unexpected character", "" + c, 1003);
-        }
-    }
-
-    public enum NumberSystem {
-        BASE_2(value -> value == '0' || value == '1', 2),
-        BASE_10(value -> ('0' <= value && value <= '9') || value == '-' || value == '.', 10),
-        BASE_16(value -> ('0' <= value && value <= '9') || ('a' <= value && value <= 'f') || ('A' <= value && value <= 'F') || value == '-', 16);
-        public final CharCondition charCondition;
-        public final int radix;
-
-        NumberSystem(CharCondition charCondition, int radix) {
-            this.charCondition = charCondition;
-            this.radix = radix;
         }
     }
 
