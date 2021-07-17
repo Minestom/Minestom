@@ -94,11 +94,9 @@ public final class ArrayUtils {
 
         for (int i = 0; i < length; i++) {
             final T value1 = array1[i];
-            for (int j = 0; j < length; j++) {
-                final T value2 = array2[j];
-                if (!value1.equals(value2)) {
-                    return false;
-                }
+            final T value2 = array2[i];
+            if (!value1.equals(value2)) {
+                return false;
             }
         }
         return true;
