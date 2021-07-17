@@ -5,6 +5,7 @@ import com.extollit.gaming.ai.path.model.IBlockDescription;
 import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import com.extollit.gaming.ai.path.model.IInstanceSpace;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.block.Block;
 
 public class PFColumnarSpace implements IColumnarSpace {
 
@@ -20,8 +21,8 @@ public class PFColumnarSpace implements IColumnarSpace {
 
     @Override
     public IBlockDescription blockAt(int x, int y, int z) {
-        final short blockStateId = chunk.getBlockStateId(x, y, z);
-        return PFBlockDescription.getBlockDescription(blockStateId);
+        final Block block = chunk.getBlock(x, y, z);
+        return PFBlock.get(block);
     }
 
     @Override

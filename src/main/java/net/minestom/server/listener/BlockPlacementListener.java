@@ -1,7 +1,8 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.data.Data;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -15,15 +16,14 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -38,7 +38,7 @@ public class BlockPlacementListener {
         final PlayerInventory playerInventory = player.getInventory();
         final Player.Hand hand = packet.hand;
         final BlockFace blockFace = packet.blockFace;
-        final BlockPosition blockPosition = packet.blockPosition;
+        final Point blockPosition = packet.blockPosition;
         final Direction direction = blockFace.toDirection();
 
         final Instance instance = player.getInstance();
@@ -52,24 +52,18 @@ public class BlockPlacementListener {
         }
 
         final ItemStack usedItem = player.getItemInHand(hand);
+        final Block interactedBlock = instance.getBlock(blockPosition);
 
         // Interact at block
         // FIXME: onUseOnBlock
-        final boolean cancel = false;//usedItem.onUseOnBlock(player, hand, blockPosition, direction);
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, blockPosition, hand, blockFace);
-        playerBlockInteractEvent.setCancelled(cancel);
-        playerBlockInteractEvent.setBlockingItemUse(cancel);
-        EventDispatcher.callCancellable(playerBlockInteractEvent, () -> {
-            final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-            if (customBlock != null) {
-                final Data data = instance.getBlockData(blockPosition);
-                final boolean blocksItem = customBlock.onInteract(player, hand, blockPosition, data);
-                if (blocksItem) {
-                    playerBlockInteractEvent.setBlockingItemUse(true);
-                }
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, blockPosition, blockFace);
+        EventDispatcher.call(playerBlockInteractEvent);
+        if (!playerBlockInteractEvent.isCancelled()) {
+            final var handler = interactedBlock.handler();
+            if (handler != null) {
+                handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockPosition, player, hand));
             }
-        });
-
+        }
         if (playerBlockInteractEvent.isBlockingItemUse()) {
             return;
         }
@@ -88,8 +82,7 @@ public class BlockPlacementListener {
                 canPlaceBlock = false; //Spectators can't place blocks
             } else if (player.getGameMode() == GameMode.ADVENTURE) {
                 //Check if the block can placed on the block
-                Block placeBlock = instance.getBlock(blockPosition);
-                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(placeBlock);
+                canPlaceBlock = usedItem.getMeta().getCanPlaceOn().contains(interactedBlock);
             }
         }
 
@@ -98,22 +91,21 @@ public class BlockPlacementListener {
         final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
         final int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
 
-        blockPosition.add(offsetX, offsetY, offsetZ);
+        final Point placementPosition = new Vec(offsetX, offsetY, offsetZ).add(blockPosition);
 
         if (!canPlaceBlock) {
             if (useMaterial.isBlock()) {
                 //Send a block change with AIR as block to keep the client in sync,
                 //using refreshChunk results in the client not being in sync
                 //after rapid invalid block placements
-                player.getPlayerConnection().sendPacket(new BlockChangePacket(blockPosition, Block.AIR.getBlockId()));
+                player.getPlayerConnection().sendPacket(new BlockChangePacket(placementPosition, Block.AIR.stateId()));
             }
             return;
         }
 
-        final Chunk chunk = instance.getChunkAt(blockPosition);
-
+        final Chunk chunk = instance.getChunkAt(placementPosition);
         Check.stateCondition(!ChunkUtils.isLoaded(chunk),
-                "A player tried to place a block in the border of a loaded chunk " + blockPosition);
+                "A player tried to place a block in the border of a loaded chunk {0}", placementPosition);
 
         // The concerned chunk will be send to the player if an error occur
         // This will ensure that the player has the correct version of the chunk
@@ -121,59 +113,50 @@ public class BlockPlacementListener {
 
         if (useMaterial.isBlock()) {
             if (!chunk.isReadOnly()) {
-                final Block block = useMaterial.getBlock();
+                final Block placedBlock = useMaterial.getBlock();
                 final Set<Entity> entities = instance.getChunkEntities(chunk);
                 // Check if the player is trying to place a block in an entity
-                boolean intersect = player.getBoundingBox().intersect(blockPosition);
-                if (!intersect && block.isSolid()) {
+                boolean intersect = player.getBoundingBox().intersectWithBlock(placementPosition);
+                if (!intersect && placedBlock.isSolid()) {
                     // TODO push entities too close to the position
                     for (Entity entity : entities) {
                         // 'player' has already been checked
                         if (entity == player ||
                                 entity.getEntityType() == EntityType.ITEM)
                             continue;
-
                         // Marker Armor Stands should not prevent block placement
-                        if(entity.getEntityMeta() instanceof ArmorStandMeta) {
+                        if (entity.getEntityMeta() instanceof ArmorStandMeta) {
                             ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
-                            if(armorStandMeta.isMarker()) {
+                            if (armorStandMeta.isMarker()) {
                                 continue;
                             }
                         }
-
-                        intersect = entity.getBoundingBox().intersect(blockPosition);
+                        intersect = entity.getBoundingBox().intersectWithBlock(placementPosition);
                         if (intersect)
                             break;
                     }
                 }
 
                 if (!intersect) {
-
                     // BlockPlaceEvent check
-                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, block, blockPosition, packet.hand);
+                    PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, placementPosition, packet.hand);
                     playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
                     EventDispatcher.call(playerBlockPlaceEvent);
                     if (!playerBlockPlaceEvent.isCancelled()) {
 
                         // BlockPlacementRule check
-                        short blockStateId = playerBlockPlaceEvent.getBlockStateId();
-                        final Block resultBlock = Block.fromStateId(blockStateId);
+                        Block resultBlock = playerBlockPlaceEvent.getBlock();
                         final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(resultBlock);
                         if (blockPlacementRule != null) {
                             // Get id from block placement rule instead of the event
-                            blockStateId = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
+                            resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
                         }
-                        final boolean placementRuleCheck = blockStateId != BlockPlacementRule.CANCEL_CODE;
-
+                        final boolean placementRuleCheck = resultBlock != null;
                         if (placementRuleCheck) {
-
                             // Place the block
-                            final short customBlockId = playerBlockPlaceEvent.getCustomBlockId();
-                            final Data blockData = playerBlockPlaceEvent.getBlockData(); // Possibly null
-                            instance.setSeparateBlocks(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ(),
-                                    blockStateId, customBlockId, blockData);
-
+                            instance.placeBlock(player, resultBlock, placementPosition,
+                                    blockFace, packet.cursorPositionX, packet.cursorPositionY, packet.cursorPositionZ);
                             // Block consuming
                             if (playerBlockPlaceEvent.doesConsumeBlock()) {
                                 // Consume the block in the player's hand
@@ -194,16 +177,14 @@ public class BlockPlacementListener {
             }
         } else {
             // Player didn't try to place a block but interacted with one
-            final BlockPosition usePosition = blockPosition.clone().subtract(offsetX, offsetY, offsetZ);
-            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, usePosition, direction);
+            PlayerUseItemOnBlockEvent event = new PlayerUseItemOnBlockEvent(player, hand, usedItem, blockPosition, direction);
             EventDispatcher.call(event);
             refreshChunk = true;
         }
 
         // Refresh chunk section if needed
         if (refreshChunk) {
-            chunk.sendChunkSectionUpdate(ChunkUtils.getSectionAt(blockPosition.getY()), player);
+            chunk.sendChunk(player);
         }
     }
-
 }

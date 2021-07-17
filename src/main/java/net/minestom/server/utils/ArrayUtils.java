@@ -117,4 +117,12 @@ public final class ArrayUtils {
         }
     }
 
+    public static boolean empty(byte[] array) {
+        for (byte b : array) {
+            if (b != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

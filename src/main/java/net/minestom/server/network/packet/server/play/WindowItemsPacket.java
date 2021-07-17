@@ -10,37 +10,43 @@ import org.jetbrains.annotations.NotNull;
 public class WindowItemsPacket implements ServerPacket {
 
     public byte windowId;
+    public int stateId;
     public ItemStack[] items;
+    public ItemStack carriedItem = ItemStack.AIR;
 
     /**
      * Default constructor, required for reflection operations.
      */
-    public WindowItemsPacket() {}
+    public WindowItemsPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
+        writer.writeVarInt(stateId);
 
         if (items == null) {
-            writer.writeShort((short) 0);
-            return;
+            writer.writeVarInt(0);
+        } else {
+            writer.writeVarInt(items.length);
+            for (ItemStack item : items) {
+                writer.writeItemStack(item);
+            }
         }
-
-        writer.writeShort((short) items.length);
-        for (ItemStack item : items) {
-            writer.writeItemStack(item);
-        }
+        writer.writeItemStack(carriedItem);
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
         windowId = reader.readByte();
+        stateId = reader.readVarInt();
 
-        short length = reader.readShort();
+        final int length = reader.readVarInt();
         items = new ItemStack[length];
         for (int i = 0; i < length; i++) {
             items[i] = reader.readItemStack();
         }
+        carriedItem = reader.readItemStack();
     }
 
     @Override

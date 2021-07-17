@@ -1,6 +1,7 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.minestom.server.command.builder.NodeMaker;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.math.IntRange;
@@ -25,6 +26,10 @@ public class ArgumentIntRange extends ArgumentRange<IntRange> {
         return staticParse(input);
     }
 
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     @NotNull
     public static IntRange staticParse(@NotNull String input) throws ArgumentSyntaxException {
         try {

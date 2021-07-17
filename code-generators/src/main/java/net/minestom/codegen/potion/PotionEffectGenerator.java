@@ -1,9 +1,6 @@
 package net.minestom.codegen.potion;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class PotionEffectGenerator extends MinestomCodeGenerator {
@@ -40,7 +39,7 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray potionEffects = GSON.fromJson(new JsonReader(new InputStreamReader(potionEffectsFile)), JsonArray.class);
+        JsonObject potionEffects = GSON.fromJson(new InputStreamReader(potionEffectsFile), JsonObject.class);
         ClassName potionEffectClassName = ClassName.get("net.minestom.server.potion", "PotionEffect");
 
         // Particle
@@ -120,18 +119,16 @@ public final class PotionEffectGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement pe : potionEffects) {
-            JsonObject potionEffect = pe.getAsJsonObject();
-
-            String potionEffectName = potionEffect.get("name").getAsString();
-
-            potionEffectClass.addEnumConstant(potionEffectName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    potionEffect.get("id").getAsString()
+        potionEffects.entrySet().forEach(entry -> {
+            final String potionEffectNamespace = entry.getKey();
+            final String potionEffectConstant = toConstant(potionEffectNamespace);
+            potionEffectClass.addEnumConstant(potionEffectConstant, TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                            potionEffectNamespace
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

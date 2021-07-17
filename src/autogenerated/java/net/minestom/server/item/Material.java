@@ -15,1325 +15,1325 @@ import org.jetbrains.annotations.Nullable;
 public enum Material implements Keyed {
     AIR(NamespaceID.from("minecraft:air"), (byte) 64, () -> null),
 
-    STONE(NamespaceID.from("minecraft:stone"), (byte) 64, () -> Registries.getBlock("minecraft:stone")),
+    STONE(NamespaceID.from("minecraft:stone"), (byte) 64, () -> Block.STONE),
 
-    GRANITE(NamespaceID.from("minecraft:granite"), (byte) 64, () -> Registries.getBlock("minecraft:granite")),
+    GRANITE(NamespaceID.from("minecraft:granite"), (byte) 64, () -> Block.GRANITE),
 
-    POLISHED_GRANITE(NamespaceID.from("minecraft:polished_granite"), (byte) 64, () -> Registries.getBlock("minecraft:polished_granite")),
+    POLISHED_GRANITE(NamespaceID.from("minecraft:polished_granite"), (byte) 64, () -> Block.POLISHED_GRANITE),
 
-    DIORITE(NamespaceID.from("minecraft:diorite"), (byte) 64, () -> Registries.getBlock("minecraft:diorite")),
+    DIORITE(NamespaceID.from("minecraft:diorite"), (byte) 64, () -> Block.DIORITE),
 
-    POLISHED_DIORITE(NamespaceID.from("minecraft:polished_diorite"), (byte) 64, () -> Registries.getBlock("minecraft:polished_diorite")),
+    POLISHED_DIORITE(NamespaceID.from("minecraft:polished_diorite"), (byte) 64, () -> Block.POLISHED_DIORITE),
 
-    ANDESITE(NamespaceID.from("minecraft:andesite"), (byte) 64, () -> Registries.getBlock("minecraft:andesite")),
+    ANDESITE(NamespaceID.from("minecraft:andesite"), (byte) 64, () -> Block.ANDESITE),
 
-    POLISHED_ANDESITE(NamespaceID.from("minecraft:polished_andesite"), (byte) 64, () -> Registries.getBlock("minecraft:polished_andesite")),
+    POLISHED_ANDESITE(NamespaceID.from("minecraft:polished_andesite"), (byte) 64, () -> Block.POLISHED_ANDESITE),
 
-    DEEPSLATE(NamespaceID.from("minecraft:deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate")),
+    DEEPSLATE(NamespaceID.from("minecraft:deepslate"), (byte) 64, () -> Block.DEEPSLATE),
 
-    COBBLED_DEEPSLATE(NamespaceID.from("minecraft:cobbled_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate")),
+    COBBLED_DEEPSLATE(NamespaceID.from("minecraft:cobbled_deepslate"), (byte) 64, () -> Block.COBBLED_DEEPSLATE),
 
-    POLISHED_DEEPSLATE(NamespaceID.from("minecraft:polished_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate")),
+    POLISHED_DEEPSLATE(NamespaceID.from("minecraft:polished_deepslate"), (byte) 64, () -> Block.POLISHED_DEEPSLATE),
 
-    CALCITE(NamespaceID.from("minecraft:calcite"), (byte) 64, () -> Registries.getBlock("minecraft:calcite")),
+    CALCITE(NamespaceID.from("minecraft:calcite"), (byte) 64, () -> Block.CALCITE),
 
-    TUFF(NamespaceID.from("minecraft:tuff"), (byte) 64, () -> Registries.getBlock("minecraft:tuff")),
+    TUFF(NamespaceID.from("minecraft:tuff"), (byte) 64, () -> Block.TUFF),
 
-    DRIPSTONE_BLOCK(NamespaceID.from("minecraft:dripstone_block"), (byte) 64, () -> Registries.getBlock("minecraft:dripstone_block")),
+    DRIPSTONE_BLOCK(NamespaceID.from("minecraft:dripstone_block"), (byte) 64, () -> Block.DRIPSTONE_BLOCK),
 
-    GRASS_BLOCK(NamespaceID.from("minecraft:grass_block"), (byte) 64, () -> Registries.getBlock("minecraft:grass_block")),
+    GRASS_BLOCK(NamespaceID.from("minecraft:grass_block"), (byte) 64, () -> Block.GRASS_BLOCK),
 
-    DIRT(NamespaceID.from("minecraft:dirt"), (byte) 64, () -> Registries.getBlock("minecraft:dirt")),
+    DIRT(NamespaceID.from("minecraft:dirt"), (byte) 64, () -> Block.DIRT),
 
-    COARSE_DIRT(NamespaceID.from("minecraft:coarse_dirt"), (byte) 64, () -> Registries.getBlock("minecraft:coarse_dirt")),
+    COARSE_DIRT(NamespaceID.from("minecraft:coarse_dirt"), (byte) 64, () -> Block.COARSE_DIRT),
 
-    PODZOL(NamespaceID.from("minecraft:podzol"), (byte) 64, () -> Registries.getBlock("minecraft:podzol")),
+    PODZOL(NamespaceID.from("minecraft:podzol"), (byte) 64, () -> Block.PODZOL),
 
-    ROOTED_DIRT(NamespaceID.from("minecraft:rooted_dirt"), (byte) 64, () -> Registries.getBlock("minecraft:rooted_dirt")),
+    ROOTED_DIRT(NamespaceID.from("minecraft:rooted_dirt"), (byte) 64, () -> Block.ROOTED_DIRT),
 
-    CRIMSON_NYLIUM(NamespaceID.from("minecraft:crimson_nylium"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_nylium")),
+    CRIMSON_NYLIUM(NamespaceID.from("minecraft:crimson_nylium"), (byte) 64, () -> Block.CRIMSON_NYLIUM),
 
-    WARPED_NYLIUM(NamespaceID.from("minecraft:warped_nylium"), (byte) 64, () -> Registries.getBlock("minecraft:warped_nylium")),
+    WARPED_NYLIUM(NamespaceID.from("minecraft:warped_nylium"), (byte) 64, () -> Block.WARPED_NYLIUM),
 
-    COBBLESTONE(NamespaceID.from("minecraft:cobblestone"), (byte) 64, () -> Registries.getBlock("minecraft:cobblestone")),
+    COBBLESTONE(NamespaceID.from("minecraft:cobblestone"), (byte) 64, () -> Block.COBBLESTONE),
 
-    OAK_PLANKS(NamespaceID.from("minecraft:oak_planks"), (byte) 64, () -> Registries.getBlock("minecraft:oak_planks")),
+    OAK_PLANKS(NamespaceID.from("minecraft:oak_planks"), (byte) 64, () -> Block.OAK_PLANKS),
 
-    SPRUCE_PLANKS(NamespaceID.from("minecraft:spruce_planks"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_planks")),
+    SPRUCE_PLANKS(NamespaceID.from("minecraft:spruce_planks"), (byte) 64, () -> Block.SPRUCE_PLANKS),
 
-    BIRCH_PLANKS(NamespaceID.from("minecraft:birch_planks"), (byte) 64, () -> Registries.getBlock("minecraft:birch_planks")),
+    BIRCH_PLANKS(NamespaceID.from("minecraft:birch_planks"), (byte) 64, () -> Block.BIRCH_PLANKS),
 
-    JUNGLE_PLANKS(NamespaceID.from("minecraft:jungle_planks"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_planks")),
+    JUNGLE_PLANKS(NamespaceID.from("minecraft:jungle_planks"), (byte) 64, () -> Block.JUNGLE_PLANKS),
 
-    ACACIA_PLANKS(NamespaceID.from("minecraft:acacia_planks"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_planks")),
+    ACACIA_PLANKS(NamespaceID.from("minecraft:acacia_planks"), (byte) 64, () -> Block.ACACIA_PLANKS),
 
-    DARK_OAK_PLANKS(NamespaceID.from("minecraft:dark_oak_planks"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_planks")),
+    DARK_OAK_PLANKS(NamespaceID.from("minecraft:dark_oak_planks"), (byte) 64, () -> Block.DARK_OAK_PLANKS),
 
-    CRIMSON_PLANKS(NamespaceID.from("minecraft:crimson_planks"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_planks")),
+    CRIMSON_PLANKS(NamespaceID.from("minecraft:crimson_planks"), (byte) 64, () -> Block.CRIMSON_PLANKS),
 
-    WARPED_PLANKS(NamespaceID.from("minecraft:warped_planks"), (byte) 64, () -> Registries.getBlock("minecraft:warped_planks")),
+    WARPED_PLANKS(NamespaceID.from("minecraft:warped_planks"), (byte) 64, () -> Block.WARPED_PLANKS),
 
-    OAK_SAPLING(NamespaceID.from("minecraft:oak_sapling"), (byte) 64, () -> Registries.getBlock("minecraft:oak_sapling")),
+    OAK_SAPLING(NamespaceID.from("minecraft:oak_sapling"), (byte) 64, () -> Block.OAK_SAPLING),
 
-    SPRUCE_SAPLING(NamespaceID.from("minecraft:spruce_sapling"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_sapling")),
+    SPRUCE_SAPLING(NamespaceID.from("minecraft:spruce_sapling"), (byte) 64, () -> Block.SPRUCE_SAPLING),
 
-    BIRCH_SAPLING(NamespaceID.from("minecraft:birch_sapling"), (byte) 64, () -> Registries.getBlock("minecraft:birch_sapling")),
+    BIRCH_SAPLING(NamespaceID.from("minecraft:birch_sapling"), (byte) 64, () -> Block.BIRCH_SAPLING),
 
-    JUNGLE_SAPLING(NamespaceID.from("minecraft:jungle_sapling"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_sapling")),
+    JUNGLE_SAPLING(NamespaceID.from("minecraft:jungle_sapling"), (byte) 64, () -> Block.JUNGLE_SAPLING),
 
-    ACACIA_SAPLING(NamespaceID.from("minecraft:acacia_sapling"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_sapling")),
+    ACACIA_SAPLING(NamespaceID.from("minecraft:acacia_sapling"), (byte) 64, () -> Block.ACACIA_SAPLING),
 
-    DARK_OAK_SAPLING(NamespaceID.from("minecraft:dark_oak_sapling"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_sapling")),
+    DARK_OAK_SAPLING(NamespaceID.from("minecraft:dark_oak_sapling"), (byte) 64, () -> Block.DARK_OAK_SAPLING),
 
-    BEDROCK(NamespaceID.from("minecraft:bedrock"), (byte) 64, () -> Registries.getBlock("minecraft:bedrock")),
+    BEDROCK(NamespaceID.from("minecraft:bedrock"), (byte) 64, () -> Block.BEDROCK),
 
-    SAND(NamespaceID.from("minecraft:sand"), (byte) 64, () -> Registries.getBlock("minecraft:sand")),
+    SAND(NamespaceID.from("minecraft:sand"), (byte) 64, () -> Block.SAND),
 
-    RED_SAND(NamespaceID.from("minecraft:red_sand"), (byte) 64, () -> Registries.getBlock("minecraft:red_sand")),
+    RED_SAND(NamespaceID.from("minecraft:red_sand"), (byte) 64, () -> Block.RED_SAND),
 
-    GRAVEL(NamespaceID.from("minecraft:gravel"), (byte) 64, () -> Registries.getBlock("minecraft:gravel")),
+    GRAVEL(NamespaceID.from("minecraft:gravel"), (byte) 64, () -> Block.GRAVEL),
 
-    COAL_ORE(NamespaceID.from("minecraft:coal_ore"), (byte) 64, () -> Registries.getBlock("minecraft:coal_ore")),
+    COAL_ORE(NamespaceID.from("minecraft:coal_ore"), (byte) 64, () -> Block.COAL_ORE),
 
-    DEEPSLATE_COAL_ORE(NamespaceID.from("minecraft:deepslate_coal_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_coal_ore")),
+    DEEPSLATE_COAL_ORE(NamespaceID.from("minecraft:deepslate_coal_ore"), (byte) 64, () -> Block.DEEPSLATE_COAL_ORE),
 
-    IRON_ORE(NamespaceID.from("minecraft:iron_ore"), (byte) 64, () -> Registries.getBlock("minecraft:iron_ore")),
+    IRON_ORE(NamespaceID.from("minecraft:iron_ore"), (byte) 64, () -> Block.IRON_ORE),
 
-    DEEPSLATE_IRON_ORE(NamespaceID.from("minecraft:deepslate_iron_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_iron_ore")),
+    DEEPSLATE_IRON_ORE(NamespaceID.from("minecraft:deepslate_iron_ore"), (byte) 64, () -> Block.DEEPSLATE_IRON_ORE),
 
-    COPPER_ORE(NamespaceID.from("minecraft:copper_ore"), (byte) 64, () -> Registries.getBlock("minecraft:copper_ore")),
+    COPPER_ORE(NamespaceID.from("minecraft:copper_ore"), (byte) 64, () -> Block.COPPER_ORE),
 
-    DEEPSLATE_COPPER_ORE(NamespaceID.from("minecraft:deepslate_copper_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_copper_ore")),
+    DEEPSLATE_COPPER_ORE(NamespaceID.from("minecraft:deepslate_copper_ore"), (byte) 64, () -> Block.DEEPSLATE_COPPER_ORE),
 
-    GOLD_ORE(NamespaceID.from("minecraft:gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:gold_ore")),
+    GOLD_ORE(NamespaceID.from("minecraft:gold_ore"), (byte) 64, () -> Block.GOLD_ORE),
 
-    DEEPSLATE_GOLD_ORE(NamespaceID.from("minecraft:deepslate_gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_gold_ore")),
+    DEEPSLATE_GOLD_ORE(NamespaceID.from("minecraft:deepslate_gold_ore"), (byte) 64, () -> Block.DEEPSLATE_GOLD_ORE),
 
-    REDSTONE_ORE(NamespaceID.from("minecraft:redstone_ore"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_ore")),
+    REDSTONE_ORE(NamespaceID.from("minecraft:redstone_ore"), (byte) 64, () -> Block.REDSTONE_ORE),
 
-    DEEPSLATE_REDSTONE_ORE(NamespaceID.from("minecraft:deepslate_redstone_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_redstone_ore")),
+    DEEPSLATE_REDSTONE_ORE(NamespaceID.from("minecraft:deepslate_redstone_ore"), (byte) 64, () -> Block.DEEPSLATE_REDSTONE_ORE),
 
-    EMERALD_ORE(NamespaceID.from("minecraft:emerald_ore"), (byte) 64, () -> Registries.getBlock("minecraft:emerald_ore")),
+    EMERALD_ORE(NamespaceID.from("minecraft:emerald_ore"), (byte) 64, () -> Block.EMERALD_ORE),
 
-    DEEPSLATE_EMERALD_ORE(NamespaceID.from("minecraft:deepslate_emerald_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_emerald_ore")),
+    DEEPSLATE_EMERALD_ORE(NamespaceID.from("minecraft:deepslate_emerald_ore"), (byte) 64, () -> Block.DEEPSLATE_EMERALD_ORE),
 
-    LAPIS_ORE(NamespaceID.from("minecraft:lapis_ore"), (byte) 64, () -> Registries.getBlock("minecraft:lapis_ore")),
+    LAPIS_ORE(NamespaceID.from("minecraft:lapis_ore"), (byte) 64, () -> Block.LAPIS_ORE),
 
-    DEEPSLATE_LAPIS_ORE(NamespaceID.from("minecraft:deepslate_lapis_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_lapis_ore")),
+    DEEPSLATE_LAPIS_ORE(NamespaceID.from("minecraft:deepslate_lapis_ore"), (byte) 64, () -> Block.DEEPSLATE_LAPIS_ORE),
 
-    DIAMOND_ORE(NamespaceID.from("minecraft:diamond_ore"), (byte) 64, () -> Registries.getBlock("minecraft:diamond_ore")),
+    DIAMOND_ORE(NamespaceID.from("minecraft:diamond_ore"), (byte) 64, () -> Block.DIAMOND_ORE),
 
-    DEEPSLATE_DIAMOND_ORE(NamespaceID.from("minecraft:deepslate_diamond_ore"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_diamond_ore")),
+    DEEPSLATE_DIAMOND_ORE(NamespaceID.from("minecraft:deepslate_diamond_ore"), (byte) 64, () -> Block.DEEPSLATE_DIAMOND_ORE),
 
-    NETHER_GOLD_ORE(NamespaceID.from("minecraft:nether_gold_ore"), (byte) 64, () -> Registries.getBlock("minecraft:nether_gold_ore")),
+    NETHER_GOLD_ORE(NamespaceID.from("minecraft:nether_gold_ore"), (byte) 64, () -> Block.NETHER_GOLD_ORE),
 
-    NETHER_QUARTZ_ORE(NamespaceID.from("minecraft:nether_quartz_ore"), (byte) 64, () -> Registries.getBlock("minecraft:nether_quartz_ore")),
+    NETHER_QUARTZ_ORE(NamespaceID.from("minecraft:nether_quartz_ore"), (byte) 64, () -> Block.NETHER_QUARTZ_ORE),
 
-    ANCIENT_DEBRIS(NamespaceID.from("minecraft:ancient_debris"), (byte) 64, () -> Registries.getBlock("minecraft:ancient_debris")),
+    ANCIENT_DEBRIS(NamespaceID.from("minecraft:ancient_debris"), (byte) 64, () -> Block.ANCIENT_DEBRIS),
 
-    COAL_BLOCK(NamespaceID.from("minecraft:coal_block"), (byte) 64, () -> Registries.getBlock("minecraft:coal_block")),
+    COAL_BLOCK(NamespaceID.from("minecraft:coal_block"), (byte) 64, () -> Block.COAL_BLOCK),
 
-    RAW_IRON_BLOCK(NamespaceID.from("minecraft:raw_iron_block"), (byte) 64, () -> Registries.getBlock("minecraft:raw_iron_block")),
+    RAW_IRON_BLOCK(NamespaceID.from("minecraft:raw_iron_block"), (byte) 64, () -> Block.RAW_IRON_BLOCK),
 
-    RAW_COPPER_BLOCK(NamespaceID.from("minecraft:raw_copper_block"), (byte) 64, () -> Registries.getBlock("minecraft:raw_copper_block")),
+    RAW_COPPER_BLOCK(NamespaceID.from("minecraft:raw_copper_block"), (byte) 64, () -> Block.RAW_COPPER_BLOCK),
 
-    RAW_GOLD_BLOCK(NamespaceID.from("minecraft:raw_gold_block"), (byte) 64, () -> Registries.getBlock("minecraft:raw_gold_block")),
+    RAW_GOLD_BLOCK(NamespaceID.from("minecraft:raw_gold_block"), (byte) 64, () -> Block.RAW_GOLD_BLOCK),
 
-    AMETHYST_BLOCK(NamespaceID.from("minecraft:amethyst_block"), (byte) 64, () -> Registries.getBlock("minecraft:amethyst_block")),
+    AMETHYST_BLOCK(NamespaceID.from("minecraft:amethyst_block"), (byte) 64, () -> Block.AMETHYST_BLOCK),
 
-    BUDDING_AMETHYST(NamespaceID.from("minecraft:budding_amethyst"), (byte) 64, () -> Registries.getBlock("minecraft:budding_amethyst")),
+    BUDDING_AMETHYST(NamespaceID.from("minecraft:budding_amethyst"), (byte) 64, () -> Block.BUDDING_AMETHYST),
 
-    IRON_BLOCK(NamespaceID.from("minecraft:iron_block"), (byte) 64, () -> Registries.getBlock("minecraft:iron_block")),
+    IRON_BLOCK(NamespaceID.from("minecraft:iron_block"), (byte) 64, () -> Block.IRON_BLOCK),
 
-    COPPER_BLOCK(NamespaceID.from("minecraft:copper_block"), (byte) 64, () -> Registries.getBlock("minecraft:copper_block")),
+    COPPER_BLOCK(NamespaceID.from("minecraft:copper_block"), (byte) 64, () -> Block.COPPER_BLOCK),
 
-    GOLD_BLOCK(NamespaceID.from("minecraft:gold_block"), (byte) 64, () -> Registries.getBlock("minecraft:gold_block")),
+    GOLD_BLOCK(NamespaceID.from("minecraft:gold_block"), (byte) 64, () -> Block.GOLD_BLOCK),
 
-    DIAMOND_BLOCK(NamespaceID.from("minecraft:diamond_block"), (byte) 64, () -> Registries.getBlock("minecraft:diamond_block")),
+    DIAMOND_BLOCK(NamespaceID.from("minecraft:diamond_block"), (byte) 64, () -> Block.DIAMOND_BLOCK),
 
-    NETHERITE_BLOCK(NamespaceID.from("minecraft:netherite_block"), (byte) 64, () -> Registries.getBlock("minecraft:netherite_block")),
+    NETHERITE_BLOCK(NamespaceID.from("minecraft:netherite_block"), (byte) 64, () -> Block.NETHERITE_BLOCK),
 
-    EXPOSED_COPPER(NamespaceID.from("minecraft:exposed_copper"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_copper")),
+    EXPOSED_COPPER(NamespaceID.from("minecraft:exposed_copper"), (byte) 64, () -> Block.EXPOSED_COPPER),
 
-    WEATHERED_COPPER(NamespaceID.from("minecraft:weathered_copper"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_copper")),
+    WEATHERED_COPPER(NamespaceID.from("minecraft:weathered_copper"), (byte) 64, () -> Block.WEATHERED_COPPER),
 
-    OXIDIZED_COPPER(NamespaceID.from("minecraft:oxidized_copper"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_copper")),
+    OXIDIZED_COPPER(NamespaceID.from("minecraft:oxidized_copper"), (byte) 64, () -> Block.OXIDIZED_COPPER),
 
-    CUT_COPPER(NamespaceID.from("minecraft:cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:cut_copper")),
+    CUT_COPPER(NamespaceID.from("minecraft:cut_copper"), (byte) 64, () -> Block.CUT_COPPER),
 
-    EXPOSED_CUT_COPPER(NamespaceID.from("minecraft:exposed_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_cut_copper")),
+    EXPOSED_CUT_COPPER(NamespaceID.from("minecraft:exposed_cut_copper"), (byte) 64, () -> Block.EXPOSED_CUT_COPPER),
 
-    WEATHERED_CUT_COPPER(NamespaceID.from("minecraft:weathered_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_cut_copper")),
+    WEATHERED_CUT_COPPER(NamespaceID.from("minecraft:weathered_cut_copper"), (byte) 64, () -> Block.WEATHERED_CUT_COPPER),
 
-    OXIDIZED_CUT_COPPER(NamespaceID.from("minecraft:oxidized_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_cut_copper")),
+    OXIDIZED_CUT_COPPER(NamespaceID.from("minecraft:oxidized_cut_copper"), (byte) 64, () -> Block.OXIDIZED_CUT_COPPER),
 
-    CUT_COPPER_STAIRS(NamespaceID.from("minecraft:cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:cut_copper_stairs")),
+    CUT_COPPER_STAIRS(NamespaceID.from("minecraft:cut_copper_stairs"), (byte) 64, () -> Block.CUT_COPPER_STAIRS),
 
-    EXPOSED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:exposed_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_cut_copper_stairs")),
+    EXPOSED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:exposed_cut_copper_stairs"), (byte) 64, () -> Block.EXPOSED_CUT_COPPER_STAIRS),
 
-    WEATHERED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:weathered_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_cut_copper_stairs")),
+    WEATHERED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:weathered_cut_copper_stairs"), (byte) 64, () -> Block.WEATHERED_CUT_COPPER_STAIRS),
 
-    OXIDIZED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:oxidized_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_cut_copper_stairs")),
+    OXIDIZED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:oxidized_cut_copper_stairs"), (byte) 64, () -> Block.OXIDIZED_CUT_COPPER_STAIRS),
 
-    CUT_COPPER_SLAB(NamespaceID.from("minecraft:cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cut_copper_slab")),
+    CUT_COPPER_SLAB(NamespaceID.from("minecraft:cut_copper_slab"), (byte) 64, () -> Block.CUT_COPPER_SLAB),
 
-    EXPOSED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:exposed_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:exposed_cut_copper_slab")),
+    EXPOSED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:exposed_cut_copper_slab"), (byte) 64, () -> Block.EXPOSED_CUT_COPPER_SLAB),
 
-    WEATHERED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:weathered_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:weathered_cut_copper_slab")),
+    WEATHERED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:weathered_cut_copper_slab"), (byte) 64, () -> Block.WEATHERED_CUT_COPPER_SLAB),
 
-    OXIDIZED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:oxidized_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:oxidized_cut_copper_slab")),
+    OXIDIZED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:oxidized_cut_copper_slab"), (byte) 64, () -> Block.OXIDIZED_CUT_COPPER_SLAB),
 
-    WAXED_COPPER_BLOCK(NamespaceID.from("minecraft:waxed_copper_block"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_copper_block")),
+    WAXED_COPPER_BLOCK(NamespaceID.from("minecraft:waxed_copper_block"), (byte) 64, () -> Block.WAXED_COPPER_BLOCK),
 
-    WAXED_EXPOSED_COPPER(NamespaceID.from("minecraft:waxed_exposed_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_copper")),
+    WAXED_EXPOSED_COPPER(NamespaceID.from("minecraft:waxed_exposed_copper"), (byte) 64, () -> Block.WAXED_EXPOSED_COPPER),
 
-    WAXED_WEATHERED_COPPER(NamespaceID.from("minecraft:waxed_weathered_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_copper")),
+    WAXED_WEATHERED_COPPER(NamespaceID.from("minecraft:waxed_weathered_copper"), (byte) 64, () -> Block.WAXED_WEATHERED_COPPER),
 
-    WAXED_OXIDIZED_COPPER(NamespaceID.from("minecraft:waxed_oxidized_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_copper")),
+    WAXED_OXIDIZED_COPPER(NamespaceID.from("minecraft:waxed_oxidized_copper"), (byte) 64, () -> Block.WAXED_OXIDIZED_COPPER),
 
-    WAXED_CUT_COPPER(NamespaceID.from("minecraft:waxed_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_cut_copper")),
+    WAXED_CUT_COPPER(NamespaceID.from("minecraft:waxed_cut_copper"), (byte) 64, () -> Block.WAXED_CUT_COPPER),
 
-    WAXED_EXPOSED_CUT_COPPER(NamespaceID.from("minecraft:waxed_exposed_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_cut_copper")),
+    WAXED_EXPOSED_CUT_COPPER(NamespaceID.from("minecraft:waxed_exposed_cut_copper"), (byte) 64, () -> Block.WAXED_EXPOSED_CUT_COPPER),
 
-    WAXED_WEATHERED_CUT_COPPER(NamespaceID.from("minecraft:waxed_weathered_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_cut_copper")),
+    WAXED_WEATHERED_CUT_COPPER(NamespaceID.from("minecraft:waxed_weathered_cut_copper"), (byte) 64, () -> Block.WAXED_WEATHERED_CUT_COPPER),
 
-    WAXED_OXIDIZED_CUT_COPPER(NamespaceID.from("minecraft:waxed_oxidized_cut_copper"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_cut_copper")),
+    WAXED_OXIDIZED_CUT_COPPER(NamespaceID.from("minecraft:waxed_oxidized_cut_copper"), (byte) 64, () -> Block.WAXED_OXIDIZED_CUT_COPPER),
 
-    WAXED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_cut_copper_stairs")),
+    WAXED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_cut_copper_stairs"), (byte) 64, () -> Block.WAXED_CUT_COPPER_STAIRS),
 
-    WAXED_EXPOSED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_exposed_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_cut_copper_stairs")),
+    WAXED_EXPOSED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_exposed_cut_copper_stairs"), (byte) 64, () -> Block.WAXED_EXPOSED_CUT_COPPER_STAIRS),
 
-    WAXED_WEATHERED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_weathered_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_cut_copper_stairs")),
+    WAXED_WEATHERED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_weathered_cut_copper_stairs"), (byte) 64, () -> Block.WAXED_WEATHERED_CUT_COPPER_STAIRS),
 
-    WAXED_OXIDIZED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_oxidized_cut_copper_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_cut_copper_stairs")),
+    WAXED_OXIDIZED_CUT_COPPER_STAIRS(NamespaceID.from("minecraft:waxed_oxidized_cut_copper_stairs"), (byte) 64, () -> Block.WAXED_OXIDIZED_CUT_COPPER_STAIRS),
 
-    WAXED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_cut_copper_slab")),
+    WAXED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_cut_copper_slab"), (byte) 64, () -> Block.WAXED_CUT_COPPER_SLAB),
 
-    WAXED_EXPOSED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_exposed_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_exposed_cut_copper_slab")),
+    WAXED_EXPOSED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_exposed_cut_copper_slab"), (byte) 64, () -> Block.WAXED_EXPOSED_CUT_COPPER_SLAB),
 
-    WAXED_WEATHERED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_weathered_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_weathered_cut_copper_slab")),
+    WAXED_WEATHERED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_weathered_cut_copper_slab"), (byte) 64, () -> Block.WAXED_WEATHERED_CUT_COPPER_SLAB),
 
-    WAXED_OXIDIZED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_oxidized_cut_copper_slab"), (byte) 64, () -> Registries.getBlock("minecraft:waxed_oxidized_cut_copper_slab")),
+    WAXED_OXIDIZED_CUT_COPPER_SLAB(NamespaceID.from("minecraft:waxed_oxidized_cut_copper_slab"), (byte) 64, () -> Block.WAXED_OXIDIZED_CUT_COPPER_SLAB),
 
-    OAK_LOG(NamespaceID.from("minecraft:oak_log"), (byte) 64, () -> Registries.getBlock("minecraft:oak_log")),
+    OAK_LOG(NamespaceID.from("minecraft:oak_log"), (byte) 64, () -> Block.OAK_LOG),
 
-    SPRUCE_LOG(NamespaceID.from("minecraft:spruce_log"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_log")),
+    SPRUCE_LOG(NamespaceID.from("minecraft:spruce_log"), (byte) 64, () -> Block.SPRUCE_LOG),
 
-    BIRCH_LOG(NamespaceID.from("minecraft:birch_log"), (byte) 64, () -> Registries.getBlock("minecraft:birch_log")),
+    BIRCH_LOG(NamespaceID.from("minecraft:birch_log"), (byte) 64, () -> Block.BIRCH_LOG),
 
-    JUNGLE_LOG(NamespaceID.from("minecraft:jungle_log"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_log")),
+    JUNGLE_LOG(NamespaceID.from("minecraft:jungle_log"), (byte) 64, () -> Block.JUNGLE_LOG),
 
-    ACACIA_LOG(NamespaceID.from("minecraft:acacia_log"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_log")),
+    ACACIA_LOG(NamespaceID.from("minecraft:acacia_log"), (byte) 64, () -> Block.ACACIA_LOG),
 
-    DARK_OAK_LOG(NamespaceID.from("minecraft:dark_oak_log"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_log")),
+    DARK_OAK_LOG(NamespaceID.from("minecraft:dark_oak_log"), (byte) 64, () -> Block.DARK_OAK_LOG),
 
-    CRIMSON_STEM(NamespaceID.from("minecraft:crimson_stem"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_stem")),
+    CRIMSON_STEM(NamespaceID.from("minecraft:crimson_stem"), (byte) 64, () -> Block.CRIMSON_STEM),
 
-    WARPED_STEM(NamespaceID.from("minecraft:warped_stem"), (byte) 64, () -> Registries.getBlock("minecraft:warped_stem")),
+    WARPED_STEM(NamespaceID.from("minecraft:warped_stem"), (byte) 64, () -> Block.WARPED_STEM),
 
-    STRIPPED_OAK_LOG(NamespaceID.from("minecraft:stripped_oak_log"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_oak_log")),
+    STRIPPED_OAK_LOG(NamespaceID.from("minecraft:stripped_oak_log"), (byte) 64, () -> Block.STRIPPED_OAK_LOG),
 
-    STRIPPED_SPRUCE_LOG(NamespaceID.from("minecraft:stripped_spruce_log"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_spruce_log")),
+    STRIPPED_SPRUCE_LOG(NamespaceID.from("minecraft:stripped_spruce_log"), (byte) 64, () -> Block.STRIPPED_SPRUCE_LOG),
 
-    STRIPPED_BIRCH_LOG(NamespaceID.from("minecraft:stripped_birch_log"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_birch_log")),
+    STRIPPED_BIRCH_LOG(NamespaceID.from("minecraft:stripped_birch_log"), (byte) 64, () -> Block.STRIPPED_BIRCH_LOG),
 
-    STRIPPED_JUNGLE_LOG(NamespaceID.from("minecraft:stripped_jungle_log"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_jungle_log")),
+    STRIPPED_JUNGLE_LOG(NamespaceID.from("minecraft:stripped_jungle_log"), (byte) 64, () -> Block.STRIPPED_JUNGLE_LOG),
 
-    STRIPPED_ACACIA_LOG(NamespaceID.from("minecraft:stripped_acacia_log"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_acacia_log")),
+    STRIPPED_ACACIA_LOG(NamespaceID.from("minecraft:stripped_acacia_log"), (byte) 64, () -> Block.STRIPPED_ACACIA_LOG),
 
-    STRIPPED_DARK_OAK_LOG(NamespaceID.from("minecraft:stripped_dark_oak_log"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_dark_oak_log")),
+    STRIPPED_DARK_OAK_LOG(NamespaceID.from("minecraft:stripped_dark_oak_log"), (byte) 64, () -> Block.STRIPPED_DARK_OAK_LOG),
 
-    STRIPPED_CRIMSON_STEM(NamespaceID.from("minecraft:stripped_crimson_stem"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_crimson_stem")),
+    STRIPPED_CRIMSON_STEM(NamespaceID.from("minecraft:stripped_crimson_stem"), (byte) 64, () -> Block.STRIPPED_CRIMSON_STEM),
 
-    STRIPPED_WARPED_STEM(NamespaceID.from("minecraft:stripped_warped_stem"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_warped_stem")),
+    STRIPPED_WARPED_STEM(NamespaceID.from("minecraft:stripped_warped_stem"), (byte) 64, () -> Block.STRIPPED_WARPED_STEM),
 
-    STRIPPED_OAK_WOOD(NamespaceID.from("minecraft:stripped_oak_wood"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_oak_wood")),
+    STRIPPED_OAK_WOOD(NamespaceID.from("minecraft:stripped_oak_wood"), (byte) 64, () -> Block.STRIPPED_OAK_WOOD),
 
-    STRIPPED_SPRUCE_WOOD(NamespaceID.from("minecraft:stripped_spruce_wood"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_spruce_wood")),
+    STRIPPED_SPRUCE_WOOD(NamespaceID.from("minecraft:stripped_spruce_wood"), (byte) 64, () -> Block.STRIPPED_SPRUCE_WOOD),
 
-    STRIPPED_BIRCH_WOOD(NamespaceID.from("minecraft:stripped_birch_wood"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_birch_wood")),
+    STRIPPED_BIRCH_WOOD(NamespaceID.from("minecraft:stripped_birch_wood"), (byte) 64, () -> Block.STRIPPED_BIRCH_WOOD),
 
-    STRIPPED_JUNGLE_WOOD(NamespaceID.from("minecraft:stripped_jungle_wood"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_jungle_wood")),
+    STRIPPED_JUNGLE_WOOD(NamespaceID.from("minecraft:stripped_jungle_wood"), (byte) 64, () -> Block.STRIPPED_JUNGLE_WOOD),
 
-    STRIPPED_ACACIA_WOOD(NamespaceID.from("minecraft:stripped_acacia_wood"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_acacia_wood")),
+    STRIPPED_ACACIA_WOOD(NamespaceID.from("minecraft:stripped_acacia_wood"), (byte) 64, () -> Block.STRIPPED_ACACIA_WOOD),
 
-    STRIPPED_DARK_OAK_WOOD(NamespaceID.from("minecraft:stripped_dark_oak_wood"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_dark_oak_wood")),
+    STRIPPED_DARK_OAK_WOOD(NamespaceID.from("minecraft:stripped_dark_oak_wood"), (byte) 64, () -> Block.STRIPPED_DARK_OAK_WOOD),
 
-    STRIPPED_CRIMSON_HYPHAE(NamespaceID.from("minecraft:stripped_crimson_hyphae"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_crimson_hyphae")),
+    STRIPPED_CRIMSON_HYPHAE(NamespaceID.from("minecraft:stripped_crimson_hyphae"), (byte) 64, () -> Block.STRIPPED_CRIMSON_HYPHAE),
 
-    STRIPPED_WARPED_HYPHAE(NamespaceID.from("minecraft:stripped_warped_hyphae"), (byte) 64, () -> Registries.getBlock("minecraft:stripped_warped_hyphae")),
+    STRIPPED_WARPED_HYPHAE(NamespaceID.from("minecraft:stripped_warped_hyphae"), (byte) 64, () -> Block.STRIPPED_WARPED_HYPHAE),
 
-    OAK_WOOD(NamespaceID.from("minecraft:oak_wood"), (byte) 64, () -> Registries.getBlock("minecraft:oak_wood")),
+    OAK_WOOD(NamespaceID.from("minecraft:oak_wood"), (byte) 64, () -> Block.OAK_WOOD),
 
-    SPRUCE_WOOD(NamespaceID.from("minecraft:spruce_wood"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_wood")),
+    SPRUCE_WOOD(NamespaceID.from("minecraft:spruce_wood"), (byte) 64, () -> Block.SPRUCE_WOOD),
 
-    BIRCH_WOOD(NamespaceID.from("minecraft:birch_wood"), (byte) 64, () -> Registries.getBlock("minecraft:birch_wood")),
+    BIRCH_WOOD(NamespaceID.from("minecraft:birch_wood"), (byte) 64, () -> Block.BIRCH_WOOD),
 
-    JUNGLE_WOOD(NamespaceID.from("minecraft:jungle_wood"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_wood")),
+    JUNGLE_WOOD(NamespaceID.from("minecraft:jungle_wood"), (byte) 64, () -> Block.JUNGLE_WOOD),
 
-    ACACIA_WOOD(NamespaceID.from("minecraft:acacia_wood"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_wood")),
+    ACACIA_WOOD(NamespaceID.from("minecraft:acacia_wood"), (byte) 64, () -> Block.ACACIA_WOOD),
 
-    DARK_OAK_WOOD(NamespaceID.from("minecraft:dark_oak_wood"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_wood")),
+    DARK_OAK_WOOD(NamespaceID.from("minecraft:dark_oak_wood"), (byte) 64, () -> Block.DARK_OAK_WOOD),
 
-    CRIMSON_HYPHAE(NamespaceID.from("minecraft:crimson_hyphae"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_hyphae")),
+    CRIMSON_HYPHAE(NamespaceID.from("minecraft:crimson_hyphae"), (byte) 64, () -> Block.CRIMSON_HYPHAE),
 
-    WARPED_HYPHAE(NamespaceID.from("minecraft:warped_hyphae"), (byte) 64, () -> Registries.getBlock("minecraft:warped_hyphae")),
+    WARPED_HYPHAE(NamespaceID.from("minecraft:warped_hyphae"), (byte) 64, () -> Block.WARPED_HYPHAE),
 
-    OAK_LEAVES(NamespaceID.from("minecraft:oak_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:oak_leaves")),
+    OAK_LEAVES(NamespaceID.from("minecraft:oak_leaves"), (byte) 64, () -> Block.OAK_LEAVES),
 
-    SPRUCE_LEAVES(NamespaceID.from("minecraft:spruce_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_leaves")),
+    SPRUCE_LEAVES(NamespaceID.from("minecraft:spruce_leaves"), (byte) 64, () -> Block.SPRUCE_LEAVES),
 
-    BIRCH_LEAVES(NamespaceID.from("minecraft:birch_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:birch_leaves")),
+    BIRCH_LEAVES(NamespaceID.from("minecraft:birch_leaves"), (byte) 64, () -> Block.BIRCH_LEAVES),
 
-    JUNGLE_LEAVES(NamespaceID.from("minecraft:jungle_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_leaves")),
+    JUNGLE_LEAVES(NamespaceID.from("minecraft:jungle_leaves"), (byte) 64, () -> Block.JUNGLE_LEAVES),
 
-    ACACIA_LEAVES(NamespaceID.from("minecraft:acacia_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_leaves")),
+    ACACIA_LEAVES(NamespaceID.from("minecraft:acacia_leaves"), (byte) 64, () -> Block.ACACIA_LEAVES),
 
-    DARK_OAK_LEAVES(NamespaceID.from("minecraft:dark_oak_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_leaves")),
+    DARK_OAK_LEAVES(NamespaceID.from("minecraft:dark_oak_leaves"), (byte) 64, () -> Block.DARK_OAK_LEAVES),
 
-    AZALEA_LEAVES(NamespaceID.from("minecraft:azalea_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:azalea_leaves")),
+    AZALEA_LEAVES(NamespaceID.from("minecraft:azalea_leaves"), (byte) 64, () -> Block.AZALEA_LEAVES),
 
-    AZALEA_LEAVES_FLOWERS(NamespaceID.from("minecraft:flowering_azalea_leaves"), (byte) 64, () -> Registries.getBlock("minecraft:flowering_azalea_leaves")),
+    FLOWERING_AZALEA_LEAVES(NamespaceID.from("minecraft:flowering_azalea_leaves"), (byte) 64, () -> Block.FLOWERING_AZALEA_LEAVES),
 
-    SPONGE(NamespaceID.from("minecraft:sponge"), (byte) 64, () -> Registries.getBlock("minecraft:sponge")),
+    SPONGE(NamespaceID.from("minecraft:sponge"), (byte) 64, () -> Block.SPONGE),
 
-    WET_SPONGE(NamespaceID.from("minecraft:wet_sponge"), (byte) 64, () -> Registries.getBlock("minecraft:wet_sponge")),
+    WET_SPONGE(NamespaceID.from("minecraft:wet_sponge"), (byte) 64, () -> Block.WET_SPONGE),
 
-    GLASS(NamespaceID.from("minecraft:glass"), (byte) 64, () -> Registries.getBlock("minecraft:glass")),
+    GLASS(NamespaceID.from("minecraft:glass"), (byte) 64, () -> Block.GLASS),
 
-    TINTED_GLASS(NamespaceID.from("minecraft:tinted_glass"), (byte) 64, () -> Registries.getBlock("minecraft:tinted_glass")),
+    TINTED_GLASS(NamespaceID.from("minecraft:tinted_glass"), (byte) 64, () -> Block.TINTED_GLASS),
 
-    LAPIS_BLOCK(NamespaceID.from("minecraft:lapis_block"), (byte) 64, () -> Registries.getBlock("minecraft:lapis_block")),
+    LAPIS_BLOCK(NamespaceID.from("minecraft:lapis_block"), (byte) 64, () -> Block.LAPIS_BLOCK),
 
-    SANDSTONE(NamespaceID.from("minecraft:sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:sandstone")),
+    SANDSTONE(NamespaceID.from("minecraft:sandstone"), (byte) 64, () -> Block.SANDSTONE),
 
-    CHISELED_SANDSTONE(NamespaceID.from("minecraft:chiseled_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_sandstone")),
+    CHISELED_SANDSTONE(NamespaceID.from("minecraft:chiseled_sandstone"), (byte) 64, () -> Block.CHISELED_SANDSTONE),
 
-    CUT_SANDSTONE(NamespaceID.from("minecraft:cut_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:cut_sandstone")),
+    CUT_SANDSTONE(NamespaceID.from("minecraft:cut_sandstone"), (byte) 64, () -> Block.CUT_SANDSTONE),
 
-    COBWEB(NamespaceID.from("minecraft:cobweb"), (byte) 64, () -> Registries.getBlock("minecraft:cobweb")),
+    COBWEB(NamespaceID.from("minecraft:cobweb"), (byte) 64, () -> Block.COBWEB),
 
-    GRASS(NamespaceID.from("minecraft:grass"), (byte) 64, () -> Registries.getBlock("minecraft:grass")),
+    GRASS(NamespaceID.from("minecraft:grass"), (byte) 64, () -> Block.GRASS),
 
-    FERN(NamespaceID.from("minecraft:fern"), (byte) 64, () -> Registries.getBlock("minecraft:fern")),
+    FERN(NamespaceID.from("minecraft:fern"), (byte) 64, () -> Block.FERN),
 
-    AZALEA(NamespaceID.from("minecraft:azalea"), (byte) 64, () -> Registries.getBlock("minecraft:azalea")),
+    AZALEA(NamespaceID.from("minecraft:azalea"), (byte) 64, () -> Block.AZALEA),
 
-    FLOWERING_AZALEA(NamespaceID.from("minecraft:flowering_azalea"), (byte) 64, () -> Registries.getBlock("minecraft:flowering_azalea")),
+    FLOWERING_AZALEA(NamespaceID.from("minecraft:flowering_azalea"), (byte) 64, () -> Block.FLOWERING_AZALEA),
 
-    DEAD_BUSH(NamespaceID.from("minecraft:dead_bush"), (byte) 64, () -> Registries.getBlock("minecraft:dead_bush")),
+    DEAD_BUSH(NamespaceID.from("minecraft:dead_bush"), (byte) 64, () -> Block.DEAD_BUSH),
 
-    SEAGRASS(NamespaceID.from("minecraft:seagrass"), (byte) 64, () -> Registries.getBlock("minecraft:seagrass")),
+    SEAGRASS(NamespaceID.from("minecraft:seagrass"), (byte) 64, () -> Block.SEAGRASS),
 
-    SEA_PICKLE(NamespaceID.from("minecraft:sea_pickle"), (byte) 64, () -> Registries.getBlock("minecraft:sea_pickle")),
+    SEA_PICKLE(NamespaceID.from("minecraft:sea_pickle"), (byte) 64, () -> Block.SEA_PICKLE),
 
-    WHITE_WOOL(NamespaceID.from("minecraft:white_wool"), (byte) 64, () -> Registries.getBlock("minecraft:white_wool")),
+    WHITE_WOOL(NamespaceID.from("minecraft:white_wool"), (byte) 64, () -> Block.WHITE_WOOL),
 
-    ORANGE_WOOL(NamespaceID.from("minecraft:orange_wool"), (byte) 64, () -> Registries.getBlock("minecraft:orange_wool")),
+    ORANGE_WOOL(NamespaceID.from("minecraft:orange_wool"), (byte) 64, () -> Block.ORANGE_WOOL),
 
-    MAGENTA_WOOL(NamespaceID.from("minecraft:magenta_wool"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_wool")),
+    MAGENTA_WOOL(NamespaceID.from("minecraft:magenta_wool"), (byte) 64, () -> Block.MAGENTA_WOOL),
 
-    LIGHT_BLUE_WOOL(NamespaceID.from("minecraft:light_blue_wool"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_wool")),
+    LIGHT_BLUE_WOOL(NamespaceID.from("minecraft:light_blue_wool"), (byte) 64, () -> Block.LIGHT_BLUE_WOOL),
 
-    YELLOW_WOOL(NamespaceID.from("minecraft:yellow_wool"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_wool")),
+    YELLOW_WOOL(NamespaceID.from("minecraft:yellow_wool"), (byte) 64, () -> Block.YELLOW_WOOL),
 
-    LIME_WOOL(NamespaceID.from("minecraft:lime_wool"), (byte) 64, () -> Registries.getBlock("minecraft:lime_wool")),
+    LIME_WOOL(NamespaceID.from("minecraft:lime_wool"), (byte) 64, () -> Block.LIME_WOOL),
 
-    PINK_WOOL(NamespaceID.from("minecraft:pink_wool"), (byte) 64, () -> Registries.getBlock("minecraft:pink_wool")),
+    PINK_WOOL(NamespaceID.from("minecraft:pink_wool"), (byte) 64, () -> Block.PINK_WOOL),
 
-    GRAY_WOOL(NamespaceID.from("minecraft:gray_wool"), (byte) 64, () -> Registries.getBlock("minecraft:gray_wool")),
+    GRAY_WOOL(NamespaceID.from("minecraft:gray_wool"), (byte) 64, () -> Block.GRAY_WOOL),
 
-    LIGHT_GRAY_WOOL(NamespaceID.from("minecraft:light_gray_wool"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_wool")),
+    LIGHT_GRAY_WOOL(NamespaceID.from("minecraft:light_gray_wool"), (byte) 64, () -> Block.LIGHT_GRAY_WOOL),
 
-    CYAN_WOOL(NamespaceID.from("minecraft:cyan_wool"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_wool")),
+    CYAN_WOOL(NamespaceID.from("minecraft:cyan_wool"), (byte) 64, () -> Block.CYAN_WOOL),
 
-    PURPLE_WOOL(NamespaceID.from("minecraft:purple_wool"), (byte) 64, () -> Registries.getBlock("minecraft:purple_wool")),
+    PURPLE_WOOL(NamespaceID.from("minecraft:purple_wool"), (byte) 64, () -> Block.PURPLE_WOOL),
 
-    BLUE_WOOL(NamespaceID.from("minecraft:blue_wool"), (byte) 64, () -> Registries.getBlock("minecraft:blue_wool")),
+    BLUE_WOOL(NamespaceID.from("minecraft:blue_wool"), (byte) 64, () -> Block.BLUE_WOOL),
 
-    BROWN_WOOL(NamespaceID.from("minecraft:brown_wool"), (byte) 64, () -> Registries.getBlock("minecraft:brown_wool")),
+    BROWN_WOOL(NamespaceID.from("minecraft:brown_wool"), (byte) 64, () -> Block.BROWN_WOOL),
 
-    GREEN_WOOL(NamespaceID.from("minecraft:green_wool"), (byte) 64, () -> Registries.getBlock("minecraft:green_wool")),
+    GREEN_WOOL(NamespaceID.from("minecraft:green_wool"), (byte) 64, () -> Block.GREEN_WOOL),
 
-    RED_WOOL(NamespaceID.from("minecraft:red_wool"), (byte) 64, () -> Registries.getBlock("minecraft:red_wool")),
+    RED_WOOL(NamespaceID.from("minecraft:red_wool"), (byte) 64, () -> Block.RED_WOOL),
 
-    BLACK_WOOL(NamespaceID.from("minecraft:black_wool"), (byte) 64, () -> Registries.getBlock("minecraft:black_wool")),
+    BLACK_WOOL(NamespaceID.from("minecraft:black_wool"), (byte) 64, () -> Block.BLACK_WOOL),
 
-    DANDELION(NamespaceID.from("minecraft:dandelion"), (byte) 64, () -> Registries.getBlock("minecraft:dandelion")),
+    DANDELION(NamespaceID.from("minecraft:dandelion"), (byte) 64, () -> Block.DANDELION),
 
-    POPPY(NamespaceID.from("minecraft:poppy"), (byte) 64, () -> Registries.getBlock("minecraft:poppy")),
+    POPPY(NamespaceID.from("minecraft:poppy"), (byte) 64, () -> Block.POPPY),
 
-    BLUE_ORCHID(NamespaceID.from("minecraft:blue_orchid"), (byte) 64, () -> Registries.getBlock("minecraft:blue_orchid")),
+    BLUE_ORCHID(NamespaceID.from("minecraft:blue_orchid"), (byte) 64, () -> Block.BLUE_ORCHID),
 
-    ALLIUM(NamespaceID.from("minecraft:allium"), (byte) 64, () -> Registries.getBlock("minecraft:allium")),
+    ALLIUM(NamespaceID.from("minecraft:allium"), (byte) 64, () -> Block.ALLIUM),
 
-    AZURE_BLUET(NamespaceID.from("minecraft:azure_bluet"), (byte) 64, () -> Registries.getBlock("minecraft:azure_bluet")),
+    AZURE_BLUET(NamespaceID.from("minecraft:azure_bluet"), (byte) 64, () -> Block.AZURE_BLUET),
 
-    RED_TULIP(NamespaceID.from("minecraft:red_tulip"), (byte) 64, () -> Registries.getBlock("minecraft:red_tulip")),
+    RED_TULIP(NamespaceID.from("minecraft:red_tulip"), (byte) 64, () -> Block.RED_TULIP),
 
-    ORANGE_TULIP(NamespaceID.from("minecraft:orange_tulip"), (byte) 64, () -> Registries.getBlock("minecraft:orange_tulip")),
+    ORANGE_TULIP(NamespaceID.from("minecraft:orange_tulip"), (byte) 64, () -> Block.ORANGE_TULIP),
 
-    WHITE_TULIP(NamespaceID.from("minecraft:white_tulip"), (byte) 64, () -> Registries.getBlock("minecraft:white_tulip")),
+    WHITE_TULIP(NamespaceID.from("minecraft:white_tulip"), (byte) 64, () -> Block.WHITE_TULIP),
 
-    PINK_TULIP(NamespaceID.from("minecraft:pink_tulip"), (byte) 64, () -> Registries.getBlock("minecraft:pink_tulip")),
+    PINK_TULIP(NamespaceID.from("minecraft:pink_tulip"), (byte) 64, () -> Block.PINK_TULIP),
 
-    OXEYE_DAISY(NamespaceID.from("minecraft:oxeye_daisy"), (byte) 64, () -> Registries.getBlock("minecraft:oxeye_daisy")),
+    OXEYE_DAISY(NamespaceID.from("minecraft:oxeye_daisy"), (byte) 64, () -> Block.OXEYE_DAISY),
 
-    CORNFLOWER(NamespaceID.from("minecraft:cornflower"), (byte) 64, () -> Registries.getBlock("minecraft:cornflower")),
+    CORNFLOWER(NamespaceID.from("minecraft:cornflower"), (byte) 64, () -> Block.CORNFLOWER),
 
-    LILY_OF_THE_VALLEY(NamespaceID.from("minecraft:lily_of_the_valley"), (byte) 64, () -> Registries.getBlock("minecraft:lily_of_the_valley")),
+    LILY_OF_THE_VALLEY(NamespaceID.from("minecraft:lily_of_the_valley"), (byte) 64, () -> Block.LILY_OF_THE_VALLEY),
 
-    WITHER_ROSE(NamespaceID.from("minecraft:wither_rose"), (byte) 64, () -> Registries.getBlock("minecraft:wither_rose")),
+    WITHER_ROSE(NamespaceID.from("minecraft:wither_rose"), (byte) 64, () -> Block.WITHER_ROSE),
 
-    SPORE_BLOSSOM(NamespaceID.from("minecraft:spore_blossom"), (byte) 64, () -> Registries.getBlock("minecraft:spore_blossom")),
+    SPORE_BLOSSOM(NamespaceID.from("minecraft:spore_blossom"), (byte) 64, () -> Block.SPORE_BLOSSOM),
 
-    BROWN_MUSHROOM(NamespaceID.from("minecraft:brown_mushroom"), (byte) 64, () -> Registries.getBlock("minecraft:brown_mushroom")),
+    BROWN_MUSHROOM(NamespaceID.from("minecraft:brown_mushroom"), (byte) 64, () -> Block.BROWN_MUSHROOM),
 
-    RED_MUSHROOM(NamespaceID.from("minecraft:red_mushroom"), (byte) 64, () -> Registries.getBlock("minecraft:red_mushroom")),
+    RED_MUSHROOM(NamespaceID.from("minecraft:red_mushroom"), (byte) 64, () -> Block.RED_MUSHROOM),
 
-    CRIMSON_FUNGUS(NamespaceID.from("minecraft:crimson_fungus"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_fungus")),
+    CRIMSON_FUNGUS(NamespaceID.from("minecraft:crimson_fungus"), (byte) 64, () -> Block.CRIMSON_FUNGUS),
 
-    WARPED_FUNGUS(NamespaceID.from("minecraft:warped_fungus"), (byte) 64, () -> Registries.getBlock("minecraft:warped_fungus")),
+    WARPED_FUNGUS(NamespaceID.from("minecraft:warped_fungus"), (byte) 64, () -> Block.WARPED_FUNGUS),
 
-    CRIMSON_ROOTS(NamespaceID.from("minecraft:crimson_roots"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_roots")),
+    CRIMSON_ROOTS(NamespaceID.from("minecraft:crimson_roots"), (byte) 64, () -> Block.CRIMSON_ROOTS),
 
-    WARPED_ROOTS(NamespaceID.from("minecraft:warped_roots"), (byte) 64, () -> Registries.getBlock("minecraft:warped_roots")),
+    WARPED_ROOTS(NamespaceID.from("minecraft:warped_roots"), (byte) 64, () -> Block.WARPED_ROOTS),
 
-    NETHER_SPROUTS(NamespaceID.from("minecraft:nether_sprouts"), (byte) 64, () -> Registries.getBlock("minecraft:nether_sprouts")),
+    NETHER_SPROUTS(NamespaceID.from("minecraft:nether_sprouts"), (byte) 64, () -> Block.NETHER_SPROUTS),
 
-    WEEPING_VINES(NamespaceID.from("minecraft:weeping_vines"), (byte) 64, () -> Registries.getBlock("minecraft:weeping_vines")),
+    WEEPING_VINES(NamespaceID.from("minecraft:weeping_vines"), (byte) 64, () -> Block.WEEPING_VINES),
 
-    TWISTING_VINES(NamespaceID.from("minecraft:twisting_vines"), (byte) 64, () -> Registries.getBlock("minecraft:twisting_vines")),
+    TWISTING_VINES(NamespaceID.from("minecraft:twisting_vines"), (byte) 64, () -> Block.TWISTING_VINES),
 
-    SUGAR_CANE(NamespaceID.from("minecraft:sugar_cane"), (byte) 64, () -> Registries.getBlock("minecraft:sugar_cane")),
+    SUGAR_CANE(NamespaceID.from("minecraft:sugar_cane"), (byte) 64, () -> Block.SUGAR_CANE),
 
-    KELP(NamespaceID.from("minecraft:kelp"), (byte) 64, () -> Registries.getBlock("minecraft:kelp")),
+    KELP(NamespaceID.from("minecraft:kelp"), (byte) 64, () -> Block.KELP),
 
-    MOSS_CARPET(NamespaceID.from("minecraft:moss_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:moss_carpet")),
+    MOSS_CARPET(NamespaceID.from("minecraft:moss_carpet"), (byte) 64, () -> Block.MOSS_CARPET),
 
-    MOSS_BLOCK(NamespaceID.from("minecraft:moss_block"), (byte) 64, () -> Registries.getBlock("minecraft:moss_block")),
+    MOSS_BLOCK(NamespaceID.from("minecraft:moss_block"), (byte) 64, () -> Block.MOSS_BLOCK),
 
-    HANGING_ROOTS(NamespaceID.from("minecraft:hanging_roots"), (byte) 64, () -> Registries.getBlock("minecraft:hanging_roots")),
+    HANGING_ROOTS(NamespaceID.from("minecraft:hanging_roots"), (byte) 64, () -> Block.HANGING_ROOTS),
 
-    BIG_DRIPLEAF(NamespaceID.from("minecraft:big_dripleaf"), (byte) 64, () -> Registries.getBlock("minecraft:big_dripleaf")),
+    BIG_DRIPLEAF(NamespaceID.from("minecraft:big_dripleaf"), (byte) 64, () -> Block.BIG_DRIPLEAF),
 
-    SMALL_DRIPLEAF(NamespaceID.from("minecraft:small_dripleaf"), (byte) 64, () -> Registries.getBlock("minecraft:small_dripleaf")),
+    SMALL_DRIPLEAF(NamespaceID.from("minecraft:small_dripleaf"), (byte) 64, () -> Block.SMALL_DRIPLEAF),
 
-    BAMBOO(NamespaceID.from("minecraft:bamboo"), (byte) 64, () -> Registries.getBlock("minecraft:bamboo")),
+    BAMBOO(NamespaceID.from("minecraft:bamboo"), (byte) 64, () -> Block.BAMBOO),
 
-    OAK_SLAB(NamespaceID.from("minecraft:oak_slab"), (byte) 64, () -> Registries.getBlock("minecraft:oak_slab")),
+    OAK_SLAB(NamespaceID.from("minecraft:oak_slab"), (byte) 64, () -> Block.OAK_SLAB),
 
-    SPRUCE_SLAB(NamespaceID.from("minecraft:spruce_slab"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_slab")),
+    SPRUCE_SLAB(NamespaceID.from("minecraft:spruce_slab"), (byte) 64, () -> Block.SPRUCE_SLAB),
 
-    BIRCH_SLAB(NamespaceID.from("minecraft:birch_slab"), (byte) 64, () -> Registries.getBlock("minecraft:birch_slab")),
+    BIRCH_SLAB(NamespaceID.from("minecraft:birch_slab"), (byte) 64, () -> Block.BIRCH_SLAB),
 
-    JUNGLE_SLAB(NamespaceID.from("minecraft:jungle_slab"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_slab")),
+    JUNGLE_SLAB(NamespaceID.from("minecraft:jungle_slab"), (byte) 64, () -> Block.JUNGLE_SLAB),
 
-    ACACIA_SLAB(NamespaceID.from("minecraft:acacia_slab"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_slab")),
+    ACACIA_SLAB(NamespaceID.from("minecraft:acacia_slab"), (byte) 64, () -> Block.ACACIA_SLAB),
 
-    DARK_OAK_SLAB(NamespaceID.from("minecraft:dark_oak_slab"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_slab")),
+    DARK_OAK_SLAB(NamespaceID.from("minecraft:dark_oak_slab"), (byte) 64, () -> Block.DARK_OAK_SLAB),
 
-    CRIMSON_SLAB(NamespaceID.from("minecraft:crimson_slab"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_slab")),
+    CRIMSON_SLAB(NamespaceID.from("minecraft:crimson_slab"), (byte) 64, () -> Block.CRIMSON_SLAB),
 
-    WARPED_SLAB(NamespaceID.from("minecraft:warped_slab"), (byte) 64, () -> Registries.getBlock("minecraft:warped_slab")),
+    WARPED_SLAB(NamespaceID.from("minecraft:warped_slab"), (byte) 64, () -> Block.WARPED_SLAB),
 
-    STONE_SLAB(NamespaceID.from("minecraft:stone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:stone_slab")),
+    STONE_SLAB(NamespaceID.from("minecraft:stone_slab"), (byte) 64, () -> Block.STONE_SLAB),
 
-    SMOOTH_STONE_SLAB(NamespaceID.from("minecraft:smooth_stone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_stone_slab")),
+    SMOOTH_STONE_SLAB(NamespaceID.from("minecraft:smooth_stone_slab"), (byte) 64, () -> Block.SMOOTH_STONE_SLAB),
 
-    SANDSTONE_SLAB(NamespaceID.from("minecraft:sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:sandstone_slab")),
+    SANDSTONE_SLAB(NamespaceID.from("minecraft:sandstone_slab"), (byte) 64, () -> Block.SANDSTONE_SLAB),
 
-    CUT_STANDSTONE_SLAB(NamespaceID.from("minecraft:cut_sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cut_sandstone_slab")),
+    CUT_SANDSTONE_SLAB(NamespaceID.from("minecraft:cut_sandstone_slab"), (byte) 64, () -> Block.CUT_SANDSTONE_SLAB),
 
-    PETRIFIED_OAK_SLAB(NamespaceID.from("minecraft:petrified_oak_slab"), (byte) 64, () -> Registries.getBlock("minecraft:petrified_oak_slab")),
+    PETRIFIED_OAK_SLAB(NamespaceID.from("minecraft:petrified_oak_slab"), (byte) 64, () -> Block.PETRIFIED_OAK_SLAB),
 
-    COBBLESTONE_SLAB(NamespaceID.from("minecraft:cobblestone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cobblestone_slab")),
+    COBBLESTONE_SLAB(NamespaceID.from("minecraft:cobblestone_slab"), (byte) 64, () -> Block.COBBLESTONE_SLAB),
 
-    BRICK_SLAB(NamespaceID.from("minecraft:brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:brick_slab")),
+    BRICK_SLAB(NamespaceID.from("minecraft:brick_slab"), (byte) 64, () -> Block.BRICK_SLAB),
 
-    STONE_BRICK_SLAB(NamespaceID.from("minecraft:stone_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:stone_brick_slab")),
+    STONE_BRICK_SLAB(NamespaceID.from("minecraft:stone_brick_slab"), (byte) 64, () -> Block.STONE_BRICK_SLAB),
 
-    NETHER_BRICK_SLAB(NamespaceID.from("minecraft:nether_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:nether_brick_slab")),
+    NETHER_BRICK_SLAB(NamespaceID.from("minecraft:nether_brick_slab"), (byte) 64, () -> Block.NETHER_BRICK_SLAB),
 
-    QUARTZ_SLAB(NamespaceID.from("minecraft:quartz_slab"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_slab")),
+    QUARTZ_SLAB(NamespaceID.from("minecraft:quartz_slab"), (byte) 64, () -> Block.QUARTZ_SLAB),
 
-    RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:red_sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:red_sandstone_slab")),
+    RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:red_sandstone_slab"), (byte) 64, () -> Block.RED_SANDSTONE_SLAB),
 
-    CUT_RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:cut_red_sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cut_red_sandstone_slab")),
+    CUT_RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:cut_red_sandstone_slab"), (byte) 64, () -> Block.CUT_RED_SANDSTONE_SLAB),
 
-    PURPUR_SLAB(NamespaceID.from("minecraft:purpur_slab"), (byte) 64, () -> Registries.getBlock("minecraft:purpur_slab")),
+    PURPUR_SLAB(NamespaceID.from("minecraft:purpur_slab"), (byte) 64, () -> Block.PURPUR_SLAB),
 
-    PRISMARINE_SLAB(NamespaceID.from("minecraft:prismarine_slab"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine_slab")),
+    PRISMARINE_SLAB(NamespaceID.from("minecraft:prismarine_slab"), (byte) 64, () -> Block.PRISMARINE_SLAB),
 
-    PRISMARINE_BRICK_SLAB(NamespaceID.from("minecraft:prismarine_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine_brick_slab")),
+    PRISMARINE_BRICK_SLAB(NamespaceID.from("minecraft:prismarine_brick_slab"), (byte) 64, () -> Block.PRISMARINE_BRICK_SLAB),
 
-    DARK_PRISMARINE_SLAB(NamespaceID.from("minecraft:dark_prismarine_slab"), (byte) 64, () -> Registries.getBlock("minecraft:dark_prismarine_slab")),
+    DARK_PRISMARINE_SLAB(NamespaceID.from("minecraft:dark_prismarine_slab"), (byte) 64, () -> Block.DARK_PRISMARINE_SLAB),
 
-    SMOOTH_QUARTZ(NamespaceID.from("minecraft:smooth_quartz"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_quartz")),
+    SMOOTH_QUARTZ(NamespaceID.from("minecraft:smooth_quartz"), (byte) 64, () -> Block.SMOOTH_QUARTZ),
 
-    SMOOTH_RED_SANDSTONE(NamespaceID.from("minecraft:smooth_red_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_red_sandstone")),
+    SMOOTH_RED_SANDSTONE(NamespaceID.from("minecraft:smooth_red_sandstone"), (byte) 64, () -> Block.SMOOTH_RED_SANDSTONE),
 
-    SMOOTH_SANDSTONE(NamespaceID.from("minecraft:smooth_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_sandstone")),
+    SMOOTH_SANDSTONE(NamespaceID.from("minecraft:smooth_sandstone"), (byte) 64, () -> Block.SMOOTH_SANDSTONE),
 
-    SMOOTH_STONE(NamespaceID.from("minecraft:smooth_stone"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_stone")),
+    SMOOTH_STONE(NamespaceID.from("minecraft:smooth_stone"), (byte) 64, () -> Block.SMOOTH_STONE),
 
-    BRICKS(NamespaceID.from("minecraft:bricks"), (byte) 64, () -> Registries.getBlock("minecraft:bricks")),
+    BRICKS(NamespaceID.from("minecraft:bricks"), (byte) 64, () -> Block.BRICKS),
 
-    BOOKSHELF(NamespaceID.from("minecraft:bookshelf"), (byte) 64, () -> Registries.getBlock("minecraft:bookshelf")),
+    BOOKSHELF(NamespaceID.from("minecraft:bookshelf"), (byte) 64, () -> Block.BOOKSHELF),
 
-    MOSSY_COBBLESTONE(NamespaceID.from("minecraft:mossy_cobblestone"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_cobblestone")),
+    MOSSY_COBBLESTONE(NamespaceID.from("minecraft:mossy_cobblestone"), (byte) 64, () -> Block.MOSSY_COBBLESTONE),
 
-    OBSIDIAN(NamespaceID.from("minecraft:obsidian"), (byte) 64, () -> Registries.getBlock("minecraft:obsidian")),
+    OBSIDIAN(NamespaceID.from("minecraft:obsidian"), (byte) 64, () -> Block.OBSIDIAN),
 
-    TORCH(NamespaceID.from("minecraft:torch"), (byte) 64, () -> Registries.getBlock("minecraft:torch")),
+    TORCH(NamespaceID.from("minecraft:torch"), (byte) 64, () -> Block.TORCH),
 
-    END_ROD(NamespaceID.from("minecraft:end_rod"), (byte) 64, () -> Registries.getBlock("minecraft:end_rod")),
+    END_ROD(NamespaceID.from("minecraft:end_rod"), (byte) 64, () -> Block.END_ROD),
 
-    CHORUS_PLANT(NamespaceID.from("minecraft:chorus_plant"), (byte) 64, () -> Registries.getBlock("minecraft:chorus_plant")),
+    CHORUS_PLANT(NamespaceID.from("minecraft:chorus_plant"), (byte) 64, () -> Block.CHORUS_PLANT),
 
-    CHORUS_FLOWER(NamespaceID.from("minecraft:chorus_flower"), (byte) 64, () -> Registries.getBlock("minecraft:chorus_flower")),
+    CHORUS_FLOWER(NamespaceID.from("minecraft:chorus_flower"), (byte) 64, () -> Block.CHORUS_FLOWER),
 
-    PURPUR_BLOCK(NamespaceID.from("minecraft:purpur_block"), (byte) 64, () -> Registries.getBlock("minecraft:purpur_block")),
+    PURPUR_BLOCK(NamespaceID.from("minecraft:purpur_block"), (byte) 64, () -> Block.PURPUR_BLOCK),
 
-    PURPUR_PILLAR(NamespaceID.from("minecraft:purpur_pillar"), (byte) 64, () -> Registries.getBlock("minecraft:purpur_pillar")),
+    PURPUR_PILLAR(NamespaceID.from("minecraft:purpur_pillar"), (byte) 64, () -> Block.PURPUR_PILLAR),
 
-    PURPUR_STAIRS(NamespaceID.from("minecraft:purpur_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:purpur_stairs")),
+    PURPUR_STAIRS(NamespaceID.from("minecraft:purpur_stairs"), (byte) 64, () -> Block.PURPUR_STAIRS),
 
-    SPAWNER(NamespaceID.from("minecraft:spawner"), (byte) 64, () -> Registries.getBlock("minecraft:spawner")),
+    SPAWNER(NamespaceID.from("minecraft:spawner"), (byte) 64, () -> Block.SPAWNER),
 
-    OAK_STAIRS(NamespaceID.from("minecraft:oak_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:oak_stairs")),
+    OAK_STAIRS(NamespaceID.from("minecraft:oak_stairs"), (byte) 64, () -> Block.OAK_STAIRS),
 
-    CHEST(NamespaceID.from("minecraft:chest"), (byte) 64, () -> Registries.getBlock("minecraft:chest")),
+    CHEST(NamespaceID.from("minecraft:chest"), (byte) 64, () -> Block.CHEST),
 
-    CRAFTING_TABLE(NamespaceID.from("minecraft:crafting_table"), (byte) 64, () -> Registries.getBlock("minecraft:crafting_table")),
+    CRAFTING_TABLE(NamespaceID.from("minecraft:crafting_table"), (byte) 64, () -> Block.CRAFTING_TABLE),
 
-    FARMLAND(NamespaceID.from("minecraft:farmland"), (byte) 64, () -> Registries.getBlock("minecraft:farmland")),
+    FARMLAND(NamespaceID.from("minecraft:farmland"), (byte) 64, () -> Block.FARMLAND),
 
-    FURNACE(NamespaceID.from("minecraft:furnace"), (byte) 64, () -> Registries.getBlock("minecraft:furnace")),
+    FURNACE(NamespaceID.from("minecraft:furnace"), (byte) 64, () -> Block.FURNACE),
 
-    LADDER(NamespaceID.from("minecraft:ladder"), (byte) 64, () -> Registries.getBlock("minecraft:ladder")),
+    LADDER(NamespaceID.from("minecraft:ladder"), (byte) 64, () -> Block.LADDER),
 
-    COBBLESTONE_STAIRS(NamespaceID.from("minecraft:cobblestone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:cobblestone_stairs")),
+    COBBLESTONE_STAIRS(NamespaceID.from("minecraft:cobblestone_stairs"), (byte) 64, () -> Block.COBBLESTONE_STAIRS),
 
-    SNOW(NamespaceID.from("minecraft:snow"), (byte) 64, () -> Registries.getBlock("minecraft:snow")),
+    SNOW(NamespaceID.from("minecraft:snow"), (byte) 64, () -> Block.SNOW),
 
-    ICE(NamespaceID.from("minecraft:ice"), (byte) 64, () -> Registries.getBlock("minecraft:ice")),
+    ICE(NamespaceID.from("minecraft:ice"), (byte) 64, () -> Block.ICE),
 
-    SNOW_BLOCK(NamespaceID.from("minecraft:snow_block"), (byte) 64, () -> Registries.getBlock("minecraft:snow_block")),
+    SNOW_BLOCK(NamespaceID.from("minecraft:snow_block"), (byte) 64, () -> Block.SNOW_BLOCK),
 
-    CACTUS(NamespaceID.from("minecraft:cactus"), (byte) 64, () -> Registries.getBlock("minecraft:cactus")),
+    CACTUS(NamespaceID.from("minecraft:cactus"), (byte) 64, () -> Block.CACTUS),
 
-    CLAY(NamespaceID.from("minecraft:clay"), (byte) 64, () -> Registries.getBlock("minecraft:clay")),
+    CLAY(NamespaceID.from("minecraft:clay"), (byte) 64, () -> Block.CLAY),
 
-    JUKEBOX(NamespaceID.from("minecraft:jukebox"), (byte) 64, () -> Registries.getBlock("minecraft:jukebox")),
+    JUKEBOX(NamespaceID.from("minecraft:jukebox"), (byte) 64, () -> Block.JUKEBOX),
 
-    OAK_FENCE(NamespaceID.from("minecraft:oak_fence"), (byte) 64, () -> Registries.getBlock("minecraft:oak_fence")),
+    OAK_FENCE(NamespaceID.from("minecraft:oak_fence"), (byte) 64, () -> Block.OAK_FENCE),
 
-    SPRUCE_FENCE(NamespaceID.from("minecraft:spruce_fence"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_fence")),
+    SPRUCE_FENCE(NamespaceID.from("minecraft:spruce_fence"), (byte) 64, () -> Block.SPRUCE_FENCE),
 
-    BIRCH_FENCE(NamespaceID.from("minecraft:birch_fence"), (byte) 64, () -> Registries.getBlock("minecraft:birch_fence")),
+    BIRCH_FENCE(NamespaceID.from("minecraft:birch_fence"), (byte) 64, () -> Block.BIRCH_FENCE),
 
-    JUNGLE_FENCE(NamespaceID.from("minecraft:jungle_fence"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_fence")),
+    JUNGLE_FENCE(NamespaceID.from("minecraft:jungle_fence"), (byte) 64, () -> Block.JUNGLE_FENCE),
 
-    ACACIA_FENCE(NamespaceID.from("minecraft:acacia_fence"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_fence")),
+    ACACIA_FENCE(NamespaceID.from("minecraft:acacia_fence"), (byte) 64, () -> Block.ACACIA_FENCE),
 
-    DARK_OAK_FENCE(NamespaceID.from("minecraft:dark_oak_fence"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_fence")),
+    DARK_OAK_FENCE(NamespaceID.from("minecraft:dark_oak_fence"), (byte) 64, () -> Block.DARK_OAK_FENCE),
 
-    CRIMSON_FENCE(NamespaceID.from("minecraft:crimson_fence"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_fence")),
+    CRIMSON_FENCE(NamespaceID.from("minecraft:crimson_fence"), (byte) 64, () -> Block.CRIMSON_FENCE),
 
-    WARPED_FENCE(NamespaceID.from("minecraft:warped_fence"), (byte) 64, () -> Registries.getBlock("minecraft:warped_fence")),
+    WARPED_FENCE(NamespaceID.from("minecraft:warped_fence"), (byte) 64, () -> Block.WARPED_FENCE),
 
-    PUMPKIN(NamespaceID.from("minecraft:pumpkin"), (byte) 64, () -> Registries.getBlock("minecraft:pumpkin")),
+    PUMPKIN(NamespaceID.from("minecraft:pumpkin"), (byte) 64, () -> Block.PUMPKIN),
 
-    CARVED_PUMPKIN(NamespaceID.from("minecraft:carved_pumpkin"), (byte) 64, () -> Registries.getBlock("minecraft:carved_pumpkin")),
+    CARVED_PUMPKIN(NamespaceID.from("minecraft:carved_pumpkin"), (byte) 64, () -> Block.CARVED_PUMPKIN),
 
-    JACK_O_LANTERN(NamespaceID.from("minecraft:jack_o_lantern"), (byte) 64, () -> Registries.getBlock("minecraft:jack_o_lantern")),
+    JACK_O_LANTERN(NamespaceID.from("minecraft:jack_o_lantern"), (byte) 64, () -> Block.JACK_O_LANTERN),
 
-    NETHERRACK(NamespaceID.from("minecraft:netherrack"), (byte) 64, () -> Registries.getBlock("minecraft:netherrack")),
+    NETHERRACK(NamespaceID.from("minecraft:netherrack"), (byte) 64, () -> Block.NETHERRACK),
 
-    SOUL_SAND(NamespaceID.from("minecraft:soul_sand"), (byte) 64, () -> Registries.getBlock("minecraft:soul_sand")),
+    SOUL_SAND(NamespaceID.from("minecraft:soul_sand"), (byte) 64, () -> Block.SOUL_SAND),
 
-    SOUL_SOIL(NamespaceID.from("minecraft:soul_soil"), (byte) 64, () -> Registries.getBlock("minecraft:soul_soil")),
+    SOUL_SOIL(NamespaceID.from("minecraft:soul_soil"), (byte) 64, () -> Block.SOUL_SOIL),
 
-    BASALT(NamespaceID.from("minecraft:basalt"), (byte) 64, () -> Registries.getBlock("minecraft:basalt")),
+    BASALT(NamespaceID.from("minecraft:basalt"), (byte) 64, () -> Block.BASALT),
 
-    POLISHED_BASALT(NamespaceID.from("minecraft:polished_basalt"), (byte) 64, () -> Registries.getBlock("minecraft:polished_basalt")),
+    POLISHED_BASALT(NamespaceID.from("minecraft:polished_basalt"), (byte) 64, () -> Block.POLISHED_BASALT),
 
-    SMOOTH_BASALT(NamespaceID.from("minecraft:smooth_basalt"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_basalt")),
+    SMOOTH_BASALT(NamespaceID.from("minecraft:smooth_basalt"), (byte) 64, () -> Block.SMOOTH_BASALT),
 
-    SOUL_TORCH(NamespaceID.from("minecraft:soul_torch"), (byte) 64, () -> Registries.getBlock("minecraft:soul_torch")),
+    SOUL_TORCH(NamespaceID.from("minecraft:soul_torch"), (byte) 64, () -> Block.SOUL_TORCH),
 
-    GLOWSTONE(NamespaceID.from("minecraft:glowstone"), (byte) 64, () -> Registries.getBlock("minecraft:glowstone")),
+    GLOWSTONE(NamespaceID.from("minecraft:glowstone"), (byte) 64, () -> Block.GLOWSTONE),
 
-    INFESTED_STONE(NamespaceID.from("minecraft:infested_stone"), (byte) 64, () -> Registries.getBlock("minecraft:infested_stone")),
+    INFESTED_STONE(NamespaceID.from("minecraft:infested_stone"), (byte) 64, () -> Block.INFESTED_STONE),
 
-    INFESTED_COBBLESTONE(NamespaceID.from("minecraft:infested_cobblestone"), (byte) 64, () -> Registries.getBlock("minecraft:infested_cobblestone")),
+    INFESTED_COBBLESTONE(NamespaceID.from("minecraft:infested_cobblestone"), (byte) 64, () -> Block.INFESTED_COBBLESTONE),
 
-    INFESTED_STONE_BRICKS(NamespaceID.from("minecraft:infested_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:infested_stone_bricks")),
+    INFESTED_STONE_BRICKS(NamespaceID.from("minecraft:infested_stone_bricks"), (byte) 64, () -> Block.INFESTED_STONE_BRICKS),
 
-    INFESTED_MOSSY_STONE_BRICKS(NamespaceID.from("minecraft:infested_mossy_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:infested_mossy_stone_bricks")),
+    INFESTED_MOSSY_STONE_BRICKS(NamespaceID.from("minecraft:infested_mossy_stone_bricks"), (byte) 64, () -> Block.INFESTED_MOSSY_STONE_BRICKS),
 
-    INFESTED_CRACKED_STONE_BRICKS(NamespaceID.from("minecraft:infested_cracked_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:infested_cracked_stone_bricks")),
+    INFESTED_CRACKED_STONE_BRICKS(NamespaceID.from("minecraft:infested_cracked_stone_bricks"), (byte) 64, () -> Block.INFESTED_CRACKED_STONE_BRICKS),
 
-    INFESTED_CHISELED_STONE_BRICKS(NamespaceID.from("minecraft:infested_chiseled_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:infested_chiseled_stone_bricks")),
+    INFESTED_CHISELED_STONE_BRICKS(NamespaceID.from("minecraft:infested_chiseled_stone_bricks"), (byte) 64, () -> Block.INFESTED_CHISELED_STONE_BRICKS),
 
-    INFESTED_DEEPSLATE(NamespaceID.from("minecraft:infested_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:infested_deepslate")),
+    INFESTED_DEEPSLATE(NamespaceID.from("minecraft:infested_deepslate"), (byte) 64, () -> Block.INFESTED_DEEPSLATE),
 
-    STONE_BRICKS(NamespaceID.from("minecraft:stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:stone_bricks")),
+    STONE_BRICKS(NamespaceID.from("minecraft:stone_bricks"), (byte) 64, () -> Block.STONE_BRICKS),
 
-    MOSSY_STONE_BRICKS(NamespaceID.from("minecraft:mossy_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_stone_bricks")),
+    MOSSY_STONE_BRICKS(NamespaceID.from("minecraft:mossy_stone_bricks"), (byte) 64, () -> Block.MOSSY_STONE_BRICKS),
 
-    CRACKED_STONE_BRICKS(NamespaceID.from("minecraft:cracked_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_stone_bricks")),
+    CRACKED_STONE_BRICKS(NamespaceID.from("minecraft:cracked_stone_bricks"), (byte) 64, () -> Block.CRACKED_STONE_BRICKS),
 
-    CHISELED_STONE_BRICKS(NamespaceID.from("minecraft:chiseled_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_stone_bricks")),
+    CHISELED_STONE_BRICKS(NamespaceID.from("minecraft:chiseled_stone_bricks"), (byte) 64, () -> Block.CHISELED_STONE_BRICKS),
 
-    DEEPSLATE_BRICKS(NamespaceID.from("minecraft:deepslate_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_bricks")),
+    DEEPSLATE_BRICKS(NamespaceID.from("minecraft:deepslate_bricks"), (byte) 64, () -> Block.DEEPSLATE_BRICKS),
 
-    CRACKED_DEEPSLATE_BRICKS(NamespaceID.from("minecraft:cracked_deepslate_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_deepslate_bricks")),
+    CRACKED_DEEPSLATE_BRICKS(NamespaceID.from("minecraft:cracked_deepslate_bricks"), (byte) 64, () -> Block.CRACKED_DEEPSLATE_BRICKS),
 
-    DEEPSLATE_TILES(NamespaceID.from("minecraft:deepslate_tiles"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tiles")),
+    DEEPSLATE_TILES(NamespaceID.from("minecraft:deepslate_tiles"), (byte) 64, () -> Block.DEEPSLATE_TILES),
 
-    CRACKED_DEEPSLATE_TILES(NamespaceID.from("minecraft:cracked_deepslate_tiles"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_deepslate_tiles")),
+    CRACKED_DEEPSLATE_TILES(NamespaceID.from("minecraft:cracked_deepslate_tiles"), (byte) 64, () -> Block.CRACKED_DEEPSLATE_TILES),
 
-    CHISELED_DEEPSLATE(NamespaceID.from("minecraft:chiseled_deepslate"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_deepslate")),
+    CHISELED_DEEPSLATE(NamespaceID.from("minecraft:chiseled_deepslate"), (byte) 64, () -> Block.CHISELED_DEEPSLATE),
 
-    BROWN_MUSHROOM_BLOCK(NamespaceID.from("minecraft:brown_mushroom_block"), (byte) 64, () -> Registries.getBlock("minecraft:brown_mushroom_block")),
+    BROWN_MUSHROOM_BLOCK(NamespaceID.from("minecraft:brown_mushroom_block"), (byte) 64, () -> Block.BROWN_MUSHROOM_BLOCK),
 
-    RED_MUSHROOM_BLOCK(NamespaceID.from("minecraft:red_mushroom_block"), (byte) 64, () -> Registries.getBlock("minecraft:red_mushroom_block")),
+    RED_MUSHROOM_BLOCK(NamespaceID.from("minecraft:red_mushroom_block"), (byte) 64, () -> Block.RED_MUSHROOM_BLOCK),
 
-    MUSHROOM_STEM(NamespaceID.from("minecraft:mushroom_stem"), (byte) 64, () -> Registries.getBlock("minecraft:mushroom_stem")),
+    MUSHROOM_STEM(NamespaceID.from("minecraft:mushroom_stem"), (byte) 64, () -> Block.MUSHROOM_STEM),
 
-    IRON_BARS(NamespaceID.from("minecraft:iron_bars"), (byte) 64, () -> Registries.getBlock("minecraft:iron_bars")),
+    IRON_BARS(NamespaceID.from("minecraft:iron_bars"), (byte) 64, () -> Block.IRON_BARS),
 
-    CHAIN(NamespaceID.from("minecraft:chain"), (byte) 64, () -> Registries.getBlock("minecraft:chain")),
+    CHAIN(NamespaceID.from("minecraft:chain"), (byte) 64, () -> Block.CHAIN),
 
-    GLASS_PANE(NamespaceID.from("minecraft:glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:glass_pane")),
+    GLASS_PANE(NamespaceID.from("minecraft:glass_pane"), (byte) 64, () -> Block.GLASS_PANE),
 
-    MELON(NamespaceID.from("minecraft:melon"), (byte) 64, () -> Registries.getBlock("minecraft:melon")),
+    MELON(NamespaceID.from("minecraft:melon"), (byte) 64, () -> Block.MELON),
 
-    VINE(NamespaceID.from("minecraft:vine"), (byte) 64, () -> Registries.getBlock("minecraft:vine")),
+    VINE(NamespaceID.from("minecraft:vine"), (byte) 64, () -> Block.VINE),
 
-    GLOW_LICHEN(NamespaceID.from("minecraft:glow_lichen"), (byte) 64, () -> Registries.getBlock("minecraft:glow_lichen")),
+    GLOW_LICHEN(NamespaceID.from("minecraft:glow_lichen"), (byte) 64, () -> Block.GLOW_LICHEN),
 
-    BRICK_STAIRS(NamespaceID.from("minecraft:brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:brick_stairs")),
+    BRICK_STAIRS(NamespaceID.from("minecraft:brick_stairs"), (byte) 64, () -> Block.BRICK_STAIRS),
 
-    STONE_BRICK_STAIRS(NamespaceID.from("minecraft:stone_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:stone_brick_stairs")),
+    STONE_BRICK_STAIRS(NamespaceID.from("minecraft:stone_brick_stairs"), (byte) 64, () -> Block.STONE_BRICK_STAIRS),
 
-    MYCELIUM(NamespaceID.from("minecraft:mycelium"), (byte) 64, () -> Registries.getBlock("minecraft:mycelium")),
+    MYCELIUM(NamespaceID.from("minecraft:mycelium"), (byte) 64, () -> Block.MYCELIUM),
 
-    LILY_PAD(NamespaceID.from("minecraft:lily_pad"), (byte) 64, () -> Registries.getBlock("minecraft:lily_pad")),
+    LILY_PAD(NamespaceID.from("minecraft:lily_pad"), (byte) 64, () -> Block.LILY_PAD),
 
-    NETHER_BRICKS(NamespaceID.from("minecraft:nether_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:nether_bricks")),
+    NETHER_BRICKS(NamespaceID.from("minecraft:nether_bricks"), (byte) 64, () -> Block.NETHER_BRICKS),
 
-    CRACKED_NETHER_BRICKS(NamespaceID.from("minecraft:cracked_nether_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_nether_bricks")),
+    CRACKED_NETHER_BRICKS(NamespaceID.from("minecraft:cracked_nether_bricks"), (byte) 64, () -> Block.CRACKED_NETHER_BRICKS),
 
-    CHISELED_NETHER_BRICKS(NamespaceID.from("minecraft:chiseled_nether_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_nether_bricks")),
+    CHISELED_NETHER_BRICKS(NamespaceID.from("minecraft:chiseled_nether_bricks"), (byte) 64, () -> Block.CHISELED_NETHER_BRICKS),
 
-    NETHER_BRICK_FENCE(NamespaceID.from("minecraft:nether_brick_fence"), (byte) 64, () -> Registries.getBlock("minecraft:nether_brick_fence")),
+    NETHER_BRICK_FENCE(NamespaceID.from("minecraft:nether_brick_fence"), (byte) 64, () -> Block.NETHER_BRICK_FENCE),
 
-    NETHER_BRICK_STAIRS(NamespaceID.from("minecraft:nether_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:nether_brick_stairs")),
+    NETHER_BRICK_STAIRS(NamespaceID.from("minecraft:nether_brick_stairs"), (byte) 64, () -> Block.NETHER_BRICK_STAIRS),
 
-    ENCHANTING_TABLE(NamespaceID.from("minecraft:enchanting_table"), (byte) 64, () -> Registries.getBlock("minecraft:enchanting_table")),
+    ENCHANTING_TABLE(NamespaceID.from("minecraft:enchanting_table"), (byte) 64, () -> Block.ENCHANTING_TABLE),
 
-    END_PORTAL_FRAME(NamespaceID.from("minecraft:end_portal_frame"), (byte) 64, () -> Registries.getBlock("minecraft:end_portal_frame")),
+    END_PORTAL_FRAME(NamespaceID.from("minecraft:end_portal_frame"), (byte) 64, () -> Block.END_PORTAL_FRAME),
 
-    END_STONE(NamespaceID.from("minecraft:end_stone"), (byte) 64, () -> Registries.getBlock("minecraft:end_stone")),
+    END_STONE(NamespaceID.from("minecraft:end_stone"), (byte) 64, () -> Block.END_STONE),
 
-    END_STONE_BRICKS(NamespaceID.from("minecraft:end_stone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:end_stone_bricks")),
+    END_STONE_BRICKS(NamespaceID.from("minecraft:end_stone_bricks"), (byte) 64, () -> Block.END_STONE_BRICKS),
 
-    DRAGON_EGG(NamespaceID.from("minecraft:dragon_egg"), (byte) 64, () -> Registries.getBlock("minecraft:dragon_egg")),
+    DRAGON_EGG(NamespaceID.from("minecraft:dragon_egg"), (byte) 64, () -> Block.DRAGON_EGG),
 
-    SANDSTONE_STAIRS(NamespaceID.from("minecraft:sandstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:sandstone_stairs")),
+    SANDSTONE_STAIRS(NamespaceID.from("minecraft:sandstone_stairs"), (byte) 64, () -> Block.SANDSTONE_STAIRS),
 
-    ENDER_CHEST(NamespaceID.from("minecraft:ender_chest"), (byte) 64, () -> Registries.getBlock("minecraft:ender_chest")),
+    ENDER_CHEST(NamespaceID.from("minecraft:ender_chest"), (byte) 64, () -> Block.ENDER_CHEST),
 
-    EMERALD_BLOCK(NamespaceID.from("minecraft:emerald_block"), (byte) 64, () -> Registries.getBlock("minecraft:emerald_block")),
+    EMERALD_BLOCK(NamespaceID.from("minecraft:emerald_block"), (byte) 64, () -> Block.EMERALD_BLOCK),
 
-    SPRUCE_STAIRS(NamespaceID.from("minecraft:spruce_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_stairs")),
+    SPRUCE_STAIRS(NamespaceID.from("minecraft:spruce_stairs"), (byte) 64, () -> Block.SPRUCE_STAIRS),
 
-    BIRCH_STAIRS(NamespaceID.from("minecraft:birch_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:birch_stairs")),
+    BIRCH_STAIRS(NamespaceID.from("minecraft:birch_stairs"), (byte) 64, () -> Block.BIRCH_STAIRS),
 
-    JUNGLE_STAIRS(NamespaceID.from("minecraft:jungle_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_stairs")),
+    JUNGLE_STAIRS(NamespaceID.from("minecraft:jungle_stairs"), (byte) 64, () -> Block.JUNGLE_STAIRS),
 
-    CRIMSON_STAIRS(NamespaceID.from("minecraft:crimson_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_stairs")),
+    CRIMSON_STAIRS(NamespaceID.from("minecraft:crimson_stairs"), (byte) 64, () -> Block.CRIMSON_STAIRS),
 
-    WARPED_STAIRS(NamespaceID.from("minecraft:warped_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:warped_stairs")),
+    WARPED_STAIRS(NamespaceID.from("minecraft:warped_stairs"), (byte) 64, () -> Block.WARPED_STAIRS),
 
-    COMMAND_BLOCK(NamespaceID.from("minecraft:command_block"), (byte) 64, () -> Registries.getBlock("minecraft:command_block")),
+    COMMAND_BLOCK(NamespaceID.from("minecraft:command_block"), (byte) 64, () -> Block.COMMAND_BLOCK),
 
-    BEACON(NamespaceID.from("minecraft:beacon"), (byte) 64, () -> Registries.getBlock("minecraft:beacon")),
+    BEACON(NamespaceID.from("minecraft:beacon"), (byte) 64, () -> Block.BEACON),
 
-    COBBLESTONE_WALL(NamespaceID.from("minecraft:cobblestone_wall"), (byte) 64, () -> Registries.getBlock("minecraft:cobblestone_wall")),
+    COBBLESTONE_WALL(NamespaceID.from("minecraft:cobblestone_wall"), (byte) 64, () -> Block.COBBLESTONE_WALL),
 
-    MOSSY_COBBLESTONE_WALL(NamespaceID.from("minecraft:mossy_cobblestone_wall"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_cobblestone_wall")),
+    MOSSY_COBBLESTONE_WALL(NamespaceID.from("minecraft:mossy_cobblestone_wall"), (byte) 64, () -> Block.MOSSY_COBBLESTONE_WALL),
 
-    BRICK_WALL(NamespaceID.from("minecraft:brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:brick_wall")),
+    BRICK_WALL(NamespaceID.from("minecraft:brick_wall"), (byte) 64, () -> Block.BRICK_WALL),
 
-    PRISMARINE_WALL(NamespaceID.from("minecraft:prismarine_wall"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine_wall")),
+    PRISMARINE_WALL(NamespaceID.from("minecraft:prismarine_wall"), (byte) 64, () -> Block.PRISMARINE_WALL),
 
-    RED_SANDSTONE_WALL(NamespaceID.from("minecraft:red_sandstone_wall"), (byte) 64, () -> Registries.getBlock("minecraft:red_sandstone_wall")),
+    RED_SANDSTONE_WALL(NamespaceID.from("minecraft:red_sandstone_wall"), (byte) 64, () -> Block.RED_SANDSTONE_WALL),
 
-    MOSSY_STONE_BRICK_WALL(NamespaceID.from("minecraft:mossy_stone_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_stone_brick_wall")),
+    MOSSY_STONE_BRICK_WALL(NamespaceID.from("minecraft:mossy_stone_brick_wall"), (byte) 64, () -> Block.MOSSY_STONE_BRICK_WALL),
 
-    GRANITE_WALL(NamespaceID.from("minecraft:granite_wall"), (byte) 64, () -> Registries.getBlock("minecraft:granite_wall")),
+    GRANITE_WALL(NamespaceID.from("minecraft:granite_wall"), (byte) 64, () -> Block.GRANITE_WALL),
 
-    STONE_BRICK_WALL(NamespaceID.from("minecraft:stone_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:stone_brick_wall")),
+    STONE_BRICK_WALL(NamespaceID.from("minecraft:stone_brick_wall"), (byte) 64, () -> Block.STONE_BRICK_WALL),
 
-    NETHER_BRICK_WALL(NamespaceID.from("minecraft:nether_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:nether_brick_wall")),
+    NETHER_BRICK_WALL(NamespaceID.from("minecraft:nether_brick_wall"), (byte) 64, () -> Block.NETHER_BRICK_WALL),
 
-    ANDESITE_WALL(NamespaceID.from("minecraft:andesite_wall"), (byte) 64, () -> Registries.getBlock("minecraft:andesite_wall")),
+    ANDESITE_WALL(NamespaceID.from("minecraft:andesite_wall"), (byte) 64, () -> Block.ANDESITE_WALL),
 
-    RED_NETHER_BRICK_WALL(NamespaceID.from("minecraft:red_nether_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:red_nether_brick_wall")),
+    RED_NETHER_BRICK_WALL(NamespaceID.from("minecraft:red_nether_brick_wall"), (byte) 64, () -> Block.RED_NETHER_BRICK_WALL),
 
-    SANDSTONE_WALL(NamespaceID.from("minecraft:sandstone_wall"), (byte) 64, () -> Registries.getBlock("minecraft:sandstone_wall")),
+    SANDSTONE_WALL(NamespaceID.from("minecraft:sandstone_wall"), (byte) 64, () -> Block.SANDSTONE_WALL),
 
-    END_STONE_BRICK_WALL(NamespaceID.from("minecraft:end_stone_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:end_stone_brick_wall")),
+    END_STONE_BRICK_WALL(NamespaceID.from("minecraft:end_stone_brick_wall"), (byte) 64, () -> Block.END_STONE_BRICK_WALL),
 
-    DIORITE_WALL(NamespaceID.from("minecraft:diorite_wall"), (byte) 64, () -> Registries.getBlock("minecraft:diorite_wall")),
+    DIORITE_WALL(NamespaceID.from("minecraft:diorite_wall"), (byte) 64, () -> Block.DIORITE_WALL),
 
-    BLACKSTONE_WALL(NamespaceID.from("minecraft:blackstone_wall"), (byte) 64, () -> Registries.getBlock("minecraft:blackstone_wall")),
+    BLACKSTONE_WALL(NamespaceID.from("minecraft:blackstone_wall"), (byte) 64, () -> Block.BLACKSTONE_WALL),
 
-    POLISHED_BLACKSTONE_WALL(NamespaceID.from("minecraft:polished_blackstone_wall"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_wall")),
+    POLISHED_BLACKSTONE_WALL(NamespaceID.from("minecraft:polished_blackstone_wall"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_WALL),
 
-    POLISHED_BLACKSTONE_BRICK_WALL(NamespaceID.from("minecraft:polished_blackstone_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_brick_wall")),
+    POLISHED_BLACKSTONE_BRICK_WALL(NamespaceID.from("minecraft:polished_blackstone_brick_wall"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_BRICK_WALL),
 
-    COBBLED_DEEPSLATE_WALL(NamespaceID.from("minecraft:cobbled_deepslate_wall"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate_wall")),
+    COBBLED_DEEPSLATE_WALL(NamespaceID.from("minecraft:cobbled_deepslate_wall"), (byte) 64, () -> Block.COBBLED_DEEPSLATE_WALL),
 
-    POLISHED_DEEPSLATE_WALL(NamespaceID.from("minecraft:polished_deepslate_wall"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate_wall")),
+    POLISHED_DEEPSLATE_WALL(NamespaceID.from("minecraft:polished_deepslate_wall"), (byte) 64, () -> Block.POLISHED_DEEPSLATE_WALL),
 
-    DEEPSLATE_BRICK_WALL(NamespaceID.from("minecraft:deepslate_brick_wall"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_brick_wall")),
+    DEEPSLATE_BRICK_WALL(NamespaceID.from("minecraft:deepslate_brick_wall"), (byte) 64, () -> Block.DEEPSLATE_BRICK_WALL),
 
-    DEEPSLATE_TILE_WALL(NamespaceID.from("minecraft:deepslate_tile_wall"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tile_wall")),
+    DEEPSLATE_TILE_WALL(NamespaceID.from("minecraft:deepslate_tile_wall"), (byte) 64, () -> Block.DEEPSLATE_TILE_WALL),
 
-    ANVIL(NamespaceID.from("minecraft:anvil"), (byte) 64, () -> Registries.getBlock("minecraft:anvil")),
+    ANVIL(NamespaceID.from("minecraft:anvil"), (byte) 64, () -> Block.ANVIL),
 
-    CHIPPED_ANVIL(NamespaceID.from("minecraft:chipped_anvil"), (byte) 64, () -> Registries.getBlock("minecraft:chipped_anvil")),
+    CHIPPED_ANVIL(NamespaceID.from("minecraft:chipped_anvil"), (byte) 64, () -> Block.CHIPPED_ANVIL),
 
-    DAMAGED_ANVIL(NamespaceID.from("minecraft:damaged_anvil"), (byte) 64, () -> Registries.getBlock("minecraft:damaged_anvil")),
+    DAMAGED_ANVIL(NamespaceID.from("minecraft:damaged_anvil"), (byte) 64, () -> Block.DAMAGED_ANVIL),
 
-    CHISELED_QUARTZ_BLOCK(NamespaceID.from("minecraft:chiseled_quartz_block"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_quartz_block")),
+    CHISELED_QUARTZ_BLOCK(NamespaceID.from("minecraft:chiseled_quartz_block"), (byte) 64, () -> Block.CHISELED_QUARTZ_BLOCK),
 
-    QUARTZ_BLOCK(NamespaceID.from("minecraft:quartz_block"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_block")),
+    QUARTZ_BLOCK(NamespaceID.from("minecraft:quartz_block"), (byte) 64, () -> Block.QUARTZ_BLOCK),
 
-    QUARTZ_BRICKS(NamespaceID.from("minecraft:quartz_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_bricks")),
+    QUARTZ_BRICKS(NamespaceID.from("minecraft:quartz_bricks"), (byte) 64, () -> Block.QUARTZ_BRICKS),
 
-    QUARTZ_PILLAR(NamespaceID.from("minecraft:quartz_pillar"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_pillar")),
+    QUARTZ_PILLAR(NamespaceID.from("minecraft:quartz_pillar"), (byte) 64, () -> Block.QUARTZ_PILLAR),
 
-    QUARTZ_STAIRS(NamespaceID.from("minecraft:quartz_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:quartz_stairs")),
+    QUARTZ_STAIRS(NamespaceID.from("minecraft:quartz_stairs"), (byte) 64, () -> Block.QUARTZ_STAIRS),
 
-    WHITE_TERRACOTTA(NamespaceID.from("minecraft:white_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:white_terracotta")),
+    WHITE_TERRACOTTA(NamespaceID.from("minecraft:white_terracotta"), (byte) 64, () -> Block.WHITE_TERRACOTTA),
 
-    ORANGE_TERRACOTTA(NamespaceID.from("minecraft:orange_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:orange_terracotta")),
+    ORANGE_TERRACOTTA(NamespaceID.from("minecraft:orange_terracotta"), (byte) 64, () -> Block.ORANGE_TERRACOTTA),
 
-    MAGENTA_TERRACOTTA(NamespaceID.from("minecraft:magenta_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_terracotta")),
+    MAGENTA_TERRACOTTA(NamespaceID.from("minecraft:magenta_terracotta"), (byte) 64, () -> Block.MAGENTA_TERRACOTTA),
 
-    LIGHT_BLUE_TERRACOTTA(NamespaceID.from("minecraft:light_blue_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_terracotta")),
+    LIGHT_BLUE_TERRACOTTA(NamespaceID.from("minecraft:light_blue_terracotta"), (byte) 64, () -> Block.LIGHT_BLUE_TERRACOTTA),
 
-    YELLOW_TERRACOTTA(NamespaceID.from("minecraft:yellow_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_terracotta")),
+    YELLOW_TERRACOTTA(NamespaceID.from("minecraft:yellow_terracotta"), (byte) 64, () -> Block.YELLOW_TERRACOTTA),
 
-    LIME_TERRACOTTA(NamespaceID.from("minecraft:lime_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:lime_terracotta")),
+    LIME_TERRACOTTA(NamespaceID.from("minecraft:lime_terracotta"), (byte) 64, () -> Block.LIME_TERRACOTTA),
 
-    PINK_TERRACOTTA(NamespaceID.from("minecraft:pink_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:pink_terracotta")),
+    PINK_TERRACOTTA(NamespaceID.from("minecraft:pink_terracotta"), (byte) 64, () -> Block.PINK_TERRACOTTA),
 
-    GRAY_TERRACOTTA(NamespaceID.from("minecraft:gray_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:gray_terracotta")),
+    GRAY_TERRACOTTA(NamespaceID.from("minecraft:gray_terracotta"), (byte) 64, () -> Block.GRAY_TERRACOTTA),
 
-    LIGHT_GRAY_TERRACOTTA(NamespaceID.from("minecraft:light_gray_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_terracotta")),
+    LIGHT_GRAY_TERRACOTTA(NamespaceID.from("minecraft:light_gray_terracotta"), (byte) 64, () -> Block.LIGHT_GRAY_TERRACOTTA),
 
-    CYAN_TERRACOTTA(NamespaceID.from("minecraft:cyan_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_terracotta")),
+    CYAN_TERRACOTTA(NamespaceID.from("minecraft:cyan_terracotta"), (byte) 64, () -> Block.CYAN_TERRACOTTA),
 
-    PURPLE_TERRACOTTA(NamespaceID.from("minecraft:purple_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:purple_terracotta")),
+    PURPLE_TERRACOTTA(NamespaceID.from("minecraft:purple_terracotta"), (byte) 64, () -> Block.PURPLE_TERRACOTTA),
 
-    BLUE_TERRACOTTA(NamespaceID.from("minecraft:blue_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:blue_terracotta")),
+    BLUE_TERRACOTTA(NamespaceID.from("minecraft:blue_terracotta"), (byte) 64, () -> Block.BLUE_TERRACOTTA),
 
-    BROWN_TERRACOTTA(NamespaceID.from("minecraft:brown_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:brown_terracotta")),
+    BROWN_TERRACOTTA(NamespaceID.from("minecraft:brown_terracotta"), (byte) 64, () -> Block.BROWN_TERRACOTTA),
 
-    GREEN_TERRACOTTA(NamespaceID.from("minecraft:green_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:green_terracotta")),
+    GREEN_TERRACOTTA(NamespaceID.from("minecraft:green_terracotta"), (byte) 64, () -> Block.GREEN_TERRACOTTA),
 
-    RED_TERRACOTTA(NamespaceID.from("minecraft:red_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:red_terracotta")),
+    RED_TERRACOTTA(NamespaceID.from("minecraft:red_terracotta"), (byte) 64, () -> Block.RED_TERRACOTTA),
 
-    BLACK_TERRACOTTA(NamespaceID.from("minecraft:black_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:black_terracotta")),
+    BLACK_TERRACOTTA(NamespaceID.from("minecraft:black_terracotta"), (byte) 64, () -> Block.BLACK_TERRACOTTA),
 
-    BARRIER(NamespaceID.from("minecraft:barrier"), (byte) 64, () -> Registries.getBlock("minecraft:barrier")),
+    BARRIER(NamespaceID.from("minecraft:barrier"), (byte) 64, () -> Block.BARRIER),
 
-    LIGHT(NamespaceID.from("minecraft:light"), (byte) 64, () -> Registries.getBlock("minecraft:light")),
+    LIGHT(NamespaceID.from("minecraft:light"), (byte) 64, () -> Block.LIGHT),
 
-    HAY_BLOCK(NamespaceID.from("minecraft:hay_block"), (byte) 64, () -> Registries.getBlock("minecraft:hay_block")),
+    HAY_BLOCK(NamespaceID.from("minecraft:hay_block"), (byte) 64, () -> Block.HAY_BLOCK),
 
-    WHITE_CARPET(NamespaceID.from("minecraft:white_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:white_carpet")),
+    WHITE_CARPET(NamespaceID.from("minecraft:white_carpet"), (byte) 64, () -> Block.WHITE_CARPET),
 
-    ORANGE_CARPET(NamespaceID.from("minecraft:orange_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:orange_carpet")),
+    ORANGE_CARPET(NamespaceID.from("minecraft:orange_carpet"), (byte) 64, () -> Block.ORANGE_CARPET),
 
-    MAGENTA_CARPET(NamespaceID.from("minecraft:magenta_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_carpet")),
+    MAGENTA_CARPET(NamespaceID.from("minecraft:magenta_carpet"), (byte) 64, () -> Block.MAGENTA_CARPET),
 
-    LIGHT_BLUE_CARPET(NamespaceID.from("minecraft:light_blue_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_carpet")),
+    LIGHT_BLUE_CARPET(NamespaceID.from("minecraft:light_blue_carpet"), (byte) 64, () -> Block.LIGHT_BLUE_CARPET),
 
-    YELLOW_CARPET(NamespaceID.from("minecraft:yellow_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_carpet")),
+    YELLOW_CARPET(NamespaceID.from("minecraft:yellow_carpet"), (byte) 64, () -> Block.YELLOW_CARPET),
 
-    LIME_CARPET(NamespaceID.from("minecraft:lime_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:lime_carpet")),
+    LIME_CARPET(NamespaceID.from("minecraft:lime_carpet"), (byte) 64, () -> Block.LIME_CARPET),
 
-    PINK_CARPET(NamespaceID.from("minecraft:pink_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:pink_carpet")),
+    PINK_CARPET(NamespaceID.from("minecraft:pink_carpet"), (byte) 64, () -> Block.PINK_CARPET),
 
-    GRAY_CARPET(NamespaceID.from("minecraft:gray_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:gray_carpet")),
+    GRAY_CARPET(NamespaceID.from("minecraft:gray_carpet"), (byte) 64, () -> Block.GRAY_CARPET),
 
-    LIGHT_GRAY_CARPET(NamespaceID.from("minecraft:light_gray_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_carpet")),
+    LIGHT_GRAY_CARPET(NamespaceID.from("minecraft:light_gray_carpet"), (byte) 64, () -> Block.LIGHT_GRAY_CARPET),
 
-    CYAN_CARPET(NamespaceID.from("minecraft:cyan_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_carpet")),
+    CYAN_CARPET(NamespaceID.from("minecraft:cyan_carpet"), (byte) 64, () -> Block.CYAN_CARPET),
 
-    PURPLE_CARPET(NamespaceID.from("minecraft:purple_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:purple_carpet")),
+    PURPLE_CARPET(NamespaceID.from("minecraft:purple_carpet"), (byte) 64, () -> Block.PURPLE_CARPET),
 
-    BLUE_CARPET(NamespaceID.from("minecraft:blue_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:blue_carpet")),
+    BLUE_CARPET(NamespaceID.from("minecraft:blue_carpet"), (byte) 64, () -> Block.BLUE_CARPET),
 
-    BROWN_CARPET(NamespaceID.from("minecraft:brown_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:brown_carpet")),
+    BROWN_CARPET(NamespaceID.from("minecraft:brown_carpet"), (byte) 64, () -> Block.BROWN_CARPET),
 
-    GREEN_CARPET(NamespaceID.from("minecraft:green_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:green_carpet")),
+    GREEN_CARPET(NamespaceID.from("minecraft:green_carpet"), (byte) 64, () -> Block.GREEN_CARPET),
 
-    RED_CARPET(NamespaceID.from("minecraft:red_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:red_carpet")),
+    RED_CARPET(NamespaceID.from("minecraft:red_carpet"), (byte) 64, () -> Block.RED_CARPET),
 
-    BLACK_CARPET(NamespaceID.from("minecraft:black_carpet"), (byte) 64, () -> Registries.getBlock("minecraft:black_carpet")),
+    BLACK_CARPET(NamespaceID.from("minecraft:black_carpet"), (byte) 64, () -> Block.BLACK_CARPET),
 
-    TERRACOTTA(NamespaceID.from("minecraft:terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:terracotta")),
+    TERRACOTTA(NamespaceID.from("minecraft:terracotta"), (byte) 64, () -> Block.TERRACOTTA),
 
-    PACKED_ICE(NamespaceID.from("minecraft:packed_ice"), (byte) 64, () -> Registries.getBlock("minecraft:packed_ice")),
+    PACKED_ICE(NamespaceID.from("minecraft:packed_ice"), (byte) 64, () -> Block.PACKED_ICE),
 
-    ACACIA_STAIRS(NamespaceID.from("minecraft:acacia_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_stairs")),
+    ACACIA_STAIRS(NamespaceID.from("minecraft:acacia_stairs"), (byte) 64, () -> Block.ACACIA_STAIRS),
 
-    DARK_OAK_STAIRS(NamespaceID.from("minecraft:dark_oak_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_stairs")),
+    DARK_OAK_STAIRS(NamespaceID.from("minecraft:dark_oak_stairs"), (byte) 64, () -> Block.DARK_OAK_STAIRS),
 
-    DIRT_PATH(NamespaceID.from("minecraft:dirt_path"), (byte) 64, () -> Registries.getBlock("minecraft:dirt_path")),
+    DIRT_PATH(NamespaceID.from("minecraft:dirt_path"), (byte) 64, () -> Block.DIRT_PATH),
 
-    SUNFLOWER(NamespaceID.from("minecraft:sunflower"), (byte) 64, () -> Registries.getBlock("minecraft:sunflower")),
+    SUNFLOWER(NamespaceID.from("minecraft:sunflower"), (byte) 64, () -> Block.SUNFLOWER),
 
-    LILAC(NamespaceID.from("minecraft:lilac"), (byte) 64, () -> Registries.getBlock("minecraft:lilac")),
+    LILAC(NamespaceID.from("minecraft:lilac"), (byte) 64, () -> Block.LILAC),
 
-    ROSE_BUSH(NamespaceID.from("minecraft:rose_bush"), (byte) 64, () -> Registries.getBlock("minecraft:rose_bush")),
+    ROSE_BUSH(NamespaceID.from("minecraft:rose_bush"), (byte) 64, () -> Block.ROSE_BUSH),
 
-    PEONY(NamespaceID.from("minecraft:peony"), (byte) 64, () -> Registries.getBlock("minecraft:peony")),
+    PEONY(NamespaceID.from("minecraft:peony"), (byte) 64, () -> Block.PEONY),
 
-    TALL_GRASS(NamespaceID.from("minecraft:tall_grass"), (byte) 64, () -> Registries.getBlock("minecraft:tall_grass")),
+    TALL_GRASS(NamespaceID.from("minecraft:tall_grass"), (byte) 64, () -> Block.TALL_GRASS),
 
-    LARGE_FERN(NamespaceID.from("minecraft:large_fern"), (byte) 64, () -> Registries.getBlock("minecraft:large_fern")),
+    LARGE_FERN(NamespaceID.from("minecraft:large_fern"), (byte) 64, () -> Block.LARGE_FERN),
 
-    WHITE_STAINED_GLASS(NamespaceID.from("minecraft:white_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:white_stained_glass")),
+    WHITE_STAINED_GLASS(NamespaceID.from("minecraft:white_stained_glass"), (byte) 64, () -> Block.WHITE_STAINED_GLASS),
 
-    ORANGE_STAINED_GLASS(NamespaceID.from("minecraft:orange_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:orange_stained_glass")),
+    ORANGE_STAINED_GLASS(NamespaceID.from("minecraft:orange_stained_glass"), (byte) 64, () -> Block.ORANGE_STAINED_GLASS),
 
-    MAGENTA_STAINED_GLASS(NamespaceID.from("minecraft:magenta_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_stained_glass")),
+    MAGENTA_STAINED_GLASS(NamespaceID.from("minecraft:magenta_stained_glass"), (byte) 64, () -> Block.MAGENTA_STAINED_GLASS),
 
-    LIGHT_BLUE_STAINED_GLASS(NamespaceID.from("minecraft:light_blue_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_stained_glass")),
+    LIGHT_BLUE_STAINED_GLASS(NamespaceID.from("minecraft:light_blue_stained_glass"), (byte) 64, () -> Block.LIGHT_BLUE_STAINED_GLASS),
 
-    YELLOW_STAINED_GLASS(NamespaceID.from("minecraft:yellow_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_stained_glass")),
+    YELLOW_STAINED_GLASS(NamespaceID.from("minecraft:yellow_stained_glass"), (byte) 64, () -> Block.YELLOW_STAINED_GLASS),
 
-    LIME_STAINED_GLASS(NamespaceID.from("minecraft:lime_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:lime_stained_glass")),
+    LIME_STAINED_GLASS(NamespaceID.from("minecraft:lime_stained_glass"), (byte) 64, () -> Block.LIME_STAINED_GLASS),
 
-    PINK_STAINED_GLASS(NamespaceID.from("minecraft:pink_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:pink_stained_glass")),
+    PINK_STAINED_GLASS(NamespaceID.from("minecraft:pink_stained_glass"), (byte) 64, () -> Block.PINK_STAINED_GLASS),
 
-    GRAY_STAINED_GLASS(NamespaceID.from("minecraft:gray_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:gray_stained_glass")),
+    GRAY_STAINED_GLASS(NamespaceID.from("minecraft:gray_stained_glass"), (byte) 64, () -> Block.GRAY_STAINED_GLASS),
 
-    LIGHT_GRAY_STAINED_GLASS(NamespaceID.from("minecraft:light_gray_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_stained_glass")),
+    LIGHT_GRAY_STAINED_GLASS(NamespaceID.from("minecraft:light_gray_stained_glass"), (byte) 64, () -> Block.LIGHT_GRAY_STAINED_GLASS),
 
-    CYAN_STAINED_GLASS(NamespaceID.from("minecraft:cyan_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_stained_glass")),
+    CYAN_STAINED_GLASS(NamespaceID.from("minecraft:cyan_stained_glass"), (byte) 64, () -> Block.CYAN_STAINED_GLASS),
 
-    PURPLE_STAINED_GLASS(NamespaceID.from("minecraft:purple_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:purple_stained_glass")),
+    PURPLE_STAINED_GLASS(NamespaceID.from("minecraft:purple_stained_glass"), (byte) 64, () -> Block.PURPLE_STAINED_GLASS),
 
-    BLUE_STAINED_GLASS(NamespaceID.from("minecraft:blue_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:blue_stained_glass")),
+    BLUE_STAINED_GLASS(NamespaceID.from("minecraft:blue_stained_glass"), (byte) 64, () -> Block.BLUE_STAINED_GLASS),
 
-    BROWN_STAINED_GLASS(NamespaceID.from("minecraft:brown_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:brown_stained_glass")),
+    BROWN_STAINED_GLASS(NamespaceID.from("minecraft:brown_stained_glass"), (byte) 64, () -> Block.BROWN_STAINED_GLASS),
 
-    GREEN_STAINED_GLASS(NamespaceID.from("minecraft:green_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:green_stained_glass")),
+    GREEN_STAINED_GLASS(NamespaceID.from("minecraft:green_stained_glass"), (byte) 64, () -> Block.GREEN_STAINED_GLASS),
 
-    RED_STAINED_GLASS(NamespaceID.from("minecraft:red_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:red_stained_glass")),
+    RED_STAINED_GLASS(NamespaceID.from("minecraft:red_stained_glass"), (byte) 64, () -> Block.RED_STAINED_GLASS),
 
-    BLACK_STAINED_GLASS(NamespaceID.from("minecraft:black_stained_glass"), (byte) 64, () -> Registries.getBlock("minecraft:black_stained_glass")),
+    BLACK_STAINED_GLASS(NamespaceID.from("minecraft:black_stained_glass"), (byte) 64, () -> Block.BLACK_STAINED_GLASS),
 
-    WHITE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:white_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:white_stained_glass_pane")),
+    WHITE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:white_stained_glass_pane"), (byte) 64, () -> Block.WHITE_STAINED_GLASS_PANE),
 
-    ORANGE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:orange_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:orange_stained_glass_pane")),
+    ORANGE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:orange_stained_glass_pane"), (byte) 64, () -> Block.ORANGE_STAINED_GLASS_PANE),
 
-    MAGENTA_STAINED_GLASS_PANE(NamespaceID.from("minecraft:magenta_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_stained_glass_pane")),
+    MAGENTA_STAINED_GLASS_PANE(NamespaceID.from("minecraft:magenta_stained_glass_pane"), (byte) 64, () -> Block.MAGENTA_STAINED_GLASS_PANE),
 
-    LIGHT_BLUE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:light_blue_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_stained_glass_pane")),
+    LIGHT_BLUE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:light_blue_stained_glass_pane"), (byte) 64, () -> Block.LIGHT_BLUE_STAINED_GLASS_PANE),
 
-    YELLOW_STAINED_GLASS_PANE(NamespaceID.from("minecraft:yellow_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_stained_glass_pane")),
+    YELLOW_STAINED_GLASS_PANE(NamespaceID.from("minecraft:yellow_stained_glass_pane"), (byte) 64, () -> Block.YELLOW_STAINED_GLASS_PANE),
 
-    LIME_STAINED_GLASS_PANE(NamespaceID.from("minecraft:lime_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:lime_stained_glass_pane")),
+    LIME_STAINED_GLASS_PANE(NamespaceID.from("minecraft:lime_stained_glass_pane"), (byte) 64, () -> Block.LIME_STAINED_GLASS_PANE),
 
-    PINK_STAINED_GLASS_PANE(NamespaceID.from("minecraft:pink_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:pink_stained_glass_pane")),
+    PINK_STAINED_GLASS_PANE(NamespaceID.from("minecraft:pink_stained_glass_pane"), (byte) 64, () -> Block.PINK_STAINED_GLASS_PANE),
 
-    GRAY_STAINED_GLASS_PANE(NamespaceID.from("minecraft:gray_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:gray_stained_glass_pane")),
+    GRAY_STAINED_GLASS_PANE(NamespaceID.from("minecraft:gray_stained_glass_pane"), (byte) 64, () -> Block.GRAY_STAINED_GLASS_PANE),
 
-    LIGHT_GRAY_STAINED_GLASS_PANE(NamespaceID.from("minecraft:light_gray_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_stained_glass_pane")),
+    LIGHT_GRAY_STAINED_GLASS_PANE(NamespaceID.from("minecraft:light_gray_stained_glass_pane"), (byte) 64, () -> Block.LIGHT_GRAY_STAINED_GLASS_PANE),
 
-    CYAN_STAINED_GLASS_PANE(NamespaceID.from("minecraft:cyan_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_stained_glass_pane")),
+    CYAN_STAINED_GLASS_PANE(NamespaceID.from("minecraft:cyan_stained_glass_pane"), (byte) 64, () -> Block.CYAN_STAINED_GLASS_PANE),
 
-    PURPLE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:purple_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:purple_stained_glass_pane")),
+    PURPLE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:purple_stained_glass_pane"), (byte) 64, () -> Block.PURPLE_STAINED_GLASS_PANE),
 
-    BLUE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:blue_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:blue_stained_glass_pane")),
+    BLUE_STAINED_GLASS_PANE(NamespaceID.from("minecraft:blue_stained_glass_pane"), (byte) 64, () -> Block.BLUE_STAINED_GLASS_PANE),
 
-    BROWN_STAINED_GLASS_PANE(NamespaceID.from("minecraft:brown_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:brown_stained_glass_pane")),
+    BROWN_STAINED_GLASS_PANE(NamespaceID.from("minecraft:brown_stained_glass_pane"), (byte) 64, () -> Block.BROWN_STAINED_GLASS_PANE),
 
-    GREEN_STAINED_GLASS_PANE(NamespaceID.from("minecraft:green_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:green_stained_glass_pane")),
+    GREEN_STAINED_GLASS_PANE(NamespaceID.from("minecraft:green_stained_glass_pane"), (byte) 64, () -> Block.GREEN_STAINED_GLASS_PANE),
 
-    RED_STAINED_GLASS_PANE(NamespaceID.from("minecraft:red_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:red_stained_glass_pane")),
+    RED_STAINED_GLASS_PANE(NamespaceID.from("minecraft:red_stained_glass_pane"), (byte) 64, () -> Block.RED_STAINED_GLASS_PANE),
 
-    BLACK_STAINED_GLASS_PANE(NamespaceID.from("minecraft:black_stained_glass_pane"), (byte) 64, () -> Registries.getBlock("minecraft:black_stained_glass_pane")),
+    BLACK_STAINED_GLASS_PANE(NamespaceID.from("minecraft:black_stained_glass_pane"), (byte) 64, () -> Block.BLACK_STAINED_GLASS_PANE),
 
-    PRISMARINE(NamespaceID.from("minecraft:prismarine"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine")),
+    PRISMARINE(NamespaceID.from("minecraft:prismarine"), (byte) 64, () -> Block.PRISMARINE),
 
-    PRISMARINE_BRICKS(NamespaceID.from("minecraft:prismarine_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine_bricks")),
+    PRISMARINE_BRICKS(NamespaceID.from("minecraft:prismarine_bricks"), (byte) 64, () -> Block.PRISMARINE_BRICKS),
 
-    DARK_PRISMARINE(NamespaceID.from("minecraft:dark_prismarine"), (byte) 64, () -> Registries.getBlock("minecraft:dark_prismarine")),
+    DARK_PRISMARINE(NamespaceID.from("minecraft:dark_prismarine"), (byte) 64, () -> Block.DARK_PRISMARINE),
 
-    PRISMARINE_STAIRS(NamespaceID.from("minecraft:prismarine_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine_stairs")),
+    PRISMARINE_STAIRS(NamespaceID.from("minecraft:prismarine_stairs"), (byte) 64, () -> Block.PRISMARINE_STAIRS),
 
-    PRISMARINE_BRICK_STAIRS(NamespaceID.from("minecraft:prismarine_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:prismarine_brick_stairs")),
+    PRISMARINE_BRICK_STAIRS(NamespaceID.from("minecraft:prismarine_brick_stairs"), (byte) 64, () -> Block.PRISMARINE_BRICK_STAIRS),
 
-    DARK_PRISMARINE_STAIRS(NamespaceID.from("minecraft:dark_prismarine_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:dark_prismarine_stairs")),
+    DARK_PRISMARINE_STAIRS(NamespaceID.from("minecraft:dark_prismarine_stairs"), (byte) 64, () -> Block.DARK_PRISMARINE_STAIRS),
 
-    SEA_LANTERN(NamespaceID.from("minecraft:sea_lantern"), (byte) 64, () -> Registries.getBlock("minecraft:sea_lantern")),
+    SEA_LANTERN(NamespaceID.from("minecraft:sea_lantern"), (byte) 64, () -> Block.SEA_LANTERN),
 
-    RED_SANDSTONE(NamespaceID.from("minecraft:red_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:red_sandstone")),
+    RED_SANDSTONE(NamespaceID.from("minecraft:red_sandstone"), (byte) 64, () -> Block.RED_SANDSTONE),
 
-    CHISELED_RED_SANDSTONE(NamespaceID.from("minecraft:chiseled_red_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_red_sandstone")),
+    CHISELED_RED_SANDSTONE(NamespaceID.from("minecraft:chiseled_red_sandstone"), (byte) 64, () -> Block.CHISELED_RED_SANDSTONE),
 
-    CUT_RED_SANDSTONE(NamespaceID.from("minecraft:cut_red_sandstone"), (byte) 64, () -> Registries.getBlock("minecraft:cut_red_sandstone")),
+    CUT_RED_SANDSTONE(NamespaceID.from("minecraft:cut_red_sandstone"), (byte) 64, () -> Block.CUT_RED_SANDSTONE),
 
-    RED_SANDSTONE_STAIRS(NamespaceID.from("minecraft:red_sandstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:red_sandstone_stairs")),
+    RED_SANDSTONE_STAIRS(NamespaceID.from("minecraft:red_sandstone_stairs"), (byte) 64, () -> Block.RED_SANDSTONE_STAIRS),
 
-    REPEATING_COMMAND_BLOCK(NamespaceID.from("minecraft:repeating_command_block"), (byte) 64, () -> Registries.getBlock("minecraft:repeating_command_block")),
+    REPEATING_COMMAND_BLOCK(NamespaceID.from("minecraft:repeating_command_block"), (byte) 64, () -> Block.REPEATING_COMMAND_BLOCK),
 
-    CHAIN_COMMAND_BLOCK(NamespaceID.from("minecraft:chain_command_block"), (byte) 64, () -> Registries.getBlock("minecraft:chain_command_block")),
+    CHAIN_COMMAND_BLOCK(NamespaceID.from("minecraft:chain_command_block"), (byte) 64, () -> Block.CHAIN_COMMAND_BLOCK),
 
-    MAGMA_BLOCK(NamespaceID.from("minecraft:magma_block"), (byte) 64, () -> Registries.getBlock("minecraft:magma_block")),
+    MAGMA_BLOCK(NamespaceID.from("minecraft:magma_block"), (byte) 64, () -> Block.MAGMA_BLOCK),
 
-    NETHER_WART_BLOCK(NamespaceID.from("minecraft:nether_wart_block"), (byte) 64, () -> Registries.getBlock("minecraft:nether_wart_block")),
+    NETHER_WART_BLOCK(NamespaceID.from("minecraft:nether_wart_block"), (byte) 64, () -> Block.NETHER_WART_BLOCK),
 
-    WARPED_WART_BLOCK(NamespaceID.from("minecraft:warped_wart_block"), (byte) 64, () -> Registries.getBlock("minecraft:warped_wart_block")),
+    WARPED_WART_BLOCK(NamespaceID.from("minecraft:warped_wart_block"), (byte) 64, () -> Block.WARPED_WART_BLOCK),
 
-    RED_NETHER_BRICKS(NamespaceID.from("minecraft:red_nether_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:red_nether_bricks")),
+    RED_NETHER_BRICKS(NamespaceID.from("minecraft:red_nether_bricks"), (byte) 64, () -> Block.RED_NETHER_BRICKS),
 
-    BONE_BLOCK(NamespaceID.from("minecraft:bone_block"), (byte) 64, () -> Registries.getBlock("minecraft:bone_block")),
+    BONE_BLOCK(NamespaceID.from("minecraft:bone_block"), (byte) 64, () -> Block.BONE_BLOCK),
 
-    STRUCTURE_VOID(NamespaceID.from("minecraft:structure_void"), (byte) 64, () -> Registries.getBlock("minecraft:structure_void")),
+    STRUCTURE_VOID(NamespaceID.from("minecraft:structure_void"), (byte) 64, () -> Block.STRUCTURE_VOID),
 
-    SHULKER_BOX(NamespaceID.from("minecraft:shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:shulker_box")),
+    SHULKER_BOX(NamespaceID.from("minecraft:shulker_box"), (byte) 1, () -> Block.SHULKER_BOX),
 
-    WHITE_SHULKER_BOX(NamespaceID.from("minecraft:white_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:white_shulker_box")),
+    WHITE_SHULKER_BOX(NamespaceID.from("minecraft:white_shulker_box"), (byte) 1, () -> Block.WHITE_SHULKER_BOX),
 
-    ORANGE_SHULKER_BOX(NamespaceID.from("minecraft:orange_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:orange_shulker_box")),
+    ORANGE_SHULKER_BOX(NamespaceID.from("minecraft:orange_shulker_box"), (byte) 1, () -> Block.ORANGE_SHULKER_BOX),
 
-    MAGENTA_SHULKER_BOX(NamespaceID.from("minecraft:magenta_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:magenta_shulker_box")),
+    MAGENTA_SHULKER_BOX(NamespaceID.from("minecraft:magenta_shulker_box"), (byte) 1, () -> Block.MAGENTA_SHULKER_BOX),
 
-    LIGHT_BLUE_SHULKER_BOX(NamespaceID.from("minecraft:light_blue_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:light_blue_shulker_box")),
+    LIGHT_BLUE_SHULKER_BOX(NamespaceID.from("minecraft:light_blue_shulker_box"), (byte) 1, () -> Block.LIGHT_BLUE_SHULKER_BOX),
 
-    YELLOW_SHULKER_BOX(NamespaceID.from("minecraft:yellow_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:yellow_shulker_box")),
+    YELLOW_SHULKER_BOX(NamespaceID.from("minecraft:yellow_shulker_box"), (byte) 1, () -> Block.YELLOW_SHULKER_BOX),
 
-    LIME_SHULKER_BOX(NamespaceID.from("minecraft:lime_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:lime_shulker_box")),
+    LIME_SHULKER_BOX(NamespaceID.from("minecraft:lime_shulker_box"), (byte) 1, () -> Block.LIME_SHULKER_BOX),
 
-    PINK_SHULKER_BOX(NamespaceID.from("minecraft:pink_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:pink_shulker_box")),
+    PINK_SHULKER_BOX(NamespaceID.from("minecraft:pink_shulker_box"), (byte) 1, () -> Block.PINK_SHULKER_BOX),
 
-    GRAY_SHULKER_BOX(NamespaceID.from("minecraft:gray_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:gray_shulker_box")),
+    GRAY_SHULKER_BOX(NamespaceID.from("minecraft:gray_shulker_box"), (byte) 1, () -> Block.GRAY_SHULKER_BOX),
 
-    LIGHT_GRAY_SHULKER_BOX(NamespaceID.from("minecraft:light_gray_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:light_gray_shulker_box")),
+    LIGHT_GRAY_SHULKER_BOX(NamespaceID.from("minecraft:light_gray_shulker_box"), (byte) 1, () -> Block.LIGHT_GRAY_SHULKER_BOX),
 
-    CYAN_SHULKER_BOX(NamespaceID.from("minecraft:cyan_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:cyan_shulker_box")),
+    CYAN_SHULKER_BOX(NamespaceID.from("minecraft:cyan_shulker_box"), (byte) 1, () -> Block.CYAN_SHULKER_BOX),
 
-    PURPLE_SHULKER_BOX(NamespaceID.from("minecraft:purple_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:purple_shulker_box")),
+    PURPLE_SHULKER_BOX(NamespaceID.from("minecraft:purple_shulker_box"), (byte) 1, () -> Block.PURPLE_SHULKER_BOX),
 
-    BLUE_SHULKER_BOX(NamespaceID.from("minecraft:blue_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:blue_shulker_box")),
+    BLUE_SHULKER_BOX(NamespaceID.from("minecraft:blue_shulker_box"), (byte) 1, () -> Block.BLUE_SHULKER_BOX),
 
-    BROWN_SHULKER_BOX(NamespaceID.from("minecraft:brown_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:brown_shulker_box")),
+    BROWN_SHULKER_BOX(NamespaceID.from("minecraft:brown_shulker_box"), (byte) 1, () -> Block.BROWN_SHULKER_BOX),
 
-    GREEN_SHULKER_BOX(NamespaceID.from("minecraft:green_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:green_shulker_box")),
+    GREEN_SHULKER_BOX(NamespaceID.from("minecraft:green_shulker_box"), (byte) 1, () -> Block.GREEN_SHULKER_BOX),
 
-    RED_SHULKER_BOX(NamespaceID.from("minecraft:red_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:red_shulker_box")),
+    RED_SHULKER_BOX(NamespaceID.from("minecraft:red_shulker_box"), (byte) 1, () -> Block.RED_SHULKER_BOX),
 
-    BLACK_SHULKER_BOX(NamespaceID.from("minecraft:black_shulker_box"), (byte) 1, () -> Registries.getBlock("minecraft:black_shulker_box")),
+    BLACK_SHULKER_BOX(NamespaceID.from("minecraft:black_shulker_box"), (byte) 1, () -> Block.BLACK_SHULKER_BOX),
 
-    WHITE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:white_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:white_glazed_terracotta")),
+    WHITE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:white_glazed_terracotta"), (byte) 64, () -> Block.WHITE_GLAZED_TERRACOTTA),
 
-    ORANGE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:orange_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:orange_glazed_terracotta")),
+    ORANGE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:orange_glazed_terracotta"), (byte) 64, () -> Block.ORANGE_GLAZED_TERRACOTTA),
 
-    MAGENTA_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:magenta_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_glazed_terracotta")),
+    MAGENTA_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:magenta_glazed_terracotta"), (byte) 64, () -> Block.MAGENTA_GLAZED_TERRACOTTA),
 
-    LIGHT_BLUE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:light_blue_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_glazed_terracotta")),
+    LIGHT_BLUE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:light_blue_glazed_terracotta"), (byte) 64, () -> Block.LIGHT_BLUE_GLAZED_TERRACOTTA),
 
-    YELLOW_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:yellow_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_glazed_terracotta")),
+    YELLOW_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:yellow_glazed_terracotta"), (byte) 64, () -> Block.YELLOW_GLAZED_TERRACOTTA),
 
-    LIME_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:lime_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:lime_glazed_terracotta")),
+    LIME_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:lime_glazed_terracotta"), (byte) 64, () -> Block.LIME_GLAZED_TERRACOTTA),
 
-    PINK_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:pink_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:pink_glazed_terracotta")),
+    PINK_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:pink_glazed_terracotta"), (byte) 64, () -> Block.PINK_GLAZED_TERRACOTTA),
 
-    GRAY_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:gray_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:gray_glazed_terracotta")),
+    GRAY_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:gray_glazed_terracotta"), (byte) 64, () -> Block.GRAY_GLAZED_TERRACOTTA),
 
-    LIGHT_GRAY_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:light_gray_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_glazed_terracotta")),
+    LIGHT_GRAY_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:light_gray_glazed_terracotta"), (byte) 64, () -> Block.LIGHT_GRAY_GLAZED_TERRACOTTA),
 
-    CYAN_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:cyan_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_glazed_terracotta")),
+    CYAN_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:cyan_glazed_terracotta"), (byte) 64, () -> Block.CYAN_GLAZED_TERRACOTTA),
 
-    PURPLE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:purple_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:purple_glazed_terracotta")),
+    PURPLE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:purple_glazed_terracotta"), (byte) 64, () -> Block.PURPLE_GLAZED_TERRACOTTA),
 
-    BLUE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:blue_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:blue_glazed_terracotta")),
+    BLUE_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:blue_glazed_terracotta"), (byte) 64, () -> Block.BLUE_GLAZED_TERRACOTTA),
 
-    BROWN_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:brown_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:brown_glazed_terracotta")),
+    BROWN_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:brown_glazed_terracotta"), (byte) 64, () -> Block.BROWN_GLAZED_TERRACOTTA),
 
-    GREEN_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:green_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:green_glazed_terracotta")),
+    GREEN_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:green_glazed_terracotta"), (byte) 64, () -> Block.GREEN_GLAZED_TERRACOTTA),
 
-    RED_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:red_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:red_glazed_terracotta")),
+    RED_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:red_glazed_terracotta"), (byte) 64, () -> Block.RED_GLAZED_TERRACOTTA),
 
-    BLACK_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:black_glazed_terracotta"), (byte) 64, () -> Registries.getBlock("minecraft:black_glazed_terracotta")),
+    BLACK_GLAZED_TERRACOTTA(NamespaceID.from("minecraft:black_glazed_terracotta"), (byte) 64, () -> Block.BLACK_GLAZED_TERRACOTTA),
 
-    WHITE_CONCRETE(NamespaceID.from("minecraft:white_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:white_concrete")),
+    WHITE_CONCRETE(NamespaceID.from("minecraft:white_concrete"), (byte) 64, () -> Block.WHITE_CONCRETE),
 
-    ORANGE_CONCRETE(NamespaceID.from("minecraft:orange_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:orange_concrete")),
+    ORANGE_CONCRETE(NamespaceID.from("minecraft:orange_concrete"), (byte) 64, () -> Block.ORANGE_CONCRETE),
 
-    MAGENTA_CONCRETE(NamespaceID.from("minecraft:magenta_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_concrete")),
+    MAGENTA_CONCRETE(NamespaceID.from("minecraft:magenta_concrete"), (byte) 64, () -> Block.MAGENTA_CONCRETE),
 
-    LIGHT_BLUE_CONCRETE(NamespaceID.from("minecraft:light_blue_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_concrete")),
+    LIGHT_BLUE_CONCRETE(NamespaceID.from("minecraft:light_blue_concrete"), (byte) 64, () -> Block.LIGHT_BLUE_CONCRETE),
 
-    YELLOW_CONCRETE(NamespaceID.from("minecraft:yellow_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_concrete")),
+    YELLOW_CONCRETE(NamespaceID.from("minecraft:yellow_concrete"), (byte) 64, () -> Block.YELLOW_CONCRETE),
 
-    LIME_CONCRETE(NamespaceID.from("minecraft:lime_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:lime_concrete")),
+    LIME_CONCRETE(NamespaceID.from("minecraft:lime_concrete"), (byte) 64, () -> Block.LIME_CONCRETE),
 
-    PINK_CONCRETE(NamespaceID.from("minecraft:pink_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:pink_concrete")),
+    PINK_CONCRETE(NamespaceID.from("minecraft:pink_concrete"), (byte) 64, () -> Block.PINK_CONCRETE),
 
-    GRAY_CONCRETE(NamespaceID.from("minecraft:gray_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:gray_concrete")),
+    GRAY_CONCRETE(NamespaceID.from("minecraft:gray_concrete"), (byte) 64, () -> Block.GRAY_CONCRETE),
 
-    LIGHT_GRAY_CONCRETE(NamespaceID.from("minecraft:light_gray_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_concrete")),
+    LIGHT_GRAY_CONCRETE(NamespaceID.from("minecraft:light_gray_concrete"), (byte) 64, () -> Block.LIGHT_GRAY_CONCRETE),
 
-    CYAN_CONCRETE(NamespaceID.from("minecraft:cyan_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_concrete")),
+    CYAN_CONCRETE(NamespaceID.from("minecraft:cyan_concrete"), (byte) 64, () -> Block.CYAN_CONCRETE),
 
-    PURPLE_CONCRETE(NamespaceID.from("minecraft:purple_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:purple_concrete")),
+    PURPLE_CONCRETE(NamespaceID.from("minecraft:purple_concrete"), (byte) 64, () -> Block.PURPLE_CONCRETE),
 
-    BLUE_CONCRETE(NamespaceID.from("minecraft:blue_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:blue_concrete")),
+    BLUE_CONCRETE(NamespaceID.from("minecraft:blue_concrete"), (byte) 64, () -> Block.BLUE_CONCRETE),
 
-    BROWN_CONCRETE(NamespaceID.from("minecraft:brown_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:brown_concrete")),
+    BROWN_CONCRETE(NamespaceID.from("minecraft:brown_concrete"), (byte) 64, () -> Block.BROWN_CONCRETE),
 
-    GREEN_CONCRETE(NamespaceID.from("minecraft:green_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:green_concrete")),
+    GREEN_CONCRETE(NamespaceID.from("minecraft:green_concrete"), (byte) 64, () -> Block.GREEN_CONCRETE),
 
-    RED_CONCRETE(NamespaceID.from("minecraft:red_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:red_concrete")),
+    RED_CONCRETE(NamespaceID.from("minecraft:red_concrete"), (byte) 64, () -> Block.RED_CONCRETE),
 
-    BLACK_CONCRETE(NamespaceID.from("minecraft:black_concrete"), (byte) 64, () -> Registries.getBlock("minecraft:black_concrete")),
+    BLACK_CONCRETE(NamespaceID.from("minecraft:black_concrete"), (byte) 64, () -> Block.BLACK_CONCRETE),
 
-    WHITE_CONCRETE_POWDER(NamespaceID.from("minecraft:white_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:white_concrete_powder")),
+    WHITE_CONCRETE_POWDER(NamespaceID.from("minecraft:white_concrete_powder"), (byte) 64, () -> Block.WHITE_CONCRETE_POWDER),
 
-    ORANGE_CONCRETE_POWDER(NamespaceID.from("minecraft:orange_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:orange_concrete_powder")),
+    ORANGE_CONCRETE_POWDER(NamespaceID.from("minecraft:orange_concrete_powder"), (byte) 64, () -> Block.ORANGE_CONCRETE_POWDER),
 
-    MAGENTA_CONCRETE_POWDER(NamespaceID.from("minecraft:magenta_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_concrete_powder")),
+    MAGENTA_CONCRETE_POWDER(NamespaceID.from("minecraft:magenta_concrete_powder"), (byte) 64, () -> Block.MAGENTA_CONCRETE_POWDER),
 
-    LIGHT_BLUE_CONCRETE_POWDER(NamespaceID.from("minecraft:light_blue_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_concrete_powder")),
+    LIGHT_BLUE_CONCRETE_POWDER(NamespaceID.from("minecraft:light_blue_concrete_powder"), (byte) 64, () -> Block.LIGHT_BLUE_CONCRETE_POWDER),
 
-    YELLOW_CONCRETE_POWDER(NamespaceID.from("minecraft:yellow_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_concrete_powder")),
+    YELLOW_CONCRETE_POWDER(NamespaceID.from("minecraft:yellow_concrete_powder"), (byte) 64, () -> Block.YELLOW_CONCRETE_POWDER),
 
-    LIME_CONCRETE_POWDER(NamespaceID.from("minecraft:lime_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:lime_concrete_powder")),
+    LIME_CONCRETE_POWDER(NamespaceID.from("minecraft:lime_concrete_powder"), (byte) 64, () -> Block.LIME_CONCRETE_POWDER),
 
-    PINK_CONCRETE_POWDER(NamespaceID.from("minecraft:pink_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:pink_concrete_powder")),
+    PINK_CONCRETE_POWDER(NamespaceID.from("minecraft:pink_concrete_powder"), (byte) 64, () -> Block.PINK_CONCRETE_POWDER),
 
-    GRAY_CONCRETE_POWDER(NamespaceID.from("minecraft:gray_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:gray_concrete_powder")),
+    GRAY_CONCRETE_POWDER(NamespaceID.from("minecraft:gray_concrete_powder"), (byte) 64, () -> Block.GRAY_CONCRETE_POWDER),
 
-    LIGHT_GRAY_CONCRETE_POWDER(NamespaceID.from("minecraft:light_gray_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_concrete_powder")),
+    LIGHT_GRAY_CONCRETE_POWDER(NamespaceID.from("minecraft:light_gray_concrete_powder"), (byte) 64, () -> Block.LIGHT_GRAY_CONCRETE_POWDER),
 
-    CYAN_CONCRETE_POWDER(NamespaceID.from("minecraft:cyan_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_concrete_powder")),
+    CYAN_CONCRETE_POWDER(NamespaceID.from("minecraft:cyan_concrete_powder"), (byte) 64, () -> Block.CYAN_CONCRETE_POWDER),
 
-    PURPLE_CONCRETE_POWDER(NamespaceID.from("minecraft:purple_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:purple_concrete_powder")),
+    PURPLE_CONCRETE_POWDER(NamespaceID.from("minecraft:purple_concrete_powder"), (byte) 64, () -> Block.PURPLE_CONCRETE_POWDER),
 
-    BLUE_CONCRETE_POWDER(NamespaceID.from("minecraft:blue_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:blue_concrete_powder")),
+    BLUE_CONCRETE_POWDER(NamespaceID.from("minecraft:blue_concrete_powder"), (byte) 64, () -> Block.BLUE_CONCRETE_POWDER),
 
-    BROWN_CONCRETE_POWDER(NamespaceID.from("minecraft:brown_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:brown_concrete_powder")),
+    BROWN_CONCRETE_POWDER(NamespaceID.from("minecraft:brown_concrete_powder"), (byte) 64, () -> Block.BROWN_CONCRETE_POWDER),
 
-    GREEN_CONCRETE_POWDER(NamespaceID.from("minecraft:green_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:green_concrete_powder")),
+    GREEN_CONCRETE_POWDER(NamespaceID.from("minecraft:green_concrete_powder"), (byte) 64, () -> Block.GREEN_CONCRETE_POWDER),
 
-    RED_CONCRETE_POWDER(NamespaceID.from("minecraft:red_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:red_concrete_powder")),
+    RED_CONCRETE_POWDER(NamespaceID.from("minecraft:red_concrete_powder"), (byte) 64, () -> Block.RED_CONCRETE_POWDER),
 
-    BLACK_CONCRETE_POWDER(NamespaceID.from("minecraft:black_concrete_powder"), (byte) 64, () -> Registries.getBlock("minecraft:black_concrete_powder")),
+    BLACK_CONCRETE_POWDER(NamespaceID.from("minecraft:black_concrete_powder"), (byte) 64, () -> Block.BLACK_CONCRETE_POWDER),
 
-    TURTLE_EGG(NamespaceID.from("minecraft:turtle_egg"), (byte) 64, () -> Registries.getBlock("minecraft:turtle_egg")),
+    TURTLE_EGG(NamespaceID.from("minecraft:turtle_egg"), (byte) 64, () -> Block.TURTLE_EGG),
 
-    DEAD_TUBE_CORAL_BLOCK(NamespaceID.from("minecraft:dead_tube_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:dead_tube_coral_block")),
+    DEAD_TUBE_CORAL_BLOCK(NamespaceID.from("minecraft:dead_tube_coral_block"), (byte) 64, () -> Block.DEAD_TUBE_CORAL_BLOCK),
 
-    DEAD_BRAIN_CORAL_BLOCK(NamespaceID.from("minecraft:dead_brain_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:dead_brain_coral_block")),
+    DEAD_BRAIN_CORAL_BLOCK(NamespaceID.from("minecraft:dead_brain_coral_block"), (byte) 64, () -> Block.DEAD_BRAIN_CORAL_BLOCK),
 
-    DEAD_BUBBLE_CORAL_BLOCK(NamespaceID.from("minecraft:dead_bubble_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:dead_bubble_coral_block")),
+    DEAD_BUBBLE_CORAL_BLOCK(NamespaceID.from("minecraft:dead_bubble_coral_block"), (byte) 64, () -> Block.DEAD_BUBBLE_CORAL_BLOCK),
 
-    DEAD_FIRE_CORAL_BLOCK(NamespaceID.from("minecraft:dead_fire_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:dead_fire_coral_block")),
+    DEAD_FIRE_CORAL_BLOCK(NamespaceID.from("minecraft:dead_fire_coral_block"), (byte) 64, () -> Block.DEAD_FIRE_CORAL_BLOCK),
 
-    DEAD_HORN_CORAL_BLOCK(NamespaceID.from("minecraft:dead_horn_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:dead_horn_coral_block")),
+    DEAD_HORN_CORAL_BLOCK(NamespaceID.from("minecraft:dead_horn_coral_block"), (byte) 64, () -> Block.DEAD_HORN_CORAL_BLOCK),
 
-    TUBE_CORAL_BLOCK(NamespaceID.from("minecraft:tube_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:tube_coral_block")),
+    TUBE_CORAL_BLOCK(NamespaceID.from("minecraft:tube_coral_block"), (byte) 64, () -> Block.TUBE_CORAL_BLOCK),
 
-    BRAIN_CORAL_BLOCK(NamespaceID.from("minecraft:brain_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:brain_coral_block")),
+    BRAIN_CORAL_BLOCK(NamespaceID.from("minecraft:brain_coral_block"), (byte) 64, () -> Block.BRAIN_CORAL_BLOCK),
 
-    BUBBLE_CORAL_BLOCK(NamespaceID.from("minecraft:bubble_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:bubble_coral_block")),
+    BUBBLE_CORAL_BLOCK(NamespaceID.from("minecraft:bubble_coral_block"), (byte) 64, () -> Block.BUBBLE_CORAL_BLOCK),
 
-    FIRE_CORAL_BLOCK(NamespaceID.from("minecraft:fire_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:fire_coral_block")),
+    FIRE_CORAL_BLOCK(NamespaceID.from("minecraft:fire_coral_block"), (byte) 64, () -> Block.FIRE_CORAL_BLOCK),
 
-    HORN_CORAL_BLOCK(NamespaceID.from("minecraft:horn_coral_block"), (byte) 64, () -> Registries.getBlock("minecraft:horn_coral_block")),
+    HORN_CORAL_BLOCK(NamespaceID.from("minecraft:horn_coral_block"), (byte) 64, () -> Block.HORN_CORAL_BLOCK),
 
-    TUBE_CORAL(NamespaceID.from("minecraft:tube_coral"), (byte) 64, () -> Registries.getBlock("minecraft:tube_coral")),
+    TUBE_CORAL(NamespaceID.from("minecraft:tube_coral"), (byte) 64, () -> Block.TUBE_CORAL),
 
-    BRAIN_CORAL(NamespaceID.from("minecraft:brain_coral"), (byte) 64, () -> Registries.getBlock("minecraft:brain_coral")),
+    BRAIN_CORAL(NamespaceID.from("minecraft:brain_coral"), (byte) 64, () -> Block.BRAIN_CORAL),
 
-    BUBBLE_CORAL(NamespaceID.from("minecraft:bubble_coral"), (byte) 64, () -> Registries.getBlock("minecraft:bubble_coral")),
+    BUBBLE_CORAL(NamespaceID.from("minecraft:bubble_coral"), (byte) 64, () -> Block.BUBBLE_CORAL),
 
-    FIRE_CORAL(NamespaceID.from("minecraft:fire_coral"), (byte) 64, () -> Registries.getBlock("minecraft:fire_coral")),
+    FIRE_CORAL(NamespaceID.from("minecraft:fire_coral"), (byte) 64, () -> Block.FIRE_CORAL),
 
-    HORN_CORAL(NamespaceID.from("minecraft:horn_coral"), (byte) 64, () -> Registries.getBlock("minecraft:horn_coral")),
+    HORN_CORAL(NamespaceID.from("minecraft:horn_coral"), (byte) 64, () -> Block.HORN_CORAL),
 
-    DEAD_BRAIN_CORAL(NamespaceID.from("minecraft:dead_brain_coral"), (byte) 64, () -> Registries.getBlock("minecraft:dead_brain_coral")),
+    DEAD_BRAIN_CORAL(NamespaceID.from("minecraft:dead_brain_coral"), (byte) 64, () -> Block.DEAD_BRAIN_CORAL),
 
-    DEAD_BUBBLE_CORAL(NamespaceID.from("minecraft:dead_bubble_coral"), (byte) 64, () -> Registries.getBlock("minecraft:dead_bubble_coral")),
+    DEAD_BUBBLE_CORAL(NamespaceID.from("minecraft:dead_bubble_coral"), (byte) 64, () -> Block.DEAD_BUBBLE_CORAL),
 
-    DEAD_FIRE_CORAL(NamespaceID.from("minecraft:dead_fire_coral"), (byte) 64, () -> Registries.getBlock("minecraft:dead_fire_coral")),
+    DEAD_FIRE_CORAL(NamespaceID.from("minecraft:dead_fire_coral"), (byte) 64, () -> Block.DEAD_FIRE_CORAL),
 
-    DEAD_HORN_CORAL(NamespaceID.from("minecraft:dead_horn_coral"), (byte) 64, () -> Registries.getBlock("minecraft:dead_horn_coral")),
+    DEAD_HORN_CORAL(NamespaceID.from("minecraft:dead_horn_coral"), (byte) 64, () -> Block.DEAD_HORN_CORAL),
 
-    DEAD_TUBE_CORAL(NamespaceID.from("minecraft:dead_tube_coral"), (byte) 64, () -> Registries.getBlock("minecraft:dead_tube_coral")),
+    DEAD_TUBE_CORAL(NamespaceID.from("minecraft:dead_tube_coral"), (byte) 64, () -> Block.DEAD_TUBE_CORAL),
 
-    TUBE_CORAL_FAN(NamespaceID.from("minecraft:tube_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:tube_coral_fan")),
+    TUBE_CORAL_FAN(NamespaceID.from("minecraft:tube_coral_fan"), (byte) 64, () -> Block.TUBE_CORAL_FAN),
 
-    BRAIN_CORAL_FAN(NamespaceID.from("minecraft:brain_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:brain_coral_fan")),
+    BRAIN_CORAL_FAN(NamespaceID.from("minecraft:brain_coral_fan"), (byte) 64, () -> Block.BRAIN_CORAL_FAN),
 
-    BUBBLE_CORAL_FAN(NamespaceID.from("minecraft:bubble_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:bubble_coral_fan")),
+    BUBBLE_CORAL_FAN(NamespaceID.from("minecraft:bubble_coral_fan"), (byte) 64, () -> Block.BUBBLE_CORAL_FAN),
 
-    FIRE_CORAL_FAN(NamespaceID.from("minecraft:fire_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:fire_coral_fan")),
+    FIRE_CORAL_FAN(NamespaceID.from("minecraft:fire_coral_fan"), (byte) 64, () -> Block.FIRE_CORAL_FAN),
 
-    HORN_CORAL_FAN(NamespaceID.from("minecraft:horn_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:horn_coral_fan")),
+    HORN_CORAL_FAN(NamespaceID.from("minecraft:horn_coral_fan"), (byte) 64, () -> Block.HORN_CORAL_FAN),
 
-    DEAD_TUBE_CORAL_FAN(NamespaceID.from("minecraft:dead_tube_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:dead_tube_coral_fan")),
+    DEAD_TUBE_CORAL_FAN(NamespaceID.from("minecraft:dead_tube_coral_fan"), (byte) 64, () -> Block.DEAD_TUBE_CORAL_FAN),
 
-    DEAD_BRAIN_CORAL_FAN(NamespaceID.from("minecraft:dead_brain_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:dead_brain_coral_fan")),
+    DEAD_BRAIN_CORAL_FAN(NamespaceID.from("minecraft:dead_brain_coral_fan"), (byte) 64, () -> Block.DEAD_BRAIN_CORAL_FAN),
 
-    DEAD_BUBBLE_CORAL_FAN(NamespaceID.from("minecraft:dead_bubble_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:dead_bubble_coral_fan")),
+    DEAD_BUBBLE_CORAL_FAN(NamespaceID.from("minecraft:dead_bubble_coral_fan"), (byte) 64, () -> Block.DEAD_BUBBLE_CORAL_FAN),
 
-    DEAD_FIRE_CORAL_FAN(NamespaceID.from("minecraft:dead_fire_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:dead_fire_coral_fan")),
+    DEAD_FIRE_CORAL_FAN(NamespaceID.from("minecraft:dead_fire_coral_fan"), (byte) 64, () -> Block.DEAD_FIRE_CORAL_FAN),
 
-    DEAD_HORN_CORAL_FAN(NamespaceID.from("minecraft:dead_horn_coral_fan"), (byte) 64, () -> Registries.getBlock("minecraft:dead_horn_coral_fan")),
+    DEAD_HORN_CORAL_FAN(NamespaceID.from("minecraft:dead_horn_coral_fan"), (byte) 64, () -> Block.DEAD_HORN_CORAL_FAN),
 
-    BLUE_ICE(NamespaceID.from("minecraft:blue_ice"), (byte) 64, () -> Registries.getBlock("minecraft:blue_ice")),
+    BLUE_ICE(NamespaceID.from("minecraft:blue_ice"), (byte) 64, () -> Block.BLUE_ICE),
 
-    CONDUIT(NamespaceID.from("minecraft:conduit"), (byte) 64, () -> Registries.getBlock("minecraft:conduit")),
+    CONDUIT(NamespaceID.from("minecraft:conduit"), (byte) 64, () -> Block.CONDUIT),
 
-    POLISHED_GRANITE_STAIRS(NamespaceID.from("minecraft:polished_granite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_granite_stairs")),
+    POLISHED_GRANITE_STAIRS(NamespaceID.from("minecraft:polished_granite_stairs"), (byte) 64, () -> Block.POLISHED_GRANITE_STAIRS),
 
-    SMOOTH_RED_SANDSTONE_STAIRS(NamespaceID.from("minecraft:smooth_red_sandstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_red_sandstone_stairs")),
+    SMOOTH_RED_SANDSTONE_STAIRS(NamespaceID.from("minecraft:smooth_red_sandstone_stairs"), (byte) 64, () -> Block.SMOOTH_RED_SANDSTONE_STAIRS),
 
-    MOSSY_STONE_BRICK_STAIRS(NamespaceID.from("minecraft:mossy_stone_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_stone_brick_stairs")),
+    MOSSY_STONE_BRICK_STAIRS(NamespaceID.from("minecraft:mossy_stone_brick_stairs"), (byte) 64, () -> Block.MOSSY_STONE_BRICK_STAIRS),
 
-    POLISHED_DIORITE_STAIRS(NamespaceID.from("minecraft:polished_diorite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_diorite_stairs")),
+    POLISHED_DIORITE_STAIRS(NamespaceID.from("minecraft:polished_diorite_stairs"), (byte) 64, () -> Block.POLISHED_DIORITE_STAIRS),
 
-    MOSSY_COBBLESTONE_STAIRS(NamespaceID.from("minecraft:mossy_cobblestone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_cobblestone_stairs")),
+    MOSSY_COBBLESTONE_STAIRS(NamespaceID.from("minecraft:mossy_cobblestone_stairs"), (byte) 64, () -> Block.MOSSY_COBBLESTONE_STAIRS),
 
-    END_STONE_BRICK_STAIRS(NamespaceID.from("minecraft:end_stone_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:end_stone_brick_stairs")),
+    END_STONE_BRICK_STAIRS(NamespaceID.from("minecraft:end_stone_brick_stairs"), (byte) 64, () -> Block.END_STONE_BRICK_STAIRS),
 
-    STONE_STAIRS(NamespaceID.from("minecraft:stone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:stone_stairs")),
+    STONE_STAIRS(NamespaceID.from("minecraft:stone_stairs"), (byte) 64, () -> Block.STONE_STAIRS),
 
-    SMOOTH_SANDSTONE_STAIRS(NamespaceID.from("minecraft:smooth_sandstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_sandstone_stairs")),
+    SMOOTH_SANDSTONE_STAIRS(NamespaceID.from("minecraft:smooth_sandstone_stairs"), (byte) 64, () -> Block.SMOOTH_SANDSTONE_STAIRS),
 
-    SMOOTH_QUARTZ_STAIRS(NamespaceID.from("minecraft:smooth_quartz_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_quartz_stairs")),
+    SMOOTH_QUARTZ_STAIRS(NamespaceID.from("minecraft:smooth_quartz_stairs"), (byte) 64, () -> Block.SMOOTH_QUARTZ_STAIRS),
 
-    GRANITE_STAIRS(NamespaceID.from("minecraft:granite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:granite_stairs")),
+    GRANITE_STAIRS(NamespaceID.from("minecraft:granite_stairs"), (byte) 64, () -> Block.GRANITE_STAIRS),
 
-    ANDESITE_STAIRS(NamespaceID.from("minecraft:andesite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:andesite_stairs")),
+    ANDESITE_STAIRS(NamespaceID.from("minecraft:andesite_stairs"), (byte) 64, () -> Block.ANDESITE_STAIRS),
 
-    RED_NETHER_BRICK_STAIRS(NamespaceID.from("minecraft:red_nether_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:red_nether_brick_stairs")),
+    RED_NETHER_BRICK_STAIRS(NamespaceID.from("minecraft:red_nether_brick_stairs"), (byte) 64, () -> Block.RED_NETHER_BRICK_STAIRS),
 
-    POLISHED_ANDESITE_STAIRS(NamespaceID.from("minecraft:polished_andesite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_andesite_stairs")),
+    POLISHED_ANDESITE_STAIRS(NamespaceID.from("minecraft:polished_andesite_stairs"), (byte) 64, () -> Block.POLISHED_ANDESITE_STAIRS),
 
-    DIORITE_STAIRS(NamespaceID.from("minecraft:diorite_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:diorite_stairs")),
+    DIORITE_STAIRS(NamespaceID.from("minecraft:diorite_stairs"), (byte) 64, () -> Block.DIORITE_STAIRS),
 
-    COBBLED_DEEPSLATE_STAIRS(NamespaceID.from("minecraft:cobbled_deepslate_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate_stairs")),
+    COBBLED_DEEPSLATE_STAIRS(NamespaceID.from("minecraft:cobbled_deepslate_stairs"), (byte) 64, () -> Block.COBBLED_DEEPSLATE_STAIRS),
 
-    POLISHED_DEEPSLATE_STAIRS(NamespaceID.from("minecraft:polished_deepslate_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate_stairs")),
+    POLISHED_DEEPSLATE_STAIRS(NamespaceID.from("minecraft:polished_deepslate_stairs"), (byte) 64, () -> Block.POLISHED_DEEPSLATE_STAIRS),
 
-    DEEPSLATE_BRICK_STAIRS(NamespaceID.from("minecraft:deepslate_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_brick_stairs")),
+    DEEPSLATE_BRICK_STAIRS(NamespaceID.from("minecraft:deepslate_brick_stairs"), (byte) 64, () -> Block.DEEPSLATE_BRICK_STAIRS),
 
-    DEEPSLATE_TILE_STAIRS(NamespaceID.from("minecraft:deepslate_tile_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tile_stairs")),
+    DEEPSLATE_TILE_STAIRS(NamespaceID.from("minecraft:deepslate_tile_stairs"), (byte) 64, () -> Block.DEEPSLATE_TILE_STAIRS),
 
-    POLISHED_GRANITE_SLAB(NamespaceID.from("minecraft:polished_granite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_granite_slab")),
+    POLISHED_GRANITE_SLAB(NamespaceID.from("minecraft:polished_granite_slab"), (byte) 64, () -> Block.POLISHED_GRANITE_SLAB),
 
-    SMOOTH_RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:smooth_red_sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_red_sandstone_slab")),
+    SMOOTH_RED_SANDSTONE_SLAB(NamespaceID.from("minecraft:smooth_red_sandstone_slab"), (byte) 64, () -> Block.SMOOTH_RED_SANDSTONE_SLAB),
 
-    MOSSY_STONE_BRICK_SLAB(NamespaceID.from("minecraft:mossy_stone_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_stone_brick_slab")),
+    MOSSY_STONE_BRICK_SLAB(NamespaceID.from("minecraft:mossy_stone_brick_slab"), (byte) 64, () -> Block.MOSSY_STONE_BRICK_SLAB),
 
-    POLISHED_DIORITE_SLAB(NamespaceID.from("minecraft:polished_diorite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_diorite_slab")),
+    POLISHED_DIORITE_SLAB(NamespaceID.from("minecraft:polished_diorite_slab"), (byte) 64, () -> Block.POLISHED_DIORITE_SLAB),
 
-    MOSSY_COBBLESTONE_SLAB(NamespaceID.from("minecraft:mossy_cobblestone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:mossy_cobblestone_slab")),
+    MOSSY_COBBLESTONE_SLAB(NamespaceID.from("minecraft:mossy_cobblestone_slab"), (byte) 64, () -> Block.MOSSY_COBBLESTONE_SLAB),
 
-    END_STONE_BRICK_SLAB(NamespaceID.from("minecraft:end_stone_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:end_stone_brick_slab")),
+    END_STONE_BRICK_SLAB(NamespaceID.from("minecraft:end_stone_brick_slab"), (byte) 64, () -> Block.END_STONE_BRICK_SLAB),
 
-    SMOOTH_SANDSTONE_SLAB(NamespaceID.from("minecraft:smooth_sandstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_sandstone_slab")),
+    SMOOTH_SANDSTONE_SLAB(NamespaceID.from("minecraft:smooth_sandstone_slab"), (byte) 64, () -> Block.SMOOTH_SANDSTONE_SLAB),
 
-    SMOOTH_QUARTZ_SLAB(NamespaceID.from("minecraft:smooth_quartz_slab"), (byte) 64, () -> Registries.getBlock("minecraft:smooth_quartz_slab")),
+    SMOOTH_QUARTZ_SLAB(NamespaceID.from("minecraft:smooth_quartz_slab"), (byte) 64, () -> Block.SMOOTH_QUARTZ_SLAB),
 
-    GRANITE_SLAB(NamespaceID.from("minecraft:granite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:granite_slab")),
+    GRANITE_SLAB(NamespaceID.from("minecraft:granite_slab"), (byte) 64, () -> Block.GRANITE_SLAB),
 
-    ANDESITE_SLAB(NamespaceID.from("minecraft:andesite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:andesite_slab")),
+    ANDESITE_SLAB(NamespaceID.from("minecraft:andesite_slab"), (byte) 64, () -> Block.ANDESITE_SLAB),
 
-    RED_NETHER_BRICK_SLAB(NamespaceID.from("minecraft:red_nether_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:red_nether_brick_slab")),
+    RED_NETHER_BRICK_SLAB(NamespaceID.from("minecraft:red_nether_brick_slab"), (byte) 64, () -> Block.RED_NETHER_BRICK_SLAB),
 
-    POLISHED_ANDESITE_SLAB(NamespaceID.from("minecraft:polished_andesite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_andesite_slab")),
+    POLISHED_ANDESITE_SLAB(NamespaceID.from("minecraft:polished_andesite_slab"), (byte) 64, () -> Block.POLISHED_ANDESITE_SLAB),
 
-    DIORITE_SLAB(NamespaceID.from("minecraft:diorite_slab"), (byte) 64, () -> Registries.getBlock("minecraft:diorite_slab")),
+    DIORITE_SLAB(NamespaceID.from("minecraft:diorite_slab"), (byte) 64, () -> Block.DIORITE_SLAB),
 
-    COBBLED_DEEPSLATE_SLAB(NamespaceID.from("minecraft:cobbled_deepslate_slab"), (byte) 64, () -> Registries.getBlock("minecraft:cobbled_deepslate_slab")),
+    COBBLED_DEEPSLATE_SLAB(NamespaceID.from("minecraft:cobbled_deepslate_slab"), (byte) 64, () -> Block.COBBLED_DEEPSLATE_SLAB),
 
-    POLISHED_DEEPSLATE_SLAB(NamespaceID.from("minecraft:polished_deepslate_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_deepslate_slab")),
+    POLISHED_DEEPSLATE_SLAB(NamespaceID.from("minecraft:polished_deepslate_slab"), (byte) 64, () -> Block.POLISHED_DEEPSLATE_SLAB),
 
-    DEEPSLATE_BRICK_SLAB(NamespaceID.from("minecraft:deepslate_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_brick_slab")),
+    DEEPSLATE_BRICK_SLAB(NamespaceID.from("minecraft:deepslate_brick_slab"), (byte) 64, () -> Block.DEEPSLATE_BRICK_SLAB),
 
-    DEEPSLATE_TILE_SLAB(NamespaceID.from("minecraft:deepslate_tile_slab"), (byte) 64, () -> Registries.getBlock("minecraft:deepslate_tile_slab")),
+    DEEPSLATE_TILE_SLAB(NamespaceID.from("minecraft:deepslate_tile_slab"), (byte) 64, () -> Block.DEEPSLATE_TILE_SLAB),
 
-    SCAFFOLDING(NamespaceID.from("minecraft:scaffolding"), (byte) 64, () -> Registries.getBlock("minecraft:scaffolding")),
+    SCAFFOLDING(NamespaceID.from("minecraft:scaffolding"), (byte) 64, () -> Block.SCAFFOLDING),
 
-    REDSTONE(NamespaceID.from("minecraft:redstone"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_wire")),
+    REDSTONE(NamespaceID.from("minecraft:redstone"), (byte) 64, () -> Block.REDSTONE_WIRE),
 
-    REDSTONE_TORCH(NamespaceID.from("minecraft:redstone_torch"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_torch")),
+    REDSTONE_TORCH(NamespaceID.from("minecraft:redstone_torch"), (byte) 64, () -> Block.REDSTONE_TORCH),
 
-    REDSTONE_BLOCK(NamespaceID.from("minecraft:redstone_block"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_block")),
+    REDSTONE_BLOCK(NamespaceID.from("minecraft:redstone_block"), (byte) 64, () -> Block.REDSTONE_BLOCK),
 
-    REPEATER(NamespaceID.from("minecraft:repeater"), (byte) 64, () -> Registries.getBlock("minecraft:repeater")),
+    REPEATER(NamespaceID.from("minecraft:repeater"), (byte) 64, () -> Block.REPEATER),
 
-    COMPARATOR(NamespaceID.from("minecraft:comparator"), (byte) 64, () -> Registries.getBlock("minecraft:comparator")),
+    COMPARATOR(NamespaceID.from("minecraft:comparator"), (byte) 64, () -> Block.COMPARATOR),
 
-    PISTON(NamespaceID.from("minecraft:piston"), (byte) 64, () -> Registries.getBlock("minecraft:piston")),
+    PISTON(NamespaceID.from("minecraft:piston"), (byte) 64, () -> Block.PISTON),
 
-    STICKY_PISTON(NamespaceID.from("minecraft:sticky_piston"), (byte) 64, () -> Registries.getBlock("minecraft:sticky_piston")),
+    STICKY_PISTON(NamespaceID.from("minecraft:sticky_piston"), (byte) 64, () -> Block.STICKY_PISTON),
 
-    SLIME_BLOCK(NamespaceID.from("minecraft:slime_block"), (byte) 64, () -> Registries.getBlock("minecraft:slime_block")),
+    SLIME_BLOCK(NamespaceID.from("minecraft:slime_block"), (byte) 64, () -> Block.SLIME_BLOCK),
 
-    HONEY_BLOCK(NamespaceID.from("minecraft:honey_block"), (byte) 64, () -> Registries.getBlock("minecraft:honey_block")),
+    HONEY_BLOCK(NamespaceID.from("minecraft:honey_block"), (byte) 64, () -> Block.HONEY_BLOCK),
 
-    OBSERVER(NamespaceID.from("minecraft:observer"), (byte) 64, () -> Registries.getBlock("minecraft:observer")),
+    OBSERVER(NamespaceID.from("minecraft:observer"), (byte) 64, () -> Block.OBSERVER),
 
-    HOPPER(NamespaceID.from("minecraft:hopper"), (byte) 64, () -> Registries.getBlock("minecraft:hopper")),
+    HOPPER(NamespaceID.from("minecraft:hopper"), (byte) 64, () -> Block.HOPPER),
 
-    DISPENSER(NamespaceID.from("minecraft:dispenser"), (byte) 64, () -> Registries.getBlock("minecraft:dispenser")),
+    DISPENSER(NamespaceID.from("minecraft:dispenser"), (byte) 64, () -> Block.DISPENSER),
 
-    DROPPER(NamespaceID.from("minecraft:dropper"), (byte) 64, () -> Registries.getBlock("minecraft:dropper")),
+    DROPPER(NamespaceID.from("minecraft:dropper"), (byte) 64, () -> Block.DROPPER),
 
-    LECTERN(NamespaceID.from("minecraft:lectern"), (byte) 64, () -> Registries.getBlock("minecraft:lectern")),
+    LECTERN(NamespaceID.from("minecraft:lectern"), (byte) 64, () -> Block.LECTERN),
 
-    TARGET(NamespaceID.from("minecraft:target"), (byte) 64, () -> Registries.getBlock("minecraft:target")),
+    TARGET(NamespaceID.from("minecraft:target"), (byte) 64, () -> Block.TARGET),
 
-    LEVER(NamespaceID.from("minecraft:lever"), (byte) 64, () -> Registries.getBlock("minecraft:lever")),
+    LEVER(NamespaceID.from("minecraft:lever"), (byte) 64, () -> Block.LEVER),
 
-    LIGHTNING_ROD(NamespaceID.from("minecraft:lightning_rod"), (byte) 64, () -> Registries.getBlock("minecraft:lightning_rod")),
+    LIGHTNING_ROD(NamespaceID.from("minecraft:lightning_rod"), (byte) 64, () -> Block.LIGHTNING_ROD),
 
-    DAYLIGHT_DETECTOR(NamespaceID.from("minecraft:daylight_detector"), (byte) 64, () -> Registries.getBlock("minecraft:daylight_detector")),
+    DAYLIGHT_DETECTOR(NamespaceID.from("minecraft:daylight_detector"), (byte) 64, () -> Block.DAYLIGHT_DETECTOR),
 
-    SCULK_SENSOR(NamespaceID.from("minecraft:sculk_sensor"), (byte) 64, () -> Registries.getBlock("minecraft:sculk_sensor")),
+    SCULK_SENSOR(NamespaceID.from("minecraft:sculk_sensor"), (byte) 64, () -> Block.SCULK_SENSOR),
 
-    TRIPWIRE_HOOK(NamespaceID.from("minecraft:tripwire_hook"), (byte) 64, () -> Registries.getBlock("minecraft:tripwire_hook")),
+    TRIPWIRE_HOOK(NamespaceID.from("minecraft:tripwire_hook"), (byte) 64, () -> Block.TRIPWIRE_HOOK),
 
-    TRAPPED_CHEST(NamespaceID.from("minecraft:trapped_chest"), (byte) 64, () -> Registries.getBlock("minecraft:trapped_chest")),
+    TRAPPED_CHEST(NamespaceID.from("minecraft:trapped_chest"), (byte) 64, () -> Block.TRAPPED_CHEST),
 
-    TNT(NamespaceID.from("minecraft:tnt"), (byte) 64, () -> Registries.getBlock("minecraft:tnt")),
+    TNT(NamespaceID.from("minecraft:tnt"), (byte) 64, () -> Block.TNT),
 
-    REDSTONE_LAMP(NamespaceID.from("minecraft:redstone_lamp"), (byte) 64, () -> Registries.getBlock("minecraft:redstone_lamp")),
+    REDSTONE_LAMP(NamespaceID.from("minecraft:redstone_lamp"), (byte) 64, () -> Block.REDSTONE_LAMP),
 
-    NOTE_BLOCK(NamespaceID.from("minecraft:note_block"), (byte) 64, () -> Registries.getBlock("minecraft:note_block")),
+    NOTE_BLOCK(NamespaceID.from("minecraft:note_block"), (byte) 64, () -> Block.NOTE_BLOCK),
 
-    STONE_BUTTON(NamespaceID.from("minecraft:stone_button"), (byte) 64, () -> Registries.getBlock("minecraft:stone_button")),
+    STONE_BUTTON(NamespaceID.from("minecraft:stone_button"), (byte) 64, () -> Block.STONE_BUTTON),
 
-    POLISHED_BLACKSTONE_BUTTON(NamespaceID.from("minecraft:polished_blackstone_button"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_button")),
+    POLISHED_BLACKSTONE_BUTTON(NamespaceID.from("minecraft:polished_blackstone_button"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_BUTTON),
 
-    OAK_BUTTON(NamespaceID.from("minecraft:oak_button"), (byte) 64, () -> Registries.getBlock("minecraft:oak_button")),
+    OAK_BUTTON(NamespaceID.from("minecraft:oak_button"), (byte) 64, () -> Block.OAK_BUTTON),
 
-    SPRUCE_BUTTON(NamespaceID.from("minecraft:spruce_button"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_button")),
+    SPRUCE_BUTTON(NamespaceID.from("minecraft:spruce_button"), (byte) 64, () -> Block.SPRUCE_BUTTON),
 
-    BIRCH_BUTTON(NamespaceID.from("minecraft:birch_button"), (byte) 64, () -> Registries.getBlock("minecraft:birch_button")),
+    BIRCH_BUTTON(NamespaceID.from("minecraft:birch_button"), (byte) 64, () -> Block.BIRCH_BUTTON),
 
-    JUNGLE_BUTTON(NamespaceID.from("minecraft:jungle_button"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_button")),
+    JUNGLE_BUTTON(NamespaceID.from("minecraft:jungle_button"), (byte) 64, () -> Block.JUNGLE_BUTTON),
 
-    ACACIA_BUTTON(NamespaceID.from("minecraft:acacia_button"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_button")),
+    ACACIA_BUTTON(NamespaceID.from("minecraft:acacia_button"), (byte) 64, () -> Block.ACACIA_BUTTON),
 
-    DARK_OAK_BUTTON(NamespaceID.from("minecraft:dark_oak_button"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_button")),
+    DARK_OAK_BUTTON(NamespaceID.from("minecraft:dark_oak_button"), (byte) 64, () -> Block.DARK_OAK_BUTTON),
 
-    CRIMSON_BUTTON(NamespaceID.from("minecraft:crimson_button"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_button")),
+    CRIMSON_BUTTON(NamespaceID.from("minecraft:crimson_button"), (byte) 64, () -> Block.CRIMSON_BUTTON),
 
-    WARPED_BUTTON(NamespaceID.from("minecraft:warped_button"), (byte) 64, () -> Registries.getBlock("minecraft:warped_button")),
+    WARPED_BUTTON(NamespaceID.from("minecraft:warped_button"), (byte) 64, () -> Block.WARPED_BUTTON),
 
-    STONE_PRESSURE_PLATE(NamespaceID.from("minecraft:stone_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:stone_pressure_plate")),
+    STONE_PRESSURE_PLATE(NamespaceID.from("minecraft:stone_pressure_plate"), (byte) 64, () -> Block.STONE_PRESSURE_PLATE),
 
-    POLISHED_BLACKSTONE_PRESSURE_PLATE(NamespaceID.from("minecraft:polished_blackstone_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_pressure_plate")),
+    POLISHED_BLACKSTONE_PRESSURE_PLATE(NamespaceID.from("minecraft:polished_blackstone_pressure_plate"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_PRESSURE_PLATE),
 
-    LIGHT_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:light_weighted_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:light_weighted_pressure_plate")),
+    LIGHT_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:light_weighted_pressure_plate"), (byte) 64, () -> Block.LIGHT_WEIGHTED_PRESSURE_PLATE),
 
-    HEAVY_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:heavy_weighted_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:heavy_weighted_pressure_plate")),
+    HEAVY_WEIGHTED_PRESSURE_PLATE(NamespaceID.from("minecraft:heavy_weighted_pressure_plate"), (byte) 64, () -> Block.HEAVY_WEIGHTED_PRESSURE_PLATE),
 
-    OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:oak_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:oak_pressure_plate")),
+    OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:oak_pressure_plate"), (byte) 64, () -> Block.OAK_PRESSURE_PLATE),
 
-    SPRUCE_PRESSURE_PLATE(NamespaceID.from("minecraft:spruce_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_pressure_plate")),
+    SPRUCE_PRESSURE_PLATE(NamespaceID.from("minecraft:spruce_pressure_plate"), (byte) 64, () -> Block.SPRUCE_PRESSURE_PLATE),
 
-    BIRCH_PRESSURE_PLATE(NamespaceID.from("minecraft:birch_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:birch_pressure_plate")),
+    BIRCH_PRESSURE_PLATE(NamespaceID.from("minecraft:birch_pressure_plate"), (byte) 64, () -> Block.BIRCH_PRESSURE_PLATE),
 
-    JUNGLE_PRESSURE_PLATE(NamespaceID.from("minecraft:jungle_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_pressure_plate")),
+    JUNGLE_PRESSURE_PLATE(NamespaceID.from("minecraft:jungle_pressure_plate"), (byte) 64, () -> Block.JUNGLE_PRESSURE_PLATE),
 
-    ACACIA_PRESSURE_PLATE(NamespaceID.from("minecraft:acacia_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_pressure_plate")),
+    ACACIA_PRESSURE_PLATE(NamespaceID.from("minecraft:acacia_pressure_plate"), (byte) 64, () -> Block.ACACIA_PRESSURE_PLATE),
 
-    DARK_OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:dark_oak_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_pressure_plate")),
+    DARK_OAK_PRESSURE_PLATE(NamespaceID.from("minecraft:dark_oak_pressure_plate"), (byte) 64, () -> Block.DARK_OAK_PRESSURE_PLATE),
 
-    CRIMSON_PRESSURE_PLATE(NamespaceID.from("minecraft:crimson_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_pressure_plate")),
+    CRIMSON_PRESSURE_PLATE(NamespaceID.from("minecraft:crimson_pressure_plate"), (byte) 64, () -> Block.CRIMSON_PRESSURE_PLATE),
 
-    WARPED_PRESSURE_PLATE(NamespaceID.from("minecraft:warped_pressure_plate"), (byte) 64, () -> Registries.getBlock("minecraft:warped_pressure_plate")),
+    WARPED_PRESSURE_PLATE(NamespaceID.from("minecraft:warped_pressure_plate"), (byte) 64, () -> Block.WARPED_PRESSURE_PLATE),
 
-    IRON_DOOR(NamespaceID.from("minecraft:iron_door"), (byte) 64, () -> Registries.getBlock("minecraft:iron_door")),
+    IRON_DOOR(NamespaceID.from("minecraft:iron_door"), (byte) 64, () -> Block.IRON_DOOR),
 
-    OAK_DOOR(NamespaceID.from("minecraft:oak_door"), (byte) 64, () -> Registries.getBlock("minecraft:oak_door")),
+    OAK_DOOR(NamespaceID.from("minecraft:oak_door"), (byte) 64, () -> Block.OAK_DOOR),
 
-    SPRUCE_DOOR(NamespaceID.from("minecraft:spruce_door"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_door")),
+    SPRUCE_DOOR(NamespaceID.from("minecraft:spruce_door"), (byte) 64, () -> Block.SPRUCE_DOOR),
 
-    BIRCH_DOOR(NamespaceID.from("minecraft:birch_door"), (byte) 64, () -> Registries.getBlock("minecraft:birch_door")),
+    BIRCH_DOOR(NamespaceID.from("minecraft:birch_door"), (byte) 64, () -> Block.BIRCH_DOOR),
 
-    JUNGLE_DOOR(NamespaceID.from("minecraft:jungle_door"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_door")),
+    JUNGLE_DOOR(NamespaceID.from("minecraft:jungle_door"), (byte) 64, () -> Block.JUNGLE_DOOR),
 
-    ACACIA_DOOR(NamespaceID.from("minecraft:acacia_door"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_door")),
+    ACACIA_DOOR(NamespaceID.from("minecraft:acacia_door"), (byte) 64, () -> Block.ACACIA_DOOR),
 
-    DARK_OAK_DOOR(NamespaceID.from("minecraft:dark_oak_door"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_door")),
+    DARK_OAK_DOOR(NamespaceID.from("minecraft:dark_oak_door"), (byte) 64, () -> Block.DARK_OAK_DOOR),
 
-    CRIMSON_DOOR(NamespaceID.from("minecraft:crimson_door"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_door")),
+    CRIMSON_DOOR(NamespaceID.from("minecraft:crimson_door"), (byte) 64, () -> Block.CRIMSON_DOOR),
 
-    WARPED_DOOR(NamespaceID.from("minecraft:warped_door"), (byte) 64, () -> Registries.getBlock("minecraft:warped_door")),
+    WARPED_DOOR(NamespaceID.from("minecraft:warped_door"), (byte) 64, () -> Block.WARPED_DOOR),
 
-    IRON_TRAPDOOR(NamespaceID.from("minecraft:iron_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:iron_trapdoor")),
+    IRON_TRAPDOOR(NamespaceID.from("minecraft:iron_trapdoor"), (byte) 64, () -> Block.IRON_TRAPDOOR),
 
-    OAK_TRAPDOOR(NamespaceID.from("minecraft:oak_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:oak_trapdoor")),
+    OAK_TRAPDOOR(NamespaceID.from("minecraft:oak_trapdoor"), (byte) 64, () -> Block.OAK_TRAPDOOR),
 
-    SPRUCE_TRAPDOOR(NamespaceID.from("minecraft:spruce_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_trapdoor")),
+    SPRUCE_TRAPDOOR(NamespaceID.from("minecraft:spruce_trapdoor"), (byte) 64, () -> Block.SPRUCE_TRAPDOOR),
 
-    BIRCH_TRAPDOOR(NamespaceID.from("minecraft:birch_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:birch_trapdoor")),
+    BIRCH_TRAPDOOR(NamespaceID.from("minecraft:birch_trapdoor"), (byte) 64, () -> Block.BIRCH_TRAPDOOR),
 
-    JUNGLE_TRAPDOOR(NamespaceID.from("minecraft:jungle_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_trapdoor")),
+    JUNGLE_TRAPDOOR(NamespaceID.from("minecraft:jungle_trapdoor"), (byte) 64, () -> Block.JUNGLE_TRAPDOOR),
 
-    ACACIA_TRAPDOOR(NamespaceID.from("minecraft:acacia_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_trapdoor")),
+    ACACIA_TRAPDOOR(NamespaceID.from("minecraft:acacia_trapdoor"), (byte) 64, () -> Block.ACACIA_TRAPDOOR),
 
-    DARK_OAK_TRAPDOOR(NamespaceID.from("minecraft:dark_oak_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_trapdoor")),
+    DARK_OAK_TRAPDOOR(NamespaceID.from("minecraft:dark_oak_trapdoor"), (byte) 64, () -> Block.DARK_OAK_TRAPDOOR),
 
-    CRIMSON_TRAPDOOR(NamespaceID.from("minecraft:crimson_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_trapdoor")),
+    CRIMSON_TRAPDOOR(NamespaceID.from("minecraft:crimson_trapdoor"), (byte) 64, () -> Block.CRIMSON_TRAPDOOR),
 
-    WARPED_TRAPDOOR(NamespaceID.from("minecraft:warped_trapdoor"), (byte) 64, () -> Registries.getBlock("minecraft:warped_trapdoor")),
+    WARPED_TRAPDOOR(NamespaceID.from("minecraft:warped_trapdoor"), (byte) 64, () -> Block.WARPED_TRAPDOOR),
 
-    OAK_FENCE_GATE(NamespaceID.from("minecraft:oak_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:oak_fence_gate")),
+    OAK_FENCE_GATE(NamespaceID.from("minecraft:oak_fence_gate"), (byte) 64, () -> Block.OAK_FENCE_GATE),
 
-    SPRUCE_FENCE_GATE(NamespaceID.from("minecraft:spruce_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:spruce_fence_gate")),
+    SPRUCE_FENCE_GATE(NamespaceID.from("minecraft:spruce_fence_gate"), (byte) 64, () -> Block.SPRUCE_FENCE_GATE),
 
-    BIRCH_FENCE_GATE(NamespaceID.from("minecraft:birch_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:birch_fence_gate")),
+    BIRCH_FENCE_GATE(NamespaceID.from("minecraft:birch_fence_gate"), (byte) 64, () -> Block.BIRCH_FENCE_GATE),
 
-    JUNGLE_FENCE_GATE(NamespaceID.from("minecraft:jungle_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:jungle_fence_gate")),
+    JUNGLE_FENCE_GATE(NamespaceID.from("minecraft:jungle_fence_gate"), (byte) 64, () -> Block.JUNGLE_FENCE_GATE),
 
-    ACACIA_FENCE_GATE(NamespaceID.from("minecraft:acacia_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:acacia_fence_gate")),
+    ACACIA_FENCE_GATE(NamespaceID.from("minecraft:acacia_fence_gate"), (byte) 64, () -> Block.ACACIA_FENCE_GATE),
 
-    DARK_OAK_FENCE_GATE(NamespaceID.from("minecraft:dark_oak_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:dark_oak_fence_gate")),
+    DARK_OAK_FENCE_GATE(NamespaceID.from("minecraft:dark_oak_fence_gate"), (byte) 64, () -> Block.DARK_OAK_FENCE_GATE),
 
-    CRIMSON_FENCE_GATE(NamespaceID.from("minecraft:crimson_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:crimson_fence_gate")),
+    CRIMSON_FENCE_GATE(NamespaceID.from("minecraft:crimson_fence_gate"), (byte) 64, () -> Block.CRIMSON_FENCE_GATE),
 
-    WARPED_FENCE_GATE(NamespaceID.from("minecraft:warped_fence_gate"), (byte) 64, () -> Registries.getBlock("minecraft:warped_fence_gate")),
+    WARPED_FENCE_GATE(NamespaceID.from("minecraft:warped_fence_gate"), (byte) 64, () -> Block.WARPED_FENCE_GATE),
 
-    POWERED_RAIL(NamespaceID.from("minecraft:powered_rail"), (byte) 64, () -> Registries.getBlock("minecraft:powered_rail")),
+    POWERED_RAIL(NamespaceID.from("minecraft:powered_rail"), (byte) 64, () -> Block.POWERED_RAIL),
 
-    DETECTOR_RAIL(NamespaceID.from("minecraft:detector_rail"), (byte) 64, () -> Registries.getBlock("minecraft:detector_rail")),
+    DETECTOR_RAIL(NamespaceID.from("minecraft:detector_rail"), (byte) 64, () -> Block.DETECTOR_RAIL),
 
-    RAIL(NamespaceID.from("minecraft:rail"), (byte) 64, () -> Registries.getBlock("minecraft:rail")),
+    RAIL(NamespaceID.from("minecraft:rail"), (byte) 64, () -> Block.RAIL),
 
-    ACTIVATOR_RAIL(NamespaceID.from("minecraft:activator_rail"), (byte) 64, () -> Registries.getBlock("minecraft:activator_rail")),
+    ACTIVATOR_RAIL(NamespaceID.from("minecraft:activator_rail"), (byte) 64, () -> Block.ACTIVATOR_RAIL),
 
     SADDLE(NamespaceID.from("minecraft:saddle"), (byte) 1, () -> null),
 
@@ -1365,9 +1365,9 @@ public enum Material implements Keyed {
 
     DARK_OAK_BOAT(NamespaceID.from("minecraft:dark_oak_boat"), (byte) 1, () -> null),
 
-    STRUCTURE_BLOCK(NamespaceID.from("minecraft:structure_block"), (byte) 64, () -> Registries.getBlock("minecraft:structure_block")),
+    STRUCTURE_BLOCK(NamespaceID.from("minecraft:structure_block"), (byte) 64, () -> Block.STRUCTURE_BLOCK),
 
-    JIGSAW(NamespaceID.from("minecraft:jigsaw"), (byte) 64, () -> Registries.getBlock("minecraft:jigsaw")),
+    JIGSAW(NamespaceID.from("minecraft:jigsaw"), (byte) 64, () -> Block.JIGSAW),
 
     TURTLE_HELMET(NamespaceID.from("minecraft:turtle_helmet"), (byte) 1, () -> null) {
         @Override
@@ -1497,13 +1497,13 @@ public enum Material implements Keyed {
         }
     },
 
-    STRING(NamespaceID.from("minecraft:string"), (byte) 64, () -> Registries.getBlock("minecraft:tripwire")),
+    STRING(NamespaceID.from("minecraft:string"), (byte) 64, () -> Block.TRIPWIRE),
 
     FEATHER(NamespaceID.from("minecraft:feather"), (byte) 64, () -> null),
 
     GUNPOWDER(NamespaceID.from("minecraft:gunpowder"), (byte) 64, () -> null),
 
-    WHEAT_SEEDS(NamespaceID.from("minecraft:wheat_seeds"), (byte) 64, () -> Registries.getBlock("minecraft:wheat")),
+    WHEAT_SEEDS(NamespaceID.from("minecraft:wheat_seeds"), (byte) 64, () -> Block.WHEAT),
 
     WHEAT(NamespaceID.from("minecraft:wheat"), (byte) 64, () -> null),
 
@@ -1834,21 +1834,21 @@ public enum Material implements Keyed {
         }
     },
 
-    OAK_SIGN(NamespaceID.from("minecraft:oak_sign"), (byte) 16, () -> Registries.getBlock("minecraft:oak_sign")),
+    OAK_SIGN(NamespaceID.from("minecraft:oak_sign"), (byte) 16, () -> Block.OAK_SIGN),
 
-    SPRUCE_SIGN(NamespaceID.from("minecraft:spruce_sign"), (byte) 16, () -> Registries.getBlock("minecraft:spruce_sign")),
+    SPRUCE_SIGN(NamespaceID.from("minecraft:spruce_sign"), (byte) 16, () -> Block.SPRUCE_SIGN),
 
-    BIRCH_SIGN(NamespaceID.from("minecraft:birch_sign"), (byte) 16, () -> Registries.getBlock("minecraft:birch_sign")),
+    BIRCH_SIGN(NamespaceID.from("minecraft:birch_sign"), (byte) 16, () -> Block.BIRCH_SIGN),
 
-    JUNGLE_SIGN(NamespaceID.from("minecraft:jungle_sign"), (byte) 16, () -> Registries.getBlock("minecraft:jungle_sign")),
+    JUNGLE_SIGN(NamespaceID.from("minecraft:jungle_sign"), (byte) 16, () -> Block.JUNGLE_SIGN),
 
-    ACACIA_SIGN(NamespaceID.from("minecraft:acacia_sign"), (byte) 16, () -> Registries.getBlock("minecraft:acacia_sign")),
+    ACACIA_SIGN(NamespaceID.from("minecraft:acacia_sign"), (byte) 16, () -> Block.ACACIA_SIGN),
 
-    DARK_OAK_SIGN(NamespaceID.from("minecraft:dark_oak_sign"), (byte) 16, () -> Registries.getBlock("minecraft:dark_oak_sign")),
+    DARK_OAK_SIGN(NamespaceID.from("minecraft:dark_oak_sign"), (byte) 16, () -> Block.DARK_OAK_SIGN),
 
-    CRIMSON_SIGN(NamespaceID.from("minecraft:crimson_sign"), (byte) 16, () -> Registries.getBlock("minecraft:crimson_sign")),
+    CRIMSON_SIGN(NamespaceID.from("minecraft:crimson_sign"), (byte) 16, () -> Block.CRIMSON_SIGN),
 
-    WARPED_SIGN(NamespaceID.from("minecraft:warped_sign"), (byte) 16, () -> Registries.getBlock("minecraft:warped_sign")),
+    WARPED_SIGN(NamespaceID.from("minecraft:warped_sign"), (byte) 16, () -> Block.WARPED_SIGN),
 
     BUCKET(NamespaceID.from("minecraft:bucket"), (byte) 16, () -> null),
 
@@ -1856,7 +1856,7 @@ public enum Material implements Keyed {
 
     LAVA_BUCKET(NamespaceID.from("minecraft:lava_bucket"), (byte) 1, () -> null),
 
-    POWDER_SNOW_BUCKET(NamespaceID.from("minecraft:powder_snow_bucket"), (byte) 1, () -> Registries.getBlock("minecraft:powder_snow")),
+    POWDER_SNOW_BUCKET(NamespaceID.from("minecraft:powder_snow_bucket"), (byte) 1, () -> Block.POWDER_SNOW),
 
     SNOWBALL(NamespaceID.from("minecraft:snowball"), (byte) 16, () -> null),
 
@@ -1878,7 +1878,7 @@ public enum Material implements Keyed {
 
     CLAY_BALL(NamespaceID.from("minecraft:clay_ball"), (byte) 64, () -> null),
 
-    DRIED_KELP_BLOCK(NamespaceID.from("minecraft:dried_kelp_block"), (byte) 64, () -> Registries.getBlock("minecraft:dried_kelp_block")),
+    DRIED_KELP_BLOCK(NamespaceID.from("minecraft:dried_kelp_block"), (byte) 64, () -> Block.DRIED_KELP_BLOCK),
 
     PAPER(NamespaceID.from("minecraft:paper"), (byte) 64, () -> null),
 
@@ -1946,7 +1946,7 @@ public enum Material implements Keyed {
 
     GLOW_INK_SAC(NamespaceID.from("minecraft:glow_ink_sac"), (byte) 64, () -> null),
 
-    COCOA_BEANS(NamespaceID.from("minecraft:cocoa_beans"), (byte) 64, () -> Registries.getBlock("minecraft:cocoa")),
+    COCOA_BEANS(NamespaceID.from("minecraft:cocoa_beans"), (byte) 64, () -> Block.COCOA),
 
     WHITE_DYE(NamespaceID.from("minecraft:white_dye"), (byte) 64, () -> null),
 
@@ -1986,39 +1986,39 @@ public enum Material implements Keyed {
 
     SUGAR(NamespaceID.from("minecraft:sugar"), (byte) 64, () -> null),
 
-    CAKE(NamespaceID.from("minecraft:cake"), (byte) 1, () -> Registries.getBlock("minecraft:cake")),
+    CAKE(NamespaceID.from("minecraft:cake"), (byte) 1, () -> Block.CAKE),
 
-    WHITE_BED(NamespaceID.from("minecraft:white_bed"), (byte) 1, () -> Registries.getBlock("minecraft:white_bed")),
+    WHITE_BED(NamespaceID.from("minecraft:white_bed"), (byte) 1, () -> Block.WHITE_BED),
 
-    ORANGE_BED(NamespaceID.from("minecraft:orange_bed"), (byte) 1, () -> Registries.getBlock("minecraft:orange_bed")),
+    ORANGE_BED(NamespaceID.from("minecraft:orange_bed"), (byte) 1, () -> Block.ORANGE_BED),
 
-    MAGENTA_BED(NamespaceID.from("minecraft:magenta_bed"), (byte) 1, () -> Registries.getBlock("minecraft:magenta_bed")),
+    MAGENTA_BED(NamespaceID.from("minecraft:magenta_bed"), (byte) 1, () -> Block.MAGENTA_BED),
 
-    LIGHT_BLUE_BED(NamespaceID.from("minecraft:light_blue_bed"), (byte) 1, () -> Registries.getBlock("minecraft:light_blue_bed")),
+    LIGHT_BLUE_BED(NamespaceID.from("minecraft:light_blue_bed"), (byte) 1, () -> Block.LIGHT_BLUE_BED),
 
-    YELLOW_BED(NamespaceID.from("minecraft:yellow_bed"), (byte) 1, () -> Registries.getBlock("minecraft:yellow_bed")),
+    YELLOW_BED(NamespaceID.from("minecraft:yellow_bed"), (byte) 1, () -> Block.YELLOW_BED),
 
-    LIME_BED(NamespaceID.from("minecraft:lime_bed"), (byte) 1, () -> Registries.getBlock("minecraft:lime_bed")),
+    LIME_BED(NamespaceID.from("minecraft:lime_bed"), (byte) 1, () -> Block.LIME_BED),
 
-    PINK_BED(NamespaceID.from("minecraft:pink_bed"), (byte) 1, () -> Registries.getBlock("minecraft:pink_bed")),
+    PINK_BED(NamespaceID.from("minecraft:pink_bed"), (byte) 1, () -> Block.PINK_BED),
 
-    GRAY_BED(NamespaceID.from("minecraft:gray_bed"), (byte) 1, () -> Registries.getBlock("minecraft:gray_bed")),
+    GRAY_BED(NamespaceID.from("minecraft:gray_bed"), (byte) 1, () -> Block.GRAY_BED),
 
-    LIGHT_GRAY_BED(NamespaceID.from("minecraft:light_gray_bed"), (byte) 1, () -> Registries.getBlock("minecraft:light_gray_bed")),
+    LIGHT_GRAY_BED(NamespaceID.from("minecraft:light_gray_bed"), (byte) 1, () -> Block.LIGHT_GRAY_BED),
 
-    CYAN_BED(NamespaceID.from("minecraft:cyan_bed"), (byte) 1, () -> Registries.getBlock("minecraft:cyan_bed")),
+    CYAN_BED(NamespaceID.from("minecraft:cyan_bed"), (byte) 1, () -> Block.CYAN_BED),
 
-    PURPLE_BED(NamespaceID.from("minecraft:purple_bed"), (byte) 1, () -> Registries.getBlock("minecraft:purple_bed")),
+    PURPLE_BED(NamespaceID.from("minecraft:purple_bed"), (byte) 1, () -> Block.PURPLE_BED),
 
-    BLUE_BED(NamespaceID.from("minecraft:blue_bed"), (byte) 1, () -> Registries.getBlock("minecraft:blue_bed")),
+    BLUE_BED(NamespaceID.from("minecraft:blue_bed"), (byte) 1, () -> Block.BLUE_BED),
 
-    BROWN_BED(NamespaceID.from("minecraft:brown_bed"), (byte) 1, () -> Registries.getBlock("minecraft:brown_bed")),
+    BROWN_BED(NamespaceID.from("minecraft:brown_bed"), (byte) 1, () -> Block.BROWN_BED),
 
-    GREEN_BED(NamespaceID.from("minecraft:green_bed"), (byte) 1, () -> Registries.getBlock("minecraft:green_bed")),
+    GREEN_BED(NamespaceID.from("minecraft:green_bed"), (byte) 1, () -> Block.GREEN_BED),
 
-    RED_BED(NamespaceID.from("minecraft:red_bed"), (byte) 1, () -> Registries.getBlock("minecraft:red_bed")),
+    RED_BED(NamespaceID.from("minecraft:red_bed"), (byte) 1, () -> Block.RED_BED),
 
-    BLACK_BED(NamespaceID.from("minecraft:black_bed"), (byte) 1, () -> Registries.getBlock("minecraft:black_bed")),
+    BLACK_BED(NamespaceID.from("minecraft:black_bed"), (byte) 1, () -> Block.BLACK_BED),
 
     COOKIE(NamespaceID.from("minecraft:cookie"), (byte) 64, () -> null) {
         @Override
@@ -2045,9 +2045,9 @@ public enum Material implements Keyed {
         }
     },
 
-    PUMPKIN_SEEDS(NamespaceID.from("minecraft:pumpkin_seeds"), (byte) 64, () -> Registries.getBlock("minecraft:pumpkin_stem")),
+    PUMPKIN_SEEDS(NamespaceID.from("minecraft:pumpkin_seeds"), (byte) 64, () -> Block.PUMPKIN_STEM),
 
-    MELON_SEEDS(NamespaceID.from("minecraft:melon_seeds"), (byte) 64, () -> Registries.getBlock("minecraft:melon_stem")),
+    MELON_SEEDS(NamespaceID.from("minecraft:melon_seeds"), (byte) 64, () -> Block.MELON_STEM),
 
     BEEF(NamespaceID.from("minecraft:beef"), (byte) 64, () -> null) {
         @Override
@@ -2092,7 +2092,7 @@ public enum Material implements Keyed {
 
     GOLD_NUGGET(NamespaceID.from("minecraft:gold_nugget"), (byte) 64, () -> null),
 
-    NETHER_WART(NamespaceID.from("minecraft:nether_wart"), (byte) 64, () -> Registries.getBlock("minecraft:nether_wart")),
+    NETHER_WART(NamespaceID.from("minecraft:nether_wart"), (byte) 64, () -> Block.NETHER_WART),
 
     POTION(NamespaceID.from("minecraft:potion"), (byte) 1, () -> null),
 
@@ -2111,9 +2111,9 @@ public enum Material implements Keyed {
 
     MAGMA_CREAM(NamespaceID.from("minecraft:magma_cream"), (byte) 64, () -> null),
 
-    BREWING_STAND(NamespaceID.from("minecraft:brewing_stand"), (byte) 64, () -> Registries.getBlock("minecraft:brewing_stand")),
+    BREWING_STAND(NamespaceID.from("minecraft:brewing_stand"), (byte) 64, () -> Block.BREWING_STAND),
 
-    CAULDRON(NamespaceID.from("minecraft:cauldron"), (byte) 64, () -> Registries.getBlock("minecraft:cauldron")),
+    CAULDRON(NamespaceID.from("minecraft:cauldron"), (byte) 64, () -> Block.CAULDRON),
 
     ENDER_EYE(NamespaceID.from("minecraft:ender_eye"), (byte) 64, () -> null),
 
@@ -2265,16 +2265,16 @@ public enum Material implements Keyed {
 
     GLOW_ITEM_FRAME(NamespaceID.from("minecraft:glow_item_frame"), (byte) 64, () -> null),
 
-    FLOWER_POT(NamespaceID.from("minecraft:flower_pot"), (byte) 64, () -> Registries.getBlock("minecraft:flower_pot")),
+    FLOWER_POT(NamespaceID.from("minecraft:flower_pot"), (byte) 64, () -> Block.FLOWER_POT),
 
-    CARROT(NamespaceID.from("minecraft:carrot"), (byte) 64, () -> Registries.getBlock("minecraft:carrots")) {
+    CARROT(NamespaceID.from("minecraft:carrot"), (byte) 64, () -> Block.CARROTS) {
         @Override
         public boolean isFood() {
             return true;
         }
     },
 
-    POTATO(NamespaceID.from("minecraft:potato"), (byte) 64, () -> Registries.getBlock("minecraft:potatoes")) {
+    POTATO(NamespaceID.from("minecraft:potato"), (byte) 64, () -> Block.POTATOES) {
         @Override
         public boolean isFood() {
             return true;
@@ -2304,17 +2304,17 @@ public enum Material implements Keyed {
         }
     },
 
-    SKELETON_SKULL(NamespaceID.from("minecraft:skeleton_skull"), (byte) 64, () -> Registries.getBlock("minecraft:skeleton_skull")),
+    SKELETON_SKULL(NamespaceID.from("minecraft:skeleton_skull"), (byte) 64, () -> Block.SKELETON_SKULL),
 
-    WITHER_SKELETON_SKULL(NamespaceID.from("minecraft:wither_skeleton_skull"), (byte) 64, () -> Registries.getBlock("minecraft:wither_skeleton_skull")),
+    WITHER_SKELETON_SKULL(NamespaceID.from("minecraft:wither_skeleton_skull"), (byte) 64, () -> Block.WITHER_SKELETON_SKULL),
 
-    PLAYER_HEAD(NamespaceID.from("minecraft:player_head"), (byte) 64, () -> Registries.getBlock("minecraft:player_head")),
+    PLAYER_HEAD(NamespaceID.from("minecraft:player_head"), (byte) 64, () -> Block.PLAYER_HEAD),
 
-    ZOMBIE_HEAD(NamespaceID.from("minecraft:zombie_head"), (byte) 64, () -> Registries.getBlock("minecraft:zombie_head")),
+    ZOMBIE_HEAD(NamespaceID.from("minecraft:zombie_head"), (byte) 64, () -> Block.ZOMBIE_HEAD),
 
-    CREEPER_HEAD(NamespaceID.from("minecraft:creeper_head"), (byte) 64, () -> Registries.getBlock("minecraft:creeper_head")),
+    CREEPER_HEAD(NamespaceID.from("minecraft:creeper_head"), (byte) 64, () -> Block.CREEPER_HEAD),
 
-    DRAGON_HEAD(NamespaceID.from("minecraft:dragon_head"), (byte) 64, () -> Registries.getBlock("minecraft:dragon_head")),
+    DRAGON_HEAD(NamespaceID.from("minecraft:dragon_head"), (byte) 64, () -> Block.DRAGON_HEAD),
 
     NETHER_STAR(NamespaceID.from("minecraft:nether_star"), (byte) 64, () -> null),
 
@@ -2392,37 +2392,37 @@ public enum Material implements Keyed {
         }
     },
 
-    WHITE_BANNER(NamespaceID.from("minecraft:white_banner"), (byte) 16, () -> Registries.getBlock("minecraft:white_banner")),
+    WHITE_BANNER(NamespaceID.from("minecraft:white_banner"), (byte) 16, () -> Block.WHITE_BANNER),
 
-    ORANGE_BANNER(NamespaceID.from("minecraft:orange_banner"), (byte) 16, () -> Registries.getBlock("minecraft:orange_banner")),
+    ORANGE_BANNER(NamespaceID.from("minecraft:orange_banner"), (byte) 16, () -> Block.ORANGE_BANNER),
 
-    MAGENTA_BANNER(NamespaceID.from("minecraft:magenta_banner"), (byte) 16, () -> Registries.getBlock("minecraft:magenta_banner")),
+    MAGENTA_BANNER(NamespaceID.from("minecraft:magenta_banner"), (byte) 16, () -> Block.MAGENTA_BANNER),
 
-    LIGHT_BLUE_BANNER(NamespaceID.from("minecraft:light_blue_banner"), (byte) 16, () -> Registries.getBlock("minecraft:light_blue_banner")),
+    LIGHT_BLUE_BANNER(NamespaceID.from("minecraft:light_blue_banner"), (byte) 16, () -> Block.LIGHT_BLUE_BANNER),
 
-    YELLOW_BANNER(NamespaceID.from("minecraft:yellow_banner"), (byte) 16, () -> Registries.getBlock("minecraft:yellow_banner")),
+    YELLOW_BANNER(NamespaceID.from("minecraft:yellow_banner"), (byte) 16, () -> Block.YELLOW_BANNER),
 
-    LIME_BANNER(NamespaceID.from("minecraft:lime_banner"), (byte) 16, () -> Registries.getBlock("minecraft:lime_banner")),
+    LIME_BANNER(NamespaceID.from("minecraft:lime_banner"), (byte) 16, () -> Block.LIME_BANNER),
 
-    PINK_BANNER(NamespaceID.from("minecraft:pink_banner"), (byte) 16, () -> Registries.getBlock("minecraft:pink_banner")),
+    PINK_BANNER(NamespaceID.from("minecraft:pink_banner"), (byte) 16, () -> Block.PINK_BANNER),
 
-    GRAY_BANNER(NamespaceID.from("minecraft:gray_banner"), (byte) 16, () -> Registries.getBlock("minecraft:gray_banner")),
+    GRAY_BANNER(NamespaceID.from("minecraft:gray_banner"), (byte) 16, () -> Block.GRAY_BANNER),
 
-    LIGHT_GRAY_BANNER(NamespaceID.from("minecraft:light_gray_banner"), (byte) 16, () -> Registries.getBlock("minecraft:light_gray_banner")),
+    LIGHT_GRAY_BANNER(NamespaceID.from("minecraft:light_gray_banner"), (byte) 16, () -> Block.LIGHT_GRAY_BANNER),
 
-    CYAN_BANNER(NamespaceID.from("minecraft:cyan_banner"), (byte) 16, () -> Registries.getBlock("minecraft:cyan_banner")),
+    CYAN_BANNER(NamespaceID.from("minecraft:cyan_banner"), (byte) 16, () -> Block.CYAN_BANNER),
 
-    PURPLE_BANNER(NamespaceID.from("minecraft:purple_banner"), (byte) 16, () -> Registries.getBlock("minecraft:purple_banner")),
+    PURPLE_BANNER(NamespaceID.from("minecraft:purple_banner"), (byte) 16, () -> Block.PURPLE_BANNER),
 
-    BLUE_BANNER(NamespaceID.from("minecraft:blue_banner"), (byte) 16, () -> Registries.getBlock("minecraft:blue_banner")),
+    BLUE_BANNER(NamespaceID.from("minecraft:blue_banner"), (byte) 16, () -> Block.BLUE_BANNER),
 
-    BROWN_BANNER(NamespaceID.from("minecraft:brown_banner"), (byte) 16, () -> Registries.getBlock("minecraft:brown_banner")),
+    BROWN_BANNER(NamespaceID.from("minecraft:brown_banner"), (byte) 16, () -> Block.BROWN_BANNER),
 
-    GREEN_BANNER(NamespaceID.from("minecraft:green_banner"), (byte) 16, () -> Registries.getBlock("minecraft:green_banner")),
+    GREEN_BANNER(NamespaceID.from("minecraft:green_banner"), (byte) 16, () -> Block.GREEN_BANNER),
 
-    RED_BANNER(NamespaceID.from("minecraft:red_banner"), (byte) 16, () -> Registries.getBlock("minecraft:red_banner")),
+    RED_BANNER(NamespaceID.from("minecraft:red_banner"), (byte) 16, () -> Block.RED_BANNER),
 
-    BLACK_BANNER(NamespaceID.from("minecraft:black_banner"), (byte) 16, () -> Registries.getBlock("minecraft:black_banner")),
+    BLACK_BANNER(NamespaceID.from("minecraft:black_banner"), (byte) 16, () -> Block.BLACK_BANNER),
 
     END_CRYSTAL(NamespaceID.from("minecraft:end_crystal"), (byte) 64, () -> null),
 
@@ -2442,7 +2442,7 @@ public enum Material implements Keyed {
         }
     },
 
-    BEETROOT_SEEDS(NamespaceID.from("minecraft:beetroot_seeds"), (byte) 64, () -> Registries.getBlock("minecraft:beetroots")),
+    BEETROOT_SEEDS(NamespaceID.from("minecraft:beetroot_seeds"), (byte) 64, () -> Block.BEETROOTS),
 
     BEETROOT_SOUP(NamespaceID.from("minecraft:beetroot_soup"), (byte) 1, () -> null) {
         @Override
@@ -2516,7 +2516,7 @@ public enum Material implements Keyed {
         }
     },
 
-    LOOM(NamespaceID.from("minecraft:loom"), (byte) 64, () -> Registries.getBlock("minecraft:loom")),
+    LOOM(NamespaceID.from("minecraft:loom"), (byte) 64, () -> Block.LOOM),
 
     FLOWER_BANNER_PATTERN(NamespaceID.from("minecraft:flower_banner_pattern"), (byte) 1, () -> null),
 
@@ -2526,59 +2526,59 @@ public enum Material implements Keyed {
 
     MOJANG_BANNER_PATTERN(NamespaceID.from("minecraft:mojang_banner_pattern"), (byte) 1, () -> null),
 
-    GLOBE_BANNER_PATTER(NamespaceID.from("minecraft:globe_banner_pattern"), (byte) 1, () -> null),
+    GLOBE_BANNER_PATTERN(NamespaceID.from("minecraft:globe_banner_pattern"), (byte) 1, () -> null),
 
     PIGLIN_BANNER_PATTERN(NamespaceID.from("minecraft:piglin_banner_pattern"), (byte) 1, () -> null),
 
-    COMPOSTER(NamespaceID.from("minecraft:composter"), (byte) 64, () -> Registries.getBlock("minecraft:composter")),
+    COMPOSTER(NamespaceID.from("minecraft:composter"), (byte) 64, () -> Block.COMPOSTER),
 
-    BARREL(NamespaceID.from("minecraft:barrel"), (byte) 64, () -> Registries.getBlock("minecraft:barrel")),
+    BARREL(NamespaceID.from("minecraft:barrel"), (byte) 64, () -> Block.BARREL),
 
-    SMOKER(NamespaceID.from("minecraft:smoker"), (byte) 64, () -> Registries.getBlock("minecraft:smoker")),
+    SMOKER(NamespaceID.from("minecraft:smoker"), (byte) 64, () -> Block.SMOKER),
 
-    BLAST_FURNACE(NamespaceID.from("minecraft:blast_furnace"), (byte) 64, () -> Registries.getBlock("minecraft:blast_furnace")),
+    BLAST_FURNACE(NamespaceID.from("minecraft:blast_furnace"), (byte) 64, () -> Block.BLAST_FURNACE),
 
-    CARTOGRAPHY_TABLE(NamespaceID.from("minecraft:cartography_table"), (byte) 64, () -> Registries.getBlock("minecraft:cartography_table")),
+    CARTOGRAPHY_TABLE(NamespaceID.from("minecraft:cartography_table"), (byte) 64, () -> Block.CARTOGRAPHY_TABLE),
 
-    FLETCHING_TABLE(NamespaceID.from("minecraft:fletching_table"), (byte) 64, () -> Registries.getBlock("minecraft:fletching_table")),
+    FLETCHING_TABLE(NamespaceID.from("minecraft:fletching_table"), (byte) 64, () -> Block.FLETCHING_TABLE),
 
-    GRINDSTONE(NamespaceID.from("minecraft:grindstone"), (byte) 64, () -> Registries.getBlock("minecraft:grindstone")),
+    GRINDSTONE(NamespaceID.from("minecraft:grindstone"), (byte) 64, () -> Block.GRINDSTONE),
 
-    SMITHING_TABLE(NamespaceID.from("minecraft:smithing_table"), (byte) 64, () -> Registries.getBlock("minecraft:smithing_table")),
+    SMITHING_TABLE(NamespaceID.from("minecraft:smithing_table"), (byte) 64, () -> Block.SMITHING_TABLE),
 
-    STONECUTTER(NamespaceID.from("minecraft:stonecutter"), (byte) 64, () -> Registries.getBlock("minecraft:stonecutter")),
+    STONECUTTER(NamespaceID.from("minecraft:stonecutter"), (byte) 64, () -> Block.STONECUTTER),
 
-    BELL(NamespaceID.from("minecraft:bell"), (byte) 64, () -> Registries.getBlock("minecraft:bell")),
+    BELL(NamespaceID.from("minecraft:bell"), (byte) 64, () -> Block.BELL),
 
-    LANTERN(NamespaceID.from("minecraft:lantern"), (byte) 64, () -> Registries.getBlock("minecraft:lantern")),
+    LANTERN(NamespaceID.from("minecraft:lantern"), (byte) 64, () -> Block.LANTERN),
 
-    SOUL_LANTERN(NamespaceID.from("minecraft:soul_lantern"), (byte) 64, () -> Registries.getBlock("minecraft:soul_lantern")),
+    SOUL_LANTERN(NamespaceID.from("minecraft:soul_lantern"), (byte) 64, () -> Block.SOUL_LANTERN),
 
-    SWEET_BERRIES(NamespaceID.from("minecraft:sweet_berries"), (byte) 64, () -> Registries.getBlock("minecraft:sweet_berry_bush")) {
+    SWEET_BERRIES(NamespaceID.from("minecraft:sweet_berries"), (byte) 64, () -> Block.SWEET_BERRY_BUSH) {
         @Override
         public boolean isFood() {
             return true;
         }
     },
 
-    GLOW_BERRIES(NamespaceID.from("minecraft:glow_berries"), (byte) 64, () -> Registries.getBlock("minecraft:cave_vines")) {
+    GLOW_BERRIES(NamespaceID.from("minecraft:glow_berries"), (byte) 64, () -> Block.CAVE_VINES) {
         @Override
         public boolean isFood() {
             return true;
         }
     },
 
-    CAMPFIRE(NamespaceID.from("minecraft:campfire"), (byte) 64, () -> Registries.getBlock("minecraft:campfire")),
+    CAMPFIRE(NamespaceID.from("minecraft:campfire"), (byte) 64, () -> Block.CAMPFIRE),
 
-    SOUL_CAMPFIRE(NamespaceID.from("minecraft:soul_campfire"), (byte) 64, () -> Registries.getBlock("minecraft:soul_campfire")),
+    SOUL_CAMPFIRE(NamespaceID.from("minecraft:soul_campfire"), (byte) 64, () -> Block.SOUL_CAMPFIRE),
 
-    SHROOMLIGHT(NamespaceID.from("minecraft:shroomlight"), (byte) 64, () -> Registries.getBlock("minecraft:shroomlight")),
+    SHROOMLIGHT(NamespaceID.from("minecraft:shroomlight"), (byte) 64, () -> Block.SHROOMLIGHT),
 
     HONEYCOMB(NamespaceID.from("minecraft:honeycomb"), (byte) 64, () -> null),
 
-    BEE_NEST(NamespaceID.from("minecraft:bee_nest"), (byte) 64, () -> Registries.getBlock("minecraft:bee_nest")),
+    BEE_NEST(NamespaceID.from("minecraft:bee_nest"), (byte) 64, () -> Block.BEE_NEST),
 
-    BEEHIVE(NamespaceID.from("minecraft:beehive"), (byte) 64, () -> Registries.getBlock("minecraft:beehive")),
+    BEEHIVE(NamespaceID.from("minecraft:beehive"), (byte) 64, () -> Block.BEEHIVE),
 
     HONEY_BOTTLE(NamespaceID.from("minecraft:honey_bottle"), (byte) 16, () -> null) {
         @Override
@@ -2587,81 +2587,81 @@ public enum Material implements Keyed {
         }
     },
 
-    HONEYCOMB_BLOCK(NamespaceID.from("minecraft:honeycomb_block"), (byte) 64, () -> Registries.getBlock("minecraft:honeycomb_block")),
+    HONEYCOMB_BLOCK(NamespaceID.from("minecraft:honeycomb_block"), (byte) 64, () -> Block.HONEYCOMB_BLOCK),
 
-    LODESTONE(NamespaceID.from("minecraft:lodestone"), (byte) 64, () -> Registries.getBlock("minecraft:lodestone")),
+    LODESTONE(NamespaceID.from("minecraft:lodestone"), (byte) 64, () -> Block.LODESTONE),
 
-    CRYING_OBSIDIAN(NamespaceID.from("minecraft:crying_obsidian"), (byte) 64, () -> Registries.getBlock("minecraft:crying_obsidian")),
+    CRYING_OBSIDIAN(NamespaceID.from("minecraft:crying_obsidian"), (byte) 64, () -> Block.CRYING_OBSIDIAN),
 
-    BLACKSTONE(NamespaceID.from("minecraft:blackstone"), (byte) 64, () -> Registries.getBlock("minecraft:blackstone")),
+    BLACKSTONE(NamespaceID.from("minecraft:blackstone"), (byte) 64, () -> Block.BLACKSTONE),
 
-    BLACKSTONE_SLAB(NamespaceID.from("minecraft:blackstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:blackstone_slab")),
+    BLACKSTONE_SLAB(NamespaceID.from("minecraft:blackstone_slab"), (byte) 64, () -> Block.BLACKSTONE_SLAB),
 
-    BLACKSTONE_STAIRS(NamespaceID.from("minecraft:blackstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:blackstone_stairs")),
+    BLACKSTONE_STAIRS(NamespaceID.from("minecraft:blackstone_stairs"), (byte) 64, () -> Block.BLACKSTONE_STAIRS),
 
-    GILDED_BLACKSTONE(NamespaceID.from("minecraft:gilded_blackstone"), (byte) 64, () -> Registries.getBlock("minecraft:gilded_blackstone")),
+    GILDED_BLACKSTONE(NamespaceID.from("minecraft:gilded_blackstone"), (byte) 64, () -> Block.GILDED_BLACKSTONE),
 
-    POLISHED_BLACKSTONE(NamespaceID.from("minecraft:polished_blackstone"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone")),
+    POLISHED_BLACKSTONE(NamespaceID.from("minecraft:polished_blackstone"), (byte) 64, () -> Block.POLISHED_BLACKSTONE),
 
-    POLISHED_BLACKSTONE_SLAB(NamespaceID.from("minecraft:polished_blackstone_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_slab")),
+    POLISHED_BLACKSTONE_SLAB(NamespaceID.from("minecraft:polished_blackstone_slab"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_SLAB),
 
-    POLISHED_BLACKSTONE_STAIRS(NamespaceID.from("minecraft:polished_blackstone_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_stairs")),
+    POLISHED_BLACKSTONE_STAIRS(NamespaceID.from("minecraft:polished_blackstone_stairs"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_STAIRS),
 
-    CHISELED_POLISHED_BLACKSTONE(NamespaceID.from("minecraft:chiseled_polished_blackstone"), (byte) 64, () -> Registries.getBlock("minecraft:chiseled_polished_blackstone")),
+    CHISELED_POLISHED_BLACKSTONE(NamespaceID.from("minecraft:chiseled_polished_blackstone"), (byte) 64, () -> Block.CHISELED_POLISHED_BLACKSTONE),
 
-    POLISHED_BLACKSTONE_BRICKS(NamespaceID.from("minecraft:polished_blackstone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_bricks")),
+    POLISHED_BLACKSTONE_BRICKS(NamespaceID.from("minecraft:polished_blackstone_bricks"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_BRICKS),
 
-    POLISHED_BLACKSTONE_BRICK_SLAB(NamespaceID.from("minecraft:polished_blackstone_brick_slab"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_brick_slab")),
+    POLISHED_BLACKSTONE_BRICK_SLAB(NamespaceID.from("minecraft:polished_blackstone_brick_slab"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_BRICK_SLAB),
 
-    POLISHED_BLACKSTONE_BRICK_STAIRS(NamespaceID.from("minecraft:polished_blackstone_brick_stairs"), (byte) 64, () -> Registries.getBlock("minecraft:polished_blackstone_brick_stairs")),
+    POLISHED_BLACKSTONE_BRICK_STAIRS(NamespaceID.from("minecraft:polished_blackstone_brick_stairs"), (byte) 64, () -> Block.POLISHED_BLACKSTONE_BRICK_STAIRS),
 
-    CRACKED_POLISHED_BLACKSTONE_BRICKS(NamespaceID.from("minecraft:cracked_polished_blackstone_bricks"), (byte) 64, () -> Registries.getBlock("minecraft:cracked_polished_blackstone_bricks")),
+    CRACKED_POLISHED_BLACKSTONE_BRICKS(NamespaceID.from("minecraft:cracked_polished_blackstone_bricks"), (byte) 64, () -> Block.CRACKED_POLISHED_BLACKSTONE_BRICKS),
 
-    RESPAWN_ANCHOR(NamespaceID.from("minecraft:respawn_anchor"), (byte) 64, () -> Registries.getBlock("minecraft:respawn_anchor")),
+    RESPAWN_ANCHOR(NamespaceID.from("minecraft:respawn_anchor"), (byte) 64, () -> Block.RESPAWN_ANCHOR),
 
-    CANDLE(NamespaceID.from("minecraft:candle"), (byte) 64, () -> Registries.getBlock("minecraft:candle")),
+    CANDLE(NamespaceID.from("minecraft:candle"), (byte) 64, () -> Block.CANDLE),
 
-    WHITE_CANDLE(NamespaceID.from("minecraft:white_candle"), (byte) 64, () -> Registries.getBlock("minecraft:white_candle")),
+    WHITE_CANDLE(NamespaceID.from("minecraft:white_candle"), (byte) 64, () -> Block.WHITE_CANDLE),
 
-    ORANGE_CANDLE(NamespaceID.from("minecraft:orange_candle"), (byte) 64, () -> Registries.getBlock("minecraft:orange_candle")),
+    ORANGE_CANDLE(NamespaceID.from("minecraft:orange_candle"), (byte) 64, () -> Block.ORANGE_CANDLE),
 
-    MAGENTA_CANDLE(NamespaceID.from("minecraft:magenta_candle"), (byte) 64, () -> Registries.getBlock("minecraft:magenta_candle")),
+    MAGENTA_CANDLE(NamespaceID.from("minecraft:magenta_candle"), (byte) 64, () -> Block.MAGENTA_CANDLE),
 
-    LIGHT_BLUE_CANDLE(NamespaceID.from("minecraft:light_blue_candle"), (byte) 64, () -> Registries.getBlock("minecraft:light_blue_candle")),
+    LIGHT_BLUE_CANDLE(NamespaceID.from("minecraft:light_blue_candle"), (byte) 64, () -> Block.LIGHT_BLUE_CANDLE),
 
-    YELLOW_CANDLE(NamespaceID.from("minecraft:yellow_candle"), (byte) 64, () -> Registries.getBlock("minecraft:yellow_candle")),
+    YELLOW_CANDLE(NamespaceID.from("minecraft:yellow_candle"), (byte) 64, () -> Block.YELLOW_CANDLE),
 
-    LIME_CANDLE(NamespaceID.from("minecraft:lime_candle"), (byte) 64, () -> Registries.getBlock("minecraft:lime_candle")),
+    LIME_CANDLE(NamespaceID.from("minecraft:lime_candle"), (byte) 64, () -> Block.LIME_CANDLE),
 
-    PINK_CANDLE(NamespaceID.from("minecraft:pink_candle"), (byte) 64, () -> Registries.getBlock("minecraft:pink_candle")),
+    PINK_CANDLE(NamespaceID.from("minecraft:pink_candle"), (byte) 64, () -> Block.PINK_CANDLE),
 
-    GRAY_CANDLE(NamespaceID.from("minecraft:gray_candle"), (byte) 64, () -> Registries.getBlock("minecraft:gray_candle")),
+    GRAY_CANDLE(NamespaceID.from("minecraft:gray_candle"), (byte) 64, () -> Block.GRAY_CANDLE),
 
-    LIGHT_GRAY_CANDLE(NamespaceID.from("minecraft:light_gray_candle"), (byte) 64, () -> Registries.getBlock("minecraft:light_gray_candle")),
+    LIGHT_GRAY_CANDLE(NamespaceID.from("minecraft:light_gray_candle"), (byte) 64, () -> Block.LIGHT_GRAY_CANDLE),
 
-    CYAN_CANDLE(NamespaceID.from("minecraft:cyan_candle"), (byte) 64, () -> Registries.getBlock("minecraft:cyan_candle")),
+    CYAN_CANDLE(NamespaceID.from("minecraft:cyan_candle"), (byte) 64, () -> Block.CYAN_CANDLE),
 
-    PURPLE_CANDLE(NamespaceID.from("minecraft:purple_candle"), (byte) 64, () -> Registries.getBlock("minecraft:purple_candle")),
+    PURPLE_CANDLE(NamespaceID.from("minecraft:purple_candle"), (byte) 64, () -> Block.PURPLE_CANDLE),
 
-    BLUE_CANDLE(NamespaceID.from("minecraft:blue_candle"), (byte) 64, () -> Registries.getBlock("minecraft:blue_candle")),
+    BLUE_CANDLE(NamespaceID.from("minecraft:blue_candle"), (byte) 64, () -> Block.BLUE_CANDLE),
 
-    BROWN_CANDLE(NamespaceID.from("minecraft:brown_candle"), (byte) 64, () -> Registries.getBlock("minecraft:brown_candle")),
+    BROWN_CANDLE(NamespaceID.from("minecraft:brown_candle"), (byte) 64, () -> Block.BROWN_CANDLE),
 
-    GREEN_CANDLE(NamespaceID.from("minecraft:green_candle"), (byte) 64, () -> Registries.getBlock("minecraft:green_candle")),
+    GREEN_CANDLE(NamespaceID.from("minecraft:green_candle"), (byte) 64, () -> Block.GREEN_CANDLE),
 
-    RED_CANDLE(NamespaceID.from("minecraft:red_candle"), (byte) 64, () -> Registries.getBlock("minecraft:red_candle")),
+    RED_CANDLE(NamespaceID.from("minecraft:red_candle"), (byte) 64, () -> Block.RED_CANDLE),
 
-    BLACK_CANDLE(NamespaceID.from("minecraft:black_candle"), (byte) 64, () -> Registries.getBlock("minecraft:black_candle")),
+    BLACK_CANDLE(NamespaceID.from("minecraft:black_candle"), (byte) 64, () -> Block.BLACK_CANDLE),
 
-    SMALL_AMETHYST_BUD(NamespaceID.from("minecraft:small_amethyst_bud"), (byte) 64, () -> Registries.getBlock("minecraft:small_amethyst_bud")),
+    SMALL_AMETHYST_BUD(NamespaceID.from("minecraft:small_amethyst_bud"), (byte) 64, () -> Block.SMALL_AMETHYST_BUD),
 
-    MEDIUM_AMETHYST_BUD(NamespaceID.from("minecraft:medium_amethyst_bud"), (byte) 64, () -> Registries.getBlock("minecraft:medium_amethyst_bud")),
+    MEDIUM_AMETHYST_BUD(NamespaceID.from("minecraft:medium_amethyst_bud"), (byte) 64, () -> Block.MEDIUM_AMETHYST_BUD),
 
-    LARGE_AMETHYST_BUD(NamespaceID.from("minecraft:large_amethyst_bud"), (byte) 64, () -> Registries.getBlock("minecraft:large_amethyst_bud")),
+    LARGE_AMETHYST_BUD(NamespaceID.from("minecraft:large_amethyst_bud"), (byte) 64, () -> Block.LARGE_AMETHYST_BUD),
 
-    AMETHYST_CLUSTER(NamespaceID.from("minecraft:amethyst_cluster"), (byte) 64, () -> Registries.getBlock("minecraft:amethyst_cluster")),
+    AMETHYST_CLUSTER(NamespaceID.from("minecraft:amethyst_cluster"), (byte) 64, () -> Block.AMETHYST_CLUSTER),
 
-    POINTED_DRIPSTONE(NamespaceID.from("minecraft:pointed_dripstone"), (byte) 64, () -> Registries.getBlock("minecraft:pointed_dripstone"));
+    POINTED_DRIPSTONE(NamespaceID.from("minecraft:pointed_dripstone"), (byte) 64, () -> Block.POINTED_DRIPSTONE);
 
     private static final Material[] VALUES = values();
 

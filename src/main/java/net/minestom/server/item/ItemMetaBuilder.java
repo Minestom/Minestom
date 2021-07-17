@@ -160,7 +160,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.canPlaceOn = new HashSet<>(blocks);
         handleCollection(canPlaceOn, "CanPlaceOn", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canPlaceOn.forEach(block -> list.add(new NBTString(block.getName())));
+            canPlaceOn.forEach(block -> list.add(new NBTString(block.name())));
             return list;
         });
         return this;
@@ -176,7 +176,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
         this.canDestroy = new HashSet<>(blocks);
         handleCollection(canDestroy, "CanDestroy", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canDestroy.forEach(block -> list.add(new NBTString(block.getName())));
+            canDestroy.forEach(block -> list.add(new NBTString(block.name())));
             return list;
         });
         return this;

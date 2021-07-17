@@ -1,21 +1,24 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player interacts with a block (right-click).
  * This is also called when a block is placed.
  */
-public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
+public class PlayerBlockInteractEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
-    private final BlockPosition blockPosition;
     private final Player.Hand hand;
+    private final Block block;
+    private final Point blockPosition;
     private final BlockFace blockFace;
 
     /**
@@ -26,11 +29,13 @@ public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player,
-                                    @NotNull BlockPosition blockPosition, @NotNull Player.Hand hand, @NotNull BlockFace blockFace) {
+    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull Player.Hand hand,
+                                    @NotNull Block block, @NotNull Point blockPosition,
+                                    @NotNull BlockFace blockFace) {
         this.player = player;
-        this.blockPosition = blockPosition;
         this.hand = hand;
+        this.block = block;
+        this.blockPosition = blockPosition;
         this.blockFace = blockFace;
     }
 
@@ -47,13 +52,17 @@ public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
         this.blocksItemUse = blocks;
     }
 
+    @Override
+    public @NotNull Block getBlock() {
+        return block;
+    }
+
     /**
      * Gets the position of the interacted block.
      *
      * @return the block position
      */
-    @NotNull
-    public BlockPosition getBlockPosition() {
+    public @NotNull Point getBlockPosition() {
         return blockPosition;
     }
 
@@ -62,8 +71,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
      *
      * @return the hand used
      */
-    @NotNull
-    public Player.Hand getHand() {
+    public @NotNull Player.Hand getHand() {
         return hand;
     }
 
@@ -72,8 +80,7 @@ public class PlayerBlockInteractEvent implements PlayerEvent, CancellableEvent {
      *
      * @return the block face
      */
-    @NotNull
-    public BlockFace getBlockFace() {
+    public @NotNull BlockFace getBlockFace() {
         return blockFace;
     }
 

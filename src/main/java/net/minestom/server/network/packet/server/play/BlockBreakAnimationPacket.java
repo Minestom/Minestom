@@ -2,22 +2,23 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockBreakAnimationPacket implements ServerPacket {
 
     public int entityId;
-    public BlockPosition blockPosition;
+    public Point blockPosition;
     public byte destroyStage;
 
     public BlockBreakAnimationPacket() {
-        blockPosition = new BlockPosition(0,0,0);
+        blockPosition = Vec.ZERO;
     }
 
-    public BlockBreakAnimationPacket(int entityId, BlockPosition blockPosition, byte destroyStage) {
+    public BlockBreakAnimationPacket(int entityId, Point blockPosition, byte destroyStage) {
         this.entityId = entityId;
         this.blockPosition = blockPosition;
         this.destroyStage = destroyStage;
@@ -32,9 +33,9 @@ public class BlockBreakAnimationPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        blockPosition = reader.readBlockPosition();
-        destroyStage = reader.readByte();
+        this.entityId = reader.readVarInt();
+        this.blockPosition = reader.readBlockPosition();
+        this.destroyStage = reader.readByte();
     }
 
     @Override

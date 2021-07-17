@@ -26,6 +26,9 @@ import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
@@ -39,13 +42,11 @@ import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.metadata.WrittenBookMeta;
-import net.minestom.server.listener.PlayerDiggingListener;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -68,7 +69,7 @@ import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.*;
-import net.minestom.server.utils.chunk.ChunkCallback;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -85,6 +86,7 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -132,7 +134,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private byte heldSlot;
 
-    private Position respawnPoint;
+    private Pos respawnPoint;
 
     private int food;
     private float foodSaturation;
@@ -143,18 +145,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
-
-    // CustomBlock break delay
-    private CustomBlock targetCustomBlock;
-    private BlockPosition targetBlockPosition;
-    // The last break delay requested
-    private long targetBreakDelay;
-    // Number of tick since the last stage change
-    private long targetBlockBreakCount;
-    // The current stage of the target block, only if multi player breaking is disabled
-    private byte targetStage;
-    // Only used if multi player breaking is disabled, contains only this player
-    private final Set<Player> targetBreakers = Collections.singleton(this);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -193,7 +183,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         setBoundingBox(0.6f, 1.8f, 0.6f);
 
-        setRespawnPoint(new Position(0, 0, 0));
+        setRespawnPoint(Pos.ZERO);
 
         this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
@@ -252,9 +242,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(serverDifficultyPacket);
 
         SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
-        spawnPositionPacket.x = (int) respawnPoint.getX();
-        spawnPositionPacket.y = (int) respawnPoint.getY();
-        spawnPositionPacket.z = (int) respawnPoint.getZ();
+        spawnPositionPacket.position = respawnPoint;
         playerConnection.sendPacket(spawnPositionPacket);
 
         // Add player to list with spawning skin
@@ -329,52 +317,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         super.update(time); // Super update (item pickup/fire management)
-
-        // Target block stage
-        if (targetCustomBlock != null) {
-            this.targetBlockBreakCount++;
-
-            final boolean processStage = targetBreakDelay < 0 || targetBlockBreakCount >= targetBreakDelay;
-
-            // Check if the player did finish his current break delay
-            if (processStage) {
-
-                // Negative value should skip abs(value) stage
-                final byte stageIncrease = (byte) (targetBreakDelay > 0 ? 1 : Math.abs(targetBreakDelay));
-
-                // Should increment the target block stage
-                if (targetCustomBlock.enableMultiPlayerBreaking()) {
-                    // Let the custom block object manages the breaking
-                    final boolean canContinue = targetCustomBlock.processStage(instance, targetBlockPosition, this, stageIncrease);
-                    if (canContinue) {
-                        final Set<Player> breakers = targetCustomBlock.getBreakers(instance, targetBlockPosition);
-                        refreshBreakDelay(breakers);
-                    } else {
-                        resetTargetBlock();
-                    }
-                } else {
-                    // Let the player object manages the breaking
-                    // The custom block doesn't support multi player breaking
-                    if (targetStage + stageIncrease >= CustomBlock.MAX_STAGE) {
-                        // Break the block
-                        instance.breakBlock(this, targetBlockPosition);
-                        resetTargetBlock();
-                    } else {
-                        // Send the new block break animation packet and refresh data
-
-                        final Chunk chunk = instance.getChunkAt(targetBlockPosition);
-                        final int entityId = targetCustomBlock.getBreakEntityId(this);
-                        final BlockBreakAnimationPacket blockBreakAnimationPacket =
-                                new BlockBreakAnimationPacket(entityId, targetBlockPosition, targetStage);
-                        Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
-                        chunk.sendPacketToViewers(blockBreakAnimationPacket);
-
-                        refreshBreakDelay(targetBreakers);
-                        this.targetStage += stageIncrease;
-                    }
-                }
-            }
-        }
 
         // Experience orb pickup
         if (experiencePickupCooldown.isReady(time)) {
@@ -493,7 +435,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
-        teleport(respawnEvent.getRespawnPosition(), this::refreshAfterTeleport);
+        teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
     }
 
     @Override
@@ -537,7 +479,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             if (chunk.isLoaded())
                 chunk.removeViewer(this);
         });
-        resetTargetBlock();
         playerConnection.disconnect();
     }
 
@@ -581,14 +522,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
+     * @return
      */
     @Override
-    public void setInstance(@NotNull Instance instance, @NotNull Position spawnPosition) {
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
-
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
         final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
-                !spawnPosition.inSameChunk(this.position);
+                !spawnPosition.sameChunk(this.position);
 
         if (needWorldRefresh) {
             // TODO: Handle player reconnections, must be false in that case too
@@ -604,14 +545,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
-            final ChunkCallback endCallback =
-                    chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true);
-
-            ChunkUtils.optionalLoadAll(instance, visibleChunks, null, endCallback);
+            return ChunkUtils.optionalLoadAll(instance, visibleChunks, null)
+                    .thenAccept(chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
             spawnPlayer(instance, spawnPosition, false, false, false);
+            return AsyncUtils.NULL_FUTURE;
         }
     }
 
@@ -620,11 +560,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * if the player is not in any instance).
      *
      * @param instance the new player instance
-     * @see #setInstance(Instance, Position)
+     * @return a {@link CompletableFuture} called once the entity's instance has been set,
+     * this is due to chunks needing to load for players
+     * @see #setInstance(Instance, Pos)
      */
     @Override
-    public void setInstance(@NotNull Instance instance) {
-        setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
+    public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
+        return setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
     }
 
     /**
@@ -632,14 +574,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * Does add the player to {@code instance}, remove all viewable entities and call {@link PlayerSpawnEvent}.
      * <p>
-     * UNSAFE: only called with {@link #setInstance(Instance, Position)}.
+     * UNSAFE: only called with {@link #setInstance(Instance, Pos)}.
      *
      * @param spawnPosition the position to teleport the player
      * @param firstSpawn    true if this is the player first spawn
      * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
      *                      chunks
      */
-    private void spawnPlayer(@NotNull Instance instance, @NotNull Position spawnPosition,
+    private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
@@ -763,17 +705,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from the {@link SoundEvent} enum.
-     *
-     * @see #playSound(SoundEvent, SoundCategory, int, int, int, float, float)
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        playSound(sound, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
-    }
-
-    /**
      * Plays a sound from an identifier (represents a custom sound in a resource pack).
      *
      * @param identifier    the identifier of the sound to play
@@ -799,17 +730,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Plays a sound from an identifier (represents a custom sound in a resource pack).
-     *
-     * @see #playSound(String, SoundCategory, int, int, int, float, float)
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, BlockPosition position, float volume, float pitch) {
-        playSound(identifier, soundCategory, position.getX(), position.getY(), position.getZ(), volume, pitch);
-    }
-
-    /**
      * Plays a sound directly to the player (constant volume).
      *
      * @param sound         the sound to play
@@ -831,7 +751,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void playSound(@NotNull Sound sound) {
-        this.playSound(sound, this.position.getX(), this.position.getY(), this.position.getZ());
+        this.playSound(sound, this.position.x(), this.position.y(), this.position.z());
     }
 
     @Override
@@ -870,7 +790,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
         EffectPacket packet = new EffectPacket();
         packet.effectId = effect.getId();
-        packet.position = new BlockPosition(x, y, z);
+        packet.position = new Vec(x, y, z);
         packet.data = data;
         packet.disableRelativeVolume = disableRelativeVolume;
         playerConnection.sendPacket(packet);
@@ -1220,7 +1140,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (instance == null)
             return;
 
-        DestroyEntityPacket destroyEntityPacket = DestroyEntityPacket.of(getEntityId());
+        DestroyEntitiesPacket destroyEntitiesPacket = new DestroyEntitiesPacket(getEntityId());
 
         final PlayerInfoPacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoPacket addPlayerPacket = getAddPlayerToList();
@@ -1231,14 +1151,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         respawnPacket.isFlat = levelFlat;
 
         playerConnection.sendPacket(removePlayerPacket);
-        playerConnection.sendPacket(destroyEntityPacket);
+        playerConnection.sendPacket(destroyEntitiesPacket);
         playerConnection.sendPacket(respawnPacket);
         playerConnection.sendPacket(addPlayerPacket);
 
         {
             // Remove player
             sendPacketToViewers(removePlayerPacket);
-            sendPacketToViewers(destroyEntityPacket);
+            sendPacketToViewers(destroyEntitiesPacket);
 
             // Show player again
             getViewers().forEach(player -> showPlayer(player.getPlayerConnection()));
@@ -1357,14 +1277,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         facePosition(facePoint, entity.getPosition(), entity, targetPoint);
     }
 
-    private void facePosition(@NotNull FacePoint facePoint, @NotNull Position targetPosition,
+    private void facePosition(@NotNull FacePoint facePoint, @NotNull Point targetPosition,
                               @Nullable Entity entity, @Nullable FacePoint targetPoint) {
         FacePlayerPacket facePlayerPacket = new FacePlayerPacket();
         facePlayerPacket.entityFacePosition = facePoint == FacePoint.EYE ?
                 FacePlayerPacket.FacePosition.EYES : FacePlayerPacket.FacePosition.FEET;
-        facePlayerPacket.targetX = targetPosition.getX();
-        facePlayerPacket.targetY = targetPosition.getY();
-        facePlayerPacket.targetZ = targetPosition.getZ();
+        facePlayerPacket.targetX = targetPosition.x();
+        facePlayerPacket.targetY = targetPosition.y();
+        facePlayerPacket.targetZ = targetPosition.z();
         if (entity != null) {
             facePlayerPacket.entityId = entity.getEntityId();
             facePlayerPacket.entityFacePosition = targetPoint == FacePoint.EYE ?
@@ -1392,13 +1312,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Used to retrieve the default spawn point.
      * <p>
-     * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Position)}.
+     * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Pos)}.
      *
      * @return a copy of the default respawn point
      */
-    @NotNull
-    public Position getRespawnPoint() {
-        return respawnPoint.clone();
+    public @NotNull Pos getRespawnPoint() {
+        return respawnPoint;
     }
 
     /**
@@ -1406,7 +1325,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param respawnPoint the player respawn point
      */
-    public void setRespawnPoint(@NotNull Position respawnPoint) {
+    public void setRespawnPoint(@NotNull Pos respawnPoint) {
         this.respawnPoint = respawnPoint;
     }
 
@@ -1428,8 +1347,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         {
             // Send new chunks
-            final BlockPosition pos = position.toBlockPosition();
-            final Chunk chunk = instance.getChunk(pos.getX() >> 4, pos.getZ() >> 4);
+            final Chunk chunk = instance.getChunkAt(position);
             Check.notNull(chunk, "Tried to interact with an unloaded chunk.");
             refreshVisibleChunks(chunk);
         }
@@ -1543,11 +1461,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
             unloadChunkPacket.chunkX = chunkX;
             unloadChunkPacket.chunkZ = chunkZ;
-            playerConnection.sendPacket(unloadChunkPacket);
+            //playerConnection.sendPacket(unloadChunkPacket);
 
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-            if (chunk != null)
+            if (chunk != null) {
                 chunk.removeViewer(this);
+            }
         }
 
         // Load new chunks
@@ -1556,7 +1475,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
-            this.instance.loadOptionalChunk(chunkX, chunkZ, chunk -> {
+            this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
                     return;
@@ -1813,16 +1732,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Used to get the {@link CustomBlock} that the player is currently mining.
-     *
-     * @return the currently mined {@link CustomBlock} by the player, null if there is not
-     */
-    @Nullable
-    public CustomBlock getCustomBlockTarget() {
-        return targetCustomBlock;
-    }
-
-    /**
      * Gets the player open inventory.
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
@@ -1975,7 +1884,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void synchronizePosition(boolean includeSelf) {
         if (includeSelf) {
             final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-            positionAndLookPacket.position = position.clone();
+            positionAndLookPacket.position = position;
             positionAndLookPacket.flags = 0x00;
             positionAndLookPacket.teleportId = teleportId.incrementAndGet();
             playerConnection.sendPacket(positionAndLookPacket);
@@ -2110,11 +2019,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Changes the player ability "Creative Mode".
-     * <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">see</a>
-     * <p>
-     * WARNING: this has nothing to do with {@link CustomBlock#getBreakDelay(Player, BlockPosition, byte, Set)}.
      *
      * @param instantBreak true to allow instant break
+     * @see <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">player abilities</a>
      */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;
@@ -2303,58 +2210,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return callItemUpdateStateEvent(true, hand);
     }
 
-    /**
-     * Makes the player digging a custom block, see {@link #resetTargetBlock()} to rewind.
-     *
-     * @param targetCustomBlock   the custom block to dig
-     * @param targetBlockPosition the custom block position
-     * @param breakers            the breakers of the block, can be null if {@code this} is the only breaker
-     */
-    public void setTargetBlock(@NotNull CustomBlock targetCustomBlock, @NotNull BlockPosition targetBlockPosition,
-                               @Nullable Set<Player> breakers) {
-        this.targetCustomBlock = targetCustomBlock;
-        this.targetBlockPosition = targetBlockPosition;
-
-        refreshBreakDelay(breakers);
-    }
-
-    /**
-     * Refreshes the break delay for the next block break stage.
-     *
-     * @param breakers the list of breakers, can be null if {@code this} is the only breaker
-     */
-    private void refreshBreakDelay(@Nullable Set<Player> breakers) {
-        breakers = breakers == null ? targetBreakers : breakers;
-
-        // Refresh the last tick update
-        this.targetBlockBreakCount = 0;
-
-        // Get if multi player breaking is enabled
-        final boolean multiPlayerBreaking = targetCustomBlock.enableMultiPlayerBreaking();
-        // Get the stage from the custom block object if it is, otherwise use the local field
-        final byte stage = multiPlayerBreaking ? targetCustomBlock.getBreakStage(instance, targetBlockPosition) : targetStage;
-        // Retrieve the break delay for the current stage
-        this.targetBreakDelay = targetCustomBlock.getBreakDelay(this, targetBlockPosition, stage, breakers);
-    }
-
-    /**
-     * Resets data from the current block the player is mining.
-     * If the currently mined block (or if there isn't any) is not a {@link CustomBlock}, nothing happen.
-     */
-    public void resetTargetBlock() {
-        // Remove effect
-        PlayerDiggingListener.removeEffect(this);
-
-        if (targetCustomBlock != null) {
-            targetCustomBlock.stopDigging(instance, targetBlockPosition, this);
-            this.targetCustomBlock = null;
-            this.targetBlockPosition = null;
-            this.targetBreakDelay = 0;
-            this.targetBlockBreakCount = 0;
-            this.targetStage = 0;
-        }
-    }
-
     public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
         this.vehicleInformation.refresh(sideways, forward, jump, unmount);
     }
@@ -2451,7 +2306,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
         entityHeadLookPacket.entityId = getEntityId();
-        entityHeadLookPacket.yaw = position.getYaw();
+        entityHeadLookPacket.yaw = position.yaw();
         connection.sendPacket(entityHeadLookPacket);
     }
 

@@ -2,11 +2,10 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.entity.EntityProjectile;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -175,7 +174,7 @@ public class CombinedAttackGoal extends GoalSelector {
             if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedDelay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     // If target is on line of entity sight, ranged attack can be performed
-                    Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
+                    final var to = target.getPosition().add(0D, target.getEyeHeight(), 0D);
 
                     Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
                     if (projectileGenerator == null) {
@@ -193,7 +192,7 @@ public class CombinedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        Position pathPosition = navigator.getPathPosition();
+        final var pathPosition = navigator.getPathPosition();
         // If we don't want to come close and we're already within desirable range, no movement is needed.
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
@@ -202,8 +201,8 @@ public class CombinedAttackGoal extends GoalSelector {
             return;
         }
         // Otherwise going to the target.
-        Position targetPosition = target.getPosition();
-        if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
+        final var targetPosition = target.getPosition();
+        if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
             if (this.cooldown.isReady(time)) {
                 this.cooldown.refreshLastUpdate(time);
                 navigator.setPathTo(targetPosition);

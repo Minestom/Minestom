@@ -2,9 +2,10 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -14,12 +15,12 @@ public class SpawnPaintingPacket implements ServerPacket {
     public int entityId;
     public UUID entityUuid;
     public int motive;
-    public BlockPosition position;
+    public Point position;
     public byte direction;
 
     public SpawnPaintingPacket() {
         entityUuid = new UUID(0, 0);
-        position = new BlockPosition(0, 0, 0);
+        position = Vec.ZERO;
     }
 
     @Override
@@ -33,11 +34,11 @@ public class SpawnPaintingPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        entityId = reader.readVarInt();
-        entityUuid = reader.readUuid();
-        motive = reader.readVarInt();
-        position = reader.readBlockPosition();
-        direction = reader.readByte();
+        this.entityId = reader.readVarInt();
+        this.entityUuid = reader.readUuid();
+        this.motive = reader.readVarInt();
+        this.position = reader.readBlockPosition();
+        this.direction = reader.readByte();
     }
 
     @Override

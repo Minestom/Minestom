@@ -36,7 +36,7 @@ public class ExplosionPacket implements ServerPacket {
         y = reader.readFloat();
         z = reader.readFloat();
         radius = reader.readFloat();
-        int recordCount = reader.readInt() * 3;
+        int recordCount = reader.readVarInt() * 3;
         records = reader.readBytes(recordCount);
         playerMotionX = reader.readFloat();
         playerMotionY = reader.readFloat();

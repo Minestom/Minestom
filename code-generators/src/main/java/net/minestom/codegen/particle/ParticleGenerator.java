@@ -1,9 +1,6 @@
 package net.minestom.codegen.particle;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class ParticleGenerator extends MinestomCodeGenerator {
@@ -40,7 +39,7 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray particles = GSON.fromJson(new JsonReader(new InputStreamReader(particlesFile)), JsonArray.class);
+        JsonObject particles = GSON.fromJson(new InputStreamReader(particlesFile), JsonObject.class);
         ClassName particleClassName = ClassName.get("net.minestom.server.particle", "Particle");
 
         // Particle
@@ -120,17 +119,15 @@ public final class ParticleGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement p : particles) {
-            JsonObject particle = p.getAsJsonObject();
-
-            String particleName = particle.get("name").getAsString();
-
-            particleClass.addEnumConstant(particleName, TypeSpec.anonymousClassBuilder(
+        particles.entrySet().forEach(entry -> {
+            final String particleNamespace = entry.getKey();
+            final String particleConstant = toConstant(particleNamespace);
+            particleClass.addEnumConstant(particleConstant, TypeSpec.anonymousClassBuilder(
                     "$T.from($S)",
                     namespaceIDClassName,
-                    particle.get("id").getAsString()
+                    particleNamespace
             ).build());
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

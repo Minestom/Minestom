@@ -17,9 +17,7 @@ import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.item.Material;
@@ -68,8 +66,8 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.17";
-    public static final int PROTOCOL_VERSION = 755;
+    public static final String VERSION_NAME = "1.17.1";
+    public static final int PROTOCOL_VERSION = 756;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -158,7 +156,6 @@ public final class MinecraftServer {
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
         // TODO: automate (probably with code generation)
-        Block.values();
         Material.values();
         PotionType.values();
         PotionEffect.values();
@@ -334,7 +331,8 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the manager handling {@link CustomBlock} and {@link BlockPlacementRule}.
+     * Gets the manager handling {@link net.minestom.server.instance.block.BlockHandler block handlers}
+     * and {@link BlockPlacementRule placement rules}.
      *
      * @return the block manager
      */
@@ -617,6 +615,7 @@ public final class MinecraftServer {
 
     /**
      * Gets if the built in Minestom terminal is enabled.
+     *
      * @return true if the terminal is enabled
      */
     public static boolean isTerminalEnabled() {

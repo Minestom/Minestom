@@ -44,6 +44,10 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
         final int nbtIndex = input.indexOf("{");
 

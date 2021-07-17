@@ -6,12 +6,11 @@ import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
@@ -268,8 +267,8 @@ public class BinaryWriter extends OutputStream {
         writeLong(uuid.getLeastSignificantBits());
     }
 
-    public void writeBlockPosition(@NotNull BlockPosition blockPosition) {
-        writeBlockPosition(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
+    public void writeBlockPosition(@NotNull Point point) {
+        writeBlockPosition(point.blockX(), point.blockY(), point.blockZ());
     }
 
     public void writeBlockPosition(int x, int y, int z) {

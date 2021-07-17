@@ -3,7 +3,6 @@ package net.minestom.codegen.potion;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class PotionTypeGenerator extends MinestomCodeGenerator {
@@ -40,7 +41,7 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray potions = GSON.fromJson(new JsonReader(new InputStreamReader(potionsFile)), JsonArray.class);
+        JsonObject potions = GSON.fromJson(new InputStreamReader(potionsFile), JsonObject.class);
         ClassName potionTypeClassName = ClassName.get("net.minestom.server.potion", "PotionType");
 
         // Particle
@@ -120,18 +121,16 @@ public final class PotionTypeGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement p : potions) {
-            JsonObject potion = p.getAsJsonObject();
-
-            String potionName = potion.get("name").getAsString();
-
-            potionTypeClass.addEnumConstant(potionName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    potion.get("id").getAsString()
+        potions.entrySet().forEach(entry -> {
+            final String potionNamespace = entry.getKey();
+            final String potionConstant = toConstant(potionNamespace);
+            potionTypeClass.addEnumConstant(potionConstant, TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                    potionNamespace
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

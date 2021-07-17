@@ -5,6 +5,7 @@ import com.extollit.gaming.ai.path.model.IColumnarSpace;
 import com.extollit.gaming.ai.path.model.IInstanceSpace;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,8 +21,8 @@ public class PFInstanceSpace implements IInstanceSpace {
 
     @Override
     public IBlockObject blockObjectAt(int x, int y, int z) {
-        final short blockStateId = instance.getBlockStateId(x, y, z);
-        return PFBlockObject.getBlockObject(blockStateId);
+        final Block block = instance.getBlock(x, y, z);
+        return PFBlock.get(block);
     }
 
     @Override
@@ -30,7 +31,6 @@ public class PFInstanceSpace implements IInstanceSpace {
         if (chunk == null) {
             return null;
         }
-
         return chunkSpaceMap.computeIfAbsent(chunk, c -> {
             final PFColumnarSpace cs = new PFColumnarSpace(this, c);
             c.setColumnarSpace(cs);
