@@ -3,13 +3,15 @@ package net.minestom.server.timer;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 /**
  * A builder which represents a fluent Object to schedule tasks.
  * <p>
- * You can specify a delay with {@link #delay(long, TimeUnit)} or {@link #repeat(long, TimeUnit)}
+ * You can specify a delay with {@link #delay(long, TemporalUnit)} or {@link #repeat(long, TemporalUnit)}
  * and then schedule the {@link Task} with {@link #schedule()}.
  */
 public class TaskBuilder {
@@ -68,9 +70,8 @@ public class TaskBuilder {
      * @return this builder, for chaining
      */
     @NotNull
-    public TaskBuilder delay(long time, @NotNull TimeUnit unit) {
-        this.delay = unit.toMilliseconds(time);
-        return this;
+    public TaskBuilder delay(long time, @NotNull TemporalUnit unit) {
+        return delay(Duration.of(time, unit));
     }
 
     /**
@@ -78,10 +79,25 @@ public class TaskBuilder {
      *
      * @param updateOption the UpdateOption for this builder.
      * @return this builder, for chaining
+     *
+     * @deprecated Replaced by {@link #delay(Duration)}
+     */
+    @SuppressWarnings("removal")
+    @NotNull
+    @Deprecated(forRemoval = true)
+    public TaskBuilder delay(net.minestom.server.utils.time.UpdateOption updateOption) {
+        return delay(updateOption.toDuration());
+    }
+
+    /**
+     * Specifies that the {@link Task} should delay its execution by the specified amount of time.
+     *
+     * @param duration the Duration for this builder.
+     * @return this builder, for chaining
      */
     @NotNull
-    public TaskBuilder delay(UpdateOption updateOption) {
-        this.delay = updateOption.toMilliseconds();
+    public TaskBuilder delay(Duration duration) {
+        this.delay = duration.toMillis();
         return this;
     }
 
@@ -89,13 +105,12 @@ public class TaskBuilder {
      * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
      *
      * @param time The time until the repetition
-     * @param unit The {@link TimeUnit} for {@code time}
+     * @param unit The {@link TemporalUnit} for {@code time}
      * @return this builder, for chaining
      */
     @NotNull
-    public TaskBuilder repeat(long time, @NotNull TimeUnit unit) {
-        this.repeat = unit.toMilliseconds(time);
-        return this;
+    public TaskBuilder repeat(long time, @NotNull TemporalUnit unit) {
+        return repeat(Duration.of(time, unit));
     }
 
     /**
@@ -103,10 +118,25 @@ public class TaskBuilder {
      *
      * @param updateOption the UpdateOption for this builder.
      * @return this builder, for chaining
+     *
+     * @deprecated Replaced by {@link #repeat(Duration)}
+     */
+    @SuppressWarnings("removal")
+    @NotNull
+    @Deprecated(forRemoval = true)
+    public TaskBuilder repeat(net.minestom.server.utils.time.UpdateOption updateOption) {
+        return repeat(updateOption.toDuration());
+    }
+
+    /**
+     * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
+     *
+     * @param duration the Duration for this builder.
+     * @return this builder, for chaining
      */
     @NotNull
-    public TaskBuilder repeat(UpdateOption updateOption) {
-        this.repeat = updateOption.toMilliseconds();
+    public TaskBuilder repeat(Duration duration) {
+        this.repeat = duration.toMillis();
         return this;
     }
 

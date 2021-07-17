@@ -7,13 +7,13 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ import static net.minestom.server.MinecraftServer.*;
 /**
  * Small monitoring tools that can be used to check the current memory usage and Minestom threads CPU usage.
  * <p>
- * Needs to be enabled with {@link #enable(UpdateOption)}. Memory can then be accessed with {@link #getUsedMemory()}
+ * Needs to be enabled with {@link #enable(Duration)}. Memory can then be accessed with {@link #getUsedMemory()}
  * and the CPUs usage with {@link #getResultMap()} or {@link #getCpuMonitoringMessage()}.
  * <p>
  * Be aware that this is not the most accurate method, you should use a proper java profiler depending on your needs.
@@ -57,10 +57,10 @@ public final class BenchmarkManager {
 
     private long time;
 
-    public void enable(@NotNull UpdateOption updateOption) {
+    public void enable(@NotNull Duration duration) {
         Check.stateCondition(enabled, "A benchmark is already running, please disable it first.");
 
-        time = updateOption.getTimeUnit().toMilliseconds(updateOption.getValue());
+        time = duration.toMillis();
 
         final Thread thread = new Thread(null, () -> {
 

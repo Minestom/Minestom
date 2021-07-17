@@ -31,10 +31,11 @@ import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,7 +43,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     // ItemStack pickup
     protected boolean canPickupItem;
-    protected Cooldown itemPickupCooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    protected Cooldown itemPickupCooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     protected boolean isDead;
 
@@ -90,7 +91,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this(entityType, uuid, new Position());
-        setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
@@ -104,7 +104,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Deprecated
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
         super(entityType, uuid, spawnPosition);
-        setGravity(0.02f, 0.08f, 3.92f);
         initEquipments();
     }
 
@@ -318,21 +317,31 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param duration duration in ticks of the effect
      */
     public void setFireForDuration(int duration) {
-        setFireForDuration(duration, TimeUnit.TICK);
+        setFireForDuration(duration, TimeUnit.SERVER_TICK);
     }
 
     /**
      * Sets fire to this entity for a given duration.
      *
      * @param duration duration of the effect
-     * @param unit     unit used to express the duration
+     * @param temporalUnit     unit used to express the duration
      * @see #setOnFire(boolean) if you want it to be permanent without any event callback
      */
-    public void setFireForDuration(int duration, TimeUnit unit) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration, unit);
+    public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
+        setFireForDuration(Duration.of(duration, temporalUnit));
+    }
+
+    /**
+     * Sets fire to this entity for a given duration.
+     *
+     * @param duration duration of the effect
+     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
+     */
+    public void setFireForDuration(Duration duration) {
+        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration);
 
         // Do not start fire event if the fire needs to be removed (< 0 duration)
-        if (duration > 0) {
+        if (duration.toMillis() > 0) {
             EventDispatcher.callCancellable(entityFireEvent, () -> {
                 final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
@@ -661,7 +670,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Gets the time in ms between two fire damage applications.
      *
      * @return the time in ms
-     * @see #setFireDamagePeriod(long, TimeUnit)
+     * @see #setFireDamagePeriod(Duration)
      */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
@@ -671,11 +680,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Changes the delay between two fire damage applications.
      *
      * @param fireDamagePeriod the delay
-     * @param timeUnit         the time unit
+     * @param temporalUnit     the time unit
      */
-    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TimeUnit timeUnit) {
-        fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
-        this.fireDamagePeriod = fireDamagePeriod;
+    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TemporalUnit temporalUnit) {
+        setFireDamagePeriod(Duration.of(fireDamagePeriod, temporalUnit));
+    }
+
+    /**
+     * Changes the delay between two fire damage applications.
+     *
+     * @param fireDamagePeriod the delay
+     */
+    public void setFireDamagePeriod(Duration fireDamagePeriod) {
+        this.fireDamagePeriod = fireDamagePeriod.toMillis();
     }
 
     /**
@@ -781,4 +798,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         return null;
     }
 
+    /**
+     * Applies knockback
+     * <p>
+     * Note: The strength is reduced based on knockback resistance
+     *
+     * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
+     * @param x knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
+     * @param z knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
+     */
+    @Override
+    public void takeKnockback(float strength, final double x, final double z) {
+        strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        super.takeKnockback(strength, x, z);
+    }
 }

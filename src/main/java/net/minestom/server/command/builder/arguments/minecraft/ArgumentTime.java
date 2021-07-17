@@ -7,15 +7,17 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 /**
  * Represents an argument giving a time (day/second/tick).
  * <p>
  * Example: 50d, 25s, 75t
  */
-public class ArgumentTime extends Argument<UpdateOption> {
+public class ArgumentTime extends Argument<Duration> {
 
     public static final int INVALID_TIME_FORMAT = -2;
     public static final int NO_NUMBER = -3;
@@ -28,12 +30,12 @@ public class ArgumentTime extends Argument<UpdateOption> {
 
     @NotNull
     @Override
-    public UpdateOption parse(@NotNull String input) throws ArgumentSyntaxException {
+    public Duration parse(@NotNull String input) throws ArgumentSyntaxException {
         final char lastChar = input.charAt(input.length() - 1);
 
-        TimeUnit timeUnit;
+        TemporalUnit timeUnit;
         if (Character.isDigit(lastChar))
-            timeUnit = TimeUnit.TICK;
+            timeUnit = TimeUnit.SERVER_TICK;
         else if (SUFFIXES.contains(lastChar)) {
             input = input.substring(0, input.length() - 1);
 
@@ -42,7 +44,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
             } else if (lastChar == 's') {
                 timeUnit = TimeUnit.SECOND;
             } else if (lastChar == 't') {
-                timeUnit = TimeUnit.TICK;
+                timeUnit = TimeUnit.SERVER_TICK;
             } else {
                 throw new ArgumentSyntaxException("Time needs to have the unit d, s, t, or none", input, NO_NUMBER);
             }
@@ -52,7 +54,7 @@ public class ArgumentTime extends Argument<UpdateOption> {
         try {
             // Check if value is a number
             final int time = Integer.parseInt(input);
-            return new UpdateOption(time, timeUnit);
+            return Duration.of(time, timeUnit);
         } catch (NumberFormatException e) {
             throw new ArgumentSyntaxException("Time needs to be a number", input, NO_NUMBER);
         }

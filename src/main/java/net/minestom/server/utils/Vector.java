@@ -327,8 +327,11 @@ public class Vector implements PublicCloneable<Vector> {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
 
-        this.y = angleCos * getY() - angleSin * getZ();
-        this.z = angleSin * getY() + angleCos * getZ();
+        double oldY = getY();
+        double oldZ = getZ();
+
+        this.y = angleCos * oldY - angleSin * oldZ;
+        this.z = angleSin * oldY + angleCos * oldZ;
         return this;
     }
 
@@ -349,8 +352,11 @@ public class Vector implements PublicCloneable<Vector> {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
 
-        this.x = angleCos * getX() + angleSin * getZ();
-        this.z = -angleSin * getX() + angleCos * getZ();
+        double oldX = getX();
+        double oldZ = getZ();
+
+        this.x =  angleCos * oldX + angleSin * oldZ;
+        this.z = -angleSin * oldX + angleCos * oldZ;
         return this;
     }
 
@@ -371,8 +377,11 @@ public class Vector implements PublicCloneable<Vector> {
         double angleCos = Math.cos(angle);
         double angleSin = Math.sin(angle);
 
-        this.x = angleCos * getX() - angleSin * getY();
-        this.y = angleSin * getX() + angleCos * getY();
+        double oldX = getX();
+        double oldY = getY();
+
+        this.x = angleCos * oldX - angleSin * oldY;
+        this.y = angleSin * oldX + angleCos * oldY;
         return this;
     }
 

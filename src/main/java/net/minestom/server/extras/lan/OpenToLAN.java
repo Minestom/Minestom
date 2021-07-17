@@ -83,7 +83,7 @@ public class OpenToLAN {
 
             eventCooldown = new Cooldown(config.delayBetweenEvent);
             task = MinecraftServer.getSchedulerManager().buildTask(OpenToLAN::ping)
-                    .repeat(config.delayBetweenPings.getValue(), config.delayBetweenPings.getTimeUnit())
+                    .repeat(config.delayBetweenPings)
                     .schedule();
             return true;
         }

@@ -1,34 +1,22 @@
 package net.minestom.server.utils.time;
 
-import net.minestom.server.MinecraftServer;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 
-public enum TimeUnit {
-
-    TICK, DAY, HOUR, MINUTE, SECOND, MILLISECOND;
-
+public class TimeUnit {
+    public static final TemporalUnit DAY = ChronoUnit.DAYS;
+    public static final TemporalUnit HOUR = ChronoUnit.HOURS;
+    public static final TemporalUnit MINUTE = ChronoUnit.MINUTES;
+    public static final TemporalUnit SECOND = ChronoUnit.SECONDS;
+    public static final TemporalUnit MILLISECOND = ChronoUnit.MILLIS;
+    public static final TemporalUnit SERVER_TICK = Tick.SERVER_TICKS;
+    public static final TemporalUnit CLIENT_TICK = Tick.CLIENT_TICKS;
     /**
-     * Converts a value and its unit to milliseconds.
-     *
-     * @param value the time value
-     * @return the converted milliseconds based on the time value and the unit
+     * @deprecated Please use either {@link #SERVER_TICK} or {@link #CLIENT_TICK}
      */
-    public long toMilliseconds(long value) {
-        switch (this) {
-            case TICK:
-                return MinecraftServer.TICK_MS * value;
-            case DAY:
-                return value * 86_400_000;
-            case HOUR:
-                return value * 3_600_000;
-            case MINUTE:
-                return value * 60_000;
-            case SECOND:
-                return value * 1000;
-            case MILLISECOND:
-                return value;
-            default:
-                return -1; // Unexpected
-        }
-    }
+    @Deprecated(forRemoval = true)
+    public static final TemporalUnit TICK = CLIENT_TICK;
 
+    private TimeUnit() {
+    }
 }

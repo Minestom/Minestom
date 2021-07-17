@@ -97,7 +97,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             if (!projectile.isAir()) {
                 chargedProjectiles.add(getItemCompound(projectile));
             }
-            this.nbt.set("ChargedProjectiles", chargedProjectiles);
+            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
 
             return this;
         }
@@ -123,7 +123,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             chargedProjectiles.add(getItemCompound(projectile1));
             chargedProjectiles.add(getItemCompound(projectile2));
             chargedProjectiles.add(getItemCompound(projectile3));
-            this.nbt.set("ChargedProjectiles", chargedProjectiles);
+            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
 
             return this;
         }
@@ -135,7 +135,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
          */
         public Builder charged(boolean charged) {
             this.charged = charged;
-            this.nbt.setByte("Charged", (byte) (charged ? 1 : 0));
+            mutateNbt(compound -> compound.setByte("Charged", (byte) (charged ? 1 : 0)));
             return this;
         }
 

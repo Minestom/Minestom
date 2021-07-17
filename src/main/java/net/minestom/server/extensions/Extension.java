@@ -151,7 +151,18 @@ public abstract class Extension {
      * @return The file contents, or null if there was an issue reading the file.
      */
     public @Nullable InputStream getPackagedResource(@NotNull String fileName) {
-        return getPackagedResource(Paths.get(fileName));
+        try {
+            final URL url = getOrigin().getMinestomExtensionClassLoader().getResource(fileName);
+            if (url == null) {
+                getLogger().debug("Resource not found: {}", fileName);
+                return null;
+            }
+
+            return url.openConnection().getInputStream();
+        } catch (IOException ex) {
+            getLogger().debug("Failed to load resource {}.", fileName, ex);
+            return null;
+        }
     }
 
     /**
@@ -163,18 +174,7 @@ public abstract class Extension {
      * @return The file contents, or null if there was an issue reading the file.
      */
     public @Nullable InputStream getPackagedResource(@NotNull Path target) {
-        try {
-            final URL url = getOrigin().getMinestomExtensionClassLoader().getResource(target.toString());
-            if (url == null) {
-                getLogger().debug("Resource not found: {}", target);
-                return null;
-            }
-
-            return url.openConnection().getInputStream();
-        } catch (IOException ex) {
-            getLogger().debug("Failed to load resource {}.", target, ex);
-            return null;
-        }
+        return getPackagedResource(target.toString().replace('\\', '/'));
     }
 
     /**

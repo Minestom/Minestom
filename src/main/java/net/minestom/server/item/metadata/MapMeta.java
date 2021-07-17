@@ -91,18 +91,18 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
 
         public Builder mapId(int value) {
             this.mapId = value;
-            this.nbt.setInt("map", mapId);
+            mutateNbt(compound -> compound.setInt("map", mapId));
             return this;
         }
 
         public Builder mapScaleDirection(int value) {
             this.mapScaleDirection = value;
-            this.nbt.setInt("map_scale_direction", value);
+            mutateNbt(compound -> compound.setInt("map_scale_direction", value));
             return this;
         }
 
         public Builder decorations(List<MapDecoration> value) {
-            this.decorations = value;
+            this.decorations = new ArrayList<>(value);
 
             NBTList<NBTCompound> decorationsList = new NBTList<>(NBTTypes.TAG_Compound);
             for (MapDecoration decoration : decorations) {
@@ -115,7 +115,7 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
 
                 decorationsList.add(decorationCompound);
             }
-            this.nbt.set("Decorations", decorationsList);
+            mutateNbt(compound -> compound.set("Decorations", decorationsList));
 
             return this;
         }
@@ -123,14 +123,16 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
         public Builder mapColor(Color value) {
             this.mapColor = value;
 
-            NBTCompound displayCompound;
-            if (nbt.containsKey("display")) {
-                displayCompound = nbt.getCompound("display");
-            } else {
-                displayCompound = new NBTCompound();
-                this.nbt.set("display", displayCompound);
-            }
-            displayCompound.setInt("MapColor", mapColor.asRGB());
+            mutateNbt(nbt -> {
+                NBTCompound displayCompound;
+                if (nbt.containsKey("display")) {
+                    displayCompound = nbt.getCompound("display");
+                } else {
+                    displayCompound = new NBTCompound();
+                    nbt.set("display", displayCompound);
+                }
+                displayCompound.setInt("MapColor", mapColor.asRGB());
+            });
 
             return this;
         }

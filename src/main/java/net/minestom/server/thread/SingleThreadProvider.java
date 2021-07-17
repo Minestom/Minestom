@@ -13,7 +13,7 @@ public class SingleThreadProvider extends ThreadProvider {
     }
 
     @Override
-    public long findThread(@NotNull Chunk chunk) {
+    public int findThread(@NotNull Chunk chunk) {
         return 0;
     }
 

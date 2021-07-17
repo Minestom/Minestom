@@ -19,9 +19,10 @@ public interface DataContainer {
      * meaning that this will be null if no data has been defined.
      *
      * @return the {@link Data} of this container, can be null
+     * @deprecated use the tag API https://wiki.minestom.com/feature/tags
      */
-    @Nullable
-    Data getData();
+    @Deprecated
+    @Nullable Data getData();
 
     /**
      * Sets the {@link Data} of this container.
@@ -30,7 +31,8 @@ public interface DataContainer {
      * on your use-case.
      *
      * @param data the new {@link Data} of this container, null to remove it
+     * @deprecated use the tag API https://wiki.minestom.com/feature/tags
      */
+    @Deprecated
     void setData(@Nullable Data data);
-
 }

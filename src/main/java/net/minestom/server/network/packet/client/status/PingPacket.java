@@ -25,7 +25,7 @@ public class PingPacket implements ClientPreplayPacket {
         if (clientPingEvent.isCancelled()) {
             connection.disconnect();
         } else {
-            if (clientPingEvent.getDelay().toMilliseconds() == 0) {
+            if (clientPingEvent.getDelay().isZero()) {
                 connection.sendPacket(new PongPacket(clientPingEvent.getPayload()));
                 connection.disconnect();
             } else {
