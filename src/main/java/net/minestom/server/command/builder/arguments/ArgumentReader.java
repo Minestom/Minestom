@@ -129,7 +129,16 @@ public class ArgumentReader {
         return readUntil(quoteType == SINGLE_QUOTE ? SINGLE_QUOTED_STRING_END : DOUBLE_QUOTED_STRING_END);
     }
 
+    /**
+     * Automatically determines the string type and reads accordingly
+     * @return the string
+     */
+    public String readSmartString() {
+        return peekCheck(CharCondition.QUOTED_STRING_START) ? readQuotedString() : readUnquotedString();
+    }
+
     public String readUnquotedJson() {
+        // TODO: 2021. 07. 17. Implement this method, HIGH priority
         throw new UnsupportedOperationException("Not implemented");
     }
 
@@ -154,6 +163,15 @@ public class ArgumentReader {
         } else {
             throw new ArgumentSyntaxException("Unexpected character", "" + c, 1003);
         }
+    }
+
+    /**
+     * Checks the current char without moving the cursor
+     * @param charCondition condition to check
+     * @return the condition's result
+     */
+    public boolean peekCheck(CharCondition charCondition) {
+        return charCondition.check(peek());
     }
 
     interface CharCondition {
