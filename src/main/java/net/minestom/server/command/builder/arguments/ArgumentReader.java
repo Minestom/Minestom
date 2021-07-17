@@ -117,7 +117,7 @@ public class ArgumentReader {
     }
 
     public String readRemaining() {
-        return arguments.substring(cursorPosition);
+        return arguments.substring(cursorPosition, (cursorPosition = arguments.length()));
     }
 
     public String readUnquotedString() {
