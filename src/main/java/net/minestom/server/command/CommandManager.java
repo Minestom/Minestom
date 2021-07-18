@@ -356,7 +356,7 @@ public final class CommandManager {
                             final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(indexed);
 
                             argChildren = new IntArrayList();
-                            lastNodes = storedNodes.get(index);
+                            lastNodes = storedNodes.get(storedNodes.size() >= index ? index : 1);
                             foundSharedPart = true;
                         }
                     }
