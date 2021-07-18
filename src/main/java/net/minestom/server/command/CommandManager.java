@@ -352,11 +352,14 @@ public final class CommandManager {
                         final int index = i + 1;
                         if (ArrayUtils.sameStart(arguments, parsedArguments, index)) {
                             final Argument<?> sharedArgument = parsedArguments[i];
-                            final var indexed = new IndexedArgument(entry.getKey(), sharedArgument, i);
+                            final var sharedSyntax = entry.getKey();
+                            final var indexed = new IndexedArgument(sharedSyntax, sharedArgument, i);
                             final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(indexed);
+                            if (storedNodes == null)
+                                continue; // Retrieved argument has already been redirected
 
                             argChildren = new IntArrayList();
-                            lastNodes = storedNodes.get(storedNodes.size() >= index ? index : 1);
+                            lastNodes = storedNodes.get(storedNodes.size() > index ? index : i);
                             foundSharedPart = true;
                         }
                     }
