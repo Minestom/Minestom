@@ -15,7 +15,6 @@ import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class ItemMeta implements TagReadable, Writeable {
 
@@ -156,22 +155,5 @@ public class ItemMeta implements TagReadable, Writeable {
         }
         writer.write(cachedBuffer);
         this.cachedBuffer.resetReaderIndex();
-    }
-
-    /**
-     * @deprecated use {@link #getTag(Tag)} with {@link Tag#defaultValue(Supplier)}
-     */
-    @Deprecated
-    @Contract(pure = true)
-    public <T> T getOrDefault(@NotNull Tag<T> tag, @Nullable T defaultValue) {
-        return tag.defaultValue(defaultValue).read(toNBT());
-    }
-
-    /**
-     * @deprecated use {@link #getTag(Tag)}
-     */
-    @Deprecated
-    public <T> @Nullable T get(@NotNull Tag<T> tag) {
-        return getTag(tag);
     }
 }

@@ -37,9 +37,9 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     private final int amount;
     private final ItemMeta meta;
 
-    protected ItemStack(@NotNull Material material, int amount,
-                        @NotNull ItemMeta meta,
-                        @Nullable StackingRule stackingRule) {
+    ItemStack(@NotNull Material material, int amount,
+              @NotNull ItemMeta meta,
+              @Nullable StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
@@ -186,13 +186,6 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return result;
     }
 
-    @Contract(value = "-> new", pure = true)
-    protected @NotNull ItemStackBuilder builder() {
-        return new ItemStackBuilder(material, meta.builder())
-                .amount(amount)
-                .stackingRule(stackingRule);
-    }
-
     @Contract(value = "_, _ -> new", pure = true)
     public <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
         return builder().meta(metaBuilder -> metaBuilder.set(tag, value)).build();
@@ -208,5 +201,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
                 this.amount,
                 NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
+    }
+
+    @Contract(value = "-> new", pure = true)
+    private @NotNull ItemStackBuilder builder() {
+        return new ItemStackBuilder(material, meta.builder())
+                .amount(amount)
+                .stackingRule(stackingRule);
     }
 }
