@@ -4,14 +4,18 @@ import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import it.unimi.dsi.fastutil.shorts.Short2ShortOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.clone.PublicCloneable;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.instance.Chunk.CHUNK_SECTION_SIZE;
 
-public class Palette implements PublicCloneable<Palette> {
+/**
+ * Represents a palette storing a complete chunk section.
+ * <p>
+ * 0 is always interpreted as being air, reason being that the block array will be filled with it during initialization.
+ */
+public final class Palette implements PublicCloneable<Palette> {
 
     /**
      * The maximum bits per entry value.
@@ -66,18 +70,15 @@ public class Palette implements PublicCloneable<Palette> {
     }
 
     public void setBlockAt(int x, int y, int z, short blockId) {
+        final boolean placedAir = blockId == 0;
         if (blocks.length == 0) {
-            if (blockId == 0) {
+            if (placedAir) {
                 // Section is empty and method is trying to place an air block, stop unnecessary computation
                 return;
             }
-
             // Initialize the section
             blocks = new long[getSize(valuesPerLong)];
         }
-
-        // Check if the new block is air, used for counting none air blocks.
-        final boolean isAir = Block.fromStateId(blockId).isAir();
 
         // Change to palette value
         blockId = getPaletteIndex(blockId);
@@ -92,20 +93,20 @@ public class Palette implements PublicCloneable<Palette> {
         {
             final long clear = MAGIC_MASKS[bitsPerEntry];
 
-            final long value = block >> bitIndex & clear;
+            final long oldBlock = block >> bitIndex & clear;
+            if (oldBlock == blockId)
+                return; // Trying to place the same block
+            final boolean currentAir = oldBlock == 0;
 
-            final boolean isCurrentAir = Block.fromStateId(fromPalette((short) value)).isAir();
-
-            block |= clear << bitIndex;
-            block ^= clear << bitIndex;
+            final long indexClear = clear << bitIndex;
+            block |= indexClear;
+            block ^= indexClear;
             block |= (long) blockId << bitIndex;
 
-            if (!isCurrentAir && isAir) { // The old block isn't air & the new block is.
-                this.blockCount--;
-            } else if (isCurrentAir && !isAir) { // The old block is air & the new block isn't.
-                this.blockCount++;
-            } // If both block are air or not air then don't change the value.
-
+            if (currentAir != placedAir) {
+                // Block count changed
+                this.blockCount += currentAir ? 1 : -1;
+            }
             blocks[index] = block;
         }
     }
@@ -115,7 +116,6 @@ public class Palette implements PublicCloneable<Palette> {
             // Section is not loaded, can only be air
             return -1;
         }
-
         final int sectionIdentifier = getSectionIndex(x, y, z);
 
         final int index = sectionIdentifier / valuesPerLong;
@@ -225,20 +225,18 @@ public class Palette implements PublicCloneable<Palette> {
         if (!hasPalette) {
             return blockId;
         }
-
-        if (!blockPaletteMap.containsKey(blockId)) {
+        final short value = blockPaletteMap.getOrDefault(blockId, (short)-1);
+        if(value == -1){
             // Resize the palette if full
             if (paletteBlockMap.size() >= getMaxPaletteSize()) {
                 resize(bitsPerEntry + bitsIncrement);
             }
-
             final short paletteIndex = (short) (paletteBlockMap.lastShortKey() + 1);
             paletteBlockMap.put(paletteIndex, blockId);
             blockPaletteMap.put(blockId, paletteIndex);
             return paletteIndex;
         }
-
-        return blockPaletteMap.get(blockId);
+        return value;
     }
 
     /**
