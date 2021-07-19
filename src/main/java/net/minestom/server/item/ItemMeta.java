@@ -32,8 +32,8 @@ public class ItemMeta implements TagReadable, Writeable {
     private final Set<Block> canDestroy;
     private final Set<Block> canPlaceOn;
 
+    private final ItemMetaBuilder metaBuilder;
     private final NBTCompound nbt;
-    private final ItemMetaBuilder emptyBuilder;
 
     private String cachedSNBT;
     private ByteBuf cachedBuffer;
@@ -50,8 +50,8 @@ public class ItemMeta implements TagReadable, Writeable {
         this.canDestroy = new HashSet<>(metaBuilder.canDestroy);
         this.canPlaceOn = new HashSet<>(metaBuilder.canPlaceOn);
 
+        this.metaBuilder = metaBuilder;
         this.nbt = metaBuilder.nbt();
-        this.emptyBuilder = metaBuilder.getSupplier().get();
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -143,7 +143,7 @@ public class ItemMeta implements TagReadable, Writeable {
 
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
-        return ItemMetaBuilder.fromNBT(emptyBuilder, nbt);
+        return ItemMetaBuilder.fromNBT(metaBuilder, nbt);
     }
 
     @Override
