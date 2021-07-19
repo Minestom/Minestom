@@ -26,8 +26,6 @@ class BlockLoader {
 
     // Block namespace -> registry data
     private static final Map<String, Block> NAMESPACE_MAP = new HashMap<>();
-    // Block namespace -> properties map to block access
-    private static final Map<String, PropertyEntry> BLOCK_PROPERTY_MAP = new HashMap<>();
     // Block id -> registry data
     private static final Int2ObjectMap<Block> BLOCK_ID_MAP = new Int2ObjectOpenHashMap<>();
     // Block state -> block object
@@ -47,11 +45,6 @@ class BlockLoader {
 
     static @Nullable Block getState(int stateId) {
         return BLOCK_STATE_MAP.get(stateId);
-    }
-
-    static @Nullable Block getProperties(String namespace, Map<String, String> properties) {
-        final var entry = BLOCK_PROPERTY_MAP.get(namespace);
-        return entry.propertyMap.get(properties);
     }
 
     static Collection<Block> values() {
@@ -75,10 +68,6 @@ class BlockLoader {
         });
     }
 
-    private static class PropertyEntry {
-        private final Map<Map<String, String>, Block> propertyMap = new ConcurrentHashMap<>();
-    }
-
     private static void retrieveState(String namespace, JsonObject object, JsonObject stateObject) {
         PropertyEntry propertyEntry = new PropertyEntry();
         stateObject.entrySet().forEach(stateEntry -> {
@@ -86,10 +75,17 @@ class BlockLoader {
             JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
             final int stateId = stateOverride.get("stateId").getAsInt();
             final var propertyMap = BlockUtils.parseProperties(query);
-            final Block block = new BlockImpl(Registry.block(object, stateOverride), propertyMap);
+            final Block block = new BlockImpl(Registry.block(object, stateOverride), propertyEntry, propertyMap);
             BLOCK_STATE_MAP.put(stateId, block);
-            propertyEntry.propertyMap.put(propertyMap, block);
+            propertyEntry.map.put(propertyMap, block);
         });
-        BLOCK_PROPERTY_MAP.put(namespace, propertyEntry);
+    }
+
+    protected static class PropertyEntry {
+        private final Map<Map<String, String>, Block> map = new ConcurrentHashMap<>();
+
+        public @Nullable Block getProperties(Map<String, String> properties) {
+            return map.get(properties);
+        }
     }
 }

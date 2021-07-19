@@ -46,13 +46,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
      * @see #withProperty(String, String)
      */
     @Contract(pure = true)
-    default @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties) {
-        Block block = this;
-        for (var entry : properties.entrySet()) {
-            block = block.withProperty(entry.getKey(), entry.getValue());
-        }
-        return block;
-    }
+    @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties);
 
     /**
      * Creates a new block with a tag modified.
