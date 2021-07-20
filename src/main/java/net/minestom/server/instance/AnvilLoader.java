@@ -88,8 +88,7 @@ public class AnvilLoader implements IChunkLoader {
         loadBlocks(chunk, fileChunk);
         loadTileEntities(chunk, fileChunk);
         // Lights
-        final var chunkSections = fileChunk.getSections();
-        for (var chunkSection : chunkSections) {
+        for (var chunkSection : fileChunk.getSections()) {
             Section section = chunk.getSection(chunkSection.getY());
             section.setSkyLight(chunkSection.getSkyLights());
             section.setBlockLight(chunkSection.getBlockLights());
@@ -116,23 +115,29 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
-        for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
-            for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
-                for (int y = 0; y < 256; y++) { // TODO don't hardcode height
-                    try {
-                        final BlockState blockState = fileChunk.getBlockState(x, y, z);
-                        Block block = Block.fromNamespaceId(blockState.getName());
-                        if (block == null) {
-                            // Invalid block
-                            continue;
+        for (var section : fileChunk.getSections()) {
+            if (section.getEmpty()) {
+                continue;
+            }
+            final int yOffset = Chunk.CHUNK_SECTION_SIZE * section.getY();
+            for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
+                for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
+                    for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
+                        try {
+                            final BlockState blockState = section.get(x, y, z);
+                            Block block = Block.fromNamespaceId(blockState.getName());
+                            if (block == null) {
+                                // Invalid block
+                                continue;
+                            }
+                            final var properties = blockState.getProperties();
+                            if (!properties.isEmpty()) {
+                                block = block.withProperties(properties);
+                            }
+                            chunk.setBlock(x, y + yOffset, z, block);
+                        } catch (Exception e) {
+                            EXCEPTION_MANAGER.handleException(e);
                         }
-                        final var properties = blockState.getProperties();
-                        if (!properties.isEmpty()) {
-                            block = block.withProperties(properties);
-                        }
-                        chunk.setBlock(x, y, z, block);
-                    } catch (Exception e) {
-                        EXCEPTION_MANAGER.handleException(e);
                     }
                 }
             }
