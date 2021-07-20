@@ -113,7 +113,7 @@ public class GamemodeCommand extends Command {
                     p.sendMessage(Component.translatable("gameMode.changed", gamemodeComponent), MessageType.SYSTEM);
                     
                     //Send a message to the sender
-                    sender.sendMessage(Component.translatable("commands.gamemode.success.other", playername, gamemodeComponent), MessageType.SYSTEM);
+                    sender.sendMessage(Component.translatable("commands.gamemode.success.other", playerName, gamemodeComponent), MessageType.SYSTEM);
                 }
             }
         }
