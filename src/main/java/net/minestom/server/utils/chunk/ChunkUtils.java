@@ -6,16 +6,17 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@ApiStatus.Internal
 public final class ChunkUtils {
 
     private ChunkUtils() {
-
     }
 
     /**
@@ -31,29 +32,24 @@ public final class ChunkUtils {
      * @param eachCallback the optional callback when a chunk get loaded
      * @return a {@link CompletableFuture} completed once all chunks have been processed
      */
-    public static @NotNull CompletableFuture<@Nullable Chunk> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
-                                                                              @Nullable ChunkCallback eachCallback) {
-        CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
-        final int length = chunks.length;
+    public static @NotNull CompletableFuture<Void> optionalLoadAll(@NotNull Instance instance, long @NotNull [] chunks,
+                                                                   @Nullable ChunkCallback eachCallback) {
+        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
-            final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
-            final int chunkZ = ChunkUtils.getChunkCoordZ(visibleChunk);
-
-            final ChunkCallback callback = (chunk) -> {
-                OptionalCallback.execute(eachCallback, chunk);
-                final boolean isLast = counter.get() == length - 1;
-                if (isLast) {
-                    // This is the last chunk to be loaded , spawn player
-                    completableFuture.complete(chunk);
-                } else {
-                    // Increment the counter of current loaded chunks
-                    counter.incrementAndGet();
-                }
-            };
-
             // WARNING: if auto-load is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(callback);
+            instance.loadOptionalChunk(getChunkCoordX(visibleChunk), getChunkCoordZ(visibleChunk))
+                    .thenAccept((chunk) -> {
+                        OptionalCallback.execute(eachCallback, chunk);
+                        final boolean isLast = counter.get() == chunks.length - 1;
+                        if (isLast) {
+                            // This is the last chunk to be loaded , spawn player
+                            completableFuture.complete(null);
+                        } else {
+                            // Increment the counter of current loaded chunks
+                            counter.incrementAndGet();
+                        }
+                    });
         }
         return completableFuture;
     }

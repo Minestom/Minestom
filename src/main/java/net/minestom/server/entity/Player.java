@@ -546,7 +546,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
 
             return ChunkUtils.optionalLoadAll(instance, visibleChunks, null)
-                    .thenAccept(chunk -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
+                    .thenRun(() -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
