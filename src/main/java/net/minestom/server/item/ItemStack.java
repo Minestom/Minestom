@@ -26,12 +26,12 @@ import java.util.function.UnaryOperator;
  */
 public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
 
+    private static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
-
-    private static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
 
     private final StackingRule stackingRule;
 
