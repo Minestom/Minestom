@@ -36,12 +36,10 @@ public class GamemodeCommand extends Command {
                             .append(Component.text("!")), MessageType.SYSTEM);
         });
 
-        //Targets parameter, can accept multiple players
         ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
 
         //Upon invalid usage, print the correct usage of the command to the sender
         setDefaultExecutor((sender, context) -> {
-            //The used alias
             String commandName = context.getCommandName();
             
             sender.sendMessage(Component.text("Usage: /" + commandName + " <gamemode> [targets]", NamedTextColor.RED), MessageType.SYSTEM);
@@ -54,13 +52,13 @@ public class GamemodeCommand extends Command {
                 sender.sendMessage(Component.text("Please run this command in-game.", NamedTextColor.RED));
                 return;
             }
+            
             //Check permission, this could be replaced with hasPermission
             if (sender.asPlayer().getPermissionLevel() < 2) {
                 sender.sendMessage(Component.text("You don't have permission to use this command.", NamedTextColor.RED));
                 return;
             }
             
-            //Arguments
             GameMode mode = context.get(gamemode);
             
             //Set the gamemode for the sender
@@ -76,7 +74,6 @@ public class GamemodeCommand extends Command {
                 return;
             }
             
-            //Arguments
             EntityFinder finder = context.get(player);
             GameMode mode = context.get(gamemode);
             
@@ -104,15 +101,12 @@ public class GamemodeCommand extends Command {
                 } else {
                     p.setGameMode(mode);
                     
-                    //Create necessary components
                     String gamemodeString = "gameMode." + mode.name().toLowerCase(Locale.ROOT);
                     Component gamemodeComponent = Component.translatable(gamemodeString);
                     Component playerName = p.getDisplayName() == null ? p.getName() : p.getDisplayName();
                     
-                    //Send a message to the changed player
+                    //Send a message to the changed player and the sender
                     p.sendMessage(Component.translatable("gameMode.changed", gamemodeComponent), MessageType.SYSTEM);
-                    
-                    //Send a message to the sender
                     sender.sendMessage(Component.translatable("commands.gamemode.success.other", playerName, gamemodeComponent), MessageType.SYSTEM);
                 }
             }
