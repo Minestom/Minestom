@@ -31,6 +31,8 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
+    private static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+
     private final StackingRule stackingRule;
 
     private final Material material;
@@ -43,7 +45,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         this.material = material;
         this.amount = amount;
         this.meta = meta;
-        this.stackingRule = Objects.requireNonNullElseGet(stackingRule, VanillaStackingRule::new);
+        this.stackingRule = Objects.requireNonNullElse(stackingRule, DEFAULT_STACKING_RULE);
     }
 
     @Contract(value = "_ -> new", pure = true)
