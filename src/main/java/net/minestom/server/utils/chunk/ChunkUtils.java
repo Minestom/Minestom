@@ -77,10 +77,7 @@ public final class ChunkUtils {
      * @return true if the chunk is loaded, false otherwise
      */
     public static boolean isLoaded(@NotNull Instance instance, double x, double z) {
-        final int chunkX = getChunkCoordinate(x);
-        final int chunkZ = getChunkCoordinate(z);
-
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        final Chunk chunk = instance.getChunk(getChunkCoordinate(x), getChunkCoordinate(z));
         return isLoaded(chunk);
     }
 

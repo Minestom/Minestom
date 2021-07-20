@@ -61,16 +61,17 @@ public class PlayerPositionListener {
         if (player.getLastSentTeleportId() != player.getLastReceivedTeleportId()) {
             return;
         }
-        // Try to move in an unloaded chunk, prevent it
-        if (!ChunkUtils.isLoaded(instance, x, z)) {
-            player.teleport(player.getPosition());
-            return;
-        }
 
         final var currentPosition = player.getPosition();
         final var newPosition = new Pos(x, y, z, yaw, pitch);
         if (currentPosition.equals(newPosition)) {
             // For some reason, the position is the same
+            return;
+        }
+
+        // Try to move in an unloaded chunk, prevent it
+        if (!currentPosition.sameChunk(newPosition) && !ChunkUtils.isLoaded(instance, x, z)) {
+            player.teleport(player.getPosition());
             return;
         }
 
