@@ -94,7 +94,7 @@ public final class MinecraftServer {
     public static final int TICK_MS = 1000 / TICK_PER_SECOND;
 
     // Network monitoring
-    private static int rateLimit = 300;
+    private static int rateLimit = 1000;
     private static int maxPacketSize = 30_000;
     // Network
     private static PacketListenerManager packetListenerManager;
