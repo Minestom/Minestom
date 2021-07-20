@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerPositionAndLookPacket implements ServerPacket {
@@ -14,8 +14,15 @@ public class PlayerPositionAndLookPacket implements ServerPacket {
     public int teleportId;
     public boolean dismountVehicle;
 
+    public PlayerPositionAndLookPacket(Pos position, byte flags, int teleportId, boolean dismountVehicle) {
+        this.position = position;
+        this.flags = flags;
+        this.teleportId = teleportId;
+        this.dismountVehicle = dismountVehicle;
+    }
+
     public PlayerPositionAndLookPacket() {
-        position = Pos.ZERO;
+        this(Pos.ZERO, (byte) 0, 0, false);
     }
 
     @Override

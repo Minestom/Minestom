@@ -598,82 +598,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     /**
-     * Sends the correct packets to update the entity's position, should be called
-     * every tick. The movement is checked inside the method!
-     * <p>
-     * The following packets are sent to viewers (check are performed in this order):
-     * <ol>
-     *     <li>{@link EntityTeleportPacket} if {@code distanceX > 8 || distanceY > 8 || distanceZ > 8}
-     *      <i>(performed using {@link #synchronizePosition(boolean)})</i></li>
-     *     <li>{@link EntityPositionAndRotationPacket} if {@code positionChange && viewChange}</li>
-     *     <li>{@link EntityPositionPacket} if {@code positionChange}</li>
-     *     <li>{@link EntityRotationPacket} and {@link EntityHeadLookPacket} if {@code viewChange}</li>
-     * </ol>
-     * In case of a player's position and/or view change an additional {@link PlayerPositionAndLookPacket}
-     * is sent to self.
-     *
-     * @param clientSide {@code true} if the client triggered this action
-     */
-    protected void sendPositionUpdate(final boolean clientSide) {
-        final boolean viewChange = !position.sameView(lastSyncedPosition);
-        final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
-        final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
-        final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
-        final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
-
-        if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            synchronizePosition(true);
-            // #synchronizePosition sets sync fields, it's safe to return
-            return;
-        } else if (positionChange && viewChange) {
-            EntityPositionAndRotationPacket positionAndRotationPacket = EntityPositionAndRotationPacket
-                    .getPacket(getEntityId(), position, lastSyncedPosition, isOnGround());
-            sendPacketToViewers(positionAndRotationPacket);
-
-            // Fix head rotation
-            final EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = position.yaw();
-            sendPacketToViewersAndSelf(entityHeadLookPacket);
-        } else if (positionChange) {
-            final EntityPositionPacket entityPositionPacket = EntityPositionPacket
-                    .getPacket(getEntityId(), position, lastSyncedPosition, onGround);
-            sendPacketToViewers(entityPositionPacket);
-        } else if (viewChange) {
-            final EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
-            entityRotationPacket.entityId = getEntityId();
-            entityRotationPacket.yaw = position.yaw();
-            entityRotationPacket.pitch = position.pitch();
-            entityRotationPacket.onGround = onGround;
-
-            final EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = position.yaw();
-
-            if (clientSide) {
-                sendPacketToViewers(entityHeadLookPacket);
-                sendPacketToViewers(entityRotationPacket);
-            } else {
-                sendPacketToViewersAndSelf(entityHeadLookPacket);
-                sendPacketToViewersAndSelf(entityRotationPacket);
-            }
-        } else {
-            // Nothing changed, return
-            return;
-        }
-
-        if (PlayerUtils.isNettyClient(this) && !clientSide) {
-            final PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
-            playerPositionAndLookPacket.flags = 0b111;
-            playerPositionAndLookPacket.position = position.sub(lastSyncedPosition);
-            playerPositionAndLookPacket.teleportId = ((Player) this).getNextTeleportId();
-            ((Player) this).getPlayerConnection().sendPacket(playerPositionAndLookPacket);
-        }
-
-        this.lastSyncedPosition = position;
-    }
-
-    /**
      * Gets the number of ticks this entity has been active for.
      *
      * @return the number of ticks this entity has been active for
@@ -1247,7 +1171,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Updates internal fields and sends updates.
      *
      * @param position the new position
-     * @see #sendPositionUpdate(boolean)
      */
     @ApiStatus.Internal
     public void refreshPosition(@NotNull final Pos position, boolean ignoreView) {
@@ -1256,7 +1179,27 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
         }
-        sendPositionUpdate(true);
+        final boolean viewChange = !position.sameView(lastSyncedPosition);
+        final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
+        final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
+        final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
+        final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
+        if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
+            synchronizePosition(true);
+            // #synchronizePosition sets sync fields, it's safe to return
+            return;
+        } else if (positionChange && viewChange) {
+            sendPacketToViewers(EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                    lastSyncedPosition, isOnGround()));
+            // Fix head rotation
+            sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        } else if (positionChange) {
+            sendPacketToViewers(EntityPositionPacket.getPacket(getEntityId(), position, lastSyncedPosition, onGround));
+        } else if (viewChange) {
+            sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+            sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
+        }
+        this.lastSyncedPosition = position;
     }
 
     @ApiStatus.Internal
@@ -1471,12 +1414,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
-        final EntityTeleportPacket entityTeleportPacket = new EntityTeleportPacket();
-        entityTeleportPacket.entityId = getEntityId();
-        entityTeleportPacket.position = position;
-        entityTeleportPacket.onGround = isOnGround();
-        sendPacketToViewers(entityTeleportPacket);
-
+        sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
         this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
     }

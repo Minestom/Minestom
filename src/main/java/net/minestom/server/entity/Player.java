@@ -1883,13 +1883,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @ApiStatus.Internal
     protected void synchronizePosition(boolean includeSelf) {
         if (includeSelf) {
-            final PlayerPositionAndLookPacket positionAndLookPacket = new PlayerPositionAndLookPacket();
-            positionAndLookPacket.position = position;
-            positionAndLookPacket.flags = 0x00;
-            positionAndLookPacket.teleportId = teleportId.incrementAndGet();
-            playerConnection.sendPacket(positionAndLookPacket);
+            playerConnection.sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, teleportId.incrementAndGet(), false));
         }
-
         super.synchronizePosition(includeSelf);
     }
 

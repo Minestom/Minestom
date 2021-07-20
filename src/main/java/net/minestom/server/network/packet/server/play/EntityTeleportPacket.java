@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityTeleportPacket implements ServerPacket {
@@ -13,8 +13,14 @@ public class EntityTeleportPacket implements ServerPacket {
     public Pos position;
     public boolean onGround;
 
+    public EntityTeleportPacket(int entityId, Pos position, boolean onGround) {
+        this.entityId = entityId;
+        this.position = position;
+        this.onGround = onGround;
+    }
+
     public EntityTeleportPacket() {
-        position = Pos.ZERO;
+        this(0, Pos.ZERO, false);
     }
 
     @Override
