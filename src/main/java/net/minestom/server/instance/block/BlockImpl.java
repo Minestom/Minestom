@@ -58,6 +58,9 @@ final class BlockImpl implements Block {
 
     @Override
     public @NotNull Block withProperties(@NotNull Map<@NotNull String, @NotNull String> properties) {
+        if (properties.isEmpty()) {
+            return this;
+        }
         Block block;
         if (this.properties.size() == properties.size()) {
             // Map should be complete

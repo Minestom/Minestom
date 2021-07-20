@@ -125,16 +125,8 @@ public class AnvilLoader implements IChunkLoader {
                     for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                         try {
                             final BlockState blockState = section.get(x, y, z);
-                            Block block = Block.fromNamespaceId(blockState.getName());
-                            if (block == null) {
-                                // Invalid block
-                                continue;
-                            }
-                            final var properties = blockState.getProperties();
-                            if (!properties.isEmpty()) {
-                                block = block.withProperties(properties);
-                            }
-                            chunk.setBlock(x, y + yOffset, z, block);
+                            chunk.setBlock(x, y + yOffset, z,
+                                    Block.fromNamespaceId(blockState.getName()).withProperties(blockState.getProperties()));
                         } catch (Exception e) {
                             EXCEPTION_MANAGER.handleException(e);
                         }
