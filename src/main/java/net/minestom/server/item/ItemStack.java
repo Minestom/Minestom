@@ -31,7 +31,7 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
      */
     public static final @NotNull ItemStack AIR = ItemStack.of(Material.AIR);
 
-    public static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+    private static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
 
     private final StackingRule stackingRule;
 
