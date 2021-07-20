@@ -117,6 +117,10 @@ public class ItemMeta implements TagReadable, Writeable {
         return tag.read(nbt);
     }
 
+    public List<String> getTags() {
+        return Collections.unmodifiableList(nbt.getKeys());
+    }
+
     public @NotNull NBTCompound toNBT() {
         return nbt.deepClone();
     }
