@@ -81,6 +81,10 @@ public final class ChunkUtils {
         return isLoaded(chunk);
     }
 
+    public static boolean isLoaded(@NotNull Instance instance, @NotNull Point point) {
+        return isLoaded(instance, point.x(), point.z());
+    }
+
     public static Chunk retrieve(Instance instance, Chunk originChunk, double x, double z) {
         final int chunkX = getChunkCoordinate(x);
         final int chunkZ = getChunkCoordinate(z);

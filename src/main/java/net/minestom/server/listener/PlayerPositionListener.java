@@ -16,42 +16,27 @@ public class PlayerPositionListener {
     }
 
     public static void playerLookListener(ClientPlayerRotationPacket packet, Player player) {
-        final var playerPosition = player.getPosition();
-        final double x = playerPosition.x();
-        final double y = playerPosition.y();
-        final double z = playerPosition.z();
-        final float yaw = packet.yaw;
-        final float pitch = packet.pitch;
-        final boolean onGround = packet.onGround;
-        processMovement(player, x, y, z, yaw, pitch, onGround);
+        processMovement(player, player.getPosition().withView(packet.yaw, packet.pitch), packet.onGround);
     }
 
     public static void playerPositionListener(ClientPlayerPositionPacket packet, Player player) {
-        final var playerPosition = player.getPosition();
-        final float yaw = playerPosition.yaw();
-        final float pitch = playerPosition.pitch();
-        final boolean onGround = packet.onGround;
-        processMovement(player,
-                packet.x, packet.y, packet.z,
-                yaw, pitch, onGround);
+        processMovement(player, player.getPosition().withCoord(packet.x, packet.y, packet.z), packet.onGround);
     }
 
     public static void playerPositionAndLookListener(ClientPlayerPositionAndRotationPacket packet, Player player) {
-        final float yaw = packet.yaw;
-        final float pitch = packet.pitch;
-        final boolean onGround = packet.onGround;
-        processMovement(player,
-                packet.x, packet.y, packet.z,
-                yaw, pitch, onGround);
+        processMovement(player, new Pos(packet.x, packet.y, packet.z, packet.yaw, packet.pitch), packet.onGround);
     }
 
     public static void teleportConfirmListener(ClientTeleportConfirmPacket packet, Player player) {
-        final int packetTeleportId = packet.teleportId;
-        player.refreshReceivedTeleportId(packetTeleportId);
+        player.refreshReceivedTeleportId(packet.teleportId);
     }
 
-    private static void processMovement(@NotNull Player player, double x, double y, double z,
-                                        float yaw, float pitch, boolean onGround) {
+    private static void processMovement(@NotNull Player player, @NotNull Pos newPosition, boolean onGround) {
+        final var currentPosition = player.getPosition();
+        if (currentPosition.equals(newPosition)) {
+            // For some reason, the position is the same
+            return;
+        }
         final Instance instance = player.getInstance();
         // Prevent moving before the player spawned, probably a modified client (or high latency?)
         if (instance == null) {
@@ -61,17 +46,9 @@ public class PlayerPositionListener {
         if (player.getLastSentTeleportId() != player.getLastReceivedTeleportId()) {
             return;
         }
-
-        final var currentPosition = player.getPosition();
-        final var newPosition = new Pos(x, y, z, yaw, pitch);
-        if (currentPosition.equals(newPosition)) {
-            // For some reason, the position is the same
-            return;
-        }
-
         // Try to move in an unloaded chunk, prevent it
-        if (!currentPosition.sameChunk(newPosition) && !ChunkUtils.isLoaded(instance, x, z)) {
-            player.teleport(player.getPosition());
+        if (!currentPosition.sameChunk(newPosition) && !ChunkUtils.isLoaded(instance, newPosition)) {
+            player.teleport(currentPosition);
             return;
         }
 
