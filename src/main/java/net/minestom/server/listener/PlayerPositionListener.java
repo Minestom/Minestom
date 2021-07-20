@@ -1,12 +1,12 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerPositionListener {
@@ -69,6 +69,10 @@ public class PlayerPositionListener {
 
         final var currentPosition = player.getPosition();
         final var newPosition = new Pos(x, y, z, yaw, pitch);
+        if (currentPosition.equals(newPosition)) {
+            // For some reason, the position is the same
+            return;
+        }
 
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
         EventDispatcher.call(playerMoveEvent);
