@@ -1,73 +1,88 @@
 package demo.commands;
 
+import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
-import net.minestom.server.command.builder.condition.Conditions;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityFinder;
 
+import java.util.List;
+import java.util.Locale;
+
 /**
- * Command that make a player change gamemode
+ * Command that make a player change gamemode, made in
+ * the style of the vanilla /gamemode command.
  */
 public class GamemodeCommand extends Command {
+
     public GamemodeCommand() {
-        super("gamemode", "g", "gm");
+        super("gamemode", "gm");
 
-        setCondition(Conditions::playerOnly);
+        ArgumentEnum<GameMode> gamemode = ArgumentType.Enum("gamemode", GameMode.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
+        gamemode.setCallback((sender, exception) -> {
+            sender.sendMessage(
+                    Component.text("Invalid gamemode ", NamedTextColor.RED)
+                            .append(Component.text(exception.getInput(), NamedTextColor.WHITE))
+                            .append(Component.text("!")), MessageType.SYSTEM);
+        });
 
-        setDefaultExecutor(this::usage);
 
-        var player = ArgumentType.Entity("player")
-                .onlyPlayers(true)
-                .singleEntity(true);
+        ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
 
-        var mode = ArgumentType.Enum("gamemode", GameMode.class)
-                .setFormat(ArgumentEnum.Format.LOWER_CASED);
+        setDefaultExecutor((sender, context) -> {
+            sender.sendMessage(Component.text("Usage: /" + context.getCommandName() + " <gamemode> [targets]", NamedTextColor.RED), MessageType.SYSTEM);
+        });
 
-        setArgumentCallback(this::targetCallback, player);
-        setArgumentCallback(this::gameModeCallback, mode);
+        addSyntax((sender, context) -> {
+            if (!sender.isPlayer()) {
+                sender.sendMessage(Component.text("Please run this command in-game.", NamedTextColor.RED));
+                return;
+            }
+            if (sender.asPlayer().getPermissionLevel() < 2) {
+                sender.sendMessage(Component.text("You don't have permission to use this command.", NamedTextColor.RED));
+                return;
+            }
+            GameMode mode = context.get(gamemode);
+            executeSelf(sender.asPlayer(), mode);
+        }, gamemode);
 
-        addSyntax(this::executeOnSelf, mode);
-        addSyntax(this::executeOnOther, player, mode);
+        addSyntax((sender, context) -> {
+            if (sender.isPlayer() && sender.asPlayer().getPermissionLevel() < 2) {
+                sender.sendMessage(Component.text("You don't have permission to use this command.", NamedTextColor.RED));
+                return;
+            }
+            EntityFinder finder = context.get(player);
+            GameMode mode = context.get(gamemode);
+            executeOthers(sender.asPlayer(), mode, finder.find(sender));
+        }, gamemode, player);
     }
 
-    private void usage(CommandSender sender, CommandContext context) {
-        sender.sendMessage(Component.text("Usage: /gamemode [player] <gamemode>")
-                .hoverEvent(Component.text("Click to get this command."))
-                .clickEvent(ClickEvent.suggestCommand("/gamemode player gamemode")));
+    private void executeOthers(CommandSender sender, GameMode mode, List<Entity> entities) {
+        if (entities.size() == 0) {
+            if (sender.isPlayer()) sender.sendMessage(Component.translatable("argument.entity.notfound.player", NamedTextColor.RED), MessageType.SYSTEM);
+            else sender.sendMessage(Component.text("No player was found", NamedTextColor.RED), MessageType.SYSTEM);
+        } else for (Entity entity : entities) {
+            if (entity instanceof Player p) {
+                if (p == sender) {
+                    executeSelf(sender.asPlayer(), mode);
+                } else {
+                    p.setGameMode(mode);
+                    p.sendMessage(Component.translatable("gameMode.changed").args(Component.translatable("gameMode." + mode.name().toLowerCase(Locale.ROOT))), MessageType.SYSTEM);
+                    sender.sendMessage(Component.translatable("commands.gamemode.success.other").args(p.getDisplayName() == null ? p.getName() : p.getDisplayName(), Component.translatable("gameMode." + mode.name().toLowerCase(Locale.ROOT))), MessageType.SYSTEM);
+                }
+            }
+        }
     }
 
-    private void executeOnSelf(CommandSender sender, CommandContext context) {
-        Player player = (Player) sender;
-
-        GameMode gamemode = context.get("gamemode");
-        assert gamemode != null; // mode is not supposed to be null, because gamemodeName will be valid
-        player.setGameMode(gamemode);
-        player.sendMessage(Component.text("You are now playing in " + gamemode.toString().toLowerCase()));
-    }
-
-    private void executeOnOther(CommandSender sender, CommandContext context) {
-        GameMode gamemode = context.get("gamemode");
-        EntityFinder targetFinder = context.get("player");
-        Player target = targetFinder.findFirstPlayer(sender);
-        assert gamemode != null; // mode is not supposed to be null, because gamemodeName will be valid
-        assert target != null;
-        target.setGameMode(gamemode);
-        target.sendMessage(Component.text("You are now playing in " + gamemode.toString().toLowerCase()));
-    }
-
-    private void targetCallback(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid player name."));
-    }
-
-    private void gameModeCallback(CommandSender sender, ArgumentSyntaxException exception) {
-        sender.sendMessage(Component.text("'" + exception.getInput() + "' is not a valid gamemode!"));
+    private void executeSelf(Player sender, GameMode mode) {
+        sender.setGameMode(mode);
+        sender.sendMessage(Component.translatable("commands.gamemode.success.self").args(Component.translatable("gameMode." + mode.name().toLowerCase(Locale.ROOT))), MessageType.SYSTEM);
     }
 }
