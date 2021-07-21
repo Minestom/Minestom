@@ -1445,16 +1445,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // New chunks indexes
         final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
 
-        // Find the difference between the two arrays
-        final int[] oldChunks = ArrayUtils.getDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks);
-        final int[] newChunks = ArrayUtils.getDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks);
-
         // Update client render distance
         updateViewPosition(newChunk.getChunkX(), newChunk.getChunkZ());
 
         // Unload old chunks
-        for (int index : oldChunks) {
-            final long chunkIndex = lastVisibleChunks[index];
+        ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
 
@@ -1467,14 +1462,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             if (chunk != null) {
                 chunk.removeViewer(this);
             }
-        }
-
+        });
         // Load new chunks
-        for (int index : newChunks) {
-            final long chunkIndex = updatedVisibleChunks[index];
+        ArrayUtils.forDifferencesBetweenArray(updatedVisibleChunks, lastVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
             this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(chunk -> {
                 if (chunk == null) {
                     // Cannot load chunk (auto load is not enabled)
@@ -1482,7 +1474,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
                 chunk.addViewer(this);
             });
-        }
+        });
     }
 
     public void refreshVisibleChunks() {
