@@ -652,9 +652,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @ApiStatus.Internal
     public void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
-        Check.notNull(chunk,
-                "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
-        Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
+        Check.notNull(chunk, "The chunk {0} is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)", chunk);
+        Check.argCondition(!chunk.isLoaded(), "Chunk {0} has been unloaded previously", chunk);
         final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         synchronized (entitiesLock) {
             Set<Entity> entities = getEntitiesInChunk(chunkIndex);
