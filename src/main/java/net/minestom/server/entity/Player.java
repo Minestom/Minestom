@@ -41,6 +41,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.InventoryHolder;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -96,7 +97,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified, InventoryHolder<PlayerInventory> {
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -1649,8 +1650,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return dimensionType;
     }
 
-    @NotNull
-    public PlayerInventory getInventory() {
+    @Override
+    public @NotNull PlayerInventory getInventory() {
         return inventory;
     }
 
