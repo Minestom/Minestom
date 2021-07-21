@@ -1434,10 +1434,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void refreshVisibleChunks(@NotNull Chunk newChunk) {
         // Previous chunks indexes
-        final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(viewableChunks ->
-                ChunkUtils.getChunkIndex(viewableChunks.getChunkX(), viewableChunks.getChunkZ())
-        ).toArray();
-
+        final long[] lastVisibleChunks = viewableChunks.stream().mapToLong(ChunkUtils::getChunkIndex).toArray();
         // New chunks indexes
         final long[] updatedVisibleChunks = ChunkUtils.getChunksInRange(newChunk.toPosition(), getChunkRange());
 

@@ -566,7 +566,9 @@ public class InstanceContainer extends Instance {
 
                 // Clear cache
                 this.chunks.remove(index);
-                this.chunkEntities.remove(index);
+                synchronized (entitiesLock){
+                    this.chunkEntities.remove(index);
+                }
 
                 chunk.unload();
 

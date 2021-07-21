@@ -1,5 +1,7 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
@@ -83,8 +85,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     protected final Set<EntityCreature> creatures = ConcurrentHashMap.newKeySet();
     protected final Set<ExperienceOrb> experienceOrbs = ConcurrentHashMap.newKeySet();
     // Entities per chunk
-    protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
-    private final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
+    protected final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
+    protected final Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -486,9 +488,12 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
             return Collections.emptySet();
-
-        final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        final Set<Entity> entities = getEntitiesInChunk(index);
+        final Set<Entity> entities;
+        synchronized (entitiesLock) {
+            if ((entities = chunkEntities.get(ChunkUtils.getChunkIndex(chunk))) == null) {
+                return Collections.emptySet();
+            }
+        }
         return Collections.unmodifiableSet(entities);
     }
 
@@ -642,15 +647,15 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         final long oldIndex = ChunkUtils.getChunkIndex(lastChunk);
         final long newIndex = ChunkUtils.getChunkIndex(newChunk);
         synchronized (entitiesLock) {
-            getEntitiesInChunk(oldIndex).remove(entity);
-            getEntitiesInChunk(newIndex).add(entity);
+            removeEntityChunk(oldIndex, entity);
+            addEntityChunk(newIndex, entity);
         }
     }
 
     private void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
         synchronized (entitiesLock) {
-            getEntitiesInChunk(chunkIndex).add(entity);
+            addEntityChunk(chunkIndex, entity);
             this.entities.add(entity);
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
@@ -665,7 +670,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     private void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
         final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
         synchronized (entitiesLock) {
-            getEntitiesInChunk(chunkIndex).remove(entity);
+            removeEntityChunk(chunkIndex, entity);
             this.entities.remove(entity);
             if (entity instanceof Player) {
                 this.players.remove(entity);
@@ -677,9 +682,18 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         }
     }
 
-    @NotNull
-    private Set<Entity> getEntitiesInChunk(long index) {
-        return chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet());
+    private void addEntityChunk(long index, Entity entity) {
+        this.chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet()).add(entity);
+    }
+
+    private void removeEntityChunk(long index, Entity entity) {
+        var chunkEntities = this.chunkEntities.get(index);
+        if (chunkEntities != null) {
+            chunkEntities.remove(entity);
+            if (chunkEntities.isEmpty()) {
+                this.chunkEntities.remove(index);
+            }
+        }
     }
 
     /**
