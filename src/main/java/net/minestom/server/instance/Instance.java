@@ -629,8 +629,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     }
 
     /**
-     * Synchronized method to execute {@link #UNSAFE_removeEntityFromChunk(Entity, Chunk)}
-     * and {@link #UNSAFE_addEntityToChunk(Entity, Chunk)} simultaneously.
+     * Changes an entity chunk.
      *
      * @param entity    the entity to change its chunk
      * @param lastChunk the last entity chunk
@@ -638,27 +637,20 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @ApiStatus.Internal
     public synchronized void UNSAFE_switchEntityChunk(@NotNull Entity entity, @NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
-        UNSAFE_removeEntityFromChunk(entity, lastChunk);
-        UNSAFE_addEntityToChunk(entity, newChunk);
+        Check.notNull(newChunk, "The chunk {0} is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)", newChunk);
+        Check.argCondition(!newChunk.isLoaded(), "Chunk {0} has been unloaded previously", newChunk);
+        final long oldIndex = ChunkUtils.getChunkIndex(lastChunk);
+        final long newIndex = ChunkUtils.getChunkIndex(newChunk);
+        synchronized (entitiesLock) {
+            getEntitiesInChunk(oldIndex).remove(entity);
+            getEntitiesInChunk(newIndex).add(entity);
+        }
     }
 
-    /**
-     * Adds the specified {@link Entity} to the instance entities cache.
-     * <p>
-     * Warning: this is done automatically when the entity move out of his chunk.
-     *
-     * @param entity the entity to add
-     * @param chunk  the chunk where the entity will be added
-     */
-    @ApiStatus.Internal
-    public void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
-        Check.notNull(chunk, "The chunk {0} is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)", chunk);
-        Check.argCondition(!chunk.isLoaded(), "Chunk {0} has been unloaded previously", chunk);
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+    private void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
         synchronized (entitiesLock) {
-            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-            entities.add(entity);
-
+            getEntitiesInChunk(chunkIndex).add(entity);
             this.entities.add(entity);
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
@@ -670,21 +662,10 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         }
     }
 
-    /**
-     * Removes the specified {@link Entity} to the instance entities cache.
-     * <p>
-     * Warning: this is done automatically when the entity move out of his chunk.
-     *
-     * @param entity the entity to remove
-     * @param chunk  the chunk where the entity will be removed
-     */
-    @ApiStatus.Internal
-    public void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+    private void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
         synchronized (entitiesLock) {
-            final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-            entities.remove(entity);
-
+            getEntitiesInChunk(chunkIndex).remove(entity);
             this.entities.remove(entity);
             if (entity instanceof Player) {
                 this.players.remove(entity);

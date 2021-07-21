@@ -116,6 +116,10 @@ public final class ChunkUtils {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
     }
 
+    public static long getChunkIndex(@NotNull Chunk chunk) {
+        return getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+    }
+
     public static long getChunkIndexWithSection(int chunkX, int chunkZ, int section) {
         long l = 0L;
         l |= ((long) chunkX & 4194303L) << 42;
