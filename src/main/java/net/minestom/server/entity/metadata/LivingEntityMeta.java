@@ -1,9 +1,9 @@
 package net.minestom.server.entity.metadata;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,11 +85,11 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     @Nullable
-    public BlockPosition getBedInWhichSleepingPosition() {
+    public Point getBedInWhichSleepingPosition() {
         return super.metadata.getIndex(OFFSET + 6, null);
     }
 
-    public void setBedInWhichSleepingPosition(@Nullable BlockPosition value) {
+    public void setBedInWhichSleepingPosition(@Nullable Point value) {
         super.metadata.setIndex(OFFSET + 6, Metadata.OptPosition(value));
     }
 

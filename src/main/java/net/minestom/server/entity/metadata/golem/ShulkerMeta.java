@@ -1,8 +1,8 @@
 package net.minestom.server.entity.metadata.golem;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,11 +22,11 @@ public class ShulkerMeta extends AbstractGolemMeta {
         super.metadata.setIndex(OFFSET, Metadata.Direction(value));
     }
 
-    public BlockPosition getAttachmentPosition() {
+    public Point getAttachmentPosition() {
         return super.metadata.getIndex(OFFSET + 1, null);
     }
 
-    public void setAttachmentPosition(BlockPosition value) {
+    public void setAttachmentPosition(Point value) {
         super.metadata.setIndex(OFFSET + 1, Metadata.OptPosition(value));
     }
 

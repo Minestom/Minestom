@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
+import net.minestom.server.command.builder.arguments.ArgumentType;
 
 public class TestCommand extends Command {
 
@@ -11,7 +12,10 @@ public class TestCommand extends Command {
         super("testcmd");
         setDefaultExecutor(this::usage);
 
-        addSyntax((sender, context) -> System.out.println("executed"), "test Get integer<number>");
+        var block = ArgumentType.BlockState("block");
+        block.setCallback((sender, exception) -> exception.printStackTrace());
+
+        addSyntax((sender, context) -> System.out.println("executed"), block);
     }
 
     private void usage(CommandSender sender, CommandContext context) {

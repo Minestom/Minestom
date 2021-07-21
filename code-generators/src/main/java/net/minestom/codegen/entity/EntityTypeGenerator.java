@@ -3,7 +3,6 @@ package net.minestom.codegen.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import net.minestom.codegen.util.NameUtil;
@@ -201,7 +200,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray entities = GSON.fromJson(new JsonReader(new InputStreamReader(entitiesFile)), JsonArray.class);
+        JsonObject entities = GSON.fromJson(new InputStreamReader(entitiesFile), JsonObject.class);
         ClassName entityClassName = ClassName.get("net.minestom.server.entity", "EntityType");
 
         // Particle
@@ -377,13 +376,14 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                         .build()
         );
         // Use data
-        for (JsonElement e : entities) {
-            JsonObject entity = e.getAsJsonObject();
+        entities.entrySet().forEach(entry -> {
+            final String entityNamespace = entry.getKey();
+            final String entityConstant = toConstant(entityNamespace);
 
-            String entityName = entity.get("name").getAsString();
+            JsonObject entity = entry.getValue().getAsJsonObject();
 
             // Get metaClass (this is a little complicated)
-            String metaClassName = NameUtil.convertSnakeCaseToCamelCase(entityName.toLowerCase());
+            String metaClassName = NameUtil.convertSnakeCaseToCamelCase(entityConstant.toLowerCase());
             switch (metaClassName) {
                 // These are cases where the entity name doesn't fully match up to the meta name.
                 // UPDATE: Handle new entity names that don't match up to their meta name.
@@ -409,18 +409,18 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
             String packageName = metadata.get(metaClassName);
             String className = metaClassName + "Meta";
             if (packageName == null) {
-                LOGGER.error("The Entity metadata for " + entity.get("id").getAsString() + " is not implemented!");
+                LOGGER.error("The Entity metadata for " + entityNamespace + " is not implemented!");
                 LOGGER.error("The metadata has been defaulted to EntityMeta.");
                 packageName = "net.minestom.server.entity.metadata";
                 className = "EntityMeta";
             }
 
             entityClass.addEnumConstant(
-                    entityName,
+                    entityConstant,
                     TypeSpec.anonymousClassBuilder(
                             "$T.from($S), $L, $L, $T::new, $T.$N",
                             namespaceIDClassName,
-                            entity.get("id").getAsString(),
+                            entityNamespace,
                             entity.get("width").getAsDouble(),
                             entity.get("height").getAsDouble(),
                             ClassName.get(packageName, className),
@@ -428,7 +428,7 @@ public final class EntityTypeGenerator extends MinestomCodeGenerator {
                             entity.get("packetType").getAsString().toUpperCase()
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

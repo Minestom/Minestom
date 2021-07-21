@@ -1,7 +1,5 @@
 package net.minestom.server.inventory;
 
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -22,7 +20,7 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public abstract class AbstractInventory implements InventoryClickHandler, TagHandler, DataContainer {
+public abstract class AbstractInventory implements InventoryClickHandler, TagHandler {
 
     private final int size;
     protected final ItemStack[] itemStacks;
@@ -34,7 +32,6 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
 
     private final Object nbtLock = new Object();
     private final NBTCompound nbt = new NBTCompound();
-    private Data data;
 
     protected AbstractInventory(int size) {
         this.size = size;
@@ -227,15 +224,5 @@ public abstract class AbstractInventory implements InventoryClickHandler, TagHan
         synchronized (nbtLock) {
             tag.write(nbt, value);
         }
-    }
-
-    @Override
-    public @Nullable Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
     }
 }

@@ -5,9 +5,9 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -18,11 +18,10 @@ public final class EntityUtils {
 
     }
 
-    public static void forEachRange(@NotNull Instance instance, @NotNull Position position,
+    public static void forEachRange(@NotNull Instance instance, @NotNull Point point,
                                     int viewDistance,
                                     @NotNull Consumer<Entity> consumer) {
-        final long[] chunksInRange = ChunkUtils.getChunksInRange(position, viewDistance);
-
+        final long[] chunksInRange = ChunkUtils.getChunksInRange(point, viewDistance);
         for (long chunkIndex : chunksInRange) {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
@@ -40,7 +39,6 @@ public final class EntityUtils {
             return false;
 
         final Chunk chunk = ent1.getInstance().getChunkAt(ent1.getPosition());
-
         final long[] visibleChunksEntity = ChunkUtils.getChunksInRange(ent2.getPosition(), MinecraftServer.getEntityViewDistance());
         for (long visibleChunk : visibleChunksEntity) {
             final int chunkX = ChunkUtils.getChunkCoordX(visibleChunk);
@@ -48,7 +46,6 @@ public final class EntityUtils {
             if (chunk.getChunkX() == chunkX && chunk.getChunkZ() == chunkZ)
                 return true;
         }
-
         return false;
     }
 
@@ -56,21 +53,14 @@ public final class EntityUtils {
         final Chunk chunk = entity.getChunk();
         if (chunk == null)
             return false;
-
-        final Position entityPosition = entity.getPosition();
-
+        final Pos entityPosition = entity.getPosition();
         // TODO: check entire bounding box
-        final BlockPosition blockPosition = entityPosition.toBlockPosition().subtract(0, 1, 0);
         try {
-            final short blockStateId = chunk.getBlockStateId(blockPosition.getX(),
-                    blockPosition.getY(),
-                    blockPosition.getZ());
-            final Block block = Block.fromStateId(blockStateId);
+            final Block block = chunk.getBlock(entityPosition.sub(0, 1, 0));
             return block.isSolid();
         } catch (NullPointerException e) {
             // Probably an entity at the border of an unloaded chunk
             return false;
         }
     }
-
 }

@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
@@ -33,7 +35,7 @@ public class EntityFinder {
     private EntitySort entitySort = EntitySort.ARBITRARY;
 
     // Position
-    private Position startPosition = new Position();
+    private Point startPosition = Vec.ZERO;
     private Float dx, dy, dz;
     private IntRange distance;
 
@@ -156,20 +158,20 @@ public class EntityFinder {
         // Diff X/Y/Z
         if (dx != null || dy != null || dz != null) {
             result = result.stream().filter(entity -> {
-                final Position entityPosition = entity.getPosition();
+                final var entityPosition = entity.getPosition();
                 if (dx != null && !MathUtils.isBetweenUnordered(
-                        entityPosition.getX(),
-                        startPosition.getX(), dx))
+                        entityPosition.x(),
+                        startPosition.x(), dx))
                     return false;
 
                 if (dy != null && !MathUtils.isBetweenUnordered(
-                        entityPosition.getY(),
-                        startPosition.getY(), dy))
+                        entityPosition.y(),
+                        startPosition.y(), dy))
                     return false;
 
                 if (dz != null && !MathUtils.isBetweenUnordered(
-                        entityPosition.getZ(),
-                        startPosition.getZ(), dz))
+                        entityPosition.z(),
+                        startPosition.z(), dz))
                     return false;
 
                 return true;
@@ -231,12 +233,12 @@ public class EntityFinder {
                                 // RANDOM is handled below
                                 return 1;
                             case FURTHEST:
-                                return startPosition.getDistance(ent1.getPosition()) >
-                                        startPosition.getDistance(ent2.getPosition()) ?
+                                return startPosition.distance(ent1.getPosition()) >
+                                        startPosition.distance(ent2.getPosition()) ?
                                         1 : 0;
                             case NEAREST:
-                                return startPosition.getDistance(ent1.getPosition()) <
-                                        startPosition.getDistance(ent2.getPosition()) ?
+                                return startPosition.distance(ent1.getPosition()) <
+                                        startPosition.distance(ent2.getPosition()) ?
                                         1 : 0;
                         }
                         return 1;
@@ -337,7 +339,7 @@ public class EntityFinder {
 
     @NotNull
     private static List<Entity> findTarget(@Nullable Instance instance, @NotNull TargetSelector targetSelector,
-                                           @NotNull Position startPosition, @Nullable Entity self) {
+                                           @NotNull Point startPosition, @Nullable Entity self) {
 
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
             Entity entity = null;
@@ -346,7 +348,7 @@ public class EntityFinder {
             Collection<Player> instancePlayers = instance != null ?
                     instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
             for (Player player : instancePlayers) {
-                final double distance = player.getPosition().getDistance(startPosition);
+                final double distance = player.getPosition().distance(startPosition);
                 if (distance < closestDistance) {
                     entity = player;
                     closestDistance = distance;

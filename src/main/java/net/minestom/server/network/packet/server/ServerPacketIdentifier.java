@@ -66,7 +66,7 @@ public class ServerPacketIdentifier {
     public static final int FACE_PLAYER = 0x37;
     public static final int PLAYER_POSITION_AND_LOOK = 0x38;
     public static final int UNLOCK_RECIPES = 0x39;
-    public static final int DESTROY_ENTITY = 0x3A;
+    public static final int DESTROY_ENTITIES = 0x3A;
     public static final int REMOVE_ENTITY_EFFECT = 0x3B;
     public static final int RESOURCE_PACK_SEND = 0x3C;
     public static final int RESPAWN = 0x3D;

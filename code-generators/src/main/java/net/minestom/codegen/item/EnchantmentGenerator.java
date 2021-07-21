@@ -3,7 +3,6 @@ package net.minestom.codegen.item;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class EnchantmentGenerator extends MinestomCodeGenerator {
@@ -40,7 +41,7 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray enchantments = GSON.fromJson(new JsonReader(new InputStreamReader(enchantmentsFile)), JsonArray.class);
+        JsonObject enchantments = GSON.fromJson(new InputStreamReader(enchantmentsFile), JsonObject.class);
         ClassName enchantmentClassName = ClassName.get("net.minestom.server.item", "Enchantment");
 
         // Enchantment
@@ -120,17 +121,16 @@ public final class EnchantmentGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement e : enchantments) {
-            JsonObject enchantment = e.getAsJsonObject();
-
-            String enchantmentName = enchantment.get("name").getAsString();
-            enchantmentClass.addEnumConstant(enchantmentName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    enchantment.get("id").getAsString()
+        enchantments.entrySet().forEach(entry -> {
+            final String enchantmentNamespace = entry.getKey();
+            final String enchantmentConstant = toConstant(enchantmentNamespace);
+            enchantmentClass.addEnumConstant(enchantmentConstant, TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                    enchantmentNamespace
                     ).build()
             );
-        }
+        });
 
 
         // Write files to outputFolder

@@ -14,7 +14,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
@@ -102,8 +103,13 @@ public final class UpdateManager {
      */
     private void serverTick(long tickStart) {
         // Tick all instances
-        MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
-                instance.tick(tickStart));
+        MinecraftServer.getInstanceManager().getInstances().forEach(instance -> {
+            try {
+                instance.tick(tickStart);
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
         // Tick all chunks (and entities inside)
         this.threadProvider.updateAndAwait(tickStart);
 

@@ -1,9 +1,8 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -52,34 +51,42 @@ public class BoundingBox {
     }
 
     /**
-     * Used to know if the bounding box intersects at a {@link BlockPosition}.
+     * Used to know if the bounding box intersects at a block position.
      *
-     * @param blockPosition the position to check
+     * @param blockX the block X
+     * @param blockY the block Y
+     * @param blockZ the block Z
      * @return true if the bounding box intersects with the position, false otherwise
      */
-    public boolean intersect(@NotNull BlockPosition blockPosition) {
-
+    public boolean intersectWithBlock(int blockX, int blockY, int blockZ) {
         final double offsetX = 1;
-        final double x = blockPosition.getX();
-        final double maxX = x + offsetX;
+        final double maxX = (double) blockX + offsetX;
 
-        final boolean checkX = getMinX() < maxX && getMaxX() > x;
+        final boolean checkX = getMinX() < maxX && getMaxX() > (double) blockX;
         if (!checkX)
             return false;
 
-        final double y = blockPosition.getY();
-        final double maxY = y + 0.99999;
+        final double maxY = (double) blockY + 0.99999;
 
-        final boolean checkY = getMinY() < maxY && getMaxY() > y;
+        final boolean checkY = getMinY() < maxY && getMaxY() > (double) blockY;
         if (!checkY)
             return false;
 
         final double offsetZ = 1;
-        final double z = blockPosition.getZ();
-        final double maxZ = z + offsetZ;
+        final double maxZ = (double) blockZ + offsetZ;
 
         // Z check
-        return getMinZ() < maxZ && getMaxZ() > z;
+        return getMinZ() < maxZ && getMaxZ() > (double) blockZ;
+    }
+
+    /**
+     * Used to know if the bounding box intersects at a point.
+     *
+     * @param blockPosition the position to check
+     * @return true if the bounding box intersects with the position, false otherwise
+     */
+    public boolean intersectWithBlock(@NotNull Point blockPosition) {
+        return intersectWithBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
     }
 
     public boolean intersect(double x, double y, double z) {
@@ -88,8 +95,8 @@ public class BoundingBox {
                 (z >= getMinZ() && z <= getMaxZ());
     }
 
-    public boolean intersect(@NotNull Position position) {
-        return intersect(position.getX(), position.getY(), position.getZ());
+    public boolean intersect(@NotNull Point point) {
+        return intersect(point.x(), point.y(), point.z());
     }
 
     /**
@@ -151,7 +158,7 @@ public class BoundingBox {
      * @return the min X
      */
     public double getMinX() {
-        return entity.getPosition().getX() - (x / 2);
+        return entity.getPosition().x() - (x / 2);
     }
 
     /**
@@ -160,7 +167,7 @@ public class BoundingBox {
      * @return the max X
      */
     public double getMaxX() {
-        return entity.getPosition().getX() + (x / 2);
+        return entity.getPosition().x() + (x / 2);
     }
 
     /**
@@ -169,7 +176,7 @@ public class BoundingBox {
      * @return the min Y
      */
     public double getMinY() {
-        return entity.getPosition().getY();
+        return entity.getPosition().y();
     }
 
     /**
@@ -178,7 +185,7 @@ public class BoundingBox {
      * @return the max Y
      */
     public double getMaxY() {
-        return entity.getPosition().getY() + y;
+        return entity.getPosition().y() + y;
     }
 
     /**
@@ -187,7 +194,7 @@ public class BoundingBox {
      * @return the min Z
      */
     public double getMinZ() {
-        return entity.getPosition().getZ() - (z / 2);
+        return entity.getPosition().z() - (z / 2);
     }
 
     /**
@@ -196,96 +203,96 @@ public class BoundingBox {
      * @return the max Z
      */
     public double getMaxZ() {
-        return entity.getPosition().getZ() + (z / 2);
+        return entity.getPosition().z() + (z / 2);
     }
 
     /**
-     * Gets an array of {@link Vector} representing the points at the bottom of the {@link BoundingBox}.
+     * Gets an array of {@link Vec} representing the points at the bottom of the {@link BoundingBox}.
      *
      * @return the points at the bottom of the {@link BoundingBox}
      */
     @NotNull
-    public Vector[] getBottomFace() {
-        return new Vector[]{
-                new Vector(getMinX(), getMinY(), getMinZ()),
-                new Vector(getMaxX(), getMinY(), getMinZ()),
-                new Vector(getMaxX(), getMinY(), getMaxZ()),
-                new Vector(getMinX(), getMinY(), getMaxZ()),
+    public Vec[] getBottomFace() {
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMinY(), getMaxZ()),
+                new Vec(getMinX(), getMinY(), getMaxZ()),
         };
     }
 
     /**
-     * Gets an array of {@link Vector} representing the points at the top of the {@link BoundingBox}.
+     * Gets an array of {@link Vec} representing the points at the top of the {@link BoundingBox}.
      *
      * @return the points at the top of the {@link BoundingBox}
      */
     @NotNull
-    public Vector[] getTopFace() {
-        return new Vector[]{
-                new Vector(getMinX(), getMaxY(), getMinZ()),
-                new Vector(getMaxX(), getMaxY(), getMinZ()),
-                new Vector(getMaxX(), getMaxY(), getMaxZ()),
-                new Vector(getMinX(), getMaxY(), getMaxZ()),
+    public Vec[] getTopFace() {
+        return new Vec[]{
+                new Vec(getMinX(), getMaxY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                new Vec(getMinX(), getMaxY(), getMaxZ()),
         };
     }
 
     /**
-     * Gets an array of {@link Vector} representing the points on the left face of the {@link BoundingBox}.
+     * Gets an array of {@link Vec} representing the points on the left face of the {@link BoundingBox}.
      *
      * @return the points on the left face of the {@link BoundingBox}
      */
     @NotNull
-    public Vector[] getLeftFace() {
-        return new Vector[]{
-                new Vector(getMinX(), getMinY(), getMinZ()),
-                new Vector(getMinX(), getMaxY(), getMinZ()),
-                new Vector(getMinX(), getMaxY(), getMaxZ()),
-                new Vector(getMinX(), getMinY(), getMaxZ()),
+    public Vec[] getLeftFace() {
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMinZ()),
+                new Vec(getMinX(), getMaxY(), getMinZ()),
+                new Vec(getMinX(), getMaxY(), getMaxZ()),
+                new Vec(getMinX(), getMinY(), getMaxZ()),
         };
     }
 
     /**
-     * Gets an array of {@link Vector} representing the points on the right face of the {@link BoundingBox}.
+     * Gets an array of {@link Vec} representing the points on the right face of the {@link BoundingBox}.
      *
      * @return the points on the right face of the {@link BoundingBox}
      */
     @NotNull
-    public Vector[] getRightFace() {
-        return new Vector[]{
-                new Vector(getMaxX(), getMinY(), getMinZ()),
-                new Vector(getMaxX(), getMaxY(), getMinZ()),
-                new Vector(getMaxX(), getMaxY(), getMaxZ()),
-                new Vector(getMaxX(), getMinY(), getMaxZ()),
+    public Vec[] getRightFace() {
+        return new Vec[]{
+                new Vec(getMaxX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                new Vec(getMaxX(), getMinY(), getMaxZ()),
         };
     }
 
     /**
-     * Gets an array of {@link Vector} representing the points at the front of the {@link BoundingBox}.
+     * Gets an array of {@link Vec} representing the points at the front of the {@link BoundingBox}.
      *
      * @return the points at the front of the {@link BoundingBox}
      */
     @NotNull
-    public Vector[] getFrontFace() {
-        return new Vector[]{
-                new Vector(getMinX(), getMinY(), getMinZ()),
-                new Vector(getMaxX(), getMinY(), getMinZ()),
-                new Vector(getMaxX(), getMaxY(), getMinZ()),
-                new Vector(getMinX(), getMaxY(), getMinZ()),
+    public Vec[] getFrontFace() {
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMinY(), getMinZ()),
+                new Vec(getMaxX(), getMaxY(), getMinZ()),
+                new Vec(getMinX(), getMaxY(), getMinZ()),
         };
     }
 
     /**
-     * Gets an array of {@link Vector} representing the points at the back of the {@link BoundingBox}.
+     * Gets an array of {@link Vec} representing the points at the back of the {@link BoundingBox}.
      *
      * @return the points at the back of the {@link BoundingBox}
      */
     @NotNull
-    public Vector[] getBackFace() {
-        return new Vector[]{
-                new Vector(getMinX(), getMinY(), getMaxZ()),
-                new Vector(getMaxX(), getMinY(), getMaxZ()),
-                new Vector(getMaxX(), getMaxY(), getMaxZ()),
-                new Vector(getMinX(), getMaxY(), getMaxZ()),
+    public Vec[] getBackFace() {
+        return new Vec[]{
+                new Vec(getMinX(), getMinY(), getMaxZ()),
+                new Vec(getMaxX(), getMinY(), getMaxZ()),
+                new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                new Vec(getMinX(), getMaxY(), getMaxZ()),
         };
     }
 

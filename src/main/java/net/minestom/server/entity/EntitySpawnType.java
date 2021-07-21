@@ -1,12 +1,11 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Vector;
 
 public enum EntitySpawnType {
     BASE {
@@ -21,10 +20,10 @@ public enum EntitySpawnType {
                 ObjectDataProvider objectDataProvider = (ObjectDataProvider) entity.getEntityMeta();
                 packet.data = objectDataProvider.getObjectData();
                 if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
-                    Vector velocity = entity.getVelocityForPacket();
-                    packet.velocityX = (short) velocity.getX();
-                    packet.velocityY = (short) velocity.getY();
-                    packet.velocityZ = (short) velocity.getZ();
+                    final var velocity = entity.getVelocityForPacket();
+                    packet.velocityX = (short) velocity.x();
+                    packet.velocityY = (short) velocity.y();
+                    packet.velocityZ = (short) velocity.z();
                 }
             }
             return packet;
@@ -38,11 +37,11 @@ public enum EntitySpawnType {
             packet.entityUuid = entity.getUuid();
             packet.entityType = entity.getEntityType().ordinal();
             packet.position = entity.getPosition();
-            packet.headPitch = entity.getPosition().getPitch();
-            Vector velocity = entity.getVelocityForPacket();
-            packet.velocityX = (short) velocity.getX();
-            packet.velocityY = (short) velocity.getY();
-            packet.velocityZ = (short) velocity.getZ();
+            packet.headPitch = entity.getPosition().pitch();
+            final var velocity = entity.getVelocityForPacket();
+            packet.velocityX = (short) velocity.x();
+            packet.velocityY = (short) velocity.y();
+            packet.velocityZ = (short) velocity.z();
             return packet;
         }
     },
@@ -78,7 +77,7 @@ public enum EntitySpawnType {
             if (entity.getEntityMeta() instanceof PaintingMeta) {
                 PaintingMeta paintingMeta = (PaintingMeta) entity.getEntityMeta();
                 packet.motive = paintingMeta.getMotive().ordinal();
-                packet.position = new BlockPosition(
+                packet.position = new Vec(
                         Math.max(0, (paintingMeta.getMotive().getWidth() >> 1) - 1),
                         paintingMeta.getMotive().getHeight() >> 1,
                         0
@@ -98,12 +97,12 @@ public enum EntitySpawnType {
                         break;
                 }
             } else {
-                packet.position = new BlockPosition(0, 0, 0);
+                packet.position = Vec.ZERO;
             }
             return packet;
         }
     };
 
     public abstract ServerPacket getSpawnPacket(Entity entity);
-    
+
 }

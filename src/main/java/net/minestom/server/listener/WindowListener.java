@@ -18,7 +18,7 @@ import java.util.Objects;
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
-        final byte windowId = packet.windowId;
+        final int windowId = packet.windowId;
         final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
         if (inventory == null) {
             // Invalid packet

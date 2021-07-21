@@ -24,7 +24,7 @@ public class MixinIntoMinestomCoreWithJava9ModuleOnClasspath extends Extension {
         List mockedList = mock(List.class);
         when(mockedList.get(0)).thenReturn("Test");
         // force load of InstanceContainer class
-        InstanceContainer c = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null);
+        InstanceContainer c = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD);
         System.out.println(c.toString());
         try {
             Assertions.assertTrue(MixinIntoMinestomCore.success, "InstanceContainer must have been mixed in with improveextensions.InstanceContainerMixin");

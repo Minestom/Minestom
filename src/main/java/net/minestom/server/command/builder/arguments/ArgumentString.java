@@ -43,7 +43,10 @@ public class ArgumentString extends Argument<String> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
-    @NotNull
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
 
         // Return if not quoted

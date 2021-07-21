@@ -1,20 +1,21 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientUpdateCommandBlockPacket extends ClientPlayPacket {
 
-    public BlockPosition blockPosition;
+    public Point blockPosition;
     public String command;
     public Mode mode;
     public byte flags;
 
     public ClientUpdateCommandBlockPacket() {
-        blockPosition = new BlockPosition(0,0,0);
+        blockPosition = Vec.ZERO;
         command = "";
         mode = Mode.REDSTONE;
     }

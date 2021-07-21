@@ -3,7 +3,6 @@ package net.minestom.codegen.entity;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public final class VillagerProfessionGenerator extends MinestomCodeGenerator {
         ClassName rawVillagerProfessionDataClassName = ClassName.get("net.minestom.server.raw_data", "RawVillagerProfessionData");
         ClassName registryClassName = ClassName.get("net.minestom.server.registry", "Registry");
 
-        JsonArray villagerProfessions = GSON.fromJson(new JsonReader(new InputStreamReader(villagerProfessionsFile)), JsonArray.class);
+        JsonArray villagerProfessions = GSON.fromJson(new InputStreamReader(villagerProfessionsFile), JsonArray.class);
         ClassName villagerProfessionClassName = ClassName.get("net.minestom.server.entity.metadata.villager", "VillagerProfession");
 
         // Particle

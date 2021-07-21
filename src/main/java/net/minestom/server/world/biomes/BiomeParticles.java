@@ -1,7 +1,6 @@
 package net.minestom.server.world.biomes;
 
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockAlternative;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -35,19 +34,18 @@ public class BiomeParticles {
         //TODO also can be falling_dust
         private static final String type = "block";
 
-        private final BlockAlternative block;
+        private final Block block;
 
-        public BlockParticle(BlockAlternative block) {
+        public BlockParticle(Block block) {
             this.block = block;
         }
 
         @Override
         public NBTCompound toNbt() {
             NBTCompound nbtCompound = new NBTCompound();
-            Block block1 = Block.fromStateId(block.getId());
             nbtCompound.setString("type", type);
-            nbtCompound.setString("Name", block1.getName());
-            Map<String, String> propertiesMap = block.createPropertiesMap();
+            nbtCompound.setString("Name", block.name());
+            Map<String, String> propertiesMap = block.properties();
             if (propertiesMap.size() != 0) {
                 NBTCompound properties = new NBTCompound();
                 propertiesMap.forEach(properties::setString);

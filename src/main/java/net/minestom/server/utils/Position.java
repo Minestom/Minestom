@@ -1,17 +1,20 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.clone.PublicCloneable;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.function.DoubleUnaryOperator;
 
 /**
  * Represents a position.
  * The instance is not contained.
+ *
+ * @deprecated use {@link net.minestom.server.coordinate.Pos} instead
  */
-public class Position implements PublicCloneable<Position> {
+@Deprecated
+public class Position implements Point {
 
     private double x, y, z;
     private float yaw, pitch;
@@ -46,6 +49,61 @@ public class Position implements PublicCloneable<Position> {
         this.y += y;
         this.z += z;
         return this;
+    }
+
+    @Override
+    public @NotNull Point add(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double value) {
+        return null;
     }
 
     /**
@@ -201,15 +259,54 @@ public class Position implements PublicCloneable<Position> {
         this.z = position.getZ();
     }
 
-    @NotNull
     @Override
-    public Position clone() {
-        try {
-            return (Position) super.clone();
-        } catch (CloneNotSupportedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public @NotNull Point withX(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withX(double x) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(double y) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Position clone() {
+        return new Position(x, y, z, yaw, pitch);
     }
 
     /**
@@ -368,9 +465,9 @@ public class Position implements PublicCloneable<Position> {
      */
     private float fixYaw(float yaw) {
         yaw = yaw % 360;
-        if(yaw < -180.0F) {
+        if (yaw < -180.0F) {
             yaw += 360.0F;
-        } else if(yaw > 180.0F) {
+        } else if (yaw > 180.0F) {
             yaw -= 360.0F;
         }
         return yaw;

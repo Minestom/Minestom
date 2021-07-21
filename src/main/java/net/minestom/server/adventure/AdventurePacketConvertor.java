@@ -15,7 +15,6 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.packet.server.play.StopSoundPacket;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -25,6 +24,7 @@ import java.util.Collection;
  */
 public class AdventurePacketConvertor {
     private static final Object2IntMap<NamedTextColor> NAMED_TEXT_COLOR_ID_MAP = new Object2IntArrayMap<>(16);
+
     static {
         NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.BLACK, 0);
         NAMED_TEXT_COLOR_ID_MAP.put(NamedTextColor.DARK_BLUE, 1);
@@ -102,9 +102,9 @@ public class AdventurePacketConvertor {
      * Creates a sound packet from a sound and a location.
      *
      * @param sound the sound
-     * @param x the x coordinate
-     * @param y the y coordinate
-     * @param z the z coordinate
+     * @param x     the x coordinate
+     * @param y     the y coordinate
+     * @param z     the z coordinate
      * @return the sound packet
      */
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
@@ -136,7 +136,7 @@ public class AdventurePacketConvertor {
     /**
      * Creates a sound effect packet from a sound and an emitter.
      *
-     * @param sound the sound
+     * @param sound   the sound
      * @param emitter the emitter, must be an {@link Entity}
      * @return the sound packet
      */
@@ -158,14 +158,13 @@ public class AdventurePacketConvertor {
             packet.pitch = sound.pitch();
             return packet;
         } else {
-            final Position pos = entity.getPosition();
-
+            final var pos = entity.getPosition();
             final NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
             packet.soundName = sound.name().asString();
             packet.soundSource = sound.source();
-            packet.x = (int) pos.getX();
-            packet.y = (int) pos.getY();
-            packet.z = (int) pos.getX();
+            packet.x = (int) pos.x();
+            packet.y = (int) pos.y();
+            packet.z = (int) pos.z();
             packet.volume = sound.volume();
             packet.pitch = sound.pitch();
             return packet;
@@ -175,7 +174,7 @@ public class AdventurePacketConvertor {
     /**
      * Creates an entity sound packet from an Adventure sound.
      *
-     * @param sound the sound
+     * @param sound  the sound
      * @param entity the entity the sound is coming from
      * @return the packet
      * @deprecated Use {@link #createSoundPacket(Sound, Sound.Emitter)}

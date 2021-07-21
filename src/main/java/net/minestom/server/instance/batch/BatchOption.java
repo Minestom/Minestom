@@ -12,6 +12,7 @@ public class BatchOption {
     private boolean fullChunk = false;
     private boolean calculateInverse = false;
     private boolean unsafeApply = false;
+    private boolean sendUpdate = true;
 
     public BatchOption() {
     }
@@ -62,6 +63,10 @@ public class BatchOption {
         return this.unsafeApply;
     }
 
+    public boolean shouldSendUpdate() {
+        return sendUpdate;
+    }
+
     /**
      * @param fullChunk true to make this batch composes the whole chunk
      * @return 'this' for chaining
@@ -96,6 +101,12 @@ public class BatchOption {
     @Contract("_ -> this")
     public BatchOption setUnsafeApply(boolean unsafeApply) {
         this.unsafeApply = unsafeApply;
+        return this;
+    }
+
+    @Contract("_ -> this")
+    public BatchOption setSendUpdate(boolean sendUpdate) {
+        this.sendUpdate = sendUpdate;
         return this;
     }
 }

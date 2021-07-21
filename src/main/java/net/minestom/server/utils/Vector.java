@@ -1,10 +1,15 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.utils.clone.PublicCloneable;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
-public class Vector implements PublicCloneable<Vector> {
+import java.util.function.DoubleUnaryOperator;
+
+/**
+ * @deprecated use {@link net.minestom.server.coordinate.Vec} instead
+ */
+@Deprecated
+public class Vector implements Point {
 
     private static final double epsilon = 0.000001;
 
@@ -36,6 +41,61 @@ public class Vector implements PublicCloneable<Vector> {
         this.y += y;
         this.z += z;
         return this;
+    }
+
+    @Override
+    public @NotNull Point add(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double value) {
+        return null;
     }
 
     /**
@@ -484,15 +544,54 @@ public class Vector implements PublicCloneable<Vector> {
                 '}';
     }
 
-    @NotNull
     @Override
-    public Vector clone() {
-        try {
-            return (Vector) super.clone();
-        } catch (CloneNotSupportedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            throw new IllegalStateException("Weird thing happened");
-        }
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public @NotNull Point withX(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withX(double x) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(double y) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Vector clone() {
+        return new Vector(x,y,z);
     }
 
     public double getX() {

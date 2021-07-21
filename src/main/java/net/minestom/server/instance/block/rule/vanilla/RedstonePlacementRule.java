@@ -5,9 +5,11 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.block.BlockUtils;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class RedstonePlacementRule extends BlockPlacementRule {
 
@@ -16,8 +18,8 @@ public class RedstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        BlockUtils block = new BlockUtils(instance, blockPosition);
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
+        BlockUtils blockUtils = new BlockUtils(instance, blockPosition);
 
         String east = "none";
         String north = "none";
@@ -27,10 +29,10 @@ public class RedstonePlacementRule extends BlockPlacementRule {
 
         // TODO Block should have method isRedstone, as redstone connects to more than itself.
 
-        final BlockUtils blockNorth = block.north();
-        final BlockUtils blockSouth = block.south();
-        final BlockUtils blockEast = block.east();
-        final BlockUtils blockWest = block.west();
+        final BlockUtils blockNorth = blockUtils.north();
+        final BlockUtils blockSouth = blockUtils.south();
+        final BlockUtils blockEast = blockUtils.east();
+        final BlockUtils blockWest = blockUtils.west();
         int connected = 0;
 
         if (blockNorth.equals(Block.REDSTONE_WIRE) || blockNorth.below().equals(Block.REDSTONE_WIRE)) {
@@ -86,27 +88,19 @@ public class RedstonePlacementRule extends BlockPlacementRule {
         }
 
         // TODO power
-
-        final String[] properties = {
-                "east=" + east,
-                "north=" + north,
-                "power=" + power,
-                "south=" + south,
-                "west=" + west};
-
-        return Block.REDSTONE_WIRE.withProperties(properties);
+        return Block.REDSTONE_WIRE.withProperties(Map.of(
+                "east", east,
+                "north", north,
+                "south", south,
+                "west", west,
+                "power", power));
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance,
-                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+    public Block blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
                             @NotNull Player pl) {
-        final short belowBlockId = instance.getBlockStateId(blockPosition.getX(), blockPosition.getY() - 1, blockPosition.getZ());
-        if (!Block.fromStateId(belowBlockId).isSolid()) {
-            return CANCEL_CODE;
-        }
-
-        return getBlockId();
+        final Block belowBlock = instance.getBlock(blockPosition.sub(0, 1, 0));
+        return belowBlock.isSolid() ? block : null;
     }
-
 }

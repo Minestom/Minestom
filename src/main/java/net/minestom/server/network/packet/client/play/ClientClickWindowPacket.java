@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 public class ClientClickWindowPacket extends ClientPlayPacket {
 
     public byte windowId;
+    public int stateId;
     public short slot;
     public byte button;
     public ClickType clickType = ClickType.PICKUP;
@@ -20,6 +21,7 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.windowId = reader.readByte();
+        this.stateId = reader.readVarInt();
         this.slot = reader.readShort();
         this.button = reader.readByte();
         this.clickType = ClickType.values()[reader.readVarInt()];
@@ -37,6 +39,7 @@ public class ClientClickWindowPacket extends ClientPlayPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeByte(windowId);
+        writer.writeVarInt(stateId);
         writer.writeShort(slot);
         writer.writeByte(button);
         writer.writeVarInt(clickType.ordinal());

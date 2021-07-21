@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * Be aware that the message returned by {@link #getMessage()} is only here for debugging purpose,
  * you should refer to {@link #getErrorCode()} to identify the exceptions.
  */
-public class ArgumentSyntaxException extends Exception {
+public class ArgumentSyntaxException extends RuntimeException {
 
     private final String input;
     private final int errorCode;

@@ -21,7 +21,7 @@ public enum StatisticType implements Keyed {
 
     TIME_SINCE_REST(NamespaceID.from("minecraft:time_since_rest")),
 
-    CROUCH_TIME(NamespaceID.from("minecraft:sneak_time")),
+    SNEAK_TIME(NamespaceID.from("minecraft:sneak_time")),
 
     WALK_ONE_CM(NamespaceID.from("minecraft:walk_one_cm")),
 

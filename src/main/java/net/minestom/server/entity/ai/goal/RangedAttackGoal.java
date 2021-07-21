@@ -104,7 +104,7 @@ public class RangedAttackGoal extends GoalSelector {
         if (distanceSquared <= this.attackRangeSquared) {
             if (!Cooldown.hasCooldown(time, this.lastShot, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
-                    Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
+                    final var to = target.getPosition().add(0D, target.getEyeHeight(), 0D);
 
                     Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
                     if (projectileGenerator == null) {
@@ -121,15 +121,15 @@ public class RangedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        Position pathPosition = navigator.getPathPosition();
+        final var  pathPosition = navigator.getPathPosition();
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
                 navigator.setPathTo(null);
             }
             return;
         }
-        Position targetPosition = target.getPosition();
-        if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
+        final var targetPosition = target.getPosition();
+        if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
             if (this.cooldown.isReady(time)) {
                 this.cooldown.refreshLastUpdate(time);
                 navigator.setPathTo(targetPosition);

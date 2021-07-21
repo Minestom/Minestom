@@ -231,7 +231,7 @@ public final class NBTUtils {
                 NBTList<NBTString> canPlaceOn = nbt.getList("CanPlaceOn");
                 Set<Block> blocks = new HashSet<>();
                 for (NBTString blockNamespace : canPlaceOn) {
-                    Block block = Registries.getBlock(blockNamespace.getValue());
+                    Block block = Block.fromNamespaceId(blockNamespace.getValue());
                     blocks.add(block);
                 }
                 metaBuilder.canPlaceOn(blocks);
@@ -243,7 +243,7 @@ public final class NBTUtils {
                 NBTList<NBTString> canDestroy = nbt.getList("CanDestroy");
                 Set<Block> blocks = new HashSet<>();
                 for (NBTString blockNamespace : canDestroy) {
-                    Block block = Registries.getBlock(blockNamespace.getValue());
+                    Block block = Block.fromNamespaceId(blockNamespace.getValue());
                     blocks.add(block);
                 }
                 metaBuilder.canDestroy(blocks);

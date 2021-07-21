@@ -11,7 +11,14 @@ public class EntityHeadLookPacket implements ServerPacket {
     public int entityId;
     public float yaw;
 
-    public EntityHeadLookPacket() {}
+    public EntityHeadLookPacket(int entityId, float yaw) {
+        this.entityId = entityId;
+        this.yaw = yaw;
+    }
+
+    public EntityHeadLookPacket() {
+        this(0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

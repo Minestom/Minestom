@@ -1,9 +1,11 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -14,48 +16,37 @@ import org.jetbrains.annotations.NotNull;
  * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
-public class PlayerStartDiggingEvent implements PlayerEvent, CancellableEvent {
+public class PlayerStartDiggingEvent implements PlayerEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
-    private final BlockPosition blockPosition;
-    private final int blockStateId;
-    private final int customBlockId;
+    private final Block block;
+    private final Point blockPosition;
 
     private boolean cancelled;
 
-    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId, int customBlockId) {
+    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition) {
         this.player = player;
+        this.block = block;
         this.blockPosition = blockPosition;
-        this.blockStateId = blockStateId;
-        this.customBlockId = customBlockId;
     }
 
     /**
-     * Gets the {@link BlockPosition}.
+     * Gets the block which is being dug.
      *
-     * @return the {@link BlockPosition}
+     * @return the block
      */
-    @NotNull
-    public BlockPosition getBlockPosition() {
+    @Override
+    public @NotNull Block getBlock() {
+        return block;
+    }
+
+    /**
+     * Gets the block position.
+     *
+     * @return the block position
+     */
+    public @NotNull Point getBlockPosition() {
         return blockPosition;
-    }
-
-    /**
-     * Gets the block state id.
-     *
-     * @return the block state id
-     */
-    public int getBlockStateId() {
-        return blockStateId;
-    }
-
-    /**
-     * Gets the custom block id.
-     *
-     * @return the custom block id
-     */
-    public int getCustomBlockId() {
-        return customBlockId;
     }
 
     @Override

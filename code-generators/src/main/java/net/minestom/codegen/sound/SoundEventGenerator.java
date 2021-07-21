@@ -1,9 +1,6 @@
 package net.minestom.codegen.sound;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.element.Modifier;
-import java.io.*;
+import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Collections;
 
 public final class SoundEventGenerator extends MinestomCodeGenerator {
@@ -40,7 +39,7 @@ public final class SoundEventGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray sounds = GSON.fromJson(new JsonReader(new InputStreamReader(soundsFile)), JsonArray.class);
+        JsonObject sounds = GSON.fromJson(new InputStreamReader(soundsFile), JsonObject.class);
         ClassName soundClassName = ClassName.get("net.minestom.server.sound", "SoundEvent");
         // Sound
         TypeSpec.Builder soundClass = TypeSpec.enumBuilder(soundClassName)
@@ -120,17 +119,16 @@ public final class SoundEventGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement s : sounds) {
-            JsonObject sound = s.getAsJsonObject();
-
-            String soundName = sound.get("name").getAsString();
-            soundClass.addEnumConstant(soundName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    sound.get("id").getAsString()
+        sounds.entrySet().forEach(entry -> {
+            final String soundNamespace = entry.getKey();
+            final String soundConstant = toConstant(soundNamespace).replace(".", "_");
+            soundClass.addEnumConstant(soundConstant, TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                            soundNamespace
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

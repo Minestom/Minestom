@@ -2,31 +2,30 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class SpawnPositionPacket implements ServerPacket {
 
-    public int x, y, z;
+    public Point position = Vec.ZERO;
     public float angle;
 
-    public SpawnPositionPacket() {}
+    public SpawnPositionPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        writer.writeBlockPosition(x, y, z);
+        writer.writeBlockPosition(position);
         writer.writeFloat(angle);
     }
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        BlockPosition pos = reader.readBlockPosition();
-        x = pos.getX();
-        y = pos.getY();
-        z = pos.getZ();
-        angle = reader.readFloat();
+        this.position = reader.readBlockPosition();
+        this.angle = reader.readFloat();
     }
 
     @Override

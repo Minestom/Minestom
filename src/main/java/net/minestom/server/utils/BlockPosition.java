@@ -1,18 +1,21 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.utils.clone.PublicCloneable;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.function.DoubleUnaryOperator;
 
 // TODO: pool block positions?
 
 /**
  * Represents the position of a block, so with integers instead of floating numbers.
+ *
+ * @deprecated use {@link net.minestom.server.coordinate.Vec} instead
  */
-public class BlockPosition implements PublicCloneable<BlockPosition> {
+@Deprecated
+public class BlockPosition implements Point {
 
     private int x, y, z;
 
@@ -212,15 +215,114 @@ public class BlockPosition implements PublicCloneable<BlockPosition> {
                 MathUtils.square(getZ() - blockPosition.getZ());
     }
 
-    @NotNull
     @Override
-    public BlockPosition clone() {
-        try {
-            return (BlockPosition) super.clone();
-        } catch (CloneNotSupportedException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+    public double x() {
+        return x;
+    }
+
+    @Override
+    public double y() {
+        return y;
+    }
+
+    @Override
+    public double z() {
+        return z;
+    }
+
+    @Override
+    public @NotNull Point withX(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withX(double x) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withY(double y) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(@NotNull DoubleUnaryOperator operator) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point withZ(double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point add(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point sub(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point mul(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double x, double y, double z) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(@NotNull Point point) {
+        return null;
+    }
+
+    @Override
+    public @NotNull Point div(double value) {
+        return null;
+    }
+
+    @Override
+    public @NotNull BlockPosition clone() {
+        return new BlockPosition(x, y, z);
     }
 
     /**

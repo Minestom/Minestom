@@ -2,9 +2,9 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 public class EntityPositionAndRotationPacket implements ServerPacket {
@@ -14,7 +14,8 @@ public class EntityPositionAndRotationPacket implements ServerPacket {
     public float yaw, pitch;
     public boolean onGround;
 
-    public EntityPositionAndRotationPacket() {}
+    public EntityPositionAndRotationPacket() {
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
@@ -44,15 +45,15 @@ public class EntityPositionAndRotationPacket implements ServerPacket {
     }
 
     public static EntityPositionAndRotationPacket getPacket(int entityId,
-                                                            @NotNull Position newPosition, @NotNull Position oldPosition,
+                                                            @NotNull Pos newPosition, @NotNull Pos oldPosition,
                                                             boolean onGround) {
         EntityPositionAndRotationPacket entityPositionAndRotationPacket = new EntityPositionAndRotationPacket();
         entityPositionAndRotationPacket.entityId = entityId;
-        entityPositionAndRotationPacket.deltaX = (short) ((newPosition.getX() * 32 - oldPosition.getX() * 32) * 128);
-        entityPositionAndRotationPacket.deltaY = (short) ((newPosition.getY() * 32 - oldPosition.getY() * 32) * 128);
-        entityPositionAndRotationPacket.deltaZ = (short) ((newPosition.getZ() * 32 - oldPosition.getZ() * 32) * 128);
-        entityPositionAndRotationPacket.yaw = newPosition.getYaw();
-        entityPositionAndRotationPacket.pitch = newPosition.getPitch();
+        entityPositionAndRotationPacket.deltaX = (short) ((newPosition.x() * 32 - oldPosition.x() * 32) * 128);
+        entityPositionAndRotationPacket.deltaY = (short) ((newPosition.y() * 32 - oldPosition.y() * 32) * 128);
+        entityPositionAndRotationPacket.deltaZ = (short) ((newPosition.z() * 32 - oldPosition.z() * 32) * 128);
+        entityPositionAndRotationPacket.yaw = newPosition.yaw();
+        entityPositionAndRotationPacket.pitch = newPosition.pitch();
         entityPositionAndRotationPacket.onGround = onGround;
 
         return entityPositionAndRotationPacket;

@@ -1,24 +1,30 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockChangePacket implements ServerPacket {
 
-    public BlockPosition blockPosition;
+    public Point blockPosition;
     public int blockStateId;
 
-    public BlockChangePacket(BlockPosition blockPosition, int blockStateId) {
+    public BlockChangePacket(Point blockPosition, int blockStateId) {
         this.blockPosition = blockPosition;
         this.blockStateId = blockStateId;
     }
 
+    public BlockChangePacket(Point blockPosition, Block block) {
+        this(blockPosition, block.stateId());
+    }
+
     public BlockChangePacket() {
-        this(new BlockPosition(0, 0, 0), 0);
+        this(Vec.ZERO, 0);
     }
 
     @Override
@@ -29,8 +35,8 @@ public class BlockChangePacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        blockPosition = reader.readBlockPosition();
-        blockStateId = reader.readVarInt();
+        this.blockPosition = reader.readBlockPosition();
+        this.blockStateId = reader.readVarInt();
     }
 
     @Override

@@ -41,7 +41,6 @@ import java.util.function.Predicate;
  * Manages the connected clients.
  */
 public final class ConnectionManager {
-
     private static final long KEEP_ALIVE_DELAY = 10_000;
     private static final long KEEP_ALIVE_KICK = 30_000;
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
@@ -59,8 +58,6 @@ public final class ConnectionManager {
     private UuidProvider uuidProvider;
     // The player provider to have your own Player implementation
     private PlayerProvider playerProvider;
-    // The consumers to call once a player connect, mostly used to init events
-    private final List<Consumer<Player>> playerInitializations = new CopyOnWriteArrayList<>();
 
     private Component shutdownText = Component.text("The server is shutting down.", NamedTextColor.RED);
 
@@ -113,8 +110,7 @@ public final class ConnectionManager {
      * @param username the player username (ignoreCase)
      * @return the first player who validate the username condition, null if none was found
      */
-    @Nullable
-    public Player getPlayer(@NotNull String username) {
+    public @Nullable Player getPlayer(@NotNull String username) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUsername().equalsIgnoreCase(username))
                 return player;
@@ -130,8 +126,7 @@ public final class ConnectionManager {
      * @param uuid the player UUID
      * @return the first player who validate the UUID condition, null if none was found
      */
-    @Nullable
-    public Player getPlayer(@NotNull UUID uuid) {
+    public @Nullable Player getPlayer(@NotNull UUID uuid) {
         for (Player player : getOnlinePlayers()) {
             if (player.getUuid().equals(uuid))
                 return player;
@@ -259,8 +254,7 @@ public final class ConnectionManager {
      * @return the uuid based on {@code playerConnection}
      * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
      */
-    @NotNull
-    public UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
+    public @NotNull UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
         if (uuidProvider == null)
             return UUID.randomUUID();
         return uuidProvider.provide(playerConnection, username);
@@ -280,47 +274,8 @@ public final class ConnectionManager {
      *
      * @return the current {@link PlayerProvider}
      */
-    @NotNull
-    public PlayerProvider getPlayerProvider() {
+    public @NotNull PlayerProvider getPlayerProvider() {
         return playerProvider == null ? playerProvider = Player::new : playerProvider;
-    }
-
-    /**
-     * Those are all the consumers called when a new {@link Player} join.
-     *
-     * @return an unmodifiable list containing all the {@link Player} initialization consumer
-     */
-    @NotNull
-    public List<Consumer<Player>> getPlayerInitializations() {
-        return Collections.unmodifiableList(playerInitializations);
-    }
-
-    /**
-     * Adds a new player initialization consumer. Those are called when a {@link Player} join,
-     * mainly to add event callbacks to the player.
-     * <p>
-     * This callback should be exclusively used to add event listeners since it is called directly after a
-     * player join (before any chunk is sent) and the client behavior can therefore be unpredictable.
-     * You can add your "init" code in {@link net.minestom.server.event.player.PlayerLoginEvent}
-     * or even {@link AsyncPlayerPreLoginEvent}.
-     *
-     * @param playerInitialization the {@link Player} initialization consumer
-     * @deprecated use the event API instead
-     */
-    @Deprecated
-    public void addPlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
-        this.playerInitializations.add(playerInitialization);
-    }
-
-    /**
-     * Removes an existing player initialization consumer.
-     * <p>
-     * Removal of player initializations should be done by reference, and not cloning.
-     *
-     * @param playerInitialization the {@link Player} initialization consumer
-     */
-    public void removePlayerInitialization(@NotNull Consumer<Player> playerInitialization) {
-        this.playerInitializations.remove(playerInitialization);
     }
 
     /**
@@ -340,8 +295,7 @@ public final class ConnectionManager {
      *
      * @return the kick reason in case on a shutdown
      */
-    @NotNull
-    public Component getShutdownText() {
+    public @NotNull Component getShutdownText() {
         return shutdownText;
     }
 
@@ -407,11 +361,6 @@ public final class ConnectionManager {
      * @param register true to register the newly created player in {@link ConnectionManager} lists
      */
     public void startPlayState(@NotNull Player player, boolean register) {
-        // Init player (register events)
-        for (Consumer<Player> playerInitialization : getPlayerInitializations()) {
-            playerInitialization.accept(player);
-        }
-
         AsyncUtils.runAsync(() -> {
             String username = player.getUsername();
             UUID uuid = player.getUuid();
@@ -424,7 +373,6 @@ public final class ConnectionManager {
             final boolean online = player.isOnline();
             if (!online) {
                 final PlayerConnection playerConnection = player.getPlayerConnection();
-
                 if (playerConnection instanceof NettyPlayerConnection) {
                     ((NettyPlayerConnection) playerConnection).getChannel().flush();
                 }
@@ -479,13 +427,11 @@ public final class ConnectionManager {
      * @return the newly created player object
      * @see #startPlayState(Player, boolean)
      */
-    @NotNull
-    public Player startPlayState(@NotNull PlayerConnection connection,
-                                 @NotNull UUID uuid, @NotNull String username,
-                                 boolean register) {
+    public @NotNull Player startPlayState(@NotNull PlayerConnection connection,
+                                          @NotNull UUID uuid, @NotNull String username,
+                                          boolean register) {
         final Player player = getPlayerProvider().createPlayer(uuid, username, connection);
         startPlayState(player, register);
-
         return player;
     }
 
@@ -511,7 +457,6 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        // Connect waiting players
         waitingPlayersTick();
     }
 
@@ -540,7 +485,6 @@ public final class ConnectionManager {
     private void waitingPlayersTick() {
         Player waitingPlayer;
         while ((waitingPlayer = waitingPlayers.poll()) != null) {
-
             PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
             EventDispatcher.call(loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();

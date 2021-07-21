@@ -1,9 +1,6 @@
 package net.minestom.codegen.statistics;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonReader;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +39,7 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
         ClassName namespaceIDClassName = ClassName.get("net.minestom.server.utils", "NamespaceID");
         ClassName registriesClassName = ClassName.get("net.minestom.server.registry", "Registries");
 
-        JsonArray statistics = GSON.fromJson(new JsonReader(new InputStreamReader(statisticsFile)), JsonArray.class);
+        JsonObject statistics = GSON.fromJson(new InputStreamReader(statisticsFile), JsonObject.class);
         ClassName statisticClassName = ClassName.get("net.minestom.server.statistic", "StatisticType");
 
         // Particle
@@ -122,18 +119,16 @@ public final class StatisticGenerator extends MinestomCodeGenerator {
         );
 
         // Use data
-        for (JsonElement s : statistics) {
-            JsonObject statistic = s.getAsJsonObject();
-
-            String statisticName = statistic.get("name").getAsString();
-
-            statisticClass.addEnumConstant(statisticName, TypeSpec.anonymousClassBuilder(
-                    "$T.from($S)",
-                    namespaceIDClassName,
-                    statistic.get("id").getAsString()
+        statistics.entrySet().forEach(entry -> {
+            final String statisticNamespace = entry.getKey();
+            final String statisticConstant = toConstant(statisticNamespace);
+            statisticClass.addEnumConstant(statisticConstant, TypeSpec.anonymousClassBuilder(
+                            "$T.from($S)",
+                            namespaceIDClassName,
+                            statisticNamespace
                     ).build()
             );
-        }
+        });
 
         // Write files to outputFolder
         writeFiles(

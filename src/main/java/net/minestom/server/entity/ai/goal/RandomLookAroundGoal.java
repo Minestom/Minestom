@@ -2,7 +2,7 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.utils.Vector;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -13,20 +13,20 @@ public class RandomLookAroundGoal extends GoalSelector {
     private static final Random RANDOM = new Random();
     private final int chancePerTick;
     private final Supplier<Integer> minimalLookTimeSupplier;
-    private final Function<EntityCreature, Vector> randomDirectionFunction;
-    private Vector lookDirection;
+    private final Function<EntityCreature, Vec> randomDirectionFunction;
+    private Vec lookDirection;
     private int lookTime = 0;
 
     public RandomLookAroundGoal(EntityCreature entityCreature, int chancePerTick) {
         this(entityCreature, chancePerTick,
-                // These two functions act similarily enough to how MC randomly looks around.
+                // These two functions act similarly enough to how MC randomly looks around.
 
                 // Look in one direction for at most 40 ticks and at minimum 20 ticks.
                 () -> 20 + RANDOM.nextInt(20),
                 // Look at a random block
                 (creature) -> {
                     final double n = Math.PI * 2 * RANDOM.nextDouble();
-                    return new Vector(
+                    return new Vec(
                             (float) Math.cos(n),
                             0,
                             (float) Math.sin(n)
@@ -44,8 +44,7 @@ public class RandomLookAroundGoal extends GoalSelector {
             EntityCreature entityCreature,
             int chancePerTick,
             @NotNull Supplier<Integer> minimalLookTimeSupplier,
-            @NotNull Function<EntityCreature, Vector> randomDirectionFunction
-    ) {
+            @NotNull Function<EntityCreature, Vec> randomDirectionFunction) {
         super(entityCreature);
         this.chancePerTick = chancePerTick;
         this.minimalLookTimeSupplier = minimalLookTimeSupplier;
@@ -69,7 +68,7 @@ public class RandomLookAroundGoal extends GoalSelector {
     @Override
     public void tick(long time) {
         --lookTime;
-        entityCreature.setView(entityCreature.getPosition().clone().setDirection(lookDirection));
+        entityCreature.refreshPosition(entityCreature.getPosition().withDirection(lookDirection));
     }
 
     @Override
@@ -79,6 +78,5 @@ public class RandomLookAroundGoal extends GoalSelector {
 
     @Override
     public void end() {
-
     }
 }
