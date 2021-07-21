@@ -541,11 +541,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             if (dimensionChange) {
                 sendDimension(instanceDimensionType);
             }
-
-            // Only load the spawning chunk to speed up login, remaining chunks are loaded in #spawnPlayer
-            final long[] visibleChunks = ChunkUtils.getChunksInRange(spawnPosition, 0);
-
-            return ChunkUtils.optionalLoadAll(instance, visibleChunks, null)
+            return instance.loadOptionalChunk(spawnPosition)
                     .thenRun(() -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
         } else {
             // The player already has the good version of all the chunks.
@@ -1493,7 +1489,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshVisibleEntities(@NotNull Chunk newChunk) {
         final int entityViewDistance = MinecraftServer.getEntityViewDistance();
         final float maximalDistance = entityViewDistance * Chunk.CHUNK_SECTION_SIZE;
-
         // Manage already viewable entities
         this.viewableEntities.stream()
                 .filter(entity -> entity.getDistance(this) > maximalDistance)
@@ -1506,18 +1501,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                         removeViewer((Player) entity);
                     }
                 });
-
         // Manage entities in unchecked chunks
         EntityUtils.forEachRange(instance, newChunk.toPosition(), entityViewDistance, entity -> {
             if (entity.isAutoViewable() && !entity.viewers.contains(this)) {
                 entity.addViewer(this);
             }
-
             if (entity instanceof Player && isAutoViewable() && !viewers.contains(entity)) {
                 addViewer((Player) entity);
             }
         });
-
     }
 
     /**
