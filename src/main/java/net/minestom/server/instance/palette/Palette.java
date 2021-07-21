@@ -105,7 +105,7 @@ public final class Palette implements PublicCloneable<Palette> {
 
             if (currentAir != placedAir) {
                 // Block count changed
-                this.blockCount += currentAir ? 1 : -1;
+                this.blockCount += (short) (currentAir ? 1 : -1);
             }
             blocks[index] = block;
         }
@@ -225,8 +225,8 @@ public final class Palette implements PublicCloneable<Palette> {
         if (!hasPalette) {
             return blockId;
         }
-        final short value = blockPaletteMap.getOrDefault(blockId, (short)-1);
-        if(value == -1){
+        final short value = blockPaletteMap.getOrDefault(blockId, (short) -1);
+        if (value == -1) {
             // Resize the palette if full
             if (paletteBlockMap.size() >= getMaxPaletteSize()) {
                 resize(bitsPerEntry + bitsIncrement);
