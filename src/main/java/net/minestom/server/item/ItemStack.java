@@ -7,6 +7,7 @@ import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,6 +104,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @Contract(value = "_, -> new", pure = true)
     public @NotNull ItemStack withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
         return withAmount(intUnaryOperator.applyAsInt(amount));
+    }
+
+    @ApiStatus.Experimental
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull ItemStack consume(int amount) {
+        return stackingRule.apply(this, currentAmount -> currentAmount - amount);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
