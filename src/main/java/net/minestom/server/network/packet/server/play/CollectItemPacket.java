@@ -12,7 +12,15 @@ public class CollectItemPacket implements ServerPacket {
     public int collectorEntityId;
     public int pickupItemCount;
 
-    public CollectItemPacket() {}
+    public CollectItemPacket(int collectedEntityId, int collectorEntityId, int pickupItemCount) {
+        this.collectedEntityId = collectedEntityId;
+        this.collectorEntityId = collectorEntityId;
+        this.pickupItemCount = pickupItemCount;
+    }
+
+    public CollectItemPacket() {
+        this(0, 0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

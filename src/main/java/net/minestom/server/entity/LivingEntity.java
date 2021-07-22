@@ -206,8 +206,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
-
-                    // Do not pickup if not visible
+                    // Do not pick up if not visible
                     if (this instanceof Player && !entity.isViewer((Player) this))
                         continue;
 
@@ -222,12 +221,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                         PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                         EventDispatcher.callCancellable(pickupItemEvent, () -> {
                             final ItemStack item = itemEntity.getItemStack();
-
-                            CollectItemPacket collectItemPacket = new CollectItemPacket();
-                            collectItemPacket.collectedEntityId = itemEntity.getEntityId();
-                            collectItemPacket.collectorEntityId = getEntityId();
-                            collectItemPacket.pickupItemCount = item.getAmount();
-                            sendPacketToViewersAndSelf(collectItemPacket);
+                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
                             entity.remove();
                         });
                     }
@@ -358,10 +352,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             float remainingDamage = entityDamageEvent.getDamage();
 
-            EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
-            entityAnimationPacket.entityId = getEntityId();
-            entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
-            sendPacketToViewersAndSelf(entityAnimationPacket);
+            sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
 
             // Additional hearts support
             if (this instanceof Player) {
@@ -546,11 +537,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEquipmentsPacket());
         playerConnection.sendPacket(getPropertiesPacket());
-
         if (getTeam() != null) {
             playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
         }
-
         return true;
     }
 
@@ -565,10 +554,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingMainHand() {
-        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
-        animationPacket.entityId = getEntityId();
-        animationPacket.animation = EntityAnimationPacket.Animation.SWING_MAIN_ARM;
-        sendPacketToViewers(animationPacket);
+        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
     }
 
     /**
@@ -576,10 +562,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingOffHand() {
-        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
-        animationPacket.entityId = getEntityId();
-        animationPacket.animation = EntityAnimationPacket.Animation.SWING_OFF_HAND;
-        sendPacketToViewers(animationPacket);
+        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {

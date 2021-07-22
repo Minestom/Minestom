@@ -48,11 +48,7 @@ public enum EntitySpawnType {
     PLAYER {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            SpawnPlayerPacket packet = new SpawnPlayerPacket();
-            packet.entityId = entity.getEntityId();
-            packet.playerUuid = entity.getUuid();
-            packet.position = entity.getPosition();
-            return packet;
+            return new SpawnPlayerPacket(entity.getEntityId(), entity.getUuid(), entity.getPosition());
         }
     },
     EXPERIENCE_ORB {

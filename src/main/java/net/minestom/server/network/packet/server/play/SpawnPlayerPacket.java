@@ -1,10 +1,10 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -15,9 +15,14 @@ public class SpawnPlayerPacket implements ServerPacket {
     public UUID playerUuid;
     public Pos position;
 
+    public SpawnPlayerPacket(int entityId, UUID playerUuid, Pos position) {
+        this.entityId = entityId;
+        this.playerUuid = playerUuid;
+        this.position = position;
+    }
+
     public SpawnPlayerPacket() {
-        playerUuid = new UUID(0, 0);
-        position = Pos.ZERO;
+        this(0, new UUID(0, 0), Pos.ZERO);
     }
 
     @Override

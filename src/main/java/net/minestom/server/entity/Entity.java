@@ -271,19 +271,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void setView(float yaw, float pitch) {
         this.position = position.withView(yaw, pitch);
-
-        EntityRotationPacket entityRotationPacket = new EntityRotationPacket();
-        entityRotationPacket.entityId = getEntityId();
-        entityRotationPacket.yaw = yaw;
-        entityRotationPacket.pitch = pitch;
-        entityRotationPacket.onGround = onGround;
-
-        EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-        entityHeadLookPacket.entityId = getEntityId();
-        entityHeadLookPacket.yaw = yaw;
-
-        sendPacketToViewersAndSelf(entityHeadLookPacket);
-        sendPacketToViewersAndSelf(entityRotationPacket);
+        sendPacketToViewersAndSelf(new EntityHeadLookPacket(getEntityId(), yaw));
+        sendPacketToViewersAndSelf(new EntityRotationPacket(getEntityId(), yaw, pitch, onGround));
     }
 
     /**
@@ -330,20 +319,12 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             playerConnection.sendPacket(getVelocityPacket());
         }
         playerConnection.sendPacket(getMetadataPacket());
-
         // Passenger
         if (hasPassenger()) {
             playerConnection.sendPacket(getPassengersPacket());
         }
-
         // Head position
-        {
-            EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-            entityHeadLookPacket.entityId = getEntityId();
-            entityHeadLookPacket.yaw = position.yaw();
-            playerConnection.sendPacket(entityHeadLookPacket);
-        }
-
+        playerConnection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
         return true;
     }
 
@@ -948,10 +929,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param status the status to trigger
      */
     public void triggerStatus(byte status) {
-        EntityStatusPacket statusPacket = new EntityStatusPacket();
-        statusPacket.entityId = getEntityId();
-        statusPacket.status = status;
-        sendPacketToViewersAndSelf(statusPacket);
+        sendPacketToViewersAndSelf(new EntityStatusPacket(getEntityId(), status));
     }
 
     /**
@@ -1381,13 +1359,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {
-        EntityVelocityPacket velocityPacket = new EntityVelocityPacket();
-        velocityPacket.entityId = getEntityId();
-        Vec velocity = getVelocityForPacket();
-        velocityPacket.velocityX = (short) velocity.x();
-        velocityPacket.velocityY = (short) velocity.y();
-        velocityPacket.velocityZ = (short) velocity.z();
-        return velocityPacket;
+        return new EntityVelocityPacket(getEntityId(), getVelocityForPacket());
     }
 
     /**
