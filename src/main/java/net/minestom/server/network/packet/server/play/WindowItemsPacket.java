@@ -12,12 +12,17 @@ public class WindowItemsPacket implements ServerPacket {
     public byte windowId;
     public int stateId;
     public ItemStack[] items;
-    public ItemStack carriedItem = ItemStack.AIR;
+    public ItemStack carriedItem;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
+    public WindowItemsPacket(byte windowId, int stateId, ItemStack[] items, ItemStack carriedItem) {
+        this.windowId = windowId;
+        this.stateId = stateId;
+        this.items = items;
+        this.carriedItem = carriedItem;
+    }
+
     public WindowItemsPacket() {
+        this((byte) 0, 0, new ItemStack[]{}, ItemStack.AIR);
     }
 
     @Override

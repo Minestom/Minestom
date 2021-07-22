@@ -199,13 +199,9 @@ public class Inventory extends AbstractInventory implements Viewable {
      */
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         final ItemStack currentCursorItem = cursorPlayersItem.getOrDefault(player, ItemStack.AIR);
-        final boolean similar = currentCursorItem.isSimilar(cursorItem);
-
-        if (!similar) {
-            final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-            player.getPlayerConnection().sendPacket(setSlotPacket);
+        if (!currentCursorItem.isSimilar(cursorItem)) {
+            player.getPlayerConnection().sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
         }
-
         if (!cursorItem.isAir()) {
             this.cursorPlayersItem.put(player, cursorItem);
         } else {
@@ -225,11 +221,7 @@ public class Inventory extends AbstractInventory implements Viewable {
     @Override
     protected synchronized void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
         this.itemStacks[slot] = itemStack;
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = getWindowId();
-        setSlotPacket.slot = (short) slot;
-        setSlotPacket.itemStack = itemStack;
-        sendPacketToViewers(setSlotPacket);
+        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     /**
@@ -237,12 +229,8 @@ public class Inventory extends AbstractInventory implements Viewable {
      *
      * @return a new {@link WindowItemsPacket} packet
      */
-    @NotNull
-    private WindowItemsPacket createNewWindowItemsPacket() {
-        WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
-        windowItemsPacket.windowId = getWindowId();
-        windowItemsPacket.items = getItemStacks();
-        return windowItemsPacket;
+    private @NotNull WindowItemsPacket createNewWindowItemsPacket() {
+        return new WindowItemsPacket(getWindowId(), 0, getItemStacks(), ItemStack.AIR);
     }
 
     /**
@@ -253,11 +241,7 @@ public class Inventory extends AbstractInventory implements Viewable {
      * @see <a href="https://wiki.vg/Protocol#Window_Property">https://wiki.vg/Protocol#Window_Property</a>
      */
     protected void sendProperty(@NotNull InventoryProperty property, short value) {
-        WindowPropertyPacket windowPropertyPacket = new WindowPropertyPacket();
-        windowPropertyPacket.windowId = getWindowId();
-        windowPropertyPacket.property = property.getProperty();
-        windowPropertyPacket.value = value;
-        sendPacketToViewers(windowPropertyPacket);
+        sendPacketToViewers(new WindowPropertyPacket(getWindowId(), property.getProperty(), value));
     }
 
     /**
@@ -352,7 +336,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
 
-        if(clickResult.doRefresh()){
+        if (clickResult.doRefresh()) {
             update(player);
         }
 

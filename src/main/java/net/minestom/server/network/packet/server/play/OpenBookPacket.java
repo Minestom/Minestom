@@ -9,9 +9,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class OpenBookPacket implements ServerPacket {
 
-    public Player.Hand hand = Player.Hand.MAIN;
+    public Player.Hand hand;
 
-    public OpenBookPacket() {}
+    public OpenBookPacket(Player.Hand hand) {
+        this.hand = hand;
+    }
+
+    public OpenBookPacket() {
+        this(Player.Hand.MAIN);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

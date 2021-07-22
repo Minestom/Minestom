@@ -926,28 +926,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void openBook(@NotNull Book book) {
-        ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
+        final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
                 .meta(WrittenBookMeta.fromAdventure(book, this))
                 .build();
-
         // Set book in offhand
-        SetSlotPacket setBookPacket = new SetSlotPacket();
-        setBookPacket.windowId = 0;
-        setBookPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
-        setBookPacket.itemStack = writtenBook;
-        playerConnection.sendPacket(setBookPacket);
-
+        playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
         // Open the book
-        OpenBookPacket openBookPacket = new OpenBookPacket();
-        openBookPacket.hand = Hand.OFF;
-        playerConnection.sendPacket(openBookPacket);
-
+        playerConnection.sendPacket(new OpenBookPacket(Hand.OFF));
         // Restore the item in offhand
-        SetSlotPacket restoreItemPacket = new SetSlotPacket();
-        restoreItemPacket.windowId = 0;
-        restoreItemPacket.slot = PlayerInventoryUtils.OFFHAND_SLOT;
-        restoreItemPacket.itemStack = getItemInOffHand();
-        playerConnection.sendPacket(restoreItemPacket);
+        playerConnection.sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
     }
 
     @Override

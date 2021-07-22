@@ -12,10 +12,15 @@ public class WindowPropertyPacket implements ServerPacket {
     public short property;
     public short value;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public WindowPropertyPacket() {}
+    public WindowPropertyPacket(byte windowId, short property, short value) {
+        this.windowId = windowId;
+        this.property = property;
+        this.value = value;
+    }
+
+    public WindowPropertyPacket() {
+        this((byte) 0, (short) 0, (short) 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

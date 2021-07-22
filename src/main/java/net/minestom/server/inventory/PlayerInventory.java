@@ -239,11 +239,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
      * @param itemStack the item stack in the slot
      */
     protected void sendSlotRefresh(short slot, ItemStack itemStack) {
-        SetSlotPacket setSlotPacket = new SetSlotPacket();
-        setSlotPacket.windowId = 0;
-        setSlotPacket.slot = slot;
-        setSlotPacket.itemStack = itemStack;
-        player.getPlayerConnection().sendPacket(setSlotPacket);
+        player.getPlayerConnection().sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
     }
 
     /**
@@ -253,16 +249,11 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
      */
     private WindowItemsPacket createWindowItemsPacket() {
         ItemStack[] convertedSlots = new ItemStack[INVENTORY_SIZE];
-
         for (int i = 0; i < itemStacks.length; i++) {
             final int slot = convertToPacketSlot(i);
             convertedSlots[slot] = itemStacks[i];
         }
-
-        WindowItemsPacket windowItemsPacket = new WindowItemsPacket();
-        windowItemsPacket.windowId = 0;
-        windowItemsPacket.items = convertedSlots;
-        return windowItemsPacket;
+        return new WindowItemsPacket((byte) 0, 0, convertedSlots, ItemStack.AIR);
     }
 
     @Override
