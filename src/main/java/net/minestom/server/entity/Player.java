@@ -232,18 +232,11 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(joinGamePacket);
 
         // Server brand name
-        {
-            playerConnection.sendPacket(PluginMessagePacket.getBrandPacket());
-        }
+        playerConnection.sendPacket(PluginMessagePacket.getBrandPacket());
+        // Difficulty
+        playerConnection.sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
 
-        ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
-        serverDifficultyPacket.difficulty = MinecraftServer.getDifficulty();
-        serverDifficultyPacket.locked = true;
-        playerConnection.sendPacket(serverDifficultyPacket);
-
-        SpawnPositionPacket spawnPositionPacket = new SpawnPositionPacket();
-        spawnPositionPacket.position = respawnPoint;
-        playerConnection.sendPacket(spawnPositionPacket);
+        playerConnection.sendPacket(new SpawnPositionPacket(respawnPoint, 0));
 
         // Add player to list with spawning skin
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, skin);
@@ -291,7 +284,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Tags
         this.playerConnection.sendPacket(TagsPacket.getRequiredTagsPacket());
 
-        // Some client update
+        // Some client updates
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
@@ -606,11 +599,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param channel the message channel
      * @param data    the message data
      */
-    public void sendPluginMessage(@NotNull String channel, @NotNull byte[] data) {
-        PluginMessagePacket pluginMessagePacket = new PluginMessagePacket();
-        pluginMessagePacket.channel = channel;
-        pluginMessagePacket.data = data;
-        playerConnection.sendPacket(pluginMessagePacket);
+    public void sendPluginMessage(@NotNull String channel, byte @NotNull [] data) {
+        playerConnection.sendPacket(new PluginMessagePacket(channel, data));
     }
 
     /**
@@ -622,8 +612,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param message the message
      */
     public void sendPluginMessage(@NotNull String channel, @NotNull String message) {
-        final byte[] bytes = message.getBytes(StandardCharsets.UTF_8);
-        sendPluginMessage(channel, bytes);
+        sendPluginMessage(channel, message.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

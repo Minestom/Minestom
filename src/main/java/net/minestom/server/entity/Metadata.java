@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ColoredText;
 import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -254,11 +253,7 @@ public class Metadata {
                 }
                 return;
             }
-            EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-            metaDataPacket.entityId = this.entity.getEntityId();
-            metaDataPacket.entries = Collections.singleton(entry);
-
-            this.entity.sendPacketToViewersAndSelf(metaDataPacket);
+            this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Collections.singleton(entry)));
         }
     }
 
@@ -266,7 +261,6 @@ public class Metadata {
         if (this.notifyAboutChanges == notifyAboutChanges) {
             return;
         }
-
         Collection<Entry<?>> entries = null;
         synchronized (this.notNotifiedChanges) {
             this.notifyAboutChanges = notifyAboutChanges;
@@ -278,16 +272,10 @@ public class Metadata {
                 this.notNotifiedChanges.clear();
             }
         }
-
         if (entries == null || this.entity == null || !this.entity.isActive()) {
             return;
         }
-
-        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-        metaDataPacket.entityId = this.entity.getEntityId();
-        metaDataPacket.entries = entries;
-
-        this.entity.sendPacketToViewersAndSelf(metaDataPacket);
+        this.entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
     }
 
     @NotNull

@@ -1367,12 +1367,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return The {@link EntityMetaDataPacket} related to this entity
      */
-    @NotNull
-    public EntityMetaDataPacket getMetadataPacket() {
-        EntityMetaDataPacket metaDataPacket = new EntityMetaDataPacket();
-        metaDataPacket.entityId = getEntityId();
-        metaDataPacket.entries = metadata.getEntries();
-        return metaDataPacket;
+    public @NotNull EntityMetaDataPacket getMetadataPacket() {
+        return new EntityMetaDataPacket(getEntityId(), metadata.getEntries());
     }
 
     /**

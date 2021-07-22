@@ -12,8 +12,13 @@ public class ServerDifficultyPacket implements ServerPacket {
     public Difficulty difficulty;
     public boolean locked;
 
+    public ServerDifficultyPacket(Difficulty difficulty, boolean locked) {
+        this.difficulty = difficulty;
+        this.locked = locked;
+    }
+
     public ServerDifficultyPacket() {
-        difficulty = Difficulty.NORMAL;
+        this(Difficulty.NORMAL, false);
     }
 
     @Override
