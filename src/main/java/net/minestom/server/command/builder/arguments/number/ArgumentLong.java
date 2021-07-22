@@ -35,16 +35,14 @@ public class ArgumentLong extends ArgumentNumber<Long> {
     @Override
     public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
         DeclareCommandsPacket.Node argumentNode = simpleArgumentNode(this, executable, false, false);
-
-        // TODO maybe use ArgumentLiteral/ArgumentWord and impose long restriction server side?
-
-        argumentNode.parser = "brigadier:integer";
+        
+        argumentNode.parser = "brigadier:long";
         argumentNode.properties = BinaryWriter.makeArray(packetWriter -> {
             packetWriter.writeByte(getNumberProperties());
             if (this.hasMin())
-                packetWriter.writeInt(this.getMin().intValue());
+                packetWriter.writeLong(this.getMin());
             if (this.hasMax())
-                packetWriter.writeInt(this.getMax().intValue());
+                packetWriter.writeLong(this.getMax());
         });
 
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
