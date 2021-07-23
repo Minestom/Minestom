@@ -208,14 +208,14 @@ public class RelativeBlockBatch implements Batch<Runnable> {
                 //For details on the bits used, see #setBlock(int, int, int, Block)
                 
                 //Get relative unsigned coordinates from the data
-                long relXUnsigned = (int) ((pos >> 40) & 1_048_575);
-                long relYUnsigned = (int) ((pos >> 20) & 1_048_575);
-                long relZUnsigned = (int) ( pos        & 1_048_575);
+                long relXUnsigned = (pos >> 40) & 1_048_575;
+                long relYUnsigned = (pos >> 20) & 1_048_575;
+                long relZUnsigned =  pos        & 1_048_575;
 
                 //Get and apply the stored sign
-                int relX = relXUnsigned * (((pos >> 60) & 1) == 1 ? -1 : 1);
-                int relY = relYUnsigned * (((pos >> 61) & 1) == 1 ? -1 : 1);
-                int relZ = relZUnsigned * (((pos >> 62) & 1) == 1 ? -1 : 1);
+                int relX = (int) (relXUnsigned * (((pos >> 60) & 1) == 1 ? -1 : 1));
+                int relY = (int) (relYUnsigned * (((pos >> 61) & 1) == 1 ? -1 : 1));
+                int relZ = (int) (relZUnsigned * (((pos >> 62) & 1) == 1 ? -1 : 1));
 
                 final Block block = entry.getValue();
 
