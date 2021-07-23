@@ -7,10 +7,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTWriter;
@@ -29,7 +29,7 @@ import java.util.function.Consumer;
 public class BinaryWriter extends OutputStream {
 
     private ByteBuf buffer;
-    private final NBTWriter nbtWriter = new NBTWriter(this, false);
+    private NBTWriter nbtWriter; // Lazily initialized
 
     /**
      * Creates a {@link BinaryWriter} using a heap buffer with a custom initial capacity.
@@ -287,6 +287,9 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {
+        if (nbtWriter == null) {
+            this.nbtWriter = new NBTWriter(this, false);
+        }
         try {
             nbtWriter.writeNamed(name, tag);
         } catch (IOException e) {
