@@ -15,7 +15,8 @@ import org.jetbrains.annotations.Nullable;
  * should be used instead for efficiency purposes.
  * <p>
  * Coordinates are relative to (0, 0, 0) with some limitations. All coordinates must
- * fit within a 16 bit integer of the first coordinate (32,767 blocks). If blocks must
+ * fit within a 20+1 bit integer (where the +1 is the sign) of the first coordinate (this area
+ * covers a range of 1,048,575 blocks in each direction). If blocks must
  * be spread out over a larger area, an {@link AbsoluteBlockBatch} should be used.
  * <p>
  * All inverses are {@link AbsoluteBlockBatch}s and represent the inverse of the application
@@ -64,14 +65,40 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         y -= offsetY;
         z -= offsetZ;
 
+        // (2^20)-1 equals 1,048,575
+        
         // Verify that blocks are not too far from each other
-        Check.argCondition(Math.abs(x) > Short.MAX_VALUE, "Relative x position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(y) > Short.MAX_VALUE, "Relative y position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(z) > Short.MAX_VALUE, "Relative z position may not be more than 16 bits long.");
+        Check.argCondition(x < -1_048_576 || x > 1_048_575, "Relative x position may not be more than 20 bits long.");
+        Check.argCondition(y < -1_048_576 || y > 1_048_575, "Relative y position may not be more than 20 bits long.");
+        Check.argCondition(z < -1_048_576 || z > 1_048_575, "Relative z position may not be more than 20 bits long.");
 
-        long pos = Short.toUnsignedLong((short)x);
-        pos = (pos << 16) | Short.toUnsignedLong((short)y);
-        pos = (pos << 16) | Short.toUnsignedLong((short)z);
+        //Bits are used effectively to store as much data as possible:
+        //
+        //    Sign of Z
+        //    |
+        //    |Sign of Y
+        //    ||
+        //    ||Sign of X                                          Bits 0-19: Z
+        //    |||                           Bits 20-39: Y     /--------------------\
+        //    |||     Bits 40-59: X     /--------------------\|                    |
+        //    |||/--------------------\ |                    ||                    |
+        //    ||||                    | |                    ||                    |
+        //    ||||                    | |                    ||                    |
+        //    ||||                    | |                    ||                    |
+        //   00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+        
+        // We could get away with using less data for Y, but it is future proof for 1.18+ worlds
+        // (though it is very much unlikely, that 2^20 vertical blocks will be affected by a single batch)
+        
+        //Add the coordinates to the long
+        long pos = Math.abs(x) & ((1L << 20)-1);
+        pos = pos << 20 | ((long)Math.abs(y) & ((1L << 20)-1));
+        pos = pos << 20 | ((long)Math.abs(z) & ((1L << 20)-1));
+
+        //Add the coordinate signs to the long
+        pos = pos | (x < 0 ? 1L << 60 : 0);
+        pos = pos | (y < 0 ? 1L << 61 : 0);
+        pos = pos | (z < 0 ? 1L << 62 : 0);
 
         //final int block = (blockStateId << 16) | customBlockId;
         synchronized (blockIdMap) {
@@ -178,9 +205,17 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         synchronized (blockIdMap) {
             for (var entry : blockIdMap.long2ObjectEntrySet()) {
                 final long pos = entry.getLongKey();
-                final short relZ = (short) (pos & 0xFFFF);
-                final short relY = (short) ((pos >> 16) & 0xFFFF);
-                final short relX = (short) ((pos >> 32) & 0xFFFF);
+                //For details on the bits used, see #setBlock(int, int, int, Block)
+                
+                //Get relative unsigned coordinates from the data
+                long relXUnsigned = (int) ((pos >> 40) & 1_048_575);
+                long relYUnsigned = (int) ((pos >> 20) & 1_048_575);
+                long relZUnsigned = (int) ( pos        & 1_048_575);
+
+                //Get and apply the stored sign
+                int relX = relXUnsigned * (((pos >> 60) & 1) == 1 ? -1 : 1);
+                int relY = relYUnsigned * (((pos >> 61) & 1) == 1 ? -1 : 1);
+                int relZ = relZUnsigned * (((pos >> 62) & 1) == 1 ? -1 : 1);
 
                 final Block block = entry.getValue();
 
