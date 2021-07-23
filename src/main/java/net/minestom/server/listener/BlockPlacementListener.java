@@ -44,7 +44,8 @@ public class BlockPlacementListener {
             return;
 
         // Prevent outdated/modified client data
-        if (!ChunkUtils.isLoaded(instance.getChunkAt(blockPosition))) {
+        final Chunk interactedChunk = instance.getChunkAt(blockPosition);
+        if (!ChunkUtils.isLoaded(interactedChunk)) {
             // Client tried to place a block in an unloaded chunk, ignore the request
             return;
         }
@@ -64,6 +65,7 @@ public class BlockPlacementListener {
             }
         }
         if (blockUse) {
+            refresh(player, interactedChunk);
             return;
         }
 
@@ -103,7 +105,7 @@ public class BlockPlacementListener {
         Check.stateCondition(!ChunkUtils.isLoaded(chunk),
                 "A player tried to place a block in the border of a loaded chunk {0}", placementPosition);
         if (chunk.isReadOnly()) {
-            chunk.sendChunk(player);
+            refresh(player, chunk);
             return;
         }
 
@@ -131,7 +133,7 @@ public class BlockPlacementListener {
             }
         }
         if (intersect) {
-            chunk.sendChunk(player);
+            refresh(player, chunk);
             return;
         }
         // BlockPlaceEvent check
@@ -139,7 +141,7 @@ public class BlockPlacementListener {
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
         if (playerBlockPlaceEvent.isCancelled()) {
-            chunk.sendChunk(player);
+            refresh(player, chunk);
             return;
         }
 
@@ -151,7 +153,7 @@ public class BlockPlacementListener {
             resultBlock = blockPlacementRule.blockPlace(instance, resultBlock, blockFace, blockPosition, player);
         }
         if (resultBlock == null) {
-            chunk.sendChunk(player);
+            refresh(player, chunk);
             return;
         }
         // Place the block
@@ -163,5 +165,10 @@ public class BlockPlacementListener {
             final ItemStack newUsedItem = usedItem.getStackingRule().apply(usedItem, usedItem.getAmount() - 1);
             playerInventory.setItemInHand(hand, newUsedItem);
         }
+    }
+
+    private static void refresh(Player player, Chunk chunk) {
+        player.getInventory().update();
+        chunk.sendChunk(player);
     }
 }
