@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -41,10 +42,7 @@ final class BlockImpl implements Block {
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
         properties.replace(property, value);
-        Block block = propertyEntry.getProperties(properties);
-        if (block == null)
-            throw new IllegalArgumentException("Invalid property: " + property + ":" + value);
-        return compute(block);
+        return compute(properties);
     }
 
     @Override
@@ -52,18 +50,12 @@ final class BlockImpl implements Block {
         if (properties.isEmpty()) {
             return this;
         }
-        Block block;
         if (this.properties.size() == properties.size()) {
-            // Map should be complete
-            block = propertyEntry.getProperties(properties);
-        } else {
-            var newProperties = new HashMap<>(this.properties);
-            newProperties.replaceAll((key, value) -> Objects.requireNonNullElse(properties.get(key), value));
-            block = propertyEntry.getProperties(newProperties);
+            return compute(properties); // Map should be complete
         }
-        if (block == null)
-            throw new IllegalArgumentException("Invalid properties: " + properties);
-        return compute(block);
+        var newProperties = new HashMap<>(this.properties);
+        newProperties.replaceAll((key, value) -> Objects.requireNonNullElse(properties.get(key), value));
+        return compute(newProperties);
     }
 
     @Override
@@ -91,7 +83,7 @@ final class BlockImpl implements Block {
 
     @Override
     public @NotNull Map<String, String> properties() {
-        return properties;
+        return Collections.unmodifiableMap(properties);
     }
 
     @Override
@@ -104,8 +96,11 @@ final class BlockImpl implements Block {
         return nbt != null ? tag.read(nbt) : null;
     }
 
-    private Block compute(Block original) {
-        return nbt == null && handler == null ? original :
-                new BlockImpl(original.registry(), propertyEntry, original.properties(), nbt, handler);
+    private Block compute(Map<String, String> properties) {
+        Block block = propertyEntry.getProperties(properties);
+        if (block == null)
+            throw new IllegalArgumentException("Invalid properties: " + properties);
+        return nbt == null && handler == null ? block :
+                new BlockImpl(block.registry(), propertyEntry, block.properties(), nbt, handler);
     }
 }
