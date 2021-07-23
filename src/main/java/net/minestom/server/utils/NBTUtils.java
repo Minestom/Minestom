@@ -152,7 +152,11 @@ public final class NBTUtils {
         if (nbt.containsKey("display")) {
             final NBTCompound display = nbt.getCompound("display");
             if (display.containsKey("Name")) {
-                final String rawName = display.getString("Name");
+                //FIXME: Remove escaping fix once https://github.com/jglrxavpok/Hephaistos/issues/8 is resolved
+                //This fix prevents having a literal backslash followed by a literal quote,
+                // but its better than stuff breaking horribly
+                final String rawName = display.getString("Name")
+                        .replace("\\\"", "\"");
                 final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
                 metaBuilder.displayName(displayName);
             }
@@ -160,7 +164,11 @@ public final class NBTUtils {
                 NBTList<NBTString> loreList = display.getList("Lore");
                 List<Component> lore = new ArrayList<>();
                 for (NBTString s : loreList) {
-                    final String rawLore = s.getValue();
+                    //FIXME: Remove escaping fix once https://github.com/jglrxavpok/Hephaistos/issues/8 is resolved
+                    //This fix prevents having a literal backslash followed by a literal quote,
+                    // but its better than stuff breaking horribly
+                    final String rawLore = s.getValue()
+                            .replace("\\\"", "\"");
                     lore.add(GsonComponentSerializer.gson().deserialize(rawLore));
                 }
                 metaBuilder.lore(lore);
