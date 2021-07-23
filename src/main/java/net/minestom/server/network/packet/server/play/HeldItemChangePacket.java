@@ -10,7 +10,13 @@ public class HeldItemChangePacket implements ServerPacket {
 
     public byte slot;
 
-    public HeldItemChangePacket() {}
+    public HeldItemChangePacket(byte slot) {
+        this.slot = slot;
+    }
+
+    public HeldItemChangePacket() {
+        this((byte) 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

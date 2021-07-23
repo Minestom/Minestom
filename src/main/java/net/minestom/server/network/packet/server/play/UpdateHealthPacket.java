@@ -12,10 +12,15 @@ public class UpdateHealthPacket implements ServerPacket {
     public int food;
     public float foodSaturation;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public UpdateHealthPacket() {}
+    public UpdateHealthPacket(float health, int food, float foodSaturation) {
+        this.health = health;
+        this.food = food;
+        this.foodSaturation = foodSaturation;
+    }
+
+    public UpdateHealthPacket() {
+        this(0, 0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

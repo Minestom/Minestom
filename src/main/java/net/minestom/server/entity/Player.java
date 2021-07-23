@@ -937,7 +937,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public void setHealth(float health) {
         super.setHealth(health);
-        sendUpdateHealthPacket();
+        this.playerConnection.sendPacket(new UpdateHealthPacket(health, food, foodSaturation));
     }
 
     @Override
@@ -982,7 +982,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(!MathUtils.isBetween(food, 0, 20),
                 "Food has to be between 0 and 20");
         this.food = food;
-        sendUpdateHealthPacket();
+        this.playerConnection.sendPacket(new UpdateHealthPacket(getHealth(), food, foodSaturation));
     }
 
     public float getFoodSaturation() {
@@ -999,7 +999,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Check.argCondition(!MathUtils.isBetween(foodSaturation, 0, 20),
                 "Food saturation has to be between 0 and 20");
         this.foodSaturation = foodSaturation;
-        sendUpdateHealthPacket();
+        this.playerConnection.sendPacket(new UpdateHealthPacket(getHealth(), food, foodSaturation));
     }
 
     /**
@@ -1336,17 +1336,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Sends an {@link UpdateHealthPacket} to refresh client-side information about health and food.
-     */
-    protected void sendUpdateHealthPacket() {
-        UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
-        updateHealthPacket.health = getHealth();
-        updateHealthPacket.food = food;
-        updateHealthPacket.foodSaturation = foodSaturation;
-        playerConnection.sendPacket(updateHealthPacket);
-    }
-
-    /**
      * Gets the percentage displayed in the experience bar.
      *
      * @return the exp percentage 0-1
@@ -1364,9 +1353,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setExp(float exp) {
         Check.argCondition(!MathUtils.isBetween(exp, 0, 1), "Exp should be between 0 and 1");
-
         this.exp = exp;
-        sendExperienceUpdatePacket();
+        this.playerConnection.sendPacket(new SetExperiencePacket(exp, level, 0));
     }
 
     /**
@@ -1386,17 +1374,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setLevel(int level) {
         this.level = level;
-        sendExperienceUpdatePacket();
-    }
-
-    /**
-     * Sends a {@link SetExperiencePacket} to refresh client-side information about the experience bar.
-     */
-    protected void sendExperienceUpdatePacket() {
-        SetExperiencePacket setExperiencePacket = new SetExperiencePacket();
-        setExperiencePacket.percentage = exp;
-        setExperiencePacket.level = level;
-        playerConnection.sendPacket(setExperiencePacket);
+        this.playerConnection.sendPacket(new SetExperiencePacket(exp, level, 0));
     }
 
     /**
@@ -1556,7 +1534,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setGameMode(@NotNull GameMode gameMode) {
         this.gameMode = gameMode;
-
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
@@ -1585,7 +1562,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void sendDimension(@NotNull DimensionType dimensionType) {
         Check.argCondition(dimensionType.equals(getDimensionType()),
                 "The dimension needs to be different than the current one!");
-
         this.dimensionType = dimensionType;
         RespawnPacket respawnPacket = new RespawnPacket();
         respawnPacket.dimensionType = dimensionType;
@@ -1649,11 +1625,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public void setHeldItemSlot(byte slot) {
         Check.argCondition(!MathUtils.isBetween(slot, 0, 8), "Slot has to be between 0 and 8");
-
-        HeldItemChangePacket heldItemChangePacket = new HeldItemChangePacket();
-        heldItemChangePacket.slot = slot;
-        playerConnection.sendPacket(heldItemChangePacket);
         refreshHeldSlot(slot);
+        this.playerConnection.sendPacket(new HeldItemChangePacket(slot));
     }
 
     /**
@@ -2106,7 +2079,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshHeldSlot(byte slot) {
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
-
         refreshEating(null);
     }
 
@@ -2241,24 +2213,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
         connection.sendPacket(getAddPlayerToList());
-
         connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());
-
         if (hasPassenger()) {
             connection.sendPacket(getPassengersPacket());
         }
-
         // Team
-        if (this.getTeam() != null)
+        if (this.getTeam() != null) {
             connection.sendPacket(this.getTeam().createTeamsCreationPacket());
-
-        EntityHeadLookPacket entityHeadLookPacket = new EntityHeadLookPacket();
-        entityHeadLookPacket.entityId = getEntityId();
-        entityHeadLookPacket.yaw = position.yaw();
-        connection.sendPacket(entityHeadLookPacket);
+        }
+        connection.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
 
     @NotNull
