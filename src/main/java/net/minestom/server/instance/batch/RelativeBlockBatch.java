@@ -69,9 +69,9 @@ public class RelativeBlockBatch implements Batch<Runnable> {
         Check.argCondition(Math.abs(y) > Short.MAX_VALUE, "Relative y position may not be more than 16 bits long.");
         Check.argCondition(Math.abs(z) > Short.MAX_VALUE, "Relative z position may not be more than 16 bits long.");
 
-        long pos = x;
-        pos = (pos << 16) | (short) y;
-        pos = (pos << 16) | (short) z;
+        long pos = Short.toUnsignedLong((short)x);
+        pos = (pos << 16) | Short.toUnsignedLong((short)y);
+        pos = (pos << 16) | Short.toUnsignedLong((short)z);
 
         //final int block = (blockStateId << 16) | customBlockId;
         synchronized (blockIdMap) {
