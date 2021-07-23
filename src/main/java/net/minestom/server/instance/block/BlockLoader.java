@@ -59,7 +59,7 @@ class BlockLoader {
             final JsonObject blockObject = entry.getValue().getAsJsonObject();
             final JsonObject stateObject = blockObject.remove("states").getAsJsonObject();
 
-            retrieveState(blockNamespace, blockObject, stateObject);
+            retrieveState(blockObject, stateObject);
             final int defaultState = blockObject.get("defaultStateId").getAsInt();
             final Block defaultBlock = getState(defaultState);
             final int id = blockObject.get("id").getAsInt();
@@ -68,14 +68,14 @@ class BlockLoader {
         });
     }
 
-    private static void retrieveState(String namespace, JsonObject object, JsonObject stateObject) {
+    private static void retrieveState(JsonObject object, JsonObject stateObject) {
         PropertyEntry propertyEntry = new PropertyEntry();
         stateObject.entrySet().forEach(stateEntry -> {
             final String query = stateEntry.getKey();
             JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
             final int stateId = stateOverride.get("stateId").getAsInt();
             final var propertyMap = BlockUtils.parseProperties(query);
-            final Block block = new BlockImpl(Registry.block(object, stateOverride), propertyEntry, propertyMap);
+            final Block block = new BlockImpl(Registry.block(object, stateOverride), propertyEntry, propertyMap, null, null);
             BLOCK_STATE_MAP.put(stateId, block);
             propertyEntry.map.put(propertyMap, block);
         });

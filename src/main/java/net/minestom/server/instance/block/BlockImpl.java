@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -33,27 +32,19 @@ final class BlockImpl implements Block {
               @Nullable BlockHandler handler) {
         this.registry = registry;
         this.propertyEntry = propertyEntry;
-        this.properties = Collections.unmodifiableMap(properties);
+        this.properties = properties;
         this.nbt = nbt;
         this.handler = handler;
-    }
-
-    BlockImpl(@NotNull Registry.BlockEntry registry,
-              @NotNull BlockLoader.PropertyEntry propertyEntry,
-              @NotNull Map<String, String> properties) {
-        this(registry, propertyEntry, properties, null, null);
     }
 
     @Override
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         var properties = new HashMap<>(this.properties);
-        properties.put(property, value);
+        properties.replace(property, value);
         Block block = propertyEntry.getProperties(properties);
         if (block == null)
             throw new IllegalArgumentException("Invalid property: " + property + ":" + value);
-        if (nbt != null || handler != null)
-            return new BlockImpl(block.registry(), propertyEntry, block.properties(), nbt, handler);
-        return block;
+        return compute(block);
     }
 
     @Override
@@ -67,14 +58,12 @@ final class BlockImpl implements Block {
             block = propertyEntry.getProperties(properties);
         } else {
             var newProperties = new HashMap<>(this.properties);
-            newProperties.putAll(properties);
+            newProperties.replaceAll((key, value) -> Objects.requireNonNullElse(properties.get(key), value));
             block = propertyEntry.getProperties(newProperties);
         }
         if (block == null)
             throw new IllegalArgumentException("Invalid properties: " + properties);
-        if (nbt != null || handler != null)
-            return new BlockImpl(block.registry(), propertyEntry, block.properties(), nbt, handler);
-        return block;
+        return compute(block);
     }
 
     @Override
@@ -92,7 +81,7 @@ final class BlockImpl implements Block {
 
     @Override
     public boolean hasNbt() {
-        return nbt != null && nbt.getSize() > 0;
+        return nbt != null;
     }
 
     @Override
@@ -112,8 +101,11 @@ final class BlockImpl implements Block {
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        if (nbt == null)
-            return null;
-        return tag.read(nbt);
+        return nbt != null ? tag.read(nbt) : null;
+    }
+
+    private Block compute(Block original) {
+        return nbt == null && handler == null ? original :
+                new BlockImpl(original.registry(), propertyEntry, original.properties(), nbt, handler);
     }
 }
