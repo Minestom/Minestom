@@ -7,9 +7,9 @@ import com.google.gson.JsonObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public class Registry {
@@ -49,7 +49,7 @@ public class Registry {
         private final boolean air;
         private final boolean solid;
         private final boolean liquid;
-        private final boolean blockEntity;
+        private final String blockEntity;
 
         private BlockEntry(JsonObject main, JsonObject override) {
             super(main, override);
@@ -64,7 +64,10 @@ public class Registry {
             this.air = getBoolean("air");
             this.solid = getBoolean("solid");
             this.liquid = getBoolean("liquid");
-            this.blockEntity = getBoolean("blockEntity");
+            {
+                final var blockEntityElement = element("blockEntity");
+                this.blockEntity = blockEntityElement != null ? blockEntityElement.getAsString() : null;
+            }
         }
 
         public @NotNull NamespaceID namespace() {
@@ -112,6 +115,10 @@ public class Registry {
         }
 
         public boolean isBlockEntity() {
+            return blockEntity != null;
+        }
+
+        public @Nullable String blockEntity() {
             return blockEntity;
         }
     }
@@ -141,7 +148,10 @@ public class Registry {
         }
 
         protected JsonElement element(String name) {
-            return Objects.requireNonNullElseGet(override.get(name), () -> main.get(name));
+            if (override.has(name)) {
+                return override.get(name);
+            }
+            return main.get(name);
         }
     }
 }
