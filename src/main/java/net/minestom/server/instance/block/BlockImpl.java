@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.function.Function;
 
 final class BlockImpl implements Block {
     private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
@@ -54,16 +54,16 @@ final class BlockImpl implements Block {
             return compute(properties); // Map should be complete
         }
         var newProperties = new HashMap<>(this.properties);
-        newProperties.replaceAll((key, value) -> Objects.requireNonNullElse(properties.get(key), value));
+        newProperties.putAll(properties);
         return compute(newProperties);
     }
 
     @Override
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var compound = Objects.requireNonNullElseGet(nbt(), NBTCompound::new);
-        tag.write(compound, value);
-        final var nbt = compound.getSize() > 0 ? NBT_CACHE.get(compound, c -> compound) : null;
-        return new BlockImpl(registry, propertyEntry, properties, nbt, handler);
+        var temporaryNbt = nbt != null ? nbt.deepClone() : new NBTCompound();
+        tag.write(temporaryNbt, value);
+        final var finalNbt = temporaryNbt.getSize() > 0 ? NBT_CACHE.get(temporaryNbt, Function.identity()) : null;
+        return new BlockImpl(registry, propertyEntry, properties, finalNbt, handler);
     }
 
     @Override
