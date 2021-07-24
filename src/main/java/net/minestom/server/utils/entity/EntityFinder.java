@@ -329,19 +329,18 @@ public class EntityFinder {
     private static @NotNull List<@NotNull Entity> findTarget(@Nullable Instance instance,
                                                              @NotNull TargetSelector targetSelector,
                                                              @NotNull Point startPosition, @Nullable Entity self) {
+        final var players = instance != null ?
+                instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
         if (targetSelector == TargetSelector.NEAREST_PLAYER) {
-            return MinecraftServer.getConnectionManager().getOnlinePlayers().stream()
+            return players.stream()
                     .min(Comparator.comparingDouble(p -> p.getPosition().distance(startPosition)))
                     .<List<Entity>>map(Collections::singletonList).orElse(Collections.emptyList());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
-            Collection<Player> players = instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers();
             final int index = ThreadLocalRandom.current().nextInt(players.size());
             final Player player = players.stream().skip(index).findFirst().orElseThrow();
             return Collections.singletonList(player);
         } else if (targetSelector == TargetSelector.ALL_PLAYERS) {
-            return List.copyOf(instance != null ?
-                    instance.getPlayers() : MinecraftServer.getConnectionManager().getOnlinePlayers());
+            return List.copyOf(players);
         } else if (targetSelector == TargetSelector.ALL_ENTITIES) {
             if (instance != null) {
                 return List.copyOf(instance.getEntities());
