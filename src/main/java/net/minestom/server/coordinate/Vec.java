@@ -17,7 +17,7 @@ public final class Vec implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
 
-    public static final double EPSILON = 1E-6;
+    public static final double EPSILON = 0.000001;
 
     private final double x, y, z;
 
