@@ -149,10 +149,9 @@ public class EntityFinder {
         if (distance != null) {
             final int minDistance = distance.getMinimum();
             final int maxDistance = distance.getMaximum();
-            result = result.stream().filter(entity -> {
-                final int distance = (int) entity.getPosition().distance(pos);
-                return MathUtils.isBetween(distance, minDistance, maxDistance);
-            }).collect(Collectors.toList());
+            result = result.stream()
+                    .filter(entity -> MathUtils.isBetween(entity.getDistance(pos), minDistance, maxDistance))
+                    .collect(Collectors.toList());
         }
 
         // Diff X/Y/Z
@@ -180,46 +179,42 @@ public class EntityFinder {
 
         // Entity type
         if (!entityTypes.isEmpty()) {
-            result = result.stream().filter(entity ->
-                            filterToggleableMap(entity.getEntityType(), entityTypes))
+            result = result.stream()
+                    .filter(entity -> filterToggleableMap(entity.getEntityType(), entityTypes))
                     .collect(Collectors.toList());
         }
 
         // GameMode
         if (!gameModes.isEmpty()) {
-            result = result.stream().filter(entity -> {
-                if (!(entity instanceof Player))
-                    return false;
-                return filterToggleableMap(((Player) entity).getGameMode(), gameModes);
-            }).collect(Collectors.toList());
+            result = result.stream()
+                    .filter(Player.class::isInstance)
+                    .filter(entity -> filterToggleableMap(((Player) entity).getGameMode(), gameModes))
+                    .collect(Collectors.toList());
         }
 
         // Level
         if (level != null) {
             final int minLevel = level.getMinimum();
             final int maxLevel = level.getMaximum();
-            result = result.stream().filter(entity -> {
-                if (!(entity instanceof Player))
-                    return false;
-
-                final int level = ((Player) entity).getLevel();
-                return MathUtils.isBetween(level, minLevel, maxLevel);
-            }).collect(Collectors.toList());
+            result = result.stream()
+                    .filter(Player.class::isInstance)
+                    .filter(entity -> MathUtils.isBetween(((Player) entity).getLevel(), minLevel, maxLevel))
+                    .collect(Collectors.toList());
         }
 
         // Name
         if (!names.isEmpty()) {
-            result = result.stream().filter(entity -> {
-                if (!(entity instanceof Player))
-                    return false;
-                return filterToggleableMap(((Player) entity).getUsername(), names);
-            }).collect(Collectors.toList());
+            result = result.stream()
+                    .filter(Player.class::isInstance)
+                    .filter(entity -> filterToggleableMap(((Player) entity).getUsername(), names))
+                    .collect(Collectors.toList());
         }
 
         // UUID
         if (!uuids.isEmpty()) {
-            result = result.stream().filter(entity ->
-                    filterToggleableMap(entity.getUuid(), uuids)).collect(Collectors.toList());
+            result = result.stream()
+                    .filter(entity -> filterToggleableMap(entity.getUuid(), uuids))
+                    .collect(Collectors.toList());
         }
 
 

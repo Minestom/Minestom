@@ -823,6 +823,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.gravityAcceleration = gravityAcceleration;
     }
 
+    public double getDistance(@NotNull Point point) {
+        return getPosition().distance(point);
+    }
+
     /**
      * Gets the distance between two entities.
      *
@@ -830,7 +834,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return the distance between this and {@code entity}
      */
     public double getDistance(@NotNull Entity entity) {
-        return getPosition().distance(entity.getPosition());
+        return getDistance(entity.getPosition());
     }
 
     /**
