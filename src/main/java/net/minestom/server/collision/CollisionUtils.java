@@ -1,20 +1,21 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-public class CollisionUtils {
+import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.Function;
 
-    private static final Vec Y_AXIS = new Vec(0, 1, 0);
-    private static final Vec X_AXIS = new Vec(1, 0, 0);
-    private static final Vec Z_AXIS = new Vec(0, 0, 1);
+public class CollisionUtils {
 
     /**
      * Moves an entity with physics applied (ie checking against blocks)
@@ -29,35 +30,32 @@ public class CollisionUtils {
         final Pos currentPosition = entity.getPosition();
         final BoundingBox boundingBox = entity.getBoundingBox();
 
-        Vec stepVec = currentPosition.asVec();
-        boolean xCheck = false, yCheck = false, zCheck = false;
+        boolean xCollision = false, yCollision = false, zCollision = false;
+        double stepSizeX = 0, stepSizeY = 0, stepSizeZ = 0;
 
         if (deltaPosition.y() != 0) {
-            final StepResult yCollision = stepAxis(instance, originChunk, stepVec, Y_AXIS, deltaPosition.y(),
+            stepSizeY = stepAxis(instance, originChunk, Axis.Y, deltaPosition.y(),
                     deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
-            yCheck = yCollision.foundCollision;
-            stepVec = yCollision.newPosition;
+            yCollision = stepSizeY != deltaPosition.y();
         }
 
         if (deltaPosition.x() != 0) {
-            final StepResult xCollision = stepAxis(instance, originChunk, stepVec, X_AXIS, deltaPosition.x(),
+            stepSizeX = stepAxis(instance, originChunk, Axis.X, deltaPosition.x(),
                     deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
-            xCheck = xCollision.foundCollision;
-            stepVec = xCollision.newPosition;
+            xCollision = stepSizeX != deltaPosition.x();
         }
 
         if (deltaPosition.z() != 0) {
-            final StepResult zCollision = stepAxis(instance, originChunk, stepVec, Z_AXIS, deltaPosition.z(),
+            stepSizeZ = stepAxis(instance, originChunk, Axis.Z, deltaPosition.z(),
                     deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
-            zCheck = zCollision.foundCollision;
-            stepVec = zCollision.newPosition;
+            zCollision = stepSizeZ != deltaPosition.z();
         }
 
-        return new PhysicsResult(currentPosition.samePoint(stepVec) ? currentPosition : currentPosition.withCoord(stepVec),
-                new Vec(xCheck ? 0 : deltaPosition.x(),
-                        yCheck ? 0 : deltaPosition.y(),
-                        zCheck ? 0 : deltaPosition.z()),
-                yCheck && deltaPosition.y() < 0);
+        return new PhysicsResult(currentPosition.add(stepSizeX, stepSizeY, stepSizeZ),
+                new Vec(xCollision ? 0 : deltaPosition.x(),
+                        yCollision ? 0 : deltaPosition.y(),
+                        zCollision ? 0 : deltaPosition.z()),
+                yCollision && deltaPosition.y() < 0);
     }
 
     /**
@@ -65,76 +63,74 @@ public class CollisionUtils {
      * Immediately return false if corners is of length 0.
      *
      * @param instance      instance to check blocks from
-     * @param startPosition starting position for stepping, can be intermediary position from last step
      * @param axis          step direction. Works best if unit vector and aligned to an axis
      * @param stepAmount    how much to step in the direction (in blocks)
      * @param corners       the corners to check against
-     * @return result of the step
+     * @return maximum step before collision
      */
-    private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, Vec... corners) {
+    private static double stepAxis(Instance instance, Chunk originChunk, Axis axis, double stepAmount, Vec... corners) {
         if (corners.length == 0)
-            return new StepResult(startPosition, false); // avoid degeneracy in following computations
+            return stepAmount; // avoid degeneracy in following computations
 
-        final Vec[] originalCorners = corners.clone();
         final double sign = Math.signum(stepAmount);
-        final int blockLength = (int) stepAmount;
+        int blockLength = (int) stepAmount;
         final double remainingLength = stepAmount - blockLength;
+        blockLength = Math.abs(blockLength);
+
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
-        for (int i = 0; i < Math.abs(blockLength); i++) {
-            collisionFound = stepOnce(instance, originChunk, axis, sign, corners);
-            if (collisionFound) break;
+
+        double totalStep = 0;
+        for (int i = 0; i < blockLength; i++) {
+            final double possibleStep = stepOnce(instance, originChunk, axis, sign, corners);
+            totalStep += possibleStep;
+            if (possibleStep != sign) {
+                collisionFound = true;
+                break;
+            }
         }
 
         // add remainingLength
         if (!collisionFound) {
-            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, corners);
+            totalStep += stepOnce(instance, originChunk, axis, remainingLength, corners);
         }
 
-        // find the corner which moved the least
-        double smallestDisplacement = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < corners.length; i++) {
-            final double displacement = originalCorners[i].distance(corners[i]);
-            if (displacement < smallestDisplacement) {
-                smallestDisplacement = displacement;
-            }
-        }
-
-        return new StepResult(startPosition.add(new Vec(smallestDisplacement).mul(axis).mul(sign)), collisionFound);
+        return totalStep;
     }
 
     /**
-     * Steps once (by a length of 1 block) on the given axis.
+     * Steps no more than 1 block once on the given axis.
      *
      * @param instance instance to get blocks from
      * @param axis     the axis to move along
      * @param corners  the corners of the bounding box to consider
-     * @return true if found collision
+     * @return the maximum distance without collision
      */
-    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
-        final double sign = Math.signum(amount);
+    private static double stepOnce(Instance instance, Chunk originChunk, Axis axis, double amount, Vec[] corners) {
+        final double signum = Math.signum(amount);
+        double[] displacement = new double[corners.length];
+        // Step each corner
         for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
             final Vec originalCorner = corners[cornerIndex];
-            final Vec newCorner = originalCorner.add(axis.mul(amount));
-            final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
-            if (!ChunkUtils.isLoaded(chunk)) {
-                // Collision at chunk border
-                return true;
-            }
-            final Block block = chunk.getBlock(newCorner);
+            // New corner without colliding with something
+            final Point newCorner = axis.with.apply(originalCorner, o -> o + amount);
 
-            // TODO: block collision boxes
-            // TODO: for the moment, always consider a full block
-            if (block.isSolid()) {
-                corners[cornerIndex] = new Vec(
-                        Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : originalCorner.x(),
-                        Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : originalCorner.y(),
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z());
-                return true;
+            final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
+            // TODO: block collision boxes, for the moment, always consider a full block
+            // Check for collision
+            if (!ChunkUtils.isLoaded(chunk) /*collision on chunk border*/ ||
+                    chunk.getBlock(newCorner).isSolid() /*collision with a solid block*/) {
+                displacement[cornerIndex] = (axis.get.apply(originalCorner) - Math.floor(axis.get.apply(newCorner))) + signum == -1 ? 1 : 0;
+                continue;
             }
-            corners[cornerIndex] = newCorner;
+            // No collision, entire step is possible
+            displacement[cornerIndex] = amount;
         }
-        return false;
+        if (signum < 0) {
+            return Arrays.stream(displacement).max().orElse(0);
+        } else {
+            return Arrays.stream(displacement).min().orElse(0);
+        }
     }
 
     /**
@@ -190,13 +186,17 @@ public class CollisionUtils {
         }
     }
 
-    private static class StepResult {
-        private final Vec newPosition;
-        private final boolean foundCollision;
+    enum Axis {
+        X(Point::x, Point::withX),
+        Y(Point::y, Point::withY),
+        Z(Point::z, Point::withZ);
 
-        public StepResult(Vec newPosition, boolean foundCollision) {
-            this.newPosition = newPosition;
-            this.foundCollision = foundCollision;
+        final Function<Point, Double> get;
+        final BiFunction<Point, DoubleUnaryOperator, Point> with;
+
+        Axis(Function<Point, Double> get, BiFunction<Point, DoubleUnaryOperator, Point> with) {
+            this.get = get;
+            this.with = with;
         }
     }
 }
