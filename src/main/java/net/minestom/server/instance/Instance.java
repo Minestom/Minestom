@@ -516,16 +516,9 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
         final Block block = getBlock(blockPosition);
-
-        BlockActionPacket blockActionPacket = new BlockActionPacket();
-        blockActionPacket.blockPosition = blockPosition;
-        blockActionPacket.actionId = actionId;
-        blockActionPacket.actionParam = actionParam;
-        blockActionPacket.blockId = block.id();
-
         final Chunk chunk = getChunkAt(blockPosition);
-        Check.notNull(chunk, "The chunk at " + blockPosition + " is not loaded!");
-        chunk.sendPacketToViewers(blockActionPacket);
+        Check.notNull(chunk, "The chunk at {0} is not loaded!", blockPosition);
+        chunk.sendPacketToViewers(new BlockActionPacket(blockPosition, actionId, actionParam, block));
     }
 
     /**
@@ -536,9 +529,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(double x, double z) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(x);
-        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-        return getChunk(chunkX, chunkZ);
+        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
     }
 
     /**

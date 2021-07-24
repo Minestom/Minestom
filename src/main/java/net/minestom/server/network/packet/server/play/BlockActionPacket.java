@@ -1,11 +1,12 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class BlockActionPacket implements ServerPacket {
@@ -15,8 +16,19 @@ public class BlockActionPacket implements ServerPacket {
     public byte actionParam;
     public int blockId;
 
+    public BlockActionPacket(Point blockPosition, byte actionId, byte actionParam, int blockId) {
+        this.blockPosition = blockPosition;
+        this.actionId = actionId;
+        this.actionParam = actionParam;
+        this.blockId = blockId;
+    }
+
+    public BlockActionPacket(Point blockPosition, byte actionId, byte actionParam, Block block) {
+        this(blockPosition, actionId, actionParam, block.id());
+    }
+
     public BlockActionPacket() {
-        blockPosition = Vec.ZERO;
+        this(Vec.ZERO, (byte) 0, (byte) 0, Block.AIR);
     }
 
     @Override

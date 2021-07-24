@@ -10,10 +10,13 @@ public class UpdateViewDistancePacket implements ServerPacket {
 
     public int viewDistance;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public UpdateViewDistancePacket() {}
+    public UpdateViewDistancePacket(int viewDistance) {
+        this.viewDistance = viewDistance;
+    }
+
+    public UpdateViewDistancePacket() {
+        this(0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

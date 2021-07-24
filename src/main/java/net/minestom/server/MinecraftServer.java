@@ -281,12 +281,8 @@ public final class MinecraftServer {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-
         // Send the packet to all online players
-        ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
-        serverDifficultyPacket.difficulty = difficulty;
-        serverDifficultyPacket.locked = true; // Can only be modified on single-player
-        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
+        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), new ServerDifficultyPacket(difficulty, true));
     }
 
     /**
@@ -491,15 +487,10 @@ public final class MinecraftServer {
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
-
             for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
-
-                    UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
-                    updateViewDistancePacket.viewDistance = player.getChunkRange();
-                    player.getPlayerConnection().sendPacket(updateViewDistancePacket);
-
+                    player.getPlayerConnection().sendPacket(new UpdateViewDistancePacket(player.getChunkRange()));
                     player.refreshVisibleChunks(playerChunk);
                 }
             }
