@@ -266,6 +266,124 @@ public abstract class Argument<T> {
     }
 
     /**
+     * Represents an argument that maps an existing argument to a value.
+     *
+     * @param <I> The input (any object)
+     * @param <O> The output (any object)
+     */
+    private static class ArgumentMap<I, O> extends Argument<O> {
+
+        final Argument<I> argument;
+        final Mapper<I, O> mapper;
+
+        private ArgumentMap(@NotNull Argument<I> argument, @NotNull Mapper<I, O> mapper) {
+            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+
+            if (argument.getSuggestionCallback() != null)
+                this.setSuggestionCallback(argument.getSuggestionCallback());
+
+            if (argument.getDefaultValue() != null)
+                this.setDefaultValue(() -> mapper.accept(argument.getDefaultValue().get()));
+
+            this.argument = argument;
+            this.mapper = mapper;
+        }
+
+        @Override
+        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
+            return mapper.accept(argument.parse(input));
+        }
+
+        @Override
+        public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+            argument.processNodes(nodeMaker, executable);
+        }
+
+        /**
+         * Represents a lambda that can turn an input into an output
+         * that also allows the throwing of ArgumentSyntaxException
+         *
+         * @param <I> The input expected from the Argument
+         * @param <O> The desired output type from this lambda.
+         */
+        @FunctionalInterface
+        public interface Mapper<I, O> {
+
+            /**
+             * Accepts I data from the argument and returns O output
+             *
+             * @param i The input processed from an argument
+             * @return The complex data type that came as a result from this argument
+             * @throws ArgumentSyntaxException If the input can not be turned into the desired output
+             *                                 (E.X. an invalid extension name)
+             */
+            O accept(I i) throws ArgumentSyntaxException;
+
+        }
+
+    }
+
+    /**
+     * Represents an argument that maps an existing argument to a value.
+     *
+     * @param <T> The type of this argument
+     */
+    private static class ArgumentFilter<T> extends Argument<T> {
+
+        final Argument<T> argument;
+        final Filterer<T> filterer;
+
+        protected ArgumentFilter(@NotNull Argument<T> argument, @NotNull Filterer<T> filterer) {
+            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+
+            if (argument.getSuggestionCallback() != null)
+                this.setSuggestionCallback(argument.getSuggestionCallback());
+
+            if (argument.getDefaultValue() != null)
+                this.setDefaultValue(argument.getDefaultValue());
+
+            this.argument = argument;
+            this.filterer = filterer;
+        }
+
+        @Override
+        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
+            T result = argument.parse(input);
+
+            filterer.check(result);
+
+            return result;
+        }
+
+        @Override
+        public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+            argument.processNodes(nodeMaker, executable);
+        }
+
+        /**
+         * Represents a lambda that can filter an input and return the input
+         * hat also allows the throwing of ArgumentSyntaxException
+         *
+         * @param <I> The input expected from the Argument
+         */
+        @FunctionalInterface
+        public interface Filterer<I> {
+
+            /**
+             * Accepts I data from the argument and throws an error if the input is invalid.
+             *
+             * @param i The input processed from an argument
+             * @throws ArgumentSyntaxException If the input does not match the conditions required for filtering
+             *                                 (E.X. an int that must be prime)
+             */
+            void check(I i) throws ArgumentSyntaxException;
+
+        }
+
+    }
+
+
+    /**
      * Maps this argument's output to another result.
      *
      * @param filterer The filterer to use (validates inputs, returns input)
