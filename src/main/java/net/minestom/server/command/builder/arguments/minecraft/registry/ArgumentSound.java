@@ -41,6 +41,6 @@ public class ArgumentSound extends ArgumentRegistry<Sound.Type> {
 
     @Override
     public String toString() {
-        return String.format("SoundEvent<%s>", getId());
+        return String.format("Sound<%s>", getId());
     }
 }
