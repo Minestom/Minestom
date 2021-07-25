@@ -56,19 +56,6 @@ public class ItemEntity extends Entity {
     }
 
     /**
-     * Changes the merge update option.
-     * Can be set to null to entirely remove the delay.
-     *
-     * @param mergeUpdateOption the new merge update option
-     * @deprecated Replaced by {@link #setMergeDelay(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public static void setMergeUpdateOption(@Nullable net.minestom.server.utils.time.UpdateOption mergeUpdateOption) {
-        setMergeDelay(mergeUpdateOption != null ? mergeUpdateOption.toDuration() : null);
-    }
-
-    /**
      * Changes the merge delay.
      * Can be set to null to entirely remove the delay.
      *

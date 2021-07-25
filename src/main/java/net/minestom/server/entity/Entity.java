@@ -1398,18 +1398,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Set custom cooldown for position synchronization.
      *
      * @param cooldown custom cooldown for position synchronization.
-     * @deprecated Replaced by {@link #setCustomSynchronizationCooldown(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public void setCustomSynchronizationCooldown(@Nullable net.minestom.server.utils.time.UpdateOption cooldown) {
-        setCustomSynchronizationCooldown(cooldown != null ? Duration.ofMillis(cooldown.toMilliseconds()) : null);
-    }
-
-    /**
-     * Set custom cooldown for position synchronization.
-     *
-     * @param cooldown custom cooldown for position synchronization.
      */
     public void setCustomSynchronizationCooldown(@Nullable Duration cooldown) {
         this.customSynchronizationCooldown = cooldown;

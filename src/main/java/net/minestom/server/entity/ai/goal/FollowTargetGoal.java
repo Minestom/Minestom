@@ -1,33 +1,19 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 
 public class FollowTargetGoal extends GoalSelector {
-
     private final Duration pathDuration;
     private long lastUpdateTime = 0;
     private boolean forceEnd = false;
     private Point lastTargetPos;
-
-    /**
-     * Creates a follow target goal object.
-     *
-     * @param entityCreature   the entity
-     * @param pathUpdateOption the time between each path update (to check if the target moved)
-     * @deprecated Replaced by {@link #FollowTargetGoal(EntityCreature, Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull net.minestom.server.utils.time.UpdateOption pathUpdateOption) {
-        this(entityCreature, pathUpdateOption.toDuration());
-    }
 
     /**
      * Creates a follow target goal object.
