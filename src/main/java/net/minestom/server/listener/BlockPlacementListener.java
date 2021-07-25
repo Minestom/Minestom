@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
@@ -131,6 +132,14 @@ public class BlockPlacementListener {
                         if (entity == player ||
                                 entity.getEntityType() == EntityType.ITEM)
                             continue;
+
+                        // Marker Armor Stands should not prevent block placement
+                        if(entity.getEntityMeta() instanceof ArmorStandMeta) {
+                            ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
+                            if(armorStandMeta.isMarker()) {
+                                continue;
+                            }
+                        }
 
                         intersect = entity.getBoundingBox().intersect(blockPosition);
                         if (intersect)

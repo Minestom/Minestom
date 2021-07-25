@@ -20,8 +20,10 @@ import java.util.Set;
 public class Hologram implements Viewable {
 
     private static final float OFFSET_Y = -0.9875f;
+    private static final float MARKER_OFFSET_Y = -0.40625f;
 
     private final Entity entity;
+    private final float yOffset;
 
     private Position position;
     private Component text;
@@ -75,13 +77,31 @@ public class Hologram implements Viewable {
      * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
      */
     public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable) {
+        this(instance, spawnPosition, text, autoViewable, false);
+    }
+
+    /**
+     * Constructs a new {@link Hologram} with the given parameters.
+     *
+     * @param instance      The instance where the hologram should be spawned.
+     * @param spawnPosition The spawn position of this hologram.
+     * @param text          The text of this hologram.
+     * @param autoViewable  {@code true}if the hologram should be visible automatically, otherwise {@code false}.
+     */
+    public Hologram(Instance instance, Position spawnPosition, Component text, boolean autoViewable, boolean marker) {
         this.entity = new Entity(EntityType.ARMOR_STAND);
 
         ArmorStandMeta armorStandMeta = (ArmorStandMeta) entity.getEntityMeta();
 
         armorStandMeta.setNotifyAboutChanges(false);
 
-        armorStandMeta.setSmall(true);
+        if(marker) {
+            this.yOffset = MARKER_OFFSET_Y;
+            armorStandMeta.setMarker(true);
+        } else {
+            this.yOffset = OFFSET_Y;
+            armorStandMeta.setSmall(true);
+        }
         armorStandMeta.setHasNoGravity(true);
         armorStandMeta.setCustomName(Component.empty());
         armorStandMeta.setCustomNameVisible(true);
@@ -89,7 +109,7 @@ public class Hologram implements Viewable {
 
         armorStandMeta.setNotifyAboutChanges(true);
 
-        this.entity.setInstance(instance, spawnPosition.clone().add(0, OFFSET_Y, 0));
+        this.entity.setInstance(instance, spawnPosition.clone().add(0, this.yOffset, 0));
         this.entity.setAutoViewable(autoViewable);
 
         this.position = spawnPosition;
@@ -112,7 +132,7 @@ public class Hologram implements Viewable {
      */
     public void setPosition(Position position) {
         checkRemoved();
-        position.add(0, OFFSET_Y, 0);
+        position.add(0, this.yOffset, 0);
         this.position = position;
         this.entity.teleport(position);
     }

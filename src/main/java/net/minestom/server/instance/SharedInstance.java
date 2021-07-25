@@ -6,10 +6,10 @@ import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.chunk.ChunkCallback;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.temporal.TemporalUnit;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -133,7 +133,7 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position) {
+    public void scheduleUpdate(int time, @NotNull TemporalUnit unit, @NotNull BlockPosition position) {
         this.instanceContainer.scheduleUpdate(time, unit, position);
     }
 

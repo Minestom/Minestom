@@ -6,12 +6,13 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.Position;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
 
 public class FollowTargetGoal extends GoalSelector {
 
-    private final UpdateOption pathUpdateOption;
+    private final Duration pathDuration;
     private long lastUpdateTime = 0;
     private boolean forceEnd = false;
     private Position lastTargetPos;
@@ -21,10 +22,24 @@ public class FollowTargetGoal extends GoalSelector {
      *
      * @param entityCreature   the entity
      * @param pathUpdateOption the time between each path update (to check if the target moved)
+     *
+     * @deprecated Replaced by {@link #FollowTargetGoal(EntityCreature, Duration)}
      */
-    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull UpdateOption pathUpdateOption) {
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull net.minestom.server.utils.time.UpdateOption pathUpdateOption) {
+        this(entityCreature, pathUpdateOption.toDuration());
+    }
+
+    /**
+     * Creates a follow target goal object.
+     *
+     * @param entityCreature   the entity
+     * @param pathDuration the time between each path update (to check if the target moved)
+     */
+    public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull Duration pathDuration) {
         super(entityCreature);
-        this.pathUpdateOption = pathUpdateOption;
+        this.pathDuration = pathDuration;
     }
 
     @Override
@@ -64,8 +79,8 @@ public class FollowTargetGoal extends GoalSelector {
     @Override
     public void tick(long time) {
         if (forceEnd ||
-                pathUpdateOption.getValue() == 0 ||
-                pathUpdateOption.getTimeUnit().toMilliseconds(pathUpdateOption.getValue()) + lastUpdateTime > time) {
+                pathDuration.isZero() ||
+                pathDuration.toMillis() + lastUpdateTime > time) {
             return;
         }
         Position targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;

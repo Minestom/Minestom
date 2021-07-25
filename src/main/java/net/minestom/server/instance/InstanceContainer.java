@@ -24,13 +24,13 @@ import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -754,7 +754,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position) {
+    public void scheduleUpdate(int time, @NotNull TemporalUnit unit, @NotNull BlockPosition position) {
         final CustomBlock toUpdate = getCustomBlock(position);
         if (toUpdate == null) {
             return;

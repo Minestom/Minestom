@@ -1,9 +1,11 @@
 package net.minestom.server.inventory.type;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.Enchantment;
+import org.jetbrains.annotations.NotNull;
 
 public class EnchantmentTableInventory extends Inventory {
 
@@ -12,7 +14,11 @@ public class EnchantmentTableInventory extends Inventory {
     private final short[] enchantmentShown = new short[EnchantmentSlot.values().length];
     private final short[] enchantmentLevel = new short[EnchantmentSlot.values().length];
 
-    public EnchantmentTableInventory(String title) {
+    public EnchantmentTableInventory(@NotNull Component title) {
+        super(InventoryType.ENCHANTMENT, title);
+    }
+
+    public EnchantmentTableInventory(@NotNull String title) {
         super(InventoryType.ENCHANTMENT, title);
     }
 

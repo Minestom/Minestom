@@ -7,15 +7,15 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.Set;
 
 public class CustomBlockSample extends CustomBlock {
 
-    private static final UpdateOption UPDATE_OPTION = new UpdateOption(3, TimeUnit.TICK);
+    private static final Duration DURATION = Duration.of(3, TimeUnit.SERVER_TICK);
 
     public CustomBlockSample() {
         super(Block.GOLD_BLOCK, "custom_block");
@@ -45,10 +45,9 @@ public class CustomBlockSample extends CustomBlock {
         //instance.refreshBlockStateId(blockPosition, (short) (blockId+1));
     }
 
-    @Nullable
     @Override
-    public UpdateOption getUpdateOption() {
-        return UPDATE_OPTION;
+    public Duration getUpdateFrequency() {
+        return DURATION;
     }
 
     @Override

@@ -8,8 +8,10 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 /**
  * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
@@ -17,12 +19,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class MeleeAttackGoal extends GoalSelector {
 
-    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private long lastHit;
     private final double range;
-    private final int delay;
-    private final TimeUnit timeUnit;
+    private final Duration delay;
 
     private boolean stop;
     private Entity cachedTarget;
@@ -33,11 +34,19 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param delay          the delay between each attacks
      * @param timeUnit       the unit of the delay
      */
-    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, int delay, @NotNull TimeUnit timeUnit) {
+    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, int delay, @NotNull TemporalUnit timeUnit) {
+        this(entityCreature, range, Duration.of(delay, timeUnit));
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to
+     * @param range          the allowed range the entity can attack others.
+     * @param delay          the delay between each attacks
+     */
+    public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, Duration delay) {
         super(entityCreature);
         this.range = range;
         this.delay = delay;
-        this.timeUnit = timeUnit;
     }
 
     public @NotNull Cooldown getCooldown() {
@@ -72,7 +81,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
             // Attack the target entity
             if (entityCreature.getDistance(target) <= range) {
-                if (!Cooldown.hasCooldown(time, lastHit, timeUnit, delay)) {
+                if (!Cooldown.hasCooldown(time, lastHit, delay)) {
                     entityCreature.attack(target, true);
                     this.lastHit = time;
                 }

@@ -3,8 +3,9 @@ package net.minestom.server.event.server;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
 
 
 /**
@@ -14,13 +15,13 @@ import org.jetbrains.annotations.NotNull;
  * @see ServerListPingEvent
  */
 public class ClientPingServerEvent implements CancellableEvent {
-    private static final UpdateOption DEFAULT_DELAY = new UpdateOption(0, TimeUnit.MILLISECOND);
+    private static final Duration DEFAULT_DELAY = Duration.of(0, TimeUnit.MILLISECOND);
 
     private final PlayerConnection connection;
     private long payload;
 
     private boolean cancelled = false;
-    private UpdateOption delay;
+    private Duration delay;
 
     /**
      * Creates a new client ping server event with 0 delay
@@ -40,12 +41,23 @@ public class ClientPingServerEvent implements CancellableEvent {
      * @param connection the player connection
      * @param payload    the payload the client sent
      */
-    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, UpdateOption delay) {
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, net.minestom.server.utils.time.UpdateOption delay) {
+        this(connection, payload, delay.toDuration());
+    }
+
+    /**
+     * Creates a new client ping server event with 0 delay
+     *
+     * @param connection the player connection
+     * @param payload    the payload the client sent
+     */
+    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, Duration delay) {
         this.connection = connection;
         this.payload = payload;
         this.delay = delay;
     }
-
 
     /**
      * PlayerConnection of received packet. Note that the player has not joined the server
@@ -82,7 +94,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      *
      * @return the delay
      */
-    public @NotNull UpdateOption getDelay() {
+    public @NotNull Duration getDelay() {
         return delay;
     }
 
@@ -90,9 +102,35 @@ public class ClientPingServerEvent implements CancellableEvent {
      * Adds to the delay until minestom will send the ping response packet.
      *
      * @param delay the delay
+     *
+     * @deprecated Replaced by {@link #addDelay(Duration)}
      */
-    public void addDelay(@NotNull UpdateOption delay) {
-        this.delay = new UpdateOption(this.delay.toMilliseconds() + delay.toMilliseconds(), TimeUnit.MILLISECOND);
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    public void addDelay(@NotNull net.minestom.server.utils.time.UpdateOption delay) {
+        addDelay(delay.toDuration());
+    }
+
+    /**
+     * Adds to the delay until minestom will send the ping response packet.
+     *
+     * @param delay the delay
+     */
+    public void addDelay(@NotNull Duration delay) {
+        this.delay = this.delay.plus(delay);
+    }
+
+    /**
+     * Sets the delay until minestom will send the ping response packet.
+     *
+     * @param delay the delay
+     *
+     * @deprecated Replaced by {@link #setDelay(Duration)}
+     */
+    @SuppressWarnings("removal")
+    @Deprecated(forRemoval = true)
+    public void setDelay(@NotNull net.minestom.server.utils.time.UpdateOption delay) {
+        setDelay(delay.toDuration());
     }
 
     /**
@@ -100,7 +138,7 @@ public class ClientPingServerEvent implements CancellableEvent {
      *
      * @param delay the delay
      */
-    public void setDelay(@NotNull UpdateOption delay) {
+    public void setDelay(@NotNull Duration delay) {
         this.delay = delay;
     }
 

@@ -26,7 +26,7 @@ public final class MinestomAdventure {
     /**
      * If components should be automatically translated in outgoing packets.
      */
-    public static final boolean AUTOMATIC_COMPONENT_TRANSLATION = false;
+    public static boolean AUTOMATIC_COMPONENT_TRANSLATION = false;
 
     static final Localizable NULL_LOCALIZABLE = () -> null;
 

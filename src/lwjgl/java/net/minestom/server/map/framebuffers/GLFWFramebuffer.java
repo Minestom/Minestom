@@ -1,7 +1,6 @@
 package net.minestom.server.map.framebuffers;
 
 import net.minestom.server.map.Framebuffer;
-import net.minestom.server.utils.time.TimeUnit;
 import org.lwjgl.BufferUtils;
 
 import java.nio.ByteBuffer;
@@ -22,7 +21,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_OPENGL_API;
  * to automatically render to the offscreen buffer on a specialized thread.
  *
  * GLFWFramebuffer does not provide guarantee that the result of {@link #toMapColors()} is synchronized with rendering, but
- * it will be updated after each frame rendered through {@link #render(Runnable)} or {@link #setupRenderLoop(long, TimeUnit, Runnable)}.
+ * it will be updated after each frame rendered through {@link #render(Runnable)} or {@link #setupRenderLoop(long, java.time.temporal.TemporalUnit, Runnable)}.
  *
  * This framebuffer is meant to render to a single map (ie it is only compatible with 128x128 rendering)
  */
