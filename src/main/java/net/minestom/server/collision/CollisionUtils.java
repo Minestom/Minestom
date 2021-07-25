@@ -32,22 +32,24 @@ public class CollisionUtils {
 
         boolean xCollision = false, yCollision = false, zCollision = false;
         double stepSizeX = 0, stepSizeY = 0, stepSizeZ = 0;
+        //Reuse array
+        double[] displacement = new double[4];
 
         if (deltaPosition.y() != 0) {
             stepSizeY = stepAxis(instance, originChunk, Axis.Y, deltaPosition.y(),
-                    deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace());
+                    deltaPosition.y() > 0 ? boundingBox.getTopFace() : boundingBox.getBottomFace(), displacement);
             yCollision = stepSizeY != deltaPosition.y();
         }
 
         if (deltaPosition.x() != 0) {
             stepSizeX = stepAxis(instance, originChunk, Axis.X, deltaPosition.x(),
-                    deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace());
+                    deltaPosition.x() < 0 ? boundingBox.getLeftFace() : boundingBox.getRightFace(), displacement);
             xCollision = stepSizeX != deltaPosition.x();
         }
 
         if (deltaPosition.z() != 0) {
             stepSizeZ = stepAxis(instance, originChunk, Axis.Z, deltaPosition.z(),
-                    deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace());
+                    deltaPosition.z() > 0 ? boundingBox.getBackFace() : boundingBox.getFrontFace(), displacement);
             zCollision = stepSizeZ != deltaPosition.z();
         }
 
@@ -68,7 +70,7 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return maximum step before collision
      */
-    private static double stepAxis(Instance instance, Chunk originChunk, Axis axis, double stepAmount, Vec... corners) {
+    private static double stepAxis(final Instance instance, final Chunk originChunk, final Axis axis, final double stepAmount, final Vec[] corners, final double[] displacement) {
         if (corners.length == 0)
             return stepAmount; // avoid degeneracy in following computations
 
@@ -82,7 +84,7 @@ public class CollisionUtils {
 
         double totalStep = 0;
         for (int i = 0; i < blockLength; i++) {
-            final double possibleStep = stepOnce(instance, originChunk, axis, sign, corners);
+            final double possibleStep = stepOnce(instance, originChunk, axis, sign, corners, sign, displacement);
             totalStep += possibleStep;
             if (possibleStep != sign) {
                 collisionFound = true;
@@ -92,7 +94,7 @@ public class CollisionUtils {
 
         // add remainingLength
         if (!collisionFound) {
-            totalStep += stepOnce(instance, originChunk, axis, remainingLength, corners);
+            totalStep += stepOnce(instance, originChunk, axis, remainingLength, corners, sign, displacement);
         }
 
         return totalStep;
@@ -106,9 +108,7 @@ public class CollisionUtils {
      * @param corners  the corners of the bounding box to consider
      * @return the maximum distance without collision
      */
-    private static double stepOnce(Instance instance, Chunk originChunk, Axis axis, double amount, Vec[] corners) {
-        final double signum = Math.signum(amount);
-        double[] displacement = new double[corners.length];
+    private static double stepOnce(final Instance instance, final Chunk originChunk, final Axis axis, final double amount, final Vec[] corners, final double signum, final double[] displacement) {
         // Step each corner
         for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
             final Vec originalCorner = corners[cornerIndex];
@@ -119,8 +119,12 @@ public class CollisionUtils {
             // TODO: block collision boxes, for the moment, always consider a full block
             // Check for collision
             if (!ChunkUtils.isLoaded(chunk) /*collision on chunk border*/ ||
-                    chunk.getBlock(newCorner).isSolid() /*collision with a solid block*/) {
+                    (chunk.getBlock(newCorner).isSolid()) /*collision with a solid block*/) {
                 displacement[cornerIndex] = (axis.get.apply(originalCorner) - Math.floor(axis.get.apply(newCorner))) + signum == -1 ? 1 : 0;
+                if (displacement[cornerIndex] == 0) {
+                    // There won't be anything closer to zero
+                    return 0;
+                }
                 continue;
             }
             // No collision, entire step is possible
