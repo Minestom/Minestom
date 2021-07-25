@@ -351,7 +351,9 @@ public abstract class Argument<T> {
         public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
             T result = argument.parse(input);
 
-            filterer.apply(result);
+            if (!filterer.apply(result)) {
+                throw new ArgumentSyntaxException(input, "Invalid filter", 1); // TODO allow for custom text?
+            }
 
             return result;
         }
