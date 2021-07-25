@@ -11,6 +11,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -271,7 +272,7 @@ public abstract class Argument<T> {
      * @param <I> The input (any object)
      * @param <O> The output (any object)
      */
-    private static class ArgumentMap<I, O> extends Argument<O> {
+    public static final class ArgumentMap<I, O> extends Argument<O> {
 
         final Argument<I> argument;
         final Mapper<I, O> mapper;
@@ -328,12 +329,12 @@ public abstract class Argument<T> {
      *
      * @param <T> The type of this argument
      */
-    private static class ArgumentFilter<T> extends Argument<T> {
+    public static final class ArgumentFilter<T> extends Argument<T> {
 
         final Argument<T> argument;
-        final Filterer<T> filterer;
+        final Function<T, Boolean> filterer;
 
-        protected ArgumentFilter(@NotNull Argument<T> argument, @NotNull Filterer<T> filterer) {
+        private ArgumentFilter(@NotNull Argument<T> argument, @NotNull Function<T, Boolean> filterer) {
             super(argument.getId(), argument.allowSpace(), argument.useRemaining());
 
             if (argument.getSuggestionCallback() != null)
@@ -350,7 +351,7 @@ public abstract class Argument<T> {
         public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
             T result = argument.parse(input);
 
-            filterer.check(result);
+            filterer.apply(result);
 
             return result;
         }
@@ -358,26 +359,6 @@ public abstract class Argument<T> {
         @Override
         public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
             argument.processNodes(nodeMaker, executable);
-        }
-
-        /**
-         * Represents a lambda that can filter an input and return the input
-         * hat also allows the throwing of ArgumentSyntaxException
-         *
-         * @param <I> The input expected from the Argument
-         */
-        @FunctionalInterface
-        public interface Filterer<I> {
-
-            /**
-             * Accepts I data from the argument and throws an error if the input is invalid.
-             *
-             * @param i The input processed from an argument
-             * @throws ArgumentSyntaxException If the input does not match the conditions required for filtering
-             *                                 (E.X. an int that must be prime)
-             */
-            void check(I i) throws ArgumentSyntaxException;
-
         }
 
     }
@@ -390,7 +371,7 @@ public abstract class Argument<T> {
      * @return A new ArgumentMap that filters using this filterer.
      */
     @ApiStatus.Experimental
-    public @NotNull ArgumentFilter<T> filter(@NotNull ArgumentFilter.Filterer<T> filterer) {
+    public @NotNull ArgumentFilter<T> filter(@NotNull Function<T, Boolean> filterer) {
         return new ArgumentFilter<>(this, filterer);
     }
 

@@ -25,13 +25,11 @@ public class UnloadExtensionCommand extends Command {
 
         setDefaultExecutor(this::usage);
 
-        extensionName = ArgumentType.String("extensionName").map((input) -> {
-            Extension extension = MinecraftServer.getExtensionManager().getExtension(input);
-
-            if (extension == null) throw new ArgumentSyntaxException("The specified extension was not found", input, 1);
-
-            return extension;
-        });
+        extensionName = ArgumentType.String("extensionName").filter((input) ->
+                MinecraftServer.getExtensionManager().hasExtension(input)
+        ).map((input) ->
+                MinecraftServer.getExtensionManager().getExtension(input)
+        );
 
         setArgumentCallback(this::extensionCallback, extensionName);
 
