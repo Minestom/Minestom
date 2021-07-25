@@ -11,6 +11,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -260,8 +262,19 @@ public abstract class Argument<T> {
      * @return A new ArgumentMap that can get this complex object type.
      */
     @ApiStatus.Experimental
-    public <O> @NotNull ArgumentMap<T, O> map(@NotNull ArgumentMap.Mapper<T, O> mapper) {
+    public <O> @NotNull Argument<O> map(@NotNull Function<T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
+    }
+
+    /**
+     * Maps this argument's output to another result.
+     *
+     * @param predicate the argument predicate
+     * @return A new ArgumentMap that filters using this filterer.
+     */
+    @ApiStatus.Experimental
+    public @NotNull Argument<T> filter(@NotNull Predicate<T> predicate) {
+        return new ArgumentFilter<>(this, predicate);
     }
 
     @Override
@@ -277,5 +290,64 @@ public abstract class Argument<T> {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    private static final class ArgumentMap<I, O> extends Argument<O> {
+        public static final int INVALID_MAP = 555;
+        final Argument<I> argument;
+        final Function<I, O> mapper;
+
+        private ArgumentMap(@NotNull Argument<I> argument, @NotNull Function<I, O> mapper) {
+            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            if (argument.getSuggestionCallback() != null)
+                this.setSuggestionCallback(argument.getSuggestionCallback());
+            if (argument.getDefaultValue() != null)
+                this.setDefaultValue(() -> mapper.apply(argument.getDefaultValue().get()));
+            this.argument = argument;
+            this.mapper = mapper;
+        }
+
+        @Override
+        public @NotNull O parse(@NotNull String input) throws ArgumentSyntaxException {
+            final I value = argument.parse(input);
+            final O mappedValue = mapper.apply(value);
+            if (mappedValue == null)
+                throw new ArgumentSyntaxException("Couldn't be converted to map type", input, INVALID_MAP);
+            return mappedValue;
+        }
+
+        @Override
+        public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+            argument.processNodes(nodeMaker, executable);
+        }
+    }
+
+    private static final class ArgumentFilter<T> extends Argument<T> {
+        public static final int INVALID_FILTER = 556;
+        final Argument<T> argument;
+        final Predicate<T> predicate;
+
+        private ArgumentFilter(@NotNull Argument<T> argument, @NotNull Predicate<T> predicate) {
+            super(argument.getId(), argument.allowSpace(), argument.useRemaining());
+            if (argument.getSuggestionCallback() != null)
+                this.setSuggestionCallback(argument.getSuggestionCallback());
+            if (argument.getDefaultValue() != null)
+                this.setDefaultValue(argument.getDefaultValue());
+            this.argument = argument;
+            this.predicate = predicate;
+        }
+
+        @Override
+        public @NotNull T parse(@NotNull String input) throws ArgumentSyntaxException {
+            final T result = argument.parse(input);
+            if (!predicate.test(result))
+                throw new ArgumentSyntaxException("Predicate failed", input, INVALID_FILTER);
+            return result;
+        }
+
+        @Override
+        public void processNodes(@NotNull NodeMaker nodeMaker, boolean executable) {
+            argument.processNodes(nodeMaker, executable);
+        }
     }
 }
