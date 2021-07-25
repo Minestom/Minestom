@@ -2,11 +2,10 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.entity.EntityProjectile;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -17,7 +16,6 @@ import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
 public class RangedAttackGoal extends GoalSelector {
-
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private long lastShot;
@@ -121,7 +119,7 @@ public class RangedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        final var  pathPosition = navigator.getPathPosition();
+        final var pathPosition = navigator.getPathPosition();
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
                 navigator.setPathTo(null);

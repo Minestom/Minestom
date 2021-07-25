@@ -68,7 +68,10 @@ import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundCategory;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.*;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -1234,7 +1237,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param facePoint      the point from where the player should aim
      * @param targetPosition the target position to face
      */
-    public void facePosition(@NotNull FacePoint facePoint, @NotNull Position targetPosition) {
+    public void facePosition(@NotNull FacePoint facePoint, @NotNull Point targetPosition) {
         facePosition(facePoint, targetPosition, null, null);
     }
 
