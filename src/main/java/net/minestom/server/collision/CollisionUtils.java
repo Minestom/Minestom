@@ -11,9 +11,7 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
-import java.util.function.BiFunction;
 import java.util.function.DoubleUnaryOperator;
-import java.util.function.Function;
 
 public class CollisionUtils {
 
@@ -62,10 +60,10 @@ public class CollisionUtils {
      * Steps on a single axis. Checks against collisions for each point of 'corners'. This method assumes that startPosition is valid.
      * Immediately return false if corners is of length 0.
      *
-     * @param instance      instance to check blocks from
-     * @param axis          step direction. Works best if unit vector and aligned to an axis
-     * @param stepAmount    how much to step in the direction (in blocks)
-     * @param corners       the corners to check against
+     * @param instance   instance to check blocks from
+     * @param axis       step direction. Works best if unit vector and aligned to an axis
+     * @param stepAmount how much to step in the direction (in blocks)
+     * @param corners    the corners to check against
      * @return maximum step before collision
      */
     private static double stepAxis(Instance instance, Chunk originChunk, Axis axis, double stepAmount, Vec... corners) {
@@ -120,7 +118,7 @@ public class CollisionUtils {
             // Check for collision
             if (!ChunkUtils.isLoaded(chunk) /*collision on chunk border*/ ||
                     chunk.getBlock(newCorner).isSolid() /*collision with a solid block*/) {
-                displacement[cornerIndex] = (axis.get.apply(originalCorner) - Math.floor(axis.get.apply(newCorner))) + signum == -1 ? 1 : 0;
+                displacement[cornerIndex] = (axis.get.get(originalCorner) - Math.floor(axis.get.get(newCorner))) + signum == -1 ? 1 : 0;
                 continue;
             }
             // No collision, entire step is possible
@@ -191,12 +189,22 @@ public class CollisionUtils {
         Y(Point::y, Point::withY),
         Z(Point::z, Point::withZ);
 
-        final Function<Point, Double> get;
-        final BiFunction<Point, DoubleUnaryOperator, Point> with;
+        final Get get;
+        final With with;
 
-        Axis(Function<Point, Double> get, BiFunction<Point, DoubleUnaryOperator, Point> with) {
+        Axis(Get get, With with) {
             this.get = get;
             this.with = with;
         }
+    }
+
+    @FunctionalInterface
+    private interface Get {
+        double get(Point point);
+    }
+
+    @FunctionalInterface
+    private interface With {
+        Point apply(Point point, DoubleUnaryOperator operator);
     }
 }
