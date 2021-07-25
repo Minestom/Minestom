@@ -30,7 +30,7 @@ public abstract class Argument<T> {
 
     private ArgumentCallback callback;
 
-    private Supplier<T> defaultValue;
+    private DefaultValueProvider<T> defaultValue;
 
     private SuggestionCallback suggestionCallback;
 
@@ -176,7 +176,7 @@ public abstract class Argument<T> {
     }
 
     @Nullable
-    public Supplier<T> getDefaultValue() {
+    public DefaultValueProvider<T> getDefaultValue() {
         return defaultValue;
     }
 
@@ -190,7 +190,7 @@ public abstract class Argument<T> {
      * @return 'this' for chaining
      */
     @NotNull
-    public Argument<T> setDefaultValue(@Nullable Supplier<T> defaultValue) {
+    public Argument<T> setDefaultValue(@Nullable DefaultValueProvider<T> defaultValue) {
         this.defaultValue = defaultValue;
         return this;
     }
@@ -206,6 +206,19 @@ public abstract class Argument<T> {
         this.defaultValue = () -> defaultValue;
         return this;
     }
+
+    @FunctionalInterface
+    public interface DefaultValueProvider<T> {
+
+        /**
+         * Gets the default value.
+         *
+         * @return The default value
+         * @throws ArgumentSyntaxException If the default argument is unable to be retrieved
+         */
+        T get() throws ArgumentSyntaxException;
+    }
+
 
     /**
      * Gets the suggestion callback of the argument

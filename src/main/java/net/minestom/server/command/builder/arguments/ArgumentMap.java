@@ -18,6 +18,12 @@ public class ArgumentMap<I, O> extends Argument<O> {
     protected ArgumentMap(@NotNull Argument<I> argument, @NotNull Mapper<I, O> mapper) {
         super(argument.getId(), argument.allowSpace(), argument.useRemaining());
 
+        if (argument.getSuggestionCallback() != null)
+            this.setSuggestionCallback(argument.getSuggestionCallback());
+
+        if (argument.getDefaultValue() != null)
+            this.setDefaultValue(() -> mapper.accept(argument.getDefaultValue().get()));
+        
         this.argument = argument;
         this.mapper = mapper;
     }
