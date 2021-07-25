@@ -23,7 +23,7 @@ public class ArgumentMap<I, O> extends Argument<O> {
 
         if (argument.getDefaultValue() != null)
             this.setDefaultValue(() -> mapper.accept(argument.getDefaultValue().get()));
-        
+
         this.argument = argument;
         this.mapper = mapper;
     }
@@ -57,26 +57,6 @@ public class ArgumentMap<I, O> extends Argument<O> {
          *                                 (E.X. an invalid extension name)
          */
         O accept(I i) throws ArgumentSyntaxException;
-
-    }
-
-    /**
-     * Represents a lambda that can filter an input and return the input
-     * hat also allows the throwing of ArgumentSyntaxException
-     *
-     * @param <I> The input expected from the Argument
-     */
-    @FunctionalInterface
-    public interface Filterer<I> {
-
-        /**
-         * Accepts I data from the argument and throws an error if the input is invalid.
-         *
-         * @param i The input processed from an argument
-         * @throws ArgumentSyntaxException If the input does not match the conditions required for filtering
-         *                                 (E.X. an int that must be prime)
-         */
-        void accept(I i) throws ArgumentSyntaxException;
 
     }
 

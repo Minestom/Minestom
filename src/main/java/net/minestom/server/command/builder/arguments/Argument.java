@@ -272,11 +272,8 @@ public abstract class Argument<T> {
      * @return A new ArgumentMap that filters using this filterer.
      */
     @ApiStatus.Experimental
-    public @NotNull ArgumentMap<T, T> filter(@NotNull ArgumentMap.Filterer<T> filterer) {
-        return this.map((input) -> {
-            filterer.accept(input);
-            return input;
-        });
+    public @NotNull ArgumentFilter<T> filter(@NotNull ArgumentFilter.Filterer<T> filterer) {
+        return new ArgumentFilter<>(this, filterer);
     }
 
     @Override
