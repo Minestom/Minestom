@@ -42,17 +42,13 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
         this.block = block;
     }
 
-    @SuppressWarnings("ConstantConditions")
     @Override
     public int getObjectData() {
-        int id = this.block.id();
-        int metadata = 0; // TODO ?
-        return id | (metadata << 12);
+        return block.stateId();
     }
 
     @Override
     public boolean requiresVelocityPacketAtSpawn() {
         return false;
     }
-
 }
