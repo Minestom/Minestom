@@ -161,24 +161,6 @@ public final class ConnectionManager {
         this.broadcastMessage(jsonMessage, null);
     }
 
-    private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
-        Collection<Player> recipients;
-
-        // Get the recipients
-        if (condition == null) {
-            recipients = getOnlinePlayers();
-        } else {
-            recipients = new ArrayList<>();
-            getOnlinePlayers().forEach(player -> {
-                final boolean result = condition.isValid(player);
-                if (result)
-                    recipients.add(player);
-            });
-        }
-
-        return recipients;
-    }
-
     /**
      * Gets all the listeners which are called for each packet received.
      *
@@ -346,7 +328,6 @@ public final class ConnectionManager {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
-
         this.players.remove(player);
         this.connectionPlayerMap.remove(connection);
     }
@@ -362,58 +343,39 @@ public final class ConnectionManager {
      */
     public void startPlayState(@NotNull Player player, boolean register) {
         AsyncUtils.runAsync(() -> {
-            String username = player.getUsername();
-            UUID uuid = player.getUuid();
-
+            final PlayerConnection playerConnection = player.getPlayerConnection();
             // Call pre login event
-            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, username, uuid);
+            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
-
             // Close the player channel if he has been disconnected (kick)
-            final boolean online = player.isOnline();
-            if (!online) {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
+            if (!player.isOnline()) {
                 if (playerConnection instanceof NettyPlayerConnection) {
                     ((NettyPlayerConnection) playerConnection).getChannel().flush();
                 }
-
                 //playerConnection.disconnect();
                 return;
             }
-
             // Change UUID/Username based on the event
             {
                 final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
                 final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
-
                 if (!player.getUsername().equals(eventUsername)) {
                     player.setUsernameField(eventUsername);
-                    username = eventUsername;
                 }
-
                 if (!player.getUuid().equals(eventUuid)) {
                     player.setUuid(eventUuid);
-                    uuid = eventUuid;
                 }
             }
-
             // Send login success packet
-            {
-                final PlayerConnection connection = player.getPlayerConnection();
-
-                LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
-                if (connection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) connection).writeAndFlush(loginSuccessPacket);
-                } else {
-                    connection.sendPacket(loginSuccessPacket);
-                }
-
-                connection.setConnectionState(ConnectionState.PLAY);
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
+            if (playerConnection instanceof NettyPlayerConnection) {
+                ((NettyPlayerConnection) playerConnection).writeAndFlush(loginSuccessPacket);
+            } else {
+                playerConnection.sendPacket(loginSuccessPacket);
             }
-
+            playerConnection.setConnectionState(ConnectionState.PLAY);
             // Add the player to the waiting list
-            addWaitingPlayer(player);
-
+            this.waitingPlayers.add(player);
             if (register) {
                 registerPlayer(player);
             }
@@ -457,7 +419,19 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        waitingPlayersTick();
+        Player waitingPlayer;
+        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
+            EventDispatcher.call(loginEvent);
+            final Instance spawningInstance = loginEvent.getSpawningInstance();
+
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+
+            waitingPlayer.UNSAFE_init(spawningInstance);
+
+            // Spawn the player at Player#getRespawnPoint during the next instance tick
+            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
+        }
     }
 
     /**
@@ -477,33 +451,5 @@ public final class ConnectionManager {
                 player.kick(TIMEOUT_TEXT);
             }
         }
-    }
-
-    /**
-     * Adds connected clients after the handshake (used to free the networking threads).
-     */
-    private void waitingPlayersTick() {
-        Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.poll()) != null) {
-            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
-            EventDispatcher.call(loginEvent);
-            final Instance spawningInstance = loginEvent.getSpawningInstance();
-
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
-
-            waitingPlayer.UNSAFE_init(spawningInstance);
-
-            // Spawn the player at Player#getRespawnPoint during the next instance tick
-            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
-        }
-    }
-
-    /**
-     * Adds a player into the waiting list, to be handled during the next server tick.
-     *
-     * @param player the {@link Player player} to add into the waiting list
-     */
-    public void addWaitingPlayer(@NotNull Player player) {
-        this.waitingPlayers.add(player);
     }
 }

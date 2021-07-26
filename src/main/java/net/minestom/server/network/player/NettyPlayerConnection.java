@@ -245,6 +245,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
+        refreshOnline(false);
         this.channel.close();
     }
 
