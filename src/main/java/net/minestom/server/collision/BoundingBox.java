@@ -1,9 +1,14 @@
 package net.minestom.server.collision;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
@@ -12,6 +17,14 @@ public class BoundingBox {
 
     private final Entity entity;
     private final double x, y, z;
+
+    private volatile Pos lastPosition;
+    private List<Vec> bottomFace;
+    private List<Vec> topFace;
+    private List<Vec> leftFace;
+    private List<Vec> rightFace;
+    private List<Vec> frontFace;
+    private List<Vec> backFace;
 
     /**
      * Creates a {@link BoundingBox} linked to an {@link Entity} and with a specific size.
@@ -211,14 +224,13 @@ public class BoundingBox {
      *
      * @return the points at the bottom of the {@link BoundingBox}
      */
-    @NotNull
-    public Vec[] getBottomFace() {
-        return new Vec[]{
-                new Vec(getMinX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-        };
+    public @NotNull List<Vec> getBottomFace() {
+        this.bottomFace = get(bottomFace, () ->
+                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
+                        new Vec(getMaxX(), getMinY(), getMinZ()),
+                        new Vec(getMaxX(), getMinY(), getMaxZ()),
+                        new Vec(getMinX(), getMinY(), getMaxZ())));
+        return bottomFace;
     }
 
     /**
@@ -226,14 +238,13 @@ public class BoundingBox {
      *
      * @return the points at the top of the {@link BoundingBox}
      */
-    @NotNull
-    public Vec[] getTopFace() {
-        return new Vec[]{
-                new Vec(getMinX(), getMaxY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ()),
-        };
+    public @NotNull List<Vec> getTopFace() {
+        this.topFace = get(topFace, () ->
+                List.of(new Vec(getMinX(), getMaxY(), getMinZ()),
+                        new Vec(getMaxX(), getMaxY(), getMinZ()),
+                        new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                        new Vec(getMinX(), getMaxY(), getMaxZ())));
+        return topFace;
     }
 
     /**
@@ -241,14 +252,13 @@ public class BoundingBox {
      *
      * @return the points on the left face of the {@link BoundingBox}
      */
-    @NotNull
-    public Vec[] getLeftFace() {
-        return new Vec[]{
-                new Vec(getMinX(), getMinY(), getMinZ()),
-                new Vec(getMinX(), getMaxY(), getMinZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMinY(), getMaxZ()),
-        };
+    public @NotNull List<Vec> getLeftFace() {
+        this.leftFace = get(leftFace, () ->
+                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
+                        new Vec(getMinX(), getMaxY(), getMinZ()),
+                        new Vec(getMinX(), getMaxY(), getMaxZ()),
+                        new Vec(getMinX(), getMinY(), getMaxZ())));
+        return leftFace;
     }
 
     /**
@@ -256,14 +266,13 @@ public class BoundingBox {
      *
      * @return the points on the right face of the {@link BoundingBox}
      */
-    @NotNull
-    public Vec[] getRightFace() {
-        return new Vec[]{
-                new Vec(getMaxX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMaxX(), getMinY(), getMaxZ()),
-        };
+    public @NotNull List<Vec> getRightFace() {
+        this.rightFace = get(rightFace, () ->
+                List.of(new Vec(getMaxX(), getMinY(), getMinZ()),
+                        new Vec(getMaxX(), getMaxY(), getMinZ()),
+                        new Vec(getMaxX(), getMaxY(), getMaxZ()),
+                        new Vec(getMaxX(), getMinY(), getMaxZ())));
+        return rightFace;
     }
 
     /**
@@ -271,14 +280,13 @@ public class BoundingBox {
      *
      * @return the points at the front of the {@link BoundingBox}
      */
-    @NotNull
-    public Vec[] getFrontFace() {
-        return new Vec[]{
-                new Vec(getMinX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMinY(), getMinZ()),
-                new Vec(getMaxX(), getMaxY(), getMinZ()),
-                new Vec(getMinX(), getMaxY(), getMinZ()),
-        };
+    public @NotNull List<Vec> getFrontFace() {
+        this.frontFace = get(frontFace, () ->
+                List.of(new Vec(getMinX(), getMinY(), getMinZ()),
+                        new Vec(getMaxX(), getMinY(), getMinZ()),
+                        new Vec(getMaxX(), getMaxY(), getMinZ()),
+                        new Vec(getMinX(), getMaxY(), getMinZ())));
+        return frontFace;
     }
 
     /**
@@ -286,14 +294,13 @@ public class BoundingBox {
      *
      * @return the points at the back of the {@link BoundingBox}
      */
-    @NotNull
-    public Vec[] getBackFace() {
-        return new Vec[]{
+    public @NotNull List<Vec> getBackFace() {
+        this.backFace = get(backFace, () -> List.of(
                 new Vec(getMinX(), getMinY(), getMaxZ()),
                 new Vec(getMaxX(), getMinY(), getMaxZ()),
                 new Vec(getMaxX(), getMaxY(), getMaxZ()),
-                new Vec(getMinX(), getMaxY(), getMaxZ()),
-        };
+                new Vec(getMinX(), getMaxY(), getMaxZ())));
+        return backFace;
     }
 
     @Override
@@ -306,5 +313,15 @@ public class BoundingBox {
         result += "\n";
         result += "[" + getMinZ() + " : " + getMaxZ() + "]";
         return result;
+    }
+
+    private @NotNull List<Vec> get(@Nullable List<Vec> face, Supplier<? extends List<Vec>> vecSupplier) {
+        final var lastPos = this.lastPosition;
+        final var entityPos = entity.getPosition();
+        if (face != null && lastPos != null && lastPos.samePoint(entityPos)) {
+            return face;
+        }
+        this.lastPosition = entityPos;
+        return vecSupplier.get();
     }
 }

@@ -10,7 +10,8 @@ import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.List;
 import java.util.function.DoubleUnaryOperator;
 
 public class CollisionUtils {
@@ -68,8 +69,8 @@ public class CollisionUtils {
      * @param corners    the corners to check against
      * @return maximum step before collision
      */
-    private static double stepAxis(final Instance instance, final Chunk originChunk, final Axis axis, final double stepAmount, final Vec[] corners, final double[] displacement) {
-        if (corners.length == 0)
+    private static double stepAxis(Instance instance, Chunk originChunk, Axis axis, double stepAmount, List<Vec> corners, double[] displacement) {
+        if (corners.isEmpty())
             return stepAmount; // avoid degeneracy in following computations
 
         final double sign = Math.signum(stepAmount);
@@ -106,10 +107,10 @@ public class CollisionUtils {
      * @param corners  the corners of the bounding box to consider
      * @return the maximum distance without collision
      */
-    private static double stepOnce(final Instance instance, final Chunk originChunk, final Axis axis, final double amount, final Vec[] corners, final double signum, final double[] displacement) {
+    private static double stepOnce(Instance instance, Chunk originChunk, Axis axis, double amount, List<Vec> corners, double[] displacement) {
         // Step each corner
-        for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
-            final Vec originalCorner = corners[cornerIndex];
+        for (int cornerIndex = 0; cornerIndex < corners.size(); cornerIndex++) {
+            final Vec originalCorner = corners.get(cornerIndex);
             // New corner without colliding with something
             final Point newCorner = axis.with.apply(originalCorner, o -> o + amount);
 
@@ -129,9 +130,21 @@ public class CollisionUtils {
             displacement[cornerIndex] = amount;
         }
         if (signum < 0) {
-            return Arrays.stream(displacement).max().orElse(0);
+            // Find highest value
+            double cache = Long.MIN_VALUE;
+            for (double d : displacement) {
+                if (d > cache)
+                    cache = d;
+            }
+            return cache;
         } else {
-            return Arrays.stream(displacement).min().orElse(0);
+            // Find lowest value
+            double cache = Long.MAX_VALUE;
+            for (double d : displacement) {
+                if (d < cache)
+                    cache = d;
+            }
+            return cache;
         }
     }
 
@@ -193,8 +206,8 @@ public class CollisionUtils {
         Y(Point::y, Point::withY),
         Z(Point::z, Point::withZ);
 
-        final Get get;
-        final With with;
+        private final Get get;
+        private final With with;
 
         Axis(Get get, With with) {
             this.get = get;
