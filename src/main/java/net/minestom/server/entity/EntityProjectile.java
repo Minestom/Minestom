@@ -152,7 +152,7 @@ public class EntityProjectile extends Entity {
             } else {
                 pos = pos.add(direction);
             }
-            Block block = instance.getBlock(pos.sub(0, 1, 0));
+            Block block = instance.getBlock(pos);
             if (!block.isAir() && !block.isLiquid()) {
                 teleport(pos);
                 return true;

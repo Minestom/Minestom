@@ -463,7 +463,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                     newVelocity = physicsResult.newVelocity();
                 } else {
                     newVelocity = deltaPos;
-                    newPosition = position.add(currentVelocity).div(tps);
+                    newPosition = position.add(currentVelocity.div(20));
                 }
 
                 // World border collision
