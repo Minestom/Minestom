@@ -107,7 +107,7 @@ public class CollisionUtils {
      * @param corners  the corners of the bounding box to consider
      * @return the maximum distance without collision
      */
-    private static double stepOnce(Instance instance, Chunk originChunk, Axis axis, double amount, List<Vec> corners, double[] displacement) {
+    private static double stepOnce(Instance instance, Chunk originChunk, Axis axis, double amount, List<Vec> corners, double signum, double[] displacement) {
         // Step each corner
         for (int cornerIndex = 0; cornerIndex < corners.size(); cornerIndex++) {
             final Vec originalCorner = corners.get(cornerIndex);
