@@ -48,6 +48,7 @@ public class Registry {
         private final NamespaceID namespace;
         private final int id;
         private final int stateId;
+        private final String translationKey;
         private final double hardness;
         private final double explosionResistance;
         private final double friction;
@@ -64,6 +65,7 @@ public class Registry {
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
             this.stateId = getInt("stateId");
+            this.translationKey = getString("translationKey");
             this.hardness = getDouble("hardness");
             this.explosionResistance = getDouble("explosionResistance");
             this.friction = getDouble("friction");
@@ -89,6 +91,10 @@ public class Registry {
 
         public int stateId() {
             return stateId;
+        }
+
+        public String translationKey() {
+            return translationKey;
         }
 
         public double hardness() {
@@ -139,6 +145,7 @@ public class Registry {
     public static class MaterialEntry extends Entry {
         private final NamespaceID namespace;
         private final int id;
+        private final String translationKey;
         private final int maxStackSize;
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
@@ -148,6 +155,7 @@ public class Registry {
             super(main, override);
             this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
+            this.translationKey = getString("translationKey");
             this.maxStackSize = getInt("maxStackSize", 64);
             this.isFood = getBoolean("edible", false);
             {
@@ -176,7 +184,7 @@ public class Registry {
                             this.equipmentSlot = null;
                             break;
                     }
-                }else{
+                } else {
                     this.equipmentSlot = null;
                 }
             }
@@ -188,6 +196,10 @@ public class Registry {
 
         public int id() {
             return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
         }
 
         public int maxStackSize() {
