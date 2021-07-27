@@ -269,7 +269,7 @@ public class BinaryWriter extends OutputStream {
             writeBoolean(false);
         } else {
             writeBoolean(true);
-            writeVarInt(itemStack.getMaterial().getId());
+            writeVarInt(itemStack.getMaterial().id());
             writeByte((byte) itemStack.getAmount());
             write(itemStack.getMeta());
         }

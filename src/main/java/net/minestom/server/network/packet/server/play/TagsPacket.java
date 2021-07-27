@@ -132,7 +132,7 @@ public class TagsPacket implements ServerPacket {
                         writer.writeVarInt(values.size());
                         // entries
                         for (NamespaceID name : values) {
-                            writer.writeVarInt(Registries.getMaterial(name).ordinal());
+                            writer.writeVarInt(Registries.getMaterial(name).id());
                         }
                     }
                     break;

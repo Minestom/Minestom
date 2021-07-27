@@ -50,7 +50,7 @@ public class CampfireHandler implements BlockHandler {
                 NBTCompound compound = new NBTCompound()
                         .setByte("Count", (byte) item.getAmount())
                         .setByte("Slot", (byte) 1)
-                        .setString("id", item.getMaterial().getNamespaceID().asString());
+                        .setString("id", item.getMaterial().name());
                 items.add(compound);
             }
             writer.setTag(internal, items);

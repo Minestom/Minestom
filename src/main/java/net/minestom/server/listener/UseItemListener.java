@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerItemAnimationEvent;
@@ -30,21 +31,10 @@ public class UseItemListener {
         final Material material = itemStack.getMaterial();
 
         // Equip armor with right click
-        if (material.isArmor()) {
-            ItemStack currentlyEquipped;
-            if (material.isHelmet()) {
-                currentlyEquipped = playerInventory.getHelmet();
-                playerInventory.setHelmet(itemStack);
-            } else if (material.isChestplate()) {
-                currentlyEquipped = playerInventory.getChestplate();
-                playerInventory.setChestplate(itemStack);
-            } else if (material.isLeggings()) {
-                currentlyEquipped = playerInventory.getLeggings();
-                playerInventory.setLeggings(itemStack);
-            } else {
-                currentlyEquipped = playerInventory.getBoots();
-                playerInventory.setBoots(itemStack);
-            }
+        final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
+        if (equipmentSlot != null) {
+            final ItemStack currentlyEquipped = playerInventory.getEquipment(equipmentSlot);
+            playerInventory.setEquipment(equipmentSlot, itemStack);
             playerInventory.setItemInHand(hand, currentlyEquipped);
         }
 

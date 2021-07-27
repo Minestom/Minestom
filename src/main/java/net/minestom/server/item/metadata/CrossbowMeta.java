@@ -181,7 +181,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
         private @NotNull NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
             NBTCompound compound = itemStack.getMeta().toNBT();
             compound.setByte("Count", (byte) itemStack.getAmount());
-            compound.setString("id", itemStack.getMaterial().getName());
+            compound.setString("id", itemStack.getMaterial().name());
             return compound;
         }
     }

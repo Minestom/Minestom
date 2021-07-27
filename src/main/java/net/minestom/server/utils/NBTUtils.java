@@ -93,7 +93,7 @@ public final class NBTUtils {
             nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
             nbt.setByte("Count", (byte) stack.getAmount());
-            nbt.setString("id", stack.getMaterial().getName());
+            nbt.setString("id", stack.getMaterial().name());
 
             list.add(nbt);
         }

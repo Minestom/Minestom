@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
@@ -17,8 +19,12 @@ import java.util.function.Supplier;
 public class Registry {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    public static BlockEntry block(@NotNull JsonObject jsonObject, JsonObject override) {
-        return new BlockEntry(jsonObject, override);
+    public static BlockEntry block(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+        return new BlockEntry(namespace, jsonObject, override);
+    }
+
+    public static MaterialEntry material(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+        return new MaterialEntry(namespace, jsonObject, override);
     }
 
     public static JsonObject load(Resource resource) {
@@ -28,7 +34,8 @@ public class Registry {
     }
 
     public enum Resource {
-        BLOCK("blocks");
+        BLOCK("blocks"),
+        ITEM("items");
 
         private final String name;
 
@@ -52,9 +59,9 @@ public class Registry {
         private final String blockEntity;
         private final Supplier<Material> materialSupplier;
 
-        private BlockEntry(JsonObject main, JsonObject override) {
+        private BlockEntry(String namespace, JsonObject main, JsonObject override) {
             super(main, override);
-            this.namespace = NamespaceID.from(getString("namespaceId"));
+            this.namespace = NamespaceID.from(namespace);
             this.id = getInt("id");
             this.stateId = getInt("stateId");
             this.hardness = getDouble("hardness");
@@ -129,6 +136,81 @@ public class Registry {
         }
     }
 
+    public static class MaterialEntry extends Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final int maxStackSize;
+        private final boolean isFood;
+        private final Supplier<Block> blockSupplier;
+        private final EquipmentSlot equipmentSlot;
+
+        private MaterialEntry(String namespace, JsonObject main, JsonObject override) {
+            super(main, override);
+            this.namespace = NamespaceID.from(namespace);
+            this.id = getInt("id");
+            this.maxStackSize = getInt("maxStackSize", 64);
+            this.isFood = getBoolean("edible", false);
+            {
+                final String blockNamespace = getString("correspondingBlock", null);
+                this.blockSupplier = blockNamespace != null ? () -> Block.fromNamespaceId(blockNamespace) : () -> null;
+            }
+
+            {
+                final var armorProperties = element("armorProperties");
+                if (armorProperties != null) {
+                    final String slot = armorProperties.getAsJsonObject().get("slot").getAsString();
+                    switch (slot) {
+                        case "feet":
+                            this.equipmentSlot = EquipmentSlot.BOOTS;
+                            break;
+                        case "legs":
+                            this.equipmentSlot = EquipmentSlot.LEGGINGS;
+                            break;
+                        case "chest":
+                            this.equipmentSlot = EquipmentSlot.CHESTPLATE;
+                            break;
+                        case "head":
+                            this.equipmentSlot = EquipmentSlot.HELMET;
+                            break;
+                        default:
+                            this.equipmentSlot = null;
+                            break;
+                    }
+                }else{
+                    this.equipmentSlot = null;
+                }
+            }
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public int maxStackSize() {
+            return maxStackSize;
+        }
+
+        public boolean isFood() {
+            return isFood;
+        }
+
+        public @Nullable Block block() {
+            return blockSupplier.get();
+        }
+
+        public boolean isArmor() {
+            return equipmentSlot != null;
+        }
+
+        public @Nullable EquipmentSlot equipmentSlot() {
+            return equipmentSlot;
+        }
+    }
+
     public static class Entry {
         private final JsonObject main, override;
 
@@ -174,7 +256,7 @@ public class Registry {
         }
 
         protected JsonElement element(String name) {
-            if (override.has(name)) {
+            if (override != null && override.has(name)) {
                 return override.get(name);
             }
             return main.get(name);

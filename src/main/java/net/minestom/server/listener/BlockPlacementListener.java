@@ -109,7 +109,7 @@ public class BlockPlacementListener {
             return;
         }
 
-        final Block placedBlock = useMaterial.getBlock();
+        final Block placedBlock = useMaterial.block();
         final Set<Entity> entities = instance.getChunkEntities(chunk);
         // Check if the player is trying to place a block in an entity
         boolean intersect = player.getBoundingBox().intersectWithBlock(placementPosition);

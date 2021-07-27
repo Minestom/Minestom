@@ -50,7 +50,7 @@ public final class BlockGenerator extends MinestomCodeGenerator {
                     FieldSpec.builder(blockCN, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
-                                    // Blocks.STONE = Block.fromNamespaceId("minecraft:stone")
+                                    // Block.STONE = Block.fromNamespaceId("minecraft:stone")
                                     "$T.fromNamespaceId($S)",
                                     blockCN,
                                     namespace
