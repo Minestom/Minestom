@@ -3,7 +3,6 @@ package demo.block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
@@ -33,7 +32,7 @@ public class CampfireHandler implements BlockHandler {
             item.forEach(nbtCompound -> {
                 int amount = nbtCompound.getAsByte("Count");
                 String id = nbtCompound.getString("id");
-                Material material = Registries.getMaterial(id);
+                Material material = Material.fromNamespaceId(id);
                 result.add(ItemStack.of(material, amount));
             });
             return result;

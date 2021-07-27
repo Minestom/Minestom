@@ -75,7 +75,7 @@ public class Registry {
             this.blockEntity = getString("blockEntity", null);
             {
                 final String materialNamespace = getString("correspondingItem", null);
-                this.materialSupplier = materialNamespace != null ? () -> Registries.getMaterial(materialNamespace) : () -> null;
+                this.materialSupplier = materialNamespace != null ? () -> Material.fromNamespaceId(materialNamespace) : () -> null;
             }
         }
 

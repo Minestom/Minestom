@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.Registries;
@@ -12,10 +13,7 @@ import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TagsPacket implements ServerPacket {
 
@@ -132,7 +130,9 @@ public class TagsPacket implements ServerPacket {
                         writer.writeVarInt(values.size());
                         // entries
                         for (NamespaceID name : values) {
-                            writer.writeVarInt(Registries.getMaterial(name).id());
+                            // FIXME: invalid namespace
+                            final var material = Objects.requireNonNullElse(Material.fromNamespaceId(name), Material.AIR);
+                            writer.writeVarInt(material.id());
                         }
                     }
                     break;

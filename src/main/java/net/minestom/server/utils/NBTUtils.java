@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 
 // for lack of a better name
@@ -69,7 +68,7 @@ public final class NBTUtils {
     public static void loadAllItems(@NotNull NBTList<NBTCompound> items, @NotNull Inventory destination) {
         destination.clear();
         for (NBTCompound tag : items) {
-            Material material = Registries.getMaterial(tag.getString("id"));
+            Material material = Material.fromNamespaceId(tag.getString("id"));
             if (material == Material.AIR) {
                 material = Material.STONE;
             }
