@@ -4,17 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
+import java.util.function.Supplier;
 
 @ApiStatus.Internal
 public class Registry {
-
-    protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     public static BlockEntry block(@NotNull JsonObject jsonObject, JsonObject override) {
         return new BlockEntry(jsonObject, override);
@@ -27,8 +28,7 @@ public class Registry {
     }
 
     public enum Resource {
-        BLOCK("blocks"),
-        BLOCK_PROPERTY("block_properties");
+        BLOCK("blocks");
 
         private final String name;
 
@@ -50,6 +50,7 @@ public class Registry {
         private final boolean solid;
         private final boolean liquid;
         private final String blockEntity;
+        private final Supplier<Material> materialSupplier;
 
         private BlockEntry(JsonObject main, JsonObject override) {
             super(main, override);
@@ -59,14 +60,15 @@ public class Registry {
             this.hardness = getDouble("hardness");
             this.explosionResistance = getDouble("explosionResistance");
             this.friction = getDouble("friction");
-            this.speedFactor = getDouble("speedFactor");
-            this.jumpFactor = getDouble("jumpFactor");
-            this.air = getBoolean("air");
+            this.speedFactor = getDouble("speedFactor", 1);
+            this.jumpFactor = getDouble("jumpFactor", 1);
+            this.air = getBoolean("air", false);
             this.solid = getBoolean("solid");
-            this.liquid = getBoolean("liquid");
+            this.liquid = getBoolean("liquid", false);
+            this.blockEntity = getString("blockEntity", null);
             {
-                final var blockEntityElement = element("blockEntity");
-                this.blockEntity = blockEntityElement != null ? blockEntityElement.getAsString() : null;
+                final String materialNamespace = getString("correspondingItem", null);
+                this.materialSupplier = materialNamespace != null ? () -> Registries.getMaterial(materialNamespace) : () -> null;
             }
         }
 
@@ -121,6 +123,10 @@ public class Registry {
         public @Nullable String blockEntity() {
             return blockEntity;
         }
+
+        public @Nullable Material material() {
+            return materialSupplier.get();
+        }
     }
 
     public static class Entry {
@@ -131,16 +137,36 @@ public class Registry {
             this.override = override;
         }
 
+        public String getString(String name, String defaultValue) {
+            var element = element(name);
+            return element != null ? element.getAsString() : defaultValue;
+        }
+
         public String getString(String name) {
             return element(name).getAsString();
+        }
+
+        public double getDouble(String name, double defaultValue) {
+            var element = element(name);
+            return element != null ? element.getAsDouble() : defaultValue;
         }
 
         public double getDouble(String name) {
             return element(name).getAsDouble();
         }
 
+        public int getInt(String name, int defaultValue) {
+            var element = element(name);
+            return element != null ? element.getAsInt() : defaultValue;
+        }
+
         public int getInt(String name) {
             return element(name).getAsInt();
+        }
+
+        public boolean getBoolean(String name, boolean defaultValue) {
+            var element = element(name);
+            return element != null ? element.getAsBoolean() : defaultValue;
         }
 
         public boolean getBoolean(String name) {
