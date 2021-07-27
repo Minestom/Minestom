@@ -1570,10 +1570,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param chunkZ the chunk Z
      */
     public void updateViewPosition(int chunkX, int chunkZ) {
-        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket();
-        updateViewPositionPacket.chunkX = chunkX;
-        updateViewPositionPacket.chunkZ = chunkZ;
-        playerConnection.sendPacket(updateViewPositionPacket);
+        playerConnection.sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
     }
 
     public int getNextTeleportId() {
