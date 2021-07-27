@@ -1787,13 +1787,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     protected void refreshAbilities() {
         byte flags = 0;
         if (invulnerable)
-            flags |= 0x01;
+            flags |= PlayerAbilitiesPacket.FLAG_INVULNERABLE;
         if (flying)
-            flags |= 0x02;
+            flags |= PlayerAbilitiesPacket.FLAG_FLYING;
         if (allowFlying)
-            flags |= 0x04;
+            flags |= PlayerAbilitiesPacket.FLAG_ALLOW_FLYING;
         if (instantBreak)
-            flags |= 0x08;
+            flags |= PlayerAbilitiesPacket.FLAG_INSTANT_BREAK;
         playerConnection.sendPacket(new PlayerAbilitiesPacket(flags, flyingSpeed, fieldViewModifier));
     }
 
