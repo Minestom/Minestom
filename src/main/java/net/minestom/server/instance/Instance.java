@@ -405,7 +405,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return the {@link TimeUpdatePacket} with this instance data
      */
     private @NotNull TimeUpdatePacket createTimePacket() {
-        return new TimeUpdatePacket(worldAge, timeRate == 0 ? -time : time);
+        return new TimeUpdatePacket(worldAge, timeRate == 0 ? -Math.abs(time) : time);
     }
 
     /**
