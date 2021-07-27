@@ -7,6 +7,10 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerAbilitiesPacket implements ServerPacket {
+    public static final byte FLAG_INVULNERABLE  = 0x01;
+    public static final byte FLAG_FLYING        = 0x02;
+    public static final byte FLAG_ALLOW_FLYING  = 0x04;
+    public static final byte FLAG_INSTANT_BREAK = 0x08;
 
     public byte flags;
     public float flyingSpeed;
@@ -20,6 +24,30 @@ public class PlayerAbilitiesPacket implements ServerPacket {
 
     public PlayerAbilitiesPacket() {
         this((byte) 0, 0f, 0f);
+    }
+    
+    /**
+     * Adds a flag to the 'flags' byte.
+     * 
+     * @see PlayerAbilitiesPacket#FLAG_INVULNERABLE
+     * @see PlayerAbilitiesPacket#FLAG_FLYING
+     * @see PlayerAbilitiesPacket#FLAG_ALLOW_FLYING
+     * @see PlayerAbilitiesPacket#FLAG_INSTANT_BREAK
+     */
+    public void addFlag(byte flag) {
+        flags |= flag;
+    }
+    
+    /**
+     * Removes a flag from the 'flags' byte.
+     * 
+     * @see PlayerAbilitiesPacket#FLAG_INVULNERABLE
+     * @see PlayerAbilitiesPacket#FLAG_FLYING
+     * @see PlayerAbilitiesPacket#FLAG_ALLOW_FLYING
+     * @see PlayerAbilitiesPacket#FLAG_INSTANT_BREAK
+     */
+    public void removeFlag(byte flag) {
+        flags &= ~(flag);
     }
 
     @Override
