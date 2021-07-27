@@ -14,7 +14,7 @@ public enum EntitySpawnType {
             SpawnEntityPacket packet = new SpawnEntityPacket();
             packet.entityId = entity.getEntityId();
             packet.uuid = entity.getUuid();
-            packet.type = entity.getEntityType().ordinal();
+            packet.type = entity.getEntityType().id();
             packet.position = entity.getPosition();
             if (entity.getEntityMeta() instanceof ObjectDataProvider) {
                 ObjectDataProvider objectDataProvider = (ObjectDataProvider) entity.getEntityMeta();
@@ -35,7 +35,7 @@ public enum EntitySpawnType {
             SpawnLivingEntityPacket packet = new SpawnLivingEntityPacket();
             packet.entityId = entity.getEntityId();
             packet.entityUuid = entity.getUuid();
-            packet.entityType = entity.getEntityType().ordinal();
+            packet.entityType = entity.getEntityType().id();
             packet.position = entity.getPosition();
             packet.headPitch = entity.getPosition().pitch();
             final var velocity = entity.getVelocityForPacket();

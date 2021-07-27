@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
+import java.util.Locale;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
@@ -27,6 +29,10 @@ public class Registry {
         return new MaterialEntry(namespace, jsonObject, override);
     }
 
+    public static EntityEntry entity(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+        return new EntityEntry(namespace, jsonObject, override);
+    }
+
     public static JsonObject load(Resource resource) {
         final String path = String.format("/%s.json", resource.name);
         final var resourceStream = Registry.class.getResourceAsStream(path);
@@ -35,7 +41,8 @@ public class Registry {
 
     public enum Resource {
         BLOCK("blocks"),
-        ITEM("items");
+        ITEM("items"),
+        ENTITY("entities");
 
         private final String name;
 
@@ -220,6 +227,49 @@ public class Registry {
 
         public @Nullable EquipmentSlot equipmentSlot() {
             return equipmentSlot;
+        }
+    }
+
+    public static class EntityEntry extends Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final String translationKey;
+        private final double width;
+        private final double height;
+        private final EntitySpawnType spawnType;
+
+        private EntityEntry(String namespace, JsonObject main, JsonObject override) {
+            super(main, override);
+            this.namespace = NamespaceID.from(namespace);
+            this.id = getInt("id");
+            this.translationKey = getString("translationKey");
+            this.width = getDouble("width");
+            this.height = getDouble("height");
+            this.spawnType = EntitySpawnType.valueOf(getString("packetType").toUpperCase(Locale.ROOT));
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
+        }
+
+        public double width() {
+            return width;
+        }
+
+        public double height() {
+            return height;
+        }
+
+        public EntitySpawnType spawnType() {
+            return spawnType;
         }
     }
 

@@ -1107,8 +1107,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-
-        sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
+        sendPacketsToViewers(getEntityType().registry().spawnType().getSpawnPacket(this));
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -1995,7 +1994,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
         connection.sendPacket(getAddPlayerToList());
-        connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
+        connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());

@@ -73,11 +73,11 @@ public class TagsPacket implements ServerPacket {
                         writer.writeVarInt(values.size());
                         // entries
                         for (NamespaceID name : values) {
-                            EntityType et = Registries.getEntityType(name);
+                            EntityType et = EntityType.fromNamespaceId(name);
                             if (et == null) {
                                 writer.writeVarInt(-1);
                             } else {
-                                writer.writeVarInt(et.ordinal());
+                                writer.writeVarInt(et.id());
                             }
                         }
                     }

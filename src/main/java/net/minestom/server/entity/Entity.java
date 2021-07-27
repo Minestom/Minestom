@@ -138,16 +138,17 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.position = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
+        setBoundingBox(entityType.width(), entityType.height(), entityType.width());
 
-        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+        this.entityMeta = EntityTypeLoader.createMeta(entityType, this, this.metadata);
 
         setAutoViewable(true);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        initializeDefaultGravity();
+        this.gravityAcceleration = EntityTypeLoader.getAcceleration(entityType.name());
+        this.gravityDragPerTick = EntityTypeLoader.getDrag(entityType.name());
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -172,8 +173,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param id the entity unique id
      * @return the entity having the specified id, null if not found
      */
-    @Nullable
-    public static Entity getEntity(int id) {
+    public static @Nullable Entity getEntity(int id) {
         return Entity.ENTITY_BY_ID.getOrDefault(id, null);
     }
 
@@ -183,8 +183,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param uuid the entity UUID
      * @return the entity having the specified uuid, null if not found
      */
-    @Nullable
-    public static Entity getEntity(@NotNull UUID uuid) {
+    public static @Nullable Entity getEntity(@NotNull UUID uuid) {
         return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
     }
 
@@ -226,8 +225,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return metadata of this entity.
      */
-    @NotNull
-    public EntityMeta getEntityMeta() {
+    public @NotNull EntityMeta getEntityMeta() {
         return this.entityMeta;
     }
 
@@ -313,7 +311,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         player.viewableEntities.add(this);
 
         PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
+        playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
             playerConnection.sendPacket(getVelocityPacket());
         }
@@ -364,7 +362,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         synchronized (entityTypeLock) {
             this.entityType = entityType;
             this.metadata = new Metadata(this);
-            this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+            this.entityMeta = EntityTypeLoader.createMeta(entityType, this, this.metadata);
 
             Set<Player> viewers = new HashSet<>(getViewers());
             getViewers().forEach(this::removeViewer0);
@@ -1404,90 +1402,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
-    }
-
-    /**
-     * Sets the Entity's {@link gravityAcceleration} and {@link gravityDragPerTick} fields to
-     * the default values according to <a href="https://minecraft.fandom.com/wiki/Entity#Motion_of_entities">Motion of entities</a>
-     */
-    @SuppressWarnings("JavadocReference")
-    private void initializeDefaultGravity() {
-        // TODO Add support for these values in the data generator
-        // Acceleration
-        switch (entityType) {
-            // 0
-            case ITEM_FRAME:
-                this.gravityAcceleration = 0;
-                break;
-            // 0.03
-            case EGG:
-            case FISHING_BOBBER:
-            case EXPERIENCE_BOTTLE:
-            case ENDER_PEARL:
-            case POTION:
-            case SNOWBALL:
-                this.gravityAcceleration = 0.03;
-                break;
-            // 0.04
-            case BOAT:
-            case TNT:
-            case FALLING_BLOCK:
-            case ITEM:
-            case MINECART:
-                this.gravityAcceleration = 0.04;
-                break;
-            // 0.05
-            case ARROW:
-            case SPECTRAL_ARROW:
-            case TRIDENT:
-                this.gravityAcceleration = 0.05;
-                break;
-            // 0.06
-            case LLAMA_SPIT:
-                this.gravityAcceleration = 0.06;
-                break;
-            // 0.1
-            case FIREBALL:
-            case WITHER_SKULL:
-            case DRAGON_FIREBALL:
-                this.gravityAcceleration = 0.1;
-                break;
-            // 0.08
-            default:
-                this.gravityAcceleration = 0.08;
-                break;
-        }
-
-        // Drag
-        switch (entityType) {
-            // 0
-            case BOAT:
-                this.gravityDragPerTick = 0;
-                break;
-            // 0.01
-            case LLAMA_SPIT:
-            case ENDER_PEARL:
-            case POTION:
-            case SNOWBALL:
-            case EGG:
-            case TRIDENT:
-            case SPECTRAL_ARROW:
-            case ARROW:
-                this.gravityDragPerTick = 0.01;
-                break;
-            // 0.05
-            case MINECART:
-                this.gravityDragPerTick = 0.05;
-                break;
-            // 0.08
-            case FISHING_BOBBER:
-                this.gravityDragPerTick = 0.08;
-                break;
-            // 0.02
-            default:
-                this.gravityDragPerTick = 0.02;
-                break;
-        }
     }
 
     /**

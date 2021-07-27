@@ -2,7 +2,6 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.fluid.Fluid;
 import net.minestom.server.item.Enchantment;
 import net.minestom.server.particle.Particle;
@@ -26,12 +25,6 @@ public final class Registries {
      */
     @Deprecated
     public static final HashMap<NamespaceID, Enchantment> enchantments = new HashMap<>();
-
-    /**
-     * Should only be used for internal code, please use the get* methods.
-     */
-    @Deprecated
-    public static final HashMap<NamespaceID, EntityType> entityTypes = new HashMap<>();
 
     /**
      * Should only be used for internal code, please use the get* methods.
@@ -91,30 +84,6 @@ public final class Registries {
     @Nullable
     public static Enchantment getEnchantment(Key key) {
         return getEnchantment(NamespaceID.from(key));
-    }
-
-    /**
-     * Returns the corresponding EntityType matching the given id. Returns null if none match.
-     */
-    @Nullable
-    public static EntityType getEntityType(String id) {
-        return getEntityType(NamespaceID.from(id));
-    }
-
-    /**
-     * Returns the corresponding EntityType matching the given id. Returns null if none match.
-     */
-    @Nullable
-    public static EntityType getEntityType(NamespaceID id) {
-        return entityTypes.get(id);
-    }
-
-    /**
-     * Returns the corresponding EntityType matching the given key. Returns null if none match.
-     */
-    @Nullable
-    public static EntityType getEntityType(Key key) {
-        return getEntityType(NamespaceID.from(key));
     }
 
     /**

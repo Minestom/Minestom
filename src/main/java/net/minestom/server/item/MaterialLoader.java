@@ -45,8 +45,8 @@ final class MaterialLoader {
 
     static {
         // Load data from file
-        JsonObject blocks = Registry.load(Registry.Resource.ITEM);
-        blocks.entrySet().forEach(entry -> {
+        JsonObject materials = Registry.load(Registry.Resource.ITEM);
+        materials.entrySet().forEach(entry -> {
             final String namespace = entry.getKey();
             final JsonObject materialObject = entry.getValue().getAsJsonObject();
 
