@@ -57,9 +57,153 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
     }
 
     public enum Format {
+        /**
+         * Default case just returns <code>name()</code> as is.
+         */
         DEFAULT(name -> name),
+        /**
+         * thisislowercase
+         * <br>
+         * <code>"EXAMPLESTRING"        -> "examplestring"</code><br>
+         * <code>"Example_TWO"          -> "example_two"</code><br>
+         * <code>"ANOTHER_EXAMPLE"      -> "another_example"</code><br>
+         * <code>"anotherExample_AGAIN" -> "anotherexample_again"</code><br>
+         */
         LOWER_CASED(name -> name.toLowerCase(Locale.ROOT)),
-        UPPER_CASED(name -> name.toUpperCase(Locale.ROOT));
+        /**
+         * THISISUPPERCASE
+         * <br>
+         * <code>"EXAMPLESTRING"        -> "EXAMPLESTRING"</code><br>
+         * <code>"Example_TWO"          -> "EXAMPLE_TWO"</code><br>
+         * <code>"ANOTHER_EXAMPLE"      -> "ANOTHER_EXAMPLE"</code><br>
+         * <code>"anotherExample_AGAIN" -> "ANOTHEREXAMPLE_AGAIN"</code><br>
+         */
+        UPPER_CASED(name -> name.toUpperCase(Locale.ROOT)),
+        /**
+         * thisIsCamelCase
+         * <br>
+         * <code>"EXAMPLESTRING"        -> "examplestring"</code><br>
+         * <code>"Example_TWO"          -> "exampleTwo"</code><br>
+         * <code>"ANOTHER_EXAMPLE"      -> "anotherExample"</code><br>
+         * <code>"anotherExample_AGAIN" -> "anotherExampleAgain"</code><br>
+         */
+        CAMEL_CASED(name -> {
+            StringBuilder sb = new StringBuilder();
+            boolean hasLetter = true;
+            boolean lowerCase = true;
+            for (int i = 0; i < name.length(); i++) {
+                String part = name.substring(i, i+1);
+                char c = part.charAt(0);
+                if (Character.isLetter(c)) {
+                    if (!hasLetter || (i > 0 && lowerCase && Character.isUpperCase(c))) {
+                        sb.append(part.toUpperCase());
+                        hasLetter = true;
+                    } else {
+                        sb.append(part.toLowerCase());
+                    }
+                    lowerCase = Character.isLowerCase(c);
+                } else if (i == 0) {
+                    continue;
+                } else {
+                    hasLetter = false;
+                }
+            }
+            return sb.toString();
+        }),
+        /**
+         * ThisIsPascalCase
+         * <br>
+         * <code>"EXAMPLESTRING"        -> "Examplestring"</code><br>
+         * <code>"Example_TWO"          -> "ExampleTwo"</code><br>
+         * <code>"ANOTHER_EXAMPLE"      -> "AnotherExample"</code><br>
+         * <code>"anotherExample_AGAIN" -> "AnotherExampleAgain"</code><br>
+         */
+        PASCAL_CASED(name -> {
+            StringBuilder sb = new StringBuilder();
+            boolean hasLetter = false;
+            boolean lowerCase = true;
+            for (int i = 0; i < name.length(); i++) {
+                String part = name.substring(i, i+1);
+                char c = part.charAt(0);
+                if (Character.isLetter(c)) {
+                    if (!hasLetter || (i > 0 && lowerCase && Character.isUpperCase(c))) {
+                        sb.append(part.toUpperCase());
+                        hasLetter = true;
+                    } else {
+                        sb.append(part.toLowerCase());
+                    }
+                    lowerCase = Character.isLowerCase(c);
+                } else if (i == 0) {
+                    continue;
+                } else {
+                    hasLetter = false;
+                }
+            }
+            return sb.toString();
+        }),
+        /**
+         * This Is Title Case
+         * <br>
+         * <code>"EXAMPLESTRING"        -> "Examplestring"</code><br>
+         * <code>"Example_TWO"          -> "Example Two"</code><br>
+         * <code>"ANOTHER_EXAMPLE"      -> "Another Example"</code><br>
+         * <code>"anotherExample_AGAIN" -> "Another Example Again"</code><br>
+         */
+        TITLE_CASED(name -> {
+            if (name.length() == 0) return "";
+            StringBuilder sb = new StringBuilder();
+            boolean hasLetter = false;
+            boolean lowerCase = true;
+            for (int i = 0; i < name.length(); i++) {
+                String part = name.substring(i, i+1);
+                char c = part.charAt(0);
+                if (Character.isLetter(c)) {
+                    if (!hasLetter || (i > 0 && lowerCase && Character.isUpperCase(c))) {
+                        sb.append(" ").append(part.toUpperCase());
+                        hasLetter = true;
+                    } else {
+                        sb.append(part.toLowerCase());
+                    }
+                    lowerCase = Character.isLowerCase(c);
+                } else if (i == 0) {
+                    continue;
+                } else {
+                    hasLetter = false;
+                }
+            }
+            return sb.toString().substring(1);
+        }),
+        /**
+         * this_is_snake_case
+         * <br>
+         * <code>"EXAMPLESTRING"        -> "examplestring"</code><br>
+         * <code>"Example_TWO"          -> "example_two"</code><br>
+         * <code>"ANOTHER_EXAMPLE"      -> "another_example"</code><br>
+         * <code>"anotherExample_AGAIN" -> "another_example_again"</code><br>
+         */
+        SNAKE_CASED(name -> {
+            if (name.length() == 0) return "";
+            StringBuilder sb = new StringBuilder();
+            boolean hasLetter = true;
+            boolean lowerCase = true;
+            for (int i = 0; i < name.length(); i++) {
+                String part = name.substring(i, i+1);
+                char c = part.charAt(0);
+                if (Character.isLetter(c)) {
+                    if (!hasLetter || (i > 0 && lowerCase && Character.isUpperCase(c))) {
+                        sb.append("_");
+                        hasLetter = true;
+                    }
+                    sb.append(part.toLowerCase());
+                    lowerCase = Character.isLowerCase(c);
+                } else if (i == 0) {
+                    continue;
+                } else {
+                    hasLetter = false;
+                }
+            }
+            return sb.toString();
+        });
 
         private final UnaryOperator<String> formatter;
 
