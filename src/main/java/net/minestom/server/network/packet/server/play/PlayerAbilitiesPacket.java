@@ -8,28 +8,22 @@ import org.jetbrains.annotations.NotNull;
 
 public class PlayerAbilitiesPacket implements ServerPacket {
 
-    // Flags
-    public boolean invulnerable;
-    public boolean flying;
-    public boolean allowFlying;
-    public boolean instantBreak;
-
-    // Options
+    public byte flags;
     public float flyingSpeed;
     public float fieldViewModifier;
 
+    public PlayerAbilitiesPacket(byte flags, float flyingSpeed, float fieldViewModifier) {
+        this.flags = flags;
+        this.flyingSpeed = flyingSpeed;
+        this.fieldViewModifier = fieldViewModifier;
+    }
+
+    public PlayerAbilitiesPacket() {
+        this((byte) 0, 0f, 0f);
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
-        byte flags = 0;
-        if (invulnerable)
-            flags |= 0x01;
-        if (flying)
-            flags |= 0x02;
-        if (allowFlying)
-            flags |= 0x04;
-        if (instantBreak)
-            flags |= 0x08;
-
         writer.writeByte(flags);
         writer.writeFloat(flyingSpeed);
         writer.writeFloat(fieldViewModifier);
@@ -37,14 +31,9 @@ public class PlayerAbilitiesPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        byte flags = reader.readByte();
-        invulnerable = (flags & 1) == 1;
-        flying = (flags & 2) == 2;
-        allowFlying = (flags & 4) == 4;
-        instantBreak = (flags & 8) == 8;
-
-        flyingSpeed = reader.readFloat();
-        fieldViewModifier = reader.readFloat();
+        this.flags = reader.readByte();
+        this.flyingSpeed = reader.readFloat();
+        this.fieldViewModifier = reader.readFloat();
     }
 
     @Override

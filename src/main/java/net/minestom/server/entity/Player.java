@@ -1769,8 +1769,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the modifiable statistic map
      */
-    @NotNull
-    public Map<PlayerStatistic, Integer> getStatisticValueMap() {
+    public @NotNull Map<PlayerStatistic, Integer> getStatisticValueMap() {
         return statisticValueMap;
     }
 
@@ -1779,8 +1778,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player vehicle information
      */
-    @NotNull
-    public PlayerVehicleInformation getVehicleInformation() {
+    public @NotNull PlayerVehicleInformation getVehicleInformation() {
         return vehicleInformation;
     }
 
@@ -1788,15 +1786,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields.
      */
     protected void refreshAbilities() {
-        PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
-        playerAbilitiesPacket.invulnerable = invulnerable;
-        playerAbilitiesPacket.flying = flying;
-        playerAbilitiesPacket.allowFlying = allowFlying;
-        playerAbilitiesPacket.instantBreak = instantBreak;
-        playerAbilitiesPacket.flyingSpeed = flyingSpeed;
-        playerAbilitiesPacket.fieldViewModifier = fieldViewModifier;
-
-        playerConnection.sendPacket(playerAbilitiesPacket);
+        byte flags = 0;
+        if (invulnerable)
+            flags |= 0x01;
+        if (flying)
+            flags |= 0x02;
+        if (allowFlying)
+            flags |= 0x04;
+        if (instantBreak)
+            flags |= 0x08;
+        playerConnection.sendPacket(new PlayerAbilitiesPacket(flags, flyingSpeed, fieldViewModifier));
     }
 
     /**
