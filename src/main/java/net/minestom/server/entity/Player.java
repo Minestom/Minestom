@@ -20,9 +20,6 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.chat.ChatParser;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
@@ -65,8 +62,6 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.SoundCategory;
-import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.stat.PlayerStatistic;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
@@ -619,31 +614,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Sends a legacy message with the specified color char.
-     *
-     * @param text      the text with the legacy color formatting
-     * @param colorChar the color character
-     * @deprecated Use {@link #sendMessage(Component)}
-     */
-    @Deprecated
-    public void sendLegacyMessage(@NotNull String text, char colorChar) {
-        ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);
-        sendJsonMessage(coloredText.toString());
-    }
-
-    /**
-     * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
-     *
-     * @param text the text with the legacy color formatting
-     * @deprecated Use {@link #sendMessage(Component)}
-     */
-    @Deprecated
-    public void sendLegacyMessage(@NotNull String text) {
-        ColoredText coloredText = ColoredText.ofLegacy(text, ChatParser.COLOR_CHAR);
-        sendJsonMessage(coloredText.toString());
-    }
-
-    /**
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
@@ -665,76 +635,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ClientChatMessagePacket chatMessagePacket = new ClientChatMessagePacket();
         chatMessagePacket.message = message;
         addPacketToQueue(chatMessagePacket);
-    }
-
-    /**
-     * Plays a sound from the {@link SoundEvent} enum.
-     *
-     * @param sound         the sound to play
-     * @param soundCategory the sound category
-     * @param x             the effect X
-     * @param y             the effect Y
-     * @param z             the effect Z
-     * @param volume        the volume of the sound (1 is 100%)
-     * @param pitch         the pitch of the sound, between 0.5 and 2.0
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
-        SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
-        soundEffectPacket.soundId = sound.getId();
-        soundEffectPacket.soundSource = soundCategory.asSource();
-        soundEffectPacket.x = x;
-        soundEffectPacket.y = y;
-        soundEffectPacket.z = z;
-        soundEffectPacket.volume = volume;
-        soundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(soundEffectPacket);
-    }
-
-    /**
-     * Plays a sound from an identifier (represents a custom sound in a resource pack).
-     *
-     * @param identifier    the identifier of the sound to play
-     * @param soundCategory the sound category
-     * @param x             the effect X
-     * @param y             the effect Y
-     * @param z             the effect Z
-     * @param volume        the volume of the sound (1 is 100%)
-     * @param pitch         the pitch of the sound, between 0.5 and 2.0
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
-        NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
-        namedSoundEffectPacket.soundName = identifier;
-        namedSoundEffectPacket.soundSource = soundCategory.asSource();
-        namedSoundEffectPacket.x = x;
-        namedSoundEffectPacket.y = y;
-        namedSoundEffectPacket.z = z;
-        namedSoundEffectPacket.volume = volume;
-        namedSoundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(namedSoundEffectPacket);
-    }
-
-    /**
-     * Plays a sound directly to the player (constant volume).
-     *
-     * @param sound         the sound to play
-     * @param soundCategory the sound category
-     * @param volume        the volume of the sound (1 is 100%)
-     * @param pitch         the pitch of the sound, between 0.5 and 2.0
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
-        EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
-        entitySoundEffectPacket.entityId = getEntityId();
-        entitySoundEffectPacket.soundId = sound.getId();
-        entitySoundEffectPacket.soundSource = soundCategory.asSource();
-        entitySoundEffectPacket.volume = volume;
-        entitySoundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(entitySoundEffectPacket);
     }
 
     @Override
@@ -784,84 +684,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(packet);
     }
 
-    /**
-     * Sends a {@link StopSoundPacket} packet.
-     *
-     * @deprecated Use {@link #stopSound(SoundStop)} with {@link SoundStop#all()}
-     */
-    @Deprecated
-    public void stopSound() {
-        StopSoundPacket stopSoundPacket = new StopSoundPacket();
-        stopSoundPacket.flags = 0x00;
-        playerConnection.sendPacket(stopSoundPacket);
-    }
-
-    /**
-     * Sets the header and footer of a player which will be displayed in his tab window.
-     *
-     * @param header the header text, null to set empty
-     * @param footer the footer text, null to set empty
-     * @deprecated Use {@link #sendPlayerListHeaderAndFooter(Component, Component)}
-     */
-    @Deprecated
-    public void sendHeaderFooter(@Nullable JsonMessage header, @Nullable JsonMessage footer) {
-        this.sendPlayerListHeaderAndFooter(header == null ? Component.empty() : header.asComponent(),
-                footer == null ? Component.empty() : footer.asComponent());
-    }
-
     @Override
     public void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
-        PlayerListHeaderAndFooterPacket packet = new PlayerListHeaderAndFooterPacket(header, footer);
-        playerConnection.sendPacket(packet);
-    }
-
-    /**
-     * Sends a title and subtitle message.
-     *
-     * @param title    the title message
-     * @param subtitle the subtitle message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)}
-     */
-    @Deprecated
-    public void sendTitleSubtitleMessage(@NotNull JsonMessage title, @NotNull JsonMessage subtitle) {
-        this.showTitle(Title.title(title.asComponent(), subtitle.asComponent()));
-    }
-
-    /**
-     * Sends a title message.
-     *
-     * @param title the title message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)}
-     */
-    @Deprecated
-    public void sendTitleMessage(@NotNull JsonMessage title) {
-        this.showTitle(Title.title(title.asComponent(), Component.empty()));
-    }
-
-    /**
-     * Sends a subtitle message.
-     *
-     * @param subtitle the subtitle message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)}
-     */
-    @Deprecated
-    public void sendSubtitleMessage(@NotNull JsonMessage subtitle) {
-        this.showTitle(Title.title(Component.empty(), subtitle.asComponent()));
-    }
-
-    /**
-     * Sends an action bar message.
-     *
-     * @param actionBar the action bar message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #sendActionBar(Component)}
-     */
-    @Deprecated
-    public void sendActionBarMessage(@NotNull JsonMessage actionBar) {
-        this.sendActionBar(actionBar.asComponent());
+        playerConnection.sendPacket(new PlayerListHeaderAndFooterPacket(header, footer));
     }
 
     @Override
@@ -1045,35 +870,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Gets the player display name in the tab-list.
      *
      * @return the player display name, null means that {@link #getUsername()} is displayed
-     * @deprecated Use {@link #getDisplayName()}
      */
-    @Nullable
-    @Deprecated
-    public JsonMessage getDisplayNameJson() {
-        return JsonMessage.fromComponent(displayName);
-    }
-
-    /**
-     * Gets the player display name in the tab-list.
-     *
-     * @return the player display name, null means that {@link #getUsername()} is displayed
-     */
-    @Nullable
-    public Component getDisplayName() {
+    public @Nullable Component getDisplayName() {
         return displayName;
-    }
-
-    /**
-     * Changes the player display name in the tab-list.
-     * <p>
-     * Sets to null to show the player username.
-     *
-     * @param displayName the display name, null to display the username
-     * @deprecated Use {@link #setDisplayName(Component)}
-     */
-    @Deprecated
-    public void setDisplayName(@Nullable JsonMessage displayName) {
-        this.setDisplayName(displayName == null ? null : displayName.asComponent());
     }
 
     /**
@@ -1097,8 +896,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the player skin object,
      * null means that the player has his {@link #getUuid()} default skin
      */
-    @Nullable
-    public PlayerSkin getSkin() {
+    public @Nullable PlayerSkin getSkin() {
         return skin;
     }
 
@@ -1576,33 +1374,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Kicks the player with a reason.
      *
-     * @param text the kick reason
-     * @deprecated Use {@link #kick(Component)}
-     */
-    @Deprecated
-    public void kick(@NotNull JsonMessage text) {
-        this.kick(text.asComponent());
-    }
-
-    /**
-     * Kicks the player with a reason.
-     *
-     * @param message the kick reason
-     * @deprecated Use {@link #kick(Component)}
-     */
-    @Deprecated
-    public void kick(@NotNull String message) {
-        this.kick(Component.text(message));
-    }
-
-    /**
-     * Kicks the player with a reason.
-     *
      * @param component the reason
      */
     public void kick(@NotNull Component component) {
         final ConnectionState connectionState = playerConnection.getConnectionState();
-
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
@@ -1610,7 +1385,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         } else {
             disconnectPacket = new DisconnectPacket(component);
         }
-
         if (playerConnection instanceof NettyPlayerConnection) {
             ((NettyPlayerConnection) playerConnection).writeAndFlush(disconnectPacket);
             playerConnection.disconnect();
@@ -1618,6 +1392,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             playerConnection.sendPacket(disconnectPacket);
             playerConnection.refreshOnline(false);
         }
+    }
+
+    /**
+     * Kicks the player with a reason.
+     *
+     * @param message the kick reason
+     */
+    public void kick(@NotNull String message) {
+        this.kick(Component.text(message));
     }
 
     /**

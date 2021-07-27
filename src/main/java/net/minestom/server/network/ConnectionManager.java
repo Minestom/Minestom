@@ -1,12 +1,9 @@
 package net.minestom.server.network;
 
 import io.netty.channel.Channel;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
@@ -23,7 +20,6 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Manages the connected clients.
@@ -132,33 +127,6 @@ public final class ConnectionManager {
                 return player;
         }
         return null;
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players who validate the condition {@code condition}.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @param condition   the condition to receive the message
-     * @deprecated Use {@link Audiences#players(Predicate)}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
-        if (condition == null) {
-            Audiences.players().sendMessage(jsonMessage);
-        } else {
-            Audiences.players(condition).sendMessage(jsonMessage);
-        }
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link Audiences#players()}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        this.broadcastMessage(jsonMessage, null);
     }
 
     /**
@@ -264,33 +232,9 @@ public final class ConnectionManager {
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
-     * @deprecated Use {@link #getShutdownText()}
-     */
-    @Deprecated
-    @NotNull
-    public JsonMessage getShutdownTextJson() {
-        return JsonMessage.fromComponent(shutdownText);
-    }
-
-    /**
-     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
-     *
-     * @return the kick reason in case on a shutdown
      */
     public @NotNull Component getShutdownText() {
         return shutdownText;
-    }
-
-    /**
-     * Changes the kick reason in case of a shutdown.
-     *
-     * @param shutdownText the new shutdown kick reason
-     * @see #getShutdownTextJson()
-     * @deprecated Use {@link #setShutdownText(Component)}
-     */
-    @Deprecated
-    public void setShutdownText(@NotNull JsonMessage shutdownText) {
-        this.shutdownText = shutdownText.asComponent();
     }
 
     /**
