@@ -25,47 +25,6 @@ public class PlayerAbilitiesPacket implements ServerPacket {
     public PlayerAbilitiesPacket() {
         this((byte) 0, 0f, 0f);
     }
-    
-    /**
-     * Adds a flag to the 'flags' byte.
-     * 
-     * @param flag the flag
-     * 
-     * @see PlayerAbilitiesPacket#FLAG_INVULNERABLE
-     * @see PlayerAbilitiesPacket#FLAG_FLYING
-     * @see PlayerAbilitiesPacket#FLAG_ALLOW_FLYING
-     * @see PlayerAbilitiesPacket#FLAG_INSTANT_BREAK
-     */
-    public void addFlag(byte flag) {
-        flags |= flag;
-    }
-    
-    /**
-     * Removes a flag from the 'flags' byte.
-     * 
-     * @param flag the flag
-     * 
-     * @see PlayerAbilitiesPacket#FLAG_INVULNERABLE
-     * @see PlayerAbilitiesPacket#FLAG_FLYING
-     * @see PlayerAbilitiesPacket#FLAG_ALLOW_FLYING
-     * @see PlayerAbilitiesPacket#FLAG_INSTANT_BREAK
-     */
-    public void removeFlag(byte flag) {
-        flags &= ~(flag);
-    }
-    
-    /**
-     * @param flag the flag
-     * @returns true if the 'flags' byte contains the specified flag
-     * 
-     * @see PlayerAbilitiesPacket#FLAG_INVULNERABLE
-     * @see PlayerAbilitiesPacket#FLAG_FLYING
-     * @see PlayerAbilitiesPacket#FLAG_ALLOW_FLYING
-     * @see PlayerAbilitiesPacket#FLAG_INSTANT_BREAK
-     */
-    public boolean hasFlag(byte flag) {
-        return (flags & flag) > 0;
-    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {
