@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.function.UnaryOperator;
+import java.util.function.Function;
 
 @SuppressWarnings("rawtypes")
 public class ArgumentEnum<E extends Enum> extends Argument<E> {
@@ -15,12 +16,13 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
     private final Class<E> enumClass;
     private final E[] values;
-    private UnaryOperator<String> formatter = Format.DEFAULT.formatter;
+    private Function<E, String> formatter;
 
     public ArgumentEnum(@NotNull String id, Class<E> enumClass) {
         super(id);
         this.enumClass = enumClass;
         this.values = enumClass.getEnumConstants();
+        this.formatter = e -> Format.DEFAULT.formatter.apply(e.name());
     }
 
     public ArgumentEnum<E> setFormat(@NotNull Format format) {
@@ -28,8 +30,13 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
         return this;
     }
     
-    public ArgumentEnum<E> setFormat(@NotNull UnaryOperator<String> formatter) {
+    public ArgumentEnum<E> setFormat(@NotNull Function<E, String> formatter) {
         this.formatter = formatter;
+        return this;
+    }
+    
+    public ArgumentEnum<E> setFormat(@NotNull UnaryOperator<String> formatter) {
+        this.formatter = e -> formatter.apply(e.name());
         return this;
     }
 
@@ -37,7 +44,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
     @Override
     public E parse(@NotNull String input) throws ArgumentSyntaxException {
         for (E value : this.values) {
-            if (this.formatter.apply(value.name()).equals(input)) {
+            if (this.formatter.apply(value).equals(input)) {
                 return value;
             }
         }
