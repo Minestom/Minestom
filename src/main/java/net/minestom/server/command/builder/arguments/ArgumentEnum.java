@@ -26,17 +26,12 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
     }
 
     public ArgumentEnum<E> setFormat(@NotNull Format format) {
-        this.formatter = format.formatter;
+        this.formatter = e -> format.formatter.apply(e.name());
         return this;
     }
     
     public ArgumentEnum<E> setFormat(@NotNull Function<E, String> formatter) {
         this.formatter = formatter;
-        return this;
-    }
-    
-    public ArgumentEnum<E> setFormat(@NotNull UnaryOperator<String> formatter) {
-        this.formatter = e -> formatter.apply(e.name());
         return this;
     }
 
@@ -62,7 +57,7 @@ public class ArgumentEnum<E extends Enum> extends Argument<E> {
 
             argumentNode.flags = DeclareCommandsPacket.getFlag(DeclareCommandsPacket.NodeType.LITERAL,
                     executable, false, false);
-            argumentNode.name = this.format.formatter.apply(this.values[i].name());
+            argumentNode.name = this.formatter.apply(this.values[i]);
             nodes[i] = argumentNode;
         }
         nodeMaker.addNodes(nodes);
