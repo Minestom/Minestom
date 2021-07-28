@@ -518,27 +518,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
-        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
-        final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
-                !spawnPosition.sameChunk(this.position);
-
-        if (needWorldRefresh) {
-            // TODO: Handle player reconnections, must be false in that case too
-            final boolean firstSpawn = this.instance == null;
-
-            // Send the new dimension if player isn't in any instance or if the dimension is different
-            final DimensionType instanceDimensionType = instance.getDimensionType();
-            final boolean dimensionChange = dimensionType != instanceDimensionType;
-            if (dimensionChange) {
-                sendDimension(instanceDimensionType);
-            }
+        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (e.g. SharedInstance)
+        if (!InstanceUtils.areLinked(this.instance, instance) || !spawnPosition.sameChunk(this.position)) {
             return instance.loadOptionalChunk(spawnPosition)
-                    .thenRun(() -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
+                    .thenRun(() -> spawnPlayer(instance, spawnPosition,
+                            this.instance == null,
+                            !Objects.equals(dimensionType, instance.getDimensionType()), true));
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
-            return AsyncUtils.NULL_FUTURE;
+            return AsyncUtils.VOID_FUTURE
+                    .thenRun(() -> spawnPlayer(instance, spawnPosition, false, false, false));
         }
     }
 
@@ -586,6 +576,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
+            if (dimensionChange) {
+                sendDimension(instance.getDimensionType());
+            }
             synchronizePosition(true); // So the player doesn't get stuck
             this.inventory.update();
         }

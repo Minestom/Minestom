@@ -194,7 +194,7 @@ public class AnvilLoader implements IChunkLoader {
                 } catch (AnvilException | IOException e) {
                     LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
                     EXCEPTION_MANAGER.handleException(e);
-                    return AsyncUtils.NULL_FUTURE;
+                    return AsyncUtils.VOID_FUTURE;
                 }
             }
         }
@@ -204,7 +204,7 @@ public class AnvilLoader implements IChunkLoader {
         } catch (AnvilException | IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);
-            return AsyncUtils.NULL_FUTURE;
+            return AsyncUtils.VOID_FUTURE;
         }
         save(chunk, column);
         try {
@@ -213,9 +213,9 @@ public class AnvilLoader implements IChunkLoader {
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);
-            return AsyncUtils.NULL_FUTURE;
+            return AsyncUtils.VOID_FUTURE;
         }
-        return AsyncUtils.NULL_FUTURE;
+        return AsyncUtils.VOID_FUTURE;
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
