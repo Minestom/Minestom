@@ -6,7 +6,6 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
@@ -19,8 +18,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -29,15 +26,10 @@ import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
-import net.minestom.server.particle.Particle;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.terminal.MinestomTerminal;
@@ -156,14 +148,6 @@ public final class MinecraftServer {
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
         // TODO: automate (probably with code generation)
-        Material.values();
-        PotionType.values();
-        PotionEffect.values();
-        Enchantment.values();
-        EntityType.values();
-        SoundEvent.values();
-        Particle.values();
-        StatisticType.values();
         Fluid.values();
 
         connectionManager = new ConnectionManager();

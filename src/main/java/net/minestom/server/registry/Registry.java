@@ -37,6 +37,10 @@ public class Registry {
         return new EnchantmentEntry(namespace, jsonObject, override);
     }
 
+    public static PotionEffectEntry potionEffect(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+        return new PotionEffectEntry(namespace, jsonObject, override);
+    }
+
     public static JsonObject load(Resource resource) {
         final String path = String.format("/%s.json", resource.name);
         final var resourceStream = Registry.class.getResourceAsStream(path);
@@ -47,7 +51,12 @@ public class Registry {
         BLOCKS("blocks"),
         ITEMS("items"),
         ENTITIES("entities"),
-        ENCHANTMENTS("enchantments");
+        ENCHANTMENTS("enchantments"),
+        SOUNDS("sounds"),
+        STATISTICS("custom_statistics"),
+        POTION_EFFECTS("potion_effects"),
+        POTION_TYPES("potions"),
+        PARTICLES("particles");
 
         private final String name;
 
@@ -330,6 +339,43 @@ public class Registry {
 
         public boolean isTreasureOnly() {
             return isTreasureOnly;
+        }
+    }
+
+    public static class PotionEffectEntry extends Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final String translationKey;
+        private final int color;
+        private final boolean isInstantaneous;
+
+        private PotionEffectEntry(String namespace, JsonObject main, JsonObject override) {
+            super(main, override);
+            this.namespace = NamespaceID.from(namespace);
+            this.id = getInt("id");
+            this.translationKey = getString("translationKey");
+            this.color = getInt("color");
+            this.isInstantaneous = getBoolean("instantaneous");
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
+        }
+
+        public int color() {
+            return color;
+        }
+
+        public boolean isInstantaneous() {
+            return isInstantaneous;
         }
     }
 

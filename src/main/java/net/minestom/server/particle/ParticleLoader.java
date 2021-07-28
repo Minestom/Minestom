@@ -1,9 +1,10 @@
-package net.minestom.server.item;
+package net.minestom.server.particle;
 
 import com.google.gson.JsonObject;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,21 +13,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Loads {@link net.minestom.server.item.Material materials} from file.
- */
 @ApiStatus.Internal
-final class MaterialLoader {
+final class ParticleLoader {
 
     // Maps do not need to be thread-safe as they are fully populated
     // in the static initializer, should not be modified during runtime
 
     // Block namespace -> registry data
-    private static final Map<String, Material> NAMESPACE_MAP = new HashMap<>();
+    private static final Map<String, Particle> NAMESPACE_MAP = new HashMap<>();
     // Block id -> registry data
-    private static final Int2ObjectMap<Material> MATERIAL_ID_MAP = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectMap<Particle> ID_MAP = new Int2ObjectOpenHashMap<>();
 
-    static Material get(@NotNull String namespace) {
+    static Particle get(@NotNull String namespace) {
         if (namespace.indexOf(':') == -1) {
             // Default to minecraft namespace
             namespace = "minecraft:" + namespace;
@@ -34,24 +32,25 @@ final class MaterialLoader {
         return NAMESPACE_MAP.get(namespace);
     }
 
-    static Material getId(int id) {
-        return MATERIAL_ID_MAP.get(id);
+    static Particle getId(int id) {
+        return ID_MAP.get(id);
     }
 
-    static Collection<Material> values() {
+    static Collection<Particle> values() {
         return Collections.unmodifiableCollection(NAMESPACE_MAP.values());
     }
 
     static {
         // Load data from file
-        JsonObject materials = Registry.load(Registry.Resource.ITEMS);
-        materials.entrySet().forEach(entry -> {
+        JsonObject particles = Registry.load(Registry.Resource.PARTICLES);
+        particles.entrySet().forEach(entry -> {
             final String namespace = entry.getKey();
-            final JsonObject materialObject = entry.getValue().getAsJsonObject();
+            final JsonObject object = entry.getValue().getAsJsonObject();
+            final int id = object.get("id").getAsInt();
 
-            final Material material = new MaterialImpl(Registry.material(namespace, materialObject, null));
-            MATERIAL_ID_MAP.put(material.id(), material);
-            NAMESPACE_MAP.put(namespace, material);
+            final var particle = new ParticleImpl(NamespaceID.from(namespace), id);
+            ID_MAP.put(id, particle);
+            NAMESPACE_MAP.put(namespace, particle);
         });
     }
 }

@@ -13,6 +13,7 @@ import java.util.Collection;
 
 @ApiStatus.NonExtendable
 public interface Material extends ProtocolObject, MaterialConstants {
+
     /**
      * Returns the material registry.
      *
@@ -63,11 +64,11 @@ public interface Material extends ProtocolObject, MaterialConstants {
         return MaterialLoader.values();
     }
 
-    static Material fromNamespaceId(@NotNull String namespaceID) {
+    static @Nullable Material fromNamespaceId(@NotNull String namespaceID) {
         return MaterialLoader.get(namespaceID);
     }
 
-    static Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
+    static @Nullable Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
         return fromNamespaceId(namespaceID.asString());
     }
 

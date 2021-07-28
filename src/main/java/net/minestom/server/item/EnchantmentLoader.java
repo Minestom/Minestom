@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +23,7 @@ final class EnchantmentLoader {
     // Block id -> registry data
     private static final Int2ObjectMap<Enchantment> ID_MAP = new Int2ObjectOpenHashMap<>();
 
-    static @Nullable Enchantment get(@NotNull String namespace) {
+    static Enchantment get(@NotNull String namespace) {
         if (namespace.indexOf(':') == -1) {
             // Default to minecraft namespace
             namespace = "minecraft:" + namespace;

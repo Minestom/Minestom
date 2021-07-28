@@ -1,4 +1,4 @@
-package net.minestom.server.stat;
+package net.minestom.server.statistic;
 
 public enum StatisticCategory {
     MINED,

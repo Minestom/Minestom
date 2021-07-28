@@ -169,11 +169,11 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
         return BlockLoader.values();
     }
 
-    static Block fromNamespaceId(@NotNull String namespaceID) {
+    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
         return BlockLoader.get(namespaceID);
     }
 
-    static Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
+    static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
         return fromNamespaceId(namespaceID.asString());
     }
 

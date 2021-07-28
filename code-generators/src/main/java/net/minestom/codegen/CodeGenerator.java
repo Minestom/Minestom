@@ -26,7 +26,7 @@ public class CodeGenerator {
         this.outputFolder = outputFolder;
     }
 
-    public void generate(InputStream resourceFile, String packageName, String typeName,String loaderName, String generatedName) {
+    public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         if (resourceFile == null) {
             LOGGER.error("Failed to find resource file for " + typeName);
             return;
@@ -45,7 +45,10 @@ public class CodeGenerator {
 
         // Use data
         json.keySet().forEach(namespace -> {
-            final String constantName = namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
+            final String constantName = namespace
+                    .replace("minecraft:", "")
+                    .replace(".", "_")
+                    .toUpperCase(Locale.ROOT);
             blockConstantsClass.addField(
                     FieldSpec.builder(typeClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)

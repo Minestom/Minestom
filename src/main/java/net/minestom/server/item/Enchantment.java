@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @ApiStatus.NonExtendable
-public interface Enchantment extends ProtocolObject {
+public interface Enchantment extends ProtocolObject, EnchantmentConstants {
 
     /**
      * Returns the enchantment registry.
@@ -35,11 +35,11 @@ public interface Enchantment extends ProtocolObject {
         return EnchantmentLoader.values();
     }
 
-    static Enchantment fromNamespaceId(@NotNull String namespaceID) {
+    static @Nullable Enchantment fromNamespaceId(@NotNull String namespaceID) {
         return EnchantmentLoader.get(namespaceID);
     }
 
-    static Enchantment fromNamespaceId(@NotNull NamespaceID namespaceID) {
+    static @Nullable Enchantment fromNamespaceId(@NotNull NamespaceID namespaceID) {
         return fromNamespaceId(namespaceID.asString());
     }
 

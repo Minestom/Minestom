@@ -31,7 +31,7 @@ final class BlockLoader {
     // Block state -> block object
     private static final Int2ObjectMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
 
-    static @Nullable Block get(@NotNull String namespace) {
+    static Block get(@NotNull String namespace) {
         if (namespace.indexOf(':') == -1) {
             // Default to minecraft namespace
             namespace = "minecraft:" + namespace;

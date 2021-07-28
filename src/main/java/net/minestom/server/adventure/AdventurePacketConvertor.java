@@ -13,7 +13,6 @@ import net.minestom.server.network.packet.server.play.EntitySoundEffectPacket;
 import net.minestom.server.network.packet.server.play.NamedSoundEffectPacket;
 import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.packet.server.play.StopSoundPacket;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -108,8 +107,7 @@ public class AdventurePacketConvertor {
      * @return the sound packet
      */
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
-        final SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
-
+        final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
         if (minestomSound == null) {
             final NamedSoundEffectPacket packet = new NamedSoundEffectPacket();
             packet.soundName = sound.name().asString();
@@ -122,7 +120,7 @@ public class AdventurePacketConvertor {
             return packet;
         } else {
             final SoundEffectPacket packet = new SoundEffectPacket();
-            packet.soundId = minestomSound.getId();
+            packet.soundId = minestomSound.id();
             packet.soundSource = sound.source();
             packet.x = (int) x;
             packet.y = (int) y;
@@ -147,11 +145,11 @@ public class AdventurePacketConvertor {
             throw new IllegalArgumentException("you can only call this method with entities");
 
         final Entity entity = (Entity) emitter;
-        final SoundEvent minestomSound = Registries.getSoundEvent(sound.name());
+        final SoundEvent minestomSound = SoundEvent.fromNamespaceId(sound.name().asString());
 
         if (minestomSound != null) {
             final EntitySoundEffectPacket packet = new EntitySoundEffectPacket();
-            packet.soundId = minestomSound.getId();
+            packet.soundId = minestomSound.id();
             packet.soundSource = sound.source();
             packet.entityId = entity.getEntityId();
             packet.volume = sound.volume();

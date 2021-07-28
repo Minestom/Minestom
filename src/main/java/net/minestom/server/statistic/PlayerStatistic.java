@@ -1,7 +1,6 @@
-package net.minestom.server.stat;
+package net.minestom.server.statistic;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.statistic.StatisticType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  * You can retrieve the statistics map with {@link Player#getStatisticValueMap()} and modify it with your own values.
  */
 public class PlayerStatistic {
-
     private final StatisticCategory category;
     private final int statisticId;
 
@@ -20,7 +18,7 @@ public class PlayerStatistic {
     }
 
     public PlayerStatistic(@NotNull StatisticType type) {
-        this(StatisticCategory.CUSTOM, type.getId());
+        this(StatisticCategory.CUSTOM, type.id());
     }
 
     @NotNull
