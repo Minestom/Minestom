@@ -513,7 +513,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
-     * @return
+     * @return a future called once the player instance changed
      */
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
@@ -579,6 +579,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
+            // Warning: loop to remove once `refreshVisibleChunks` manage it
+            this.viewableChunks.forEach(chunk ->
+                    playerConnection.sendPacket(new UnloadChunkPacket(chunk.getChunkX(), chunk.getChunkZ())));
             refreshVisibleChunks();
         }
 
@@ -1199,12 +1202,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
-            final UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
-            unloadChunkPacket.chunkX = chunkX;
-            unloadChunkPacket.chunkZ = chunkZ;
-            //playerConnection.sendPacket(unloadChunkPacket);
-
+            //playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null) {
                 chunk.removeViewer(this);
