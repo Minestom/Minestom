@@ -1,5 +1,6 @@
 package net.minestom.codegen;
 
+import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.potion.PotionEffectGenerator;
 import net.minestom.codegen.potion.PotionTypeGenerator;
@@ -29,6 +30,8 @@ public class Generators {
         if (true)
             return; // TODO complete
 
+        // Generate fluids
+        new FluidGenerator(resource("fluids.json"), outputFolder).generate();
         // TODO: Generate attributes
 //        new AttributeGenerator(
 //                new File(inputFolder, targetVersion + "_attributes.json"),
