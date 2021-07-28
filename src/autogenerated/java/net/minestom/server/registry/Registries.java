@@ -2,14 +2,12 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.fluid.Fluid;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -48,12 +46,6 @@ public final class Registries {
      */
     @Deprecated
     public static final HashMap<NamespaceID, StatisticType> statisticTypes = new HashMap<>();
-
-    /**
-     * Should only be used for internal code, please use the get* methods.
-     */
-    @Deprecated
-    public static final HashMap<NamespaceID, Fluid> fluids = new HashMap<>();
 
     /**
      * Returns the corresponding Particle matching the given id. Returns null if none match.
@@ -173,29 +165,5 @@ public final class Registries {
     @Nullable
     public static StatisticType getStatisticType(Key key) {
         return getStatisticType(NamespaceID.from(key));
-    }
-
-    /**
-     * Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.
-     */
-    @NotNull
-    public static Fluid getFluid(String id) {
-        return getFluid(NamespaceID.from(id));
-    }
-
-    /**
-     * Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.
-     */
-    @NotNull
-    public static Fluid getFluid(NamespaceID id) {
-        return fluids.getOrDefault(id, Fluid.EMPTY);
-    }
-
-    /**
-     * Returns the corresponding Fluid matching the given key. Returns 'EMPTY' if none match.
-     */
-    @NotNull
-    public static Fluid getFluid(Key key) {
-        return getFluid(NamespaceID.from(key));
     }
 }

@@ -26,7 +26,7 @@ public class CodeGenerator {
         this.outputFolder = outputFolder;
     }
 
-    public void generate(InputStream resourceFile, String packageName, String typeName,String loaderName, String generatedName) {
+    public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         if (resourceFile == null) {
             LOGGER.error("Failed to find resource file for " + typeName);
             return;
@@ -50,7 +50,7 @@ public class CodeGenerator {
                     FieldSpec.builder(typeClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
-                                    // TypeClass.STONE = MaterialLoader.fromNamespaceId("minecraft:stone")
+                                    // TypeClass.STONE = MaterialLoader.get("minecraft:stone")
                                     "$T.get($S)",
                                     loaderClass,
                                     namespace
@@ -66,7 +66,7 @@ public class CodeGenerator {
                 outputFolder);
     }
 
-    private void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
+    private static void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
         for (JavaFile javaFile : fileList) {
             try {
                 javaFile.writeTo(outputFolder);
