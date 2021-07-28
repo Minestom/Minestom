@@ -94,7 +94,7 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantment     the enchantment
      */
     public void setEnchantmentShown(EnchantmentSlot enchantmentSlot, Enchantment enchantment) {
-        final short id = enchantment == null ? -1 : (short) enchantment.getId();
+        final short id = enchantment == null ? -1 : (short) enchantment.id();
         switch (enchantmentSlot) {
             case TOP:
                 sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);

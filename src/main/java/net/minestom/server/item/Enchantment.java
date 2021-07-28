@@ -1,0 +1,49 @@
+package net.minestom.server.item;
+
+import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+
+@ApiStatus.NonExtendable
+public interface Enchantment extends ProtocolObject {
+
+    /**
+     * Returns the enchantment registry.
+     *
+     * @return the enchantment registry
+     */
+    @Contract(pure = true)
+    @NotNull Registry.EnchantmentEntry registry();
+
+    @Override
+    default @NotNull NamespaceID namespace() {
+        return registry().namespace();
+    }
+
+    @Override
+    default int id() {
+        return registry().id();
+    }
+
+    static @NotNull Collection<@NotNull Enchantment> values() {
+        return EnchantmentLoader.values();
+    }
+
+    static Enchantment fromNamespaceId(@NotNull String namespaceID) {
+        return EnchantmentLoader.get(namespaceID);
+    }
+
+    static Enchantment fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromNamespaceId(namespaceID.asString());
+    }
+
+    static @Nullable Enchantment fromId(int id) {
+        return EnchantmentLoader.getId(id);
+    }
+}

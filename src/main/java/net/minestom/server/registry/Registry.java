@@ -33,6 +33,10 @@ public class Registry {
         return new EntityEntry(namespace, jsonObject, override);
     }
 
+    public static EnchantmentEntry enchantment(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
+        return new EnchantmentEntry(namespace, jsonObject, override);
+    }
+
     public static JsonObject load(Resource resource) {
         final String path = String.format("/%s.json", resource.name);
         final var resourceStream = Registry.class.getResourceAsStream(path);
@@ -42,7 +46,8 @@ public class Registry {
     public enum Resource {
         BLOCKS("blocks"),
         ITEMS("items"),
-        ENTITIES("entities");
+        ENTITIES("entities"),
+        ENCHANTMENTS("enchantments");
 
         private final String name;
 
@@ -270,6 +275,61 @@ public class Registry {
 
         public EntitySpawnType spawnType() {
             return spawnType;
+        }
+    }
+
+    public static class EnchantmentEntry extends Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final String translationKey;
+        private final double maxLevel;
+        private final boolean isCursed;
+        private final boolean isDiscoverable;
+        private final boolean isTradeable;
+        private final boolean isTreasureOnly;
+
+        private EnchantmentEntry(String namespace, JsonObject main, JsonObject override) {
+            super(main, override);
+            this.namespace = NamespaceID.from(namespace);
+            this.id = getInt("id");
+            this.translationKey = getString("translationKey");
+            this.maxLevel = getDouble("maxLevel");
+            this.isCursed = getBoolean("curse", false);
+            this.isDiscoverable = getBoolean("discoverable", true);
+            this.isTradeable = getBoolean("tradeable", true);
+            this.isTreasureOnly = getBoolean("treasureOnly", false);
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public String translationKey() {
+            return translationKey;
+        }
+
+        public double maxLevel() {
+            return maxLevel;
+        }
+
+        public boolean isCursed() {
+            return isCursed;
+        }
+
+        public boolean isDiscoverable() {
+            return isDiscoverable;
+        }
+
+        public boolean isTradeable() {
+            return isTradeable;
+        }
+
+        public boolean isTreasureOnly() {
+            return isTreasureOnly;
         }
     }
 

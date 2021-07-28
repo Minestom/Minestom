@@ -16,7 +16,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -254,7 +253,7 @@ public final class NBTUtils {
         for (NBTCompound enchantment : enchantments) {
             final short level = enchantment.getAsShort("lvl");
             final String id = enchantment.getString("id");
-            final Enchantment enchant = Registries.getEnchantment(id);
+            final Enchantment enchant = Enchantment.fromNamespaceId(id);
             if (enchant != null) {
                 setter.applyEnchantment(enchant, level);
             } else {
