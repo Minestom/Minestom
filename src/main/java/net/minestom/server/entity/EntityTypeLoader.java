@@ -97,12 +97,10 @@ final class EntityTypeLoader {
 
     static {
         // Load data from file
-        JsonObject entities = Registry.load(Registry.Resource.ENTITY);
+        JsonObject entities = Registry.load(Registry.Resource.ENTITIES);
         entities.entrySet().forEach(entry -> {
             final String namespace = entry.getKey();
             final JsonObject entityObject = entry.getValue().getAsJsonObject();
-
-            final var metaSupplier = ENTITY_META_SUPPLIER.get(namespace);
 
             final var entityType = new EntityTypeImpl(Registry.entity(namespace, entityObject, null));
             ENTITY_ID_MAP.put(entityType.id(), entityType);

@@ -40,9 +40,9 @@ public class Registry {
     }
 
     public enum Resource {
-        BLOCK("blocks"),
-        ITEM("items"),
-        ENTITY("entities");
+        BLOCKS("blocks"),
+        ITEMS("items"),
+        ENTITIES("entities");
 
         private final String name;
 

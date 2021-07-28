@@ -53,7 +53,7 @@ final class BlockLoader {
 
     static {
         // Load data from file
-        JsonObject blocks = Registry.load(Registry.Resource.BLOCK);
+        JsonObject blocks = Registry.load(Registry.Resource.BLOCKS);
         blocks.entrySet().forEach(entry -> {
             final String blockNamespace = entry.getKey();
             final JsonObject blockObject = entry.getValue().getAsJsonObject();
