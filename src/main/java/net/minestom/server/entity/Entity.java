@@ -485,9 +485,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                         // Stop player velocity
                         this.velocity = Vec.ZERO;
                     } else {
-                        final Block block = finalChunk.getBlock(position);
-                        final double drag = block.registry().friction();
-
+                        final double drag = this.onGround ?
+                                finalChunk.getBlock(position).registry().friction() : 0.91;
                         this.velocity = newVelocity
                                 // Convert from block/tick to block/sec
                                 .mul(tps)
