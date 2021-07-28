@@ -28,7 +28,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinestomRootClassLoader.class);
 
-    private static MinestomRootClassLoader INSTANCE;
+    private static volatile MinestomRootClassLoader INSTANCE;
 
     /**
      * Classes that cannot be loaded/modified by this classloader.
