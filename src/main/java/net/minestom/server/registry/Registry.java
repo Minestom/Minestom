@@ -168,6 +168,7 @@ public class Registry {
         private final int id;
         private final String translationKey;
         private final int maxStackSize;
+        private final int maxDamage;
         private final boolean isFood;
         private final Supplier<Block> blockSupplier;
         private final EquipmentSlot equipmentSlot;
@@ -178,6 +179,7 @@ public class Registry {
             this.id = getInt("id");
             this.translationKey = getString("translationKey");
             this.maxStackSize = getInt("maxStackSize", 64);
+            this.maxDamage = getInt("maxDamage", 0);
             this.isFood = getBoolean("edible", false);
             {
                 final String blockNamespace = getString("correspondingBlock", null);
@@ -225,6 +227,10 @@ public class Registry {
 
         public int maxStackSize() {
             return maxStackSize;
+        }
+
+        public int maxDamage() {
+            return maxDamage;
         }
 
         public boolean isFood() {
