@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.ambient;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.MobMeta;
 import org.jetbrains.annotations.NotNull;
 

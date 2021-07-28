@@ -1,11 +1,7 @@
 package net.minestom.server.command.builder.arguments.relative;
 
 import net.minestom.server.command.builder.NodeMaker;
-import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Function;
