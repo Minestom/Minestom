@@ -28,7 +28,6 @@ import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
@@ -45,8 +44,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -175,13 +172,6 @@ public final class MinecraftServer {
         tagManager = new TagManager();
 
         nettyServer = new NettyServer(packetProcessor);
-
-        // Registry
-        try {
-            ResourceGatherer.ensureResourcesArePresent(VERSION_NAME);
-        } catch (IOException e) {
-            LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
-        }
 
         initialized = true;
 

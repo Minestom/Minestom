@@ -5,17 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.Condition;
-import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.NamespaceIDHashMap;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.Reader;
 
 /**
  * Handles loading and configuration of loot tables
  */
 public final class LootTableManager {
-
     private NamespaceIDHashMap<JsonDeserializer<? extends Condition>> conditionDeserializers = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableType> tableTypes = new NamespaceIDHashMap<>();
     private NamespaceIDHashMap<LootTableEntryType> entryTypes = new NamespaceIDHashMap<>();
@@ -71,7 +71,8 @@ public final class LootTableManager {
     }
 
     public LootTable load(NamespaceID name) throws FileNotFoundException {
-        return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/" + name.getDomain() + "/loot_tables/" + name.getPath() + ".json")));
+        return null; // FIXME
+        //return load(name, new FileReader(new File(ResourceGatherer.DATA_FOLDER, "data/" + name.getDomain() + "/loot_tables/" + name.getPath() + ".json")));
     }
 
     /**

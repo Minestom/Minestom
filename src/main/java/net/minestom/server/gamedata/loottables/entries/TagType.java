@@ -6,9 +6,8 @@ import net.minestom.server.gamedata.loottables.LootTable;
 import net.minestom.server.gamedata.loottables.LootTableEntryType;
 import net.minestom.server.gamedata.loottables.LootTableFunction;
 import net.minestom.server.gamedata.loottables.LootTableManager;
-import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.gamedata.tags.Tag;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -17,11 +16,6 @@ import java.util.List;
 public class TagType implements LootTableEntryType {
     @Override
     public LootTable.Entry create(LootTableManager lootTableManager, String name, List<Condition> conditions, List<LootTable.Entry> children, boolean expand, List<LootTableFunction> functions, int weight, int quality) {
-        try {
-            return new TagEntry(this, MinecraftServer.getTagManager().load(NamespaceID.from(name), "items"), expand, weight, quality, conditions);
-        } catch (FileNotFoundException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+        return new TagEntry(this, MinecraftServer.getTagManager().getTag(Tag.BasicType.ITEMS, name), expand, weight, quality, conditions);
     }
 }

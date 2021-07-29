@@ -56,7 +56,13 @@ public class Registry {
         STATISTICS("custom_statistics"),
         POTION_EFFECTS("potion_effects"),
         POTION_TYPES("potions"),
-        PARTICLES("particles");
+        PARTICLES("particles"),
+
+        BLOCK_TAGS("tags/block_tags"),
+        ENTITY_TYPE_TAGS("tags/entity_type_tags"),
+        FLUID_TAGS("tags/fluid_tags"),
+        GAMEPLAY_TAGS("tags/gameplay_tags"),
+        ITEM_TAGS("tags/item_tags");
 
         private final String name;
 
