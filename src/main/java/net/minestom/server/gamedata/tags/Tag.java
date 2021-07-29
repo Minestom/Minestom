@@ -71,7 +71,7 @@ public final class Tag {
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
                 name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> 1), // TODO
+                name -> Registries.getFluid(name).ordinal()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
                 name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
