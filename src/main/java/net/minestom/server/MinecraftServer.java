@@ -12,7 +12,6 @@ import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluid.Fluid;
-import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
@@ -129,7 +128,6 @@ public final class MinecraftServer {
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
-    private static LootTableManager lootTableManager;
     private static TagManager tagManager;
 
     public static MinecraftServer init() {
@@ -168,7 +166,6 @@ public final class MinecraftServer {
 
         updateManager = new UpdateManager();
 
-        lootTableManager = new LootTableManager();
         tagManager = new TagManager();
 
         nettyServer = new NettyServer(packetProcessor);
@@ -607,16 +604,6 @@ public final class MinecraftServer {
     public static ResponseDataConsumer getResponseDataConsumer() {
         checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
-    }
-
-    /**
-     * Gets the manager handling loot tables.
-     *
-     * @return the loot table manager
-     */
-    public static LootTableManager getLootTableManager() {
-        checkInitStatus(lootTableManager);
-        return lootTableManager;
     }
 
     /**
