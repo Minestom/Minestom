@@ -49,7 +49,7 @@ public class Registry {
         return GSON.fromJson(new InputStreamReader(resourceStream), JsonObject.class);
     }
 
-    public static class Loader<T extends ProtocolObject> {
+    public static class Container<T extends ProtocolObject> {
         // Maps do not need to be thread-safe as they are fully populated
         // in the static initializer, should not be modified during runtime
 
@@ -57,6 +57,15 @@ public class Registry {
         private final Map<String, T> namespaceMap = new HashMap<>();
         // id -> registry data
         private final Int2ObjectMap<T> idMap = new Int2ObjectOpenHashMap<>();
+
+        public Container(Resource resource, Loader<T> loader) {
+            final JsonObject objects = Registry.load(resource);
+            objects.entrySet().forEach(entry -> {
+                final String namespace = entry.getKey();
+                final JsonObject object = entry.getValue().getAsJsonObject();
+                loader.accept(this, namespace, object);
+            });
+        }
 
         public T get(@NotNull String namespace) {
             return namespaceMap.get(namespace);
@@ -77,6 +86,10 @@ public class Registry {
         public void register(@NotNull T value) {
             idMap.put(value.id(), value);
             namespaceMap.put(value.name(), value);
+        }
+
+        public interface Loader<T extends ProtocolObject> {
+            void accept(Container<T> container, String namespace, JsonObject object);
         }
     }
 

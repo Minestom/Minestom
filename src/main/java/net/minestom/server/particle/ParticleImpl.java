@@ -1,6 +1,5 @@
 package net.minestom.server.particle;
 
-import com.google.gson.JsonObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
@@ -8,33 +7,26 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 final class ParticleImpl implements Particle {
-    private static final Registry.Loader<Particle> LOADER = new Registry.Loader<>();
+    private static final Registry.Container<Particle> CONTAINER = new Registry.Container<>(Registry.Resource.PARTICLES,
+            (loader, namespace, object) -> {
+                final int id = object.get("id").getAsInt();
+                loader.register(new ParticleImpl(NamespaceID.from(namespace), id));
+            });
 
     static Particle get(@NotNull String namespace) {
-        return LOADER.get(namespace);
+        return CONTAINER.get(namespace);
     }
 
     static Particle getSafe(@NotNull String namespace) {
-        return LOADER.getSafe(namespace);
+        return CONTAINER.getSafe(namespace);
     }
 
     static Particle getId(int id) {
-        return LOADER.getId(id);
+        return CONTAINER.getId(id);
     }
 
     static Collection<Particle> values() {
-        return LOADER.values();
-    }
-
-    static {
-        // Load data from file
-        JsonObject particles = Registry.load(Registry.Resource.PARTICLES);
-        particles.entrySet().forEach(entry -> {
-            final String namespace = entry.getKey();
-            final JsonObject object = entry.getValue().getAsJsonObject();
-            final int id = object.get("id").getAsInt();
-            LOADER.register(new ParticleImpl(NamespaceID.from(namespace), id));
-        });
+        return CONTAINER.values();
     }
 
     private final NamespaceID namespaceID;

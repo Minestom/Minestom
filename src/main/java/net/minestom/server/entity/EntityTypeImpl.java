@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import com.google.gson.JsonObject;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
@@ -47,25 +46,26 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 final class EntityTypeImpl implements EntityType {
-    private static final Registry.Loader<EntityType> LOADER = new Registry.Loader<>();
+    private static final Registry.Container<EntityType> CONTAINER = new Registry.Container<>(Registry.Resource.ENTITIES,
+            (container, namespace, object) -> container.register(new EntityTypeImpl(Registry.entity(namespace, object, null))));
     private static final Map<String, BiFunction<Entity, Metadata, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
     private static final Map<String, Double> ACCELERATION_MAP = createAccelerationMap();
     private static final Map<String, Double> DRAG_MAP = createDragMap();
 
     static EntityType get(@NotNull String namespace) {
-        return LOADER.get(namespace);
+        return CONTAINER.get(namespace);
     }
 
     static EntityType getSafe(@NotNull String namespace) {
-        return LOADER.getSafe(namespace);
+        return CONTAINER.getSafe(namespace);
     }
 
     static EntityType getId(int id) {
-        return LOADER.getId(id);
+        return CONTAINER.getId(id);
     }
 
     static Collection<EntityType> values() {
-        return LOADER.values();
+        return CONTAINER.values();
     }
 
     static EntityMeta createMeta(EntityType entityType, Entity entity, Metadata metadata) {
@@ -78,16 +78,6 @@ final class EntityTypeImpl implements EntityType {
 
     static double getDrag(String namespace) {
         return DRAG_MAP.getOrDefault(namespace, 0.02);
-    }
-
-    static {
-        // Load data from file
-        JsonObject entities = Registry.load(Registry.Resource.ENTITIES);
-        entities.entrySet().forEach(entry -> {
-            final String namespace = entry.getKey();
-            final JsonObject entityObject = entry.getValue().getAsJsonObject();
-            LOADER.register(new EntityTypeImpl(Registry.entity(namespace, entityObject, null)));
-        });
     }
 
     private static Map<String, BiFunction<Entity, Metadata, EntityMeta>> createMetaMap() {
