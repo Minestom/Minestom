@@ -170,7 +170,7 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
-        return BlockImpl.get(namespaceID);
+        return BlockImpl.getSafe(namespaceID);
     }
 
     static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
