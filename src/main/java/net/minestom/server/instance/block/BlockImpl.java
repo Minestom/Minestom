@@ -21,19 +21,30 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 final class BlockImpl implements Block {
-    private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
-            .expireAfterWrite(Duration.ofMinutes(5))
-            .weakValues()
-            .build();
     // Block state -> block object
     private static final Int2ObjectMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
     private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
             (container, namespace, object) -> {
                 final JsonObject stateObject = object.remove("states").getAsJsonObject();
-                retrieveState(namespace, object, stateObject);
+                // Loop each state
+                PropertyEntry propertyEntry = new PropertyEntry();
+                for (var stateEntry : stateObject.entrySet()) {
+                    final String query = stateEntry.getKey();
+                    JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
+                    final var propertyMap = BlockUtils.parseProperties(query);
+                    final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
+                            propertyEntry, propertyMap, null, null);
+                    BLOCK_STATE_MAP.put(block.stateId(), block);
+                    propertyEntry.put(propertyMap, block);
+                }
+                // Register default state
                 final int defaultState = object.get("defaultStateId").getAsInt();
                 container.register(getState(defaultState));
             });
+    private static final Cache<NBTCompound, NBTCompound> NBT_CACHE = Caffeine.newBuilder()
+            .expireAfterWrite(Duration.ofMinutes(5))
+            .weakValues()
+            .build();
 
     static Block get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -55,26 +66,7 @@ final class BlockImpl implements Block {
         return CONTAINER.values();
     }
 
-    private static void retrieveState(String namespace, JsonObject object, JsonObject stateObject) {
-        PropertyEntry propertyEntry = new PropertyEntry();
-        stateObject.entrySet().forEach(stateEntry -> {
-            final String query = stateEntry.getKey();
-            JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
-            final int stateId = stateOverride.get("stateId").getAsInt();
-            final var propertyMap = BlockUtils.parseProperties(query);
-            final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
-                    propertyEntry, propertyMap, null, null);
-            BLOCK_STATE_MAP.put(stateId, block);
-            propertyEntry.map.put(propertyMap, block);
-        });
-    }
-
-    protected static class PropertyEntry {
-        private final Map<Map<String, String>, Block> map = new ConcurrentHashMap<>();
-
-        public @Nullable Block getProperties(Map<String, String> properties) {
-            return map.get(properties);
-        }
+    protected static class PropertyEntry extends ConcurrentHashMap<Map<String, String>, Block> {
     }
 
     private final Registry.BlockEntry registry;
@@ -154,7 +146,7 @@ final class BlockImpl implements Block {
     }
 
     private Block compute(Map<String, String> properties) {
-        Block block = propertyEntry.getProperties(properties);
+        Block block = propertyEntry.get(properties);
         if (block == null)
             throw new IllegalArgumentException("Invalid properties: " + properties);
         return nbt == null && handler == null ? block :
