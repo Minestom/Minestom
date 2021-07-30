@@ -99,7 +99,7 @@ public final class ChunkUtils {
      */
     public static int getChunkCoordinate(double xz) {
         assert Chunk.CHUNK_SIZE_X == Chunk.CHUNK_SIZE_Z;
-        return Math.floorDiv(MathUtils.floor(xz), Chunk.CHUNK_SIZE_X);
+        return Math.floorDiv((int) Math.floor(xz), Chunk.CHUNK_SIZE_X);
     }
 
     /**

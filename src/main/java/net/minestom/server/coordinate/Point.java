@@ -49,7 +49,7 @@ public interface Point {
      */
     @Contract(pure = true)
     default int blockX() {
-        return MathUtils.floor(x());
+        return (int) Math.floor(x());
     }
 
     /**
@@ -59,7 +59,7 @@ public interface Point {
      */
     @Contract(pure = true)
     default int blockY() {
-        return MathUtils.floor(y());
+        return (int) Math.floor(y());
     }
 
     /**
@@ -69,7 +69,7 @@ public interface Point {
      */
     @Contract(pure = true)
     default int blockZ() {
-        return MathUtils.floor(z());
+        return (int) Math.floor(z());
     }
 
     /**

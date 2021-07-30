@@ -536,9 +536,9 @@ public final class Vec implements Point {
         );
 
         Operator FLOOR = (x, y, z) -> new Vec(
-                MathUtils.floor(x),
-                MathUtils.floor(y),
-                MathUtils.floor(z)
+                Math.floor(x),
+                Math.floor(y),
+                Math.floor(z)
         );
 
         @NotNull Vec apply(double x, double y, double z);
