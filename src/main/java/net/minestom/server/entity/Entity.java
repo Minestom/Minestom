@@ -422,90 +422,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             }
         }
 
-        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
         // Entity tick
         {
-
             // Cache the number of "gravity tick"
-            if (!onGround) {
-                gravityTickCount++;
-            } else {
-                gravityTickCount = 0;
-            }
-
-            // Velocity
-            final boolean noGravity = hasNoGravity();
-            boolean applyVelocity;
-            // Non-player entities with either velocity or gravity enabled
-            applyVelocity = !isNettyClient && (hasVelocity() || !noGravity);
-            // Players with a velocity applied (client is responsible for gravity)
-            applyVelocity |= isNettyClient && hasVelocity();
-
-            if (applyVelocity) {
-                final float tps = MinecraftServer.TICK_PER_SECOND;
-                final Pos newPosition;
-                final Vec newVelocity;
-
-                final Vec currentVelocity = getVelocity();
-                final Vec deltaPos = new Vec(
-                        currentVelocity.x() / tps,
-                        currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
-                        currentVelocity.z() / tps
-                );
-
-                if (this.hasPhysics) {
-                    final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
-                    this.onGround = physicsResult.isOnGround();
-                    newPosition = physicsResult.newPosition();
-                    newVelocity = physicsResult.newVelocity();
-                } else {
-                    newVelocity = deltaPos;
-                    newPosition = position.add(currentVelocity.div(20));
-                }
-
-                // World border collision
-                final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
-                if (!ChunkUtils.isLoaded(finalChunk)) {
-                    // Entity shouldn't be updated when moving in an unloaded chunk
-                    return;
-                }
-
-                // Apply the position if changed
-                if (!finalVelocityPosition.samePoint(position)) {
-                    refreshPosition(finalVelocityPosition, true);
-                    if (!isNettyClient) {
-                        synchronizePosition(true);
-                    }
-                }
-
-                // Update velocity
-                if (hasVelocity() || !newVelocity.isZero()) {
-                    if (onGround && isNettyClient) {
-                        // Stop player velocity
-                        this.velocity = Vec.ZERO;
-                    } else {
-                        final double drag = this.onGround ?
-                                finalChunk.getBlock(position).registry().friction() : 0.91;
-                        this.velocity = newVelocity
-                                // Convert from block/tick to block/sec
-                                .mul(tps)
-                                // Apply drag
-                                .apply((x, y, z) -> new Vec(
-                                        x * drag,
-                                        !noGravity ? y * (1 - gravityDragPerTick) : y,
-                                        z * drag
-                                ))
-                                // Prevent infinitely decreasing velocity
-                                .apply(Vec.Operator.EPSILON);
-                    }
-                }
-
-                // Verify if velocity packet has to be sent
-                if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
-                    sendPacketToViewersAndSelf(getVelocityPacket());
-                }
-            }
+            this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
+            velocityTick();
 
             // handle block contacts
             // TODO do not call every tick (it is pretty expensive)
@@ -559,14 +480,90 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 });
             }
         }
-
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             synchronizePosition(false);
         }
-
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
+        }
+    }
+
+    private void velocityTick() {
+        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
+        final boolean noGravity = hasNoGravity();
+        final boolean hasVelocity = hasVelocity();
+        boolean applyVelocity;
+        // Non-player entities with either velocity or gravity enabled
+        applyVelocity = !isNettyClient && (hasVelocity || !noGravity);
+        // Players with a velocity applied (client is responsible for gravity)
+        applyVelocity |= isNettyClient && hasVelocity;
+        if (!applyVelocity) {
+            return;
+        }
+        final float tps = MinecraftServer.TICK_PER_SECOND;
+        final Vec currentVelocity = getVelocity();
+        final Vec deltaPos = new Vec(
+                currentVelocity.x() / tps,
+                currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
+                currentVelocity.z() / tps
+        );
+
+        final Pos newPosition;
+        final Vec newVelocity;
+        if (this.hasPhysics) {
+            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+            this.onGround = physicsResult.isOnGround();
+            newPosition = physicsResult.newPosition();
+            newVelocity = physicsResult.newVelocity();
+        } else {
+            newVelocity = deltaPos;
+            newPosition = position.add(currentVelocity.div(20));
+        }
+
+        // World border collision
+        final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+        if (finalVelocityPosition.samePoint(position)) {
+            this.velocity = Vec.ZERO;
+            if (hasVelocity) {
+                sendPacketToViewersAndSelf(getVelocityPacket());
+            }
+            return;
+        }
+        final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
+        if (!ChunkUtils.isLoaded(finalChunk)) {
+            // Entity shouldn't be updated when moving in an unloaded chunk
+            return;
+        }
+        refreshPosition(finalVelocityPosition, true);
+        if (!isNettyClient) {
+            synchronizePosition(true);
+        }
+
+        // Update velocity
+        if (hasVelocity || !newVelocity.isZero()) {
+            if (onGround && isNettyClient) {
+                // Stop player velocity
+                this.velocity = Vec.ZERO;
+            } else {
+                final double drag = this.onGround ?
+                        finalChunk.getBlock(position).registry().friction() : 0.91;
+                this.velocity = newVelocity
+                        // Convert from block/tick to block/sec
+                        .mul(tps)
+                        // Apply drag
+                        .apply((x, y, z) -> new Vec(
+                                x * drag,
+                                !noGravity ? y * (1 - gravityDragPerTick) : y,
+                                z * drag
+                        ))
+                        // Prevent infinitely decreasing velocity
+                        .apply(Vec.Operator.EPSILON);
+            }
+        }
+        // Verify if velocity packet has to be sent
+        if (hasVelocity || gravityTickCount > 0) {
+            sendPacketToViewersAndSelf(getVelocityPacket());
         }
     }
 
