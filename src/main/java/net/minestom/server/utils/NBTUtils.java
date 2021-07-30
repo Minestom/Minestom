@@ -155,9 +155,10 @@ public final class NBTUtils {
                 //FIXME: Remove escaping fix once https://github.com/jglrxavpok/Hephaistos/issues/8 is resolved
                 //This fix prevents having a literal backslash followed by a literal quote,
                 // but its better than stuff breaking horribly
-                final String rawName = display.getString("Name")
-                        .replace("\\\"", "\"");
-                final Component displayName = GsonComponentSerializer.gson().deserialize(rawName);
+                //final String rawName = display.getString("Name")
+                //        .replace("\\\"", "\"");
+                //System.out.println("Deserializing: " + rawName);
+                final Component displayName = GsonComponentSerializer.gson().deserialize(display.getString("Name"));
                 metaBuilder.displayName(displayName);
             }
             if (display.containsKey("Lore")) {
@@ -167,9 +168,9 @@ public final class NBTUtils {
                     //FIXME: Remove escaping fix once https://github.com/jglrxavpok/Hephaistos/issues/8 is resolved
                     //This fix prevents having a literal backslash followed by a literal quote,
                     // but its better than stuff breaking horribly
-                    final String rawLore = s.getValue()
-                            .replace("\\\"", "\"");
-                    lore.add(GsonComponentSerializer.gson().deserialize(rawLore));
+                    //final String rawLore = s.getValue()
+                    //        .replace("\\\"", "\"");
+                    lore.add(GsonComponentSerializer.gson().deserialize(s.getValue()));
                 }
                 metaBuilder.lore(lore);
             }

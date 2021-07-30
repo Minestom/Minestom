@@ -47,12 +47,15 @@ public class PlayerPositionListener {
 
     public static void teleportConfirmListener(ClientTeleportConfirmPacket packet, Player player) {
         final int packetTeleportId = packet.teleportId;
+        System.out.println("Received teleport id packet: " + packet.teleportId);
         player.refreshReceivedTeleportId(packetTeleportId);
     }
 
     private static void processMovement(@NotNull Player player, double x, double y, double z,
                                         float yaw, float pitch, boolean onGround) {
         final Instance instance = player.getInstance();
+
+        System.out.println("Move packet received: " + x + ":" + y + ":" + z);
 
         // Prevent moving before the player spawned, probably a modified client (or high latency?)
         if (instance == null) {
