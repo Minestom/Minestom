@@ -56,7 +56,7 @@ public interface IChunkLoader {
             } catch (InterruptedException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
-            return AsyncUtils.NULL_FUTURE;
+            return AsyncUtils.VOID_FUTURE;
         } else {
             CompletableFuture<Void> completableFuture = new CompletableFuture<>();
             AtomicInteger counter = new AtomicInteger();

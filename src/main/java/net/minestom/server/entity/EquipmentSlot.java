@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.item.attribute.AttributeSlot;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,8 +19,7 @@ public enum EquipmentSlot {
         return !isHand();
     }
 
-    @NotNull
-    public static EquipmentSlot fromAttributeSlot(AttributeSlot attributeSlot) {
+    public static EquipmentSlot fromAttributeSlot(@NotNull AttributeSlot attributeSlot) {
         switch (attributeSlot) {
             case MAINHAND:
                 return MAIN_HAND;
@@ -38,5 +36,4 @@ public enum EquipmentSlot {
         }
         throw new IllegalStateException("Something weird happened");
     }
-
 }

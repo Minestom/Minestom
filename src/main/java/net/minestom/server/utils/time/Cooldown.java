@@ -6,18 +6,8 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 
 public final class Cooldown {
-
     private final Duration duration;
     private long lastUpdate;
-
-    /**
-     * @deprecated Replaced by {@link #Cooldown(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public Cooldown(@NotNull UpdateOption updateOption) {
-        this(updateOption.toDuration());
-    }
 
     public Cooldown(Duration duration) {
         this.duration = duration;
@@ -39,10 +29,10 @@ public final class Cooldown {
     /**
      * Gets if something is in cooldown based on the current time.
      *
-     * @param currentTime the current time in milliseconds
-     * @param lastUpdate  the last update in milliseconds
-     * @param temporalUnit    the time unit of the cooldown
-     * @param cooldown    the value of the cooldown
+     * @param currentTime  the current time in milliseconds
+     * @param lastUpdate   the last update in milliseconds
+     * @param temporalUnit the time unit of the cooldown
+     * @param cooldown     the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
     public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull TemporalUnit temporalUnit, long cooldown) {
@@ -52,25 +42,9 @@ public final class Cooldown {
     /**
      * Gets if something is in cooldown based on the current time.
      *
-     * @param currentTime  the current time in milliseconds
-     * @param lastUpdate   the last update in milliseconds
-     * @param updateOption the cooldown
-     * @return true if the cooldown is in progress, false otherwise
-     *
-     * @deprecated Replaced by {@link #hasCooldown(long, long, Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull UpdateOption updateOption) {
-        return hasCooldown(currentTime, lastUpdate, updateOption.toDuration());
-    }
-
-    /**
-     * Gets if something is in cooldown based on the current time.
-     *
-     * @param currentTime  the current time in milliseconds
-     * @param lastUpdate   the last update in milliseconds
-     * @param duration the cooldown
+     * @param currentTime the current time in milliseconds
+     * @param lastUpdate  the last update in milliseconds
+     * @param duration    the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
     public static boolean hasCooldown(long currentTime, long lastUpdate, @NotNull Duration duration) {
@@ -81,9 +55,9 @@ public final class Cooldown {
     /**
      * Gets if something is in cooldown based on the current time ({@link System#currentTimeMillis()}).
      *
-     * @param lastUpdate the last update in milliseconds
-     * @param temporalUnit   the time unit of the cooldown
-     * @param cooldown   the value of the cooldown
+     * @param lastUpdate   the last update in milliseconds
+     * @param temporalUnit the time unit of the cooldown
+     * @param cooldown     the value of the cooldown
      * @return true if the cooldown is in progress, false otherwise
      */
     public static boolean hasCooldown(long lastUpdate, @NotNull TemporalUnit temporalUnit, int cooldown) {

@@ -17,7 +17,7 @@ public class RemoveEntityEffectPacket implements ServerPacket {
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(entityId);
-        writer.writeByte((byte) effect.getId());
+        writer.writeByte((byte) effect.id());
     }
 
     @Override

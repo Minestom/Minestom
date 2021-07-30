@@ -16,7 +16,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.*;
 
 // for lack of a better name
@@ -69,7 +67,7 @@ public final class NBTUtils {
     public static void loadAllItems(@NotNull NBTList<NBTCompound> items, @NotNull Inventory destination) {
         destination.clear();
         for (NBTCompound tag : items) {
-            Material material = Registries.getMaterial(tag.getString("id"));
+            Material material = Material.fromNamespaceId(tag.getString("id"));
             if (material == Material.AIR) {
                 material = Material.STONE;
             }
@@ -93,7 +91,7 @@ public final class NBTUtils {
             nbt.set("tag", tag);
             nbt.setByte("Slot", (byte) i);
             nbt.setByte("Count", (byte) stack.getAmount());
-            nbt.setString("id", stack.getMaterial().getName());
+            nbt.setString("id", stack.getMaterial().name());
 
             list.add(nbt);
         }
@@ -255,7 +253,7 @@ public final class NBTUtils {
         for (NBTCompound enchantment : enchantments) {
             final short level = enchantment.getAsShort("lvl");
             final String id = enchantment.getString("id");
-            final Enchantment enchant = Registries.getEnchantment(id);
+            final Enchantment enchant = Enchantment.fromNamespaceId(id);
             if (enchant != null) {
                 setter.applyEnchantment(enchant, level);
             } else {

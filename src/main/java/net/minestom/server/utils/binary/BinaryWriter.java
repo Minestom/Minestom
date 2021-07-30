@@ -6,7 +6,6 @@ import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.SerializerUtils;
@@ -189,16 +188,6 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Writes a JsonMessage to the buffer.
-     * Simply a writeSizedString with message.toString()
-     *
-     * @param message
-     */
-    public void writeJsonMessage(JsonMessage message) {
-        writeSizedString(message.toString());
-    }
-
-    /**
      * Writes a var-int array to the buffer.
      * <p>
      * It is sized by another var-int at the beginning.
@@ -280,7 +269,7 @@ public class BinaryWriter extends OutputStream {
             writeBoolean(false);
         } else {
             writeBoolean(true);
-            writeVarInt(itemStack.getMaterial().getId());
+            writeVarInt(itemStack.getMaterial().id());
             writeByte((byte) itemStack.getAmount());
             write(itemStack.getMeta());
         }

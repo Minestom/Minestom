@@ -12,7 +12,6 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +61,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setStartPosition(@NotNull Position startPosition) {
+    public EntityFinder setStartPosition(@NotNull Point startPosition) {
         this.startPosition = startPosition;
         return this;
     }

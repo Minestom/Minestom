@@ -3,7 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
 import net.minestom.server.network.packet.server.play.StatisticsPacket;
-import net.minestom.server.stat.PlayerStatistic;
+import net.minestom.server.statistic.PlayerStatistic;
 
 import java.util.ArrayList;
 import java.util.List;

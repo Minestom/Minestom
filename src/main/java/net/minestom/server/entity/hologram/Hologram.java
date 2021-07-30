@@ -2,13 +2,12 @@ package net.minestom.server.entity.hologram;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.Viewable;
-import net.minestom.server.chat.JsonMessage;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -68,7 +67,7 @@ public class Hologram implements Viewable {
 
         armorStandMeta.setNotifyAboutChanges(false);
 
-        if(marker) {
+        if (marker) {
             this.yOffset = MARKER_OFFSET_Y;
             armorStandMeta.setMarker(true);
         } else {
@@ -113,31 +112,9 @@ public class Hologram implements Viewable {
      * Gets the hologram text.
      *
      * @return the hologram text
-     * @deprecated Use {@link #getText()}
-     */
-    @Deprecated
-    public JsonMessage getTextJson() {
-        return JsonMessage.fromComponent(text);
-    }
-
-    /**
-     * Gets the hologram text.
-     *
-     * @return the hologram text
      */
     public Component getText() {
         return text;
-    }
-
-    /**
-     * Changes the hologram text.
-     *
-     * @param text the new hologram text
-     * @deprecated Use {@link #setText(Component)}
-     */
-    @Deprecated
-    public void setText(JsonMessage text) {
-        this.setText(text.asComponent());
     }
 
     /**

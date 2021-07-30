@@ -5,7 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
-import net.minestom.server.command.builder.arguments.ArgumentMap;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.extensions.Extension;
@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 
 public class UnloadExtensionCommand extends Command {
 
-    private final ArgumentMap<String, Extension> extensionName;
+    private final Argument<Extension> extensionName;
 
     public UnloadExtensionCommand() {
         super("unload");

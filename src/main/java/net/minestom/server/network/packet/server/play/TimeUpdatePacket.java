@@ -11,10 +11,14 @@ public class TimeUpdatePacket implements ServerPacket {
     public long worldAge;
     public long timeOfDay;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public TimeUpdatePacket() {}
+    public TimeUpdatePacket(long worldAge, long timeOfDay) {
+        this.worldAge = worldAge;
+        this.timeOfDay = timeOfDay;
+    }
+
+    public TimeUpdatePacket() {
+        this(0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

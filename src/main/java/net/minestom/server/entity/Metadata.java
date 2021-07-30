@@ -2,7 +2,6 @@ package net.minestom.server.entity;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
@@ -42,30 +41,6 @@ public class Metadata {
 
     public static Value<String> String(@NotNull String value) {
         return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), BinaryReader::readSizedString);
-    }
-
-    @Deprecated
-    public static Value<JsonMessage> Chat(@NotNull JsonMessage value) {
-        return new Value<>(TYPE_CHAT, value, writer -> writer.writeSizedString(value.toString()), reader -> reader.readJsonMessage(Integer.MAX_VALUE));
-    }
-
-    @Deprecated
-    public static Value<JsonMessage> OptChat(@Nullable JsonMessage value) {
-        return new Value<>(TYPE_OPTCHAT, value, writer -> {
-            final boolean present = value != null;
-            writer.writeBoolean(present);
-            if (present) {
-                writer.writeSizedString(value.toString());
-            }
-        },
-                reader -> {
-                    boolean present = reader.readBoolean();
-                    if (present) {
-                        return reader.readJsonMessage(Integer.MAX_VALUE);
-                    } else {
-                        return null;
-                    }
-                });
     }
 
     public static Value<Component> Chat(@NotNull Component value) {
@@ -328,7 +303,7 @@ public class Metadata {
             case TYPE_CHAT:
                 return (Value<T>) Chat(Component.empty());
             case TYPE_OPTCHAT:
-                return (Value<T>) OptChat((Component) null);
+                return (Value<T>) OptChat(null);
             case TYPE_SLOT:
                 return (Value<T>) Slot(ItemStack.AIR);
             case TYPE_BOOLEAN:

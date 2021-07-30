@@ -6,7 +6,6 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
@@ -25,6 +24,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
     public static final int NO_MATERIAL = 1;
     public static final int INVALID_NBT = 2;
+    public static final int INVALID_MATERIAL = 3;
 
     public ArgumentItemStack(String id) {
         super(id, true);
@@ -56,12 +56,16 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
         if (nbtIndex == -1) {
             // Only material name
-            final Material material = Registries.getMaterial(input);
+            final Material material = Material.fromNamespaceId(input);
+            if (material == null)
+                throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
             return ItemStack.of(material);
         } else {
             // Material plus additional NBT
             final String materialName = input.substring(0, nbtIndex);
-            final Material material = Registries.getMaterial(materialName);
+            final Material material = Material.fromNamespaceId(materialName);
+            if (material == null)
+                throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
 
             final String sNBT = input.substring(nbtIndex).replace("\\\"", "\"");
 

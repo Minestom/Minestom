@@ -9,7 +9,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.acquirable.Acquirable;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
@@ -139,16 +138,17 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.position = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        setBoundingBox(entityType.getWidth(), entityType.getHeight(), entityType.getWidth());
+        setBoundingBox(entityType.width(), entityType.height(), entityType.width());
 
-        this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
         setAutoViewable(true);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        initializeDefaultGravity();
+        this.gravityAcceleration = EntityTypeImpl.getAcceleration(entityType.name());
+        this.gravityDragPerTick = EntityTypeImpl.getDrag(entityType.name());
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -173,8 +173,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param id the entity unique id
      * @return the entity having the specified id, null if not found
      */
-    @Nullable
-    public static Entity getEntity(int id) {
+    public static @Nullable Entity getEntity(int id) {
         return Entity.ENTITY_BY_ID.getOrDefault(id, null);
     }
 
@@ -184,8 +183,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @param uuid the entity UUID
      * @return the entity having the specified uuid, null if not found
      */
-    @Nullable
-    public static Entity getEntity(@NotNull UUID uuid) {
+    public static @Nullable Entity getEntity(@NotNull UUID uuid) {
         return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
     }
 
@@ -227,8 +225,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @return metadata of this entity.
      */
-    @NotNull
-    public EntityMeta getEntityMeta() {
+    public @NotNull EntityMeta getEntityMeta() {
         return this.entityMeta;
     }
 
@@ -314,7 +311,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         player.viewableEntities.add(this);
 
         PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
+        playerConnection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         if (hasVelocity()) {
             playerConnection.sendPacket(getVelocityPacket());
         }
@@ -365,7 +362,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         synchronized (entityTypeLock) {
             this.entityType = entityType;
             this.metadata = new Metadata(this);
-            this.entityMeta = entityType.getMetaConstructor().apply(this, this.metadata);
+            this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
             Set<Player> viewers = new HashSet<>(getViewers());
             getViewers().forEach(this::removeViewer0);
@@ -425,91 +422,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             }
         }
 
-        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
         // Entity tick
         {
-
             // Cache the number of "gravity tick"
-            if (!onGround) {
-                gravityTickCount++;
-            } else {
-                gravityTickCount = 0;
-            }
-
-            // Velocity
-            final boolean noGravity = hasNoGravity();
-            boolean applyVelocity;
-            // Non-player entities with either velocity or gravity enabled
-            applyVelocity = !isNettyClient && (hasVelocity() || !noGravity);
-            // Players with a velocity applied (client is responsible for gravity)
-            applyVelocity |= isNettyClient && hasVelocity();
-
-            if (applyVelocity) {
-                final float tps = MinecraftServer.TICK_PER_SECOND;
-                final Pos newPosition;
-                final Vec newVelocity;
-
-                final Vec currentVelocity = getVelocity();
-                final Vec deltaPos = new Vec(
-                        currentVelocity.x() / tps,
-                        currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
-                        currentVelocity.z() / tps
-                );
-
-                if (this.hasPhysics) {
-                    final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
-                    this.onGround = physicsResult.isOnGround();
-                    newPosition = physicsResult.newPosition();
-                    newVelocity = physicsResult.newVelocity();
-                } else {
-                    newVelocity = deltaPos;
-                    newPosition = position.add(currentVelocity).div(tps);
-                }
-
-                // World border collision
-                final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
-                final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
-                if (!ChunkUtils.isLoaded(finalChunk)) {
-                    // Entity shouldn't be updated when moving in an unloaded chunk
-                    return;
-                }
-
-                // Apply the position if changed
-                if (!finalVelocityPosition.samePoint(position)) {
-                    refreshPosition(finalVelocityPosition, true);
-                    if (!isNettyClient) {
-                        synchronizePosition(true);
-                    }
-                }
-
-                // Update velocity
-                if (hasVelocity() || !newVelocity.isZero()) {
-                    if (onGround && isNettyClient) {
-                        // Stop player velocity
-                        this.velocity = Vec.ZERO;
-                    } else {
-                        final Block block = finalChunk.getBlock(position);
-                        final double drag = block.registry().friction();
-
-                        this.velocity = newVelocity
-                                // Convert from block/tick to block/sec
-                                .mul(tps)
-                                // Apply drag
-                                .apply((x, y, z) -> new Vec(
-                                        x * drag,
-                                        !noGravity ? y * (1 - gravityDragPerTick) : y,
-                                        z * drag
-                                ))
-                                // Prevent infinitely decreasing velocity
-                                .apply(Vec.Operator.EPSILON);
-                    }
-                }
-
-                // Verify if velocity packet has to be sent
-                if (hasVelocity() || (!isNettyClient && gravityTickCount > 0)) {
-                    sendPacketToViewersAndSelf(getVelocityPacket());
-                }
-            }
+            this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
+            velocityTick();
 
             // handle block contacts
             // TODO do not call every tick (it is pretty expensive)
@@ -563,14 +480,90 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 });
             }
         }
-
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
             synchronizePosition(false);
         }
-
         if (shouldRemove() && !MinecraftServer.isStopping()) {
             remove();
+        }
+    }
+
+    private void velocityTick() {
+        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
+        final boolean noGravity = hasNoGravity();
+        final boolean hasVelocity = hasVelocity();
+        boolean applyVelocity;
+        // Non-player entities with either velocity or gravity enabled
+        applyVelocity = !isNettyClient && (hasVelocity || !noGravity);
+        // Players with a velocity applied (client is responsible for gravity)
+        applyVelocity |= isNettyClient && hasVelocity;
+        if (!applyVelocity) {
+            return;
+        }
+        final float tps = MinecraftServer.TICK_PER_SECOND;
+        final Vec currentVelocity = getVelocity();
+        final Vec deltaPos = new Vec(
+                currentVelocity.x() / tps,
+                currentVelocity.y() / tps - (noGravity ? 0 : gravityAcceleration),
+                currentVelocity.z() / tps
+        );
+
+        final Pos newPosition;
+        final Vec newVelocity;
+        if (this.hasPhysics) {
+            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+            this.onGround = physicsResult.isOnGround();
+            newPosition = physicsResult.newPosition();
+            newVelocity = physicsResult.newVelocity();
+        } else {
+            newVelocity = deltaPos;
+            newPosition = position.add(currentVelocity.div(20));
+        }
+
+        // World border collision
+        final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
+        if (finalVelocityPosition.samePoint(position)) {
+            this.velocity = Vec.ZERO;
+            if (hasVelocity) {
+                sendPacketToViewersAndSelf(getVelocityPacket());
+            }
+            return;
+        }
+        final Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, finalVelocityPosition);
+        if (!ChunkUtils.isLoaded(finalChunk)) {
+            // Entity shouldn't be updated when moving in an unloaded chunk
+            return;
+        }
+        refreshPosition(finalVelocityPosition, true);
+        if (!isNettyClient) {
+            synchronizePosition(true);
+        }
+
+        // Update velocity
+        if (hasVelocity || !newVelocity.isZero()) {
+            if (onGround && isNettyClient) {
+                // Stop player velocity
+                this.velocity = Vec.ZERO;
+            } else {
+                final double drag = this.onGround ?
+                        finalChunk.getBlock(position).registry().friction() : 0.91;
+                this.velocity = newVelocity
+                        // Convert from block/tick to block/sec
+                        .mul(tps)
+                        // Apply drag
+                        .apply((x, y, z) -> new Vec(
+                                x * drag,
+                                !noGravity ? y * (1 - gravityDragPerTick) : y,
+                                z * drag
+                        ))
+                        // Prevent infinitely decreasing velocity
+                        .apply(Vec.Operator.EPSILON);
+            }
+        }
+        // Verify if velocity packet has to be sent
+        if (hasVelocity || gravityTickCount > 0) {
+            sendPacketToViewersAndSelf(getVelocityPacket());
         }
     }
 
@@ -1053,7 +1046,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @param pose the new entity pose
      */
-    @NotNull
     public void setPose(@NotNull Pose pose) {
         this.entityMeta.setPose(pose);
     }
@@ -1062,33 +1054,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
-     * @deprecated Use {@link #getCustomName()}
      */
-    @Deprecated
-    @Nullable
-    public JsonMessage getCustomNameJson() {
-        return this.entityMeta.getCustomNameJson();
-    }
-
-    /**
-     * Gets the entity custom name.
-     *
-     * @return the custom name of the entity, null if there is not
-     */
-    @Nullable
-    public Component getCustomName() {
+    public @Nullable Component getCustomName() {
         return this.entityMeta.getCustomName();
-    }
-
-    /**
-     * Changes the entity custom name.
-     *
-     * @param customName the custom name of the entity, null to remove it
-     * @deprecated Use {@link #setCustomName(Component)}
-     */
-    @Deprecated
-    public void setCustomName(@Nullable JsonMessage customName) {
-        this.entityMeta.setCustomName(customName);
     }
 
     /**
@@ -1398,18 +1366,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Set custom cooldown for position synchronization.
      *
      * @param cooldown custom cooldown for position synchronization.
-     * @deprecated Replaced by {@link #setCustomSynchronizationCooldown(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public void setCustomSynchronizationCooldown(@Nullable net.minestom.server.utils.time.UpdateOption cooldown) {
-        setCustomSynchronizationCooldown(cooldown != null ? Duration.ofMillis(cooldown.toMilliseconds()) : null);
-    }
-
-    /**
-     * Set custom cooldown for position synchronization.
-     *
-     * @param cooldown custom cooldown for position synchronization.
      */
     public void setCustomSynchronizationCooldown(@Nullable Duration cooldown) {
         this.customSynchronizationCooldown = cooldown;
@@ -1442,90 +1398,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     @Override
     public <T> void setTag(@NotNull Tag<T> tag, @Nullable T value) {
         tag.write(nbtCompound, value);
-    }
-
-    /**
-     * Sets the Entity's {@link gravityAcceleration} and {@link gravityDragPerTick} fields to
-     * the default values according to <a href="https://minecraft.fandom.com/wiki/Entity#Motion_of_entities">Motion of entities</a>
-     */
-    @SuppressWarnings("JavadocReference")
-    private void initializeDefaultGravity() {
-        // TODO Add support for these values in the data generator
-        // Acceleration
-        switch (entityType) {
-            // 0
-            case ITEM_FRAME:
-                this.gravityAcceleration = 0;
-                break;
-            // 0.03
-            case EGG:
-            case FISHING_BOBBER:
-            case EXPERIENCE_BOTTLE:
-            case ENDER_PEARL:
-            case POTION:
-            case SNOWBALL:
-                this.gravityAcceleration = 0.03;
-                break;
-            // 0.04
-            case BOAT:
-            case TNT:
-            case FALLING_BLOCK:
-            case ITEM:
-            case MINECART:
-                this.gravityAcceleration = 0.04;
-                break;
-            // 0.05
-            case ARROW:
-            case SPECTRAL_ARROW:
-            case TRIDENT:
-                this.gravityAcceleration = 0.05;
-                break;
-            // 0.06
-            case LLAMA_SPIT:
-                this.gravityAcceleration = 0.06;
-                break;
-            // 0.1
-            case FIREBALL:
-            case WITHER_SKULL:
-            case DRAGON_FIREBALL:
-                this.gravityAcceleration = 0.1;
-                break;
-            // 0.08
-            default:
-                this.gravityAcceleration = 0.08;
-                break;
-        }
-
-        // Drag
-        switch (entityType) {
-            // 0
-            case BOAT:
-                this.gravityDragPerTick = 0;
-                break;
-            // 0.01
-            case LLAMA_SPIT:
-            case ENDER_PEARL:
-            case POTION:
-            case SNOWBALL:
-            case EGG:
-            case TRIDENT:
-            case SPECTRAL_ARROW:
-            case ARROW:
-                this.gravityDragPerTick = 0.01;
-                break;
-            // 0.05
-            case MINECART:
-                this.gravityDragPerTick = 0.05;
-                break;
-            // 0.08
-            case FISHING_BOBBER:
-                this.gravityDragPerTick = 0.08;
-                break;
-            // 0.02
-            default:
-                this.gravityDragPerTick = 0.02;
-                break;
-        }
     }
 
     /**

@@ -1,7 +1,6 @@
 package net.minestom.server.entity.damage;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
@@ -49,17 +48,8 @@ public class DamageType implements TagHandler {
      *
      * @return the damage type identifier
      */
-    @NotNull
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         return identifier;
-    }
-
-    /**
-     * @deprecated Use {@link #buildDeathMessage(Player)}
-     */
-    @Deprecated
-    public JsonMessage buildDeathMessageJson(@NotNull Player killed) {
-        return JsonMessage.fromComponent(this.buildDeathMessage(killed));
     }
 
     /**
@@ -70,8 +60,7 @@ public class DamageType implements TagHandler {
      * @param killed the player who has been killed
      * @return the death message, null to do not send anything
      */
-    @Nullable
-    public Component buildDeathMessage(@NotNull Player killed) {
+    public @Nullable Component buildDeathMessage(@NotNull Player killed) {
         return Component.translatable("death." + identifier, Component.text(killed.getUsername()));
     }
 
@@ -82,8 +71,7 @@ public class DamageType implements TagHandler {
      * @param projectile the actual projectile
      * @return a new {@link EntityProjectileDamage}
      */
-    @NotNull
-    public static DamageType fromProjectile(@Nullable Entity shooter, @NotNull Entity projectile) {
+    public static @NotNull DamageType fromProjectile(@Nullable Entity shooter, @NotNull Entity projectile) {
         return new EntityProjectileDamage(shooter, projectile);
     }
 
@@ -93,8 +81,7 @@ public class DamageType implements TagHandler {
      * @param player the player damager
      * @return a new {@link EntityDamage}
      */
-    @NotNull
-    public static EntityDamage fromPlayer(@NotNull Player player) {
+    public static @NotNull EntityDamage fromPlayer(@NotNull Player player) {
         return new EntityDamage(player);
     }
 
@@ -104,18 +91,8 @@ public class DamageType implements TagHandler {
      * @param entity the entity damager
      * @return a new {@link EntityDamage}
      */
-    @NotNull
-    public static EntityDamage fromEntity(@NotNull Entity entity) {
+    public static @NotNull EntityDamage fromEntity(@NotNull Entity entity) {
         return new EntityDamage(entity);
-    }
-
-    /**
-     * @deprecated Use {@link #buildDeathScreenText(Player)}
-     */
-    @Deprecated
-    @Nullable
-    public JsonMessage buildDeathScreenTextJson(@NotNull Player killed) {
-        return JsonMessage.fromComponent(this.buildDeathScreenText(killed));
     }
 
     /**
@@ -124,7 +101,7 @@ public class DamageType implements TagHandler {
      * @param killed the player who has been killed
      * @return the death screen text, null to do not send anything
      */
-    public Component buildDeathScreenText(@NotNull Player killed) {
+    public @Nullable Component buildDeathScreenText(@NotNull Player killed) {
         return Component.translatable("death." + identifier);
     }
 
@@ -134,8 +111,7 @@ public class DamageType implements TagHandler {
      * @param entity the entity hit by this damage
      * @return the sound to play when the given entity is hurt by this damage type. Can be null if no sound should play
      */
-    @Nullable
-    public SoundEvent getSound(@NotNull LivingEntity entity) {
+    public @Nullable SoundEvent getSound(@NotNull LivingEntity entity) {
         if (entity instanceof Player) {
             return getPlayerSound((Player) entity);
         }

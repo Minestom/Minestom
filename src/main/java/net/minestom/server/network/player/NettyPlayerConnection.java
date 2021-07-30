@@ -4,12 +4,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.socket.SocketChannel;
-
-import java.util.Objects;
-
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.AdventureSerializer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.extras.mojangAuth.Decrypter;
@@ -32,6 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.crypto.SecretKey;
 import java.net.SocketAddress;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -248,6 +245,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
+        refreshOnline(false);
         this.channel.close();
     }
 

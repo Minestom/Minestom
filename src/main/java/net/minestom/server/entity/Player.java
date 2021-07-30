@@ -20,9 +20,6 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.attribute.Attribute;
-import net.minestom.server.chat.ChatParser;
-import net.minestom.server.chat.ColoredText;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandSender;
@@ -65,10 +62,11 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
-import net.minestom.server.sound.SoundCategory;
-import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.stat.PlayerStatistic;
-import net.minestom.server.utils.*;
+import net.minestom.server.statistic.PlayerStatistic;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.TickUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
@@ -515,32 +513,22 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param instance      the new player instance
      * @param spawnPosition the new position of the player
-     * @return
+     * @return a future called once the player instance changed
      */
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.argCondition(this.instance == instance, "Instance should be different than the current one");
-        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (eg SharedInstance)
-        final boolean needWorldRefresh = !InstanceUtils.areLinked(this.instance, instance) ||
-                !spawnPosition.sameChunk(this.position);
-
-        if (needWorldRefresh) {
-            // TODO: Handle player reconnections, must be false in that case too
-            final boolean firstSpawn = this.instance == null;
-
-            // Send the new dimension if player isn't in any instance or if the dimension is different
-            final DimensionType instanceDimensionType = instance.getDimensionType();
-            final boolean dimensionChange = dimensionType != instanceDimensionType;
-            if (dimensionChange) {
-                sendDimension(instanceDimensionType);
-            }
+        // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (e.g. SharedInstance)
+        if (!InstanceUtils.areLinked(this.instance, instance) || !spawnPosition.sameChunk(this.position)) {
             return instance.loadOptionalChunk(spawnPosition)
-                    .thenRun(() -> spawnPlayer(instance, spawnPosition, firstSpawn, dimensionChange, true));
+                    .thenRun(() -> spawnPlayer(instance, spawnPosition,
+                            this.instance == null,
+                            !Objects.equals(dimensionType, instance.getDimensionType()), true));
         } else {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
-            return AsyncUtils.NULL_FUTURE;
+            return AsyncUtils.VOID_FUTURE
+                    .thenRun(() -> spawnPlayer(instance, spawnPosition, false, false, false));
         }
     }
 
@@ -581,10 +569,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         super.setInstance(instance, spawnPosition);
 
         if (updateChunks) {
+            // Warning: loop to remove once `refreshVisibleChunks` manage it
+            this.viewableChunks.forEach(chunk ->
+                    playerConnection.sendPacket(new UnloadChunkPacket(chunk.getChunkX(), chunk.getChunkZ())));
             refreshVisibleChunks();
         }
 
         if (dimensionChange || firstSpawn) {
+            if (dimensionChange) {
+                sendDimension(instance.getDimensionType());
+            }
             synchronizePosition(true); // So the player doesn't get stuck
             this.inventory.update();
         }
@@ -616,31 +610,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Sends a legacy message with the specified color char.
-     *
-     * @param text      the text with the legacy color formatting
-     * @param colorChar the color character
-     * @deprecated Use {@link #sendMessage(Component)}
-     */
-    @Deprecated
-    public void sendLegacyMessage(@NotNull String text, char colorChar) {
-        ColoredText coloredText = ColoredText.ofLegacy(text, colorChar);
-        sendJsonMessage(coloredText.toString());
-    }
-
-    /**
-     * Sends a legacy message with the default color char {@link ChatParser#COLOR_CHAR}.
-     *
-     * @param text the text with the legacy color formatting
-     * @deprecated Use {@link #sendMessage(Component)}
-     */
-    @Deprecated
-    public void sendLegacyMessage(@NotNull String text) {
-        ColoredText coloredText = ColoredText.ofLegacy(text, ChatParser.COLOR_CHAR);
-        sendJsonMessage(coloredText.toString());
-    }
-
-    /**
      * @deprecated Use {@link #sendMessage(Component)}
      */
     @Deprecated
@@ -662,76 +631,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ClientChatMessagePacket chatMessagePacket = new ClientChatMessagePacket();
         chatMessagePacket.message = message;
         addPacketToQueue(chatMessagePacket);
-    }
-
-    /**
-     * Plays a sound from the {@link SoundEvent} enum.
-     *
-     * @param sound         the sound to play
-     * @param soundCategory the sound category
-     * @param x             the effect X
-     * @param y             the effect Y
-     * @param z             the effect Z
-     * @param volume        the volume of the sound (1 is 100%)
-     * @param pitch         the pitch of the sound, between 0.5 and 2.0
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
-        SoundEffectPacket soundEffectPacket = new SoundEffectPacket();
-        soundEffectPacket.soundId = sound.getId();
-        soundEffectPacket.soundSource = soundCategory.asSource();
-        soundEffectPacket.x = x;
-        soundEffectPacket.y = y;
-        soundEffectPacket.z = z;
-        soundEffectPacket.volume = volume;
-        soundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(soundEffectPacket);
-    }
-
-    /**
-     * Plays a sound from an identifier (represents a custom sound in a resource pack).
-     *
-     * @param identifier    the identifier of the sound to play
-     * @param soundCategory the sound category
-     * @param x             the effect X
-     * @param y             the effect Y
-     * @param z             the effect Z
-     * @param volume        the volume of the sound (1 is 100%)
-     * @param pitch         the pitch of the sound, between 0.5 and 2.0
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound, double, double, double)}
-     */
-    @Deprecated
-    public void playSound(@NotNull String identifier, @NotNull SoundCategory soundCategory, int x, int y, int z, float volume, float pitch) {
-        NamedSoundEffectPacket namedSoundEffectPacket = new NamedSoundEffectPacket();
-        namedSoundEffectPacket.soundName = identifier;
-        namedSoundEffectPacket.soundSource = soundCategory.asSource();
-        namedSoundEffectPacket.x = x;
-        namedSoundEffectPacket.y = y;
-        namedSoundEffectPacket.z = z;
-        namedSoundEffectPacket.volume = volume;
-        namedSoundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(namedSoundEffectPacket);
-    }
-
-    /**
-     * Plays a sound directly to the player (constant volume).
-     *
-     * @param sound         the sound to play
-     * @param soundCategory the sound category
-     * @param volume        the volume of the sound (1 is 100%)
-     * @param pitch         the pitch of the sound, between 0.5 and 2.0
-     * @deprecated Use {@link #playSound(net.kyori.adventure.sound.Sound)}
-     */
-    @Deprecated
-    public void playSound(@NotNull SoundEvent sound, @NotNull SoundCategory soundCategory, float volume, float pitch) {
-        EntitySoundEffectPacket entitySoundEffectPacket = new EntitySoundEffectPacket();
-        entitySoundEffectPacket.entityId = getEntityId();
-        entitySoundEffectPacket.soundId = sound.getId();
-        entitySoundEffectPacket.soundSource = soundCategory.asSource();
-        entitySoundEffectPacket.volume = volume;
-        entitySoundEffectPacket.pitch = pitch;
-        playerConnection.sendPacket(entitySoundEffectPacket);
     }
 
     @Override
@@ -781,84 +680,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(packet);
     }
 
-    /**
-     * Sends a {@link StopSoundPacket} packet.
-     *
-     * @deprecated Use {@link #stopSound(SoundStop)} with {@link SoundStop#all()}
-     */
-    @Deprecated
-    public void stopSound() {
-        StopSoundPacket stopSoundPacket = new StopSoundPacket();
-        stopSoundPacket.flags = 0x00;
-        playerConnection.sendPacket(stopSoundPacket);
-    }
-
-    /**
-     * Sets the header and footer of a player which will be displayed in his tab window.
-     *
-     * @param header the header text, null to set empty
-     * @param footer the footer text, null to set empty
-     * @deprecated Use {@link #sendPlayerListHeaderAndFooter(Component, Component)}
-     */
-    @Deprecated
-    public void sendHeaderFooter(@Nullable JsonMessage header, @Nullable JsonMessage footer) {
-        this.sendPlayerListHeaderAndFooter(header == null ? Component.empty() : header.asComponent(),
-                footer == null ? Component.empty() : footer.asComponent());
-    }
-
     @Override
     public void sendPlayerListHeaderAndFooter(@NotNull Component header, @NotNull Component footer) {
-        PlayerListHeaderAndFooterPacket packet = new PlayerListHeaderAndFooterPacket(header, footer);
-        playerConnection.sendPacket(packet);
-    }
-
-    /**
-     * Sends a title and subtitle message.
-     *
-     * @param title    the title message
-     * @param subtitle the subtitle message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)}
-     */
-    @Deprecated
-    public void sendTitleSubtitleMessage(@NotNull JsonMessage title, @NotNull JsonMessage subtitle) {
-        this.showTitle(Title.title(title.asComponent(), subtitle.asComponent()));
-    }
-
-    /**
-     * Sends a title message.
-     *
-     * @param title the title message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)}
-     */
-    @Deprecated
-    public void sendTitleMessage(@NotNull JsonMessage title) {
-        this.showTitle(Title.title(title.asComponent(), Component.empty()));
-    }
-
-    /**
-     * Sends a subtitle message.
-     *
-     * @param subtitle the subtitle message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #showTitle(Title)}
-     */
-    @Deprecated
-    public void sendSubtitleMessage(@NotNull JsonMessage subtitle) {
-        this.showTitle(Title.title(Component.empty(), subtitle.asComponent()));
-    }
-
-    /**
-     * Sends an action bar message.
-     *
-     * @param actionBar the action bar message
-     * @see #sendTitleTime(int, int, int) to specify the display time
-     * @deprecated Use {@link #sendActionBar(Component)}
-     */
-    @Deprecated
-    public void sendActionBarMessage(@NotNull JsonMessage actionBar) {
-        this.sendActionBar(actionBar.asComponent());
+        playerConnection.sendPacket(new PlayerListHeaderAndFooterPacket(header, footer));
     }
 
     @Override
@@ -1042,35 +866,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Gets the player display name in the tab-list.
      *
      * @return the player display name, null means that {@link #getUsername()} is displayed
-     * @deprecated Use {@link #getDisplayName()}
      */
-    @Nullable
-    @Deprecated
-    public JsonMessage getDisplayNameJson() {
-        return JsonMessage.fromComponent(displayName);
-    }
-
-    /**
-     * Gets the player display name in the tab-list.
-     *
-     * @return the player display name, null means that {@link #getUsername()} is displayed
-     */
-    @Nullable
-    public Component getDisplayName() {
+    public @Nullable Component getDisplayName() {
         return displayName;
-    }
-
-    /**
-     * Changes the player display name in the tab-list.
-     * <p>
-     * Sets to null to show the player username.
-     *
-     * @param displayName the display name, null to display the username
-     * @deprecated Use {@link #setDisplayName(Component)}
-     */
-    @Deprecated
-    public void setDisplayName(@Nullable JsonMessage displayName) {
-        this.setDisplayName(displayName == null ? null : displayName.asComponent());
     }
 
     /**
@@ -1094,8 +892,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @return the player skin object,
      * null means that the player has his {@link #getUuid()} default skin
      */
-    @Nullable
-    public PlayerSkin getSkin() {
+    public @Nullable PlayerSkin getSkin() {
         return skin;
     }
 
@@ -1234,7 +1031,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param facePoint      the point from where the player should aim
      * @param targetPosition the target position to face
      */
-    public void facePosition(@NotNull FacePoint facePoint, @NotNull Position targetPosition) {
+    public void facePosition(@NotNull FacePoint facePoint, @NotNull Point targetPosition) {
         facePosition(facePoint, targetPosition, null, null);
     }
 
@@ -1306,8 +1103,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-
-        sendPacketsToViewers(getEntityType().getSpawnType().getSpawnPacket(this));
+        sendPacketsToViewers(getEntityType().registry().spawnType().getSpawnPacket(this));
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -1399,12 +1195,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         ArrayUtils.forDifferencesBetweenArray(lastVisibleChunks, updatedVisibleChunks, chunkIndex -> {
             final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
             final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-
-            final UnloadChunkPacket unloadChunkPacket = new UnloadChunkPacket();
-            unloadChunkPacket.chunkX = chunkX;
-            unloadChunkPacket.chunkZ = chunkZ;
-            //playerConnection.sendPacket(unloadChunkPacket);
-
+            //playerConnection.sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
             final Chunk chunk = instance.getChunk(chunkX, chunkZ);
             if (chunk != null) {
                 chunk.removeViewer(this);
@@ -1573,33 +1364,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     /**
      * Kicks the player with a reason.
      *
-     * @param text the kick reason
-     * @deprecated Use {@link #kick(Component)}
-     */
-    @Deprecated
-    public void kick(@NotNull JsonMessage text) {
-        this.kick(text.asComponent());
-    }
-
-    /**
-     * Kicks the player with a reason.
-     *
-     * @param message the kick reason
-     * @deprecated Use {@link #kick(Component)}
-     */
-    @Deprecated
-    public void kick(@NotNull String message) {
-        this.kick(Component.text(message));
-    }
-
-    /**
-     * Kicks the player with a reason.
-     *
      * @param component the reason
      */
     public void kick(@NotNull Component component) {
         final ConnectionState connectionState = playerConnection.getConnectionState();
-
         // Packet type depends on the current player connection state
         final ServerPacket disconnectPacket;
         if (connectionState == ConnectionState.LOGIN) {
@@ -1607,7 +1375,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         } else {
             disconnectPacket = new DisconnectPacket(component);
         }
-
         if (playerConnection instanceof NettyPlayerConnection) {
             ((NettyPlayerConnection) playerConnection).writeAndFlush(disconnectPacket);
             playerConnection.disconnect();
@@ -1615,6 +1382,15 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             playerConnection.sendPacket(disconnectPacket);
             playerConnection.refreshOnline(false);
         }
+    }
+
+    /**
+     * Kicks the player with a reason.
+     *
+     * @param message the kick reason
+     */
+    public void kick(@NotNull String message) {
+        this.kick(Component.text(message));
     }
 
     /**
@@ -1784,14 +1560,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param chunkZ the chunk Z
      */
     public void updateViewPosition(int chunkX, int chunkZ) {
-        UpdateViewPositionPacket updateViewPositionPacket = new UpdateViewPositionPacket();
-        updateViewPositionPacket.chunkX = chunkX;
-        updateViewPositionPacket.chunkZ = chunkZ;
-        playerConnection.sendPacket(updateViewPositionPacket);
-    }
-
-    public int getNextTeleportId() {
-        return teleportId.getAndIncrement();
+        playerConnection.sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
     }
 
     public int getLastSentTeleportId() {
@@ -1986,8 +1755,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the modifiable statistic map
      */
-    @NotNull
-    public Map<PlayerStatistic, Integer> getStatisticValueMap() {
+    public @NotNull Map<PlayerStatistic, Integer> getStatisticValueMap() {
         return statisticValueMap;
     }
 
@@ -1996,8 +1764,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player vehicle information
      */
-    @NotNull
-    public PlayerVehicleInformation getVehicleInformation() {
+    public @NotNull PlayerVehicleInformation getVehicleInformation() {
         return vehicleInformation;
     }
 
@@ -2005,15 +1772,16 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Sends to the player a {@link PlayerAbilitiesPacket} with all the updated fields.
      */
     protected void refreshAbilities() {
-        PlayerAbilitiesPacket playerAbilitiesPacket = new PlayerAbilitiesPacket();
-        playerAbilitiesPacket.invulnerable = invulnerable;
-        playerAbilitiesPacket.flying = flying;
-        playerAbilitiesPacket.allowFlying = allowFlying;
-        playerAbilitiesPacket.instantBreak = instantBreak;
-        playerAbilitiesPacket.flyingSpeed = flyingSpeed;
-        playerAbilitiesPacket.fieldViewModifier = fieldViewModifier;
-
-        playerConnection.sendPacket(playerAbilitiesPacket);
+        byte flags = 0;
+        if (invulnerable)
+            flags |= PlayerAbilitiesPacket.FLAG_INVULNERABLE;
+        if (flying)
+            flags |= PlayerAbilitiesPacket.FLAG_FLYING;
+        if (allowFlying)
+            flags |= PlayerAbilitiesPacket.FLAG_ALLOW_FLYING;
+        if (instantBreak)
+            flags |= PlayerAbilitiesPacket.FLAG_INSTANT_BREAK;
+        playerConnection.sendPacket(new PlayerAbilitiesPacket(flags, flyingSpeed, fieldViewModifier));
     }
 
     /**
@@ -2213,7 +1981,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
         connection.sendPacket(getAddPlayerToList());
-        connection.sendPacket(getEntityType().getSpawnType().getSpawnPacket(this));
+        connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());

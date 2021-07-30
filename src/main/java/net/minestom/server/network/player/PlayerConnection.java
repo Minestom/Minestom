@@ -150,7 +150,6 @@ public abstract class PlayerConnection {
         return MinecraftServer.getNettyServer().getPort();
     }
 
-
     /**
      * Forcing the player to disconnect.
      */

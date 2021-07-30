@@ -1,20 +1,10 @@
 package net.minestom.codegen;
 
-import net.minestom.codegen.blocks.BlockGenerator;
-import net.minestom.codegen.entity.EntityTypeGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
-import net.minestom.codegen.item.EnchantmentGenerator;
-import net.minestom.codegen.item.MaterialGenerator;
-import net.minestom.codegen.particle.ParticleGenerator;
-import net.minestom.codegen.potion.PotionEffectGenerator;
-import net.minestom.codegen.potion.PotionTypeGenerator;
-import net.minestom.codegen.sound.SoundEventGenerator;
-import net.minestom.codegen.statistics.StatisticGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class Generators {
@@ -26,29 +16,24 @@ public class Generators {
             return;
         }
         File outputFolder = new File(args[0]);
-        // Generate blocks
-        new BlockGenerator(resource("blocks.json"), outputFolder).generate();
+        var generator = new CodeGenerator(outputFolder);
+        generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockImpl", "BlockConstants");
+        generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "MaterialConstants");
+        generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypeConstants");
+        generator.generate(resource("enchantments.json"), "net.minestom.server.item", "Enchantment", "EnchantmentImpl", "EnchantmentConstants");
+        generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffectConstants");
+        generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypeConstants");
+        generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleImpl", "ParticleConstants");
+        generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "SoundEventImpl", "SoundEventConstants");
+        generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypeConstants");
+
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
-        // Generate entities
-        new EntityTypeGenerator(resource("entities.json"), outputFolder).generate();
-        // Generate items
-        new MaterialGenerator(resource("items.json"), outputFolder).generate();
-        // Generate enchantments
-        new EnchantmentGenerator(resource("enchantments.json"), outputFolder).generate();
         // TODO: Generate attributes
 //        new AttributeGenerator(
 //                new File(inputFolder, targetVersion + "_attributes.json"),
 //                outputFolder
 //        ).generate();
-        // Generate potion effects
-        new PotionEffectGenerator(resource("potion_effects.json"), outputFolder).generate();
-        // Generate potions
-        new PotionTypeGenerator(resource("potions.json"), outputFolder).generate();
-        // Generate particles
-        new ParticleGenerator(resource("particles.json"), outputFolder).generate();
-        // Generate sounds
-        new SoundEventGenerator(resource("sounds.json"), outputFolder).generate();
         // TODO: Generate villager professions
 //        new VillagerProfessionGenerator(
 //                new File(inputFolder, targetVersion + "_villager_professions.json"),
@@ -59,8 +44,6 @@ public class Generators {
 //                new File(inputFolder, targetVersion + "_villager_types.json"),
 //                outputFolder
 //        ).generate();
-        // Generate statistics
-        new StatisticGenerator(resource("custom_statistics.json"), outputFolder).generate();
         LOGGER.info("Finished generating code");
     }
 

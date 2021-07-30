@@ -383,23 +383,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the client update rate for time related packet
      */
-    @Nullable
-    public Duration getTimeUpdate() {
+    public @Nullable Duration getTimeUpdate() {
         return timeUpdate;
-    }
-
-    /**
-     * Changes the rate at which the client is updated about the time
-     * <p>
-     * Setting it to null means that the client will never know about time change
-     * (but will still change server-side)
-     *
-     * @param timeUpdate the new update rate concerning time
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public void setTimeUpdate(@Nullable net.minestom.server.utils.time.UpdateOption timeUpdate) {
-        setTimeUpdate(timeUpdate != null ? timeUpdate.toDuration() : null);
     }
 
     /**
@@ -419,12 +404,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
-    @NotNull
-    private TimeUpdatePacket createTimePacket() {
-        TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
-        timeUpdatePacket.worldAge = worldAge;
-        timeUpdatePacket.timeOfDay = time;
-        return timeUpdatePacket;
+    private @NotNull TimeUpdatePacket createTimePacket() {
+        return new TimeUpdatePacket(worldAge, timeRate == 0 ? -Math.abs(time) : time);
     }
 
     /**
@@ -432,8 +413,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the {@link WorldBorder} linked to the instance
      */
-    @NotNull
-    public WorldBorder getWorldBorder() {
+    public @NotNull WorldBorder getWorldBorder() {
         return worldBorder;
     }
 
@@ -442,8 +422,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
-    @NotNull
-    public Set<Entity> getEntities() {
+    public @NotNull Set<@NotNull Entity> getEntities() {
         return Collections.unmodifiableSet(entities);
     }
 

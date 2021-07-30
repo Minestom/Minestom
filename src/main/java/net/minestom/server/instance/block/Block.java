@@ -5,10 +5,7 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NamespaceID;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Unmodifiable;
+import org.jetbrains.annotations.*;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Collection;
@@ -22,6 +19,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
+@ApiStatus.NonExtendable
 public interface Block extends ProtocolObject, TagReadable, BlockConstants {
 
     /**
@@ -168,23 +166,23 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     static @NotNull Collection<@NotNull Block> values() {
-        return BlockLoader.values();
+        return BlockImpl.values();
     }
 
-    static Block fromNamespaceId(@NotNull String namespaceID) {
-        return BlockLoader.get(namespaceID);
+    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
+        return BlockImpl.getSafe(namespaceID);
     }
 
-    static Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
+    static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
         return fromNamespaceId(namespaceID.asString());
     }
 
     static @Nullable Block fromStateId(short stateId) {
-        return BlockLoader.getState(stateId);
+        return BlockImpl.getState(stateId);
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockLoader.getId(blockId);
+        return BlockImpl.getId(blockId);
     }
 
     @FunctionalInterface

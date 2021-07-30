@@ -1,12 +1,9 @@
 package net.minestom.server.network;
 
 import io.netty.channel.Channel;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.event.EventDispatcher;
@@ -23,7 +20,6 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.callback.validator.PlayerValidator;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +31,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 /**
  * Manages the connected clients.
@@ -132,51 +127,6 @@ public final class ConnectionManager {
                 return player;
         }
         return null;
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players who validate the condition {@code condition}.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @param condition   the condition to receive the message
-     * @deprecated Use {@link Audiences#players(Predicate)}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage, @Nullable PlayerValidator condition) {
-        if (condition == null) {
-            Audiences.players().sendMessage(jsonMessage);
-        } else {
-            Audiences.players(condition).sendMessage(jsonMessage);
-        }
-    }
-
-    /**
-     * Sends a {@link JsonMessage} to all online players.
-     *
-     * @param jsonMessage the message to send, probably a {@link net.minestom.server.chat.ColoredText} or {@link net.minestom.server.chat.RichMessage}
-     * @deprecated Use {@link Audience#sendMessage(Component)} on {@link Audiences#players()}
-     */
-    @Deprecated
-    public void broadcastMessage(@NotNull JsonMessage jsonMessage) {
-        this.broadcastMessage(jsonMessage, null);
-    }
-
-    private Collection<Player> getRecipients(@Nullable PlayerValidator condition) {
-        Collection<Player> recipients;
-
-        // Get the recipients
-        if (condition == null) {
-            recipients = getOnlinePlayers();
-        } else {
-            recipients = new ArrayList<>();
-            getOnlinePlayers().forEach(player -> {
-                final boolean result = condition.isValid(player);
-                if (result)
-                    recipients.add(player);
-            });
-        }
-
-        return recipients;
     }
 
     /**
@@ -282,33 +232,9 @@ public final class ConnectionManager {
      * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
      *
      * @return the kick reason in case on a shutdown
-     * @deprecated Use {@link #getShutdownText()}
-     */
-    @Deprecated
-    @NotNull
-    public JsonMessage getShutdownTextJson() {
-        return JsonMessage.fromComponent(shutdownText);
-    }
-
-    /**
-     * Gets the kick reason when the server is shutdown using {@link MinecraftServer#stopCleanly()}.
-     *
-     * @return the kick reason in case on a shutdown
      */
     public @NotNull Component getShutdownText() {
         return shutdownText;
-    }
-
-    /**
-     * Changes the kick reason in case of a shutdown.
-     *
-     * @param shutdownText the new shutdown kick reason
-     * @see #getShutdownTextJson()
-     * @deprecated Use {@link #setShutdownText(Component)}
-     */
-    @Deprecated
-    public void setShutdownText(@NotNull JsonMessage shutdownText) {
-        this.shutdownText = shutdownText.asComponent();
     }
 
     /**
@@ -346,7 +272,6 @@ public final class ConnectionManager {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
-
         this.players.remove(player);
         this.connectionPlayerMap.remove(connection);
     }
@@ -362,58 +287,39 @@ public final class ConnectionManager {
      */
     public void startPlayState(@NotNull Player player, boolean register) {
         AsyncUtils.runAsync(() -> {
-            String username = player.getUsername();
-            UUID uuid = player.getUuid();
-
+            final PlayerConnection playerConnection = player.getPlayerConnection();
             // Call pre login event
-            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, username, uuid);
+            AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player);
             EventDispatcher.call(asyncPlayerPreLoginEvent);
-
             // Close the player channel if he has been disconnected (kick)
-            final boolean online = player.isOnline();
-            if (!online) {
-                final PlayerConnection playerConnection = player.getPlayerConnection();
+            if (!player.isOnline()) {
                 if (playerConnection instanceof NettyPlayerConnection) {
                     ((NettyPlayerConnection) playerConnection).getChannel().flush();
                 }
-
                 //playerConnection.disconnect();
                 return;
             }
-
             // Change UUID/Username based on the event
             {
                 final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
                 final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
-
                 if (!player.getUsername().equals(eventUsername)) {
                     player.setUsernameField(eventUsername);
-                    username = eventUsername;
                 }
-
                 if (!player.getUuid().equals(eventUuid)) {
                     player.setUuid(eventUuid);
-                    uuid = eventUuid;
                 }
             }
-
             // Send login success packet
-            {
-                final PlayerConnection connection = player.getPlayerConnection();
-
-                LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(uuid, username);
-                if (connection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) connection).writeAndFlush(loginSuccessPacket);
-                } else {
-                    connection.sendPacket(loginSuccessPacket);
-                }
-
-                connection.setConnectionState(ConnectionState.PLAY);
+            LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
+            if (playerConnection instanceof NettyPlayerConnection) {
+                ((NettyPlayerConnection) playerConnection).writeAndFlush(loginSuccessPacket);
+            } else {
+                playerConnection.sendPacket(loginSuccessPacket);
             }
-
+            playerConnection.setConnectionState(ConnectionState.PLAY);
             // Add the player to the waiting list
-            addWaitingPlayer(player);
-
+            this.waitingPlayers.add(player);
             if (register) {
                 registerPlayer(player);
             }
@@ -457,7 +363,19 @@ public final class ConnectionManager {
      * Connects waiting players.
      */
     public void updateWaitingPlayers() {
-        waitingPlayersTick();
+        Player waitingPlayer;
+        while ((waitingPlayer = waitingPlayers.poll()) != null) {
+            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
+            EventDispatcher.call(loginEvent);
+            final Instance spawningInstance = loginEvent.getSpawningInstance();
+
+            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
+
+            waitingPlayer.UNSAFE_init(spawningInstance);
+
+            // Spawn the player at Player#getRespawnPoint during the next instance tick
+            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
+        }
     }
 
     /**
@@ -477,33 +395,5 @@ public final class ConnectionManager {
                 player.kick(TIMEOUT_TEXT);
             }
         }
-    }
-
-    /**
-     * Adds connected clients after the handshake (used to free the networking threads).
-     */
-    private void waitingPlayersTick() {
-        Player waitingPlayer;
-        while ((waitingPlayer = waitingPlayers.poll()) != null) {
-            PlayerLoginEvent loginEvent = new PlayerLoginEvent(waitingPlayer);
-            EventDispatcher.call(loginEvent);
-            final Instance spawningInstance = loginEvent.getSpawningInstance();
-
-            Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
-
-            waitingPlayer.UNSAFE_init(spawningInstance);
-
-            // Spawn the player at Player#getRespawnPoint during the next instance tick
-            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
-        }
-    }
-
-    /**
-     * Adds a player into the waiting list, to be handled during the next server tick.
-     *
-     * @param player the {@link Player player} to add into the waiting list
-     */
-    public void addWaitingPlayer(@NotNull Player player) {
-        this.waitingPlayers.add(player);
     }
 }

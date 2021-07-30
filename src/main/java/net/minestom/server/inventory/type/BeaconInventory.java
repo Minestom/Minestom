@@ -56,7 +56,7 @@ public class BeaconInventory extends Inventory {
      */
     public void setFirstPotionEffect(PotionEffect firstPotionEffect) {
         this.firstPotionEffect = firstPotionEffect;
-        sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.getId());
+        sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.id());
     }
 
     /**
@@ -75,7 +75,6 @@ public class BeaconInventory extends Inventory {
      */
     public void setSecondPotionEffect(PotionEffect secondPotionEffect) {
         this.secondPotionEffect = secondPotionEffect;
-        sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.getId());
+        sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.id());
     }
-
 }

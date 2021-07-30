@@ -1,7 +1,6 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,10 +16,10 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
     private String username;
     private UUID playerUuid;
 
-    public AsyncPlayerPreLoginEvent(@NotNull Player player, @NotNull String username, @NotNull UUID playerUuid) {
+    public AsyncPlayerPreLoginEvent(@NotNull Player player) {
         this.player = player;
-        this.username = username;
-        this.playerUuid = playerUuid;
+        this.username = player.getUsername();
+        this.playerUuid = player.getUuid();
     }
 
     /**
