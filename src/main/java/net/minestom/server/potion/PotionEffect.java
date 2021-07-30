@@ -27,11 +27,11 @@ public interface PotionEffect extends ProtocolObject, PotionEffectConstants {
     }
 
     static @NotNull Collection<@NotNull PotionEffect> values() {
-        return PotionEffectLoader.values();
+        return PotionEffectImpl.values();
     }
 
     static @Nullable PotionEffect fromNamespaceId(@NotNull String namespaceID) {
-        return PotionEffectLoader.get(namespaceID);
+        return PotionEffectImpl.get(namespaceID);
     }
 
     static @Nullable PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -39,6 +39,6 @@ public interface PotionEffect extends ProtocolObject, PotionEffectConstants {
     }
 
     static @Nullable PotionEffect fromId(int id) {
-        return PotionEffectLoader.getId(id);
+        return PotionEffectImpl.getId(id);
     }
 }

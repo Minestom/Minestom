@@ -18,14 +18,14 @@ public class Generators {
         File outputFolder = new File(args[0]);
         var generator = new CodeGenerator(outputFolder);
         generator.generate(resource("blocks.json"), "net.minestom.server.instance.block", "Block", "BlockLoader", "BlockConstants");
-        generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialLoader", "MaterialConstants");
-        generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeLoader", "EntityTypeConstants");
-        generator.generate(resource("enchantments.json"), "net.minestom.server.item", "Enchantment", "EnchantmentLoader", "EnchantmentConstants");
-        generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectLoader", "PotionEffectConstants");
-        generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeLoader", "PotionTypeConstants");
-        generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleLoader", "ParticleConstants");
-        generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "SoundEventLoader", "SoundEventConstants");
-        generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeLoader", "StatisticTypeConstants");
+        generator.generate(resource("items.json"), "net.minestom.server.item", "Material", "MaterialImpl", "MaterialConstants");
+        generator.generate(resource("entities.json"), "net.minestom.server.entity", "EntityType", "EntityTypeImpl", "EntityTypeConstants");
+        generator.generate(resource("enchantments.json"), "net.minestom.server.item", "Enchantment", "EnchantmentImpl", "EnchantmentConstants");
+        generator.generate(resource("potion_effects.json"), "net.minestom.server.potion", "PotionEffect", "PotionEffectImpl", "PotionEffectConstants");
+        generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypeConstants");
+        generator.generate(resource("particles.json"), "net.minestom.server.particle", "Particle", "ParticleImpl", "ParticleConstants");
+        generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "SoundEventImpl", "SoundEventConstants");
+        generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypeConstants");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();

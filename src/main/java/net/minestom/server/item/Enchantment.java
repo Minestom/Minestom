@@ -32,11 +32,11 @@ public interface Enchantment extends ProtocolObject, EnchantmentConstants {
     }
 
     static @NotNull Collection<@NotNull Enchantment> values() {
-        return EnchantmentLoader.values();
+        return EnchantmentImpl.values();
     }
 
     static @Nullable Enchantment fromNamespaceId(@NotNull String namespaceID) {
-        return EnchantmentLoader.get(namespaceID);
+        return EnchantmentImpl.get(namespaceID);
     }
 
     static @Nullable Enchantment fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -44,6 +44,6 @@ public interface Enchantment extends ProtocolObject, EnchantmentConstants {
     }
 
     static @Nullable Enchantment fromId(int id) {
-        return EnchantmentLoader.getId(id);
+        return EnchantmentImpl.getId(id);
     }
 }

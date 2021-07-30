@@ -12,11 +12,11 @@ import java.util.Collection;
 public interface PotionType extends ProtocolObject, PotionTypeConstants {
 
     static @NotNull Collection<@NotNull PotionType> values() {
-        return PotionTypeLoader.values();
+        return PotionTypeImpl.values();
     }
 
     static @Nullable PotionType fromNamespaceId(@NotNull String namespaceID) {
-        return PotionTypeLoader.get(namespaceID);
+        return PotionTypeImpl.get(namespaceID);
     }
 
     static @Nullable PotionType fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -24,6 +24,6 @@ public interface PotionType extends ProtocolObject, PotionTypeConstants {
     }
 
     static @Nullable PotionType fromId(int id) {
-        return PotionTypeLoader.getId(id);
+        return PotionTypeImpl.getId(id);
     }
 }

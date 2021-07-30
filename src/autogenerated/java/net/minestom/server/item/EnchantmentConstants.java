@@ -5,79 +5,79 @@ package net.minestom.server.item;
  */
 @SuppressWarnings("unused")
 interface EnchantmentConstants {
-    Enchantment PROTECTION = EnchantmentLoader.get("minecraft:protection");
+    Enchantment PROTECTION = EnchantmentImpl.get("minecraft:protection");
 
-    Enchantment FIRE_PROTECTION = EnchantmentLoader.get("minecraft:fire_protection");
+    Enchantment FIRE_PROTECTION = EnchantmentImpl.get("minecraft:fire_protection");
 
-    Enchantment FEATHER_FALLING = EnchantmentLoader.get("minecraft:feather_falling");
+    Enchantment FEATHER_FALLING = EnchantmentImpl.get("minecraft:feather_falling");
 
-    Enchantment BLAST_PROTECTION = EnchantmentLoader.get("minecraft:blast_protection");
+    Enchantment BLAST_PROTECTION = EnchantmentImpl.get("minecraft:blast_protection");
 
-    Enchantment PROJECTILE_PROTECTION = EnchantmentLoader.get("minecraft:projectile_protection");
+    Enchantment PROJECTILE_PROTECTION = EnchantmentImpl.get("minecraft:projectile_protection");
 
-    Enchantment RESPIRATION = EnchantmentLoader.get("minecraft:respiration");
+    Enchantment RESPIRATION = EnchantmentImpl.get("minecraft:respiration");
 
-    Enchantment AQUA_AFFINITY = EnchantmentLoader.get("minecraft:aqua_affinity");
+    Enchantment AQUA_AFFINITY = EnchantmentImpl.get("minecraft:aqua_affinity");
 
-    Enchantment THORNS = EnchantmentLoader.get("minecraft:thorns");
+    Enchantment THORNS = EnchantmentImpl.get("minecraft:thorns");
 
-    Enchantment DEPTH_STRIDER = EnchantmentLoader.get("minecraft:depth_strider");
+    Enchantment DEPTH_STRIDER = EnchantmentImpl.get("minecraft:depth_strider");
 
-    Enchantment FROST_WALKER = EnchantmentLoader.get("minecraft:frost_walker");
+    Enchantment FROST_WALKER = EnchantmentImpl.get("minecraft:frost_walker");
 
-    Enchantment BINDING_CURSE = EnchantmentLoader.get("minecraft:binding_curse");
+    Enchantment BINDING_CURSE = EnchantmentImpl.get("minecraft:binding_curse");
 
-    Enchantment SOUL_SPEED = EnchantmentLoader.get("minecraft:soul_speed");
+    Enchantment SOUL_SPEED = EnchantmentImpl.get("minecraft:soul_speed");
 
-    Enchantment SHARPNESS = EnchantmentLoader.get("minecraft:sharpness");
+    Enchantment SHARPNESS = EnchantmentImpl.get("minecraft:sharpness");
 
-    Enchantment SMITE = EnchantmentLoader.get("minecraft:smite");
+    Enchantment SMITE = EnchantmentImpl.get("minecraft:smite");
 
-    Enchantment BANE_OF_ARTHROPODS = EnchantmentLoader.get("minecraft:bane_of_arthropods");
+    Enchantment BANE_OF_ARTHROPODS = EnchantmentImpl.get("minecraft:bane_of_arthropods");
 
-    Enchantment KNOCKBACK = EnchantmentLoader.get("minecraft:knockback");
+    Enchantment KNOCKBACK = EnchantmentImpl.get("minecraft:knockback");
 
-    Enchantment FIRE_ASPECT = EnchantmentLoader.get("minecraft:fire_aspect");
+    Enchantment FIRE_ASPECT = EnchantmentImpl.get("minecraft:fire_aspect");
 
-    Enchantment LOOTING = EnchantmentLoader.get("minecraft:looting");
+    Enchantment LOOTING = EnchantmentImpl.get("minecraft:looting");
 
-    Enchantment SWEEPING = EnchantmentLoader.get("minecraft:sweeping");
+    Enchantment SWEEPING = EnchantmentImpl.get("minecraft:sweeping");
 
-    Enchantment EFFICIENCY = EnchantmentLoader.get("minecraft:efficiency");
+    Enchantment EFFICIENCY = EnchantmentImpl.get("minecraft:efficiency");
 
-    Enchantment SILK_TOUCH = EnchantmentLoader.get("minecraft:silk_touch");
+    Enchantment SILK_TOUCH = EnchantmentImpl.get("minecraft:silk_touch");
 
-    Enchantment UNBREAKING = EnchantmentLoader.get("minecraft:unbreaking");
+    Enchantment UNBREAKING = EnchantmentImpl.get("minecraft:unbreaking");
 
-    Enchantment FORTUNE = EnchantmentLoader.get("minecraft:fortune");
+    Enchantment FORTUNE = EnchantmentImpl.get("minecraft:fortune");
 
-    Enchantment POWER = EnchantmentLoader.get("minecraft:power");
+    Enchantment POWER = EnchantmentImpl.get("minecraft:power");
 
-    Enchantment PUNCH = EnchantmentLoader.get("minecraft:punch");
+    Enchantment PUNCH = EnchantmentImpl.get("minecraft:punch");
 
-    Enchantment FLAME = EnchantmentLoader.get("minecraft:flame");
+    Enchantment FLAME = EnchantmentImpl.get("minecraft:flame");
 
-    Enchantment INFINITY = EnchantmentLoader.get("minecraft:infinity");
+    Enchantment INFINITY = EnchantmentImpl.get("minecraft:infinity");
 
-    Enchantment LUCK_OF_THE_SEA = EnchantmentLoader.get("minecraft:luck_of_the_sea");
+    Enchantment LUCK_OF_THE_SEA = EnchantmentImpl.get("minecraft:luck_of_the_sea");
 
-    Enchantment LURE = EnchantmentLoader.get("minecraft:lure");
+    Enchantment LURE = EnchantmentImpl.get("minecraft:lure");
 
-    Enchantment LOYALTY = EnchantmentLoader.get("minecraft:loyalty");
+    Enchantment LOYALTY = EnchantmentImpl.get("minecraft:loyalty");
 
-    Enchantment IMPALING = EnchantmentLoader.get("minecraft:impaling");
+    Enchantment IMPALING = EnchantmentImpl.get("minecraft:impaling");
 
-    Enchantment RIPTIDE = EnchantmentLoader.get("minecraft:riptide");
+    Enchantment RIPTIDE = EnchantmentImpl.get("minecraft:riptide");
 
-    Enchantment CHANNELING = EnchantmentLoader.get("minecraft:channeling");
+    Enchantment CHANNELING = EnchantmentImpl.get("minecraft:channeling");
 
-    Enchantment MULTISHOT = EnchantmentLoader.get("minecraft:multishot");
+    Enchantment MULTISHOT = EnchantmentImpl.get("minecraft:multishot");
 
-    Enchantment QUICK_CHARGE = EnchantmentLoader.get("minecraft:quick_charge");
+    Enchantment QUICK_CHARGE = EnchantmentImpl.get("minecraft:quick_charge");
 
-    Enchantment PIERCING = EnchantmentLoader.get("minecraft:piercing");
+    Enchantment PIERCING = EnchantmentImpl.get("minecraft:piercing");
 
-    Enchantment MENDING = EnchantmentLoader.get("minecraft:mending");
+    Enchantment MENDING = EnchantmentImpl.get("minecraft:mending");
 
-    Enchantment VANISHING_CURSE = EnchantmentLoader.get("minecraft:vanishing_curse");
+    Enchantment VANISHING_CURSE = EnchantmentImpl.get("minecraft:vanishing_curse");
 }

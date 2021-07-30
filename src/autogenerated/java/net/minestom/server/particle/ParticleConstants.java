@@ -5,181 +5,181 @@ package net.minestom.server.particle;
  */
 @SuppressWarnings("unused")
 interface ParticleConstants {
-    Particle AMBIENT_ENTITY_EFFECT = ParticleLoader.get("minecraft:ambient_entity_effect");
+    Particle AMBIENT_ENTITY_EFFECT = ParticleImpl.get("minecraft:ambient_entity_effect");
 
-    Particle ANGRY_VILLAGER = ParticleLoader.get("minecraft:angry_villager");
+    Particle ANGRY_VILLAGER = ParticleImpl.get("minecraft:angry_villager");
 
-    Particle BARRIER = ParticleLoader.get("minecraft:barrier");
+    Particle BARRIER = ParticleImpl.get("minecraft:barrier");
 
-    Particle LIGHT = ParticleLoader.get("minecraft:light");
+    Particle LIGHT = ParticleImpl.get("minecraft:light");
 
-    Particle BLOCK = ParticleLoader.get("minecraft:block");
+    Particle BLOCK = ParticleImpl.get("minecraft:block");
 
-    Particle BUBBLE = ParticleLoader.get("minecraft:bubble");
+    Particle BUBBLE = ParticleImpl.get("minecraft:bubble");
 
-    Particle CLOUD = ParticleLoader.get("minecraft:cloud");
+    Particle CLOUD = ParticleImpl.get("minecraft:cloud");
 
-    Particle CRIT = ParticleLoader.get("minecraft:crit");
+    Particle CRIT = ParticleImpl.get("minecraft:crit");
 
-    Particle DAMAGE_INDICATOR = ParticleLoader.get("minecraft:damage_indicator");
+    Particle DAMAGE_INDICATOR = ParticleImpl.get("minecraft:damage_indicator");
 
-    Particle DRAGON_BREATH = ParticleLoader.get("minecraft:dragon_breath");
+    Particle DRAGON_BREATH = ParticleImpl.get("minecraft:dragon_breath");
 
-    Particle DRIPPING_LAVA = ParticleLoader.get("minecraft:dripping_lava");
+    Particle DRIPPING_LAVA = ParticleImpl.get("minecraft:dripping_lava");
 
-    Particle FALLING_LAVA = ParticleLoader.get("minecraft:falling_lava");
+    Particle FALLING_LAVA = ParticleImpl.get("minecraft:falling_lava");
 
-    Particle LANDING_LAVA = ParticleLoader.get("minecraft:landing_lava");
+    Particle LANDING_LAVA = ParticleImpl.get("minecraft:landing_lava");
 
-    Particle DRIPPING_WATER = ParticleLoader.get("minecraft:dripping_water");
+    Particle DRIPPING_WATER = ParticleImpl.get("minecraft:dripping_water");
 
-    Particle FALLING_WATER = ParticleLoader.get("minecraft:falling_water");
+    Particle FALLING_WATER = ParticleImpl.get("minecraft:falling_water");
 
-    Particle DUST = ParticleLoader.get("minecraft:dust");
+    Particle DUST = ParticleImpl.get("minecraft:dust");
 
-    Particle DUST_COLOR_TRANSITION = ParticleLoader.get("minecraft:dust_color_transition");
+    Particle DUST_COLOR_TRANSITION = ParticleImpl.get("minecraft:dust_color_transition");
 
-    Particle EFFECT = ParticleLoader.get("minecraft:effect");
+    Particle EFFECT = ParticleImpl.get("minecraft:effect");
 
-    Particle ELDER_GUARDIAN = ParticleLoader.get("minecraft:elder_guardian");
+    Particle ELDER_GUARDIAN = ParticleImpl.get("minecraft:elder_guardian");
 
-    Particle ENCHANTED_HIT = ParticleLoader.get("minecraft:enchanted_hit");
+    Particle ENCHANTED_HIT = ParticleImpl.get("minecraft:enchanted_hit");
 
-    Particle ENCHANT = ParticleLoader.get("minecraft:enchant");
+    Particle ENCHANT = ParticleImpl.get("minecraft:enchant");
 
-    Particle END_ROD = ParticleLoader.get("minecraft:end_rod");
+    Particle END_ROD = ParticleImpl.get("minecraft:end_rod");
 
-    Particle ENTITY_EFFECT = ParticleLoader.get("minecraft:entity_effect");
+    Particle ENTITY_EFFECT = ParticleImpl.get("minecraft:entity_effect");
 
-    Particle EXPLOSION_EMITTER = ParticleLoader.get("minecraft:explosion_emitter");
+    Particle EXPLOSION_EMITTER = ParticleImpl.get("minecraft:explosion_emitter");
 
-    Particle EXPLOSION = ParticleLoader.get("minecraft:explosion");
+    Particle EXPLOSION = ParticleImpl.get("minecraft:explosion");
 
-    Particle FALLING_DUST = ParticleLoader.get("minecraft:falling_dust");
+    Particle FALLING_DUST = ParticleImpl.get("minecraft:falling_dust");
 
-    Particle FIREWORK = ParticleLoader.get("minecraft:firework");
+    Particle FIREWORK = ParticleImpl.get("minecraft:firework");
 
-    Particle FISHING = ParticleLoader.get("minecraft:fishing");
+    Particle FISHING = ParticleImpl.get("minecraft:fishing");
 
-    Particle FLAME = ParticleLoader.get("minecraft:flame");
+    Particle FLAME = ParticleImpl.get("minecraft:flame");
 
-    Particle SOUL_FIRE_FLAME = ParticleLoader.get("minecraft:soul_fire_flame");
+    Particle SOUL_FIRE_FLAME = ParticleImpl.get("minecraft:soul_fire_flame");
 
-    Particle SOUL = ParticleLoader.get("minecraft:soul");
+    Particle SOUL = ParticleImpl.get("minecraft:soul");
 
-    Particle FLASH = ParticleLoader.get("minecraft:flash");
+    Particle FLASH = ParticleImpl.get("minecraft:flash");
 
-    Particle HAPPY_VILLAGER = ParticleLoader.get("minecraft:happy_villager");
+    Particle HAPPY_VILLAGER = ParticleImpl.get("minecraft:happy_villager");
 
-    Particle COMPOSTER = ParticleLoader.get("minecraft:composter");
+    Particle COMPOSTER = ParticleImpl.get("minecraft:composter");
 
-    Particle HEART = ParticleLoader.get("minecraft:heart");
+    Particle HEART = ParticleImpl.get("minecraft:heart");
 
-    Particle INSTANT_EFFECT = ParticleLoader.get("minecraft:instant_effect");
+    Particle INSTANT_EFFECT = ParticleImpl.get("minecraft:instant_effect");
 
-    Particle ITEM = ParticleLoader.get("minecraft:item");
+    Particle ITEM = ParticleImpl.get("minecraft:item");
 
-    Particle VIBRATION = ParticleLoader.get("minecraft:vibration");
+    Particle VIBRATION = ParticleImpl.get("minecraft:vibration");
 
-    Particle ITEM_SLIME = ParticleLoader.get("minecraft:item_slime");
+    Particle ITEM_SLIME = ParticleImpl.get("minecraft:item_slime");
 
-    Particle ITEM_SNOWBALL = ParticleLoader.get("minecraft:item_snowball");
+    Particle ITEM_SNOWBALL = ParticleImpl.get("minecraft:item_snowball");
 
-    Particle LARGE_SMOKE = ParticleLoader.get("minecraft:large_smoke");
+    Particle LARGE_SMOKE = ParticleImpl.get("minecraft:large_smoke");
 
-    Particle LAVA = ParticleLoader.get("minecraft:lava");
+    Particle LAVA = ParticleImpl.get("minecraft:lava");
 
-    Particle MYCELIUM = ParticleLoader.get("minecraft:mycelium");
+    Particle MYCELIUM = ParticleImpl.get("minecraft:mycelium");
 
-    Particle NOTE = ParticleLoader.get("minecraft:note");
+    Particle NOTE = ParticleImpl.get("minecraft:note");
 
-    Particle POOF = ParticleLoader.get("minecraft:poof");
+    Particle POOF = ParticleImpl.get("minecraft:poof");
 
-    Particle PORTAL = ParticleLoader.get("minecraft:portal");
+    Particle PORTAL = ParticleImpl.get("minecraft:portal");
 
-    Particle RAIN = ParticleLoader.get("minecraft:rain");
+    Particle RAIN = ParticleImpl.get("minecraft:rain");
 
-    Particle SMOKE = ParticleLoader.get("minecraft:smoke");
+    Particle SMOKE = ParticleImpl.get("minecraft:smoke");
 
-    Particle SNEEZE = ParticleLoader.get("minecraft:sneeze");
+    Particle SNEEZE = ParticleImpl.get("minecraft:sneeze");
 
-    Particle SPIT = ParticleLoader.get("minecraft:spit");
+    Particle SPIT = ParticleImpl.get("minecraft:spit");
 
-    Particle SQUID_INK = ParticleLoader.get("minecraft:squid_ink");
+    Particle SQUID_INK = ParticleImpl.get("minecraft:squid_ink");
 
-    Particle SWEEP_ATTACK = ParticleLoader.get("minecraft:sweep_attack");
+    Particle SWEEP_ATTACK = ParticleImpl.get("minecraft:sweep_attack");
 
-    Particle TOTEM_OF_UNDYING = ParticleLoader.get("minecraft:totem_of_undying");
+    Particle TOTEM_OF_UNDYING = ParticleImpl.get("minecraft:totem_of_undying");
 
-    Particle UNDERWATER = ParticleLoader.get("minecraft:underwater");
+    Particle UNDERWATER = ParticleImpl.get("minecraft:underwater");
 
-    Particle SPLASH = ParticleLoader.get("minecraft:splash");
+    Particle SPLASH = ParticleImpl.get("minecraft:splash");
 
-    Particle WITCH = ParticleLoader.get("minecraft:witch");
+    Particle WITCH = ParticleImpl.get("minecraft:witch");
 
-    Particle BUBBLE_POP = ParticleLoader.get("minecraft:bubble_pop");
+    Particle BUBBLE_POP = ParticleImpl.get("minecraft:bubble_pop");
 
-    Particle CURRENT_DOWN = ParticleLoader.get("minecraft:current_down");
+    Particle CURRENT_DOWN = ParticleImpl.get("minecraft:current_down");
 
-    Particle BUBBLE_COLUMN_UP = ParticleLoader.get("minecraft:bubble_column_up");
+    Particle BUBBLE_COLUMN_UP = ParticleImpl.get("minecraft:bubble_column_up");
 
-    Particle NAUTILUS = ParticleLoader.get("minecraft:nautilus");
+    Particle NAUTILUS = ParticleImpl.get("minecraft:nautilus");
 
-    Particle DOLPHIN = ParticleLoader.get("minecraft:dolphin");
+    Particle DOLPHIN = ParticleImpl.get("minecraft:dolphin");
 
-    Particle CAMPFIRE_COSY_SMOKE = ParticleLoader.get("minecraft:campfire_cosy_smoke");
+    Particle CAMPFIRE_COSY_SMOKE = ParticleImpl.get("minecraft:campfire_cosy_smoke");
 
-    Particle CAMPFIRE_SIGNAL_SMOKE = ParticleLoader.get("minecraft:campfire_signal_smoke");
+    Particle CAMPFIRE_SIGNAL_SMOKE = ParticleImpl.get("minecraft:campfire_signal_smoke");
 
-    Particle DRIPPING_HONEY = ParticleLoader.get("minecraft:dripping_honey");
+    Particle DRIPPING_HONEY = ParticleImpl.get("minecraft:dripping_honey");
 
-    Particle FALLING_HONEY = ParticleLoader.get("minecraft:falling_honey");
+    Particle FALLING_HONEY = ParticleImpl.get("minecraft:falling_honey");
 
-    Particle LANDING_HONEY = ParticleLoader.get("minecraft:landing_honey");
+    Particle LANDING_HONEY = ParticleImpl.get("minecraft:landing_honey");
 
-    Particle FALLING_NECTAR = ParticleLoader.get("minecraft:falling_nectar");
+    Particle FALLING_NECTAR = ParticleImpl.get("minecraft:falling_nectar");
 
-    Particle FALLING_SPORE_BLOSSOM = ParticleLoader.get("minecraft:falling_spore_blossom");
+    Particle FALLING_SPORE_BLOSSOM = ParticleImpl.get("minecraft:falling_spore_blossom");
 
-    Particle ASH = ParticleLoader.get("minecraft:ash");
+    Particle ASH = ParticleImpl.get("minecraft:ash");
 
-    Particle CRIMSON_SPORE = ParticleLoader.get("minecraft:crimson_spore");
+    Particle CRIMSON_SPORE = ParticleImpl.get("minecraft:crimson_spore");
 
-    Particle WARPED_SPORE = ParticleLoader.get("minecraft:warped_spore");
+    Particle WARPED_SPORE = ParticleImpl.get("minecraft:warped_spore");
 
-    Particle SPORE_BLOSSOM_AIR = ParticleLoader.get("minecraft:spore_blossom_air");
+    Particle SPORE_BLOSSOM_AIR = ParticleImpl.get("minecraft:spore_blossom_air");
 
-    Particle DRIPPING_OBSIDIAN_TEAR = ParticleLoader.get("minecraft:dripping_obsidian_tear");
+    Particle DRIPPING_OBSIDIAN_TEAR = ParticleImpl.get("minecraft:dripping_obsidian_tear");
 
-    Particle FALLING_OBSIDIAN_TEAR = ParticleLoader.get("minecraft:falling_obsidian_tear");
+    Particle FALLING_OBSIDIAN_TEAR = ParticleImpl.get("minecraft:falling_obsidian_tear");
 
-    Particle LANDING_OBSIDIAN_TEAR = ParticleLoader.get("minecraft:landing_obsidian_tear");
+    Particle LANDING_OBSIDIAN_TEAR = ParticleImpl.get("minecraft:landing_obsidian_tear");
 
-    Particle REVERSE_PORTAL = ParticleLoader.get("minecraft:reverse_portal");
+    Particle REVERSE_PORTAL = ParticleImpl.get("minecraft:reverse_portal");
 
-    Particle WHITE_ASH = ParticleLoader.get("minecraft:white_ash");
+    Particle WHITE_ASH = ParticleImpl.get("minecraft:white_ash");
 
-    Particle SMALL_FLAME = ParticleLoader.get("minecraft:small_flame");
+    Particle SMALL_FLAME = ParticleImpl.get("minecraft:small_flame");
 
-    Particle SNOWFLAKE = ParticleLoader.get("minecraft:snowflake");
+    Particle SNOWFLAKE = ParticleImpl.get("minecraft:snowflake");
 
-    Particle DRIPPING_DRIPSTONE_LAVA = ParticleLoader.get("minecraft:dripping_dripstone_lava");
+    Particle DRIPPING_DRIPSTONE_LAVA = ParticleImpl.get("minecraft:dripping_dripstone_lava");
 
-    Particle FALLING_DRIPSTONE_LAVA = ParticleLoader.get("minecraft:falling_dripstone_lava");
+    Particle FALLING_DRIPSTONE_LAVA = ParticleImpl.get("minecraft:falling_dripstone_lava");
 
-    Particle DRIPPING_DRIPSTONE_WATER = ParticleLoader.get("minecraft:dripping_dripstone_water");
+    Particle DRIPPING_DRIPSTONE_WATER = ParticleImpl.get("minecraft:dripping_dripstone_water");
 
-    Particle FALLING_DRIPSTONE_WATER = ParticleLoader.get("minecraft:falling_dripstone_water");
+    Particle FALLING_DRIPSTONE_WATER = ParticleImpl.get("minecraft:falling_dripstone_water");
 
-    Particle GLOW_SQUID_INK = ParticleLoader.get("minecraft:glow_squid_ink");
+    Particle GLOW_SQUID_INK = ParticleImpl.get("minecraft:glow_squid_ink");
 
-    Particle GLOW = ParticleLoader.get("minecraft:glow");
+    Particle GLOW = ParticleImpl.get("minecraft:glow");
 
-    Particle WAX_ON = ParticleLoader.get("minecraft:wax_on");
+    Particle WAX_ON = ParticleImpl.get("minecraft:wax_on");
 
-    Particle WAX_OFF = ParticleLoader.get("minecraft:wax_off");
+    Particle WAX_OFF = ParticleImpl.get("minecraft:wax_off");
 
-    Particle ELECTRIC_SPARK = ParticleLoader.get("minecraft:electric_spark");
+    Particle ELECTRIC_SPARK = ParticleImpl.get("minecraft:electric_spark");
 
-    Particle SCRAPE = ParticleLoader.get("minecraft:scrape");
+    Particle SCRAPE = ParticleImpl.get("minecraft:scrape");
 }

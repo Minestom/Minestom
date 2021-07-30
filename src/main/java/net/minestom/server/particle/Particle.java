@@ -12,11 +12,11 @@ import java.util.Collection;
 public interface Particle extends ProtocolObject, ParticleConstants {
 
     static @NotNull Collection<@NotNull Particle> values() {
-        return ParticleLoader.values();
+        return ParticleImpl.values();
     }
 
     static @Nullable Particle fromNamespaceId(@NotNull String namespaceID) {
-        return ParticleLoader.get(namespaceID);
+        return ParticleImpl.get(namespaceID);
     }
 
     static @Nullable Particle fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -24,6 +24,6 @@ public interface Particle extends ProtocolObject, ParticleConstants {
     }
 
     static @Nullable Particle fromId(int id) {
-        return ParticleLoader.getId(id);
+        return ParticleImpl.getId(id);
     }
 }

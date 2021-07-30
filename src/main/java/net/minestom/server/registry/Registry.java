@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -14,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStreamReader;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.Supplier;
 
 @ApiStatus.Internal
@@ -45,6 +47,37 @@ public class Registry {
         final String path = String.format("/%s.json", resource.name);
         final var resourceStream = Registry.class.getResourceAsStream(path);
         return GSON.fromJson(new InputStreamReader(resourceStream), JsonObject.class);
+    }
+
+    public static class Loader<T extends ProtocolObject> {
+        // Maps do not need to be thread-safe as they are fully populated
+        // in the static initializer, should not be modified during runtime
+
+        // namespace -> registry data
+        private final Map<String, T> namespaceMap = new HashMap<>();
+        // id -> registry data
+        private final Int2ObjectMap<T> idMap = new Int2ObjectOpenHashMap<>();
+
+        public T get(@NotNull String namespace) {
+            return namespaceMap.get(namespace);
+        }
+
+        public T getSafe(@NotNull String namespace) {
+            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
+        }
+
+        public T getId(int id) {
+            return idMap.get(id);
+        }
+
+        public Collection<T> values() {
+            return Collections.unmodifiableCollection(namespaceMap.values());
+        }
+
+        public void register(@NotNull T value) {
+            idMap.put(value.id(), value);
+            namespaceMap.put(value.name(), value);
+        }
     }
 
     public enum Resource {

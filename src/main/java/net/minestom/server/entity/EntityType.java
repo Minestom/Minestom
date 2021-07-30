@@ -39,11 +39,11 @@ public interface EntityType extends ProtocolObject, EntityTypeConstants {
     }
 
     static @NotNull Collection<@NotNull EntityType> values() {
-        return EntityTypeLoader.values();
+        return EntityTypeImpl.values();
     }
 
     static EntityType fromNamespaceId(@NotNull String namespaceID) {
-        return EntityTypeLoader.get(namespaceID);
+        return EntityTypeImpl.get(namespaceID);
     }
 
     static EntityType fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -51,6 +51,6 @@ public interface EntityType extends ProtocolObject, EntityTypeConstants {
     }
 
     static @Nullable EntityType fromId(int id) {
-        return EntityTypeLoader.getId(id);
+        return EntityTypeImpl.getId(id);
     }
 }

@@ -12,11 +12,11 @@ import java.util.Collection;
 public interface StatisticType extends ProtocolObject, StatisticTypeConstants {
 
     static @NotNull Collection<@NotNull StatisticType> values() {
-        return StatisticTypeLoader.values();
+        return StatisticTypeImpl.values();
     }
 
     static @Nullable StatisticType fromNamespaceId(@NotNull String namespaceID) {
-        return StatisticTypeLoader.get(namespaceID);
+        return StatisticTypeImpl.getSafe(namespaceID);
     }
 
     static @Nullable StatisticType fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -24,6 +24,6 @@ public interface StatisticType extends ProtocolObject, StatisticTypeConstants {
     }
 
     static @Nullable StatisticType fromId(int id) {
-        return StatisticTypeLoader.getId(id);
+        return StatisticTypeImpl.getId(id);
     }
 }

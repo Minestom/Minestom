@@ -140,15 +140,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         setBoundingBox(entityType.width(), entityType.height(), entityType.width());
 
-        this.entityMeta = EntityTypeLoader.createMeta(entityType, this, this.metadata);
+        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
         setAutoViewable(true);
 
         Entity.ENTITY_BY_ID.put(id, this);
         Entity.ENTITY_BY_UUID.put(uuid, this);
 
-        this.gravityAcceleration = EntityTypeLoader.getAcceleration(entityType.name());
-        this.gravityDragPerTick = EntityTypeLoader.getDrag(entityType.name());
+        this.gravityAcceleration = EntityTypeImpl.getAcceleration(entityType.name());
+        this.gravityDragPerTick = EntityTypeImpl.getDrag(entityType.name());
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -362,7 +362,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         synchronized (entityTypeLock) {
             this.entityType = entityType;
             this.metadata = new Metadata(this);
-            this.entityMeta = EntityTypeLoader.createMeta(entityType, this, this.metadata);
+            this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
 
             Set<Player> viewers = new HashSet<>(getViewers());
             getViewers().forEach(this::removeViewer0);

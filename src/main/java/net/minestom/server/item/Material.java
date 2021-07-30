@@ -61,11 +61,11 @@ public interface Material extends ProtocolObject, MaterialConstants {
     }
 
     static @NotNull Collection<@NotNull Material> values() {
-        return MaterialLoader.values();
+        return MaterialImpl.values();
     }
 
     static @Nullable Material fromNamespaceId(@NotNull String namespaceID) {
-        return MaterialLoader.get(namespaceID);
+        return MaterialImpl.get(namespaceID);
     }
 
     static @Nullable Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -73,6 +73,6 @@ public interface Material extends ProtocolObject, MaterialConstants {
     }
 
     static @Nullable Material fromId(int id) {
-        return MaterialLoader.getId(id);
+        return MaterialImpl.getId(id);
     }
 }

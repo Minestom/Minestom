@@ -12,11 +12,11 @@ import java.util.Collection;
 public interface SoundEvent extends ProtocolObject, SoundEventConstants {
 
     static @NotNull Collection<@NotNull SoundEvent> values() {
-        return SoundEventLoader.values();
+        return SoundEventImpl.values();
     }
 
     static @Nullable SoundEvent fromNamespaceId(@NotNull String namespaceID) {
-        return SoundEventLoader.get(namespaceID);
+        return SoundEventImpl.get(namespaceID);
     }
 
     static @Nullable SoundEvent fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -24,6 +24,6 @@ public interface SoundEvent extends ProtocolObject, SoundEventConstants {
     }
 
     static @Nullable SoundEvent fromId(int id) {
-        return SoundEventLoader.getId(id);
+        return SoundEventImpl.getId(id);
     }
 }

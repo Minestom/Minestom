@@ -5,89 +5,89 @@ package net.minestom.server.potion;
  */
 @SuppressWarnings("unused")
 interface PotionTypeConstants {
-    PotionType EMPTY = PotionTypeLoader.get("minecraft:empty");
+    PotionType EMPTY = PotionTypeImpl.get("minecraft:empty");
 
-    PotionType WATER = PotionTypeLoader.get("minecraft:water");
+    PotionType WATER = PotionTypeImpl.get("minecraft:water");
 
-    PotionType MUNDANE = PotionTypeLoader.get("minecraft:mundane");
+    PotionType MUNDANE = PotionTypeImpl.get("minecraft:mundane");
 
-    PotionType THICK = PotionTypeLoader.get("minecraft:thick");
+    PotionType THICK = PotionTypeImpl.get("minecraft:thick");
 
-    PotionType AWKWARD = PotionTypeLoader.get("minecraft:awkward");
+    PotionType AWKWARD = PotionTypeImpl.get("minecraft:awkward");
 
-    PotionType NIGHT_VISION = PotionTypeLoader.get("minecraft:night_vision");
+    PotionType NIGHT_VISION = PotionTypeImpl.get("minecraft:night_vision");
 
-    PotionType LONG_NIGHT_VISION = PotionTypeLoader.get("minecraft:long_night_vision");
+    PotionType LONG_NIGHT_VISION = PotionTypeImpl.get("minecraft:long_night_vision");
 
-    PotionType INVISIBILITY = PotionTypeLoader.get("minecraft:invisibility");
+    PotionType INVISIBILITY = PotionTypeImpl.get("minecraft:invisibility");
 
-    PotionType LONG_INVISIBILITY = PotionTypeLoader.get("minecraft:long_invisibility");
+    PotionType LONG_INVISIBILITY = PotionTypeImpl.get("minecraft:long_invisibility");
 
-    PotionType LEAPING = PotionTypeLoader.get("minecraft:leaping");
+    PotionType LEAPING = PotionTypeImpl.get("minecraft:leaping");
 
-    PotionType LONG_LEAPING = PotionTypeLoader.get("minecraft:long_leaping");
+    PotionType LONG_LEAPING = PotionTypeImpl.get("minecraft:long_leaping");
 
-    PotionType STRONG_LEAPING = PotionTypeLoader.get("minecraft:strong_leaping");
+    PotionType STRONG_LEAPING = PotionTypeImpl.get("minecraft:strong_leaping");
 
-    PotionType FIRE_RESISTANCE = PotionTypeLoader.get("minecraft:fire_resistance");
+    PotionType FIRE_RESISTANCE = PotionTypeImpl.get("minecraft:fire_resistance");
 
-    PotionType LONG_FIRE_RESISTANCE = PotionTypeLoader.get("minecraft:long_fire_resistance");
+    PotionType LONG_FIRE_RESISTANCE = PotionTypeImpl.get("minecraft:long_fire_resistance");
 
-    PotionType SWIFTNESS = PotionTypeLoader.get("minecraft:swiftness");
+    PotionType SWIFTNESS = PotionTypeImpl.get("minecraft:swiftness");
 
-    PotionType LONG_SWIFTNESS = PotionTypeLoader.get("minecraft:long_swiftness");
+    PotionType LONG_SWIFTNESS = PotionTypeImpl.get("minecraft:long_swiftness");
 
-    PotionType STRONG_SWIFTNESS = PotionTypeLoader.get("minecraft:strong_swiftness");
+    PotionType STRONG_SWIFTNESS = PotionTypeImpl.get("minecraft:strong_swiftness");
 
-    PotionType SLOWNESS = PotionTypeLoader.get("minecraft:slowness");
+    PotionType SLOWNESS = PotionTypeImpl.get("minecraft:slowness");
 
-    PotionType LONG_SLOWNESS = PotionTypeLoader.get("minecraft:long_slowness");
+    PotionType LONG_SLOWNESS = PotionTypeImpl.get("minecraft:long_slowness");
 
-    PotionType STRONG_SLOWNESS = PotionTypeLoader.get("minecraft:strong_slowness");
+    PotionType STRONG_SLOWNESS = PotionTypeImpl.get("minecraft:strong_slowness");
 
-    PotionType TURTLE_MASTER = PotionTypeLoader.get("minecraft:turtle_master");
+    PotionType TURTLE_MASTER = PotionTypeImpl.get("minecraft:turtle_master");
 
-    PotionType LONG_TURTLE_MASTER = PotionTypeLoader.get("minecraft:long_turtle_master");
+    PotionType LONG_TURTLE_MASTER = PotionTypeImpl.get("minecraft:long_turtle_master");
 
-    PotionType STRONG_TURTLE_MASTER = PotionTypeLoader.get("minecraft:strong_turtle_master");
+    PotionType STRONG_TURTLE_MASTER = PotionTypeImpl.get("minecraft:strong_turtle_master");
 
-    PotionType WATER_BREATHING = PotionTypeLoader.get("minecraft:water_breathing");
+    PotionType WATER_BREATHING = PotionTypeImpl.get("minecraft:water_breathing");
 
-    PotionType LONG_WATER_BREATHING = PotionTypeLoader.get("minecraft:long_water_breathing");
+    PotionType LONG_WATER_BREATHING = PotionTypeImpl.get("minecraft:long_water_breathing");
 
-    PotionType HEALING = PotionTypeLoader.get("minecraft:healing");
+    PotionType HEALING = PotionTypeImpl.get("minecraft:healing");
 
-    PotionType STRONG_HEALING = PotionTypeLoader.get("minecraft:strong_healing");
+    PotionType STRONG_HEALING = PotionTypeImpl.get("minecraft:strong_healing");
 
-    PotionType HARMING = PotionTypeLoader.get("minecraft:harming");
+    PotionType HARMING = PotionTypeImpl.get("minecraft:harming");
 
-    PotionType STRONG_HARMING = PotionTypeLoader.get("minecraft:strong_harming");
+    PotionType STRONG_HARMING = PotionTypeImpl.get("minecraft:strong_harming");
 
-    PotionType POISON = PotionTypeLoader.get("minecraft:poison");
+    PotionType POISON = PotionTypeImpl.get("minecraft:poison");
 
-    PotionType LONG_POISON = PotionTypeLoader.get("minecraft:long_poison");
+    PotionType LONG_POISON = PotionTypeImpl.get("minecraft:long_poison");
 
-    PotionType STRONG_POISON = PotionTypeLoader.get("minecraft:strong_poison");
+    PotionType STRONG_POISON = PotionTypeImpl.get("minecraft:strong_poison");
 
-    PotionType REGENERATION = PotionTypeLoader.get("minecraft:regeneration");
+    PotionType REGENERATION = PotionTypeImpl.get("minecraft:regeneration");
 
-    PotionType LONG_REGENERATION = PotionTypeLoader.get("minecraft:long_regeneration");
+    PotionType LONG_REGENERATION = PotionTypeImpl.get("minecraft:long_regeneration");
 
-    PotionType STRONG_REGENERATION = PotionTypeLoader.get("minecraft:strong_regeneration");
+    PotionType STRONG_REGENERATION = PotionTypeImpl.get("minecraft:strong_regeneration");
 
-    PotionType STRENGTH = PotionTypeLoader.get("minecraft:strength");
+    PotionType STRENGTH = PotionTypeImpl.get("minecraft:strength");
 
-    PotionType LONG_STRENGTH = PotionTypeLoader.get("minecraft:long_strength");
+    PotionType LONG_STRENGTH = PotionTypeImpl.get("minecraft:long_strength");
 
-    PotionType STRONG_STRENGTH = PotionTypeLoader.get("minecraft:strong_strength");
+    PotionType STRONG_STRENGTH = PotionTypeImpl.get("minecraft:strong_strength");
 
-    PotionType WEAKNESS = PotionTypeLoader.get("minecraft:weakness");
+    PotionType WEAKNESS = PotionTypeImpl.get("minecraft:weakness");
 
-    PotionType LONG_WEAKNESS = PotionTypeLoader.get("minecraft:long_weakness");
+    PotionType LONG_WEAKNESS = PotionTypeImpl.get("minecraft:long_weakness");
 
-    PotionType LUCK = PotionTypeLoader.get("minecraft:luck");
+    PotionType LUCK = PotionTypeImpl.get("minecraft:luck");
 
-    PotionType SLOW_FALLING = PotionTypeLoader.get("minecraft:slow_falling");
+    PotionType SLOW_FALLING = PotionTypeImpl.get("minecraft:slow_falling");
 
-    PotionType LONG_SLOW_FALLING = PotionTypeLoader.get("minecraft:long_slow_falling");
+    PotionType LONG_SLOW_FALLING = PotionTypeImpl.get("minecraft:long_slow_falling");
 }
