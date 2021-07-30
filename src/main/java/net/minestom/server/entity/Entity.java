@@ -1510,6 +1510,10 @@ public class Entity implements Viewable, Tickable, EventHandler<EntityEvent>, Da
         if (hasPassenger()) {
             getPassengers().forEach(this::removePassenger);
         }
+        var vehicle = this.vehicle;
+        if (vehicle != null) {
+            vehicle.removePassenger(this);
+        }
         MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
