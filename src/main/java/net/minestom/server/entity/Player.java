@@ -1563,10 +1563,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         playerConnection.sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
     }
 
-    public int getNextTeleportId() {
-        return teleportId.getAndIncrement();
-    }
-
     public int getLastSentTeleportId() {
         return teleportId.get();
     }
