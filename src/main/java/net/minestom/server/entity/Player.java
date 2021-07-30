@@ -1952,7 +1952,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     public int getNextTeleportId() {
-        return teleportId.getAndIncrement();
+        return teleportId.incrementAndGet();
     }
 
     public int getLastSentTeleportId() {
