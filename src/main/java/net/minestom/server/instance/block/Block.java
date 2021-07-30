@@ -166,11 +166,11 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     static @NotNull Collection<@NotNull Block> values() {
-        return BlockLoader.values();
+        return BlockImpl.values();
     }
 
     static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
-        return BlockLoader.get(namespaceID);
+        return BlockImpl.get(namespaceID);
     }
 
     static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
@@ -178,11 +178,11 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
     }
 
     static @Nullable Block fromStateId(short stateId) {
-        return BlockLoader.getState(stateId);
+        return BlockImpl.getState(stateId);
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockLoader.getId(blockId);
+        return BlockImpl.getId(blockId);
     }
 
     @FunctionalInterface

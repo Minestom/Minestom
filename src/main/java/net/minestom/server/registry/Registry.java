@@ -84,8 +84,8 @@ public class Registry {
         }
 
         public void register(@NotNull T value) {
-            idMap.put(value.id(), value);
-            namespaceMap.put(value.name(), value);
+            this.idMap.put(value.id(), value);
+            this.namespaceMap.put(value.name(), value);
         }
 
         public interface Loader<T extends ProtocolObject> {

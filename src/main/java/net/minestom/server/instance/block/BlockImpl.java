@@ -2,16 +2,22 @@ package net.minestom.server.instance.block;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.google.gson.JsonObject;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 final class BlockImpl implements Block {
@@ -19,15 +25,66 @@ final class BlockImpl implements Block {
             .expireAfterWrite(Duration.ofMinutes(5))
             .weakValues()
             .build();
+    // Block state -> block object
+    private static final Int2ObjectMap<Block> BLOCK_STATE_MAP = new Int2ObjectOpenHashMap<>();
+    private static final Registry.Container<Block> CONTAINER = new Registry.Container<>(Registry.Resource.BLOCKS,
+            (container, namespace, object) -> {
+                final JsonObject stateObject = object.remove("states").getAsJsonObject();
+                retrieveState(namespace, object, stateObject);
+                final int defaultState = object.get("defaultStateId").getAsInt();
+                container.register(getState(defaultState));
+            });
+
+    static Block get(@NotNull String namespace) {
+        return CONTAINER.get(namespace);
+    }
+
+    static Block getSafe(@NotNull String namespace) {
+        return CONTAINER.getSafe(namespace);
+    }
+
+    static Block getId(int id) {
+        return CONTAINER.getId(id);
+    }
+
+    static Block getState(int stateId) {
+        return BLOCK_STATE_MAP.get(stateId);
+    }
+
+    static Collection<Block> values() {
+        return CONTAINER.values();
+    }
+
+    private static void retrieveState(String namespace, JsonObject object, JsonObject stateObject) {
+        PropertyEntry propertyEntry = new PropertyEntry();
+        stateObject.entrySet().forEach(stateEntry -> {
+            final String query = stateEntry.getKey();
+            JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
+            final int stateId = stateOverride.get("stateId").getAsInt();
+            final var propertyMap = BlockUtils.parseProperties(query);
+            final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
+                    propertyEntry, propertyMap, null, null);
+            BLOCK_STATE_MAP.put(stateId, block);
+            propertyEntry.map.put(propertyMap, block);
+        });
+    }
+
+    protected static class PropertyEntry {
+        private final Map<Map<String, String>, Block> map = new ConcurrentHashMap<>();
+
+        public @Nullable Block getProperties(Map<String, String> properties) {
+            return map.get(properties);
+        }
+    }
 
     private final Registry.BlockEntry registry;
-    private final BlockLoader.PropertyEntry propertyEntry;
+    private final PropertyEntry propertyEntry;
     private final Map<String, String> properties;
     private final NBTCompound nbt;
     private final BlockHandler handler;
 
     BlockImpl(@NotNull Registry.BlockEntry registry,
-              @NotNull BlockLoader.PropertyEntry propertyEntry,
+              @NotNull PropertyEntry propertyEntry,
               @NotNull Map<String, String> properties,
               @Nullable NBTCompound nbt,
               @Nullable BlockHandler handler) {
