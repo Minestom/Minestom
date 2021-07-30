@@ -43,7 +43,7 @@ public interface EntityType extends ProtocolObject, EntityTypeConstants {
     }
 
     static EntityType fromNamespaceId(@NotNull String namespaceID) {
-        return EntityTypeImpl.get(namespaceID);
+        return EntityTypeImpl.getSafe(namespaceID);
     }
 
     static EntityType fromNamespaceId(@NotNull NamespaceID namespaceID) {

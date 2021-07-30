@@ -31,7 +31,7 @@ public interface PotionEffect extends ProtocolObject, PotionEffectConstants {
     }
 
     static @Nullable PotionEffect fromNamespaceId(@NotNull String namespaceID) {
-        return PotionEffectImpl.get(namespaceID);
+        return PotionEffectImpl.getSafe(namespaceID);
     }
 
     static @Nullable PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {

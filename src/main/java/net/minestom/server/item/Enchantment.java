@@ -36,7 +36,7 @@ public interface Enchantment extends ProtocolObject, EnchantmentConstants {
     }
 
     static @Nullable Enchantment fromNamespaceId(@NotNull String namespaceID) {
-        return EnchantmentImpl.get(namespaceID);
+        return EnchantmentImpl.getSafe(namespaceID);
     }
 
     static @Nullable Enchantment fromNamespaceId(@NotNull NamespaceID namespaceID) {

@@ -16,7 +16,7 @@ public interface PotionType extends ProtocolObject, PotionTypeConstants {
     }
 
     static @Nullable PotionType fromNamespaceId(@NotNull String namespaceID) {
-        return PotionTypeImpl.get(namespaceID);
+        return PotionTypeImpl.getSafe(namespaceID);
     }
 
     static @Nullable PotionType fromNamespaceId(@NotNull NamespaceID namespaceID) {

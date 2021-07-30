@@ -65,7 +65,7 @@ public interface Material extends ProtocolObject, MaterialConstants {
     }
 
     static @Nullable Material fromNamespaceId(@NotNull String namespaceID) {
-        return MaterialImpl.get(namespaceID);
+        return MaterialImpl.getSafe(namespaceID);
     }
 
     static @Nullable Material fromNamespaceId(@NotNull NamespaceID namespaceID) {

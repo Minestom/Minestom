@@ -16,7 +16,7 @@ public interface Particle extends ProtocolObject, ParticleConstants {
     }
 
     static @Nullable Particle fromNamespaceId(@NotNull String namespaceID) {
-        return ParticleImpl.get(namespaceID);
+        return ParticleImpl.getSafe(namespaceID);
     }
 
     static @Nullable Particle fromNamespaceId(@NotNull NamespaceID namespaceID) {

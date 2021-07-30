@@ -16,7 +16,7 @@ public interface SoundEvent extends ProtocolObject, SoundEventConstants {
     }
 
     static @Nullable SoundEvent fromNamespaceId(@NotNull String namespaceID) {
-        return SoundEventImpl.get(namespaceID);
+        return SoundEventImpl.getSafe(namespaceID);
     }
 
     static @Nullable SoundEvent fromNamespaceId(@NotNull NamespaceID namespaceID) {
