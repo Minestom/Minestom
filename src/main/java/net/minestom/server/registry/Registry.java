@@ -19,30 +19,39 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Supplier;
 
-@ApiStatus.Internal
-public class Registry {
+/**
+ * Handles registry data, used by {@link ProtocolObject} implementations and is strictly internal.
+ * Use at your own risk.
+ */
+public final class Registry {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
+    @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
         return new BlockEntry(namespace, jsonObject, override);
     }
 
+    @ApiStatus.Internal
     public static MaterialEntry material(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
         return new MaterialEntry(namespace, jsonObject, override);
     }
 
+    @ApiStatus.Internal
     public static EntityEntry entity(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
         return new EntityEntry(namespace, jsonObject, override);
     }
 
+    @ApiStatus.Internal
     public static EnchantmentEntry enchantment(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
         return new EnchantmentEntry(namespace, jsonObject, override);
     }
 
+    @ApiStatus.Internal
     public static PotionEffectEntry potionEffect(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
         return new PotionEffectEntry(namespace, jsonObject, override);
     }
 
+    @ApiStatus.Internal
     public static JsonObject load(Resource resource) {
         final String path = String.format("/%s.json", resource.name);
         final var resourceStream = Registry.class.getResourceAsStream(path);
@@ -58,6 +67,7 @@ public class Registry {
         // id -> registry data
         private final Int2ObjectMap<T> idMap = new Int2ObjectOpenHashMap<>();
 
+        @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
             final JsonObject objects = Registry.load(resource);
             objects.entrySet().forEach(entry -> {
@@ -93,6 +103,7 @@ public class Registry {
         }
     }
 
+    @ApiStatus.Internal
     public enum Resource {
         BLOCKS("blocks"),
         ITEMS("items"),
