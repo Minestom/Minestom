@@ -60,9 +60,9 @@ public class MultiBlockChangePacket implements ServerPacket {
     }
 
     public static short getLocalBlockPosAsShort(int x, int y, int z) {
-        x = x % Chunk.CHUNK_SIZE_X;
-        y = y % 16;
-        z = z % Chunk.CHUNK_SIZE_Z;
+        x = x & 0xF;
+        y = y & 0xF;
+        z = z & 0xF;
         return (short) (x << 8 | z << 4 | y);
     }
 
