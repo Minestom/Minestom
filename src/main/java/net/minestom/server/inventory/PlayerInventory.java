@@ -253,7 +253,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
             final int slot = convertToPacketSlot(i);
             convertedSlots[slot] = itemStacks[i];
         }
-        return new WindowItemsPacket((byte) 0, 0, convertedSlots, ItemStack.AIR);
+        return new WindowItemsPacket((byte) 0, 0, convertedSlots, cursorItem);
     }
 
     @Override
