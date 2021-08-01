@@ -32,17 +32,14 @@ public final class ArrayUtils {
 
     public static void forDifferencesBetweenArray(long @NotNull [] a, long @NotNull [] b,
                                                   @NotNull LongConsumer consumer) {
+        loop:
         for (final long aValue : a) {
-            boolean contains = false;
             for (final long bValue : b) {
                 if (bValue == aValue) {
-                    contains = true;
-                    break;
+                    continue loop;
                 }
             }
-            if (!contains) {
-                consumer.accept(aValue);
-            }
+            consumer.accept(aValue);
         }
     }
 
