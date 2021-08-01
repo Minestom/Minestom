@@ -1,9 +1,9 @@
 package net.minestom.server.registry;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonReader;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.entity.EntitySpawnType;
@@ -11,10 +11,12 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.Supplier;
@@ -24,7 +26,7 @@ import java.util.function.Supplier;
  * Use at your own risk.
  */
 public final class Registry {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    private static final Gson GSON = new Gson();
 
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull JsonObject jsonObject, JsonObject override) {
@@ -53,9 +55,19 @@ public final class Registry {
 
     @ApiStatus.Internal
     public static JsonObject load(Resource resource) {
-        final String path = String.format("/%s.json", resource.name);
-        final var resourceStream = Registry.class.getResourceAsStream(path);
-        return GSON.fromJson(new InputStreamReader(resourceStream), JsonObject.class);
+        final var resourceStream = ClassLoader.getSystemResourceAsStream(resource.name);
+        Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+        final var reader = new JsonReader(new InputStreamReader(resourceStream));
+        try {
+            return GSON.fromJson(reader, JsonObject.class);
+        } finally {
+            try {
+                resourceStream.close();
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static class Container<T extends ProtocolObject> {
@@ -106,21 +118,21 @@ public final class Registry {
 
     @ApiStatus.Internal
     public enum Resource {
-        BLOCKS("blocks"),
-        ITEMS("items"),
-        ENTITIES("entities"),
-        ENCHANTMENTS("enchantments"),
-        SOUNDS("sounds"),
-        STATISTICS("custom_statistics"),
-        POTION_EFFECTS("potion_effects"),
-        POTION_TYPES("potions"),
-        PARTICLES("particles"),
+        BLOCKS("blocks.json"),
+        ITEMS("items.json"),
+        ENTITIES("entities.json"),
+        ENCHANTMENTS("enchantments.json"),
+        SOUNDS("sounds.json"),
+        STATISTICS("custom_statistics.json"),
+        POTION_EFFECTS("potion_effects.json"),
+        POTION_TYPES("potions.json"),
+        PARTICLES("particles.json"),
 
-        BLOCK_TAGS("tags/block_tags"),
-        ENTITY_TYPE_TAGS("tags/entity_type_tags"),
-        FLUID_TAGS("tags/fluid_tags"),
-        GAMEPLAY_TAGS("tags/gameplay_tags"),
-        ITEM_TAGS("tags/item_tags");
+        BLOCK_TAGS("tags/block_tags.json"),
+        ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
+        FLUID_TAGS("tags/fluid_tags.json"),
+        GAMEPLAY_TAGS("tags/gameplay_tags.json"),
+        ITEM_TAGS("tags/item_tags.json");
 
         private final String name;
 
