@@ -145,6 +145,15 @@ final class BlockImpl implements Block {
         return nbt != null ? tag.read(nbt) : null;
     }
 
+    @Override
+    public String toString() {
+        return name() + "{" +
+                "properties=" + properties +
+                ", nbt=" + nbt +
+                ", handler=" + handler +
+                '}';
+    }
+
     private Block compute(Map<String, String> properties) {
         Block block = propertyEntry.get(properties);
         if (block == null)
