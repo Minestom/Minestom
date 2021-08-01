@@ -66,6 +66,7 @@ public final class Registry {
         private final Map<String, T> namespaceMap = new HashMap<>();
         // id -> registry data
         private final Int2ObjectMap<T> idMap = new Int2ObjectOpenHashMap<>();
+        private final Collection<T> objects = Collections.unmodifiableCollection(namespaceMap.values());
 
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
@@ -90,7 +91,7 @@ public final class Registry {
         }
 
         public Collection<T> values() {
-            return Collections.unmodifiableCollection(namespaceMap.values());
+            return objects;
         }
 
         public void register(@NotNull T value) {
