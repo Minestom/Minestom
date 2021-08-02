@@ -150,7 +150,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private BelowNameTag belowNameTag;
 
-    private int permissionLevel;
+    private byte permissionLevel;
 
     private boolean reducedDebugScreenInformation;
 
@@ -418,6 +418,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         getPlayerConnection().sendPacket(respawnPacket);
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
         EventDispatcher.call(respawnEvent);
+        triggerStatus((byte) (24 + permissionLevel)); // Set permission level
         refreshIsDead(false);
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
@@ -1590,7 +1591,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void setPermissionLevel(int permissionLevel) {
         Check.argCondition(!MathUtils.isBetween(permissionLevel, 0, 4), "permissionLevel has to be between 0 and 4");
 
-        this.permissionLevel = permissionLevel;
+        this.permissionLevel = (byte) permissionLevel;
 
         // Magic values: https://wiki.vg/Entity_statuses#Player
         // TODO remove magic values
