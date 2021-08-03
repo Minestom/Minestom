@@ -228,12 +228,13 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void attemptWrite(ByteBuffer buffer) {
+        buffer.flip();
         synchronized (tickBufferLock) {
             try {
                 this.tickBuffer.put(buffer);
             } catch (BufferOverflowException e) {
                 try {
-                    this.channel.write(tickBuffer);
+                    this.channel.write(tickBuffer.flip());
                     this.channel.write(buffer);
                 } catch (IOException ex) {
                     MinecraftServer.getExceptionManager().handleException(ex);
@@ -245,12 +246,12 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void flush() {
-        if (tickBuffer.remaining() == 0) {
-            // Nothing to write
-            return;
-        }
-        // Retrieve safe copy
         synchronized (tickBufferLock) {
+            this.tickBuffer.flip();
+            if (tickBuffer.remaining() == 0) {
+                // Nothing to write
+                return;
+            }
             try {
                 channel.write(tickBuffer);
             } catch (IOException e) {
