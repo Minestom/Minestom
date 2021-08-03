@@ -150,7 +150,7 @@ public class BinaryWriter extends OutputStream {
      * @param l the long to write
      */
     public void writeVarLong(long l) {
-        Utils.writeVarLong(this, l);
+        Utils.writeVarLong(buffer, l);
     }
 
     /**
@@ -292,7 +292,10 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void write(@NotNull BinaryWriter writer) {
-        write(writer.getBuffer());
+        var buffer = writer.buffer;
+        final int pos = buffer.position();
+        write(buffer.position(0));
+        buffer.position(pos);
     }
 
     /**

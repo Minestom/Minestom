@@ -211,9 +211,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                         GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
             }
-            synchronized (tickBufferLock) {
-                PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
-            }
+            attemptWrite(PacketUtils.createFramedPacket(serverPacket));
             return;
         } else if (message instanceof ByteBuffer) {
             attemptWrite((ByteBuffer) message);

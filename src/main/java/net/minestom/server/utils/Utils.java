@@ -2,7 +2,6 @@ package net.minestom.server.utils;
 
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -89,14 +88,14 @@ public final class Utils {
         return result;
     }
 
-    public static void writeVarLong(BinaryWriter writer, long value) {
+    public static void writeVarLong(ByteBuffer buffer, long value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
             if (value != 0) {
                 temp |= 0b10000000;
             }
-            writer.writeByte(temp);
+            buffer.put(temp);
         } while (value != 0);
     }
 

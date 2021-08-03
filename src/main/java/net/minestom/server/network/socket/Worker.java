@@ -7,7 +7,6 @@ import net.minestom.server.network.player.NettyPlayerConnection;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -140,7 +139,7 @@ public class Worker {
         }
 
         private static ByteBuffer allocate(int size) {
-            return ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
+            return ByteBuffer.allocateDirect(size);
         }
     }
 }
