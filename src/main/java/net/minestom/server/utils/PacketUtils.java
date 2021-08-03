@@ -130,58 +130,45 @@ public final class PacketUtils {
         sendGroupedPacket(players, packet, null);
     }
 
-    /**
-     * Writes a {@link ServerPacket} into a {@link ByteBuffer}.
-     *
-     * @param buf    the recipient of {@code packet}
-     * @param packet the packet to write into {@code buf}
-     */
-    public static void writePacket(@NotNull ByteBuffer buf, @NotNull ServerPacket packet) {
-        Utils.writeVarInt(buf, packet.getId());
-        BinaryWriter writer = new BinaryWriter(buf);
-        try {
-            packet.write(writer);
-        } catch (Exception e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
-    }
-
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
-                                         @NotNull ServerPacket serverPacket) {
-        final int compressionThreshold = MinecraftServer.getCompressionThreshold();
-
-        // Index of the var-int containing the complete packet length
-        final int packetLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-        final int startIndex = buffer.position(); // Index where the content starts (after length)
-        if (compressionThreshold > 0) {
-            // Index of the uncompressed payload length
-            final int dataLengthIndex = Utils.writeEmptyVarIntHeader(buffer);
-
-            // Write packet
-            final int contentIndex = buffer.position();
-            writePacket(buffer, serverPacket);
-            final int packetSize = buffer.position() - contentIndex;
-
-            final int uncompressedLength = packetSize >= compressionThreshold ? packetSize : 0;
-            Utils.writeVarIntHeader(buffer, dataLengthIndex, uncompressedLength);
-            if (uncompressedLength > 0) {
-                // Packet large enough, compress
-                ByteBuffer uncompressedCopy = buffer.duplicate().position(contentIndex).limit(contentIndex + packetSize);
-                buffer.position(contentIndex);
-
-                var deflater = COMPRESSOR.get();
-                deflater.setInput(uncompressedCopy);
-                deflater.finish();
-                deflater.deflate(buffer);
-                deflater.reset();
-            }
-        } else {
-            // No compression, write packet id + payload
-            writePacket(buffer, serverPacket);
+                                         @NotNull ServerPacket packet,
+                                         boolean compression) {
+        if (!compression) {
+            // Length + payload
+            final int lengthIndex = Utils.writeEmptyVarIntHeader(buffer);
+            Utils.writeVarInt(buffer, packet.getId());
+            packet.write(new BinaryWriter(buffer));
+            final int finalSize = buffer.position() - (lengthIndex + 3);
+            Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
+            return;
         }
-        // Total length
-        final int totalPacketLength = buffer.position() - startIndex;
-        Utils.writeVarIntHeader(buffer, packetLengthIndex, totalPacketLength);
+        // Compressed format
+        final int compressedIndex = Utils.writeEmptyVarIntHeader(buffer);
+        final int uncompressedIndex = Utils.writeEmptyVarIntHeader(buffer);
+        final int contentStart = buffer.position();
+
+        Utils.writeVarInt(buffer, packet.getId());
+        packet.write(new BinaryWriter(buffer));
+        final int packetSize = buffer.position() - contentStart;
+        if (packetSize >= MinecraftServer.getCompressionThreshold()) {
+            // Packet large enough, compress
+            final int limitCache = buffer.limit();
+            buffer.position(contentStart).limit(contentStart + packetSize);
+            var uncompressedCopy = ByteBuffer.allocate(packetSize).put(buffer);
+            buffer.position(contentStart).limit(limitCache);
+
+            var deflater = COMPRESSOR.get();
+            deflater.setInput(uncompressedCopy.flip());
+            deflater.finish();
+            deflater.deflate(buffer);
+            deflater.reset();
+
+            Utils.writeVarIntHeader(buffer, compressedIndex, (buffer.position() - contentStart) + 3);
+            Utils.writeVarIntHeader(buffer, uncompressedIndex, packetSize);
+        } else {
+            Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
+            Utils.writeVarIntHeader(buffer, uncompressedIndex, 0);
+        }
     }
 
     /**
@@ -193,7 +180,7 @@ public final class PacketUtils {
      */
     public static @NotNull ByteBuffer createFramedPacket(@NotNull ServerPacket serverPacket) {
         ByteBuffer packetBuf = ByteBuffer.allocate(2_000_000);
-        writeFramedPacket(packetBuf, serverPacket);
+        writeFramedPacket(packetBuf, serverPacket, MinecraftServer.getCompressionThreshold() > 0);
         return packetBuf;
     }
 }

@@ -63,7 +63,6 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final Object tickBufferLock = new Object();
     private final ByteBuffer tickBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
     private ByteBuffer cacheBuffer;
 
@@ -170,8 +169,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         Check.stateCondition(compressed, "Compression is already enabled!");
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
-        this.compressed = true;
         writeAndFlush(new SetCompressionPacket(threshold));
+        this.compressed = true;
     }
 
     /**
@@ -209,13 +208,15 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
-        attemptWrite(PacketUtils.createFramedPacket(packet));
-        flush();
+        synchronized (tickBuffer){
+            PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
+            flush();
+        }
     }
 
     public void attemptWrite(ByteBuffer buffer) {
         buffer.flip();
-        synchronized (tickBufferLock) {
+        synchronized (tickBuffer) {
             try {
                 this.tickBuffer.put(buffer);
             } catch (BufferOverflowException e) {
@@ -233,14 +234,14 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void flush() {
-        synchronized (tickBufferLock) {
+        synchronized (tickBuffer) {
             this.tickBuffer.flip();
             if (tickBuffer.remaining() == 0) {
                 // Nothing to write
                 return;
             }
             try {
-                channel.write(tickBuffer);
+                this.channel.write(tickBuffer);
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
