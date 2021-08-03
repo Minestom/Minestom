@@ -1,7 +1,5 @@
 package net.minestom.server.extras.query;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -23,6 +21,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketAddress;
 import java.net.SocketException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -151,18 +150,18 @@ public class Query {
             }
 
             // get the contents
-            ByteBuf data = Unpooled.wrappedBuffer(packet.getData());
+            ByteBuffer data = ByteBuffer.wrap(packet.getData());
 
             // check the magic field
-            if (data.readUnsignedShort() != 0xFEFD) {
+            if ((data.getShort() & 0xFFFF) != 0xFEFD) {
                 continue;
             }
 
             // now check the query type
-            byte type = data.readByte();
+            byte type = data.get();
 
             if (type == 9) { // handshake
-                int sessionID = data.readInt();
+                int sessionID = data.getInt();
                 int challengeToken = RANDOM.nextInt();
 
                 CHALLENGE_TOKENS.put(challengeToken, packet.getSocketAddress());
@@ -184,12 +183,12 @@ public class Query {
                     }
                 }
             } else if (type == 0) { // stat
-                int sessionID = data.readInt();
-                int challengeToken = data.readInt();
+                int sessionID = data.getInt();
+                int challengeToken = data.getInt();
                 SocketAddress sender = packet.getSocketAddress();
 
                 if (CHALLENGE_TOKENS.containsKey(challengeToken) && CHALLENGE_TOKENS.get(challengeToken).equals(sender)) {
-                    int remaining = data.readableBytes();
+                    int remaining = data.remaining();
 
                     if (remaining == 0) { // basic
                         BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);

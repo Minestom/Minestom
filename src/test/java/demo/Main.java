@@ -24,6 +24,7 @@ public class Main {
 
     public static void main(String[] args) {
         MinecraftServer minecraftServer = MinecraftServer.init();
+        MinecraftServer.setCompressionThreshold(0);
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
 

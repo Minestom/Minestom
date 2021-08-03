@@ -1,36 +1,36 @@
 package net.minestom.server.network.player;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.socket.SocketChannel;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.PlayerSkin;
-import net.minestom.server.extras.mojangAuth.Decrypter;
-import net.minestom.server.extras.mojangAuth.Encrypter;
-import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
-import net.minestom.server.network.netty.NettyServer;
-import net.minestom.server.network.netty.codec.PacketCompressor;
+import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
-import net.minestom.server.utils.BufUtils;
+import net.minestom.server.network.socket.Server;
+import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.cache.CacheablePacket;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.SecretKey;
+import java.io.IOException;
 import java.net.SocketAddress;
+import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.zip.DataFormatException;
 
 /**
  * Represents a networking connection with Netty.
@@ -43,8 +43,8 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     private SocketAddress remoteAddress;
 
-    private boolean encrypted = false;
-    private boolean compressed = false;
+    private volatile boolean encrypted = false;
+    private volatile boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
     private byte[] nonce = new byte[4];
@@ -64,12 +64,89 @@ public class NettyPlayerConnection extends PlayerConnection {
     private PlayerSkin bungeeSkin;
 
     private final Object tickBufferLock = new Object();
-    private volatile ByteBuf tickBuffer = BufUtils.direct();
+    private final ByteBuffer tickBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
+    private ByteBuffer cacheBuffer;
 
     public NettyPlayerConnection(@NotNull SocketChannel channel) {
         super();
         this.channel = channel;
-        this.remoteAddress = channel.remoteAddress();
+        try {
+            this.remoteAddress = channel.getRemoteAddress();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
+        final var readBuffer = workerContext.readBuffer;
+        final int limit = readBuffer.limit();
+        // Read all packets
+        while (readBuffer.remaining() > 0) {
+            readBuffer.mark(); // Mark the beginning of the packet
+            try {
+                // Read packet
+                final int packetLength = Utils.readVarInt(readBuffer);
+                final int packetEnd = readBuffer.position() + packetLength;
+                if (packetEnd > readBuffer.limit()) {
+                    // Integrity fail
+                    throw new BufferUnderflowException();
+                }
+
+                readBuffer.limit(packetEnd); // Ensure that the reader doesn't exceed packet bound
+
+                // Read protocol
+                var content = workerContext.contentBuffer.clear();
+                {
+                    if (!compressed) {
+                        // Compression disabled, payload is following
+                        content = readBuffer;
+                    } else {
+                        final int dataLength = Utils.readVarInt(readBuffer);
+                        if (dataLength == 0) {
+                            // Data is too small to be compressed, payload is following
+                            content = readBuffer;
+                        } else {
+                            // Decompress to content buffer
+                            try {
+                                final var inflater = workerContext.inflater;
+                                inflater.setInput(readBuffer);
+                                inflater.inflate(content);
+                                inflater.reset();
+                            } catch (DataFormatException e) {
+                                e.printStackTrace();
+                            }
+                            content.flip();
+                        }
+                    }
+                }
+
+                // Process packet
+                final int packetId = Utils.readVarInt(content);
+                try {
+                    packetProcessor.process(this, new InboundPacket(packetId, content));
+                } catch (Exception e) {
+                    // Error while reading the packet
+                    e.printStackTrace();
+                    break;
+                }
+
+                // Return to original state (before writing)
+                readBuffer.limit(limit).position(packetEnd);
+            } catch (BufferUnderflowException e) {
+                readBuffer.reset();
+                this.cacheBuffer = ByteBuffer.allocateDirect(readBuffer.remaining());
+                this.cacheBuffer.put(readBuffer).flip();
+                break;
+            }
+        }
+    }
+
+    public void consumeCache(ByteBuffer buffer) {
+        if (cacheBuffer == null) {
+            return;
+        }
+        buffer.put(cacheBuffer);
+        this.cacheBuffer = null;
     }
 
     /**
@@ -81,10 +158,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
         this.encrypted = true;
-        channel.pipeline().addBefore(NettyServer.GROUPED_PACKET_HANDLER_NAME, NettyServer.DECRYPT_HANDLER_NAME,
-                new Decrypter(MojangCrypt.getCipher(2, secretKey)));
-        channel.pipeline().addBefore(NettyServer.GROUPED_PACKET_HANDLER_NAME, NettyServer.ENCRYPT_HANDLER_NAME,
-                new Encrypter(MojangCrypt.getCipher(1, secretKey)));
+        // TODO
     }
 
     /**
@@ -96,11 +170,8 @@ public class NettyPlayerConnection extends PlayerConnection {
         Check.stateCondition(compressed, "Compression is already enabled!");
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
-
         this.compressed = true;
         writeAndFlush(new SetCompressionPacket(threshold));
-        channel.pipeline().addAfter(NettyServer.FRAMER_HANDLER_NAME, NettyServer.COMPRESSOR_HANDLER_NAME,
-                new PacketCompressor(threshold));
     }
 
     /**
@@ -112,21 +183,12 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating) {
-        if (!channel.isActive())
+        if (!channel.isConnected())
             return;
-
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
                 // Flush happen during #update()
-                if (serverPacket instanceof CacheablePacket && MinecraftServer.hasPacketCaching()) {
-                    synchronized (tickBufferLock) {
-                        if (tickBuffer.refCnt() == 0)
-                            return;
-                        CacheablePacket.writeCache(tickBuffer, serverPacket);
-                    }
-                } else {
-                    write(serverPacket, skipTranslating);
-                }
+                write(serverPacket, skipTranslating);
             } else {
                 // Player is probably not logged yet
                 writeAndFlush(serverPacket);
@@ -141,93 +203,65 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void write(@NotNull Object message, boolean skipTranslating) {
         if (message instanceof FramedPacket) {
             final FramedPacket framedPacket = (FramedPacket) message;
-            synchronized (tickBufferLock) {
-                if (tickBuffer.refCnt() == 0)
-                    return;
-                final ByteBuf body = framedPacket.getBody();
-                tickBuffer.writeBytes(body, body.readerIndex(), body.readableBytes());
-            }
+            attemptWrite(framedPacket.getBody());
             return;
         } else if (message instanceof ServerPacket) {
             ServerPacket serverPacket = (ServerPacket) message;
-
             if ((MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
                 serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                         GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
             }
-
             synchronized (tickBufferLock) {
-                if (tickBuffer.refCnt() == 0)
-                    return;
                 PacketUtils.writeFramedPacket(tickBuffer, serverPacket);
             }
             return;
-        } else if (message instanceof ByteBuf) {
-            synchronized (tickBufferLock) {
-                if (tickBuffer.refCnt() == 0)
-                    return;
-                tickBuffer.writeBytes((ByteBuf) message);
-            }
+        } else if (message instanceof ByteBuffer) {
+            attemptWrite((ByteBuffer) message);
             return;
         }
         throw new UnsupportedOperationException("type " + message.getClass() + " is not supported");
     }
 
-    public void writeAndFlush(@NotNull Object message) {
-        writeWaitingPackets();
-        ChannelFuture channelFuture = channel.writeAndFlush(message);
-
-        if (MinecraftServer.shouldProcessNettyErrors()) {
-            channelFuture.addListener(future -> {
-                if (!future.isSuccess() && channel.isActive()) {
-                    MinecraftServer.getExceptionManager().handleException(future.cause());
-                }
-            });
-        }
+    public void writeAndFlush(@NotNull ServerPacket packet) {
+        attemptWrite(PacketUtils.createFramedPacket(packet));
+        flush();
     }
 
-    public void writeWaitingPackets() {
-        if (tickBuffer.writerIndex() == 0) {
-            // Nothing to write
-            return;
-        }
-
-        // Retrieve safe copy
-        final ByteBuf copy;
+    public void attemptWrite(ByteBuffer buffer) {
         synchronized (tickBufferLock) {
-            if (tickBuffer.refCnt() == 0)
-                return;
-            copy = tickBuffer;
-            tickBuffer = tickBuffer.alloc().buffer(tickBuffer.writerIndex());
-        }
-
-        // Write copied buffer to netty
-        ChannelFuture channelFuture = channel.write(new FramedPacket(copy));
-        channelFuture.addListener(future -> copy.release());
-
-        // Netty debug
-        if (MinecraftServer.shouldProcessNettyErrors()) {
-            channelFuture.addListener(future -> {
-                if (!future.isSuccess() && channel.isActive()) {
-                    MinecraftServer.getExceptionManager().handleException(future.cause());
+            try {
+                this.tickBuffer.put(buffer);
+            } catch (BufferOverflowException e) {
+                try {
+                    this.channel.write(tickBuffer);
+                    this.channel.write(buffer);
+                } catch (IOException ex) {
+                    MinecraftServer.getExceptionManager().handleException(ex);
+                } finally {
+                    this.tickBuffer.clear();
                 }
-            });
-        }
-    }
-
-    public void flush() {
-        final int bufferSize = tickBuffer.writerIndex();
-        if (bufferSize > 0) {
-            if (channel.isActive()) {
-                writeWaitingPackets();
-                channel.flush();
             }
         }
     }
 
-    @NotNull
+    public void flush() {
+        if (tickBuffer.remaining() == 0) {
+            // Nothing to write
+            return;
+        }
+        // Retrieve safe copy
+        synchronized (tickBufferLock) {
+            try {
+                channel.write(tickBuffer);
+            } catch (IOException e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+            this.tickBuffer.clear();
+        }
+    }
+
     @Override
-    public SocketAddress getRemoteAddress() {
+    public @NotNull SocketAddress getRemoteAddress() {
         return remoteAddress;
     }
 
@@ -246,11 +280,14 @@ public class NettyPlayerConnection extends PlayerConnection {
     @Override
     public void disconnect() {
         refreshOnline(false);
-        this.channel.close();
+        try {
+            this.channel.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    @NotNull
-    public Channel getChannel() {
+    public @NotNull SocketChannel getChannel() {
         return channel;
     }
 
@@ -261,8 +298,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @return the username given by the client, unchecked
      */
-    @Nullable
-    public String getLoginUsername() {
+    public @Nullable String getLoginUsername() {
         return loginUsername;
     }
 
@@ -323,9 +359,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.protocolVersion = protocolVersion;
     }
 
-
-    @Nullable
-    public UUID getBungeeUuid() {
+    public @Nullable UUID getBungeeUuid() {
         return bungeeUuid;
     }
 
@@ -333,8 +367,7 @@ public class NettyPlayerConnection extends PlayerConnection {
         this.bungeeUuid = bungeeUuid;
     }
 
-    @Nullable
-    public PlayerSkin getBungeeSkin() {
+    public @Nullable PlayerSkin getBungeeSkin() {
         return bungeeSkin;
     }
 
@@ -367,8 +400,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      * @param messageId the message id
      * @return the channel linked to the message id, null if not found
      */
-    @Nullable
-    public String getPluginRequestChannel(int messageId) {
+    public @Nullable String getPluginRequestChannel(int messageId) {
         return pluginRequestMap.get(messageId);
     }
 
@@ -382,9 +414,6 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void releaseTickBuffer() {
-        synchronized (tickBufferLock) {
-            tickBuffer.release();
-        }
     }
 
     public byte[] getNonce() {

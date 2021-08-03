@@ -1,6 +1,5 @@
 package net.minestom.server.item;
 
-import io.netty.buffer.ByteBuf;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.attribute.ItemAttribute;
@@ -13,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -36,7 +36,7 @@ public class ItemMeta implements TagReadable, Writeable {
     private final NBTCompound nbt;
 
     private String cachedSNBT;
-    private ByteBuf cachedBuffer;
+    private ByteBuffer cachedBuffer;
 
     protected ItemMeta(@NotNull ItemMetaBuilder metaBuilder) {
         this.damage = metaBuilder.damage;
@@ -154,6 +154,6 @@ public class ItemMeta implements TagReadable, Writeable {
             this.cachedBuffer = w.getBuffer();
         }
         writer.write(cachedBuffer);
-        this.cachedBuffer.resetReaderIndex();
+        this.cachedBuffer.position(0);
     }
 }

@@ -1,8 +1,5 @@
 package net.minestom.server.utils.binary;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufUtil;
-import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.MinecraftServer;
@@ -16,8 +13,11 @@ import org.jglrxavpok.hephaistos.nbt.NBTWriter;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.function.Consumer;
 
@@ -26,8 +26,7 @@ import java.util.function.Consumer;
  * WARNING: not thread-safe.
  */
 public class BinaryWriter extends OutputStream {
-
-    private ByteBuf buffer;
+    private ByteBuffer buffer;
     private NBTWriter nbtWriter; // Lazily initialized
 
     /**
@@ -36,7 +35,7 @@ public class BinaryWriter extends OutputStream {
      * @param initialCapacity the initial capacity of the binary writer
      */
     public BinaryWriter(int initialCapacity) {
-        this.buffer = Unpooled.buffer(initialCapacity);
+        this.buffer = ByteBuffer.allocate(initialCapacity);
     }
 
     /**
@@ -44,24 +43,15 @@ public class BinaryWriter extends OutputStream {
      *
      * @param buffer the writer buffer
      */
-    public BinaryWriter(@NotNull ByteBuf buffer) {
+    public BinaryWriter(@NotNull ByteBuffer buffer) {
         this.buffer = buffer;
-    }
-
-    /**
-     * Creates a {@link BinaryWriter} from multiple buffers.
-     *
-     * @param buffers the buffers making this
-     */
-    public BinaryWriter(@NotNull ByteBuf... buffers) {
-        this.buffer = Unpooled.wrappedBuffer(buffers);
     }
 
     /**
      * Creates a {@link BinaryWriter} with a "reasonably small initial capacity".
      */
     public BinaryWriter() {
-        this.buffer = Unpooled.buffer();
+        this(500); // TODO prevent OOB
     }
 
     /**
@@ -79,7 +69,7 @@ public class BinaryWriter extends OutputStream {
      * @param b the boolean to write
      */
     public void writeBoolean(boolean b) {
-        buffer.writeBoolean(b);
+        buffer.put((byte) (b ? 1 : 0));
     }
 
     /**
@@ -88,7 +78,7 @@ public class BinaryWriter extends OutputStream {
      * @param b the byte to write
      */
     public void writeByte(byte b) {
-        buffer.writeByte(b);
+        buffer.put(b);
     }
 
     /**
@@ -97,7 +87,7 @@ public class BinaryWriter extends OutputStream {
      * @param c the char to write
      */
     public void writeChar(char c) {
-        buffer.writeChar(c);
+        buffer.putChar(c);
     }
 
     /**
@@ -106,7 +96,7 @@ public class BinaryWriter extends OutputStream {
      * @param s the short to write
      */
     public void writeShort(short s) {
-        buffer.writeShort(s);
+        buffer.putShort(s);
     }
 
     /**
@@ -115,7 +105,7 @@ public class BinaryWriter extends OutputStream {
      * @param i the int to write
      */
     public void writeInt(int i) {
-        buffer.writeInt(i);
+        buffer.putInt(i);
     }
 
     /**
@@ -124,7 +114,7 @@ public class BinaryWriter extends OutputStream {
      * @param l the long to write
      */
     public void writeLong(long l) {
-        buffer.writeLong(l);
+        buffer.putLong(l);
     }
 
     /**
@@ -133,7 +123,7 @@ public class BinaryWriter extends OutputStream {
      * @param f the float to write
      */
     public void writeFloat(float f) {
-        buffer.writeFloat(f);
+        buffer.putFloat(f);
     }
 
     /**
@@ -142,7 +132,7 @@ public class BinaryWriter extends OutputStream {
      * @param d the double to write
      */
     public void writeDouble(double d) {
-        buffer.writeDouble(d);
+        buffer.putDouble(d);
     }
 
     /**
@@ -171,9 +161,9 @@ public class BinaryWriter extends OutputStream {
      * @param string the string to write
      */
     public void writeSizedString(@NotNull String string) {
-        final int utf8Bytes = ByteBufUtil.utf8Bytes(string);
-        writeVarInt(utf8Bytes);
-        buffer.writeCharSequence(string, StandardCharsets.UTF_8);
+        final var bytes = string.getBytes(StandardCharsets.UTF_8);
+        writeVarInt(bytes.length);
+        writeBytes(bytes);
     }
 
     /**
@@ -184,7 +174,8 @@ public class BinaryWriter extends OutputStream {
      * @param charset the charset to encode in
      */
     public void writeNullTerminatedString(@NotNull String string, @NotNull Charset charset) {
-        buffer.writeCharSequence(string + '\0', charset);
+        final var bytes = (string + '\0').getBytes(charset);
+        writeBytes(bytes);
     }
 
     /**
@@ -223,8 +214,8 @@ public class BinaryWriter extends OutputStream {
      *
      * @param bytes the byte array to write
      */
-    public void writeBytes(@NotNull byte[] bytes) {
-        buffer.writeBytes(bytes);
+    public void writeBytes(byte @NotNull [] bytes) {
+        buffer.put(bytes);
     }
 
     /**
@@ -296,12 +287,12 @@ public class BinaryWriter extends OutputStream {
         writeable.write(this);
     }
 
-    public void write(@NotNull BinaryWriter writer) {
-        this.buffer.writeBytes(writer.getBuffer());
+    public void write(@NotNull ByteBuffer buffer) {
+        this.buffer.put(buffer);
     }
 
-    public void write(@NotNull ByteBuf buffer) {
-        this.buffer.writeBytes(buffer);
+    public void write(@NotNull BinaryWriter writer) {
+        write(writer.getBuffer());
     }
 
     /**
@@ -323,38 +314,43 @@ public class BinaryWriter extends OutputStream {
      * @return the byte array containing all the {@link BinaryWriter} data
      */
     public byte[] toByteArray() {
-        byte[] bytes = new byte[buffer.readableBytes()];
-        final int readerIndex = buffer.readerIndex();
-        buffer.getBytes(readerIndex, bytes);
+        byte[] bytes = new byte[buffer.remaining()];
+        buffer.get(bytes);
         return bytes;
     }
 
     /**
-     * Adds a {@link BinaryWriter}'s {@link ByteBuf} at the beginning of this writer.
+     * Adds a {@link BinaryWriter}'s {@link ByteBuffer} at the beginning of this writer.
      *
      * @param headerWriter the {@link BinaryWriter} to add at the beginning
      */
     public void writeAtStart(@NotNull BinaryWriter headerWriter) {
         // Get the buffer of the header
-        final ByteBuf headerBuf = headerWriter.getBuffer();
+        final var headerBuf = headerWriter.getBuffer();
         // Merge both the headerBuf and this buffer
-        final ByteBuf finalBuffer = Unpooled.wrappedBuffer(headerBuf, buffer);
+        final var finalBuffer = concat(headerBuf, buffer);
         // Change the buffer used by this writer
         setBuffer(finalBuffer);
     }
 
     /**
-     * Adds a {@link BinaryWriter}'s {@link ByteBuf} at the end of this writer.
+     * Adds a {@link BinaryWriter}'s {@link ByteBuffer} at the end of this writer.
      *
      * @param footerWriter the {@link BinaryWriter} to add at the end
      */
     public void writeAtEnd(@NotNull BinaryWriter footerWriter) {
         // Get the buffer of the footer
-        final ByteBuf footerBuf = footerWriter.getBuffer();
+        final var footerBuf = footerWriter.getBuffer();
         // Merge both this buffer and the footerBuf
-        final ByteBuf finalBuffer = Unpooled.wrappedBuffer(buffer, footerBuf);
+        final var finalBuffer = concat(buffer, footerBuf);
         // Change the buffer used by this writer
         setBuffer(finalBuffer);
+    }
+
+    public static ByteBuffer concat(final ByteBuffer... buffers) {
+        final ByteBuffer combined = ByteBuffer.allocate(Arrays.stream(buffers).mapToInt(Buffer::remaining).sum());
+        Arrays.stream(buffers).forEach(b -> combined.put(b.duplicate()));
+        return combined;
     }
 
     /**
@@ -362,7 +358,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @return the raw buffer
      */
-    public @NotNull ByteBuf getBuffer() {
+    public @NotNull ByteBuffer getBuffer() {
         return buffer;
     }
 
@@ -371,7 +367,7 @@ public class BinaryWriter extends OutputStream {
      *
      * @param buffer the new buffer used by this binary writer
      */
-    public void setBuffer(ByteBuf buffer) {
+    public void setBuffer(ByteBuffer buffer) {
         this.buffer = buffer;
     }
 
@@ -381,7 +377,8 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void writeUnsignedShort(int yourShort) {
-        buffer.writeShort(yourShort & 0xFFFF);
+        // FIXME unsigned
+        buffer.putShort((short) (yourShort & 0xFFFF));
     }
 
     /**

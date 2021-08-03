@@ -256,7 +256,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
         List<byte[]> skyLights = new ArrayList<>();
         List<byte[]> blockLights = new ArrayList<>();
 
-        UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
+        UpdateLightPacket updateLightPacket = new UpdateLightPacket();
         updateLightPacket.chunkX = getChunkX();
         updateLightPacket.chunkZ = getChunkZ();
 
@@ -392,7 +392,5 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
      */
     protected void unload() {
         this.loaded = false;
-        ChunkDataPacket.CACHE.invalidate(getIdentifier());
-        UpdateLightPacket.CACHE.invalidate(getIdentifier());
     }
 }

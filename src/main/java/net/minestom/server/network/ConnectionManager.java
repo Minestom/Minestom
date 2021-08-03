@@ -1,6 +1,5 @@
 package net.minestom.server.network;
 
-import io.netty.channel.Channel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -24,6 +23,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -294,7 +294,7 @@ public final class ConnectionManager {
             // Close the player channel if he has been disconnected (kick)
             if (!player.isOnline()) {
                 if (playerConnection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) playerConnection).getChannel().flush();
+                    ((NettyPlayerConnection) playerConnection).flush();
                 }
                 //playerConnection.disconnect();
                 return;
@@ -350,9 +350,12 @@ public final class ConnectionManager {
             final PlayerConnection playerConnection = player.getPlayerConnection();
             if (playerConnection instanceof NettyPlayerConnection) {
                 final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                final Channel channel = nettyPlayerConnection.getChannel();
-                channel.writeAndFlush(disconnectPacket);
-                channel.close();
+                nettyPlayerConnection.writeAndFlush(disconnectPacket);
+                try {
+                    nettyPlayerConnection.getChannel().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         this.players.clear();

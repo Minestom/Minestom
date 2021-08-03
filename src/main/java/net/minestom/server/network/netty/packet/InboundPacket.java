@@ -1,14 +1,14 @@
 package net.minestom.server.network.netty.packet;
 
-import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
+
 public class InboundPacket {
-
     private final int packetId;
-    private final ByteBuf body;
+    private final ByteBuffer body;
 
-    public InboundPacket(int id, @NotNull ByteBuf body) {
+    public InboundPacket(int id, @NotNull ByteBuffer body) {
         this.packetId = id;
         this.body = body;
     }
@@ -17,8 +17,7 @@ public class InboundPacket {
         return packetId;
     }
 
-    @NotNull
-    public ByteBuf getBody() {
+    public @NotNull ByteBuffer getBody() {
         return body;
     }
 }

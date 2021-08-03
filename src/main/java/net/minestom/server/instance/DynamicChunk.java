@@ -124,7 +124,7 @@ public class DynamicChunk extends Chunk {
         if (packet != null && cachedPacketTime == getLastChangeTime()) {
             return packet;
         }
-        packet = new ChunkDataPacket(getIdentifier(), getLastChangeTime());
+        packet = new ChunkDataPacket();
         packet.biomes = biomes;
         packet.chunkX = chunkX;
         packet.chunkZ = chunkZ;

@@ -1,7 +1,8 @@
 package net.minestom.server.network.netty.packet;
 
-import io.netty.buffer.ByteBuf;
 import org.jetbrains.annotations.NotNull;
+
+import java.nio.ByteBuffer;
 
 /**
  * Represents a packet which is already framed. (packet id+payload) + optional compression
@@ -9,14 +10,13 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FramedPacket {
 
-    private final ByteBuf body;
+    private final ByteBuffer body;
 
-    public FramedPacket(@NotNull ByteBuf body) {
+    public FramedPacket(@NotNull ByteBuffer body) {
         this.body = body;
     }
 
-    @NotNull
-    public ByteBuf getBody() {
+    public @NotNull ByteBuffer getBody() {
         return body;
     }
 }

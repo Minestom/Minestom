@@ -21,10 +21,10 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
+import net.minestom.server.network.socket.Server;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.scoreboard.TeamManager;
@@ -43,6 +43,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -85,9 +88,7 @@ public final class MinecraftServer {
     // Network
     private static PacketListenerManager packetListenerManager;
     private static PacketProcessor packetProcessor;
-    private static NettyServer nettyServer;
-    private static int nettyThreadCount = Runtime.getRuntime().availableProcessors();
-    private static boolean processNettyErrors = true;
+    private static Server server;
 
     private static ExceptionManager exceptionManager;
 
@@ -122,7 +123,6 @@ public final class MinecraftServer {
     private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
-    private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static ResponseDataConsumer responseDataConsumer;
@@ -168,7 +168,11 @@ public final class MinecraftServer {
 
         tagManager = new TagManager();
 
-        nettyServer = new NettyServer(packetProcessor);
+        try {
+            server = new Server(packetProcessor);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         initialized = true;
 
@@ -275,16 +279,6 @@ public final class MinecraftServer {
     public static PacketListenerManager getPacketListenerManager() {
         checkInitStatus(packetListenerManager);
         return packetListenerManager;
-    }
-
-    /**
-     * Gets the netty server.
-     *
-     * @return the netty server
-     */
-    public static NettyServer getNettyServer() {
-        checkInitStatus(nettyServer);
-        return nettyServer;
     }
 
     /**
@@ -522,34 +516,6 @@ public final class MinecraftServer {
     /**
      * Gets if the packet caching feature is enabled.
      * <p>
-     * This feature allows some packets (implementing the {@link net.minestom.server.utils.cache.CacheablePacket} to be cached
-     * in order to do not have to be written and compressed over and over again), this is especially useful for chunk and light packets.
-     * <p>
-     * It is enabled by default and it is our recommendation,
-     * you should only disable it if you want to focus on low memory usage
-     * at the cost of many packet writing and compression.
-     *
-     * @return true if the packet caching feature is enabled, false otherwise
-     */
-    public static boolean hasPacketCaching() {
-        return packetCaching;
-    }
-
-    /**
-     * Enables or disable packet caching.
-     *
-     * @param packetCaching true to enable packet caching
-     * @throws IllegalStateException if this is called after the server started
-     * @see #hasPacketCaching()
-     */
-    public static void setPacketCaching(boolean packetCaching) {
-        Check.stateCondition(started, "You cannot change the packet caching value after the server has been started.");
-        MinecraftServer.packetCaching = packetCaching;
-    }
-
-    /**
-     * Gets if the packet caching feature is enabled.
-     * <p>
      * This features allow sending the exact same packet/buffer to multiple connections.
      * It does provide a great performance benefit by allocating and writing/compressing only once.
      * <p>
@@ -666,45 +632,9 @@ public final class MinecraftServer {
         return updateManager;
     }
 
-    /**
-     * Gets the number of threads used by Netty.
-     * <p>
-     * Is the number of vCPU by default.
-     *
-     * @return the number of netty threads
-     */
-    public static int getNettyThreadCount() {
-        return nettyThreadCount;
-    }
-
-    /**
-     * Changes the number of threads used by Netty.
-     *
-     * @param nettyThreadCount the number of threads
-     * @throws IllegalStateException if the server is already started
-     */
-    public static void setNettyThreadCount(int nettyThreadCount) {
-        Check.stateCondition(started, "Netty thread count can only be changed before the server starts!");
-        MinecraftServer.nettyThreadCount = nettyThreadCount;
-    }
-
-    /**
-     * Gets if the server should process netty errors and other unnecessary netty events.
-     *
-     * @return should process netty errors
-     */
-    public static boolean shouldProcessNettyErrors() {
-        return processNettyErrors;
-    }
-
-    /**
-     * Sets if the server should process netty errors and other unnecessary netty events.
-     * false is faster
-     *
-     * @param processNettyErrors should process netty errors
-     */
-    public static void setShouldProcessNettyErrors(boolean processNettyErrors) {
-        MinecraftServer.processNettyErrors = processNettyErrors;
+    public static Server getServer() {
+        checkInitStatus(server);
+        return server;
     }
 
     /**
@@ -744,8 +674,11 @@ public final class MinecraftServer {
         updateManager.start();
 
         // Init & start the TCP server
-        nettyServer.init();
-        nettyServer.start(address, port);
+        try {
+            server.start(new InetSocketAddress(address, port));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (extensionManager.shouldLoadOnStartup()) {
             final long loadStartTime = System.nanoTime();
@@ -779,7 +712,7 @@ public final class MinecraftServer {
         updateManager.stop();
         schedulerManager.shutdown();
         connectionManager.shutdown();
-        nettyServer.stop();
+        server.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
         LOGGER.info("Unloading all extensions.");
         extensionManager.shutdown();

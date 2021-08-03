@@ -135,7 +135,7 @@ public abstract class PlayerConnection {
      * @return the server address used
      */
     public @Nullable String getServerAddress() {
-        return MinecraftServer.getNettyServer().getAddress();
+        return MinecraftServer.getServer().getAddress();
     }
 
 
@@ -147,7 +147,7 @@ public abstract class PlayerConnection {
      * @return the server port used
      */
     public int getServerPort() {
-        return MinecraftServer.getNettyServer().getPort();
+        return MinecraftServer.getServer().getPort();
     }
 
     /**
