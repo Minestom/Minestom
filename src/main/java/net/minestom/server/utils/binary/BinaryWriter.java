@@ -288,14 +288,11 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void write(@NotNull ByteBuffer buffer) {
-        this.buffer.put(buffer);
+        this.buffer.put(buffer.flip());
     }
 
     public void write(@NotNull BinaryWriter writer) {
-        var buffer = writer.buffer;
-        final int pos = buffer.position();
-        write(buffer.position(0));
-        buffer.position(pos);
+        write(writer.buffer);
     }
 
     /**

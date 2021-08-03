@@ -105,7 +105,7 @@ public class ChunkDataPacket implements ServerPacket {
 
         // Data
         writer.writeVarInt(blocks.position());
-        writer.write(blocks.flip());
+        writer.write(blocks);
 
         // Block entities
         if (entries == null || entries.isEmpty()) {

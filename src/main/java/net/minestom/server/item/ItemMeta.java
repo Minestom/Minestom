@@ -153,6 +153,6 @@ public class ItemMeta implements TagReadable, Writeable {
             w.writeNBT("", nbt);
             this.cachedBuffer = w.getBuffer();
         }
-        writer.write(cachedBuffer.flip());
+        writer.write(cachedBuffer);
     }
 }
