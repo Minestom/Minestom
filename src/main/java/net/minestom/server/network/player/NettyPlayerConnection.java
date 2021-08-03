@@ -247,9 +247,12 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void flush() {
+        if (tickBuffer.position() == 0) {
+            // Nothing to write
+            return;
+        }
         synchronized (tickBuffer) {
             if (tickBuffer.position() == 0) {
-                // Nothing to write
                 return;
             }
             try {

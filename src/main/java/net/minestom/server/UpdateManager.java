@@ -1,6 +1,7 @@
 package net.minestom.server;
 
 import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -9,7 +10,6 @@ import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.thread.SingleThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -82,10 +82,12 @@ public final class UpdateManager {
                     }
 
                     // Flush all waiting packets
-                    AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().parallelStream()
-                            .filter(player -> player.getPlayerConnection() instanceof NettyPlayerConnection)
-                            .map(player -> (NettyPlayerConnection) player.getPlayerConnection())
-                            .forEach(NettyPlayerConnection::flush));
+                    for (Player player : connectionManager.getOnlinePlayers()) {
+                        final var connection = player.getPlayerConnection();
+                        if (connection instanceof NettyPlayerConnection) {
+                            ((NettyPlayerConnection) connection).flush();
+                        }
+                    }
 
                     // Disable thread until next tick
                     LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
