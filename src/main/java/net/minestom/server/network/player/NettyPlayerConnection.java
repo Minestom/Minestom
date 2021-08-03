@@ -188,7 +188,11 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (shouldSendPacket(serverPacket)) {
             if (getPlayer() != null) {
                 // Flush happen during #update()
-                write(serverPacket, skipTranslating);
+                if ((MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && serverPacket instanceof ComponentHoldingServerPacket) {
+                    serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
+                            GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
+                }
+                attemptWrite(PacketUtils.createFramedPacket(serverPacket));
             } else {
                 // Player is probably not logged yet
                 writeAndFlush(serverPacket);
@@ -196,28 +200,12 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    public void write(@NotNull Object message) {
-        this.write(message, false);
+    public void write(@NotNull FramedPacket framedPacket) {
+        attemptWrite(framedPacket.getBody());
     }
 
-    public void write(@NotNull Object message, boolean skipTranslating) {
-        if (message instanceof FramedPacket) {
-            final FramedPacket framedPacket = (FramedPacket) message;
-            attemptWrite(framedPacket.getBody());
-            return;
-        } else if (message instanceof ServerPacket) {
-            ServerPacket serverPacket = (ServerPacket) message;
-            if ((MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && getPlayer() != null && serverPacket instanceof ComponentHoldingServerPacket) {
-                serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
-                        GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
-            }
-            attemptWrite(PacketUtils.createFramedPacket(serverPacket));
-            return;
-        } else if (message instanceof ByteBuffer) {
-            attemptWrite((ByteBuffer) message);
-            return;
-        }
-        throw new UnsupportedOperationException("type " + message.getClass() + " is not supported");
+    public void write(@NotNull ByteBuffer buffer) {
+        attemptWrite(buffer);
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
@@ -235,6 +223,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                     this.channel.write(tickBuffer.flip());
                     this.channel.write(buffer);
                 } catch (IOException ex) {
+                    disconnect();
                     MinecraftServer.getExceptionManager().handleException(ex);
                 } finally {
                     this.tickBuffer.clear();
