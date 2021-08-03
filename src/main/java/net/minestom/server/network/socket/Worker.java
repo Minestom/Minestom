@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 public class Worker {
@@ -129,17 +128,15 @@ public class Worker {
      */
     public static final class Context {
         public final ByteBuffer readBuffer = allocate(Server.SOCKET_BUFFER_SIZE);
-        public final ByteBuffer writeBuffer = allocate(Server.SOCKET_BUFFER_SIZE);
         /**
          * Stores a single packet payload to be read.
          */
         public final ByteBuffer contentBuffer = allocate(Server.MAX_PACKET_SIZE);
-        public final Deflater deflater = new Deflater();
         public final Inflater inflater = new Inflater();
 
         public void clearBuffers() {
             this.readBuffer.clear();
-            this.writeBuffer.clear();
+            this.contentBuffer.clear();
         }
 
         private static ByteBuffer allocate(int size) {
