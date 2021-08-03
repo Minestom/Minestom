@@ -64,16 +64,12 @@ public class NettyPlayerConnection extends PlayerConnection {
     private PlayerSkin bungeeSkin;
 
     private final ByteBuffer tickBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
-    private ByteBuffer cacheBuffer;
+    private volatile ByteBuffer cacheBuffer;
 
-    public NettyPlayerConnection(@NotNull SocketChannel channel) {
+    public NettyPlayerConnection(@NotNull SocketChannel channel, SocketAddress remoteAddress) {
         super();
         this.channel = channel;
-        try {
-            this.remoteAddress = channel.getRemoteAddress();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.remoteAddress = remoteAddress;
     }
 
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
@@ -133,8 +129,8 @@ public class NettyPlayerConnection extends PlayerConnection {
                 readBuffer.limit(limit).position(packetEnd);
             } catch (BufferUnderflowException e) {
                 readBuffer.reset();
-                this.cacheBuffer = ByteBuffer.allocateDirect(readBuffer.remaining());
-                this.cacheBuffer.put(readBuffer).flip();
+                this.cacheBuffer = ByteBuffer.allocateDirect(readBuffer.remaining())
+                        .put(readBuffer).flip();
                 break;
             }
         }
@@ -191,7 +187,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                     serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                             GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
                 }
-                attemptWrite(PacketUtils.createFramedPacket(serverPacket));
+                attemptWrite(serverPacket);
             } else {
                 // Player is probably not logged yet
                 writeAndFlush(serverPacket);
@@ -208,17 +204,34 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
-        synchronized (tickBuffer){
-            PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
+        synchronized (tickBuffer) {
+            attemptWrite(packet);
             flush();
         }
     }
 
+    public void attemptWrite(ServerPacket packet) {
+        synchronized (tickBuffer) {
+            final int position = tickBuffer.position();
+            try {
+                PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
+            } catch (BufferOverflowException e) {
+                try {
+                    this.channel.write(tickBuffer.position(position).flip());
+                    this.tickBuffer.clear();
+                    PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
+                } catch (IOException ex) {
+                    disconnect();
+                    MinecraftServer.getExceptionManager().handleException(ex);
+                }
+            }
+        }
+    }
+
     public void attemptWrite(ByteBuffer buffer) {
-        buffer.flip();
         synchronized (tickBuffer) {
             try {
-                this.tickBuffer.put(buffer);
+                this.tickBuffer.put(buffer.flip());
             } catch (BufferOverflowException e) {
                 try {
                     this.channel.write(tickBuffer.flip());
@@ -235,13 +248,12 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     public void flush() {
         synchronized (tickBuffer) {
-            this.tickBuffer.flip();
-            if (tickBuffer.remaining() == 0) {
+            if (tickBuffer.position() == 0) {
                 // Nothing to write
                 return;
             }
             try {
-                this.channel.write(tickBuffer);
+                this.channel.write(tickBuffer.flip());
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -400,9 +412,6 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (connectionState.equals(ConnectionState.PLAY)) {
             this.pluginRequestMap.clear();
         }
-    }
-
-    public void releaseTickBuffer() {
     }
 
     public byte[] getNonce() {

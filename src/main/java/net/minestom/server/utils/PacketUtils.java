@@ -89,7 +89,8 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                final ByteBuffer finalBuffer = createFramedPacket(packet);
+                ByteBuffer finalBuffer = ByteBuffer.allocate(2_000_000);
+                writeFramedPacket(finalBuffer, packet, MinecraftServer.getCompressionThreshold() > 0);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
                 // Send packet to all players
                 for (Player player : players) {
@@ -98,7 +99,6 @@ public final class PacketUtils {
                     // Verify if the player should receive the packet
                     if (playerValidator != null && !playerValidator.isValid(player))
                         continue;
-
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
                         final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
@@ -114,8 +114,7 @@ public final class PacketUtils {
                 // Verify if the player should receive the packet
                 if (playerValidator != null && !playerValidator.isValid(player))
                     continue;
-                final PlayerConnection playerConnection = player.getPlayerConnection();
-                playerConnection.sendPacket(packet, false);
+                player.getPlayerConnection().sendPacket(packet, false);
             }
         }
     }
@@ -154,11 +153,11 @@ public final class PacketUtils {
             // Packet large enough, compress
             final int limitCache = buffer.limit();
             buffer.position(contentStart).limit(contentStart + packetSize);
-            var uncompressedCopy = ByteBuffer.allocate(packetSize).put(buffer);
+            var uncompressedCopy = ByteBuffer.allocate(packetSize).put(buffer).flip();
             buffer.position(contentStart).limit(limitCache);
 
             var deflater = COMPRESSOR.get();
-            deflater.setInput(uncompressedCopy.flip());
+            deflater.setInput(uncompressedCopy);
             deflater.finish();
             deflater.deflate(buffer);
             deflater.reset();
@@ -169,18 +168,5 @@ public final class PacketUtils {
             Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
             Utils.writeVarIntHeader(buffer, uncompressedIndex, 0);
         }
-    }
-
-    /**
-     * Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
-     * from a server packet, directly into an output buffer.
-     * <p>
-     * Can be used if you want to store a raw buffer and send it later without the additional writing cost.
-     * Compression is applied if {@link MinecraftServer#getCompressionThreshold()} is greater than 0.
-     */
-    public static @NotNull ByteBuffer createFramedPacket(@NotNull ServerPacket serverPacket) {
-        ByteBuffer packetBuf = ByteBuffer.allocate(2_000_000);
-        writeFramedPacket(packetBuf, serverPacket, MinecraftServer.getCompressionThreshold() > 0);
-        return packetBuf;
     }
 }

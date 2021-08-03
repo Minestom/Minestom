@@ -73,8 +73,7 @@ public class Worker {
     }
 
     public void receiveConnection(SocketChannel channel) throws IOException {
-        var connection = new NettyPlayerConnection(channel);
-        this.connectionMap.put(channel, connection);
+        this.connectionMap.put(channel, new NettyPlayerConnection(channel, channel.getRemoteAddress()));
         register(channel);
         this.selector.wakeup();
     }
@@ -91,7 +90,7 @@ public class Worker {
     private void disconnect(NettyPlayerConnection connection, SocketChannel channel) throws IOException {
         // Client close
         channel.close();
-        connectionMap.remove(channel);
+        this.connectionMap.remove(channel);
         // Remove the connection
         connection.refreshOnline(false);
         Player player = connection.getPlayer();
