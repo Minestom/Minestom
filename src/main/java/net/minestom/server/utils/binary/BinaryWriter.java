@@ -317,6 +317,7 @@ public class BinaryWriter extends OutputStream {
      * @return the byte array containing all the {@link BinaryWriter} data
      */
     public byte[] toByteArray() {
+        buffer.flip();
         byte[] bytes = new byte[buffer.remaining()];
         buffer.get(bytes);
         return bytes;
