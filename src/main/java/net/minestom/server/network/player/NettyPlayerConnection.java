@@ -6,8 +6,7 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.netty.packet.FramedPacket;
-import net.minestom.server.network.netty.packet.InboundPacket;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
@@ -90,38 +89,37 @@ public class NettyPlayerConnection extends PlayerConnection {
                 readBuffer.limit(packetEnd); // Ensure that the reader doesn't exceed packet bound
 
                 // Read protocol
-                var content = workerContext.contentBuffer.clear();
-                {
-                    if (!compressed) {
-                        // Compression disabled, payload is following
+                ByteBuffer content;
+                if (!compressed) {
+                    // Compression disabled, payload is following
+                    content = readBuffer;
+                } else {
+                    final int dataLength = Utils.readVarInt(readBuffer);
+                    if (dataLength == 0) {
+                        // Data is too small to be compressed, payload is following
                         content = readBuffer;
                     } else {
-                        final int dataLength = Utils.readVarInt(readBuffer);
-                        if (dataLength == 0) {
-                            // Data is too small to be compressed, payload is following
-                            content = readBuffer;
-                        } else {
-                            // Decompress to content buffer
-                            try {
-                                final var inflater = workerContext.inflater;
-                                inflater.setInput(readBuffer);
-                                inflater.inflate(content);
-                                inflater.reset();
-                            } catch (DataFormatException e) {
-                                e.printStackTrace();
-                            }
-                            content.flip();
+                        // Decompress to content buffer
+                        content = workerContext.contentBuffer.clear();
+                        try {
+                            final var inflater = workerContext.inflater;
+                            inflater.setInput(readBuffer);
+                            inflater.inflate(content);
+                            inflater.reset();
+                        } catch (DataFormatException e) {
+                            e.printStackTrace();
                         }
+                        content.flip();
                     }
                 }
 
                 // Process packet
                 final int packetId = Utils.readVarInt(content);
                 try {
-                    packetProcessor.process(this, new InboundPacket(packetId, content));
+                    packetProcessor.process(this, packetId, content);
                 } catch (Exception e) {
                     // Error while reading the packet
-                    e.printStackTrace();
+                    MinecraftServer.getExceptionManager().handleException(e);
                     break;
                 }
 
@@ -196,7 +194,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void write(@NotNull FramedPacket framedPacket) {
-        attemptWrite(framedPacket.getBody());
+        attemptWrite(framedPacket.body());
     }
 
     public void write(@NotNull ByteBuffer buffer) {

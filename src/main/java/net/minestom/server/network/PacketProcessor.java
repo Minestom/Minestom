@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandler;
@@ -16,6 +15,8 @@ import net.minestom.server.utils.binary.Readable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.ByteBuffer;
 
 /**
  * Responsible for processing client packets.
@@ -41,14 +42,12 @@ public final class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    public void process(@NotNull NettyPlayerConnection playerConnection, @NotNull InboundPacket packet) {
-        // Increment packet count (checked in PlayerConnection#update)
+    public void process(@NotNull NettyPlayerConnection playerConnection, int packetId, ByteBuffer body) {
         if (MinecraftServer.getRateLimit() > 0) {
+            // Increment packet count (checked in PlayerConnection#update)
             playerConnection.getPacketCounter().incrementAndGet();
         }
-        final int packetId = packet.getPacketId();
-        BinaryReader binaryReader = new BinaryReader(packet.getBody());
-
+        BinaryReader binaryReader = new BinaryReader(body);
         final ConnectionState connectionState = playerConnection.getConnectionState();
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet

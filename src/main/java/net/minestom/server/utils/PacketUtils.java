@@ -7,7 +7,7 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.network.netty.packet.FramedPacket;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
@@ -89,9 +89,9 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                ByteBuffer finalBuffer = ByteBuffer.allocate(200_000);
+                ByteBuffer finalBuffer = ByteBuffer.allocate(200_000); // TODO don't allocate
                 writeFramedPacket(finalBuffer, packet, MinecraftServer.getCompressionThreshold() > 0);
-                final FramedPacket framedPacket = new FramedPacket(finalBuffer);
+                final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer);
                 // Send packet to all players
                 for (Player player : players) {
                     if (!player.isOnline())
