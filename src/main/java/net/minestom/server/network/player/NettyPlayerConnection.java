@@ -198,17 +198,11 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (tickBuffer) {
             buffer.flip();
-            if (tickBuffer.remaining() >= buffer.remaining()) {
-                // Enough buffer space
-                this.tickBuffer.put(buffer);
-            } else {
-                try {
-                    this.channel.write(tickBuffer.flip());
-                    this.tickBuffer.clear().put(buffer);
-                } catch (IOException ex) {
-                    MinecraftServer.getExceptionManager().handleException(ex);
-                }
+            if (buffer.remaining() > tickBuffer.remaining()) {
+                // Tick buffer is full, flush before appending
+                flush();
             }
+            this.tickBuffer.put(buffer);
         }
     }
 
@@ -218,17 +212,13 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     public void write(@NotNull ServerPacket packet) {
         synchronized (tickBuffer) {
-            final int position = tickBuffer.position();
+            this.tickBuffer.mark();
             try {
                 PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
             } catch (BufferOverflowException e) {
-                try {
-                    this.channel.write(tickBuffer.position(position).flip());
-                    this.tickBuffer.clear();
-                    PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
-                } catch (IOException ex) {
-                    MinecraftServer.getExceptionManager().handleException(ex);
-                }
+                this.tickBuffer.reset();
+                flush();
+                PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
             }
         }
     }
@@ -241,18 +231,15 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void flush() {
-        if (tickBuffer.position() == 0) {
-            // Nothing to write
-            return;
-        }
         synchronized (tickBuffer) {
             if (!channel.isOpen()) return;
             if (tickBuffer.position() == 0) return;
             try {
                 this.channel.write(tickBuffer.flip());
-                this.tickBuffer.clear();
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
+            } finally {
+                this.tickBuffer.clear();
             }
         }
     }
