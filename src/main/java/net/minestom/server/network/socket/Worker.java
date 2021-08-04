@@ -73,22 +73,19 @@ public class Worker {
     }
 
     public void receiveConnection(SocketChannel channel) throws IOException {
-        this.connectionMap.put(channel, new NettyPlayerConnection(channel, channel.getRemoteAddress()));
-        register(channel);
-        this.selector.wakeup();
-    }
-
-    private void register(SocketChannel channel) throws IOException {
+        this.connectionMap.put(channel, new NettyPlayerConnection(this, channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
         var socket = channel.socket();
         socket.setSendBufferSize(Server.SOCKET_BUFFER_SIZE);
         socket.setReceiveBufferSize(Server.SOCKET_BUFFER_SIZE);
         socket.setTcpNoDelay(Server.NO_DELAY);
+        this.selector.wakeup();
     }
 
-    private void disconnect(NettyPlayerConnection connection, SocketChannel channel) throws IOException {
+    public void disconnect(NettyPlayerConnection connection, SocketChannel channel) throws IOException {
         // Client close
+        connection.refreshOnline(false);
         channel.close();
         this.connectionMap.remove(channel);
         // Remove the connection

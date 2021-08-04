@@ -89,7 +89,7 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                ByteBuffer finalBuffer = ByteBuffer.allocate(2_000_000);
+                ByteBuffer finalBuffer = ByteBuffer.allocate(200_000);
                 writeFramedPacket(finalBuffer, packet, MinecraftServer.getCompressionThreshold() > 0);
                 final FramedPacket framedPacket = new FramedPacket(finalBuffer);
                 // Send packet to all players

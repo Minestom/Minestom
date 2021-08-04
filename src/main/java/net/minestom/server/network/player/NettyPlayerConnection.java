@@ -38,9 +38,8 @@ import java.util.zip.DataFormatException;
  * It is the implementation used for all network client.
  */
 public class NettyPlayerConnection extends PlayerConnection {
-
+    private final Worker worker;
     private final SocketChannel channel;
-
     private SocketAddress remoteAddress;
 
     private volatile boolean encrypted = false;
@@ -66,8 +65,9 @@ public class NettyPlayerConnection extends PlayerConnection {
     private final ByteBuffer tickBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
     private volatile ByteBuffer cacheBuffer;
 
-    public NettyPlayerConnection(@NotNull SocketChannel channel, SocketAddress remoteAddress) {
+    public NettyPlayerConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
         super();
+        this.worker = worker;
         this.channel = channel;
         this.remoteAddress = remoteAddress;
     }
@@ -283,9 +283,8 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        refreshOnline(false);
         try {
-            this.channel.close();
+            this.worker.disconnect(this, channel);
         } catch (IOException e) {
             e.printStackTrace();
         }
