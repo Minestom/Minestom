@@ -568,6 +568,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         super.setInstance(instance, spawnPosition);
 
+        if (dimensionChange) {
+            sendDimension(instance.getDimensionType());
+        }
+
         if (updateChunks) {
             // Warning: loop to remove once `refreshVisibleChunks` manage it
             this.viewableChunks.forEach(chunk ->
@@ -576,9 +580,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         if (dimensionChange || firstSpawn) {
-            if (dimensionChange) {
-                sendDimension(instance.getDimensionType());
-            }
             synchronizePosition(true); // So the player doesn't get stuck
             this.inventory.update();
         }
