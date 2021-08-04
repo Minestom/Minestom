@@ -19,7 +19,7 @@ import java.util.zip.Inflater;
 
 public class Worker {
     private final Map<SocketChannel, NettyPlayerConnection> connectionMap = new ConcurrentHashMap<>();
-    private final Selector selector = Selector.open();
+    protected final Selector selector = Selector.open();
     private final PacketProcessor packetProcessor;
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {

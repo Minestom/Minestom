@@ -65,6 +65,7 @@ public class Server {
 
     public void stop() {
         this.stop = true;
+        this.workers.forEach(worker -> worker.selector.wakeup());
     }
 
     public String getAddress() {

@@ -101,8 +101,7 @@ public final class PacketUtils {
                         continue;
                     final PlayerConnection playerConnection = player.getPlayerConnection();
                     if (playerConnection instanceof NettyPlayerConnection) {
-                        final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                        nettyPlayerConnection.write(framedPacket);
+                        ((NettyPlayerConnection) playerConnection).write(framedPacket);
                     } else {
                         playerConnection.sendPacket(packet);
                     }
