@@ -180,4 +180,9 @@ public final class PacketUtils {
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
         return createFramedPacket(BUFFER.get().clear(), packet);
     }
+
+    public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
+        final var temp = PacketUtils.createFramedPacket(packet);
+        return ByteBuffer.allocate(temp.position()).put(temp.flip());
+    }
 }

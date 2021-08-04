@@ -135,10 +135,8 @@ public class DynamicChunk extends Chunk {
             ByteBuffer chunkPacket = cachedChunkBuffer;
             ByteBuffer lightPacket = cachedLightBuffer;
             if (lastChange > cachedPacketTime || (chunkPacket == null || lightPacket == null)) {
-                final var tempChunk = PacketUtils.createFramedPacket(createChunkPacket());
-                chunkPacket = ByteBuffer.allocate(tempChunk.position()).put(tempChunk.flip());
-                final var tempLight = PacketUtils.createFramedPacket(createLightPacket());
-                lightPacket = ByteBuffer.allocate(tempLight.position()).put(tempLight.flip());
+                chunkPacket = PacketUtils.allocateTrimmedPacket(createChunkPacket());
+                lightPacket = PacketUtils.allocateTrimmedPacket(createLightPacket());
                 this.cachedChunkBuffer = chunkPacket;
                 this.cachedLightBuffer = lightPacket;
                 this.cachedPacketTime = lastChange;
