@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 final class BlockImpl implements Block {
@@ -27,13 +26,14 @@ final class BlockImpl implements Block {
             (container, namespace, object) -> {
                 final JsonObject stateObject = object.remove("states").getAsJsonObject();
                 // Loop each state
-                PropertyEntry propertyEntry = new PropertyEntry();
+                var propertyEntry = new HashMap<Map<String, String>, Block>();
+                var unmodifiableEntries = Collections.unmodifiableMap(propertyEntry);
                 for (var stateEntry : stateObject.entrySet()) {
                     final String query = stateEntry.getKey();
                     JsonObject stateOverride = stateEntry.getValue().getAsJsonObject();
                     final var propertyMap = BlockUtils.parseProperties(query);
                     final Block block = new BlockImpl(Registry.block(namespace, object, stateOverride),
-                            propertyEntry, propertyMap, null, null);
+                            unmodifiableEntries, propertyMap, null, null);
                     BLOCK_STATE_MAP.put(block.stateId(), block);
                     propertyEntry.put(propertyMap, block);
                 }
@@ -66,17 +66,14 @@ final class BlockImpl implements Block {
         return CONTAINER.values();
     }
 
-    protected static class PropertyEntry extends ConcurrentHashMap<Map<String, String>, Block> {
-    }
-
     private final Registry.BlockEntry registry;
-    private final PropertyEntry propertyEntry;
+    private final Map<Map<String, String>, Block> propertyEntry;
     private final Map<String, String> properties;
     private final NBTCompound nbt;
     private final BlockHandler handler;
 
     BlockImpl(@NotNull Registry.BlockEntry registry,
-              @NotNull PropertyEntry propertyEntry,
+              @NotNull Map<Map<String, String>, Block> propertyEntry,
               @NotNull Map<String, String> properties,
               @Nullable NBTCompound nbt,
               @Nullable BlockHandler handler) {
