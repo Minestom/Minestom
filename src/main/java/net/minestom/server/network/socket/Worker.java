@@ -4,6 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.NettyPlayerConnection;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -17,9 +18,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.zip.Inflater;
 
-public class Worker {
+@ApiStatus.Internal
+public final class Worker {
+    final Selector selector = Selector.open();
     private final Map<SocketChannel, NettyPlayerConnection> connectionMap = new ConcurrentHashMap<>();
-    protected final Selector selector = Selector.open();
     private final PacketProcessor packetProcessor;
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
@@ -49,7 +51,6 @@ public class Worker {
                 ByteBuffer readBuffer = workerContext.readBuffer;
                 // Consume last incomplete packet
                 connection.consumeCache(readBuffer);
-
                 // Read socket
                 if (channel.read(readBuffer) == -1) {
                     // EOS
@@ -59,7 +60,7 @@ public class Worker {
                 readBuffer.flip();
                 connection.processPackets(workerContext, packetProcessor);
             } catch (IOException e) {
-                e.printStackTrace();
+                // TODO print exception? (should ignore disconnection)
                 try {
                     disconnect(connection, channel);
                 } catch (IOException ioException) {
@@ -101,15 +102,15 @@ public class Worker {
         private static final AtomicInteger COUNTER = new AtomicInteger();
 
         private Thread(Runnable runnable) {
-            super(null, runnable, "worker-" + COUNTER.getAndIncrement());
+            super(null, runnable, "net-worker-" + COUNTER.getAndIncrement());
         }
 
         protected static void start(Server server, Consumer<Context> runnable) {
             new Thread(() -> {
-                Context workerContext = new Context();
+                Context context = new Context();
                 while (server.isOpen()) {
                     try {
-                        runnable.accept(workerContext);
+                        runnable.accept(context);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -122,20 +123,16 @@ public class Worker {
      * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
      */
     public static final class Context {
-        public final ByteBuffer readBuffer = allocate(Server.SOCKET_BUFFER_SIZE);
+        public final ByteBuffer readBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
         /**
          * Stores a single packet payload to be read.
          */
-        public final ByteBuffer contentBuffer = allocate(Server.MAX_PACKET_SIZE);
+        public final ByteBuffer contentBuffer = ByteBuffer.allocateDirect(Server.MAX_PACKET_SIZE);
         public final Inflater inflater = new Inflater();
 
         public void clearBuffers() {
             this.readBuffer.clear();
             this.contentBuffer.clear();
-        }
-
-        private static ByteBuffer allocate(int size) {
-            return ByteBuffer.allocateDirect(size);
         }
     }
 }

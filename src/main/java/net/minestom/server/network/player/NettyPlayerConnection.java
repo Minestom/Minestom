@@ -250,9 +250,8 @@ public class NettyPlayerConnection extends PlayerConnection {
             return;
         }
         synchronized (tickBuffer) {
-            if (tickBuffer.position() == 0) {
-                return;
-            }
+            if (!channel.isOpen()) return;
+            if (tickBuffer.position() == 0) return;
             try {
                 this.channel.write(tickBuffer.flip());
             } catch (IOException e) {
