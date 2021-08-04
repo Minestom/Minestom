@@ -3,6 +3,7 @@ package net.minestom.server.network.player;
 import net.kyori.adventure.translation.GlobalTranslator;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
@@ -15,6 +16,7 @@ import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -179,11 +181,12 @@ public class NettyPlayerConnection extends PlayerConnection {
         if (!channel.isConnected())
             return;
         if (shouldSendPacket(serverPacket)) {
-            if (getPlayer() != null) {
+            final Player player = getPlayer();
+            if (player != null) {
                 // Flush happen during #update()
                 if ((MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && !skipTranslating) && serverPacket instanceof ComponentHoldingServerPacket) {
                     serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
-                            GlobalTranslator.render(component, Objects.requireNonNullElseGet(getPlayer().getLocale(), MinestomAdventure::getDefaultLocale)));
+                            GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
                 }
                 attemptWrite(serverPacket);
             } else {
@@ -273,6 +276,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      *
      * @param remoteAddress the new connection remote address
      */
+    @ApiStatus.Internal
     public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
@@ -344,7 +348,6 @@ public class NettyPlayerConnection extends PlayerConnection {
     public int getProtocolVersion() {
         return protocolVersion;
     }
-
 
     /**
      * Used in {@link net.minestom.server.network.packet.client.handshake.HandshakePacket} to change the internal fields.

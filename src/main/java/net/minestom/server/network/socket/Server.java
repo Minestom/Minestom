@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class Server {
+public final class Server {
     public static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
             Runtime.getRuntime().availableProcessors() * 2);
     public static final int SOCKET_BUFFER_SIZE = Integer.getInteger("minestom.buffer-size", 65535);
-    public static final int MAX_PACKET_SIZE = 2097151; // 3 bytes var-int
+    public static final int MAX_PACKET_SIZE = 2_097_151; // 3 bytes var-int
     public static final boolean NO_DELAY = true;
 
     private volatile boolean stop;
@@ -45,7 +45,6 @@ public class Server {
         serverSocket.configureBlocking(false);
         serverSocket.register(selector, SelectionKey.OP_ACCEPT);
         serverSocket.socket().setReceiveBufferSize(SOCKET_BUFFER_SIZE);
-
         LOGGER.info("Server starting, wait for connections");
         new Thread(() -> {
             while (!stop) {
@@ -56,7 +55,7 @@ public class Server {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }, "Ms-entrypoint").start();
     }
 
     public boolean isOpen() {

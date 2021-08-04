@@ -98,14 +98,18 @@ public final class Worker {
         }
     }
 
-    static class Thread extends java.lang.Thread {
+    /**
+     * Thread responsible for reading players socket and forwarding packets into
+     * players' packet queue.
+     */
+    static final class Thread extends java.lang.Thread {
         private static final AtomicInteger COUNTER = new AtomicInteger();
 
         private Thread(Runnable runnable) {
-            super(null, runnable, "net-worker-" + COUNTER.getAndIncrement());
+            super(null, runnable, "Ms-worker-" + COUNTER.getAndIncrement());
         }
 
-        protected static void start(Server server, Consumer<Context> runnable) {
+        static void start(Server server, Consumer<Context> runnable) {
             new Thread(() -> {
                 Context context = new Context();
                 while (server.isOpen()) {
