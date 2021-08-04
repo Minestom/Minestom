@@ -85,7 +85,6 @@ public final class Server {
                 Worker thread = findWorker();
                 final SocketChannel client = socketChannel.accept();
                 thread.receiveConnection(client);
-                LOGGER.info("new connection: " + client);
             }
         }
         selectedKeys.clear();
