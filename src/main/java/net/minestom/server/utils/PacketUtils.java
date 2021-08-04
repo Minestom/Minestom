@@ -12,11 +12,13 @@ import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.zip.Deflater;
@@ -28,6 +30,7 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
+    private static final ThreadLocal<ByteBuffer> BUFFER = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE));
 
     private PacketUtils() {
     }
@@ -89,8 +92,7 @@ public final class PacketUtils {
             // Send grouped packet...
             final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
             if (success) {
-                ByteBuffer finalBuffer = ByteBuffer.allocate(200_000); // TODO don't allocate
-                writeFramedPacket(finalBuffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+                ByteBuffer finalBuffer = createFramedPacket(packet);
                 final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer);
                 // Send packet to all players
                 for (Player player : players) {
@@ -106,6 +108,7 @@ public final class PacketUtils {
                         playerConnection.sendPacket(packet);
                     }
                 }
+                finalBuffer.clear(); // Clear packet to be reused
             }
         } else {
             // Write the same packet for each individual players
@@ -167,5 +170,18 @@ public final class PacketUtils {
             Utils.writeVarIntHeader(buffer, compressedIndex, packetSize + 3);
             Utils.writeVarIntHeader(buffer, uncompressedIndex, 0);
         }
+    }
+
+    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
+        var buffer = BUFFER.get();
+        try {
+            writeFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+        } catch (BufferOverflowException e) {
+            // In the unlikely case where the packet is bigger than the default buffer size,
+            // increase to the highest authorized buffer size using heap (for cheap allocation)
+            buffer = ByteBuffer.allocate(Server.MAX_PACKET_SIZE);
+            writeFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+        }
+        return buffer;
     }
 }
