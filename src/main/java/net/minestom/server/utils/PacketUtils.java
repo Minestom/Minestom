@@ -16,7 +16,6 @@ import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
@@ -78,43 +77,36 @@ public final class PacketUtils {
      * @param playerValidator optional callback to check if a specify player of {@code players} should receive the packet
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
-                                         @Nullable PlayerValidator playerValidator) {
+                                         @NotNull PlayerValidator playerValidator) {
         if (players.isEmpty())
             return;
-
         // work out if the packet needs to be sent individually due to server-side translating
         boolean needsTranslating = false;
         if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ComponentHoldingServerPacket) {
             needsTranslating = ComponentUtils.areAnyTranslatable(((ComponentHoldingServerPacket) packet).components());
         }
-
         if (MinecraftServer.hasGroupedPacket() && !needsTranslating) {
             // Send grouped packet...
-            final boolean success = PACKET_LISTENER_MANAGER.processServerPacket(packet, players);
-            if (success) {
-                ByteBuffer finalBuffer = createFramedPacket(packet);
-                final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer);
-                // Send packet to all players
-                for (Player player : players) {
-                    if (!player.isOnline())
-                        continue;
-                    // Verify if the player should receive the packet
-                    if (playerValidator != null && !playerValidator.isValid(player))
-                        continue;
-                    final PlayerConnection playerConnection = player.getPlayerConnection();
-                    if (playerConnection instanceof NettyPlayerConnection) {
-                        ((NettyPlayerConnection) playerConnection).write(framedPacket);
-                    } else {
-                        playerConnection.sendPacket(packet);
-                    }
+            if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
+                return;
+            final ByteBuffer finalBuffer = createFramedPacket(packet);
+            final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer);
+            // Send packet to all players
+            for (Player player : players) {
+                if (!player.isOnline() || !playerValidator.isValid(player))
+                    continue;
+                final PlayerConnection connection = player.getPlayerConnection();
+                if (connection instanceof NettyPlayerConnection) {
+                    ((NettyPlayerConnection) connection).write(framedPacket);
+                } else {
+                    connection.sendPacket(packet);
                 }
-                finalBuffer.clear(); // Clear packet to be reused
             }
+            finalBuffer.clear(); // Clear packet to be reused
         } else {
             // Write the same packet for each individual players
             for (Player player : players) {
-                // Verify if the player should receive the packet
-                if (playerValidator != null && !playerValidator.isValid(player))
+                if (!player.isOnline() || !playerValidator.isValid(player))
                     continue;
                 player.getPlayerConnection().sendPacket(packet, false);
             }
@@ -128,7 +120,7 @@ public final class PacketUtils {
      * @see #sendGroupedPacket(Collection, ServerPacket, PlayerValidator)
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
-        sendGroupedPacket(players, packet, null);
+        sendGroupedPacket(players, packet, player -> true);
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,
@@ -172,16 +164,21 @@ public final class PacketUtils {
         }
     }
 
-    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        var buffer = BUFFER.get();
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer initial, @NotNull ServerPacket packet) {
+        final boolean compression = MinecraftServer.getCompressionThreshold() > 0;
+        var buffer = initial;
         try {
-            writeFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+            writeFramedPacket(buffer, packet, compression);
         } catch (BufferOverflowException e) {
             // In the unlikely case where the packet is bigger than the default buffer size,
             // increase to the highest authorized buffer size using heap (for cheap allocation)
             buffer = ByteBuffer.allocate(Server.MAX_PACKET_SIZE);
-            writeFramedPacket(buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
+            writeFramedPacket(buffer, packet, compression);
         }
         return buffer;
+    }
+
+    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
+        return createFramedPacket(BUFFER.get(), packet);
     }
 }

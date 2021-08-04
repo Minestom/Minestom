@@ -8,8 +8,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -225,9 +223,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
         // Refresh chunk for viewers
         if (options.shouldSendUpdate()) {
-            ChunkDataPacket chunkDataPacket = chunk.createChunkPacket();
             // TODO update all sections from `updatedSections`
-            PacketUtils.sendGroupedPacket(chunk.getViewers(), chunkDataPacket);
+            chunk.sendChunk();
         }
 
         if (instance instanceof InstanceContainer) {

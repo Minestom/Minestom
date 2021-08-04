@@ -4,16 +4,24 @@ import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.network.packet.server.play.UpdateLightPacket;
+import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.SoftReference;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,9 +38,10 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>();
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>();
 
-    private long lastChangeTime;
+    private volatile long lastChangeTime;
 
-    private SoftReference<ChunkDataPacket> cachedPacket = new SoftReference<>(null);
+    private ByteBuffer cachedChunkBuffer;
+    private ByteBuffer cachedLightBuffer;
     private long cachedPacketTime;
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
@@ -117,23 +126,32 @@ public class DynamicChunk extends Chunk {
         return lastChangeTime;
     }
 
-    @NotNull
     @Override
-    public ChunkDataPacket createChunkPacket() {
-        ChunkDataPacket packet = cachedPacket.get();
-        if (packet != null && cachedPacketTime == getLastChangeTime()) {
-            return packet;
+    public synchronized void sendChunk(@NotNull Player player) {
+        if (!isLoaded()) return;
+        final PlayerConnection connection = player.getPlayerConnection();
+        if (connection instanceof NettyPlayerConnection) {
+            final long lastChange = getLastChangeTime();
+            if (lastChange > cachedPacketTime ||
+                    (cachedChunkBuffer == null || cachedLightBuffer == null)) {
+                this.cachedChunkBuffer = PacketUtils.createFramedPacket(ByteBuffer.allocate(65000), createChunkPacket());
+                this.cachedLightBuffer = PacketUtils.createFramedPacket(ByteBuffer.allocate(65000), createLightPacket());
+                this.cachedPacketTime = lastChange;
+            }
+            NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
+            nettyPlayerConnection.write(cachedChunkBuffer);
+            nettyPlayerConnection.write(cachedLightBuffer);
+        } else {
+            connection.sendPacket(createLightPacket());
+            connection.sendPacket(createChunkPacket());
         }
-        packet = new ChunkDataPacket();
-        packet.biomes = biomes;
-        packet.chunkX = chunkX;
-        packet.chunkZ = chunkZ;
-        packet.sections = sectionMap.clone(); // TODO deep clone
-        packet.entries = entries.clone();
+    }
 
-        this.cachedPacketTime = getLastChangeTime();
-        this.cachedPacket = new SoftReference<>(packet);
-        return packet;
+    @Override
+    public synchronized void sendChunk() {
+        if (!isLoaded()) return;
+        sendPacketToViewers(createLightPacket());
+        sendPacketToViewers(createChunkPacket());
     }
 
     @NotNull
@@ -151,6 +169,54 @@ public class DynamicChunk extends Chunk {
     public void reset() {
         this.sectionMap.values().forEach(Section::clear);
         this.entries.clear();
+    }
+
+    private @NotNull ChunkDataPacket createChunkPacket() {
+        ChunkDataPacket packet = new ChunkDataPacket();
+        packet.biomes = biomes;
+        packet.chunkX = chunkX;
+        packet.chunkZ = chunkZ;
+        packet.sections = sectionMap.clone(); // TODO deep clone
+        packet.entries = entries.clone();
+        return packet;
+    }
+
+    private @NotNull UpdateLightPacket createLightPacket() {
+        long skyMask = 0;
+        long blockMask = 0;
+        List<byte[]> skyLights = new ArrayList<>();
+        List<byte[]> blockLights = new ArrayList<>();
+
+        UpdateLightPacket updateLightPacket = new UpdateLightPacket();
+        updateLightPacket.chunkX = getChunkX();
+        updateLightPacket.chunkZ = getChunkZ();
+
+        updateLightPacket.skyLight = skyLights;
+        updateLightPacket.blockLight = blockLights;
+
+        final var sections = getSections();
+        for (var entry : sections.entrySet()) {
+            final int index = entry.getKey() + 1;
+            final Section section = entry.getValue();
+
+            final var skyLight = section.getSkyLight();
+            final var blockLight = section.getBlockLight();
+
+            if (!ArrayUtils.empty(skyLight)) {
+                skyLights.add(skyLight);
+                skyMask |= 1L << index;
+            }
+            if (!ArrayUtils.empty(blockLight)) {
+                blockLights.add(blockLight);
+                blockMask |= 1L << index;
+            }
+        }
+
+        updateLightPacket.skyLightMask = new long[]{skyMask};
+        updateLightPacket.blockLightMask = new long[]{blockMask};
+        updateLightPacket.emptySkyLightMask = new long[0];
+        updateLightPacket.emptyBlockLightMask = new long[0];
+        return updateLightPacket;
     }
 
     private @Nullable Section getOptionalSection(int y) {
