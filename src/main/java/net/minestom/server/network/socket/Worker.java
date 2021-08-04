@@ -85,11 +85,9 @@ public final class Worker {
     }
 
     public void disconnect(NettyPlayerConnection connection, SocketChannel channel) throws IOException {
+        if (connectionMap.remove(channel) == null) return;
         // Client close
-        connection.refreshOnline(false);
         channel.close();
-        this.connectionMap.remove(channel);
-        // Remove the connection
         connection.refreshOnline(false);
         Player player = connection.getPlayer();
         if (player != null) {

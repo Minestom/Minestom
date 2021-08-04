@@ -102,7 +102,6 @@ public final class PacketUtils {
                     connection.sendPacket(packet);
                 }
             }
-            finalBuffer.clear(); // Clear packet to be reused
         } else {
             // Write the same packet for each individual players
             for (Player player : players) {
@@ -179,6 +178,6 @@ public final class PacketUtils {
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(BUFFER.get(), packet);
+        return createFramedPacket(BUFFER.get().clear(), packet);
     }
 }

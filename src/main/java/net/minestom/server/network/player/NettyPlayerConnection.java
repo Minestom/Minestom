@@ -178,8 +178,7 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     @Override
     public void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating) {
-        if (!channel.isConnected())
-            return;
+        if (!channel.isConnected()) return;
         if (shouldSendPacket(serverPacket)) {
             final Player player = getPlayer();
             if (player != null) {
@@ -207,7 +206,6 @@ public class NettyPlayerConnection extends PlayerConnection {
                     this.channel.write(tickBuffer.flip());
                     this.tickBuffer.clear().put(buffer);
                 } catch (IOException ex) {
-                    disconnect();
                     MinecraftServer.getExceptionManager().handleException(ex);
                 }
             }
@@ -229,7 +227,6 @@ public class NettyPlayerConnection extends PlayerConnection {
                     this.tickBuffer.clear();
                     PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
                 } catch (IOException ex) {
-                    disconnect();
                     MinecraftServer.getExceptionManager().handleException(ex);
                 }
             }
@@ -255,7 +252,6 @@ public class NettyPlayerConnection extends PlayerConnection {
                 this.channel.write(tickBuffer.flip());
                 this.tickBuffer.clear();
             } catch (IOException e) {
-                disconnect();
                 MinecraftServer.getExceptionManager().handleException(e);
             }
         }

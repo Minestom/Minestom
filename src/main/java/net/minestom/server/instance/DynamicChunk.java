@@ -133,8 +133,10 @@ public class DynamicChunk extends Chunk {
         if (connection instanceof NettyPlayerConnection) {
             final long lastChange = getLastChangeTime();
             if (lastChange > cachedPacketTime || (cachedChunkBuffer == null || cachedLightBuffer == null)) {
-                this.cachedChunkBuffer = PacketUtils.createFramedPacket(ByteBuffer.allocate(65000), createChunkPacket());
-                this.cachedLightBuffer = PacketUtils.createFramedPacket(ByteBuffer.allocate(65000), createLightPacket());
+                final var tempChunk = PacketUtils.createFramedPacket(createChunkPacket());
+                this.cachedChunkBuffer = ByteBuffer.allocate(tempChunk.position()).put(tempChunk.flip());
+                final var tempLight = PacketUtils.createFramedPacket(createLightPacket());
+                this.cachedLightBuffer = ByteBuffer.allocate(tempLight.position()).put(tempLight.flip());
                 this.cachedPacketTime = lastChange;
             }
             NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
