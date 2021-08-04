@@ -24,6 +24,7 @@ public class Server {
 
     private volatile boolean stop;
 
+    private final Selector selector = Selector.open();
     private final List<Worker> workers = new ArrayList<>(WORKER_COUNT);
     private int index;
 
@@ -39,7 +40,6 @@ public class Server {
     }
 
     public void start(SocketAddress address) throws IOException {
-        Selector selector = Selector.open();
         this.serverSocket = ServerSocketChannel.open();
         serverSocket.bind(address);
         serverSocket.configureBlocking(false);
@@ -65,6 +65,7 @@ public class Server {
 
     public void stop() {
         this.stop = true;
+        this.selector.wakeup();
         this.workers.forEach(worker -> worker.selector.wakeup());
     }
 
