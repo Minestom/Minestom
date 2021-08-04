@@ -188,7 +188,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                     serverPacket = ((ComponentHoldingServerPacket) serverPacket).copyWithOperator(component ->
                             GlobalTranslator.render(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
                 }
-                attemptWrite(serverPacket);
+                write(serverPacket);
             } else {
                 // Player is probably not logged yet
                 writeAndFlush(serverPacket);
@@ -196,22 +196,29 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    public void write(@NotNull FramedPacket framedPacket) {
-        attemptWrite(framedPacket.body());
-    }
-
     public void write(@NotNull ByteBuffer buffer) {
-        attemptWrite(buffer);
-    }
-
-    public void writeAndFlush(@NotNull ServerPacket packet) {
         synchronized (tickBuffer) {
-            attemptWrite(packet);
-            flush();
+            buffer.flip();
+            if (tickBuffer.remaining() >= buffer.remaining()) {
+                // Enough buffer space
+                this.tickBuffer.put(buffer);
+            } else {
+                try {
+                    this.channel.write(tickBuffer.flip());
+                    this.tickBuffer.clear().put(buffer);
+                } catch (IOException ex) {
+                    disconnect();
+                    MinecraftServer.getExceptionManager().handleException(ex);
+                }
+            }
         }
     }
 
-    public void attemptWrite(ServerPacket packet) {
+    public void write(@NotNull FramedPacket framedPacket) {
+        write(framedPacket.body());
+    }
+
+    public void write(@NotNull ServerPacket packet) {
         synchronized (tickBuffer) {
             final int position = tickBuffer.position();
             try {
@@ -229,21 +236,10 @@ public class NettyPlayerConnection extends PlayerConnection {
         }
     }
 
-    public void attemptWrite(ByteBuffer buffer) {
+    public void writeAndFlush(@NotNull ServerPacket packet) {
         synchronized (tickBuffer) {
-            try {
-                this.tickBuffer.put(buffer.flip());
-            } catch (BufferOverflowException e) {
-                try {
-                    this.channel.write(tickBuffer.flip());
-                    this.channel.write(buffer);
-                } catch (IOException ex) {
-                    disconnect();
-                    MinecraftServer.getExceptionManager().handleException(ex);
-                } finally {
-                    this.tickBuffer.clear();
-                }
-            }
+            write(packet);
+            flush();
         }
     }
 
@@ -257,10 +253,11 @@ public class NettyPlayerConnection extends PlayerConnection {
             if (tickBuffer.position() == 0) return;
             try {
                 this.channel.write(tickBuffer.flip());
+                this.tickBuffer.clear();
             } catch (IOException e) {
+                disconnect();
                 MinecraftServer.getExceptionManager().handleException(e);
             }
-            this.tickBuffer.clear();
         }
     }
 

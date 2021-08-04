@@ -132,8 +132,7 @@ public class DynamicChunk extends Chunk {
         final PlayerConnection connection = player.getPlayerConnection();
         if (connection instanceof NettyPlayerConnection) {
             final long lastChange = getLastChangeTime();
-            if (lastChange > cachedPacketTime ||
-                    (cachedChunkBuffer == null || cachedLightBuffer == null)) {
+            if (lastChange > cachedPacketTime || (cachedChunkBuffer == null || cachedLightBuffer == null)) {
                 this.cachedChunkBuffer = PacketUtils.createFramedPacket(ByteBuffer.allocate(65000), createChunkPacket());
                 this.cachedLightBuffer = PacketUtils.createFramedPacket(ByteBuffer.allocate(65000), createLightPacket());
                 this.cachedPacketTime = lastChange;
