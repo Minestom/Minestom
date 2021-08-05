@@ -198,7 +198,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (tickBuffer) {
             buffer.flip();
-            if (buffer.remaining() > tickBuffer.remaining()) {
+            if (buffer.limit() > tickBuffer.remaining()) {
                 // Tick buffer is full, flush before appending
                 flush();
             }

@@ -142,8 +142,8 @@ public class DynamicChunk extends Chunk {
                 this.cachedPacketTime = lastChange;
             }
             NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
-            nettyPlayerConnection.write(chunkPacket);
             nettyPlayerConnection.write(lightPacket);
+            nettyPlayerConnection.write(chunkPacket);
         } else {
             connection.sendPacket(createLightPacket());
             connection.sendPacket(createChunkPacket());
