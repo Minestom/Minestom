@@ -160,8 +160,7 @@ public abstract class PlayerConnection {
      *
      * @return the player, can be null if not initialized yet
      */
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return player;
     }
 

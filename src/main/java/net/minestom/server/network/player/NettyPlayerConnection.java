@@ -101,7 +101,7 @@ public class NettyPlayerConnection extends PlayerConnection {
                         content = readBuffer;
                     } else {
                         // Decompress to content buffer
-                        content = workerContext.contentBuffer.clear();
+                        content = workerContext.contentBuffer;
                         try {
                             final var inflater = workerContext.inflater;
                             inflater.setInput(readBuffer);
@@ -255,11 +255,7 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     @Override
     public void disconnect() {
-        try {
-            this.worker.disconnect(this, channel);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.worker.disconnect(this, channel);
     }
 
     public @NotNull SocketChannel getChannel() {

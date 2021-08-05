@@ -268,7 +268,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
-    public void removePlayer(@NotNull PlayerConnection connection) {
+    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
@@ -344,7 +344,7 @@ public final class ConnectionManager {
     /**
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
-    public void shutdown() {
+    public synchronized void shutdown() {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();

@@ -441,18 +441,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public void remove() {
-        if (isRemoved())
-            return;
-
+        if (isRemoved()) return;
         EventDispatcher.call(new PlayerDisconnectEvent(this));
-
         super.remove();
         this.packets.clear();
-        if (getOpenInventory() != null)
+        if (getOpenInventory() != null) {
             getOpenInventory().removeViewer(this);
-
+        }
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
-
         // Advancement tabs cache
         {
             Set<AdvancementTab> advancementTabs = AdvancementTab.getTabs(this);
@@ -462,15 +458,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 }
             }
         }
-
         // Clear all viewable entities
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
-        this.viewableChunks.forEach(chunk -> {
-            if (chunk.isLoaded())
-                chunk.removeViewer(this);
-        });
-        playerConnection.disconnect();
+        this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
     }
 
     @Override

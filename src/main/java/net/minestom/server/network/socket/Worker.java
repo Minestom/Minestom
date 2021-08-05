@@ -61,11 +61,7 @@ public final class Worker {
                 connection.processPackets(workerContext, packetProcessor);
             } catch (IOException e) {
                 // TODO print exception? (should ignore disconnection)
-                try {
-                    disconnect(connection, channel);
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
+                connection.disconnect();
             } finally {
                 workerContext.clearBuffers();
             }
@@ -84,15 +80,18 @@ public final class Worker {
         this.selector.wakeup();
     }
 
-    public void disconnect(NettyPlayerConnection connection, SocketChannel channel) throws IOException {
-        if (connectionMap.remove(channel) == null) return;
-        // Client close
-        channel.close();
-        connection.refreshOnline(false);
-        Player player = connection.getPlayer();
-        if (player != null) {
-            player.remove();
+    public void disconnect(NettyPlayerConnection connection, SocketChannel channel) {
+        try {
+            channel.close();
+            this.connectionMap.remove(channel);
             MinecraftServer.getConnectionManager().removePlayer(connection);
+            connection.refreshOnline(false);
+            Player player = connection.getPlayer();
+            if (player != null) {
+                player.remove();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
