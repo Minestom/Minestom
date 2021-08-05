@@ -23,7 +23,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
@@ -211,16 +210,8 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void write(@NotNull ServerPacket packet) {
-        synchronized (tickBuffer) {
-            this.tickBuffer.mark();
-            try {
-                PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
-            } catch (BufferOverflowException e) {
-                this.tickBuffer.reset();
-                flush();
-                PacketUtils.writeFramedPacket(tickBuffer, packet, compressed);
-            }
-        }
+        // TODO write directly to the tick buffer
+        write(PacketUtils.createFramedPacket(packet, compressed));
     }
 
     public void writeAndFlush(@NotNull ServerPacket packet) {
@@ -231,8 +222,8 @@ public class NettyPlayerConnection extends PlayerConnection {
     }
 
     public void flush() {
+        if (!channel.isOpen()) return;
         synchronized (tickBuffer) {
-            if (!channel.isOpen()) return;
             if (tickBuffer.position() == 0) return;
             try {
                 this.channel.write(tickBuffer.flip());

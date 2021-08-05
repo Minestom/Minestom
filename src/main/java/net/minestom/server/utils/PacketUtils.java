@@ -163,8 +163,8 @@ public final class PacketUtils {
         }
     }
 
-    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer initial, @NotNull ServerPacket packet) {
-        final boolean compression = MinecraftServer.getCompressionThreshold() > 0;
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer initial, @NotNull ServerPacket packet,
+                                                boolean compression) {
         var buffer = initial;
         try {
             writeFramedPacket(buffer, packet, compression);
@@ -177,8 +177,16 @@ public final class PacketUtils {
         return buffer;
     }
 
+    public static ByteBuffer createFramedPacket(@NotNull ByteBuffer initial, @NotNull ServerPacket packet) {
+        return createFramedPacket(initial, packet, MinecraftServer.getCompressionThreshold() > 0);
+    }
+
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
         return createFramedPacket(BUFFER.get().clear(), packet);
+    }
+
+    public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
+        return createFramedPacket(BUFFER.get().clear(), packet, compression);
     }
 
     public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
