@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.data.DataType;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +27,7 @@ public class InventoryData extends DataType<Inventory> {
 
     @NotNull
     @Override
-    public Inventory decode(@NotNull BinaryReader reader) {
+    public Inventory decode(@NotNull BinaryBuffer reader) {
         final Component title = reader.readComponent();
         final InventoryType inventoryType = InventoryType.valueOf(reader.readSizedString());
         final int size = inventoryType.getSize();

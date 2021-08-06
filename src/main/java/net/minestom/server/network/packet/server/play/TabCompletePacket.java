@@ -5,7 +5,7 @@ import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,7 +42,7 @@ public class TabCompletePacket implements ComponentHoldingServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
+    public void read(@NotNull BinaryBuffer reader) {
         transactionId = reader.readVarInt();
         start = reader.readVarInt();
         length = reader.readVarInt();

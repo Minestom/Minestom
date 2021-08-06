@@ -1,7 +1,7 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +15,7 @@ public class UuidType extends DataType<UUID> {
 
     @NotNull
     @Override
-    public UUID decode(@NotNull BinaryReader reader) {
+    public UUID decode(@NotNull BinaryBuffer reader) {
         return reader.readUuid();
     }
 }

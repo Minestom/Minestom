@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server;
 
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public interface ServerPacket extends Readable, Writeable {
 
     @Override
-    default void read(@NotNull BinaryReader reader) {
+    default void read(@NotNull BinaryBuffer reader) {
         // FIXME: remove when all packets are written and read properly
         throw new UnsupportedOperationException("WIP: This packet is not set up to be read from Minestom code at the moment.");
     }

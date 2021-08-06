@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.resourcepack.ResourcePack;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,7 +39,7 @@ public class ResourcePackSendPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
+    public void read(@NotNull BinaryBuffer reader) {
         this.url = reader.readSizedString();
         this.hash = reader.readSizedString();
         this.forced = reader.readBoolean();

@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.client.play;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -18,7 +18,7 @@ public class ClientPlayerBlockPlacementPacket extends ClientPlayPacket {
     public boolean insideBlock;
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
+    public void read(@NotNull BinaryBuffer reader) {
         this.hand = Player.Hand.values()[reader.readVarInt()];
         this.blockPosition = reader.readBlockPosition();
         this.blockFace = BlockFace.values()[reader.readVarInt()];

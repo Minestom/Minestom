@@ -3,8 +3,6 @@ package net.minestom.server.utils.binary;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.NBTUtils;
 import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
@@ -18,7 +16,6 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.function.Supplier;
 
 /**
  * Class used to read from a byte array.
@@ -164,18 +161,6 @@ public class BinaryReader extends InputStream {
         return new UUID(readLong(), readLong());
     }
 
-    /**
-     * Tries to read an {@link ItemStack}.
-     *
-     * @return the read item
-     * @throws NullPointerException if the item could not get read
-     */
-    public ItemStack readItemStack() {
-        final ItemStack itemStack = NBTUtils.readItemStack(this);
-        Check.notNull(itemStack, "#readSlot returned null, probably because the buffer was corrupted");
-        return itemStack;
-    }
-
     public Component readComponent(int maxLength) {
         final String jsonObject = readSizedString(maxLength);
         return GsonComponentSerializer.gson().deserialize(jsonObject);
@@ -183,36 +168,6 @@ public class BinaryReader extends InputStream {
 
     public Component readComponent() {
         return readComponent(Integer.MAX_VALUE);
-    }
-
-    /**
-     * Creates a new object from the given supplier and calls its {@link Readable#read(BinaryReader)} method with this reader.
-     *
-     * @param supplier supplier to create new instances of your object
-     * @param <T>      the readable object type
-     * @return the read object
-     */
-    public <T extends Readable> T read(@NotNull Supplier<@NotNull T> supplier) {
-        T result = supplier.get();
-        result.read(this);
-        return result;
-    }
-
-    /**
-     * Reads the length of the array to read as a varint, creates the array to contain the readable objects and call
-     * their respective {@link Readable#read(BinaryReader)} methods.
-     *
-     * @param supplier supplier to create new instances of your object
-     * @param <T>      the readable object type
-     * @return the read objects
-     */
-    public <T extends Readable> @NotNull T[] readArray(@NotNull Supplier<@NotNull T> supplier) {
-        Readable[] result = new Readable[readVarInt()];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = supplier.get();
-            result[i].read(this);
-        }
-        return (T[]) result;
     }
 
     public ByteBuffer getBuffer() {

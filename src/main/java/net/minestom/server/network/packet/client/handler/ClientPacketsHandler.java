@@ -1,7 +1,6 @@
 package net.minestom.server.network.packet.client.handler;
 
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -12,7 +11,7 @@ import java.util.function.Supplier;
  * Packets are register using {@link #register(int, ClientPacketSupplier)}
  * (you can override a packet id even if not recommended and not officially supported) and retrieved with {@link #getPacketInstance(int)}.
  * <p>
- * If you want to fill the packet from a buffer, consider using {@link ClientPacket#read(BinaryReader)} after getting the packet instance.
+ * If you want to fill the packet from a buffer, consider using {@link Readable#read(net.minestom.server.utils.binary.BinaryBuffer)} after getting the packet instance.
  */
 public class ClientPacketsHandler {
 

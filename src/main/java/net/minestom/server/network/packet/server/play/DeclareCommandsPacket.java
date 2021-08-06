@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
@@ -23,7 +23,7 @@ public class DeclareCommandsPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
+    public void read(@NotNull BinaryBuffer reader) {
         int nodeCount = reader.readVarInt();
         nodes = new Node[nodeCount];
         for (int i = 0; i < nodeCount; i++) {
@@ -75,7 +75,7 @@ public class DeclareCommandsPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryReader reader) {
+        public void read(@NotNull BinaryBuffer reader) {
             flags = reader.readByte();
             children = reader.readVarIntArray();
             if ((flags & 0x08) != 0) {
@@ -96,7 +96,7 @@ public class DeclareCommandsPacket implements ServerPacket {
             }
         }
 
-        private byte[] getProperties(BinaryReader reader, String parser) {
+        private byte[] getProperties(BinaryBuffer reader, String parser) {
             switch (parser) {
                 case "brigadier:double":
                     return reader.extractBytes(() -> {

@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
@@ -28,23 +28,23 @@ public class Metadata {
     // METADATA TYPES
 
     public static Value<Byte> Byte(byte value) {
-        return new Value<>(TYPE_BYTE, value, writer -> writer.writeByte(value), BinaryReader::readByte);
+        return new Value<>(TYPE_BYTE, value, writer -> writer.writeByte(value), BinaryBuffer::readByte);
     }
 
     public static Value<Integer> VarInt(int value) {
-        return new Value<>(TYPE_VARINT, value, writer -> writer.writeVarInt(value), BinaryReader::readVarInt);
+        return new Value<>(TYPE_VARINT, value, writer -> writer.writeVarInt(value), BinaryBuffer::readVarInt);
     }
 
     public static Value<Float> Float(float value) {
-        return new Value<>(TYPE_FLOAT, value, writer -> writer.writeFloat(value), BinaryReader::readFloat);
+        return new Value<>(TYPE_FLOAT, value, writer -> writer.writeFloat(value), BinaryBuffer::readFloat);
     }
 
     public static Value<String> String(@NotNull String value) {
-        return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), BinaryReader::readSizedString);
+        return new Value<>(TYPE_STRING, value, writer -> writer.writeSizedString(value), BinaryBuffer::readSizedString);
     }
 
     public static Value<Component> Chat(@NotNull Component value) {
-        return new Value<>(TYPE_CHAT, value, writer -> writer.writeComponent(value), BinaryReader::readComponent);
+        return new Value<>(TYPE_CHAT, value, writer -> writer.writeComponent(value), BinaryBuffer::readComponent);
     }
 
     public static Value<Component> OptChat(@Nullable Component value) {
@@ -64,11 +64,11 @@ public class Metadata {
     }
 
     public static Value<ItemStack> Slot(@NotNull ItemStack value) {
-        return new Value<>(TYPE_SLOT, value, writer -> writer.writeItemStack(value), BinaryReader::readItemStack);
+        return new Value<>(TYPE_SLOT, value, writer -> writer.writeItemStack(value), BinaryBuffer::readItemStack);
     }
 
     public static Value<Boolean> Boolean(boolean value) {
-        return new Value<>(TYPE_BOOLEAN, value, writer -> writer.writeBoolean(value), BinaryReader::readBoolean);
+        return new Value<>(TYPE_BOOLEAN, value, writer -> writer.writeBoolean(value), BinaryBuffer::readBoolean);
     }
 
     public static Value<Point> Rotation(@NotNull Point value) {
@@ -80,7 +80,7 @@ public class Metadata {
     }
 
     public static Value<Point> Position(@NotNull Point value) {
-        return new Value<>(TYPE_POSITION, value, writer -> writer.writeBlockPosition(value), BinaryReader::readBlockPosition);
+        return new Value<>(TYPE_POSITION, value, writer -> writer.writeBlockPosition(value), BinaryBuffer::readBlockPosition);
     }
 
     public static Value<Point> OptPosition(@Nullable Point value) {
@@ -268,7 +268,7 @@ public class Metadata {
             this.value = value;
         }
 
-        public Entry(BinaryReader reader) {
+        public Entry(BinaryBuffer reader) {
             this.index = reader.readByte();
             int type = reader.readVarInt();
             value = Metadata.read(type, reader);
@@ -336,7 +336,7 @@ public class Metadata {
         }
     }
 
-    private static <T> Value<T> read(int type, BinaryReader reader) {
+    private static <T> Value<T> read(int type, BinaryBuffer reader) {
         Value<T> value = getCorrespondingNewEmptyValue(type);
         value.read(reader);
         return value;
@@ -347,9 +347,9 @@ public class Metadata {
         protected final int type;
         protected T value;
         protected final Consumer<BinaryWriter> valueWriter;
-        protected final Function<BinaryReader, T> readingFunction;
+        protected final Function<BinaryBuffer, T> readingFunction;
 
-        public Value(int type, T value, @NotNull Consumer<BinaryWriter> valueWriter, @NotNull Function<BinaryReader, T> readingFunction) {
+        public Value(int type, T value, @NotNull Consumer<BinaryWriter> valueWriter, @NotNull Function<BinaryBuffer, T> readingFunction) {
             this.type = type;
             this.value = value;
             this.valueWriter = valueWriter;
@@ -363,7 +363,7 @@ public class Metadata {
         }
 
         @Override
-        public void read(@NotNull BinaryReader reader) {
+        public void read(@NotNull BinaryBuffer reader) {
             // skip type, will be read somewhere else
             value = readingFunction.apply(reader);
         }

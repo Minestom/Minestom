@@ -2,7 +2,7 @@ package net.minestom.server.network.packet.server.login;
 
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public class LoginPluginRequestPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
+    public void read(@NotNull BinaryBuffer reader) {
         messageId = reader.readVarInt();
         channel = reader.readSizedString();
         data = reader.readRemainingBytes();

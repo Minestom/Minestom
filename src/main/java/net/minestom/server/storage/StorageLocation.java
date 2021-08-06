@@ -2,7 +2,7 @@ package net.minestom.server.storage;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.data.*;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -122,7 +122,7 @@ public class StorageLocation {
             return null;
 
         // Decode the data
-        BinaryReader binaryReader = new BinaryReader(data);
+        BinaryBuffer binaryReader = BinaryBuffer.ofArray(data);
         return dataType.decode(binaryReader);
     }
 

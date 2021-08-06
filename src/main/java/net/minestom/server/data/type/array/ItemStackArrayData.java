@@ -2,7 +2,7 @@ package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public class ItemStackArrayData extends DataType<ItemStack[]> {
 
     @NotNull
     @Override
-    public ItemStack[] decode(@NotNull BinaryReader reader) {
+    public ItemStack[] decode(@NotNull BinaryBuffer reader) {
         ItemStack[] items = new ItemStack[reader.readVarInt()];
         for (int i = 0; i < items.length; i++) {
             items[i] = reader.readItemStack();

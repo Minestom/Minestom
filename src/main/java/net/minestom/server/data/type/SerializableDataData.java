@@ -3,7 +3,7 @@ package net.minestom.server.data.type;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
 import net.minestom.server.data.SerializableDataImpl;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public class SerializableDataData extends DataType<SerializableData> {
 
     @NotNull
     @Override
-    public SerializableData decode(@NotNull BinaryReader reader) {
+    public SerializableData decode(@NotNull BinaryBuffer reader) {
         SerializableData serializableData = new SerializableDataImpl();
         serializableData.readIndexedSerializedData(reader);
         return serializableData;

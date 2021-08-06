@@ -1,7 +1,7 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ public class BooleanData extends DataType<Boolean> {
 
     @NotNull
     @Override
-    public Boolean decode(@NotNull BinaryReader reader) {
+    public Boolean decode(@NotNull BinaryBuffer reader) {
         return reader.readBoolean();
     }
 }

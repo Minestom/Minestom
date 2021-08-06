@@ -6,7 +6,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,7 +41,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryReader reader) {
+    public void read(@NotNull BinaryBuffer reader) {
         action = Action.values()[reader.readVarInt()];
         int playerInfoCount = reader.readVarInt();
 
@@ -163,7 +163,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
             this.ping = ping;
         }
 
-        AddPlayer(UUID uuid, BinaryReader reader) {
+        AddPlayer(UUID uuid, BinaryBuffer reader) {
             super(uuid);
             name = reader.readSizedString();
             int propertyCount = reader.readVarInt();
@@ -236,7 +236,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
                 this(name, value, null);
             }
 
-            Property(BinaryReader reader) {
+            Property(BinaryBuffer reader) {
                 name = reader.readSizedString();
                 value = reader.readSizedString();
                 boolean hasSignature = reader.readBoolean();
@@ -267,7 +267,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
             this.gameMode = gameMode;
         }
 
-        UpdateGamemode(UUID uuid, BinaryReader reader) {
+        UpdateGamemode(UUID uuid, BinaryBuffer reader) {
             super(uuid);
             gameMode = GameMode.fromId((byte) reader.readVarInt());
         }
@@ -287,7 +287,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
             this.ping = ping;
         }
 
-        UpdateLatency(UUID uuid, BinaryReader reader) {
+        UpdateLatency(UUID uuid, BinaryBuffer reader) {
             super(uuid);
             ping = reader.readVarInt();
         }
@@ -307,7 +307,7 @@ public class PlayerInfoPacket implements ComponentHoldingServerPacket {
             this.displayName = displayName;
         }
 
-        UpdateDisplayName(UUID uuid, BinaryReader reader) {
+        UpdateDisplayName(UUID uuid, BinaryBuffer reader) {
             super(uuid);
             boolean hasDisplayName = reader.readBoolean();
             if (hasDisplayName) {
