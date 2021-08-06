@@ -1331,8 +1331,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.getId());
 
             PlayerInfoPacket infoPacket = new PlayerInfoPacket(PlayerInfoPacket.Action.UPDATE_GAMEMODE);
+            PlayerAbilitiesPacket abilitiesPacket = new PlayerAbilitiesPacket();
+            if (gameMode.equals(GameMode.CREATIVE)) {
+                abilitiesPacket.flags = 0b1101;
+                abilitiesPacket.flyingSpeed = 0.05f;
+            }
             infoPacket.playerInfos.add(new PlayerInfoPacket.UpdateGamemode(getUuid(), gameMode));
             sendPacketToViewersAndSelf(infoPacket);
+            getPlayerConnection().sendPacket(abilitiesPacket);
         }
     }
 
