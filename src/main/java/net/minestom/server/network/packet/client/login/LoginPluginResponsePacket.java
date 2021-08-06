@@ -12,7 +12,6 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
-import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -50,7 +49,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                 // Velocity
                 if (VelocityProxy.isEnabled() && channel.equals(VelocityProxy.PLAYER_INFO_CHANNEL)) {
                     if (data != null && data.length > 0) {
-                        BinaryReader reader = new BinaryReader(data);
+                        BinaryBuffer reader = BinaryBuffer.ofArray(data);
                         success = VelocityProxy.checkIntegrity(reader);
                         if (success) {
                             // Get the real connection address

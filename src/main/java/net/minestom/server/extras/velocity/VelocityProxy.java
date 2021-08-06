@@ -2,14 +2,13 @@ package net.minestom.server.extras.velocity;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
-import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -47,18 +46,16 @@ public final class VelocityProxy {
         return enabled;
     }
 
-    public static boolean checkIntegrity(@NotNull BinaryReader reader) {
+    public static boolean checkIntegrity(@NotNull BinaryBuffer reader) {
         if (!enabled) {
             return false;
         }
 
         final byte[] signature = reader.readBytes(32);
 
-        ByteBuffer buf = reader.getBuffer();
-        buf.mark();
-        final byte[] data = new byte[buf.remaining()];
-        buf.get(data);
-        buf.reset();
+        final var mark = reader.mark();
+        final byte[] data = reader.readBytes(reader.readableBytes());
+        reader.reset(mark);
 
         try {
             final Mac mac = Mac.getInstance("HmacSHA256");
@@ -75,7 +72,7 @@ public final class VelocityProxy {
         return version == SUPPORTED_FORWARDING_VERSION;
     }
 
-    public static InetAddress readAddress(@NotNull BinaryReader reader) {
+    public static InetAddress readAddress(@NotNull BinaryBuffer reader) {
         try {
             return InetAddress.getByName(reader.readSizedString());
         } catch (UnknownHostException e) {
@@ -84,7 +81,7 @@ public final class VelocityProxy {
         }
     }
 
-    public static PlayerSkin readSkin(@NotNull BinaryReader reader) {
+    public static PlayerSkin readSkin(@NotNull BinaryBuffer reader) {
         String skinTexture = null;
         String skinSignature = null;
 
