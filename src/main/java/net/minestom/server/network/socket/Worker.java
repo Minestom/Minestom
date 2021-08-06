@@ -4,10 +4,10 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -48,16 +48,11 @@ public final class Worker {
             }
             var connection = connectionMap.get(channel);
             try {
-                ByteBuffer readBuffer = workerContext.readBuffer;
+                var readBuffer = workerContext.readBuffer;
                 // Consume last incomplete packet
                 connection.consumeCache(readBuffer);
-                // Read socket
-                if (channel.read(readBuffer) == -1) {
-                    // EOS
-                    throw new IOException("Disconnected");
-                }
-                // Process data
-                readBuffer.flip();
+                // Read & process
+                readBuffer.readChannel(channel);
                 connection.processPackets(workerContext, packetProcessor);
             } catch (IOException e) {
                 // TODO print exception? (should ignore disconnection)
@@ -124,11 +119,11 @@ public final class Worker {
      * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
      */
     public static final class Context {
-        public final ByteBuffer readBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
+        public final BinaryBuffer readBuffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
         /**
          * Stores a single packet payload to be read.
          */
-        public final ByteBuffer contentBuffer = ByteBuffer.allocateDirect(Server.MAX_PACKET_SIZE);
+        public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final Inflater inflater = new Inflater();
 
         public void clearBuffers() {

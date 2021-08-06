@@ -14,7 +14,7 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Utils;
+import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -62,8 +62,8 @@ public class NettyPlayerConnection extends PlayerConnection {
     private UUID bungeeUuid;
     private PlayerSkin bungeeSkin;
 
-    private final ByteBuffer tickBuffer = ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE);
-    private volatile ByteBuffer cacheBuffer;
+    private final BinaryBuffer tickBuffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
+    private volatile BinaryBuffer cacheBuffer;
 
     public NettyPlayerConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
         super();
@@ -74,73 +74,68 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
         final var readBuffer = workerContext.readBuffer;
-        final int limit = readBuffer.limit();
+        final int limit = readBuffer.writerOffset();
         // Read all packets
-        while (readBuffer.remaining() > 0) {
-            readBuffer.mark(); // Mark the beginning of the packet
+        while (readBuffer.readableBytes() > 0) {
+            final var beginMark = readBuffer.mark();
             try {
-                // Read packet
-                final int packetLength = Utils.readVarInt(readBuffer);
-                final int packetEnd = readBuffer.position() + packetLength;
-                if (packetEnd > readBuffer.limit()) {
+                // Ensure that the buffer contains the full packet (or wait for next socket read)
+                final int packetLength = readBuffer.readVarInt();
+                final int packetEnd = readBuffer.readerOffset() + packetLength;
+                if (packetEnd > readBuffer.writerOffset()) {
                     // Integrity fail
                     throw new BufferUnderflowException();
                 }
-
-                readBuffer.limit(packetEnd); // Ensure that the reader doesn't exceed packet bound
-
-                // Read protocol
-                ByteBuffer content;
+                // Read packet https://wiki.vg/Protocol#Packet_format
+                BinaryBuffer content;
                 if (!compressed) {
                     // Compression disabled, payload is following
                     content = readBuffer;
                 } else {
-                    final int dataLength = Utils.readVarInt(readBuffer);
+                    final int dataLength = readBuffer.readVarInt();
                     if (dataLength == 0) {
                         // Data is too small to be compressed, payload is following
                         content = readBuffer;
                     } else {
                         // Decompress to content buffer
                         content = workerContext.contentBuffer;
+                        final var contentStartMark = content.mark();
                         try {
                             final var inflater = workerContext.inflater;
-                            inflater.setInput(readBuffer);
-                            inflater.inflate(content);
+                            inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), packetEnd));
+                            inflater.inflate(content.asByteBuffer(0, content.capacity()));
                             inflater.reset();
                         } catch (DataFormatException e) {
                             e.printStackTrace();
                         }
-                        content.flip();
+                        content.reset(contentStartMark);
                     }
                 }
-
                 // Process packet
-                final int packetId = Utils.readVarInt(content);
+                final int packetId = content.readVarInt();
                 try {
-                    packetProcessor.process(this, packetId, content);
+                    var finalBuffer = content.asByteBuffer(content.readerOffset(), packetEnd);
+                    packetProcessor.process(this, packetId, finalBuffer);
                 } catch (Exception e) {
                     // Error while reading the packet
                     MinecraftServer.getExceptionManager().handleException(e);
                     break;
                 }
-
                 // Return to original state (before writing)
-                readBuffer.limit(limit).position(packetEnd);
+                readBuffer.reset(packetEnd, limit);
             } catch (BufferUnderflowException e) {
-                readBuffer.reset();
-                this.cacheBuffer = ByteBuffer.allocateDirect(readBuffer.remaining())
-                        .put(readBuffer).flip();
+                readBuffer.reset(beginMark);
+                this.cacheBuffer = BinaryBuffer.copy(readBuffer);
                 break;
             }
         }
     }
 
-    public void consumeCache(ByteBuffer buffer) {
-        if (cacheBuffer == null) {
-            return;
+    public void consumeCache(BinaryBuffer buffer) {
+        if (cacheBuffer != null) {
+            buffer.write(cacheBuffer);
+            this.cacheBuffer = null;
         }
-        buffer.put(cacheBuffer);
-        this.cacheBuffer = null;
     }
 
     /**
@@ -197,11 +192,11 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (tickBuffer) {
             buffer.flip();
-            if (buffer.limit() > tickBuffer.remaining()) {
+            if (!tickBuffer.canWrite(buffer.limit())) {
                 // Tick buffer is full, flush before appending
                 flush();
             }
-            this.tickBuffer.put(buffer);
+            this.tickBuffer.write(buffer);
         }
     }
 
@@ -224,9 +219,9 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void flush() {
         if (!channel.isOpen()) return;
         synchronized (tickBuffer) {
-            if (tickBuffer.position() == 0) return;
+            if (tickBuffer.readableBytes() == 0) return;
             try {
-                this.channel.write(tickBuffer.flip());
+                this.tickBuffer.writeChannel(channel);
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             } finally {

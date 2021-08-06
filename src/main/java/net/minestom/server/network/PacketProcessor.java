@@ -127,9 +127,7 @@ public final class PacketProcessor {
         } catch (Exception e) {
             final Player player = connection.getPlayer();
             final String username = player != null ? player.getUsername() : "null";
-            LOGGER.warn("Connection {} ({}) sent an unexpected packet.",
-                    connection.getRemoteAddress(),
-                    username);
+            LOGGER.warn("Connection {} ({}) sent an unexpected packet.", connection.getRemoteAddress(), username);
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }
