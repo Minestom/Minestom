@@ -70,6 +70,11 @@ public class CommandDispatcher {
         return Collections.unmodifiableSet(commands);
     }
 
+    @NotNull
+    public Map<String, Command> getCommandMap() {
+        return Collections.unmodifiableMap(commandMap);
+    }
+
     /**
      * Gets the command class associated with the name.
      *

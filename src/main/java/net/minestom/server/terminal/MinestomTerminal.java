@@ -7,6 +7,8 @@ import org.jline.reader.EndOfFileException;
 import org.jline.reader.LineReader;
 import org.jline.reader.LineReaderBuilder;
 import org.jline.reader.UserInterruptException;
+import org.jline.reader.impl.completer.AggregateCompleter;
+import org.jline.reader.impl.history.DefaultHistory;
 import org.jline.terminal.Terminal;
 import org.jline.terminal.TerminalBuilder;
 
@@ -30,6 +32,10 @@ public class MinestomTerminal {
             }
             LineReader reader = LineReaderBuilder.builder()
                     .terminal(terminal)
+                    .completer(new AggregateCompleter(
+                            new MinestomCompleter()
+                    ))
+                    .history(new DefaultHistory())
                     .build();
             running = true;
 
