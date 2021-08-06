@@ -52,8 +52,7 @@ public final class BinaryBuffer {
 
     public int readVarInt() {
         int value = 0;
-        final int maxRead = Math.min(5, readableBytes());
-        for (int i = 0; i < maxRead; i++) {
+        for (int i = 0; i < 5; i++) {
             final int offset = readerOffset + i;
             final byte k = nioBuffer.get(offset);
             value |= (k & 0x7F) << i * 7;
@@ -62,7 +61,6 @@ public final class BinaryBuffer {
                 return value;
             }
         }
-        this.readerOffset += maxRead;
         throw new RuntimeException("VarInt is too big");
     }
 
