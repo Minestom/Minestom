@@ -16,7 +16,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.attribute.AttributeSlot;
 import net.minestom.server.item.attribute.ItemAttribute;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -112,7 +112,8 @@ public final class NBTUtils {
         nbt.set(listName, enchantList);
     }
 
-    public static @NotNull ItemStack readItemStack(@NotNull BinaryBuffer reader) {
+    @NotNull
+    public static ItemStack readItemStack(@NotNull BinaryReader reader) {
         final boolean present = reader.readBoolean();
 
         if (!present) {

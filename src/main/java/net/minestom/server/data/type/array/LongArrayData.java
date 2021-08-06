@@ -1,7 +1,7 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public class LongArrayData extends DataType<long[]> {
 
     @NotNull
     @Override
-    public long[] decode(@NotNull BinaryBuffer reader) {
+    public long[] decode(@NotNull BinaryReader reader) {
         long[] array = new long[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
             array[i] = reader.readLong();

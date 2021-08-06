@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.shorts.Short2ObjectMap;
 import it.unimi.dsi.fastutil.shorts.Short2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.PrimitiveConversion;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -153,7 +153,7 @@ public class SerializableDataImpl extends SerializableData {
     }
 
     @Override
-    public void readSerializedData(@NotNull BinaryBuffer reader, @NotNull Object2ShortMap<String> typeToIndexMap) {
+    public void readSerializedData(@NotNull BinaryReader reader, @NotNull Object2ShortMap<String> typeToIndexMap) {
         // Map used to convert an index to the class name (opposite of typeToIndexMap)
         final Short2ObjectMap<String> indexToTypeMap = new Short2ObjectOpenHashMap<>(typeToIndexMap.size());
         {

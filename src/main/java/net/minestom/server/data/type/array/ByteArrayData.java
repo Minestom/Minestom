@@ -1,7 +1,7 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ public class ByteArrayData extends DataType<byte[]> {
 
     @NotNull
     @Override
-    public byte[] decode(@NotNull BinaryBuffer reader) {
+    public byte[] decode(@NotNull BinaryReader reader) {
         return decodeByteArray(reader);
     }
 
@@ -24,7 +24,7 @@ public class ByteArrayData extends DataType<byte[]> {
         }
     }
 
-    public static byte[] decodeByteArray(@NotNull BinaryBuffer binaryReader) {
+    public static byte[] decodeByteArray(@NotNull BinaryReader binaryReader) {
         byte[] array = new byte[binaryReader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
             array[i] = binaryReader.readByte();

@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +35,7 @@ public class EffectPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.effectId = reader.readInt();
         this.position = reader.readBlockPosition();
         this.data = reader.readInt();

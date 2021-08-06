@@ -10,7 +10,7 @@ import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -84,7 +84,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         sharedSecret = ByteArrayData.decodeByteArray(reader);
         verifyToken = ByteArrayData.decodeByteArray(reader);
     }

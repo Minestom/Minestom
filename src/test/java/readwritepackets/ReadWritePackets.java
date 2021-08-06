@@ -7,7 +7,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
@@ -79,7 +79,7 @@ public class ReadWritePackets {
 
                         // re-read packet
                         byte[] originalBytes = writer.toByteArray();
-                        BinaryBuffer reader = BinaryBuffer.ofArray(originalBytes);
+                        BinaryReader reader = new BinaryReader(originalBytes);
                         packet.read(reader);
 
                         Assertions.assertEquals(0, reader.readRemainingBytes().length, "Packet did not read all available data");

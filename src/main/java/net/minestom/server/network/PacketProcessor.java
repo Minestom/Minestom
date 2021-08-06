@@ -10,11 +10,13 @@ import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHand
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
 import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.Readable;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.ByteBuffer;
 
 /**
  * Responsible for processing client packets.
@@ -40,17 +42,18 @@ public final class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    public void process(@NotNull NettyPlayerConnection playerConnection, int packetId, BinaryBuffer content) {
+    public void process(@NotNull NettyPlayerConnection playerConnection, int packetId, ByteBuffer body) {
         if (MinecraftServer.getRateLimit() > 0) {
             // Increment packet count (checked in PlayerConnection#update)
             playerConnection.getPacketCounter().incrementAndGet();
         }
+        BinaryReader binaryReader = new BinaryReader(body);
         final ConnectionState connectionState = playerConnection.getConnectionState();
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (packetId == 0) {
                 HandshakePacket handshakePacket = new HandshakePacket();
-                safeRead(playerConnection, handshakePacket, content);
+                safeRead(playerConnection, handshakePacket, binaryReader);
                 handshakePacket.process(playerConnection);
             }
             return;
@@ -59,18 +62,18 @@ public final class PacketProcessor {
             case PLAY:
                 final Player player = playerConnection.getPlayer();
                 ClientPlayPacket playPacket = (ClientPlayPacket) playPacketsHandler.getPacketInstance(packetId);
-                safeRead(playerConnection, playPacket, content);
+                safeRead(playerConnection, playPacket, binaryReader);
                 assert player != null;
                 player.addPacketToQueue(playPacket);
                 break;
             case LOGIN:
                 final ClientPreplayPacket loginPacket = (ClientPreplayPacket) loginPacketsHandler.getPacketInstance(packetId);
-                safeRead(playerConnection, loginPacket, content);
+                safeRead(playerConnection, loginPacket, binaryReader);
                 loginPacket.process(playerConnection);
                 break;
             case STATUS:
                 final ClientPreplayPacket statusPacket = (ClientPreplayPacket) statusPacketsHandler.getPacketInstance(packetId);
-                safeRead(playerConnection, statusPacket, content);
+                safeRead(playerConnection, statusPacket, binaryReader);
                 statusPacket.process(playerConnection);
                 break;
         }
@@ -107,14 +110,16 @@ public final class PacketProcessor {
     }
 
     /**
-     * Calls {@link Readable#read(BinaryBuffer)} and catch all the exceptions to be printed using the packet processor logger.
+     * Calls {@link Readable#read(BinaryReader)} and catch all the exceptions to be printed using the packet processor logger.
      *
      * @param connection the connection who sent the packet
      * @param readable   the readable interface
      * @param reader     the buffer containing the packet
      */
-    private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryBuffer reader) {
-        if (reader.readableBytes() == 0) {
+    private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
+        final int readableBytes = reader.available();
+        // Check if there is anything to read
+        if (readableBytes == 0) {
             return;
         }
         try {

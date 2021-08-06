@@ -2,7 +2,7 @@ package net.minestom.server.data;
 
 import it.unimi.dsi.fastutil.objects.Object2ShortMap;
 import it.unimi.dsi.fastutil.objects.Object2ShortOpenHashMap;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,8 +16,8 @@ public abstract class SerializableData extends Data {
     /**
      * Serializes the data into an array of bytes.
      * <p>
-     * Use {@link #readIndexedSerializedData(BinaryBuffer)} if {@code indexed} is true,
-     * {@link #readSerializedData(BinaryBuffer, Object2ShortMap)} otherwise with the index map
+     * Use {@link #readIndexedSerializedData(BinaryReader)} if {@code indexed} is true,
+     * {@link #readSerializedData(BinaryReader, Object2ShortMap)} otherwise with the index map
      * to convert it back to a {@link SerializableData}.
      *
      * @param typeToIndexMap the type to index map, will create entries if new types are discovered.
@@ -32,16 +32,17 @@ public abstract class SerializableData extends Data {
      * Reads the data of a {@link SerializableData} when you already have the index map.
      * <p>
      * WARNING: the data to read should not have any index to read and your index map should be COMPLETE.
-     * Use {@link #readIndexedSerializedData(BinaryBuffer)} if you need to read the header.
-     *  @param reader         the binary reader
+     * Use {@link #readIndexedSerializedData(BinaryReader)} if you need to read the header.
+     *
+     * @param reader         the binary reader
      * @param typeToIndexMap the index map
      */
-    public abstract void readSerializedData(@NotNull BinaryBuffer reader, @NotNull Object2ShortMap<String> typeToIndexMap);
+    public abstract void readSerializedData(@NotNull BinaryReader reader, @NotNull Object2ShortMap<String> typeToIndexMap);
 
     /**
      * Serializes the data into an array of bytes.
      * <p>
-     * Use {@link #readIndexedSerializedData(BinaryBuffer)}
+     * Use {@link #readIndexedSerializedData(BinaryReader)}
      * to convert it back to a {@link SerializableData}.
      * <p>
      * This will create a type index map which will be present in the header.
@@ -60,7 +61,7 @@ public abstract class SerializableData extends Data {
      *
      * @param reader the binary reader
      */
-    public void readIndexedSerializedData(@NotNull BinaryBuffer reader) {
+    public void readIndexedSerializedData(@NotNull BinaryReader reader) {
         final Object2ShortMap<String> typeToIndexMap = SerializableData.readDataIndexes(reader);
         readSerializedData(reader, typeToIndexMap);
     }
@@ -96,13 +97,13 @@ public abstract class SerializableData extends Data {
     /**
      * Reads a data index map (type name -&gt; type index).
      * <p>
-     * Can then be used with {@link SerializableData#readSerializedData(BinaryBuffer, Object2ShortMap)}.
+     * Can then be used with {@link SerializableData#readSerializedData(BinaryReader, Object2ShortMap)}.
      *
      * @param binaryReader the reader
      * @return a map containing the indexes of your data
      */
     @NotNull
-    public static Object2ShortMap<String> readDataIndexes(@NotNull BinaryBuffer binaryReader) {
+    public static Object2ShortMap<String> readDataIndexes(@NotNull BinaryReader binaryReader) {
         Object2ShortMap<String> typeToIndexMap = new Object2ShortOpenHashMap<>();
         {
             final int dataIndexSize = binaryReader.readVarInt();

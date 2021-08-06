@@ -3,8 +3,10 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.statistic.StatisticCategory;
-import net.minestom.server.utils.binary.*;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 public class StatisticsPacket implements ServerPacket {
@@ -24,7 +26,7 @@ public class StatisticsPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         int length = reader.readVarInt();
         statistics = new Statistic[length];
         for (int i = 0; i < length; i++) {
@@ -52,7 +54,7 @@ public class StatisticsPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             category = StatisticCategory.values()[reader.readVarInt()];
             statisticId = reader.readVarInt();
             value = reader.readVarInt();

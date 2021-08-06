@@ -1,7 +1,7 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ public class ShortArrayData extends DataType<short[]> {
 
     @NotNull
     @Override
-    public short[] decode(@NotNull BinaryBuffer reader) {
+    public short[] decode(@NotNull BinaryReader reader) {
         short[] array = new short[reader.readVarInt()];
         for (int i = 0; i < array.length; i++) {
             array[i] = reader.readShort();

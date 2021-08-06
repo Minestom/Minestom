@@ -4,8 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.*;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -65,7 +67,7 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         mapId = reader.readVarInt();
         scale = reader.readByte();
         locked = reader.readBoolean();
@@ -157,7 +159,7 @@ public class MapDataPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             type = reader.readVarInt();
             x = reader.readByte();
             z = reader.readByte();

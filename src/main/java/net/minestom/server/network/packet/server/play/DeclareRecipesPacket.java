@@ -3,7 +3,7 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
 import net.minestom.server.utils.binary.Writeable;
@@ -28,7 +28,7 @@ public class DeclareRecipesPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         int recipeCount = reader.readVarInt();
         recipes = new DeclaredRecipe[recipeCount];
         for (int i = 0; i < recipeCount; i++) {
@@ -94,7 +94,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             throw new UnsupportedOperationException("'read' must be implemented inside subclasses!");
         }
     }
@@ -116,7 +116,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.result = result;
         }
 
-        private DeclaredShapelessCraftingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredShapelessCraftingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "crafting_shapeless");
             read(reader);
         }
@@ -135,7 +135,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString();
             int count = reader.readVarInt();
             ingredients = new Ingredient[count];
@@ -170,7 +170,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.height = height;
         }
 
-        private DeclaredShapedCraftingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredShapedCraftingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "crafting_shaped");
             read(reader);
         }
@@ -190,7 +190,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             width = reader.readVarInt();
             height = reader.readVarInt();
             group = reader.readSizedString();
@@ -226,7 +226,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.cookingTime = cookingTime;
         }
 
-        private DeclaredSmeltingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredSmeltingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "smelting");
             read(reader);
         }
@@ -244,7 +244,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
@@ -277,7 +277,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.cookingTime = cookingTime;
         }
 
-        private DeclaredBlastingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredBlastingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "blasting");
             read(reader);
         }
@@ -295,7 +295,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
@@ -328,7 +328,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.cookingTime = cookingTime;
         }
 
-        private DeclaredSmokingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredSmokingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "smoking");
             read(reader);
         }
@@ -346,7 +346,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
@@ -379,7 +379,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.cookingTime = cookingTime;
         }
 
-        private DeclaredCampfireCookingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredCampfireCookingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "campfire_cooking");
             read(reader);
         }
@@ -397,7 +397,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
@@ -424,7 +424,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.result = result;
         }
 
-        private DeclaredStonecutterRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredStonecutterRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "stonecutter");
             read(reader);
         }
@@ -440,7 +440,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             group = reader.readSizedString();
             ingredient = new Ingredient();
             ingredient.read(reader);
@@ -465,7 +465,7 @@ public class DeclareRecipesPacket implements ServerPacket {
             this.result = result;
         }
 
-        private DeclaredSmithingRecipe(@NotNull String recipeId, @NotNull BinaryBuffer reader) {
+        private DeclaredSmithingRecipe(@NotNull String recipeId, @NotNull BinaryReader reader) {
             super(recipeId, "smithing");
             read(reader);
         }
@@ -481,7 +481,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             base = new Ingredient();
             addition = new Ingredient();
             base.read(reader);
@@ -503,7 +503,7 @@ public class DeclareRecipesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             items = new ItemStack[reader.readVarInt()];
             for (int i = 0; i < items.length; i++) {
                 items[i] = reader.readItemStack();

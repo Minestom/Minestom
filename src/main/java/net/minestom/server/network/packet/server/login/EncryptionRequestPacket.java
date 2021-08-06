@@ -5,7 +5,7 @@ import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.player.NettyPlayerConnection;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +38,7 @@ public class EncryptionRequestPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         reader.readSizedString(); // server id, apparently empty
 
         publicKey = ByteArrayData.decodeByteArray(reader);

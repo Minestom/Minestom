@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -16,7 +16,7 @@ public class ClientUpdateSignPacket extends ClientPlayPacket {
     public String line4 = "";
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         this.blockPosition = reader.readBlockPosition();
         this.line1 = reader.readSizedString(384);
         this.line2 = reader.readSizedString(384);

@@ -1,7 +1,7 @@
 package net.minestom.server.data.type;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +13,7 @@ public class LongData extends DataType<Long> {
 
     @NotNull
     @Override
-    public Long decode(@NotNull BinaryBuffer reader) {
+    public Long decode(@NotNull BinaryReader reader) {
         return reader.readLong();
     }
 }

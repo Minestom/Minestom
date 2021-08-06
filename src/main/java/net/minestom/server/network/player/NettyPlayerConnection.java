@@ -114,8 +114,8 @@ public class NettyPlayerConnection extends PlayerConnection {
                 // Process packet
                 final int packetId = content.readVarInt();
                 try {
-                    final var slice = content.slice(content.readerOffset(), packetLength);
-                    packetProcessor.process(this, packetId, slice);
+                    var finalBuffer = content.asByteBuffer(content.readerOffset(), packetEnd);
+                    packetProcessor.process(this, packetId, finalBuffer);
                 } catch (Exception e) {
                     // Error while reading the packet
                     MinecraftServer.getExceptionManager().handleException(e);

@@ -1,7 +1,7 @@
 package net.minestom.server.data.type.array;
 
 import net.minestom.server.data.DataType;
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +14,7 @@ public class StringArrayData extends DataType<String[]> {
 
     @NotNull
     @Override
-    public String[] decode(@NotNull BinaryBuffer reader) {
+    public String[] decode(@NotNull BinaryReader reader) {
         return reader.readSizedStringArray(Integer.MAX_VALUE);
     }
 }

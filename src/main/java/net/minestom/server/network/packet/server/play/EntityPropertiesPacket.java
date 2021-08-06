@@ -6,8 +6,10 @@ import net.minestom.server.attribute.AttributeModifier;
 import net.minestom.server.attribute.AttributeOperation;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.*;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -30,7 +32,7 @@ public class EntityPropertiesPacket implements ServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         entityId = reader.readVarInt();
         int propertyCount = reader.readVarInt();
         properties = new Property[propertyCount];
@@ -73,7 +75,7 @@ public class EntityPropertiesPacket implements ServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             String key = reader.readSizedString();
             attribute = Attribute.fromKey(key);
 

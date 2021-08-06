@@ -6,8 +6,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.binary.*;
+import net.minestom.server.utils.binary.BinaryReader;
+import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.binary.Readable;
+import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
     }
 
     @Override
-    public void read(@NotNull BinaryBuffer reader) {
+    public void read(@NotNull BinaryReader reader) {
         resetAdvancements = reader.readBoolean();
 
         int mappingCount = reader.readVarInt();
@@ -109,7 +111,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             key = reader.readSizedString();
             value = new Advancement();
             value.read(reader);
@@ -146,7 +148,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             boolean hasParent = reader.readBoolean();
             if (hasParent) {
                 parentIdentifier = reader.readSizedString();
@@ -198,7 +200,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             title = reader.readComponent();
             description = reader.readComponent();
             icon = reader.readItemStack();
@@ -224,7 +226,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             requirements = reader.readSizedStringArray(Integer.MAX_VALUE);
         }
     }
@@ -240,7 +242,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             key = reader.readSizedString();
             value = new AdvancementProgress();
             value.read(reader);
@@ -259,7 +261,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             int count = reader.readVarInt();
             criteria = new Criteria[count];
             for (int i = 0; i < count; i++) {
@@ -280,7 +282,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             criterionIdentifier = reader.readSizedString();
             criterionProgress = new CriterionProgress();
             criterionProgress.read(reader);
@@ -299,7 +301,7 @@ public class AdvancementsPacket implements ComponentHoldingServerPacket {
         }
 
         @Override
-        public void read(@NotNull BinaryBuffer reader) {
+        public void read(@NotNull BinaryReader reader) {
             achieved = reader.readBoolean();
             if (achieved) {
                 dateOfAchieving = reader.readLong();
