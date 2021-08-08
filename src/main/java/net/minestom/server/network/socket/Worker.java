@@ -12,7 +12,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -31,37 +30,28 @@ public final class Worker {
 
     private void threadTick(Context workerContext) {
         try {
-            selector.select();
+            this.selector.select(key -> {
+                final SocketChannel channel = (SocketChannel) key.channel();
+                if (!channel.isOpen()) return;
+                if (!key.isReadable()) return;
+                var connection = connectionMap.get(channel);
+                try {
+                    var readBuffer = workerContext.readBuffer;
+                    // Consume last incomplete packet
+                    connection.consumeCache(readBuffer);
+                    // Read & process
+                    readBuffer.readChannel(channel);
+                    connection.processPackets(workerContext, packetProcessor);
+                } catch (IOException e) {
+                    // TODO print exception? (should ignore disconnection)
+                    connection.disconnect();
+                } finally {
+                    workerContext.clearBuffers();
+                }
+            });
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
+            MinecraftServer.getExceptionManager().handleException(e);
         }
-        Set<SelectionKey> selectedKeys = selector.selectedKeys();
-        for (SelectionKey key : selectedKeys) {
-            SocketChannel channel = (SocketChannel) key.channel();
-            if (!channel.isOpen()) {
-                continue;
-            }
-            if (!key.isReadable()) {
-                // We only care about read
-                continue;
-            }
-            var connection = connectionMap.get(channel);
-            try {
-                var readBuffer = workerContext.readBuffer;
-                // Consume last incomplete packet
-                connection.consumeCache(readBuffer);
-                // Read & process
-                readBuffer.readChannel(channel);
-                connection.processPackets(workerContext, packetProcessor);
-            } catch (IOException e) {
-                // TODO print exception? (should ignore disconnection)
-                connection.disconnect();
-            } finally {
-                workerContext.clearBuffers();
-            }
-        }
-        selectedKeys.clear();
     }
 
     public void receiveConnection(SocketChannel channel) throws IOException {
