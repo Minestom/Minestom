@@ -12,7 +12,6 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public final class Server {
     public static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
@@ -52,7 +51,17 @@ public final class Server {
             while (!stop) {
                 // Busy wait for connections
                 try {
-                    serverTick(selector, serverSocket);
+                    this.selector.select(key -> {
+                        if (!key.isAcceptable()) return;
+                        try {
+                            // Register socket and forward to thread
+                            Worker worker = findWorker();
+                            final SocketChannel client = serverSocket.accept();
+                            worker.receiveConnection(client);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -76,20 +85,6 @@ public final class Server {
 
     public int getPort() {
         return port;
-    }
-
-    private void serverTick(Selector selector, ServerSocketChannel socketChannel) throws IOException {
-        selector.select();
-        Set<SelectionKey> selectedKeys = selector.selectedKeys();
-        for (SelectionKey key : selectedKeys) {
-            if (key.isAcceptable()) {
-                // Register socket and forward to thread
-                Worker thread = findWorker();
-                final SocketChannel client = socketChannel.accept();
-                thread.receiveConnection(client);
-            }
-        }
-        selectedKeys.clear();
     }
 
     private Worker findWorker() {
