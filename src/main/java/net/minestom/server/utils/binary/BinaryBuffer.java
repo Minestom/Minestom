@@ -43,7 +43,7 @@ public final class BinaryBuffer {
     public void write(ByteBuffer buffer) {
         final int size = buffer.remaining();
         // TODO jdk 13 put with index
-        asByteBuffer(writerOffset, writerOffset + size).put(buffer);
+        this.nioBuffer.position(writerOffset).put(buffer);
         this.writerOffset += size;
     }
 
@@ -98,13 +98,29 @@ public final class BinaryBuffer {
         return writerOffset - readerOffset;
     }
 
+    public void writeBytes(byte[] bytes) {
+        this.nioBuffer.position(writerOffset).put(bytes);
+        this.writerOffset += bytes.length;
+    }
+
+    public byte[] readBytes(int length) {
+        byte[] bytes = new byte[length];
+        this.nioBuffer.position(readerOffset).get(bytes, 0, length);
+        this.readerOffset += length;
+        return bytes;
+    }
+
+    public byte[] readRemainingBytes() {
+        return readBytes(readableBytes());
+    }
+
     public void clear() {
         this.readerOffset = 0;
         this.writerOffset = 0;
     }
 
     public ByteBuffer asByteBuffer(int reader, int writer) {
-        return nioBuffer.duplicate().position(reader).limit(writer);
+        return nioBuffer.position(reader).slice().limit(writer);
     }
 
     public void writeChannel(WritableByteChannel channel) throws IOException {

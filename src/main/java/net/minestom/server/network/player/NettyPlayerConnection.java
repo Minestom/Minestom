@@ -5,6 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerSkin;
+import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.FramedPacket;
@@ -20,7 +21,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.ShortBufferException;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.BufferUnderflowException;
@@ -47,6 +50,8 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     //Could be null. Only used for Mojang Auth
     private byte[] nonce = new byte[4];
+    private Cipher decryptCipher;
+    private Cipher encryptCipher;
 
     // Data from client packets
     private String loginUsername;
@@ -74,6 +79,20 @@ public class NettyPlayerConnection extends PlayerConnection {
 
     public void processPackets(Worker.Context workerContext, PacketProcessor packetProcessor) {
         final var readBuffer = workerContext.readBuffer;
+        // Decrypt data
+        if (encrypted) {
+            final Cipher cipher = decryptCipher;
+            final int remainingBytes = readBuffer.readableBytes();
+            final byte[] bytes = readBuffer.readRemainingBytes();
+            byte[] output = new byte[cipher.getOutputSize(remainingBytes)];
+            try {
+                cipher.update(bytes, 0, remainingBytes, output, 0);
+            } catch (ShortBufferException e) {
+                e.printStackTrace();
+            }
+            readBuffer.clear();
+            readBuffer.writeBytes(output);
+        }
         final int limit = readBuffer.writerOffset();
         // Read all packets
         while (readBuffer.readableBytes() > 0) {
@@ -146,8 +165,9 @@ public class NettyPlayerConnection extends PlayerConnection {
      */
     public void setEncryptionKey(@NotNull SecretKey secretKey) {
         Check.stateCondition(encrypted, "Encryption is already enabled!");
+        this.decryptCipher = MojangCrypt.getCipher(2, secretKey);
+        this.encryptCipher = MojangCrypt.getCipher(1, secretKey);
         this.encrypted = true;
-        // TODO
     }
 
     /**
@@ -221,9 +241,21 @@ public class NettyPlayerConnection extends PlayerConnection {
         synchronized (tickBuffer) {
             if (tickBuffer.readableBytes() == 0) return;
             try {
+                if (encrypted) {
+                    final Cipher cipher = encryptCipher;
+                    // Encrypt data first
+                    final int remainingBytes = tickBuffer.readableBytes();
+                    final byte[] bytes = tickBuffer.readRemainingBytes();
+                    byte[] outTempArray = new byte[cipher.getOutputSize(remainingBytes)];
+                    cipher.update(bytes, 0, remainingBytes, outTempArray);
+                    this.tickBuffer.clear();
+                    this.tickBuffer.writeBytes(outTempArray);
+                }
                 this.tickBuffer.writeChannel(channel);
             } catch (IOException e) {
                 MinecraftServer.getExceptionManager().handleException(e);
+            } catch (ShortBufferException e) {
+                e.printStackTrace();
             } finally {
                 this.tickBuffer.clear();
             }
