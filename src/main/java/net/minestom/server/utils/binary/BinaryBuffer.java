@@ -14,6 +14,7 @@ import java.nio.channels.WritableByteChannel;
  * Manages off-heap memory.
  * Not thread-safe.
  */
+@ApiStatus.Internal
 public final class BinaryBuffer {
     private ByteBuffer nioBuffer; // To become a `MemorySegment` once released
     private NBTReader nbtReader;
