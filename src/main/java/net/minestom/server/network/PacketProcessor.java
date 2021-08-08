@@ -8,7 +8,7 @@ import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandl
 import net.minestom.server.network.packet.client.handler.ClientPlayPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.Readable;
@@ -42,7 +42,7 @@ public final class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    public void process(@NotNull NettyPlayerConnection playerConnection, int packetId, ByteBuffer body) {
+    public void process(@NotNull PlayerSocketConnection playerConnection, int packetId, ByteBuffer body) {
         if (MinecraftServer.getRateLimit() > 0) {
             // Increment packet count (checked in PlayerConnection#update)
             playerConnection.getPacketCounter().incrementAndGet();

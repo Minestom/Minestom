@@ -491,14 +491,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     private void velocityTick() {
-        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
+        final boolean isSocketClient = PlayerUtils.isSocketClient(this);
         final boolean noGravity = hasNoGravity();
         final boolean hasVelocity = hasVelocity();
         boolean applyVelocity;
         // Non-player entities with either velocity or gravity enabled
-        applyVelocity = !isNettyClient && (hasVelocity || !noGravity);
+        applyVelocity = !isSocketClient && (hasVelocity || !noGravity);
         // Players with a velocity applied (client is responsible for gravity)
-        applyVelocity |= isNettyClient && hasVelocity;
+        applyVelocity |= isSocketClient && hasVelocity;
         if (!applyVelocity) {
             return;
         }
@@ -537,13 +537,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             return;
         }
         refreshPosition(finalVelocityPosition, true);
-        if (!isNettyClient) {
+        if (!isSocketClient) {
             synchronizePosition(true);
         }
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            if (onGround && isNettyClient) {
+            if (onGround && isSocketClient) {
                 // Stop player velocity
                 this.velocity = Vec.ZERO;
             } else {

@@ -4,7 +4,7 @@ import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public class EncryptionRequestPacket implements ServerPacket {
     public byte[] publicKey;
     public byte[] nonce = new byte[4];
 
-    public EncryptionRequestPacket(NettyPlayerConnection connection) {
+    public EncryptionRequestPacket(PlayerSocketConnection connection) {
         ThreadLocalRandom.current().nextBytes(nonce);
         connection.setNonce(nonce);
     }

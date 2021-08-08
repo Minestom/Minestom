@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 /**
- * A fake player will behave exactly the same way as would do a {@link Player} backed by a netty connection
+ * A fake player will behave exactly the same way as would do a {@link Player} backed by a socket connection
  * (events, velocity, gravity, player list, etc...) with the exception that you need to control it server-side
  * using a {@link FakePlayerController} (see {@link #getController()}).
  * <p>

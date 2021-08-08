@@ -55,8 +55,8 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.resourcepack.ResourcePack;
@@ -92,7 +92,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * Those are the major actors of the server,
- * they are not necessary backed by a {@link NettyPlayerConnection} as shown by {@link FakePlayer}.
+ * they are not necessary backed by a {@link PlayerSocketConnection} as shown by {@link FakePlayer}.
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
@@ -212,7 +212,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * Init the player and spawn him.
      * <p>
      * WARNING: executed in the main update thread
-     * UNSAFE: Only meant to be used when a netty player connects through the server.
+     * UNSAFE: Only meant to be used when a socket player connects through the server.
      *
      * @param spawnInstance the player spawn instance (defined in {@link PlayerLoginEvent})
      */
@@ -1366,8 +1366,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         } else {
             disconnectPacket = new DisconnectPacket(component);
         }
-        if (playerConnection instanceof NettyPlayerConnection) {
-            ((NettyPlayerConnection) playerConnection).writeAndFlush(disconnectPacket);
+        if (playerConnection instanceof PlayerSocketConnection) {
+            ((PlayerSocketConnection) playerConnection).writeAndFlush(disconnectPacket);
             playerConnection.disconnect();
         } else {
             playerConnection.sendPacket(disconnectPacket);

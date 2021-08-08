@@ -36,11 +36,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.DataFormatException;
 
 /**
- * Represents a networking connection with Netty.
+ * Represents a socket connection.
  * <p>
  * It is the implementation used for all network client.
  */
-public class NettyPlayerConnection extends PlayerConnection {
+@ApiStatus.Internal
+public class PlayerSocketConnection extends PlayerConnection {
     private final Worker worker;
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
@@ -70,7 +71,7 @@ public class NettyPlayerConnection extends PlayerConnection {
     private final BinaryBuffer tickBuffer = BinaryBuffer.ofSize(Server.SOCKET_BUFFER_SIZE);
     private volatile BinaryBuffer cacheBuffer;
 
-    public NettyPlayerConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
+    public PlayerSocketConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
         super();
         this.worker = worker;
         this.channel = channel;
@@ -278,7 +279,6 @@ public class NettyPlayerConnection extends PlayerConnection {
     public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
     }
-
 
     @Override
     public void disconnect() {

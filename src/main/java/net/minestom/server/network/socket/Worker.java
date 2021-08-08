@@ -3,7 +3,7 @@ package net.minestom.server.network.socket;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -21,7 +21,7 @@ import java.util.zip.Inflater;
 @ApiStatus.Internal
 public final class Worker {
     final Selector selector = Selector.open();
-    private final Map<SocketChannel, NettyPlayerConnection> connectionMap = new ConcurrentHashMap<>();
+    private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final PacketProcessor packetProcessor;
 
     public Worker(Server server, PacketProcessor packetProcessor) throws IOException {
@@ -65,7 +65,7 @@ public final class Worker {
     }
 
     public void receiveConnection(SocketChannel channel) throws IOException {
-        this.connectionMap.put(channel, new NettyPlayerConnection(this, channel, channel.getRemoteAddress()));
+        this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
         var socket = channel.socket();
@@ -75,7 +75,7 @@ public final class Worker {
         this.selector.wakeup();
     }
 
-    public void disconnect(NettyPlayerConnection connection, SocketChannel channel) {
+    public void disconnect(PlayerSocketConnection connection, SocketChannel channel) {
         try {
             channel.close();
             this.connectionMap.remove(channel);

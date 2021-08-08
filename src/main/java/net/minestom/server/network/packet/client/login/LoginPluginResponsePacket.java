@@ -9,7 +9,7 @@ import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -34,9 +34,9 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
     public void process(@NotNull PlayerConnection connection) {
 
         // Proxy support
-        if (connection instanceof NettyPlayerConnection) {
-            final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
-            final String channel = nettyPlayerConnection.getPluginRequestChannel(messageId);
+        if (connection instanceof PlayerSocketConnection) {
+            final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            final String channel = socketConnection.getPluginRequestChannel(messageId);
 
             if (channel != null) {
                 boolean success = false;
@@ -68,13 +68,13 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
                 if (success) {
                     if (socketAddress != null) {
-                        nettyPlayerConnection.setRemoteAddress(socketAddress);
+                        socketConnection.setRemoteAddress(socketAddress);
                     }
                     if (playerUsername != null) {
-                        nettyPlayerConnection.UNSAFE_setLoginUsername(playerUsername);
+                        socketConnection.UNSAFE_setLoginUsername(playerUsername);
                     }
 
-                    final String username = nettyPlayerConnection.getLoginUsername();
+                    final String username = socketConnection.getLoginUsername();
                     final UUID uuid = playerUuid != null ?
                             playerUuid : CONNECTION_MANAGER.getPlayerConnectionUuid(connection, username);
 
@@ -82,7 +82,7 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                     player.setSkin(playerSkin);
                 } else {
                     LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
-                    nettyPlayerConnection.sendPacket(disconnectPacket);
+                    socketConnection.sendPacket(disconnectPacket);
                 }
 
             }

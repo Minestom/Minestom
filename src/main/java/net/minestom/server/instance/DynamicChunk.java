@@ -10,7 +10,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
@@ -130,7 +130,7 @@ public class DynamicChunk extends Chunk {
     public synchronized void sendChunk(@NotNull Player player) {
         if (!isLoaded()) return;
         final PlayerConnection connection = player.getPlayerConnection();
-        if (connection instanceof NettyPlayerConnection) {
+        if (connection instanceof PlayerSocketConnection) {
             final long lastChange = getLastChangeTime();
             ByteBuffer chunkPacket = cachedChunkBuffer;
             ByteBuffer lightPacket = cachedLightBuffer;
@@ -141,9 +141,9 @@ public class DynamicChunk extends Chunk {
                 this.cachedLightBuffer = lightPacket;
                 this.cachedPacketTime = lastChange;
             }
-            NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
-            nettyPlayerConnection.write(lightPacket);
-            nettyPlayerConnection.write(chunkPacket);
+            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
+            socketConnection.write(lightPacket);
+            socketConnection.write(chunkPacket);
         } else {
             connection.sendPacket(createLightPacket());
             connection.sendPacket(createChunkPacket());

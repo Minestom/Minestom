@@ -10,7 +10,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -96,8 +96,8 @@ public final class PacketUtils {
                 if (!player.isOnline() || !playerValidator.isValid(player))
                     continue;
                 final PlayerConnection connection = player.getPlayerConnection();
-                if (connection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) connection).write(framedPacket);
+                if (connection instanceof PlayerSocketConnection) {
+                    ((PlayerSocketConnection) connection).write(framedPacket);
                 } else {
                     connection.sendPacket(packet);
                 }
