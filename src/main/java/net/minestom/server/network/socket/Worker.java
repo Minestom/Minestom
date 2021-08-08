@@ -61,17 +61,6 @@ public final class Worker extends Thread {
         }
     }
 
-    public void receiveConnection(SocketChannel channel) throws IOException {
-        this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
-        channel.configureBlocking(false);
-        channel.register(selector, SelectionKey.OP_READ);
-        var socket = channel.socket();
-        socket.setSendBufferSize(Server.SOCKET_BUFFER_SIZE);
-        socket.setReceiveBufferSize(Server.SOCKET_BUFFER_SIZE);
-        socket.setTcpNoDelay(Server.NO_DELAY);
-        this.selector.wakeup();
-    }
-
     public void disconnect(PlayerSocketConnection connection, SocketChannel channel) {
         try {
             channel.close();
@@ -87,6 +76,17 @@ public final class Worker extends Thread {
         }
     }
 
+    void receiveConnection(SocketChannel channel) throws IOException {
+        this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
+        channel.configureBlocking(false);
+        channel.register(selector, SelectionKey.OP_READ);
+        var socket = channel.socket();
+        socket.setSendBufferSize(Server.SOCKET_BUFFER_SIZE);
+        socket.setReceiveBufferSize(Server.SOCKET_BUFFER_SIZE);
+        socket.setTcpNoDelay(Server.NO_DELAY);
+        this.selector.wakeup();
+    }
+
     /**
      * Contains objects that we can be shared across all the connection of a {@link Worker worker}.
      */
@@ -95,7 +95,7 @@ public final class Worker extends Thread {
         public final BinaryBuffer contentBuffer = BinaryBuffer.ofSize(Server.MAX_PACKET_SIZE);
         public final Inflater inflater = new Inflater();
 
-        public void clearBuffers() {
+        void clearBuffers() {
             this.readBuffer.clear();
             this.contentBuffer.clear();
         }

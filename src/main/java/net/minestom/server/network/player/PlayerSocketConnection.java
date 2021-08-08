@@ -89,7 +89,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             try {
                 cipher.update(bytes, 0, remainingBytes, output, 0);
             } catch (ShortBufferException e) {
-                e.printStackTrace();
+                MinecraftServer.getExceptionManager().handleException(e);
+                return;
             }
             readBuffer.clear();
             readBuffer.writeBytes(output);
@@ -134,14 +135,14 @@ public class PlayerSocketConnection extends PlayerConnection {
                 // Process packet
                 final int packetId = content.readVarInt();
                 try {
-                    var finalBuffer = content.asByteBuffer(content.readerOffset(), packetEnd);
-                    packetProcessor.process(this, packetId, finalBuffer);
+                    final ByteBuffer payload = content.asByteBuffer(content.readerOffset(), packetEnd);
+                    packetProcessor.process(this, packetId, payload);
                 } catch (Exception e) {
                     // Error while reading the packet
                     MinecraftServer.getExceptionManager().handleException(e);
                     break;
                 }
-                // Return to original state (before writing)
+                // Position buffer to read the next packet
                 readBuffer.reset(packetEnd, limit);
             } catch (BufferUnderflowException e) {
                 readBuffer.reset(beginMark);
