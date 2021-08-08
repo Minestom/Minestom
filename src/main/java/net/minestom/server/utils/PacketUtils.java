@@ -191,6 +191,6 @@ public final class PacketUtils {
 
     public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final var temp = PacketUtils.createFramedPacket(packet);
-        return ByteBuffer.allocateDirect(temp.position()).put(temp.flip());
+        return ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
     }
 }
