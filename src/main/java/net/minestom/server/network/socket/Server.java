@@ -35,7 +35,9 @@ public final class Server {
     public Server(PacketProcessor packetProcessor) throws IOException {
         // Create all workers
         for (int i = 0; i < WORKER_COUNT; i++) {
-            this.workers.add(new Worker(this, packetProcessor));
+            Worker worker = new Worker(this, packetProcessor);
+            this.workers.add(worker);
+            worker.start();
         }
     }
 
