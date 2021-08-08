@@ -39,13 +39,13 @@ public final class UpdateManager {
     /**
      * Should only be created in MinecraftServer.
      */
-    protected UpdateManager() {
+    UpdateManager() {
     }
 
     /**
      * Starts the server loop in the update thread.
      */
-    protected void start() {
+    void start() {
         final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
 
         new Thread(() -> {
@@ -95,6 +95,7 @@ public final class UpdateManager {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
+            this.threadProvider.shutdown();
         }, MinecraftServer.THREAD_NAME_TICK_SCHEDULER).start();
     }
 
@@ -241,6 +242,5 @@ public final class UpdateManager {
      */
     public void stop() {
         this.stopRequested = true;
-        this.threadProvider.shutdown();
     }
 }
