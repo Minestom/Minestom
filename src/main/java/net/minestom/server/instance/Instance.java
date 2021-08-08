@@ -228,6 +228,17 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
+     * Saves the current instance tags.
+     * <p>
+     * Warning: only the global instance data will be saved, not chunks.
+     * You would need to call {@link #saveChunksToStorage()} too.
+     *
+     * @return the future called once the instance data has been saved
+     */
+    @ApiStatus.Experimental
+    public abstract @NotNull CompletableFuture<Void> saveInstance();
+
+    /**
      * Saves a {@link Chunk} to permanent storage.
      *
      * @param chunk the {@link Chunk} to save

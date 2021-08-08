@@ -19,6 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 public interface IChunkLoader {
 
     /**
+     * Loads instance data from the loader.
+     *
+     * @param instance the instance to retrieve the data from
+     */
+    default void loadInstance(@NotNull Instance instance) {
+    }
+
+    /**
      * Loads a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied.
      *
      * @param instance the {@link Instance} where the {@link Chunk} belong
@@ -27,6 +35,10 @@ public interface IChunkLoader {
      * @return a {@link CompletableFuture} containing the chunk, or null if not present
      */
     @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ);
+
+    default @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
+        return AsyncUtils.VOID_FUTURE;
+    }
 
     /**
      * Saves a {@link Chunk} with an optional callback for when it is done.

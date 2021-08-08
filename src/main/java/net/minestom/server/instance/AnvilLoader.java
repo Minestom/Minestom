@@ -5,15 +5,14 @@ import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.world.biomes.Biome;
 import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +21,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
@@ -37,15 +37,31 @@ public class AnvilLoader implements IChunkLoader {
 
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
     private final Path path;
+    private final Path levelPath;
     private final Path regionPath;
 
     public AnvilLoader(@NotNull Path path) {
         this.path = path;
+        this.levelPath = path.resolve("level.dat");
         this.regionPath = path.resolve("region");
     }
 
     public AnvilLoader(@NotNull String path) {
         this(Path.of(path));
+    }
+
+    @Override
+    public void loadInstance(@NotNull Instance instance) {
+        if (!Files.exists(levelPath)) {
+            return;
+        }
+        try (var reader = new NBTReader(Files.newInputStream(levelPath))) {
+            final NBTCompound tag = (NBTCompound) reader.read();
+            Files.copy(levelPath, path.resolve("level.dat_old"), StandardCopyOption.REPLACE_EXISTING);
+            instance.setTag(Tag.NBT, tag);
+        } catch (IOException | NBTException e) {
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
     }
 
     @Override
@@ -116,17 +132,16 @@ public class AnvilLoader implements IChunkLoader {
 
     private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
         for (var section : fileChunk.getSections()) {
-            if (section.getEmpty()) {
-                continue;
-            }
+            if (section.getEmpty()) continue;
             final int yOffset = Chunk.CHUNK_SECTION_SIZE * section.getY();
             for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
                 for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
                     for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                         try {
                             final BlockState blockState = section.get(x, y, z);
-                            chunk.setBlock(x, y + yOffset, z,
-                                    Block.fromNamespaceId(blockState.getName()).withProperties(blockState.getProperties()));
+                            final Block block = Objects.requireNonNull(Block.fromNamespaceId(blockState.getName()))
+                                    .withProperties(blockState.getProperties());
+                            chunk.setBlock(x, y + yOffset, z, block);
                         } catch (Exception e) {
                             EXCEPTION_MANAGER.handleException(e);
                         }
@@ -167,8 +182,20 @@ public class AnvilLoader implements IChunkLoader {
         }
     }
 
-    // TODO: find a way to unload MCAFiles when an entire region is unloaded
-
+    @Override
+    public @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
+        final var nbt = instance.getTag(Tag.NBT);
+        if (nbt == null) {
+            // Instance has no data
+            return AsyncUtils.VOID_FUTURE;
+        }
+        try (NBTWriter writer = new NBTWriter(Files.newOutputStream(levelPath))) {
+            writer.writeNamed("", nbt);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return AsyncUtils.VOID_FUTURE;
+    }
 
     @Override
     public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {

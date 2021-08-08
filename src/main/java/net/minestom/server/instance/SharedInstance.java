@@ -15,7 +15,6 @@ import java.util.concurrent.CompletableFuture;
  * entities are separated.
  */
 public class SharedInstance extends Instance {
-
     private final InstanceContainer instanceContainer;
 
     public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
@@ -57,6 +56,11 @@ public class SharedInstance extends Instance {
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
         return instanceContainer.getChunk(chunkX, chunkZ);
+    }
+
+    @Override
+    public @NotNull CompletableFuture<Void> saveInstance() {
+        return instanceContainer.saveInstance();
     }
 
     @Override

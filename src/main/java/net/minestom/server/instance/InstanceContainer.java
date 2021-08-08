@@ -41,9 +41,6 @@ import java.util.function.Consumer;
  */
 public class InstanceContainer extends Instance {
 
-    private static final String UUID_KEY = "uuid";
-    private static final String DATA_KEY = "data";
-
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
 
@@ -85,6 +82,7 @@ public class InstanceContainer extends Instance {
 
         // Set the default chunk loader which use the Anvil format
         setChunkLoader(new AnvilLoader("world"));
+        this.chunkLoader.loadInstance(this);
     }
 
     @Override
@@ -256,6 +254,11 @@ public class InstanceContainer extends Instance {
         synchronized (chunks) {
             return chunks.get(index);
         }
+    }
+
+    @Override
+    public @NotNull CompletableFuture<Void> saveInstance() {
+        return chunkLoader.saveInstance(this);
     }
 
     @Override
