@@ -33,6 +33,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -490,14 +491,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     private void velocityTick() {
-        final boolean isNettyClient = PlayerUtils.isNettyClient(this);
+        final boolean isSocketClient = PlayerUtils.isSocketClient(this);
         final boolean noGravity = hasNoGravity();
         final boolean hasVelocity = hasVelocity();
         boolean applyVelocity;
         // Non-player entities with either velocity or gravity enabled
-        applyVelocity = !isNettyClient && (hasVelocity || !noGravity);
+        applyVelocity = !isSocketClient && (hasVelocity || !noGravity);
         // Players with a velocity applied (client is responsible for gravity)
-        applyVelocity |= isNettyClient && hasVelocity;
+        applyVelocity |= isSocketClient && hasVelocity;
         if (!applyVelocity) {
             return;
         }
@@ -536,13 +537,13 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             return;
         }
         refreshPosition(finalVelocityPosition, true);
-        if (!isNettyClient) {
+        if (!isSocketClient) {
             synchronizePosition(true);
         }
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            if (onGround && isNettyClient) {
+            if (onGround && isSocketClient) {
                 // Stop player velocity
                 this.velocity = Vec.ZERO;
             } else {
@@ -708,6 +709,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
+        if (isRemoved()) return AsyncUtils.VOID_FUTURE;
         if (this.instance != null) {
             this.instance.UNSAFE_removeEntity(this);
         }
@@ -1267,16 +1269,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * WARNING: this does not trigger {@link EntityDeathEvent}.
      */
     public void remove() {
-        if (isRemoved())
-            return;
-
+        if (isRemoved()) return;
         MinecraftServer.getUpdateManager().getThreadProvider().removeEntity(this);
         this.removed = true;
         this.shouldRemove = true;
         Entity.ENTITY_BY_ID.remove(id);
         Entity.ENTITY_BY_UUID.remove(uuid);
-        if (instance != null)
+        if (instance != null) {
             instance.UNSAFE_removeEntity(this);
+        }
     }
 
     /**

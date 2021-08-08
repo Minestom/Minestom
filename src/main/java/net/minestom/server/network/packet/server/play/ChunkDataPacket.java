@@ -1,7 +1,5 @@
 package net.minestom.server.network.packet.server.play;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.Int2LongRBTreeMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
@@ -15,22 +13,17 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.cache.CacheablePacket;
-import net.minestom.server.utils.cache.TemporaryPacketCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
-public class ChunkDataPacket implements ServerPacket, CacheablePacket {
-
-    public static final TemporaryPacketCache CACHE = new TemporaryPacketCache(5, TimeUnit.MINUTES);
+public class ChunkDataPacket implements ServerPacket {
 
     public Biome[] biomes;
     public int chunkX, chunkZ;
@@ -42,22 +35,13 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     private static final int MAX_BITS_PER_ENTRY = 16;
     private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * MAX_BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
 
-    // Cacheable data
-    private final UUID identifier;
-    private final long timestamp;
     /**
      * Heightmaps NBT, as read from raw packet data.
      * Only filled by #read, and unused at the moment.
      */
     public NBTCompound heightmapsNBT;
 
-    private ChunkDataPacket() {
-        this(new UUID(0, 0), 0);
-    }
-
-    public ChunkDataPacket(@Nullable UUID identifier, long timestamp) {
-        this.identifier = identifier;
-        this.timestamp = timestamp;
+    public ChunkDataPacket() {
     }
 
     @Override
@@ -65,7 +49,7 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
 
-        ByteBuf blocks = Unpooled.buffer(MAX_BUFFER_SIZE);
+        ByteBuffer blocks = ByteBuffer.allocate(MAX_BUFFER_SIZE);
 
         Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
 
@@ -120,9 +104,8 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
         }
 
         // Data
-        writer.writeVarInt(blocks.writerIndex());
+        writer.writeVarInt(blocks.position());
         writer.write(blocks);
-        blocks.release();
 
         // Block entities
         if (entries == null || entries.isEmpty()) {
@@ -243,20 +226,5 @@ public class ChunkDataPacket implements ServerPacket, CacheablePacket {
     @Override
     public int getId() {
         return ServerPacketIdentifier.CHUNK_DATA;
-    }
-
-    @Override
-    public @NotNull TemporaryPacketCache getCache() {
-        return CACHE;
-    }
-
-    @Override
-    public UUID getIdentifier() {
-        return identifier;
-    }
-
-    @Override
-    public long getTimestamp() {
-        return timestamp;
     }
 }

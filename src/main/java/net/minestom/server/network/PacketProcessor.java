@@ -1,27 +1,22 @@
 package net.minestom.server.network;
 
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.socket.SocketChannel;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.network.netty.packet.InboundPacket;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.client.handler.ClientLoginPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientPlayPacketsHandler;
 import net.minestom.server.network.packet.client.handler.ClientStatusPacketsHandler;
 import net.minestom.server.network.packet.client.handshake.HandshakePacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.Readable;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.nio.ByteBuffer;
 
 /**
  * Responsible for processing client packets.
@@ -34,10 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * the same meaning as it is a login or play packet).
  */
 public final class PacketProcessor {
-
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketProcessor.class);
-
-    private final Map<ChannelHandlerContext, PlayerConnection> connectionPlayerConnectionMap = new ConcurrentHashMap<>();
 
     // Protocols state
     private final ClientStatusPacketsHandler statusPacketsHandler;
@@ -50,33 +42,13 @@ public final class PacketProcessor {
         this.playPacketsHandler = new ClientPlayPacketsHandler();
     }
 
-    public void process(@NotNull ChannelHandlerContext context, @NotNull InboundPacket packet) {
-        final SocketChannel socketChannel = (SocketChannel) context.channel();
-
-        // Create the netty player connection object if not existing
-        PlayerConnection playerConnection = connectionPlayerConnectionMap.get(context);
-        if (playerConnection == null) {
-            // Should never happen
-            context.close();
-            return;
-        }
-
-        // Prevent the client from sending packets when disconnected (kick)
-        if (!playerConnection.isOnline() || !socketChannel.isActive()) {
-            playerConnection.disconnect();
-            return;
-        }
-
-        // Increment packet count (checked in PlayerConnection#update)
+    public void process(@NotNull PlayerSocketConnection playerConnection, int packetId, ByteBuffer body) {
         if (MinecraftServer.getRateLimit() > 0) {
+            // Increment packet count (checked in PlayerConnection#update)
             playerConnection.getPacketCounter().incrementAndGet();
         }
-
+        BinaryReader binaryReader = new BinaryReader(body);
         final ConnectionState connectionState = playerConnection.getConnectionState();
-
-        final int packetId = packet.getPacketId();
-        BinaryReader binaryReader = new BinaryReader(packet.getBody());
-
         if (connectionState == ConnectionState.UNKNOWN) {
             // Should be handshake packet
             if (packetId == 0) {
@@ -86,7 +58,6 @@ public final class PacketProcessor {
             }
             return;
         }
-
         switch (connectionState) {
             case PLAY:
                 final Player player = playerConnection.getPlayer();
@@ -109,33 +80,12 @@ public final class PacketProcessor {
     }
 
     /**
-     * Retrieves a player connection from its channel.
-     *
-     * @param context the connection context
-     * @return the connection of this channel, null if not found
-     */
-    @Nullable
-    public PlayerConnection getPlayerConnection(ChannelHandlerContext context) {
-        return connectionPlayerConnectionMap.get(context);
-    }
-
-    public void createPlayerConnection(@NotNull ChannelHandlerContext context) {
-        final PlayerConnection playerConnection = new NettyPlayerConnection((SocketChannel) context.channel());
-        connectionPlayerConnectionMap.put(context, playerConnection);
-    }
-
-    public PlayerConnection removePlayerConnection(@NotNull ChannelHandlerContext context) {
-        return connectionPlayerConnectionMap.remove(context);
-    }
-
-    /**
      * Gets the handler for client status packets.
      *
      * @return the status packets handler
      * @see <a href="https://wiki.vg/Protocol#Status">Status packets</a>
      */
-    @NotNull
-    public ClientStatusPacketsHandler getStatusPacketsHandler() {
+    public @NotNull ClientStatusPacketsHandler getStatusPacketsHandler() {
         return statusPacketsHandler;
     }
 
@@ -145,8 +95,7 @@ public final class PacketProcessor {
      * @return the status login handler
      * @see <a href="https://wiki.vg/Protocol#Login">Login packets</a>
      */
-    @NotNull
-    public ClientLoginPacketsHandler getLoginPacketsHandler() {
+    public @NotNull ClientLoginPacketsHandler getLoginPacketsHandler() {
         return loginPacketsHandler;
     }
 
@@ -156,8 +105,7 @@ public final class PacketProcessor {
      * @return the play packets handler
      * @see <a href="https://wiki.vg/Protocol#Play">Play packets</a>
      */
-    @NotNull
-    public ClientPlayPacketsHandler getPlayPacketsHandler() {
+    public @NotNull ClientPlayPacketsHandler getPlayPacketsHandler() {
         return playPacketsHandler;
     }
 
@@ -170,20 +118,16 @@ public final class PacketProcessor {
      */
     private void safeRead(@NotNull PlayerConnection connection, @NotNull Readable readable, @NotNull BinaryReader reader) {
         final int readableBytes = reader.available();
-
         // Check if there is anything to read
         if (readableBytes == 0) {
             return;
         }
-
         try {
             readable.read(reader);
         } catch (Exception e) {
             final Player player = connection.getPlayer();
             final String username = player != null ? player.getUsername() : "null";
-            LOGGER.warn("Connection {} ({}) sent an unexpected packet.",
-                    connection.getRemoteAddress(),
-                    username);
+            LOGGER.warn("Connection {} ({}) sent an unexpected packet.", connection.getRemoteAddress(), username);
             MinecraftServer.getExceptionManager().handleException(e);
         }
     }

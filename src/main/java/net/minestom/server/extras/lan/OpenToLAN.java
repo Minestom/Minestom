@@ -121,7 +121,7 @@ public class OpenToLAN {
      * Performs the ping.
      */
     private static void ping() {
-        if (MinecraftServer.getNettyServer().getPort() != 0) {
+        if (MinecraftServer.getServer().getPort() != 0) {
             if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
                 final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
                 EventDispatcher.call(event);

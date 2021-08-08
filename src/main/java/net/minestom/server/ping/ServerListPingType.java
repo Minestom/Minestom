@@ -75,13 +75,13 @@ public enum ServerListPingType {
      * @see OpenToLAN
      */
     public static @NotNull String getOpenToLANPing(@NotNull ResponseData data) {
-        return String.format(LAN_PING_FORMAT, SECTION.serialize(data.getDescription()), MinecraftServer.getNettyServer().getPort());
+        return String.format(LAN_PING_FORMAT, SECTION.serialize(data.getDescription()), MinecraftServer.getServer().getPort());
     }
 
     /**
      * Creates a legacy ping response for client versions below the Netty rewrite (1.6-).
      *
-     * @param data the response data
+     * @param data             the response data
      * @param supportsVersions if the client supports recieving the versions of the server
      * @return the response
      */
@@ -99,7 +99,7 @@ public enum ServerListPingType {
     /**
      * Creates a modern ping response for client versions above the Netty rewrite (1.7+).
      *
-     * @param data the response data
+     * @param data            the response data
      * @param supportsFullRgb if the client supports full RGB
      * @return the response
      */

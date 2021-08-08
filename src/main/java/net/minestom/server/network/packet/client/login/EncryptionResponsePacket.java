@@ -7,8 +7,8 @@ import net.minestom.server.data.type.array.ByteArrayData;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -35,31 +35,26 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
-
-        // Encryption is only support for netty connection
-        if (!(connection instanceof NettyPlayerConnection)) {
+        // Encryption is only support for socket connection
+        if (!(connection instanceof PlayerSocketConnection)) {
             return;
         }
-        final NettyPlayerConnection nettyConnection = (NettyPlayerConnection) connection;
-
+        final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
         AsyncUtils.runAsync(() -> {
             try {
-                final String loginUsername = nettyConnection.getLoginUsername();
-                if (!Arrays.equals(nettyConnection.getNonce(), getNonce())) {
+                final String loginUsername = socketConnection.getLoginUsername();
+                if (!Arrays.equals(socketConnection.getNonce(), getNonce())) {
                     MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
                     return;
                 }
                 if (loginUsername != null && !loginUsername.isEmpty()) {
-
                     final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
-
                     if (digestedData == null) {
                         // Incorrect key, probably because of the client
-                        MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", nettyConnection.getRemoteAddress());
+                        MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", socketConnection.getRemoteAddress());
                         connection.disconnect();
                         return;
                     }
-
                     // Query Mojang's sessionserver.
                     final String serverId = new BigInteger(digestedData).toString(16);
                     InputStream gameProfileStream = new URL(
@@ -70,7 +65,7 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
                     ).openStream();
 
                     final JsonObject gameProfile = GSON.fromJson(new InputStreamReader(gameProfileStream), JsonObject.class);
-                    nettyConnection.setEncryptionKey(getSecretKey());
+                    socketConnection.setEncryptionKey(getSecretKey());
                     UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString().replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
                     String profileName = gameProfile.get("name").getAsString();
 
@@ -85,8 +80,8 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        sharedSecret = ByteArrayData.decodeByteArray(reader);
-        verifyToken = ByteArrayData.decodeByteArray(reader);
+        this.sharedSecret = ByteArrayData.decodeByteArray(reader);
+        this.verifyToken = ByteArrayData.decodeByteArray(reader);
     }
 
     @Override

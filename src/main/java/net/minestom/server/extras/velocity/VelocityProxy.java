@@ -1,6 +1,5 @@
 package net.minestom.server.extras.velocity;
 
-import io.netty.buffer.ByteBuf;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.utils.binary.BinaryReader;
@@ -10,6 +9,7 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -54,9 +54,11 @@ public final class VelocityProxy {
 
         final byte[] signature = reader.readBytes(32);
 
-        ByteBuf buf = reader.getBuffer();
-        final byte[] data = new byte[buf.readableBytes()];
-        buf.getBytes(buf.readerIndex(), data);
+        ByteBuffer buf = reader.getBuffer();
+        buf.mark();
+        final byte[] data = new byte[buf.remaining()];
+        buf.get(data);
+        buf.reset();
 
         try {
             final Mac mac = Mac.getInstance("HmacSHA256");

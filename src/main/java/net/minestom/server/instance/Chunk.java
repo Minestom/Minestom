@@ -13,18 +13,18 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockGetter;
 import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
@@ -126,11 +126,13 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     public abstract long getLastChangeTime();
 
     /**
-     * Creates a {@link ChunkDataPacket} with this chunk data ready to be written.
+     * Sends the chunk data to {@code player}.
      *
-     * @return a new chunk data packet
+     * @param player the player
      */
-    public abstract @NotNull ChunkDataPacket createChunkPacket();
+    public abstract void sendChunk(@NotNull Player player);
+
+    public abstract void sendChunk();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -152,7 +154,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     /**
      * Gets the unique identifier of this chunk.
      * <p>
-     * WARNING: this UUID is not persistent but randomized once the object is instantiate.
+     * WARNING: this UUID is not persistent but randomized once the object is instantiated.
      *
      * @return the chunk identifier
      */
@@ -245,50 +247,6 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     }
 
     /**
-     * Gets the light packet of this chunk.
-     *
-     * @return the light packet
-     */
-    @NotNull
-    public UpdateLightPacket getLightPacket() {
-        long skyMask = 0;
-        long blockMask = 0;
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
-
-        UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
-        updateLightPacket.chunkX = getChunkX();
-        updateLightPacket.chunkZ = getChunkZ();
-
-        updateLightPacket.skyLight = skyLights;
-        updateLightPacket.blockLight = blockLights;
-
-        final var sections = getSections();
-        for (var entry : sections.entrySet()) {
-            final int index = entry.getKey() + 1;
-            final Section section = entry.getValue();
-
-            final var skyLight = section.getSkyLight();
-            final var blockLight = section.getBlockLight();
-
-            if (!ArrayUtils.empty(skyLight)) {
-                skyLights.add(skyLight);
-                skyMask |= 1L << index;
-            }
-            if (!ArrayUtils.empty(blockLight)) {
-                blockLights.add(blockLight);
-                blockMask |= 1L << index;
-            }
-        }
-
-        updateLightPacket.skyLightMask = new long[]{skyMask};
-        updateLightPacket.blockLightMask = new long[]{blockMask};
-        updateLightPacket.emptySkyLightMask = new long[0];
-        updateLightPacket.emptyBlockLightMask = new long[0];
-        return updateLightPacket;
-    }
-
-    /**
      * Used to verify if the chunk should still be kept in memory.
      *
      * @return true if the chunk is loaded
@@ -366,33 +324,9 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
     }
 
     /**
-     * Sends the chunk data to {@code player}.
-     *
-     * @param player the player
-     */
-    public synchronized void sendChunk(@NotNull Player player) {
-        // Only send loaded chunk
-        if (!isLoaded())
-            return;
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getLightPacket());
-        playerConnection.sendPacket(createChunkPacket());
-    }
-
-    public synchronized void sendChunk() {
-        if (!isLoaded()) {
-            return;
-        }
-        sendPacketToViewers(getLightPacket());
-        sendPacketToViewers(createChunkPacket());
-    }
-
-    /**
      * Sets the chunk as "unloaded".
      */
     protected void unload() {
         this.loaded = false;
-        ChunkDataPacket.CACHE.invalidate(getIdentifier());
-        UpdateLightPacket.CACHE.invalidate(getIdentifier());
     }
 }

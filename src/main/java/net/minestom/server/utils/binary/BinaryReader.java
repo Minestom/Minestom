@@ -1,7 +1,5 @@
 package net.minestom.server.utils.binary;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.coordinate.Point;
@@ -17,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -27,16 +26,15 @@ import java.util.function.Supplier;
  * WARNING: not thread-safe.
  */
 public class BinaryReader extends InputStream {
-
-    private final ByteBuf buffer;
+    private final ByteBuffer buffer;
     private final NBTReader nbtReader = new NBTReader(this, false);
 
-    public BinaryReader(@NotNull ByteBuf buffer) {
+    public BinaryReader(@NotNull ByteBuffer buffer) {
         this.buffer = buffer;
     }
 
     public BinaryReader(byte[] bytes) {
-        this(Unpooled.wrappedBuffer(bytes));
+        this(ByteBuffer.wrap(bytes));
     }
 
     public int readVarInt() {
@@ -48,49 +46,49 @@ public class BinaryReader extends InputStream {
     }
 
     public boolean readBoolean() {
-        return buffer.readBoolean();
+        return buffer.get() == 1;
     }
 
     public byte readByte() {
-        return buffer.readByte();
+        return buffer.get();
     }
 
     public short readShort() {
-        return buffer.readShort();
+        return buffer.getShort();
     }
 
     public char readChar() {
-        return buffer.readChar();
+        return buffer.getChar();
     }
 
     public int readUnsignedShort() {
-        return buffer.readUnsignedShort();
+        return buffer.getShort() & 0xFFFF;
     }
 
     /**
      * Same as readInt
      */
     public int readInteger() {
-        return buffer.readInt();
+        return buffer.getInt();
     }
 
     /**
      * Same as readInteger, created for parity with BinaryWriter
      */
     public int readInt() {
-        return buffer.readInt();
+        return buffer.getInt();
     }
 
     public long readLong() {
-        return buffer.readLong();
+        return buffer.getLong();
     }
 
     public float readFloat() {
-        return buffer.readFloat();
+        return buffer.getFloat();
     }
 
     public double readDouble() {
-        return buffer.readDouble();
+        return buffer.getDouble();
     }
 
     /**
@@ -105,12 +103,9 @@ public class BinaryReader extends InputStream {
      */
     public String readSizedString(int maxLength) {
         final int length = readVarInt();
-        Check.stateCondition(!buffer.isReadable(length),
-                "Trying to read a string that is too long (wanted {0}, only have {1})",
-                length,
-                buffer.readableBytes());
-        final String str = buffer.toString(buffer.readerIndex(), length, StandardCharsets.UTF_8);
-        buffer.skipBytes(length);
+        byte[] bytes = new byte[length];
+        buffer.get(bytes);
+        final String str = new String(bytes, StandardCharsets.UTF_8);
         Check.stateCondition(str.length() > maxLength,
                 "String length ({0}) was higher than the max length of {1}", length, maxLength);
         return str;
@@ -121,10 +116,8 @@ public class BinaryReader extends InputStream {
     }
 
     public byte[] readBytes(int length) {
-        ByteBuf buf = buffer.readBytes(length);
-        byte[] bytes = new byte[buf.readableBytes()];
-        buf.readBytes(bytes);
-        buf.release();
+        byte[] bytes = new byte[length];
+        buffer.get(bytes);
         return bytes;
     }
 
@@ -164,14 +157,11 @@ public class BinaryReader extends InputStream {
     }
 
     public Point readBlockPosition() {
-        final long value = buffer.readLong();
-        return SerializerUtils.longToBlockPosition(value);
+        return SerializerUtils.longToBlockPosition(buffer.getLong());
     }
 
     public UUID readUuid() {
-        final long most = readLong();
-        final long least = readLong();
-        return new UUID(most, least);
+        return new UUID(readLong(), readLong());
     }
 
     /**
@@ -225,7 +215,7 @@ public class BinaryReader extends InputStream {
         return (T[]) result;
     }
 
-    public ByteBuf getBuffer() {
+    public ByteBuffer getBuffer() {
         return buffer;
     }
 
@@ -236,7 +226,7 @@ public class BinaryReader extends InputStream {
 
     @Override
     public int available() {
-        return buffer.readableBytes();
+        return buffer.remaining();
     }
 
     public NBT readTag() throws IOException, NBTException {
@@ -251,11 +241,12 @@ public class BinaryReader extends InputStream {
      * @param extractor the extraction code, simply call the reader's read* methods here.
      */
     public byte[] extractBytes(Runnable extractor) {
-        int startingPosition = getBuffer().readerIndex();
+        int startingPosition = buffer.position();
         extractor.run();
-        int endingPosition = getBuffer().readerIndex();
+        int endingPosition = getBuffer().position();
         byte[] output = new byte[endingPosition - startingPosition];
-        getBuffer().getBytes(startingPosition, output);
+        buffer.get(output, 0, output.length);
+        //buffer.get(startingPosition, output);
         return output;
     }
 }

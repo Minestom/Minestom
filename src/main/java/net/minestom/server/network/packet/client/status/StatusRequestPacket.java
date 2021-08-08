@@ -16,12 +16,8 @@ public class StatusRequestPacket implements ClientPreplayPacket {
     public void process(@NotNull PlayerConnection connection) {
         final ServerListPingType pingVersion = ServerListPingType.fromModernProtocolVersion(connection.getProtocolVersion());
         final ServerListPingEvent statusRequestEvent = new ServerListPingEvent(connection, pingVersion);
-        EventDispatcher.callCancellable(statusRequestEvent, () -> {
-            final ResponsePacket responsePacket = new ResponsePacket();
-            responsePacket.jsonResponse = pingVersion.getPingResponse(statusRequestEvent.getResponseData());
-
-            connection.sendPacket(responsePacket);
-        });
+        EventDispatcher.callCancellable(statusRequestEvent, () ->
+                connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getResponseData()))));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.minestom.server.network;
 
-import io.netty.channel.Channel;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -16,7 +15,7 @@ import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -24,6 +23,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -268,7 +268,7 @@ public final class ConnectionManager {
      * @param connection the player connection
      * @see PlayerConnection#disconnect() to properly disconnect a player
      */
-    public void removePlayer(@NotNull PlayerConnection connection) {
+    public synchronized void removePlayer(@NotNull PlayerConnection connection) {
         final Player player = this.connectionPlayerMap.get(connection);
         if (player == null)
             return;
@@ -293,8 +293,8 @@ public final class ConnectionManager {
             EventDispatcher.call(asyncPlayerPreLoginEvent);
             // Close the player channel if he has been disconnected (kick)
             if (!player.isOnline()) {
-                if (playerConnection instanceof NettyPlayerConnection) {
-                    ((NettyPlayerConnection) playerConnection).getChannel().flush();
+                if (playerConnection instanceof PlayerSocketConnection) {
+                    ((PlayerSocketConnection) playerConnection).flush();
                 }
                 //playerConnection.disconnect();
                 return;
@@ -312,8 +312,8 @@ public final class ConnectionManager {
             }
             // Send login success packet
             LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername());
-            if (playerConnection instanceof NettyPlayerConnection) {
-                ((NettyPlayerConnection) playerConnection).writeAndFlush(loginSuccessPacket);
+            if (playerConnection instanceof PlayerSocketConnection) {
+                ((PlayerSocketConnection) playerConnection).writeAndFlush(loginSuccessPacket);
             } else {
                 playerConnection.sendPacket(loginSuccessPacket);
             }
@@ -344,15 +344,18 @@ public final class ConnectionManager {
     /**
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
-    public void shutdown() {
+    public synchronized void shutdown() {
         DisconnectPacket disconnectPacket = new DisconnectPacket(shutdownText);
         for (Player player : getOnlinePlayers()) {
             final PlayerConnection playerConnection = player.getPlayerConnection();
-            if (playerConnection instanceof NettyPlayerConnection) {
-                final NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) playerConnection;
-                final Channel channel = nettyPlayerConnection.getChannel();
-                channel.writeAndFlush(disconnectPacket);
-                channel.close();
+            if (playerConnection instanceof PlayerSocketConnection) {
+                final PlayerSocketConnection socketConnection = (PlayerSocketConnection) playerConnection;
+                socketConnection.writeAndFlush(disconnectPacket);
+                try {
+                    socketConnection.getChannel().close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
         this.players.clear();
