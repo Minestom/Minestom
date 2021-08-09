@@ -9,8 +9,8 @@ import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +21,7 @@ import java.net.SocketAddress;
 import java.util.UUID;
 
 public class LoginPluginResponsePacket implements ClientPreplayPacket {
-
     private final static ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
-
     public static final Component INVALID_PROXY_RESPONSE = Component.text("Invalid proxy response!", NamedTextColor.RED);
 
     public int messageId;
@@ -32,7 +30,6 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
 
     @Override
     public void process(@NotNull PlayerConnection connection) {
-
         // Proxy support
         if (connection instanceof PlayerSocketConnection) {
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
@@ -61,7 +58,6 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                             playerUsername = reader.readSizedString(16);
 
                             playerSkin = VelocityProxy.readSkin(reader);
-
                         }
                     }
                 }
@@ -84,7 +80,6 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
                     LoginDisconnectPacket disconnectPacket = new LoginDisconnectPacket(INVALID_PROXY_RESPONSE);
                     socketConnection.sendPacket(disconnectPacket);
                 }
-
             }
         }
     }
@@ -102,7 +97,6 @@ public class LoginPluginResponsePacket implements ClientPreplayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(messageId);
         writer.writeBoolean(successful);
-
         if (successful) {
             writer.writeBytes(data);
         }

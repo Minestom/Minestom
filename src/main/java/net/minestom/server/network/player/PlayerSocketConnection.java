@@ -15,11 +15,14 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.network.socket.Worker;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -42,6 +45,8 @@ import java.util.zip.DataFormatException;
  */
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
+    private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
+
     private final Worker worker;
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
@@ -102,24 +107,29 @@ public class PlayerSocketConnection extends PlayerConnection {
             try {
                 // Ensure that the buffer contains the full packet (or wait for next socket read)
                 final int packetLength = readBuffer.readVarInt();
-                final int packetEnd = readBuffer.readerOffset() + packetLength;
+                final int readerStart = readBuffer.readerOffset();
+                final int packetEnd = readerStart + packetLength;
                 if (packetEnd > readBuffer.writerOffset()) {
                     // Integrity fail
                     throw new BufferUnderflowException();
                 }
                 // Read packet https://wiki.vg/Protocol#Packet_format
                 BinaryBuffer content;
+                int payloadLength;
                 if (!compressed) {
                     // Compression disabled, payload is following
                     content = readBuffer;
+                    payloadLength = packetLength;
                 } else {
                     final int dataLength = readBuffer.readVarInt();
                     if (dataLength == 0) {
                         // Data is too small to be compressed, payload is following
                         content = readBuffer;
+                        payloadLength = packetLength - (content.readerOffset() - readerStart);
                     } else {
                         // Decompress to content buffer
                         content = workerContext.contentBuffer;
+                        payloadLength = dataLength;
                         final var contentStartMark = content.mark();
                         try {
                             final var inflater = workerContext.inflater;
@@ -127,20 +137,25 @@ public class PlayerSocketConnection extends PlayerConnection {
                             inflater.inflate(content.asByteBuffer(0, content.capacity()));
                             inflater.reset();
                         } catch (DataFormatException e) {
-                            e.printStackTrace();
+                            MinecraftServer.getExceptionManager().handleException(e);
                         }
                         content.reset(contentStartMark);
                     }
                 }
                 // Process packet
-                final int packetId = content.readVarInt();
+                ByteBuffer payload = content.asByteBuffer(content.readerOffset(), payloadLength);
+                final int packetId = Utils.readVarInt(payload);
                 try {
-                    final ByteBuffer payload = content.asByteBuffer(content.readerOffset(), packetEnd);
                     packetProcessor.process(this, packetId, payload);
                 } catch (Exception e) {
                     // Error while reading the packet
                     MinecraftServer.getExceptionManager().handleException(e);
                     break;
+                } finally {
+                    if (payload.position() != payload.limit()) {
+                        LOGGER.warn("WARNING: Packet 0x{} not fully read ({}), {}",
+                                Integer.toHexString(packetId), payload, this);
+                    }
                 }
                 // Position buffer to read the next packet
                 readBuffer.reset(packetEnd, limit);
