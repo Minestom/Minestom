@@ -81,7 +81,9 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
     public static class Builder extends ItemMetaBuilder {
 
         private boolean triple;
-        private ItemStack projectile1, projectile2, projectile3 = ItemStack.AIR;
+        private ItemStack projectile1 = ItemStack.AIR;
+        private ItemStack projectile2 = ItemStack.AIR;
+        private ItemStack projectile3 = ItemStack.AIR;
         private boolean charged;
 
         /**
