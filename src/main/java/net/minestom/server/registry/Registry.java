@@ -83,11 +83,11 @@ public final class Registry {
         @ApiStatus.Internal
         public Container(Resource resource, Loader<T> loader) {
             final JsonObject objects = Registry.load(resource);
-            objects.entrySet().forEach(entry -> {
+            for (var entry : objects.entrySet()) {
                 final String namespace = entry.getKey();
                 final JsonObject object = entry.getValue().getAsJsonObject();
                 loader.accept(this, namespace, object);
-            });
+            }
         }
 
         public T get(@NotNull String namespace) {
