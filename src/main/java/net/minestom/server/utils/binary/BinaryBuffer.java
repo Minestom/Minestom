@@ -136,7 +136,7 @@ public final class BinaryBuffer {
     }
 
     public void readChannel(ReadableByteChannel channel) throws IOException {
-        final int count = channel.read(asByteBuffer(readerOffset, capacity));
+        final int count = channel.read(nioBuffer.position(readerOffset));
         if (count == -1) {
             // EOS
             throw new IOException("Disconnected");

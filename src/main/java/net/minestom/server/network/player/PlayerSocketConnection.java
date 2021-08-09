@@ -228,12 +228,11 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void write(@NotNull ByteBuffer buffer) {
         synchronized (tickBuffer) {
-            buffer.flip();
-            if (!tickBuffer.canWrite(buffer.limit())) {
+            if (!tickBuffer.canWrite(buffer.position())) {
                 // Tick buffer is full, flush before appending
                 flush();
             }
-            this.tickBuffer.write(buffer);
+            this.tickBuffer.write(buffer.flip());
         }
     }
 
