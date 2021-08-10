@@ -51,7 +51,18 @@ public class BinaryWriter extends OutputStream {
      * Creates a {@link BinaryWriter} with a "reasonably small initial capacity".
      */
     public BinaryWriter() {
-        this(500); // TODO prevent OOB
+        this(255);
+    }
+
+    protected void ensureSize(int length) {
+        final int position = buffer.position();
+        if (position + length >= buffer.limit()) {
+            final int newLength = (position + length) * 4;
+            var copy = buffer.isDirect() ?
+                    ByteBuffer.allocateDirect(newLength) : ByteBuffer.allocate(newLength);
+            copy.put(buffer.flip());
+            this.buffer = copy;
+        }
     }
 
     /**
@@ -64,21 +75,22 @@ public class BinaryWriter extends OutputStream {
     }
 
     /**
-     * Writes a single boolean to the buffer.
-     *
-     * @param b the boolean to write
-     */
-    public void writeBoolean(boolean b) {
-        buffer.put((byte) (b ? 1 : 0));
-    }
-
-    /**
      * Writes a single byte to the buffer.
      *
      * @param b the byte to write
      */
     public void writeByte(byte b) {
+        ensureSize(Byte.BYTES);
         buffer.put(b);
+    }
+
+    /**
+     * Writes a single boolean to the buffer.
+     *
+     * @param b the boolean to write
+     */
+    public void writeBoolean(boolean b) {
+        writeByte((byte) (b ? 1 : 0));
     }
 
     /**
@@ -87,6 +99,7 @@ public class BinaryWriter extends OutputStream {
      * @param c the char to write
      */
     public void writeChar(char c) {
+        ensureSize(Character.BYTES);
         buffer.putChar(c);
     }
 
@@ -96,6 +109,7 @@ public class BinaryWriter extends OutputStream {
      * @param s the short to write
      */
     public void writeShort(short s) {
+        ensureSize(Short.BYTES);
         buffer.putShort(s);
     }
 
@@ -105,6 +119,7 @@ public class BinaryWriter extends OutputStream {
      * @param i the int to write
      */
     public void writeInt(int i) {
+        ensureSize(Integer.BYTES);
         buffer.putInt(i);
     }
 
@@ -114,6 +129,7 @@ public class BinaryWriter extends OutputStream {
      * @param l the long to write
      */
     public void writeLong(long l) {
+        ensureSize(Long.BYTES);
         buffer.putLong(l);
     }
 
@@ -123,6 +139,7 @@ public class BinaryWriter extends OutputStream {
      * @param f the float to write
      */
     public void writeFloat(float f) {
+        ensureSize(Float.BYTES);
         buffer.putFloat(f);
     }
 
@@ -132,6 +149,7 @@ public class BinaryWriter extends OutputStream {
      * @param d the double to write
      */
     public void writeDouble(double d) {
+        ensureSize(Double.BYTES);
         buffer.putDouble(d);
     }
 
@@ -141,6 +159,7 @@ public class BinaryWriter extends OutputStream {
      * @param i the int to write
      */
     public void writeVarInt(int i) {
+        ensureSize(5);
         Utils.writeVarInt(buffer, i);
     }
 
@@ -150,6 +169,7 @@ public class BinaryWriter extends OutputStream {
      * @param l the long to write
      */
     public void writeVarLong(long l) {
+        ensureSize(10);
         Utils.writeVarLong(buffer, l);
     }
 
@@ -215,6 +235,7 @@ public class BinaryWriter extends OutputStream {
      * @param bytes the byte array to write
      */
     public void writeBytes(byte @NotNull [] bytes) {
+        ensureSize(bytes.length);
         buffer.put(bytes);
     }
 
@@ -288,6 +309,7 @@ public class BinaryWriter extends OutputStream {
     }
 
     public void write(@NotNull ByteBuffer buffer) {
+        ensureSize(buffer.position());
         this.buffer.put(buffer.flip());
     }
 
@@ -379,6 +401,7 @@ public class BinaryWriter extends OutputStream {
 
     public void writeUnsignedShort(int yourShort) {
         // FIXME unsigned
+        ensureSize(Short.BYTES);
         buffer.putShort((short) (yourShort & 0xFFFF));
     }
 
