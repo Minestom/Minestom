@@ -58,34 +58,28 @@ public final class Utils {
     }
 
     public static int readVarInt(ByteBuffer buf) {
-        int i = 0;
-        final int maxRead = Math.min(5, buf.remaining());
-        for (int j = 0; j < maxRead; j++) {
-            final int k = buf.get();
-            i |= (k & 0x7F) << j * 7;
-            if ((k & 0x80) != 128) {
-                return i;
+        // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
+        int result = 0;
+        for (int shift = 0; ; shift += 7) {
+            byte b = buf.get();
+            result |= (b & 0x7f) << shift;
+            if (b >= 0) {
+                return result;
             }
         }
-        throw new RuntimeException("VarInt is too big");
     }
 
-    public static long readVarLong(@NotNull ByteBuffer buffer) {
-        int numRead = 0;
+    public static long readVarLong(@NotNull ByteBuffer buf) {
+        // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L404
         long result = 0;
-        byte read;
-        do {
-            read = buffer.get();
-            long value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 10) {
-                throw new RuntimeException("VarLong is too big");
+        for (int shift = 0; shift < 56; shift += 7) {
+            byte b = buf.get();
+            result |= (b & 0x7fL) << shift;
+            if (b >= 0) {
+                return result;
             }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
+        }
+        return result | (buf.get() & 0xffL) << 56;
     }
 
     public static void writeVarLong(ByteBuffer buffer, long value) {
