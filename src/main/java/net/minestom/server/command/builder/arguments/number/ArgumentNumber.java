@@ -61,7 +61,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
 
             return value;
         } catch (NumberFormatException | NullPointerException e) {
-            throw new ArgumentSyntaxException("Input is not a number/long", input, NOT_NUMBER_ERROR);
+            throw new ArgumentSyntaxException("Input is not a number, or it's invalid for the given type", input, NOT_NUMBER_ERROR);
         }
     }
 
