@@ -32,6 +32,7 @@ import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.permission.PermissionManager;
 import net.minestom.server.ping.ResponseDataConsumer;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
@@ -121,6 +122,7 @@ public final class MinecraftServer {
     private static AdvancementManager advancementManager;
     private static BossBarManager bossBarManager;
 
+    private static PermissionManager permissionManager;
     private static ExtensionManager extensionManager;
 
     private static final GlobalEventHandler GLOBAL_EVENT_HANDLER = new GlobalEventHandler();
@@ -188,6 +190,7 @@ public final class MinecraftServer {
         advancementManager = new AdvancementManager();
         bossBarManager = new BossBarManager();
 
+        permissionManager = new PermissionManager();
         updateManager = new UpdateManager();
 
         lootTableManager = new LootTableManager();
@@ -683,6 +686,11 @@ public final class MinecraftServer {
     public static AdvancementManager getAdvancementManager() {
         checkInitStatus(advancementManager);
         return advancementManager;
+    }
+
+    public static PermissionManager getPermissionManager() {
+        checkInitStatus(permissionManager);
+        return permissionManager;
     }
 
     /**
