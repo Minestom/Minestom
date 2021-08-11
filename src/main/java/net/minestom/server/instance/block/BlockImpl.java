@@ -13,10 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 final class BlockImpl implements Block {
@@ -140,6 +137,23 @@ final class BlockImpl implements Block {
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
         return nbt != null ? tag.read(nbt) : null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BlockImpl block = (BlockImpl) o;
+        return registry.equals(block.registry) &&
+                propertyEntry.equals(block.propertyEntry) &&
+                properties.equals(block.properties) &&
+                Objects.equals(nbt, block.nbt) &&
+                Objects.equals(handler, block.handler);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(registry, propertyEntry, properties, nbt, handler);
     }
 
     @Override
