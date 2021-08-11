@@ -15,6 +15,7 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.BufferOverflowException;
@@ -29,9 +30,20 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
-    private static final ThreadLocal<ByteBuffer> BUFFER = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE));
+    private static final ThreadLocal<ByteBuffer> PACKET_BUFFER = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE));
+    private static final ThreadLocal<ByteBuffer> COMPRESSION_CACHE = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE));
 
     private PacketUtils() {
+    }
+
+    @ApiStatus.Internal
+    static ByteBuffer localBuffer() {
+        return PACKET_BUFFER.get().clear();
+    }
+
+    @ApiStatus.Internal
+    static ByteBuffer compressionCache() {
+        return COMPRESSION_CACHE.get().clear();
     }
 
     /**
@@ -150,7 +162,7 @@ public final class PacketUtils {
             // Packet large enough, compress
             final int limitCache = buffer.limit();
             buffer.position(contentStart).limit(contentStart + packetSize);
-            var uncompressedCopy = ByteBuffer.allocate(packetSize).put(buffer).flip();
+            var uncompressedCopy = compressionCache().put(buffer).flip();
             buffer.position(contentStart).limit(limitCache);
 
             var deflater = COMPRESSOR.get();
@@ -186,11 +198,11 @@ public final class PacketUtils {
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(BUFFER.get().clear(), packet);
+        return createFramedPacket(localBuffer(), packet);
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        return createFramedPacket(BUFFER.get().clear(), packet, compression);
+        return createFramedPacket(localBuffer(), packet, compression);
     }
 
     public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
