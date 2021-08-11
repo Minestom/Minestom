@@ -10,8 +10,8 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.ComponentHoldingServerPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.callback.validator.PlayerValidator;
@@ -120,6 +120,10 @@ public final class PacketUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
         sendGroupedPacket(players, packet, player -> true);
+    }
+
+    public static void broadcastPacket(@NotNull ServerPacket packet) {
+        sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
     }
 
     public static void writeFramedPacket(@NotNull ByteBuffer buffer,

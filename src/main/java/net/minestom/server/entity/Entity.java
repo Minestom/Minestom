@@ -306,7 +306,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected boolean addViewer0(@NotNull Player player) {
-        if (!this.viewers.add(player)) {
+        if (player == this || !this.viewers.add(player)) {
             return false;
         }
         player.viewableEntities.add(this);
@@ -334,7 +334,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     protected boolean removeViewer0(@NotNull Player player) {
-        if (!viewers.remove(player)) {
+        if (player == this || !viewers.remove(player)) {
             return false;
         }
         player.getPlayerConnection().sendPacket(new DestroyEntitiesPacket(getEntityId()));

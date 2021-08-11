@@ -15,8 +15,8 @@ import net.minestom.server.network.packet.client.login.LoginStartPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.DisconnectPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.validate.Check;
@@ -373,11 +373,12 @@ public final class ConnectionManager {
             final Instance spawningInstance = loginEvent.getSpawningInstance();
 
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
-
-            waitingPlayer.UNSAFE_init(spawningInstance);
-
             // Spawn the player at Player#getRespawnPoint during the next instance tick
-            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
+            Player finalWaitingPlayer = waitingPlayer;
+            spawningInstance.scheduleNextTick(instance -> {
+                finalWaitingPlayer.UNSAFE_init(spawningInstance);
+                finalWaitingPlayer.setInstance(spawningInstance);
+            });
         }
     }
 

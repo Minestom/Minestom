@@ -241,7 +241,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         EventDispatcher.call(skinInitEvent);
         this.skin = skinInitEvent.getSkin();
         // FIXME: when using Geyser, this line remove the skin of the client
-        playerConnection.sendPacket(getAddPlayerToList());
+        PacketUtils.broadcastPacket(getAddPlayerToList());
+        for (var player : MinecraftServer.getConnectionManager().getOnlinePlayers()) {
+            this.playerConnection.sendPacket(player.getAddPlayerToList());
+        }
 
         // Commands start
         {
@@ -430,11 +433,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void spawn() {
-
-    }
-
-    @Override
     public boolean isOnGround() {
         return onGround;
     }
@@ -462,16 +460,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         // Clear all viewable chunks
         this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
-    }
-
-    @Override
-    protected boolean addViewer0(@NotNull Player player) {
-        if (player == this) {
-            return false;
-        }
-        PlayerConnection viewerConnection = player.getPlayerConnection();
-        viewerConnection.sendPacket(getAddPlayerToList());
-        return super.addViewer0(player);
+        // Remove from the tab-list
+        PacketUtils.broadcastPacket(getRemovePlayerToList());
     }
 
     @Override
@@ -479,13 +469,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (player == this || !super.removeViewer0(player)) {
             return false;
         }
-
-        PlayerConnection viewerConnection = player.getPlayerConnection();
-        viewerConnection.sendPacket(getRemovePlayerToList());
-
         // Team
         if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            viewerConnection.sendPacket(this.getTeam().createTeamDestructionPacket());
+            player.getPlayerConnection().sendPacket(this.getTeam().createTeamDestructionPacket());
         }
         return true;
     }
