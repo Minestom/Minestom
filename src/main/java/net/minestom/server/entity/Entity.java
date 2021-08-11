@@ -526,8 +526,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         if (finalVelocityPosition.samePoint(position)) {
             this.velocity = Vec.ZERO;
-            if (hasVelocity) {
-                sendPacketToViewersAndSelf(getVelocityPacket());
+            if (hasVelocity && !isSocketClient) {
+                sendPacketToViewers(getVelocityPacket());
             }
             return;
         }
@@ -563,8 +563,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             }
         }
         // Verify if velocity packet has to be sent
-        if (hasVelocity || gravityTickCount > 0) {
-            sendPacketToViewersAndSelf(getVelocityPacket());
+        if ((hasVelocity || gravityTickCount > 0) && !isSocketClient) {
+            sendPacketToViewers(getVelocityPacket());
         }
     }
 
