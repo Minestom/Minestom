@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ApiStatus.Internal
+@ApiStatus.Experimental
 public final class ChunkUtils {
 
     private ChunkUtils() {

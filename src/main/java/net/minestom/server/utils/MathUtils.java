@@ -2,7 +2,7 @@ package net.minestom.server.utils;
 
 import org.jetbrains.annotations.ApiStatus;
 
-@ApiStatus.Internal
+@ApiStatus.Experimental
 public final class MathUtils {
 
     private MathUtils() {
