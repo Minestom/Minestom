@@ -416,7 +416,15 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return the {@link TimeUpdatePacket} with this instance data
      */
     private @NotNull TimeUpdatePacket createTimePacket() {
-        return new TimeUpdatePacket(worldAge, timeRate == 0 ? -Math.abs(time) : time);
+        long timeOfDay;
+        if (timeRate == 0) {
+            //Negative values make the sun and moon stop moving
+            //0 as a long cannot be negative
+            timeOfDay = time == 0 ? -24000L : -Math.abs(time);
+        } else {
+            timeOfDay = time;
+        }
+        return new TimeUpdatePacket(worldAge, timeOfDay);
     }
 
     /**
