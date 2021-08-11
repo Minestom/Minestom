@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;
 
-@ApiStatus.Internal
+@ApiStatus.Experimental
 public final class AsyncUtils {
     public static final CompletableFuture<Void> VOID_FUTURE = CompletableFuture.completedFuture(null);
 

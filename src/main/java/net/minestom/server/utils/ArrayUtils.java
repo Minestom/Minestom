@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.LongConsumer;
 
-@ApiStatus.Internal
+@ApiStatus.Experimental
 public final class ArrayUtils {
 
     private ArrayUtils() {
