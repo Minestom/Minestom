@@ -131,19 +131,12 @@ public class InventoryClickProcessor {
     @NotNull
     public InventoryClickResult changeHeld(@Nullable Inventory inventory, @NotNull Player player, int slot, int key,
                                            @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        // Verify the clicked item
         InventoryClickResult clickResult = startCondition(inventory, player, slot, ClickType.CHANGE_HELD, clicked, cursor);
-
-        if (clickResult.isCancel()) {
-            return clickResult;
-        }
-
-        // Converted again during the inventory condition calling to internal slot
-        final int keySlot = PlayerInventoryUtils.convertToPacketSlot(key);
-        clickResult = startCondition(null, player, keySlot, ClickType.CHANGE_HELD, clicked, cursor);
-
-        if (clickResult.isCancel()) {
-            return clickResult;
-        }
+        if (clickResult.isCancel()) return clickResult;
+        // Verify the destination (held bar)
+        clickResult = startCondition(null, player, key, ClickType.CHANGE_HELD, clicked, cursor);
+        if (clickResult.isCancel()) return clickResult;
 
         if (cursor.isAir() && clicked.isAir()) {
             clickResult.setCancel(true);
@@ -152,7 +145,6 @@ public class InventoryClickProcessor {
 
         ItemStack resultClicked;
         ItemStack resultHeld;
-
         if (clicked.isAir()) {
             // Set held item [key] to slot
             resultClicked = cursor;
@@ -162,16 +154,14 @@ public class InventoryClickProcessor {
                 // if held item [key] is air then set clicked to held
                 resultClicked = ItemStack.AIR;
             } else {
-                // Otherwise replace held item and held
+                // Otherwise, replace held item and held
                 resultClicked = cursor;
             }
-
             resultHeld = clicked;
         }
 
         clickResult.setClicked(resultClicked);
         clickResult.setCursor(resultHeld);
-
         return clickResult;
     }
 
