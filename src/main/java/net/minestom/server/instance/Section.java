@@ -20,14 +20,14 @@ public class Section implements PublicCloneable<Section> {
     }
 
     public short getBlockAt(int x, int y, int z) {
-        x = toChunkCoordinate(x);
-        z = toChunkCoordinate(z);
+        x = toChunkRelativeCoordinate(x);
+        z = toChunkRelativeCoordinate(z);
         return palette.getBlockAt(x, y, z);
     }
 
     public void setBlockAt(int x, int y, int z, short blockId) {
-        x = toChunkCoordinate(x);
-        z = toChunkCoordinate(z);
+        x = toChunkRelativeCoordinate(x);
+        z = toChunkRelativeCoordinate(z);
         palette.setBlockAt(x, y, z, blockId);
     }
 
@@ -65,12 +65,12 @@ public class Section implements PublicCloneable<Section> {
     }
 
     /**
-     * Converts a world coordinate to a chunk one.
+     * Returns a coordinate that is relative to a chunk the provided coordinate is in.
      *
      * @param xz the world coordinate
-     * @return the chunk coordinate of {@code xz}
+     * @return a coordinate relative to the closest chunk
      */
-    private static int toChunkCoordinate(int xz) {
+    private static int toChunkRelativeCoordinate(int xz) {
         xz %= 16;
         if (xz < 0) {
             xz += Chunk.CHUNK_SECTION_SIZE;
