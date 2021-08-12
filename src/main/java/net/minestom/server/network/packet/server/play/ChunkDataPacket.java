@@ -10,6 +10,7 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
@@ -32,8 +33,7 @@ public class ChunkDataPacket implements ServerPacket {
     public Map<Integer, Block> entries = new HashMap<>();
 
     private static final byte CHUNK_SECTION_COUNT = 16;
-    private static final int MAX_BITS_PER_ENTRY = 16;
-    private static final int MAX_BUFFER_SIZE = (Short.BYTES + Byte.BYTES + 5 * Byte.BYTES + (4096 * MAX_BITS_PER_ENTRY / Long.SIZE * Long.BYTES)) * CHUNK_SECTION_COUNT + 256 * Integer.BYTES;
+    private static final PacketUtils.Cache BLOCK_CACHE = PacketUtils.Cache.get("chunk-block-cache", 262_144);
 
     /**
      * Heightmaps NBT, as read from raw packet data.
@@ -49,7 +49,7 @@ public class ChunkDataPacket implements ServerPacket {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
 
-        ByteBuffer blocks = ByteBuffer.allocate(MAX_BUFFER_SIZE);
+        ByteBuffer blocks = BLOCK_CACHE.retrieveLocal();
 
         Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
 

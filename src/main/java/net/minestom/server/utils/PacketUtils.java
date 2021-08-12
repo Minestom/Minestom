@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.BufferOverflowException;
 import java.nio.ByteBuffer;
 import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.Deflater;
 
 /**
@@ -30,20 +32,10 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
-    private static final ThreadLocal<ByteBuffer> PACKET_BUFFER = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE));
-    private static final ThreadLocal<ByteBuffer> COMPRESSION_CACHE = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(Server.SOCKET_BUFFER_SIZE));
+    private static final Cache PACKET_BUFFER = Cache.get("packet-buffer", Server.SOCKET_BUFFER_SIZE);
+    private static final Cache COMPRESSION_CACHE = Cache.get("compression-buffer", Server.SOCKET_BUFFER_SIZE);
 
     private PacketUtils() {
-    }
-
-    @ApiStatus.Internal
-    static ByteBuffer localBuffer() {
-        return PACKET_BUFFER.get().clear();
-    }
-
-    @ApiStatus.Internal
-    static ByteBuffer compressionCache() {
-        return COMPRESSION_CACHE.get().clear();
     }
 
     /**
@@ -162,7 +154,7 @@ public final class PacketUtils {
             // Packet large enough, compress
             final int limitCache = buffer.limit();
             buffer.position(contentStart).limit(contentStart + packetSize);
-            var uncompressedCopy = compressionCache().put(buffer).flip();
+            var uncompressedCopy = COMPRESSION_CACHE.retrieveLocal().put(buffer).flip();
             buffer.position(contentStart).limit(limitCache);
 
             var deflater = COMPRESSOR.get();
@@ -198,15 +190,40 @@ public final class PacketUtils {
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(localBuffer(), packet);
+        return createFramedPacket(PACKET_BUFFER.retrieveLocal(), packet);
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        return createFramedPacket(localBuffer(), packet, compression);
+        return createFramedPacket(PACKET_BUFFER.retrieveLocal(), packet, compression);
     }
 
     public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final var temp = PacketUtils.createFramedPacket(packet);
         return ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
+    }
+
+    @ApiStatus.Internal
+    public static final class Cache {
+        private static final Map<String, Cache> CACHES = new ConcurrentHashMap<>();
+
+        private final String name;
+        private final ThreadLocal<ByteBuffer> cache;
+
+        private Cache(String name, int size) {
+            this.name = name;
+            this.cache = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(size));
+        }
+
+        public static Cache get(String name, int size) {
+            return CACHES.computeIfAbsent(name, s -> new Cache(name, size));
+        }
+
+        public String name() {
+            return name;
+        }
+
+        public ByteBuffer retrieveLocal() {
+            return cache.get().clear();
+        }
     }
 }
