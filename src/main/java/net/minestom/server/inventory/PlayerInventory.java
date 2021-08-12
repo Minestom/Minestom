@@ -262,8 +262,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(convertedSlot);
 
-        final InventoryClickResult clickResult = clickProcessor.leftClick(null, player, convertedSlot, clicked, cursor);
-
+        final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, convertedSlot, clicked, cursor);
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
@@ -282,8 +281,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(convertedSlot);
 
-        final InventoryClickResult clickResult = clickProcessor.rightClick(null, player, convertedSlot, clicked, cursor);
-
+        final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, convertedSlot, clicked, cursor);
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
@@ -308,9 +306,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final boolean outsideDrop = slot == -999;
         final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot, OFFSET);
 
-        final InventoryClickResult clickResult = clickProcessor.drop(null, player,
+        final InventoryClickResult clickResult = clickProcessor.drop(player, this,
                 all, slot, button, clicked, cursor);
-
         if (clickResult.doRefresh())
             sendSlotRefresh((short) slot, clicked);
 
@@ -329,10 +326,10 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
         final int start = hotBarClick ? 9 : 0;
         final int end = hotBarClick ? getSize() - 9 : 8;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(this,
+        final InventoryClickResult clickResult = clickProcessor.shiftClick(
+                this, this,
                 start, end, 1,
                 player, slot, clicked, cursor);
-
         if (clickResult == null)
             return false;
 
@@ -350,8 +347,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack heldItem = getItemStack(key);
         final ItemStack clicked = getItemStack(slot, OFFSET);
 
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(null, player, slot, key, clicked, heldItem);
-
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, key, clicked, heldItem);
         if (clickResult.doRefresh()) {
             sendSlotRefresh((short) slot, clicked);
         }
@@ -373,11 +369,10 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = slot != -999 ? getItemStack(slot, OFFSET) : ItemStack.AIR;
 
-        final InventoryClickResult clickResult = clickProcessor.dragging(null, player,
+        final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
                 slot, button,
                 clicked, cursor, s -> getItemStack(s, OFFSET),
                 (s, item) -> setItemStack(s, OFFSET, item));
-
         if (clickResult == null) {
             return false;
         }
@@ -393,7 +388,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, null, player, slot, cursor);
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, cursor);
         if (clickResult == null)
             return false;
         if (clickResult.doRefresh())

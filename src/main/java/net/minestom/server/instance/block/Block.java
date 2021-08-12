@@ -68,7 +68,6 @@ public interface Block extends ProtocolObject, TagReadable, BlockConstants {
         return withTag(Tag.NBT, compound);
     }
 
-
     /**
      * Creates a new block with the specified {@link BlockHandler handler}.
      *

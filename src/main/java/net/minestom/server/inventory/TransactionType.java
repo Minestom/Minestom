@@ -21,9 +21,7 @@ public interface TransactionType {
      */
     TransactionType ADD = (inventory, itemStack, slotPredicate, start, end, step) -> {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
-
         final StackingRule stackingRule = itemStack.getStackingRule();
-
         // Check filled slot (not air)
         for (int i = start; i < end; i += step) {
             ItemStack inventoryItem = inventory.getItemStack(i);
@@ -33,9 +31,7 @@ public interface TransactionType {
             if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
                 final int itemAmount = stackingRule.getAmount(inventoryItem);
                 final int maxSize = stackingRule.getMaxSize(inventoryItem);
-                if (itemAmount == maxSize)
-                    continue;
-
+                if (itemAmount == maxSize) continue;
                 if (!slotPredicate.test(i, inventoryItem)) {
                     // Cancelled transaction
                     continue;
@@ -55,25 +51,19 @@ public interface TransactionType {
                 }
             }
         }
-
         // Check air slot to fill
         for (int i = start; i < end; i += step) {
             ItemStack inventoryItem = inventory.getItemStack(i);
-            if (!inventoryItem.isAir()) {
-                continue;
-            }
-
+            if (!inventoryItem.isAir()) continue;
             if (!slotPredicate.test(i, inventoryItem)) {
                 // Cancelled transaction
                 continue;
             }
-
             // Fill the slot
             itemChangesMap.put(i, itemStack);
             itemStack = stackingRule.apply(itemStack, 0);
             break;
         }
-
         return Pair.of(itemStack, itemChangesMap);
     };
 
@@ -85,10 +75,8 @@ public interface TransactionType {
         Int2ObjectMap<ItemStack> itemChangesMap = new Int2ObjectOpenHashMap<>();
         final StackingRule stackingRule = itemStack.getStackingRule();
         for (int i = start; i < end; i += step) {
-            ItemStack inventoryItem = inventory.getItemStack(i);
-            if (inventoryItem.isAir()) {
-                continue;
-            }
+            final ItemStack inventoryItem = inventory.getItemStack(i);
+            if (inventoryItem.isAir()) continue;
             if (stackingRule.canBeStacked(itemStack, inventoryItem)) {
                 if (!slotPredicate.test(i, inventoryItem)) {
                     // Cancelled transaction
@@ -110,7 +98,6 @@ public interface TransactionType {
                 }
             }
         }
-
         return Pair.of(itemStack, itemChangesMap);
     };
 
