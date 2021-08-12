@@ -33,7 +33,7 @@ public class ChunkDataPacket implements ServerPacket {
     public Map<Integer, Block> entries = new HashMap<>();
 
     private static final byte CHUNK_SECTION_COUNT = 16;
-    private static final PacketUtils.Cache BLOCK_CACHE = PacketUtils.Cache.get("chunk-block-cache", 262_144);
+    private static final PacketUtils.LocalCache BLOCK_CACHE = PacketUtils.LocalCache.get("chunk-block-cache", 262_144);
 
     /**
      * Heightmaps NBT, as read from raw packet data.
@@ -49,7 +49,7 @@ public class ChunkDataPacket implements ServerPacket {
         writer.writeInt(chunkX);
         writer.writeInt(chunkZ);
 
-        ByteBuffer blocks = BLOCK_CACHE.retrieveLocal();
+        ByteBuffer blocks = BLOCK_CACHE.get();
 
         Int2LongRBTreeMap maskMap = new Int2LongRBTreeMap();
 

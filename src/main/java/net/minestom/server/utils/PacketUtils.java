@@ -32,8 +32,8 @@ import java.util.zip.Deflater;
 public final class PacketUtils {
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
     private static final ThreadLocal<Deflater> COMPRESSOR = ThreadLocal.withInitial(Deflater::new);
-    private static final Cache PACKET_BUFFER = Cache.get("packet-buffer", Server.SOCKET_BUFFER_SIZE);
-    private static final Cache COMPRESSION_CACHE = Cache.get("compression-buffer", Server.SOCKET_BUFFER_SIZE);
+    private static final LocalCache PACKET_BUFFER = LocalCache.get("packet-buffer", Server.SOCKET_BUFFER_SIZE);
+    private static final LocalCache COMPRESSION_CACHE = LocalCache.get("compression-buffer", Server.SOCKET_BUFFER_SIZE);
 
     private PacketUtils() {
     }
@@ -154,7 +154,7 @@ public final class PacketUtils {
             // Packet large enough, compress
             final int limitCache = buffer.limit();
             buffer.position(contentStart).limit(contentStart + packetSize);
-            var uncompressedCopy = COMPRESSION_CACHE.retrieveLocal().put(buffer).flip();
+            var uncompressedCopy = COMPRESSION_CACHE.get().put(buffer).flip();
             buffer.position(contentStart).limit(limitCache);
 
             var deflater = COMPRESSOR.get();
@@ -190,11 +190,11 @@ public final class PacketUtils {
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet) {
-        return createFramedPacket(PACKET_BUFFER.retrieveLocal(), packet);
+        return createFramedPacket(PACKET_BUFFER.get(), packet);
     }
 
     public static ByteBuffer createFramedPacket(@NotNull ServerPacket packet, boolean compression) {
-        return createFramedPacket(PACKET_BUFFER.retrieveLocal(), packet, compression);
+        return createFramedPacket(PACKET_BUFFER.get(), packet, compression);
     }
 
     public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
@@ -203,26 +203,26 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static final class Cache {
-        private static final Map<String, Cache> CACHES = new ConcurrentHashMap<>();
+    public static final class LocalCache {
+        private static final Map<String, LocalCache> CACHES = new ConcurrentHashMap<>();
 
         private final String name;
         private final ThreadLocal<ByteBuffer> cache;
 
-        private Cache(String name, int size) {
+        private LocalCache(String name, int size) {
             this.name = name;
             this.cache = ThreadLocal.withInitial(() -> ByteBuffer.allocateDirect(size));
         }
 
-        public static Cache get(String name, int size) {
-            return CACHES.computeIfAbsent(name, s -> new Cache(name, size));
+        public static LocalCache get(String name, int size) {
+            return CACHES.computeIfAbsent(name, s -> new LocalCache(name, size));
         }
 
         public String name() {
             return name;
         }
 
-        public ByteBuffer retrieveLocal() {
+        public ByteBuffer get() {
             return cache.get().clear();
         }
     }
