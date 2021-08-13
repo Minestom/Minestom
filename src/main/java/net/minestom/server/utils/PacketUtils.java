@@ -94,7 +94,7 @@ public final class PacketUtils {
             if (!PACKET_LISTENER_MANAGER.processServerPacket(packet, players))
                 return;
             final ByteBuffer finalBuffer = createFramedPacket(packet);
-            final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer);
+            final FramedPacket framedPacket = new FramedPacket(packet.getId(), finalBuffer, packet);
             // Send packet to all players
             for (Player player : players) {
                 if (!player.isOnline() || !playerValidator.isValid(player))
