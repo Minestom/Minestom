@@ -144,6 +144,13 @@ public class ItemMeta implements TagReadable, Writeable {
         return nbt.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "{" +
+                "nbt=" + nbt +
+                '}';
+    }
+
     @Contract(value = "-> new", pure = true)
     protected @NotNull ItemMetaBuilder builder() {
         return ItemMetaBuilder.fromNBT(metaBuilder, nbt);

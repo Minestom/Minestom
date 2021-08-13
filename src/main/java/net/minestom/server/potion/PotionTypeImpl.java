@@ -46,4 +46,9 @@ final class PotionTypeImpl implements PotionType {
     public int id() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

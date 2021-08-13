@@ -35,4 +35,9 @@ final class EnchantmentImpl implements Enchantment {
     public @NotNull Registry.EnchantmentEntry registry() {
         return registry;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

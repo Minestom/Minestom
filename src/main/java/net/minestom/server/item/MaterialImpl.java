@@ -35,4 +35,9 @@ final class MaterialImpl implements Material {
     public @NotNull Registry.MaterialEntry registry() {
         return registry;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

@@ -46,4 +46,9 @@ final class StatisticTypeImpl implements StatisticType {
     public int id() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

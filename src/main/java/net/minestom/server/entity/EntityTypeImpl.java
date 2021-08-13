@@ -254,4 +254,9 @@ final class EntityTypeImpl implements EntityType {
     public @NotNull Registry.EntityEntry registry() {
         return registry;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

@@ -35,4 +35,9 @@ final class PotionEffectImpl implements PotionEffect {
     public @NotNull Registry.PotionEffectEntry registry() {
         return registry;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

@@ -46,4 +46,9 @@ final class SoundEventImpl implements SoundEvent {
     public int id() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return name();
+    }
 }

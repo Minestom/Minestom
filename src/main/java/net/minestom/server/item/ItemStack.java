@@ -195,6 +195,16 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "ItemStack{" +
+                "stackingRule=" + stackingRule +
+                ", material=" + material +
+                ", amount=" + amount +
+                ", meta=" + meta +
+                '}';
+    }
+
     @Contract(value = "_, _ -> new", pure = true)
     public <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
         return builder().meta(metaBuilder -> metaBuilder.set(tag, value)).build();
