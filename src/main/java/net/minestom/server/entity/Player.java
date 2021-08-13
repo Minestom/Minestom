@@ -246,15 +246,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.playerConnection.sendPacket(player.getAddPlayerToList());
         }
 
-        // Commands start
-        {
-            CommandManager commandManager = MinecraftServer.getCommandManager();
-            DeclareCommandsPacket declareCommandsPacket = commandManager.createDeclareCommandsPacket(this);
-
-            playerConnection.sendPacket(declareCommandsPacket);
-        }
-        // Commands end
-
+        // Commands
+        refreshCommands();
 
         // Recipes start
         {
@@ -430,6 +423,17 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
+    }
+    
+    /**
+     * Refreshes the command list for this player. This checks the
+     * {@link net.minestom.server.command.builder.condition.CommandCondition}s
+     * again, and any changes will be visible to the player.
+     */
+    public void refreshCommands() {
+        CommandManager commandManager = MinecraftServer.getCommandManager();
+        DeclareCommandsPacket declareCommandsPacket = commandManager.createDeclareCommandsPacket(this);
+        playerConnection.sendPacket(declareCommandsPacket);
     }
 
     @Override
