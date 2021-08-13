@@ -1,8 +1,8 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -59,8 +59,7 @@ public class RandomStrollGoal extends GoalSelector {
         return radius;
     }
 
-    @NotNull
-    private List<Vec> getNearbyBlocks(int radius) {
+    private static @NotNull List<Vec> getNearbyBlocks(int radius) {
         List<Vec> blocks = new ArrayList<>();
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
