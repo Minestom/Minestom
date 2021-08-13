@@ -46,37 +46,24 @@ public class Navigator {
      */
     public void moveTowards(@NotNull Point direction, double speed) {
         final Pos position = entity.getPosition();
-
-        final double currentX = position.x();
-        final double currentY = position.y();
-        final double currentZ = position.z();
-
-        final double targetX = direction.x();
-        final double targetY = direction.y();
-        final double targetZ = direction.z();
-
-        final double dx = targetX - currentX;
-        final double dy = targetY - currentY;
-        final double dz = targetZ - currentZ;
-
+        final double dx = direction.x() - position.x();
+        final double dy = direction.y() - position.y();
+        final double dz = direction.z() - position.z();
         // the purpose of these few lines is to slow down entities when they reach their destination
         final double distSquared = dx * dx + dy * dy + dz * dz;
         if (speed > distSquared) {
             speed = distSquared;
         }
-
         final double radians = Math.atan2(dz, dx);
         final double speedX = Math.cos(radians) * speed;
         final double speedY = dy * speed;
         final double speedZ = Math.sin(radians) * speed;
-
         // Update 'position' view
         final var view = PositionUtils.lookAlong(position, dx, direction.y(), dz);
-        entity.setView(view.yaw(), view.pitch());
-
+        this.entity.setView(view.yaw(), view.pitch());
         // Prevent ghosting
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        entity.refreshPosition(physicsResult.newPosition());
+        this.entity.refreshPosition(physicsResult.newPosition());
     }
 
     public void jump(float height) {
@@ -120,7 +107,7 @@ public class Navigator {
             return false;
         }
 
-        // Can't path outside of the world border
+        // Can't path outside the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
         if (!worldBorder.isInside(point)) {
             return false;
