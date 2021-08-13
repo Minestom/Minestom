@@ -11,7 +11,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -129,7 +128,6 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
      */
     @Override
     public void update() {
-        DebugUtils.printStackTrace();
         this.player.getPlayerConnection().sendPacket(createWindowItemsPacket());
     }
 
