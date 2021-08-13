@@ -414,6 +414,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             return false;
         }
         refreshPlayerCursorItem(player, clickResult.getCursor());
+        updateAll(player); // FIXME: currently not properly client-predicted
         return true;
     }
 
@@ -429,6 +430,7 @@ public class Inventory extends AbstractInventory implements Viewable {
             return false;
         }
         refreshPlayerCursorItem(player, clickResult.getCursor());
+        updateAll(player); // FIXME: currently not properly client-predicted
         return true;
     }
 
