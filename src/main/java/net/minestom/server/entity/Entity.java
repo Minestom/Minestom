@@ -1115,13 +1115,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Updates internal fields and sends updates.
      *
-     * @param position the new position
+     * @param newPosition the new position
      */
     @ApiStatus.Internal
-    public void refreshPosition(@NotNull final Pos position, boolean ignoreView) {
+    public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView) {
         final var previousPosition = this.position;
-        this.position = ignoreView ? previousPosition.withCoord(position) : position;
+        final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
+        this.position = position;
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
         }
@@ -1148,8 +1149,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
     @ApiStatus.Internal
-    public void refreshPosition(@NotNull final Pos position) {
-        refreshPosition(position, false);
+    public void refreshPosition(@NotNull final Pos newPosition) {
+        refreshPosition(newPosition, false);
     }
 
     /**
