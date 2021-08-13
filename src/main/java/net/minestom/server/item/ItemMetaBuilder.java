@@ -83,7 +83,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder lore(@NotNull List<@NotNull Component> lore) {
-        this.lore = new ArrayList<>(lore);
+        this.lore = List.copyOf(lore);
         handleCompound("display", nbtCompound -> {
             final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
             for (Component line : lore) {
@@ -102,7 +102,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
-        this.enchantmentMap = new HashMap<>(enchantments);
+        this.enchantmentMap = Map.copyOf(enchantments);
         handleMap(enchantmentMap, "Enchantments", () -> {
             NBTUtils.writeEnchant(nbt, "Enchantments", enchantmentMap);
             return nbt.get("Enchantments");
@@ -126,7 +126,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
-        this.attributes = new ArrayList<>(attributes);
+        this.attributes = List.copyOf(attributes);
 
         handleCollection(attributes, "AttributeModifiers", () -> {
             NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
@@ -157,7 +157,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
-        this.canPlaceOn = new HashSet<>(blocks);
+        this.canPlaceOn = Set.copyOf(blocks);
         handleCollection(canPlaceOn, "CanPlaceOn", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
             canPlaceOn.forEach(block -> list.add(new NBTString(block.name())));
@@ -173,7 +173,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canDestroy(@NotNull Set<@NotNull Block> blocks) {
-        this.canDestroy = new HashSet<>(blocks);
+        this.canDestroy = Set.copyOf(blocks);
         handleCollection(canDestroy, "CanDestroy", () -> {
             NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
             canDestroy.forEach(block -> list.add(new NBTString(block.name())));

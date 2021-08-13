@@ -13,7 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 public class ItemMeta implements TagReadable, Writeable {
@@ -43,12 +46,12 @@ public class ItemMeta implements TagReadable, Writeable {
         this.unbreakable = metaBuilder.unbreakable;
         this.hideFlag = metaBuilder.hideFlag;
         this.displayName = metaBuilder.displayName;
-        this.lore = new ArrayList<>(metaBuilder.lore);
-        this.enchantmentMap = new HashMap<>(metaBuilder.enchantmentMap);
-        this.attributes = new ArrayList<>(metaBuilder.attributes);
+        this.lore = List.copyOf(metaBuilder.lore);
+        this.enchantmentMap = Map.copyOf(metaBuilder.enchantmentMap);
+        this.attributes = List.copyOf(metaBuilder.attributes);
         this.customModelData = metaBuilder.customModelData;
-        this.canDestroy = new HashSet<>(metaBuilder.canDestroy);
-        this.canPlaceOn = new HashSet<>(metaBuilder.canPlaceOn);
+        this.canDestroy = Set.copyOf(metaBuilder.canDestroy);
+        this.canPlaceOn = Set.copyOf(metaBuilder.canPlaceOn);
 
         this.metaBuilder = metaBuilder;
         this.nbt = metaBuilder.nbt();
