@@ -537,9 +537,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             return;
         }
         refreshPosition(finalVelocityPosition, true);
-        if (!isSocketClient) {
-            synchronizePosition(true);
-        }
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
@@ -1124,6 +1121,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public void refreshPosition(@NotNull final Pos position, boolean ignoreView) {
         final var previousPosition = this.position;
         this.position = ignoreView ? previousPosition.withCoord(position) : position;
+        if (position.equals(lastSyncedPosition)) return;
         if (!position.samePoint(previousPosition)) {
             refreshCoordinate(position);
         }
@@ -1133,9 +1131,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
         final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            synchronizePosition(true);
-            // #synchronizePosition sets sync fields, it's safe to return
-            return;
+            sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
         } else if (positionChange && viewChange) {
             sendPacketToViewers(EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
                     lastSyncedPosition, isOnGround()));
@@ -1147,6 +1143,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
             sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
         }
+        this.lastAbsoluteSynchronizationTime = System.currentTimeMillis();
         this.lastSyncedPosition = position;
     }
 
