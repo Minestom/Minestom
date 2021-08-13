@@ -536,7 +536,14 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             // Entity shouldn't be updated when moving in an unloaded chunk
             return;
         }
-        refreshPosition(finalVelocityPosition, true);
+
+        if (this instanceof ItemEntity) {
+            // TODO find other exceptions
+            this.position = finalVelocityPosition;
+            refreshCoordinate(finalVelocityPosition);
+        } else {
+            refreshPosition(finalVelocityPosition, true);
+        }
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
