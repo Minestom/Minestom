@@ -358,6 +358,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
             return false;
         }
         setCursorItem(clickResult.getCursor());
+        update(); // FIXME: currently not properly client-predicted
         return true;
     }
 
@@ -370,6 +371,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
             return false;
         }
         setCursorItem(clickResult.getCursor());
+        update(); // FIXME: currently not properly client-predicted
         return true;
     }
 }
