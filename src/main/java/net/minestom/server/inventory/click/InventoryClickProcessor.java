@@ -118,19 +118,19 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @Nullable InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
-                                                     int start, int end, int step,
-                                                     @NotNull Player player, int slot,
-                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+    public @NotNull InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
+                                                    int start, int end, int step,
+                                                    @NotNull Player player, int slot,
+                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
-        if (clicked.isAir()) return null;
+        if (clicked.isAir()) return clickResult.cancelled();
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
             InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
             if (result.isCancel()) {
-                clickResult.setRefresh(true);
+                clickResult.setCancel(true);
                 return false;
             }
             return true;
@@ -264,11 +264,11 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @Nullable InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
-                                                      @NotNull final ItemStack cursor) {
+    public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
+                                                     @NotNull final ItemStack cursor) {
         InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_DOUBLE_CLICK, ItemStack.AIR, cursor);
         if (clickResult.isCancel()) return clickResult;
-        if (cursor.isAir()) return null;
+        if (cursor.isAir()) return clickResult.cancelled();
 
         final StackingRule cursorRule = cursor.getStackingRule();
         final int amount = cursorRule.getAmount(cursor);
@@ -391,7 +391,6 @@ public final class InventoryClickProcessor {
                                                          @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         final Inventory eventInventory = inventory instanceof Inventory ? (Inventory) inventory : null;
-        clickResult.setPlayerInventory(eventInventory == null);
 
         // Reset the didCloseInventory field
         // Wait for inventory conditions + events to possibly close the inventory
@@ -404,7 +403,6 @@ public final class InventoryClickProcessor {
             clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
             clickResult.setClicked(inventoryPreClickEvent.getClickedItem());
             if (inventoryPreClickEvent.isCancelled()) {
-                clickResult.setRefresh(true);
                 clickResult.setCancel(true);
             }
         }
@@ -419,7 +417,6 @@ public final class InventoryClickProcessor {
                     clickResult.setCursor(result.getCursorItem());
                     clickResult.setClicked(result.getClickedItem());
                     if (result.isCancel()) {
-                        clickResult.setRefresh(true);
                         clickResult.setCancel(true);
                     }
                 }

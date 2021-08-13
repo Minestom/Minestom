@@ -11,6 +11,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.debug.DebugUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,6 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
 public class PlayerInventory extends AbstractInventory implements EquipmentHandler {
-
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 
@@ -129,7 +129,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
      */
     @Override
     public void update() {
-        player.getPlayerConnection().sendPacket(createWindowItemsPacket());
+        DebugUtils.printStackTrace();
+        this.player.getPlayerConnection().sendPacket(createWindowItemsPacket());
     }
 
     /**
@@ -172,7 +173,6 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         Check.notNull(itemStack, "The ItemStack cannot be null, you can set air instead");
 
         EquipmentSlot equipmentSlot = null;
-
         if (slot == player.getHeldSlot()) {
             equipmentSlot = EquipmentSlot.MAIN_HAND;
         } else if (slot == OFFHAND_SLOT) {
@@ -186,25 +186,18 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         } else if (slot == BOOTS_SLOT) {
             equipmentSlot = EquipmentSlot.BOOTS;
         }
-
         if (equipmentSlot != null) {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
-
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
         }
-
         this.itemStacks[slot] = itemStack;
-
         // Sync equipment
         if (equipmentSlot != null) {
-            player.syncEquipment(equipmentSlot);
+            this.player.syncEquipment(equipmentSlot);
         }
-
         // Refresh slot
-        update();
-        // FIXME: replace update() to refreshSlot, currently not possible because our inventory click handling is not exactly the same as what the client expects
-        //refreshSlot((short) slot);
+        sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
     }
 
     /**
@@ -261,18 +254,15 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(convertedSlot);
-
         final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, convertedSlot, clicked, cursor);
-        if (clickResult.doRefresh())
-            sendSlotRefresh((short) slot, clicked);
-
+        if (clickResult.isCancel()) {
+            update();
+            return false;
+        }
         setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
-
-        if (!clickResult.isCancel())
-            callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
-
-        return !clickResult.isCancel();
+        callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
+        return true;
     }
 
     @Override
@@ -280,23 +270,21 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(convertedSlot);
-
         final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, convertedSlot, clicked, cursor);
-        if (clickResult.doRefresh())
-            sendSlotRefresh((short) slot, clicked);
-
+        if (clickResult.isCancel()) {
+            update();
+            return false;
+        }
         setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
-
-        if (!clickResult.isCancel())
-            callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
-
-        return !clickResult.isCancel();
+        callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
+        return true;
     }
 
     @Override
     public boolean middleClick(@NotNull Player player, int slot) {
         // TODO
+        update();
         return false;
     }
 
@@ -305,18 +293,18 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
         final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot, OFFSET);
-
         final InventoryClickResult clickResult = clickProcessor.drop(player, this,
                 all, slot, button, clicked, cursor);
-        if (clickResult.doRefresh())
-            sendSlotRefresh((short) slot, clicked);
-
+        if (clickResult.isCancel()) {
+            update();
+            return false;
+        }
         final ItemStack resultClicked = clickResult.getClicked();
-        if (resultClicked != null && !outsideDrop)
+        if (resultClicked != null && !outsideDrop) {
             setItemStack(slot, OFFSET, resultClicked);
+        }
         setCursorItem(clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        return true;
     }
 
     @Override
@@ -330,70 +318,58 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
                 this, this,
                 start, end, 1,
                 player, slot, clicked, cursor);
-        if (clickResult == null)
+        if (clickResult.isCancel()) {
+            update();
             return false;
-
+        }
         setItemStack(slot, OFFSET, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        update(); // FIXME: currently not properly client-predicted
+        return true;
     }
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
-        if (!getCursorItem().isAir())
-            return false;
-
+        final ItemStack cursorItem = getCursorItem();
+        if (!cursorItem.isAir()) return false;
         final ItemStack heldItem = getItemStack(key);
         final ItemStack clicked = getItemStack(slot, OFFSET);
-
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, key, clicked, heldItem);
-        if (clickResult.doRefresh()) {
-            sendSlotRefresh((short) slot, clicked);
+        if (clickResult.isCancel()) {
+            update();
+            return false;
         }
-
         setItemStack(slot, OFFSET, clickResult.getClicked());
         setItemStack(key, clickResult.getCursor());
-
-        if (!clickResult.isCancel())
-            callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem());
-
-        // Weird synchronization issue when omitted
-        update();
-
-        return !clickResult.isCancel();
+        callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, cursorItem);
+        return true;
     }
 
     @Override
     public boolean dragging(@NotNull Player player, int slot, int button) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = slot != -999 ? getItemStack(slot, OFFSET) : ItemStack.AIR;
-
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
                 slot, button,
                 clicked, cursor, s -> getItemStack(s, OFFSET),
                 (s, item) -> setItemStack(s, OFFSET, item));
-        if (clickResult == null) {
+        if (clickResult == null || clickResult.isCancel()) {
+            update();
             return false;
         }
-
-        if (clickResult.doRefresh())
-            update();
-
         setCursorItem(clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        return true;
     }
 
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, cursor);
-        if (clickResult == null)
-            return false;
-        if (clickResult.doRefresh())
+        if (clickResult.isCancel()) {
             update();
+            return false;
+        }
         setCursorItem(clickResult.getCursor());
-        return !clickResult.isCancel();
+        return true;
     }
 }

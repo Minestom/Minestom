@@ -267,23 +267,19 @@ public class Inventory extends AbstractInventory implements Viewable {
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-
         final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, slot, clicked, cursor);
-        if (clickResult.doRefresh()) {
-            updateFromClick(clickResult, player);
+        if (clickResult.isCancel()) {
+            updateAll(player);
+            return false;
         }
-
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         refreshPlayerCursorItem(player, clickResult.getCursor());
-
-        if (!clickResult.isCancel())
-            callClickEvent(player, isInWindow ? this : null, slot, ClickType.LEFT_CLICK, clicked, cursor);
-
-        return !clickResult.isCancel();
+        callClickEvent(player, isInWindow ? this : null, slot, ClickType.LEFT_CLICK, clicked, cursor);
+        return true;
     }
 
     @Override
@@ -293,23 +289,19 @@ public class Inventory extends AbstractInventory implements Viewable {
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-
         final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, slot, clicked, cursor);
-        if (clickResult.doRefresh()) {
-            updateFromClick(clickResult, player);
+        if (clickResult.isCancel()) {
+            updateAll(player);
+            return false;
         }
-
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         refreshPlayerCursorItem(player, clickResult.getCursor());
-
-        if (!clickResult.isCancel())
-            callClickEvent(player, isInWindow ? this : null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
-
-        return !clickResult.isCancel();
+        callClickEvent(player, isInWindow ? this : null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
+        return true;
     }
 
     @Override
@@ -319,28 +311,23 @@ public class Inventory extends AbstractInventory implements Viewable {
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack cursor = getCursorItem(player); // Isn't used in the algorithm
-
         final InventoryClickResult clickResult = clickProcessor.shiftClick(
                 isInWindow ? this : playerInventory,
                 isInWindow ? playerInventory : this,
                 0, isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1,
                 player, slot, clicked, cursor);
-        if (clickResult == null)
+        if (clickResult.isCancel()) {
+            updateAll(player);
             return false;
-
+        }
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-
-        if (clickResult.doRefresh()) {
-            update(player);
-        }
-
+        updateAll(player); // FIXME: currently not properly client-predicted
         refreshPlayerCursorItem(player, clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        return true;
     }
 
     @Override
@@ -350,31 +337,25 @@ public class Inventory extends AbstractInventory implements Viewable {
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack heldItem = playerInventory.getItemStack(key);
-
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, key, clicked, heldItem);
-        if (clickResult.doRefresh()) {
-            updateFromClick(clickResult, player);
+        if (clickResult.isCancel()) {
+            updateAll(player);
+            return false;
         }
-
         if (isInWindow) {
             setItemStack(slot, clickResult.getClicked());
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         playerInventory.setItemStack(key, clickResult.getCursor());
-
-        if (!clickResult.isCancel())
-            callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
-
-        // Weird synchronization issue when omitted
-        updateFromClick(clickResult, player);
-
-        return !clickResult.isCancel();
+        callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, getCursorItem(player));
+        return true;
     }
 
     @Override
     public boolean middleClick(@NotNull Player player, int slot) {
         // TODO
+        update(player);
         return false;
     }
 
@@ -387,14 +368,12 @@ public class Inventory extends AbstractInventory implements Viewable {
         final ItemStack clicked = outsideDrop ?
                 ItemStack.AIR : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot));
         final ItemStack cursor = getCursorItem(player);
-
         final InventoryClickResult clickResult = clickProcessor.drop(player, this,
                 all, slot, button, clicked, cursor);
-
-        if (clickResult.doRefresh()) {
-            updateFromClick(clickResult, player);
+        if (clickResult.isCancel()) {
+            updateAll(player);
+            return false;
         }
-
         final ItemStack resultClicked = clickResult.getClicked();
         if (!outsideDrop && resultClicked != null) {
             if (isInWindow) {
@@ -403,10 +382,8 @@ public class Inventory extends AbstractInventory implements Viewable {
                 playerInventory.setItemStack(clickSlot, resultClicked);
             }
         }
-
         refreshPlayerCursorItem(player, clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        return true;
     }
 
     @Override
@@ -418,7 +395,6 @@ public class Inventory extends AbstractInventory implements Viewable {
                 (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot)) :
                 ItemStack.AIR;
         final ItemStack cursor = getCursorItem(player);
-
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
                 slot, button,
                 clicked, cursor,
@@ -433,18 +409,12 @@ public class Inventory extends AbstractInventory implements Viewable {
                         playerInventory.setItemStack(PlayerInventoryUtils.convertSlot(s, offset), item);
                     }
                 });
-
-        if (clickResult == null) {
+        if (clickResult == null || clickResult.isCancel()) {
+            updateAll(player);
             return false;
         }
-
-        if (clickResult.doRefresh()) {
-            updateFromClick(clickResult, player);
-        }
-
         refreshPlayerCursorItem(player, clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        return true;
     }
 
     @Override
@@ -452,32 +422,18 @@ public class Inventory extends AbstractInventory implements Viewable {
         final PlayerInventory playerInventory = player.getInventory();
         final ItemStack cursor = getCursorItem(player);
         final boolean isInWindow = isClickInWindow(slot);
-
         final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
                 this, player, slot, cursor);
-
-        if (clickResult == null)
+        if (clickResult.isCancel()) {
+            updateAll(player);
             return false;
-
-        if (clickResult.doRefresh())
-            updateFromClick(clickResult, player);
-
+        }
         refreshPlayerCursorItem(player, clickResult.getCursor());
-
-        return !clickResult.isCancel();
+        return true;
     }
 
-    /**
-     * Used to update the inventory for a specific player in order to fix his cancelled actions
-     *
-     * @param clickResult the action result
-     * @param player      the player who did the action
-     */
-    private void updateFromClick(InventoryClickResult clickResult, Player player) {
-        if (clickResult.isPlayerInventory()) {
-            player.getInventory().update();
-        } else {
-            update(player);
-        }
+    private void updateAll(Player player) {
+        player.getInventory().update();
+        update(player);
     }
 }

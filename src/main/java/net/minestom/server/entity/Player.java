@@ -282,7 +282,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
-        getInventory().update();
     }
 
     /**
