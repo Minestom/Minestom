@@ -144,16 +144,14 @@ final class BlockImpl implements Block {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BlockImpl block = (BlockImpl) o;
-        return registry.equals(block.registry) &&
-                propertyEntry.equals(block.propertyEntry) &&
-                properties.equals(block.properties) &&
+        return stateId() == block.stateId() &&
                 Objects.equals(nbt, block.nbt) &&
                 Objects.equals(handler, block.handler);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(registry, propertyEntry, properties, nbt, handler);
+        return Objects.hash(stateId(), nbt, handler);
     }
 
     @Override
