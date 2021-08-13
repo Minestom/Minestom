@@ -483,10 +483,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 // connection null during Player initialization (due to #super call)
                 self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
             }
+            EntityPropertiesPacket propertiesPacket = getPropertiesPacket(Collections.singleton(attributeInstance));
             if (self) {
-                sendPacketToViewersAndSelf(getPropertiesPacket());
+                sendPacketToViewersAndSelf(propertiesPacket);
             } else {
-                sendPacketToViewers(getPropertiesPacket());
+                sendPacketToViewers(propertiesPacket);
             }
         }
     }
@@ -600,8 +601,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @NotNull
     protected EntityPropertiesPacket getPropertiesPacket() {
+        return getPropertiesPacket(attributeModifiers.values());
+    }
+
+    /**
+     * Gets an {@link EntityPropertiesPacket} for this entity with the specified attribute values.
+     *
+     * @param attributes the attributes to include in the packet
+     * @return an {@link EntityPropertiesPacket} linked to this entity
+     */
+    @NotNull
+    protected EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
         // Get all the attributes which should be sent to the client
-        final AttributeInstance[] instances = attributeModifiers.values().stream()
+        final AttributeInstance[] instances = attributes.stream()
                 .filter(i -> i.getAttribute().isShared())
                 .toArray(AttributeInstance[]::new);
 

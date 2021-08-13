@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
@@ -99,14 +100,9 @@ public class PlayerDiggingListener {
             }
 
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
-            Player.Hand hand = null;
-            if (player.isEating()) {
-                hand = player.getEatingHand();
-            } else if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
-                hand = Player.Hand.OFF;
-            } else if (player.getItemInHand(Player.Hand.MAIN).getMaterial().hasState()) {
-                hand = Player.Hand.MAIN;
-            }
+            PlayerMeta meta = player.getEntityMeta();
+            if (!meta.isHandActive()) return;
+            Player.Hand hand = meta.getActiveHand();
 
             player.refreshEating(null);
             player.triggerStatus((byte) 9);
