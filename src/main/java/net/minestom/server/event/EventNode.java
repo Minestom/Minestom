@@ -514,6 +514,13 @@ public class EventNode<T extends Event> {
         return this;
     }
 
+    public <I> void addInter(@NotNull EventInterface<I> inter, @NotNull I value) {
+        inter.mapped.forEach((eventType, consumer) -> {
+            // TODO cache so listeners can be removed from the EventInterface
+            addListener((EventListener<? extends T>) EventListener.builder(eventType).handler(event -> consumer.accept(value, event)).build());
+        });
+    }
+
     private void increaseChildListenerCount(Class<? extends T> eventClass, int count) {
         var entry = listenerMap.computeIfAbsent(eventClass, aClass -> new ListenerEntry<>());
         ListenerEntry.addAndGet(entry, count);
