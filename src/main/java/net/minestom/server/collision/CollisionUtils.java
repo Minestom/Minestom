@@ -10,6 +10,9 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CollisionUtils {
 
     private static final Vec Y_AXIS = new Vec(0, 1, 0);
@@ -71,30 +74,27 @@ public class CollisionUtils {
      * @param corners       the corners to check against
      * @return result of the step
      */
-    private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, Vec... corners) {
-        if (corners.length == 0)
-            return new StepResult(startPosition, false); // avoid degeneracy in following computations
-
-        final Vec[] originalCorners = corners.clone();
+    private static StepResult stepAxis(Instance instance, Chunk originChunk, Vec startPosition, Vec axis, double stepAmount, List<Vec> corners) {
+        final List<Vec> mutableCorners = new ArrayList<>(corners);
         final double sign = Math.signum(stepAmount);
         final int blockLength = (int) stepAmount;
         final double remainingLength = stepAmount - blockLength;
         // used to determine if 'remainingLength' should be used
         boolean collisionFound = false;
         for (int i = 0; i < Math.abs(blockLength); i++) {
-            collisionFound = stepOnce(instance, originChunk, axis, sign, corners);
+            collisionFound = stepOnce(instance, originChunk, axis, sign, mutableCorners);
             if (collisionFound) break;
         }
 
         // add remainingLength
         if (!collisionFound) {
-            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, corners);
+            collisionFound = stepOnce(instance, originChunk, axis, remainingLength, mutableCorners);
         }
 
         // find the corner which moved the least
         double smallestDisplacement = Double.POSITIVE_INFINITY;
-        for (int i = 0; i < corners.length; i++) {
-            final double displacement = originalCorners[i].distance(corners[i]);
+        for (int i = 0; i < corners.size(); i++) {
+            final double displacement = corners.get(i).distance(mutableCorners.get(i));
             if (displacement < smallestDisplacement) {
                 smallestDisplacement = displacement;
             }
@@ -111,10 +111,10 @@ public class CollisionUtils {
      * @param corners  the corners of the bounding box to consider
      * @return true if found collision
      */
-    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, Vec[] corners) {
+    private static boolean stepOnce(Instance instance, Chunk originChunk, Vec axis, double amount, List<Vec> corners) {
         final double sign = Math.signum(amount);
-        for (int cornerIndex = 0; cornerIndex < corners.length; cornerIndex++) {
-            final Vec originalCorner = corners[cornerIndex];
+        for (int cornerIndex = 0; cornerIndex < corners.size(); cornerIndex++) {
+            final Vec originalCorner = corners.get(cornerIndex);
             final Vec newCorner = originalCorner.add(axis.mul(amount));
             final Chunk chunk = ChunkUtils.retrieve(instance, originChunk, newCorner);
             if (!ChunkUtils.isLoaded(chunk)) {
@@ -122,17 +122,16 @@ public class CollisionUtils {
                 return true;
             }
             final Block block = chunk.getBlock(newCorner);
-
             // TODO: block collision boxes
             // TODO: for the moment, always consider a full block
             if (block.isSolid()) {
-                corners[cornerIndex] = new Vec(
+                corners.set(cornerIndex, new Vec(
                         Math.abs(axis.x()) > 10e-16 ? newCorner.blockX() - axis.x() * sign : originalCorner.x(),
                         Math.abs(axis.y()) > 10e-16 ? newCorner.blockY() - axis.y() * sign : originalCorner.y(),
-                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z());
+                        Math.abs(axis.z()) > 10e-16 ? newCorner.blockZ() - axis.z() * sign : originalCorner.z()));
                 return true;
             }
-            corners[cornerIndex] = newCorner;
+            corners.set(cornerIndex, newCorner);
         }
         return false;
     }
