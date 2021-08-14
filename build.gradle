@@ -39,7 +39,6 @@ allprojects {
     }
     javadoc {
         options {
-            destinationDir(file("docs"))
             addBooleanOption('html5', true)
             links "https://jd.adventure.kyori.net/api/$adventureVersion/"
             links "https://docs.oracle.com/en/java/javase/11/docs/api/"
