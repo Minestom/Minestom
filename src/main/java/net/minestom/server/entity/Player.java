@@ -282,6 +282,8 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.playerConnection.sendPacket(getPropertiesPacket()); // Send default properties
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
+
+        setInstance(spawnInstance);
     }
 
     /**
@@ -423,7 +425,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Runnable called when teleportation is successful (after loading and sending necessary chunk)
         teleport(respawnEvent.getRespawnPosition()).thenRun(this::refreshAfterTeleport);
     }
-    
+
     /**
      * Refreshes the command list for this player. This checks the
      * {@link net.minestom.server.command.builder.condition.CommandCondition}s
@@ -497,12 +499,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
-        Check.argCondition(this.instance == instance, "Instance should be different than the current one");
+        final Instance currentInstance = this.instance;
+        Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
         // true if the chunks need to be sent to the client, can be false if the instances share the same chunks (e.g. SharedInstance)
-        if (!InstanceUtils.areLinked(this.instance, instance) || !spawnPosition.sameChunk(this.position)) {
+        if (!InstanceUtils.areLinked(currentInstance, instance) || !spawnPosition.sameChunk(this.position)) {
+            final boolean firstSpawn = currentInstance == null;
             return instance.loadOptionalChunk(spawnPosition)
-                    .thenRun(() -> spawnPlayer(instance, spawnPosition,
-                            this.instance == null,
+                    .thenRun(() -> spawnPlayer(instance, spawnPosition, firstSpawn,
                             !Objects.equals(dimensionType, instance.getDimensionType()), true));
         } else {
             // The player already has the good version of all the chunks.

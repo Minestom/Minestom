@@ -33,7 +33,6 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -713,9 +712,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
-        if (isRemoved()) return AsyncUtils.VOID_FUTURE;
-        if (this.instance != null) {
-            this.instance.UNSAFE_removeEntity(this);
+        final Instance previousInstance = this.instance;
+        if (previousInstance != null) {
+            previousInstance.UNSAFE_removeEntity(this);
         }
         this.position = spawnPosition;
         this.isActive = true;

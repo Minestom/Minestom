@@ -372,9 +372,8 @@ public final class ConnectionManager {
             EventDispatcher.call(loginEvent);
             final Instance spawningInstance = loginEvent.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the PlayerLoginEvent");
-            // Spawn the player at Player#getRespawnPoint during the next instance tick
+            // Spawn the player at Player#getRespawnPoint
             waitingPlayer.UNSAFE_init(spawningInstance);
-            spawningInstance.scheduleNextTick(waitingPlayer::setInstance);
         }
     }
 
