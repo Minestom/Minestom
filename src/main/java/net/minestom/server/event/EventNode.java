@@ -177,6 +177,12 @@ public class EventNode<T extends Event> {
         return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
+    public static <E extends Event, V> @NotNull Mapped<E, V> mapped(@NotNull String name,
+                                                                    @NotNull EventFilter<E, V> filter,
+                                                                    @NotNull V value) {
+        return new Mapped<>(name, filter, value);
+    }
+
     private static <E extends Event, V> EventNode<E> create(@NotNull String name,
                                                             @NotNull EventFilter<E, V> filter,
                                                             @Nullable BiPredicate<E, V> predicate) {
@@ -188,6 +194,7 @@ public class EventNode<T extends Event> {
 
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
+    private final Map<Object, EventNode<T>> mappedNode = new ConcurrentHashMap<>();
 
     protected final String name;
     protected final EventFilter<T, ?> filter;
@@ -211,12 +218,11 @@ public class EventNode<T extends Event> {
      * @param event the called event
      * @return true to enter the node, false otherwise
      */
-    protected boolean condition(@NotNull T event) {
+    protected boolean condition(@NotNull T event, @Nullable Object handler) {
         if (predicate == null)
             return true;
-        final var value = filter.getHandler(event);
         try {
-            return predicate.test(event, value);
+            return predicate.test(event, handler);
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
             return false;
@@ -238,9 +244,17 @@ public class EventNode<T extends Event> {
             // Invalid event type
             return;
         }
-        if (!condition(event)) {
+        final var value = filter.getHandler(event);
+        if (!condition(event, value)) {
             // Cancelled by superclass
             return;
+        }
+        // Mapped listeners
+        if (value != null && !mappedNode.isEmpty()) {
+            // FIXME: `value` is always null when `EventFilter#all` is used
+            //  we might need a way to retrieve all the possible handlers from an event class
+            final var map = mappedNode.get(value);
+            if (map != null) map.call(event);
         }
         // Process listener list
         final var entry = listenerMap.get(eventClass);
@@ -514,6 +528,10 @@ public class EventNode<T extends Event> {
         return this;
     }
 
+    public <E extends T, V> void map(@NotNull Mapped<E, V> map) {
+        this.mappedNode.put(map.value, (EventNode<T>) map);
+    }
+
     public <I> void addInter(@NotNull EventInterface<I> inter, @NotNull I value) {
         inter.mapped.forEach((eventType, consumer) -> {
             // TODO cache so listeners can be removed from the EventInterface
@@ -557,6 +575,15 @@ public class EventNode<T extends Event> {
 
         private static int addAndGet(ListenerEntry<?> entry, int add) {
             return CHILD_UPDATER.addAndGet(entry, add);
+        }
+    }
+
+    public static final class Mapped<T extends Event, V> extends EventNode<T> {
+        private final V value;
+
+        Mapped(@NotNull String name, @NotNull EventFilter<T, ?> filter, @NotNull V value) {
+            super(name, filter, null);
+            this.value = value;
         }
     }
 }
