@@ -119,7 +119,8 @@ public class WindowListener {
             ((PlayerInventory) inventory).setCursorItem(itemStack);
         } else if (inventory instanceof Inventory) {
             ((Inventory) inventory).setCursorItem(player, itemStack);
+        } else {
+            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
         }
-        throw new RuntimeException("Invalid inventory: " + inventory.getClass());
     }
 }
