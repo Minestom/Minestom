@@ -577,17 +577,21 @@ public class EventNode<T extends Event> {
     private static List<Function<Event, Object>> getEventMapping(Class<? extends Event> eventClass) {
         return HANDLER_SUPPLIERS.computeIfAbsent(eventClass, clazz -> {
             List<Function<Event, Object>> result = new ArrayList<>();
-            if (EntityEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((EntityEvent) e).getEntity());
-            } else if (PlayerEvent.class.isAssignableFrom(clazz)) {
+            if (PlayerEvent.class.isAssignableFrom(clazz)) {
                 result.add(e -> ((PlayerEvent) e).getPlayer());
-            } else if (ItemEvent.class.isAssignableFrom(clazz)) {
+            } else if (EntityEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((EntityEvent) e).getEntity());
+            }
+            if (ItemEvent.class.isAssignableFrom(clazz)) {
                 result.add(e -> ((ItemEvent) e).getItemStack());
-            } else if (InstanceEvent.class.isAssignableFrom(clazz)) {
+            }
+            if (InstanceEvent.class.isAssignableFrom(clazz)) {
                 result.add(e -> ((InstanceEvent) e).getInstance());
-            } else if (InventoryEvent.class.isAssignableFrom(clazz)) {
+            }
+            if (InventoryEvent.class.isAssignableFrom(clazz)) {
                 result.add(e -> ((InventoryEvent) e).getInventory());
-            } else if (BlockEvent.class.isAssignableFrom(clazz)) {
+            }
+            if (BlockEvent.class.isAssignableFrom(clazz)) {
                 result.add(e -> ((BlockEvent) e).getBlock());
             }
             return result;
