@@ -1,7 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.*;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.validate.Check;
@@ -16,6 +16,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -189,6 +190,7 @@ public class EventNode<T extends Event> {
         return new EventNode<>(name, filter, predicate != null ? (e, o) -> predicate.test(e, (V) o) : null);
     }
 
+    private static final Map<Class<? extends Event>, List<Function<Event, Object>>> HANDLER_SUPPLIERS = new ConcurrentHashMap<>();
     private static final Object GLOBAL_CHILD_LOCK = new Object();
     private final Object lock = new Object();
 
@@ -218,11 +220,12 @@ public class EventNode<T extends Event> {
      * @param event the called event
      * @return true to enter the node, false otherwise
      */
-    protected boolean condition(@NotNull T event, @Nullable Object handler) {
+    protected boolean condition(@NotNull T event) {
         if (predicate == null)
             return true;
+        final var value = filter.getHandler(event);
         try {
-            return predicate.test(event, handler);
+            return predicate.test(event, value);
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
             return false;
@@ -244,17 +247,18 @@ public class EventNode<T extends Event> {
             // Invalid event type
             return;
         }
-        final var value = filter.getHandler(event);
-        if (!condition(event, value)) {
+        if (!condition(event)) {
             // Cancelled by superclass
             return;
         }
         // Mapped listeners
-        if (value != null && !mappedNode.isEmpty()) {
-            // FIXME: `value` is always null when `EventFilter#all` is used
-            //  we might need a way to retrieve all the possible handlers from an event class
-            final var map = mappedNode.get(value);
-            if (map != null) map.call(event);
+        if (!mappedNode.isEmpty()) {
+            // Check mapped listeners for each individual event handler
+            getEventMapping(eventClass).forEach(function -> {
+                final var handler = function.apply(event);
+                final var map = mappedNode.get(handler);
+                if (map != null) map.call(event);
+            });
         }
         // Process listener list
         final var entry = listenerMap.get(eventClass);
@@ -564,6 +568,30 @@ public class EventNode<T extends Event> {
         final boolean nameCheck = node.getName().equals(name);
         final boolean typeCheck = eventType.isAssignableFrom(node.eventType);
         return nameCheck && typeCheck;
+    }
+
+    // Returns a list of (event->object) functions used to retrieve handler.
+    // For example `PlayerUseItemEvent` should return a function to retrieve the player,
+    // and another for the item.
+    // All event trait are currently hardcoded.
+    private static List<Function<Event, Object>> getEventMapping(Class<? extends Event> eventClass) {
+        return HANDLER_SUPPLIERS.computeIfAbsent(eventClass, clazz -> {
+            List<Function<Event, Object>> result = new ArrayList<>();
+            if (EntityEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((EntityEvent) e).getEntity());
+            } else if (PlayerEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((PlayerEvent) e).getPlayer());
+            } else if (ItemEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((ItemEvent) e).getItemStack());
+            } else if (InstanceEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((InstanceEvent) e).getInstance());
+            } else if (InventoryEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((InventoryEvent) e).getInventory());
+            } else if (BlockEvent.class.isAssignableFrom(clazz)) {
+                result.add(e -> ((BlockEvent) e).getBlock());
+            }
+            return result;
+        });
     }
 
     private static class ListenerEntry<T extends Event> {
