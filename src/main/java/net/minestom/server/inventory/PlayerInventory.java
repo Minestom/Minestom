@@ -363,7 +363,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, cursor);
+        final ItemStack clicked = getItemStack(slot, OFFSET);
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
             return false;

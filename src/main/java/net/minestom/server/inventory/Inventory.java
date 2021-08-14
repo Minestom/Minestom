@@ -421,10 +421,14 @@ public class Inventory extends AbstractInventory implements Viewable {
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final PlayerInventory playerInventory = player.getInventory();
-        final ItemStack cursor = getCursorItem(player);
         final boolean isInWindow = isClickInWindow(slot);
+        final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
+        final ItemStack clicked = slot != -999 ?
+                (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot)) :
+                ItemStack.AIR;
+        final ItemStack cursor = getCursorItem(player);
         final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
-                this, player, slot, cursor);
+                this, player, slot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
