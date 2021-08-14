@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -155,6 +155,24 @@ implements <a href="../ObjectDataProvider.html" title="interface in net.minestom
 <!--   -->
 </a>
 <h3>Field Summary</h3>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#MAX_OFFSET">MAX_OFFSET</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#OFFSET">OFFSET</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.entity.metadata.EntityMeta">
 <!--   -->
@@ -227,7 +245,7 @@ implements <a href="../ObjectDataProvider.html" title="interface in net.minestom
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.metadata.<a href="../EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></h3>
-<code><a href="../EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="../EntityMeta.html#getCustomName()">getCustomName</a>, <a href="../EntityMeta.html#getCustomNameJson()">getCustomNameJson</a>, <a href="../EntityMeta.html#getMask(byte)">getMask</a>, <a href="../EntityMeta.html#getMaskBit(byte,byte)">getMaskBit</a>, <a href="../EntityMeta.html#getPose()">getPose</a>, <a href="../EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="../EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="../EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="../EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="../EntityMeta.html#isInvisible()">isInvisible</a>, <a href="../EntityMeta.html#isOnFire()">isOnFire</a>, <a href="../EntityMeta.html#isSilent()">isSilent</a>, <a href="../EntityMeta.html#isSneaking()">isSneaking</a>, <a href="../EntityMeta.html#isSprinting()">isSprinting</a>, <a href="../EntityMeta.html#isSwimming()">isSwimming</a>, <a href="../EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="../EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="../EntityMeta.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="../EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="../EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="../EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="../EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="../EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="../EntityMeta.html#setMask(byte,byte)">setMask</a>, <a href="../EntityMeta.html#setMaskBit(byte,byte,boolean)">setMaskBit</a>, <a href="../EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="../EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="../EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="../EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="../EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="../EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="../EntityMeta.html#setSwimming(boolean)">setSwimming</a></code></li>
+<code><a href="../EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="../EntityMeta.html#getCustomName()">getCustomName</a>, <a href="../EntityMeta.html#getCustomNameJson()">getCustomNameJson</a>, <a href="../EntityMeta.html#getMask(int)">getMask</a>, <a href="../EntityMeta.html#getMaskBit(int,byte)">getMaskBit</a>, <a href="../EntityMeta.html#getPose()">getPose</a>, <a href="../EntityMeta.html#getTickFrozen()">getTickFrozen</a>, <a href="../EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="../EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="../EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="../EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="../EntityMeta.html#isInvisible()">isInvisible</a>, <a href="../EntityMeta.html#isOnFire()">isOnFire</a>, <a href="../EntityMeta.html#isSilent()">isSilent</a>, <a href="../EntityMeta.html#isSneaking()">isSneaking</a>, <a href="../EntityMeta.html#isSprinting()">isSprinting</a>, <a href="../EntityMeta.html#isSwimming()">isSwimming</a>, <a href="../EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="../EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="../EntityMeta.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="../EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="../EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="../EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="../EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="../EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="../EntityMeta.html#setMask(int,byte)">setMask</a>, <a href="../EntityMeta.html#setMaskBit(int,byte,boolean)">setMaskBit</a>, <a href="../EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="../EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="../EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="../EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="../EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="../EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="../EntityMeta.html#setSwimming(boolean)">setSwimming</a>, <a href="../EntityMeta.html#setTickFrozen(int)">setTickFrozen</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -245,6 +263,42 @@ implements <a href="../ObjectDataProvider.html" title="interface in net.minestom
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="OFFSET">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>OFFSET</h4>
+<pre>public static final&nbsp;byte OFFSET</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../constant-values.html#net.minestom.server.entity.metadata.item.ItemEntityMeta.OFFSET">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="MAX_OFFSET">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>MAX_OFFSET</h4>
+<pre>public static final&nbsp;byte MAX_OFFSET</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../constant-values.html#net.minestom.server.entity.metadata.item.ItemEntityMeta.MAX_OFFSET">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -378,7 +432,7 @@ public&nbsp;@NotNull <a href="../../../item/ItemStack.html" title="class in net.
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

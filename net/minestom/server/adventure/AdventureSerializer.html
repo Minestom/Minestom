@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":41,"i1":41,"i2":41,"i3":41,"i4":41,"i5":41,"i6":41,"i7":41,"i8":41,"i9":41,"i10":41,"i11":41};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -130,19 +130,23 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">AdventureSerializer</span>
+<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public class <span class="typeNameLabel">AdventureSerializer</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html" title="class in net.minestom.server.adventure"><code>MinestomAdventure</code></a></div>
+</div>
 <div class="block">Manager class for handling Adventure serialization. By default AdventureSerializer will simply
  serialize components to Strings using <code>GsonComponentSerializer</code>. However, AdventureSerializer
  class can be used to change the way text is serialized. For example, a pre-JSON
  implementation of Minestom could change AdventureSerializer to the plain component serializer.
  <br><br>
  This manager also performs translation on all messages and the <code>serialize</code>
- method should be used when converting <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>Component</code></a>s into strings. This allows for
- messages with <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> to be automatically translated into the locale
+ method should be used when converting <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>Component</code></a>s into strings. This allows for
+ messages with <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> to be automatically translated into the locale
  of specific players, or other elements which implement <a href="Localizable.html" title="interface in net.minestom.server.adventure"><code>Localizable</code></a>. To add your
- own translations, use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true#addSource(net.kyori.adventure.translation.Translator)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>GlobalTranslator.addSource(Translator)</code></a> with a
- <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/translation/TranslationRegistry.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>TranslationRegistry</code></a> or your own implementation of <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/translation/Translator.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator</code></a>.</div>
+ own translations, use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true#addSource(net.kyori.adventure.translation.Translator)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>GlobalTranslator.addSource(Translator)</code></a> with a
+ <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/TranslationRegistry.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>TranslationRegistry</code></a> or your own implementation of <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -167,13 +171,10 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#AUTOMATIC_COMPONENT_TRANSLATION">AUTOMATIC_COMPONENT_TRANSLATION</a></span></code></th>
 <td class="colLast">
-<div class="block">If components should be automatically translated in outgoing packets.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html#AUTOMATIC_COMPONENT_TRANSLATION"><code>MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION</code></a></div>
+</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static <a href="Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#NULL_LOCALIZABLE">NULL_LOCALIZABLE</a></span></code></th>
-<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -187,7 +188,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -195,94 +196,114 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#areAnyTranslatable(java.util.Collection)">areAnyTranslatable</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;components)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#areAnyTranslatable(java.util.Collection)">areAnyTranslatable</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;components)</code></th>
 <td class="colLast">
-<div class="block">Checks if any of a series of components are translatable server-side.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="../utils/ComponentUtils.html#areAnyTranslatable(java.util.Collection)"><code>ComponentUtils.areAnyTranslatable(Collection)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDefaultLocale()">getDefaultLocale</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the default locale used to translate <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> if, when
- <a href="#translate(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)"><code>translate(Component, Localizable)</code></a> is called with a localizable that
- does not have a locale.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html#getDefaultLocale()"><code>MinestomAdventure.getDefaultLocale()</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
+<td class="colFirst"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSerializer()">getSerializer</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the root serializer that is used to convert components into strings.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">The serializer is no longer in use, use the adventure-provided serializers</div>
+</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>static @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink">GlobalTranslator</a></code></td>
+<td class="colFirst"><code>static @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink">GlobalTranslator</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTranslator()">getTranslator</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the global translator object used by AdventureSerializer manager.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true#get()" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>GlobalTranslator.get()</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTranslatable(net.kyori.adventure.text.Component)">isTranslatable</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTranslatable(net.kyori.adventure.text.Component)">isTranslatable</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</code></th>
 <td class="colLast">
-<div class="block">Checks if a component can be translated server-side.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="../utils/ComponentUtils.html#isTranslatable(net.kyori.adventure.text.Component)"><code>ComponentUtils.isTranslatable(Component)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serialize(net.kyori.adventure.text.Component)">serialize</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#serialize(net.kyori.adventure.text.Component)">serialize</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</code></th>
 <td class="colLast">
-<div class="block">Serializes a component into a string using <a href="#getSerializer()"><code>getSerializer()</code></a>.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use the Adventure serializers directly</div>
+</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultLocale(java.util.Locale)">setDefaultLocale</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;defaultLocale)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultLocale(java.util.Locale)">setDefaultLocale</a></span>&#8203;(@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;defaultLocale)</code></th>
 <td class="colLast">
-<div class="block">Sets the default locale used to translate <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> if, when
- <a href="#translate(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)"><code>translate(Component, Localizable)</code></a> is called with a localizable that
- does not have a locale.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html#setDefaultLocale(java.util.Locale)"><code>MinestomAdventure.setDefaultLocale(Locale)</code></a>}</div>
+</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSerializer(java.util.function.Function)">setSerializer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;serializer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSerializer(java.util.function.Function)">setSerializer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;serializer)</code></th>
 <td class="colLast">
-<div class="block">Sets the root serializer that is used to convert components into strings.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">The serializer is no longer in use</div>
+</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>static @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(net.kyori.adventure.text.Component,java.util.Locale)">translate</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<td class="colFirst"><code>static @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(net.kyori.adventure.text.Component,java.util.Locale)">translate</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;locale)</code></th>
 <td class="colLast">
-<div class="block">Prepares a component for serialization.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code>static @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)">translate</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<td class="colFirst"><code>static @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translate(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)">translate</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
          @NotNull <a href="Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>&nbsp;localizable)</code></th>
 <td class="colLast">
-<div class="block">Prepares a component for serialization.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateAndSerialize(net.kyori.adventure.text.Component,java.util.Locale)">translateAndSerialize</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateAndSerialize(net.kyori.adventure.text.Component,java.util.Locale)">translateAndSerialize</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;locale)</code></th>
 <td class="colLast">
-<div class="block">Prepares and then serializes a component.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a> and the Adventure serializers</div>
+</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateAndSerialize(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)">translateAndSerialize</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#translateAndSerialize(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)">translateAndSerialize</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
                      @NotNull <a href="Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>&nbsp;localizable)</code></th>
 <td class="colLast">
-<div class="block">Prepares and then serializes a component.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a> and the Adventure serializers</div>
+</div>
 </td>
 </tr>
 </table>
@@ -312,24 +333,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="AUTOMATIC_COMPONENT_TRANSLATION">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>AUTOMATIC_COMPONENT_TRANSLATION</h4>
-<pre>public static final&nbsp;boolean AUTOMATIC_COMPONENT_TRANSLATION</pre>
-<div class="block">If components should be automatically translated in outgoing packets.</div>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../constant-values.html#net.minestom.server.adventure.AdventureSerializer.AUTOMATIC_COMPONENT_TRANSLATION">Constant Field Values</a></dd>
-</dl>
-</li>
-</ul>
-<a id="NULL_LOCALIZABLE">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>NULL_LOCALIZABLE</h4>
-<pre>protected static final&nbsp;<a href="Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a> NULL_LOCALIZABLE</pre>
+<h4>AUTOMATIC_COMPONENT_TRANSLATION</h4>
+<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static final&nbsp;boolean AUTOMATIC_COMPONENT_TRANSLATION</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html#AUTOMATIC_COMPONENT_TRANSLATION"><code>MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION</code></a></div>
+</div>
+<div class="block">If components should be automatically translated in outgoing packets.</div>
 </li>
 </ul>
 </li>
@@ -348,8 +360,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>getSerializer</h4>
-<pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;getSerializer()</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+@NotNull
+public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;getSerializer()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">The serializer is no longer in use, use the adventure-provided serializers</div>
+</div>
 <div class="block">Gets the root serializer that is used to convert components into strings.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -363,8 +379,12 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>setSerializer</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;setSerializer&#8203;(@NotNull
-                                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;serializer)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public static&nbsp;void&nbsp;setSerializer&#8203;(@NotNull
+                                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;serializer)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">The serializer is no longer in use</div>
+</div>
 <div class="block">Sets the root serializer that is used to convert components into strings.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -378,9 +398,13 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>getDefaultLocale</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+@NotNull
 public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;getDefaultLocale()</pre>
-<div class="block">Gets the default locale used to translate <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> if, when
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html#getDefaultLocale()"><code>MinestomAdventure.getDefaultLocale()</code></a></div>
+</div>
+<div class="block">Gets the default locale used to translate <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> if, when
  <a href="#translate(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)"><code>translate(Component, Localizable)</code></a> is called with a localizable that
  does not have a locale.</div>
 <dl>
@@ -395,14 +419,18 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>setDefaultLocale</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;setDefaultLocale&#8203;(@NotNull
-                                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;defaultLocale)</pre>
-<div class="block">Sets the default locale used to translate <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> if, when
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static&nbsp;void&nbsp;setDefaultLocale&#8203;(@Nullable
+                                    @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;defaultLocale)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="MinestomAdventure.html#setDefaultLocale(java.util.Locale)"><code>MinestomAdventure.setDefaultLocale(Locale)</code></a>}</div>
+</div>
+<div class="block">Sets the default locale used to translate <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/TranslatableComponent.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink"><code>TranslatableComponent</code></a> if, when
  <a href="#translate(net.kyori.adventure.text.Component,net.minestom.server.adventure.Localizable)"><code>translate(Component, Localizable)</code></a> is called with a localizable that
  does not have a locale.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>defaultLocale</code> - the new default locale</dd>
+<dd><code>defaultLocale</code> - the new default locale, or <code>null</code> to return to the default</dd>
 </dl>
 </li>
 </ul>
@@ -412,10 +440,14 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>getTranslator</h4>
-<pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink">GlobalTranslator</a>&nbsp;getTranslator()</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+@NotNull
+public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true" title="class or interface in net.kyori.adventure.translation" class="externalLink">GlobalTranslator</a>&nbsp;getTranslator()</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true#get()" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>GlobalTranslator.get()</code></a></div>
+</div>
 <div class="block">Gets the global translator object used by AdventureSerializer manager. This is just shorthand for
- <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true#get()" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>GlobalTranslator.get()</code></a>.</div>
+ <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/GlobalTranslator.html?is-external=true#get()" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>GlobalTranslator.get()</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the global translator</dd>
@@ -428,11 +460,15 @@ public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/ne
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;translate&#8203;(@NotNull
-                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+@NotNull
+public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;translate&#8203;(@NotNull
+                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
                                            @NotNull
                                            @NotNull <a href="Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>&nbsp;localizable)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a></div>
+</div>
 <div class="block">Prepares a component for serialization. This runs the component through the
  translator for the localizable's locale.</div>
 <dl>
@@ -450,11 +486,15 @@ public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/ne
 <ul class="blockList">
 <li class="blockList">
 <h4>translate</h4>
-<pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;translate&#8203;(@NotNull
-                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+@NotNull
+public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;translate&#8203;(@NotNull
+                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
                                            @NotNull
                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;locale)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a></div>
+</div>
 <div class="block">Prepares a component for serialization. This runs the component through the
  translator for the locale.</div>
 <dl>
@@ -472,9 +512,13 @@ public static&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/ne
 <ul class="blockList">
 <li class="blockList">
 <h4>serialize</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+@NotNull
 public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;serialize&#8203;(@NotNull
-                                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</pre>
+                                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use the Adventure serializers directly</div>
+</div>
 <div class="block">Serializes a component into a string using <a href="#getSerializer()"><code>getSerializer()</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -490,10 +534,14 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>translateAndSerialize</h4>
-<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;translateAndSerialize&#8203;(@NotNull
-                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;translateAndSerialize&#8203;(@NotNull
+                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
                                            @NotNull
                                            @NotNull <a href="Localizable.html" title="interface in net.minestom.server.adventure">Localizable</a>&nbsp;localizable)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a> and the Adventure serializers</div>
+</div>
 <div class="block">Prepares and then serializes a component.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -510,10 +558,14 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>translateAndSerialize</h4>
-<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;translateAndSerialize&#8203;(@NotNull
-                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;translateAndSerialize&#8203;(@NotNull
+                                           @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component,
                                            @NotNull
                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Locale.html?is-external=true" title="class or interface in java.util" class="externalLink">Locale</a>&nbsp;locale)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/translation/Translator.html?is-external=true#translate(java.lang.String,java.util.Locale)" title="class or interface in net.kyori.adventure.translation" class="externalLink"><code>Translator.translate(String, Locale)</code></a> and the Adventure serializers</div>
+</div>
 <div class="block">Prepares and then serializes a component.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -530,8 +582,12 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockList">
 <li class="blockList">
 <h4>isTranslatable</h4>
-<pre class="methodSignature">public static&nbsp;boolean&nbsp;isTranslatable&#8203;(@NotNull
-                                     @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static&nbsp;boolean&nbsp;isTranslatable&#8203;(@NotNull
+                                     @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;component)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="../utils/ComponentUtils.html#isTranslatable(net.kyori.adventure.text.Component)"><code>ComponentUtils.isTranslatable(Component)</code></a></div>
+</div>
 <div class="block">Checks if a component can be translated server-side. This is done by running the
  component through the translator and seeing if the translated component is equal
  to the non translated component.</div>
@@ -550,8 +606,12 @@ public static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/d
 <ul class="blockListLast">
 <li class="blockList">
 <h4>areAnyTranslatable</h4>
-<pre class="methodSignature">public static&nbsp;boolean&nbsp;areAnyTranslatable&#8203;(@NotNull
-                                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;components)</pre>
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static&nbsp;boolean&nbsp;areAnyTranslatable&#8203;(@NotNull
+                                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;components)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="../utils/ComponentUtils.html#areAnyTranslatable(java.util.Collection)"><code>ComponentUtils.areAnyTranslatable(Collection)</code></a></div>
+</div>
 <div class="block">Checks if any of a series of components are translatable server-side.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

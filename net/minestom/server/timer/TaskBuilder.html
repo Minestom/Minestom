@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":10,"i6":10,"i7":10,"i8":42,"i9":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -134,7 +134,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">A builder which represents a fluent Object to schedule tasks.
  <p>
- You can specify a delay with <a href="#delay(long,net.minestom.server.utils.time.TimeUnit)"><code>delay(long, TimeUnit)</code></a> or <a href="#repeat(long,net.minestom.server.utils.time.TimeUnit)"><code>repeat(long, TimeUnit)</code></a>
+ You can specify a delay with <a href="#delay(long,java.time.temporal.TemporalUnit)"><code>delay(long, TemporalUnit)</code></a> or <a href="#repeat(long,java.time.temporal.TemporalUnit)"><code>repeat(long, TemporalUnit)</code></a>
  and then schedule the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> with <a href="#schedule()"><code>schedule()</code></a>.</div>
 </li>
 </ul>
@@ -182,7 +182,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -204,20 +204,29 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(long,net.minestom.server.utils.time.TimeUnit)">delay</a></span>&#8203;(long&nbsp;time,
-     @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(long,java.time.temporal.TemporalUnit)">delay</a></span>&#8203;(long&nbsp;time,
+     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;unit)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(net.minestom.server.utils.time.UpdateOption)">delay</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(java.time.Duration)">delay</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#delay(net.minestom.server.utils.time.UpdateOption)">delay</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Replaced by <a href="#delay(java.time.Duration)"><code>delay(Duration)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#makeTransient()">makeTransient</a></span>()</code></th>
 <td class="colLast">
@@ -226,22 +235,31 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
   reload of that extension.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(long,net.minestom.server.utils.time.TimeUnit)">repeat</a></span>&#8203;(long&nbsp;time,
-      @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</code></th>
-<td class="colLast">
-<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
-</td>
-</tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(net.minestom.server.utils.time.UpdateOption)">repeat</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(long,java.time.temporal.TemporalUnit)">repeat</a></span>&#8203;(long&nbsp;time,
+      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;unit)</code></th>
 <td class="colLast">
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(java.time.Duration)">repeat</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</code></th>
+<td class="colLast">
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#repeat(net.minestom.server.utils.time.UpdateOption)">repeat</a></span>&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Replaced by <a href="#repeat(java.time.Duration)"><code>repeat(Duration)</code></a></div>
+</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="Task.html" title="class in net.minestom.server.timer">Task</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#schedule()">schedule</a></span>()</code></th>
 <td class="colLast">
@@ -322,7 +340,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="delay(long,net.minestom.server.utils.time.TimeUnit)">
+<a id="delay(long,java.time.temporal.TemporalUnit)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -331,7 +349,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;delay&#8203;(long&nbsp;time,
                                   @NotNull
-                                  @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</pre>
+                                  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;unit)</pre>
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -349,7 +367,11 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>delay</h4>
 <pre class="methodSignature">@NotNull
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
 public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;delay&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Replaced by <a href="#delay(java.time.Duration)"><code>delay(Duration)</code></a></div>
+</div>
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -359,7 +381,24 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
 </dl>
 </li>
 </ul>
-<a id="repeat(long,net.minestom.server.utils.time.TimeUnit)">
+<a id="delay(java.time.Duration)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>delay</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;delay&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</pre>
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should delay its execution by the specified amount of time.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>duration</code> - the Duration for this builder.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder, for chaining</dd>
+</dl>
+</li>
+</ul>
+<a id="repeat(long,java.time.temporal.TemporalUnit)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -368,12 +407,12 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;repeat&#8203;(long&nbsp;time,
                                    @NotNull
-                                   @NotNull <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;unit)</pre>
+                                   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;unit)</pre>
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>time</code> - The time until the repetition</dd>
-<dd><code>unit</code> - The <a href="../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time"><code>TimeUnit</code></a> for <code>time</code></dd>
+<dd><code>unit</code> - The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink"><code>TemporalUnit</code></a> for <code>time</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>
@@ -386,11 +425,32 @@ public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.ser
 <li class="blockList">
 <h4>repeat</h4>
 <pre class="methodSignature">@NotNull
+<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
 public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;repeat&#8203;(<a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Replaced by <a href="#repeat(java.time.Duration)"><code>repeat(Duration)</code></a></div>
+</div>
 <div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>updateOption</code> - the UpdateOption for this builder.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this builder, for chaining</dd>
+</dl>
+</li>
+</ul>
+<a id="repeat(java.time.Duration)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>repeat</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="TaskBuilder.html" title="class in net.minestom.server.timer">TaskBuilder</a>&nbsp;repeat&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</pre>
+<div class="block">Specifies that the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> should continue to run after waiting for the specified value until it is terminated.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>duration</code> - the Duration for this builder.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>

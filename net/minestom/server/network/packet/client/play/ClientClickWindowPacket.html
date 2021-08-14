@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -147,6 +147,29 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="ClientClickWindowPacket.ClickType.html" title="enum in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ClickType</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- =========== FIELD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -162,23 +185,23 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#actionNumber">actionNumber</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>byte</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#button">button</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>it.unimi.dsi.fastutil.shorts.Short2ObjectMap&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#changedSlots">changedSlots</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#item">item</a></span></code></th>
+<td class="colFirst"><code><a href="ClientClickWindowPacket.ClickType.html" title="enum in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ClickType</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clickType">clickType</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#mode">mode</a></span></code></th>
+<td class="colFirst"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#item">item</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -302,22 +325,22 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <pre>public&nbsp;byte button</pre>
 </li>
 </ul>
-<a id="actionNumber">
+<a id="clickType">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>actionNumber</h4>
-<pre>public&nbsp;short actionNumber</pre>
+<h4>clickType</h4>
+<pre>public&nbsp;<a href="ClientClickWindowPacket.ClickType.html" title="enum in net.minestom.server.network.packet.client.play">ClientClickWindowPacket.ClickType</a> clickType</pre>
 </li>
 </ul>
-<a id="mode">
+<a id="changedSlots">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>mode</h4>
-<pre>public&nbsp;int mode</pre>
+<h4>changedSlots</h4>
+<pre>public&nbsp;it.unimi.dsi.fastutil.shorts.Short2ObjectMap&lt;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt; changedSlots</pre>
 </li>
 </ul>
 <a id="item">
@@ -441,7 +464,7 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

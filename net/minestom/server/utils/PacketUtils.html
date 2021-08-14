@@ -156,7 +156,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(com.velocitypowered.natives.compression.VelocityCompressor,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(@NotNull com.velocitypowered.natives.compression.VelocityCompressor&nbsp;compressor,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/zip/Deflater.html?is-external=true" title="class or interface in java.util.zip" class="externalLink">Deflater</a>&nbsp;deflater,
               @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
               @NotNull io.netty.buffer.ByteBuf&nbsp;compressionTarget)</code></th>
 <td class="colLast">
@@ -199,7 +199,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
           @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Sends a packet to an audience.</div>
@@ -250,7 +250,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>sendPacket</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;sendPacket&#8203;(@NotNull
-                              @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
+                              @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
                               @NotNull
                               @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
 <div class="block">Sends a packet to an audience. This method performs the following steps in the
@@ -260,9 +260,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
      <li>Otherwise, if <code>audience</code> is a <a href="../adventure/audience/PacketGroupingAudience.html" title="interface in net.minestom.server.adventure.audience"><code>PacketGroupingAudience</code></a>, call
      <a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)"><code>sendGroupedPacket(Collection, ServerPacket)</code></a> on the players that the
      grouping audience contains.</li>
-     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.Single.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>ForwardingAudience.Single</code></a>,
+     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/ForwardingAudience.Single.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>ForwardingAudience.Single</code></a>,
      call this method on the single audience inside the forwarding audience.</li>
-     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>ForwardingAudience</code></a>, call this
+     <li>Otherwise, if <code>audience</code> is a <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/ForwardingAudience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>ForwardingAudience</code></a>, call this
      method for each audience member of the forwarding audience.</li>
      <li>Otherwise, do nothing.</li>
  </ol></div>
@@ -353,14 +353,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="compressBuffer(com.velocitypowered.natives.compression.VelocityCompressor,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
+<a id="compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>compressBuffer</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;compressBuffer&#8203;(@NotNull
-                                  @NotNull com.velocitypowered.natives.compression.VelocityCompressor&nbsp;compressor,
+                                  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/zip/Deflater.html?is-external=true" title="class or interface in java.util.zip" class="externalLink">Deflater</a>&nbsp;deflater,
                                   @NotNull
                                   @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
                                   @NotNull
@@ -370,7 +370,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  <code>packetBuffer</code> needs to be the packet content without any header (if you want to use it to write a Minecraft packet).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>compressor</code> - the deflater for zlib compression</dd>
+<dd><code>deflater</code> - the deflater for zlib compression</dd>
 <dd><code>packetBuffer</code> - the buffer containing all the packet fields</dd>
 <dd><code>compressionTarget</code> - the buffer which will receive the compressed version of <code>packetBuffer</code></dd>
 </dl>

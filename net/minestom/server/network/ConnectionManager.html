@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":42,"i3":42,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":42,"i13":42,"i14":10,"i15":42,"i16":10,"i17":42,"i18":42,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":42,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
+var data = {"i0":42,"i1":10,"i2":42,"i3":42,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":42,"i13":42,"i14":10,"i15":42,"i16":10,"i17":42,"i18":42,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":42,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -178,7 +178,9 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayerInitialization(java.util.function.Consumer)">addPlayerInitialization</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;playerInitialization)</code></th>
 <td class="colLast">
-<div class="block">Adds a new player initialization consumer.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use the event API instead</div>
+</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -193,7 +195,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#broadcastMessage(net.minestom.server.chat.JsonMessage)">broadcastMessage</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;jsonMessage)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a> on <a href="../adventure/audience/Audiences.html#players()"><code>Audiences.players()</code></a></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a> on <a href="../adventure/audience/Audiences.html#players()"><code>Audiences.players()</code></a></div>
 </div>
 </td>
 </tr>
@@ -269,7 +271,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReceivePacketConsumers()">getReceivePacketConsumers</a></span>()</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">all packet listening methods will ultimately be removed.</div>
+<div class="deprecationComment">see <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
 </div>
 </td>
 </tr>
@@ -283,7 +285,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownText()">getShutdownText</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
@@ -310,7 +312,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">onPacketReceive</a></span>&#8203;(@NotNull <a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">all packet listening methods will ultimately be removed.</div>
+<div class="deprecationComment">listen to <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
 </div>
 </td>
 </tr>
@@ -353,7 +355,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShutdownText(net.kyori.adventure.text.Component)">setShutdownText</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;shutdownText)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShutdownText(net.kyori.adventure.text.Component)">setShutdownText</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;shutdownText)</code></th>
 <td class="colLast">
 <div class="block">Changes the kick reason in case of a shutdown.</div>
 </td>
@@ -572,7 +574,7 @@ public&nbsp;void&nbsp;broadcastMessage&#8203;(@NotNull
 public&nbsp;void&nbsp;broadcastMessage&#8203;(@NotNull
                              @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;jsonMessage)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a> on <a href="../adventure/audience/Audiences.html#players()"><code>Audiences.players()</code></a></div>
+<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a> on <a href="../adventure/audience/Audiences.html#players()"><code>Audiences.players()</code></a></div>
 </div>
 <div class="block">Sends a <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> to all online players.</div>
 <dl>
@@ -591,9 +593,7 @@ public&nbsp;void&nbsp;broadcastMessage&#8203;(@NotNull
 <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;&nbsp;getReceivePacketConsumers()</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">all packet listening methods will ultimately be removed.
- May or may not work depending on the packet.
- It is instead recommended to use a proxy, improving scalability and increasing server performance</div>
+<div class="deprecationComment">see <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
 </div>
 <div class="block">Gets all the listeners which are called for each packet received.</div>
 <dl>
@@ -612,9 +612,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 public&nbsp;void&nbsp;onPacketReceive&#8203;(@NotNull
                             @NotNull <a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">all packet listening methods will ultimately be removed.
- May or may not work depending on the packet.
- It is instead recommended to use a proxy, improving scalability and increasing server performance</div>
+<div class="deprecationComment">listen to <a href="../event/player/PlayerPacketEvent.html" title="class in net.minestom.server.event.player"><code>PlayerPacketEvent</code></a></div>
 </div>
 <div class="block">Adds a consumer to call once a packet is received.</div>
 <dl>
@@ -762,8 +760,12 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <ul class="blockList">
 <li class="blockList">
 <h4>addPlayerInitialization</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addPlayerInitialization&#8203;(@NotNull
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+public&nbsp;void&nbsp;addPlayerInitialization&#8203;(@NotNull
                                     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;playerInitialization)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use the event API instead</div>
+</div>
 <div class="block">Adds a new player initialization consumer. Those are called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> join,
  mainly to add event callbacks to the player.
  <p>
@@ -820,7 +822,7 @@ public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.mine
 <li class="blockList">
 <h4>getShutdownText</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getShutdownText()</pre>
+public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getShutdownText()</pre>
 <div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -856,7 +858,7 @@ public&nbsp;void&nbsp;setShutdownText&#8203;(@NotNull
 <li class="blockList">
 <h4>setShutdownText</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setShutdownText&#8203;(@NotNull
-                            @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;shutdownText)</pre>
+                            @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;shutdownText)</pre>
 <div class="block">Changes the kick reason in case of a shutdown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

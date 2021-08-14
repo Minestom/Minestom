@@ -136,7 +136,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a></code>, <code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">DynamicChunk</span>
@@ -200,7 +200,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
-<code><a href="Chunk.html#BIOME_COUNT">BIOME_COUNT</a>, <a href="Chunk.html#BIOME_MANAGER">BIOME_MANAGER</a>, <a href="Chunk.html#biomes">biomes</a>, <a href="Chunk.html#BLOCK_MANAGER">BLOCK_MANAGER</a>, <a href="Chunk.html#CHUNK_SECTION_COUNT">CHUNK_SECTION_COUNT</a>, <a href="Chunk.html#CHUNK_SECTION_SIZE">CHUNK_SECTION_SIZE</a>, <a href="Chunk.html#CHUNK_SIZE_X">CHUNK_SIZE_X</a>, <a href="Chunk.html#CHUNK_SIZE_Y">CHUNK_SIZE_Y</a>, <a href="Chunk.html#CHUNK_SIZE_Z">CHUNK_SIZE_Z</a>, <a href="Chunk.html#chunkX">chunkX</a>, <a href="Chunk.html#chunkZ">chunkZ</a>, <a href="Chunk.html#columnarSpace">columnarSpace</a>, <a href="Chunk.html#data">data</a>, <a href="Chunk.html#instance">instance</a>, <a href="Chunk.html#loaded">loaded</a>, <a href="Chunk.html#viewers">viewers</a></code></li>
+<code><a href="Chunk.html#BIOME_MANAGER">BIOME_MANAGER</a>, <a href="Chunk.html#biomes">biomes</a>, <a href="Chunk.html#BLOCK_MANAGER">BLOCK_MANAGER</a>, <a href="Chunk.html#CHUNK_SECTION_SIZE">CHUNK_SECTION_SIZE</a>, <a href="Chunk.html#CHUNK_SIZE_X">CHUNK_SIZE_X</a>, <a href="Chunk.html#CHUNK_SIZE_Z">CHUNK_SIZE_Z</a>, <a href="Chunk.html#chunkX">chunkX</a>, <a href="Chunk.html#chunkZ">chunkZ</a>, <a href="Chunk.html#columnarSpace">columnarSpace</a>, <a href="Chunk.html#data">data</a>, <a href="Chunk.html#instance">instance</a>, <a href="Chunk.html#loaded">loaded</a>, <a href="Chunk.html#viewers">viewers</a></code></li>
 </ul>
 </li>
 </ul>
@@ -262,8 +262,8 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected @NotNull <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFreshPacket()">createFreshPacket</a></span>()</code></th>
+<td class="colFirst"><code>@NotNull <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createChunkPacket()">createChunkPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Creates a <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a> with this chunk data ready to be written.</div>
 </td>
@@ -386,7 +386,7 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.instance.<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></h3>
-<code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#createChunkSectionUpdatePacket(int)">createChunkSectionUpdatePacket</a>, <a href="Chunk.html#getBiomes()">getBiomes</a>, <a href="Chunk.html#getBlockIndex(int,int,int)">getBlockIndex</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getCustomBlock(int)">getCustomBlock</a>, <a href="Chunk.html#getCustomBlock(int,int,int)">getCustomBlock</a>, <a href="Chunk.html#getData()">getData</a>, <a href="Chunk.html#getFreshFullDataPacket()">getFreshFullDataPacket</a>, <a href="Chunk.html#getFreshPartialDataPacket()">getFreshPartialDataPacket</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getInstance()">getInstance</a>, <a href="Chunk.html#getLightPacket()">getLightPacket</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isBlockEntity(short)">isBlockEntity</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk()">sendChunk</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#sendChunkSectionUpdate(int,net.minestom.server.entity.Player)">sendChunkSectionUpdate</a>, <a href="Chunk.html#sendChunkUpdate()">sendChunkUpdate</a>, <a href="Chunk.html#sendChunkUpdate(net.minestom.server.entity.Player)">sendChunkUpdate</a>, <a href="Chunk.html#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a>, <a href="Chunk.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></li>
+<code><a href="Chunk.html#addViewer(net.minestom.server.entity.Player)">addViewer</a>, <a href="Chunk.html#createChunkSectionUpdatePacket(int)">createChunkSectionUpdatePacket</a>, <a href="Chunk.html#getBiomes()">getBiomes</a>, <a href="Chunk.html#getBlockIndex(int,int,int)">getBlockIndex</a>, <a href="Chunk.html#getChunkX()">getChunkX</a>, <a href="Chunk.html#getChunkZ()">getChunkZ</a>, <a href="Chunk.html#getCustomBlock(int)">getCustomBlock</a>, <a href="Chunk.html#getCustomBlock(int,int,int)">getCustomBlock</a>, <a href="Chunk.html#getData()">getData</a>, <a href="Chunk.html#getIdentifier()">getIdentifier</a>, <a href="Chunk.html#getInstance()">getInstance</a>, <a href="Chunk.html#getLightPacket()">getLightPacket</a>, <a href="Chunk.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="Chunk.html#getViewers()">getViewers</a>, <a href="Chunk.html#isBlockEntity(short)">isBlockEntity</a>, <a href="Chunk.html#isLoaded()">isLoaded</a>, <a href="Chunk.html#isReadOnly()">isReadOnly</a>, <a href="Chunk.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a>, <a href="Chunk.html#sendChunk()">sendChunk</a>, <a href="Chunk.html#sendChunk(net.minestom.server.entity.Player)">sendChunk</a>, <a href="Chunk.html#sendChunkSectionUpdate(int,net.minestom.server.entity.Player)">sendChunkSectionUpdate</a>, <a href="Chunk.html#sendChunkUpdate()">sendChunkUpdate</a>, <a href="Chunk.html#sendChunkUpdate(net.minestom.server.entity.Player)">sendChunkUpdate</a>, <a href="Chunk.html#setColumnarSpace(net.minestom.server.entity.pathfinding.PFColumnarSpace)">setColumnarSpace</a>, <a href="Chunk.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="Chunk.html#setReadOnly(boolean)">setReadOnly</a>, <a href="Chunk.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="Chunk.html#shouldGenerate()">shouldGenerate</a>, <a href="Chunk.html#toPosition()">toPosition</a>, <a href="Chunk.html#toString()">toString</a>, <a href="Chunk.html#unload()">unload</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -394,6 +394,20 @@ extends <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagReadable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
+<code><a href="../tag/TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagWritable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
+<code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.Viewable">
@@ -806,19 +820,19 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 </dl>
 </li>
 </ul>
-<a id="createFreshPacket()">
+<a id="createChunkPacket()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>createFreshPacket</h4>
+<h4>createChunkPacket</h4>
 <pre class="methodSignature">@NotNull
-protected&nbsp;@NotNull <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a>&nbsp;createFreshPacket()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#createFreshPacket()">Chunk</a></code></span></div>
+public&nbsp;@NotNull <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play">ChunkDataPacket</a>&nbsp;createChunkPacket()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="Chunk.html#createChunkPacket()">Chunk</a></code></span></div>
 <div class="block">Creates a <a href="../network/packet/server/play/ChunkDataPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>ChunkDataPacket</code></a> with this chunk data ready to be written.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="Chunk.html#createFreshPacket()">createFreshPacket</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
+<dd><code><a href="Chunk.html#createChunkPacket()">createChunkPacket</a></code>&nbsp;in class&nbsp;<code><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a new chunk data packet</dd>
 </dl>

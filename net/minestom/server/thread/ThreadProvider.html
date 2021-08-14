@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+var data = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -214,80 +214,61 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addChunk(net.minestom.server.instance.Chunk)">addChunk</a></span>&#8203;(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>abstract long</code></td>
+<td class="colFirst"><code>abstract int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findThread(net.minestom.server.instance.Chunk)">findThread</a></span>&#8203;(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="ThreadProvider.RefreshType.html" title="enum in net.minestom.server.thread">ThreadProvider.RefreshType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChunkRefreshType()">getChunkRefreshType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Defines how often chunks thread should be updated.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaximumRefreshTime()">getMaximumRefreshTime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Maximum time used to refresh chunks and entities thread.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMinimumRefreshTime()">getMinimumRefreshTime</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Minimum time used to refresh chunks and entities thread.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRefreshPercentage()">getRefreshPercentage</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Represents the maximum percentage of tick time that can be spent refreshing chunks thread.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>protected int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getThreadId(net.minestom.server.instance.Chunk)">getThreadId</a></span>&#8203;(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
-<td class="colLast">
-<div class="block">Finds the thread id associated to a <a href="../instance/Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getThreads()">getThreads</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkLoad(net.minestom.server.instance.Chunk)">onChunkLoad</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onChunkUnload(net.minestom.server.instance.Chunk)">onChunkUnload</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a></span>&#8203;(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#refreshThreads(long)">refreshThreads</a></span>&#8203;(long&nbsp;tickTime)</code></th>
 <td class="colLast">
@@ -295,44 +276,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  refresh the chunk linked to an entity, and chunk threads based on <a href="#findThread(net.minestom.server.instance.Chunk)"><code>findThread(Chunk)</code></a>.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeChunk(net.minestom.server.instance.Chunk)">removeChunk</a></span>&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i14" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEntity(net.minestom.server.entity.Entity)">removeEntity</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Add an entity into the waiting list to get removed from its thread.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
-<td class="colFirst"><code>protected @NotNull <a href="ThreadProvider.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadProvider.ChunkEntry</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkThread(net.minestom.server.instance.Chunk,java.util.function.Function)">setChunkThread</a></span>&#8203;(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a>,&#8203;<a href="ThreadProvider.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadProvider.ChunkEntry</a>&gt;&nbsp;chunkEntrySupplier)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i16" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Shutdowns all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#switchChunk(net.minestom.server.instance.Chunk)">switchChunk</a></span>&#8203;(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CountDownLatch.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CountDownLatch</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update(long)">update</a></span>&#8203;(long&nbsp;time)</code></th>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateAndAwait(long)">updateAndAwait</a></span>&#8203;(long&nbsp;time)</code></th>
 <td class="colLast">
 <div class="block">Prepares the update by creating the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a> tasks.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateEntity(net.minestom.server.entity.Entity)">updateEntity</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
@@ -435,8 +400,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>findThread</h4>
-<pre class="methodSignature">public abstract&nbsp;long&nbsp;findThread&#8203;(@NotNull
-                                @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+<pre class="methodSignature">public abstract&nbsp;int&nbsp;findThread&#8203;(@NotNull
+                               @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -503,14 +468,13 @@ public&nbsp;@NotNull <a href="ThreadProvider.RefreshType.html" title="enum in ne
 </dl>
 </li>
 </ul>
-<a id="update(long)">
+<a id="updateAndAwait(long)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>update</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CountDownLatch.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CountDownLatch</a>&nbsp;update&#8203;(long&nbsp;time)</pre>
+<h4>updateAndAwait</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;updateAndAwait&#8203;(long&nbsp;time)</pre>
 <div class="block">Prepares the update by creating the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>TickThread</code></a> tasks.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -571,87 +535,13 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <a id="shutdown()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>shutdown</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;shutdown()</pre>
 <div class="block">Shutdowns all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.
  <p>
  Action is irreversible.</div>
-</li>
-</ul>
-<a id="getThreads()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getThreads</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a>&gt;&nbsp;getThreads()</pre>
-<div class="block">Gets all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the tick threads</dd>
-</dl>
-</li>
-</ul>
-<a id="addChunk(net.minestom.server.instance.Chunk)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addChunk</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;addChunk&#8203;(@NotNull
-                        @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-</li>
-</ul>
-<a id="switchChunk(net.minestom.server.instance.Chunk)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>switchChunk</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;switchChunk&#8203;(@NotNull
-                           @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-</li>
-</ul>
-<a id="setChunkThread(net.minestom.server.instance.Chunk,java.util.function.Function)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setChunkThread</h4>
-<pre class="methodSignature">@NotNull
-protected&nbsp;@NotNull <a href="ThreadProvider.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadProvider.ChunkEntry</a>&nbsp;setChunkThread&#8203;(@NotNull
-                                                            @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-                                                            @NotNull
-                                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a>,&#8203;<a href="ThreadProvider.ChunkEntry.html" title="class in net.minestom.server.thread">ThreadProvider.ChunkEntry</a>&gt;&nbsp;chunkEntrySupplier)</pre>
-</li>
-</ul>
-<a id="removeChunk(net.minestom.server.instance.Chunk)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>removeChunk</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;removeChunk&#8203;(<a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-</li>
-</ul>
-<a id="getThreadId(net.minestom.server.instance.Chunk)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getThreadId</h4>
-<pre class="methodSignature">protected&nbsp;int&nbsp;getThreadId&#8203;(@NotNull
-                          @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
-<div class="block">Finds the thread id associated to a <a href="../instance/Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chunk</code> - the chunk to find the thread id from</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the chunk thread id</dd>
-</dl>
 </li>
 </ul>
 </li>

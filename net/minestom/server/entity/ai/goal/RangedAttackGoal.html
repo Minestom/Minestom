@@ -174,14 +174,24 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,int,int,int,boolean,double,double,net.minestom.server.utils.time.TimeUnit)">RangedAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,int,int,int,boolean,double,double,java.time.temporal.TemporalUnit)">RangedAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
                 int&nbsp;delay,
                 int&nbsp;attackRange,
                 int&nbsp;desirableRange,
                 boolean&nbsp;comeClose,
                 double&nbsp;power,
                 double&nbsp;spread,
-                @NotNull <a href="../../../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
+                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;timeUnit)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,java.time.Duration,int,int,boolean,double,double)">RangedAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;delay,
+                int&nbsp;attackRange,
+                int&nbsp;desirableRange,
+                boolean&nbsp;comeClose,
+                double&nbsp;power,
+                double&nbsp;spread)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -216,7 +226,7 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProjectileGenerator(java.util.function.Function)">setProjectileGenerator</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a>,&#8203;<a href="../../type/projectile/EntityProjectile.html" title="class in net.minestom.server.entity.type.projectile">EntityProjectile</a>&gt;&nbsp;projectileGenerator)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProjectileGenerator(java.util.function.Function)">setProjectileGenerator</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a>,&#8203;<a href="../../EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a>&gt;&nbsp;projectileGenerator)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -278,10 +288,10 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,int,int,int,boolean,double,double,net.minestom.server.utils.time.TimeUnit)">
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,int,int,int,boolean,double,double,java.time.temporal.TemporalUnit)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>RangedAttackGoal</h4>
 <pre>public&nbsp;RangedAttackGoal&#8203;(@NotNull
@@ -293,7 +303,7 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
                         double&nbsp;power,
                         double&nbsp;spread,
                         @NotNull
-                        @NotNull <a href="../../../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</pre>
+                        @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;timeUnit)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entityCreature</code> - the entity to add the goal to.</dd>
@@ -304,6 +314,32 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <dd><code>spread</code> - shot spread (0 for best accuracy).</dd>
 <dd><code>power</code> - shot power (1 for normal).</dd>
 <dd><code>timeUnit</code> - the unit of the delay.</dd>
+</dl>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,java.time.Duration,int,int,boolean,double,double)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>RangedAttackGoal</h4>
+<pre>public&nbsp;RangedAttackGoal&#8203;(@NotNull
+                        @NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+                        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;delay,
+                        int&nbsp;attackRange,
+                        int&nbsp;desirableRange,
+                        boolean&nbsp;comeClose,
+                        double&nbsp;power,
+                        double&nbsp;spread)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entityCreature</code> - the entity to add the goal to.</dd>
+<dd><code>delay</code> - the delay between each shots.</dd>
+<dd><code>attackRange</code> - the allowed range the entity can shoot others.</dd>
+<dd><code>desirableRange</code> - the desirable range: the entity will try to stay no further than this distance.</dd>
+<dd><code>comeClose</code> - whether entity should go as close as possible to the target whether target is not in line of sight.</dd>
+<dd><code>spread</code> - shot spread (0 for best accuracy).</dd>
+<dd><code>power</code> - shot power (1 for normal).</dd>
 </dl>
 </li>
 </ul>
@@ -332,7 +368,7 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <ul class="blockList">
 <li class="blockList">
 <h4>setProjectileGenerator</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setProjectileGenerator&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a>,&#8203;<a href="../../type/projectile/EntityProjectile.html" title="class in net.minestom.server.entity.type.projectile">EntityProjectile</a>&gt;&nbsp;projectileGenerator)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setProjectileGenerator&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="../../Entity.html" title="class in net.minestom.server.entity">Entity</a>,&#8203;<a href="../../EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a>&gt;&nbsp;projectileGenerator)</pre>
 </li>
 </ul>
 <a id="shouldStart()">

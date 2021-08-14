@@ -105,14 +105,26 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></th>
+<th class="colFirst" scope="row"><a href="Event.html" title="interface in net.minestom.server.event">Event</a></th>
 <td class="colLast">
-<div class="block">Represents an <a href="Event.html" title="class in net.minestom.server.event"><code>Event</code></a> which can be cancelled.</div>
+<div class="block">Event which can be listened to by an <a href="EventNode.html" title="class in net.minestom.server.event"><code>EventNode</code></a> using <a href="EventNode.html#addListener(net.minestom.server.event.EventListener)"><code>EventNode.addListener(EventListener)</code></a>.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colFirst" scope="row"><a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E extends <a href="Event.html" title="class in net.minestom.server.event">Event</a>&gt;</th>
+<th class="colFirst" scope="row"><a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<th class="colFirst" scope="row"><a href="EventFilter.html" title="interface in net.minestom.server.event">EventFilter</a>&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>,&#8203;H&gt;</th>
+<td class="colLast">
+<div class="block">Represents a filter for a specific <a href="Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> type.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colFirst" scope="row"><a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</th>
+<td class="colLast">
+<div class="block">Represents an event listener (handler) in an event graph.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -126,31 +138,38 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a></th>
+<th class="colFirst" scope="row"><a href="EventDispatcher.html" title="class in net.minestom.server.event">EventDispatcher</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<th class="colFirst" scope="row"><a href="Event.html" title="class in net.minestom.server.event">Event</a></th>
-<td class="colLast">
-<div class="block">Object which can be listened to by an <a href="handler/EventHandler.html" title="interface in net.minestom.server.event.handler"><code>EventHandler</code></a>.</div>
-</td>
+<th class="colFirst" scope="row"><a href="EventListener.Builder.html" title="class in net.minestom.server.event">EventListener.Builder</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="EventNode.html" title="class in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</th>
+<td class="colLast">
+<div class="block">Represents a single node in an event graph.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="GlobalEventHandler.html" title="class in net.minestom.server.event">GlobalEventHandler</a></th>
 <td class="colLast">
 <div class="block">Object containing all the global event listeners.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="InstanceEvent.html" title="class in net.minestom.server.event">InstanceEvent</a></th>
-<td class="colLast">&nbsp;</td>
+</tbody>
+</table>
+</li>
+<li class="blockList">
+<table class="typeSummary">
+<caption><span>Enum Summary</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Enum</th>
+<th class="colLast" scope="col">Description</th>
 </tr>
+<tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<th class="colFirst" scope="row"><a href="PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a></th>
+<th class="colFirst" scope="row"><a href="EventListener.Result.html" title="enum in net.minestom.server.event">EventListener.Result</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>

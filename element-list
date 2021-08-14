@@ -5,8 +5,8 @@ net.minestom.server.advancements.notifications
 net.minestom.server.adventure
 net.minestom.server.adventure.audience
 net.minestom.server.adventure.bossbar
+net.minestom.server.adventure.provider
 net.minestom.server.attribute
-net.minestom.server.bossbar
 net.minestom.server.chat
 net.minestom.server.collision
 net.minestom.server.color
@@ -50,13 +50,6 @@ net.minestom.server.entity.metadata.villager
 net.minestom.server.entity.metadata.water
 net.minestom.server.entity.metadata.water.fish
 net.minestom.server.entity.pathfinding
-net.minestom.server.entity.type
-net.minestom.server.entity.type.animal
-net.minestom.server.entity.type.decoration
-net.minestom.server.entity.type.monster
-net.minestom.server.entity.type.other
-net.minestom.server.entity.type.projectile
-net.minestom.server.entity.type.vehicle
 net.minestom.server.entity.vehicle
 net.minestom.server.event
 net.minestom.server.event.entity
@@ -66,6 +59,7 @@ net.minestom.server.event.inventory
 net.minestom.server.event.item
 net.minestom.server.event.player
 net.minestom.server.event.server
+net.minestom.server.event.trait
 net.minestom.server.exception
 net.minestom.server.extensions
 net.minestom.server.extras
@@ -79,7 +73,7 @@ net.minestom.server.extras.query.response
 net.minestom.server.extras.selfmodification
 net.minestom.server.extras.selfmodification.mixins
 net.minestom.server.extras.velocity
-net.minestom.server.fluids
+net.minestom.server.fluid
 net.minestom.server.gamedata
 net.minestom.server.gamedata.conditions
 net.minestom.server.gamedata.loottables
@@ -135,6 +129,7 @@ net.minestom.server.resourcepack
 net.minestom.server.scoreboard
 net.minestom.server.sound
 net.minestom.server.stat
+net.minestom.server.statistic
 net.minestom.server.storage
 net.minestom.server.storage.systems
 net.minestom.server.tag

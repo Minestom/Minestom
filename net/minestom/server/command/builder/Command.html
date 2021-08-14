@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":10,"i16":10,"i17":10,"i18":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":9,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -331,16 +331,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onDynamicWrite(net.minestom.server.command.CommandSender,java.lang.String)">onDynamicWrite</a></span>&#8203;(@NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</code></th>
-<td class="colLast">
-<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat
- when in a dynamic argument (<a href="arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicWord</code></a> (when <a href="arguments/minecraft/SuggestionType.html#ASK_SERVER"><code>SuggestionType.ASK_SERVER</code></a> is used)
- and <a href="arguments/ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicStringArray</code></a>).</div>
-</td>
-</tr>
-<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setArgumentCallback(net.minestom.server.command.builder.ArgumentCallback,net.minestom.server.command.builder.arguments.Argument)">setArgumentCallback</a></span>&#8203;(@NotNull <a href="ArgumentCallback.html" title="interface in net.minestom.server.command.builder">ArgumentCallback</a>&nbsp;callback,
                    @NotNull <a href="arguments/Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;?&gt;&nbsp;argument)</code></th>
@@ -348,14 +338,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Sets an <a href="ArgumentCallback.html" title="interface in net.minestom.server.command.builder"><code>ArgumentCallback</code></a>.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCondition(net.minestom.server.command.builder.condition.CommandCondition)">setCondition</a></span>&#8203;(@Nullable <a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition">CommandCondition</a>&nbsp;commandCondition)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="condition/CommandCondition.html" title="interface in net.minestom.server.command.builder.condition"><code>CommandCondition</code></a>.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDefaultExecutor(net.minestom.server.command.builder.CommandExecutor)">setDefaultExecutor</a></span>&#8203;(@Nullable <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor)</code></th>
 <td class="colLast">
@@ -580,7 +570,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <ul class="blockList">
 <li class="blockList">
 <h4>addSyntax</h4>
-<pre class="methodSignature">@Beta
+<pre class="methodSignature">@Experimental
 @NotNull
 public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="CommandSyntax.html" title="class in net.minestom.server.command.builder">CommandSyntax</a>&gt;&nbsp;addSyntax&#8203;(@NotNull
                                                     @NotNull <a href="CommandExecutor.html" title="interface in net.minestom.server.command.builder">CommandExecutor</a>&nbsp;executor,
@@ -697,29 +687,6 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 </dl>
 </li>
 </ul>
-<a id="onDynamicWrite(net.minestom.server.command.CommandSender,java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>onDynamicWrite</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;onDynamicWrite&#8203;(@NotNull
-                                         @NotNull <a href="../CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender,
-                                         @NotNull
-                                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;text)</pre>
-<div class="block">Allows for tab auto completion, this is called everytime the player press a key in the chat
- when in a dynamic argument (<a href="arguments/ArgumentDynamicWord.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicWord</code></a> (when <a href="arguments/minecraft/SuggestionType.html#ASK_SERVER"><code>SuggestionType.ASK_SERVER</code></a> is used)
- and <a href="arguments/ArgumentDynamicStringArray.html" title="class in net.minestom.server.command.builder.arguments"><code>ArgumentDynamicStringArray</code></a>).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>sender</code> - the command sender</dd>
-<dd><code>text</code> - the whole player's text</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the array containing all the suggestion for the current arg (split SPACE), can be null</dd>
-</dl>
-</li>
-</ul>
 <a id="globalListener(net.minestom.server.command.CommandSender,net.minestom.server.command.builder.CommandContext,java.lang.String)">
 <!--   -->
 </a>
@@ -752,7 +719,7 @@ public&nbsp;@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/ap
 <ul class="blockList">
 <li class="blockList">
 <h4>getSyntaxesStrings</h4>
-<pre class="methodSignature">@Beta
+<pre class="methodSignature">@Experimental
 @NotNull
 public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;&nbsp;getSyntaxesStrings()</pre>
 </li>
@@ -763,7 +730,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <ul class="blockList">
 <li class="blockList">
 <h4>getSyntaxesTree</h4>
-<pre class="methodSignature">@Beta
+<pre class="methodSignature">@Experimental
 @NotNull
 public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getSyntaxesTree()</pre>
 </li>

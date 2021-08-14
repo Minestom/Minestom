@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":42,"i5":42,"i6":42,"i7":42,"i8":10,"i9":42,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":42,"i16":10,"i17":10,"i18":42,"i19":10,"i20":10,"i21":10,"i22":42,"i23":10,"i24":10,"i25":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":42,"i4":42,"i5":42,"i6":42,"i7":10,"i8":42,"i9":10,"i10":42,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":42,"i17":10,"i18":10,"i19":42,"i20":10,"i21":10,"i22":10,"i23":42,"i24":10,"i25":10,"i26":10,"i27":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -266,6 +266,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#arePlayersHidden()">arePlayersHidden</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns if the players are hidden or not.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>@NotNull com.google.gson.JsonObject</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#build()">build</a></span>()</code></th>
 <td class="colLast">
@@ -274,14 +281,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearEntries()">clearEntries</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears the entries.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#clearPlayers()">clearPlayers</a></span>()</code></th>
 <td class="colLast">
@@ -290,42 +297,42 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDescription()">getDescription</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response description</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../utils/identity/NamedAndIdentified.html" title="interface in net.minestom.server.utils.identity">NamedAndIdentified</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntries()">getEntries</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a modifiable collection of the current entries.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFavicon()">getFavicon</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response favicon.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxPlayer()">getMaxPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response maximum player count.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOnline()">getOnline</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response online count.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="ResponseData.PingPlayer.html" title="class in net.minestom.server.ping">ResponseData.PingPlayer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayers()">getPlayers</a></span>()</code></th>
 <td class="colLast">
@@ -334,21 +341,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getProtocol()">getProtocol</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the response protocol version.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVersion()">getVersion</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Get the version name for the response.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(java.lang.String)">setDescription</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;description)</code></th>
 <td class="colLast">
@@ -357,28 +364,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.kyori.adventure.text.Component)">setDescription</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.kyori.adventure.text.Component)">setDescription</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</code></th>
 <td class="colLast">
 <div class="block">Sets the response description.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFavicon(java.lang.String)">setFavicon</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;favicon)</code></th>
 <td class="colLast">
 <div class="block">Sets the response favicon.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPlayer(int)">setMaxPlayer</a></span>&#8203;(int&nbsp;maxPlayer)</code></th>
 <td class="colLast">
 <div class="block">Sets the response maximum player count.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setName(java.lang.String)">setName</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
 <td class="colLast">
@@ -387,21 +394,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setOnline(int)">setOnline</a></span>&#8203;(int&nbsp;online)</code></th>
 <td class="colLast">
 <div class="block">Sets the response online count.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayersHidden(boolean)">setPlayersHidden</a></span>&#8203;(boolean&nbsp;playersHidden)</code></th>
+<td class="colLast">
+<div class="block">Sets whether the players are hidden or not.</div>
+</td>
+</tr>
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setProtocol(int)">setProtocol</a></span>&#8203;(int&nbsp;protocol)</code></th>
 <td class="colLast">
 <div class="block">Sets the response protocol version.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVersion(java.lang.String)">setVersion</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;version)</code></th>
 <td class="colLast">
@@ -715,7 +729,7 @@ public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://docs.oracle.com/en/
 <ul class="blockList">
 <li class="blockList">
 <h4>setDescription</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</pre>
 <div class="block">Sets the response description.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -729,7 +743,7 @@ public&nbsp;void&nbsp;setDescription&#8203;(<a href="https://docs.oracle.com/en/
 <ul class="blockList">
 <li class="blockList">
 <h4>getDescription</h4>
-<pre class="methodSignature">public&nbsp;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getDescription()</pre>
+<pre class="methodSignature">public&nbsp;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getDescription()</pre>
 <div class="block">Get the response description</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -840,6 +854,35 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the entries</dd>
+</dl>
+</li>
+</ul>
+<a id="setPlayersHidden(boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPlayersHidden</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setPlayersHidden&#8203;(boolean&nbsp;playersHidden)</pre>
+<div class="block">Sets whether the players are hidden or not.
+ In the vanilla client, `???` will be displayed where the online and maximum players would be.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>playersHidden</code> - if the players are hidden</dd>
+</dl>
+</li>
+</ul>
+<a id="arePlayersHidden()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>arePlayersHidden</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;arePlayersHidden()</pre>
+<div class="block">Returns if the players are hidden or not.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>if the players are hidden</dd>
 </dl>
 </li>
 </ul>

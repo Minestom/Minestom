@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":41,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -168,7 +168,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -176,15 +176,17 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createEntitySoundPacket(net.kyori.adventure.sound.Sound,net.minestom.server.entity.Entity)">createEntitySoundPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createEntitySoundPacket(net.kyori.adventure.sound.Sound,net.minestom.server.entity.Entity)">createEntitySoundPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
                        @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
-<div class="block">Creates an entity sound packet from an Adventure sound.</div>
+<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="#createSoundPacket(net.kyori.adventure.sound.Sound,net.kyori.adventure.sound.Sound.Emitter)"><code>createSoundPacket(Sound, Sound.Emitter)</code></a></div>
+</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundPacket(net.kyori.adventure.sound.Sound,double,double,double)">createSoundPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
+<td class="colFirst"><code>static @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundPacket(net.kyori.adventure.sound.Sound,double,double,double)">createSoundPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
                  double&nbsp;x,
                  double&nbsp;y,
                  double&nbsp;z)</code></th>
@@ -193,43 +195,51 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundPacket(net.kyori.adventure.sound.Sound,net.kyori.adventure.sound.Sound.Emitter)">createSoundPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
+                 @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Emitter.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Emitter</a>&nbsp;emitter)</code></th>
+<td class="colLast">
+<div class="block">Creates a sound effect packet from a sound and an emitter.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundStopPacket(net.kyori.adventure.sound.SoundStop)">createSoundStopPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/SoundStop.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">SoundStop</a>&nbsp;stop)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSoundStopPacket(net.kyori.adventure.sound.SoundStop)">createSoundStopPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/SoundStop.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">SoundStop</a>&nbsp;stop)</code></th>
 <td class="colLast">
 <div class="block">Creates a sound stop packet from a sound stop.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarColorValue(net.kyori.adventure.bossbar.BossBar.Color)">getBossBarColorValue</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.Color.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Color</a>&nbsp;color)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarColorValue(net.kyori.adventure.bossbar.BossBar.Color)">getBossBarColorValue</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/bossbar/BossBar.Color.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Color</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value of a boss bar color.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static byte</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarFlagValue(java.util.Collection)">getBossBarFlagValue</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.Flag.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Flag</a>&gt;&nbsp;flags)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarFlagValue(java.util.Collection)">getBossBarFlagValue</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/bossbar/BossBar.Flag.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Flag</a>&gt;&nbsp;flags)</code></th>
 <td class="colLast">
 <div class="block">Gets the byte value of a collection of boss bar flags.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarOverlayValue(net.kyori.adventure.bossbar.BossBar.Overlay)">getBossBarOverlayValue</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.Overlay.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Overlay</a>&nbsp;overlay)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBossBarOverlayValue(net.kyori.adventure.bossbar.BossBar.Overlay)">getBossBarOverlayValue</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/bossbar/BossBar.Overlay.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Overlay</a>&nbsp;overlay)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value of a boss bar overlay.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNamedTextColorValue(net.kyori.adventure.text.format.NamedTextColor)">getNamedTextColorValue</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/format/NamedTextColor.html?is-external=true" title="class or interface in net.kyori.adventure.text.format" class="externalLink">NamedTextColor</a>&nbsp;color)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNamedTextColorValue(net.kyori.adventure.text.format.NamedTextColor)">getNamedTextColorValue</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/format/NamedTextColor.html?is-external=true" title="class or interface in net.kyori.adventure.text.format" class="externalLink">NamedTextColor</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value from a named text color.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSoundSourceValue(net.kyori.adventure.sound.Sound.Source)">getSoundSourceValue</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.Source.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Source</a>&nbsp;source)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSoundSourceValue(net.kyori.adventure.sound.Sound.Source)">getSoundSourceValue</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Source.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Source</a>&nbsp;source)</code></th>
 <td class="colLast">
 <div class="block">Gets the int value of a sound source.</div>
 </td>
@@ -284,7 +294,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getBossBarOverlayValue</h4>
 <pre class="methodSignature">public static&nbsp;int&nbsp;getBossBarOverlayValue&#8203;(@NotNull
-                                         <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.Overlay.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Overlay</a>&nbsp;overlay)</pre>
+                                         <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/bossbar/BossBar.Overlay.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Overlay</a>&nbsp;overlay)</pre>
 <div class="block">Gets the int value of a boss bar overlay.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -301,7 +311,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getBossBarFlagValue</h4>
 <pre class="methodSignature">public static&nbsp;byte&nbsp;getBossBarFlagValue&#8203;(@NotNull
-                                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.Flag.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Flag</a>&gt;&nbsp;flags)</pre>
+                                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/bossbar/BossBar.Flag.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Flag</a>&gt;&nbsp;flags)</pre>
 <div class="block">Gets the byte value of a collection of boss bar flags.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -318,7 +328,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getBossBarColorValue</h4>
 <pre class="methodSignature">public static&nbsp;int&nbsp;getBossBarColorValue&#8203;(@NotNull
-                                       <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/bossbar/BossBar.Color.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Color</a>&nbsp;color)</pre>
+                                       <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/bossbar/BossBar.Color.html?is-external=true" title="class or interface in net.kyori.adventure.bossbar" class="externalLink">BossBar.Color</a>&nbsp;color)</pre>
 <div class="block">Gets the int value of a boss bar color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -335,7 +345,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getSoundSourceValue</h4>
 <pre class="methodSignature">public static&nbsp;int&nbsp;getSoundSourceValue&#8203;(@NotNull
-                                      <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.Source.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Source</a>&nbsp;source)</pre>
+                                      <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Source.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Source</a>&nbsp;source)</pre>
 <div class="block">Gets the int value of a sound source.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -352,7 +362,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>getNamedTextColorValue</h4>
 <pre class="methodSignature">public static&nbsp;int&nbsp;getNamedTextColorValue&#8203;(@NotNull
-                                         @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/format/NamedTextColor.html?is-external=true" title="class or interface in net.kyori.adventure.text.format" class="externalLink">NamedTextColor</a>&nbsp;color)</pre>
+                                         @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/format/NamedTextColor.html?is-external=true" title="class or interface in net.kyori.adventure.text.format" class="externalLink">NamedTextColor</a>&nbsp;color)</pre>
 <div class="block">Gets the int value from a named text color.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -368,11 +378,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>createSoundPacket</h4>
-<pre class="methodSignature">public static&nbsp;<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createSoundPacket&#8203;(@NotNull
-                                             @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
-                                             double&nbsp;x,
-                                             double&nbsp;y,
-                                             double&nbsp;z)</pre>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createSoundPacket&#8203;(@NotNull
+                                                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
+                                                      double&nbsp;x,
+                                                      double&nbsp;y,
+                                                      double&nbsp;z)</pre>
 <div class="block">Creates a sound packet from a sound and a location.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -385,16 +396,40 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
+<a id="createSoundPacket(net.kyori.adventure.sound.Sound,net.kyori.adventure.sound.Sound.Emitter)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createSoundPacket</h4>
+<pre class="methodSignature">@NotNull
+public static&nbsp;@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createSoundPacket&#8203;(@NotNull
+                                                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
+                                                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Emitter.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Emitter</a>&nbsp;emitter)</pre>
+<div class="block">Creates a sound effect packet from a sound and an emitter.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>sound</code> - the sound</dd>
+<dd><code>emitter</code> - the emitter, must be an <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the sound packet</dd>
+</dl>
+</li>
+</ul>
 <a id="createEntitySoundPacket(net.kyori.adventure.sound.Sound,net.minestom.server.entity.Entity)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createEntitySoundPacket</h4>
-<pre class="methodSignature">public static&nbsp;<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createEntitySoundPacket&#8203;(@NotNull
-                                                   @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
+public static&nbsp;<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createEntitySoundPacket&#8203;(@NotNull
+                                                   @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound</a>&nbsp;sound,
                                                    @NotNull
                                                    @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
+<div class="deprecationComment">Use <a href="#createSoundPacket(net.kyori.adventure.sound.Sound,net.kyori.adventure.sound.Sound.Emitter)"><code>createSoundPacket(Sound, Sound.Emitter)</code></a></div>
+</div>
 <div class="block">Creates an entity sound packet from an Adventure sound.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -412,7 +447,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>createSoundStopPacket</h4>
 <pre class="methodSignature">public static&nbsp;<a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;createSoundStopPacket&#8203;(@NotNull
-                                                 @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/sound/SoundStop.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">SoundStop</a>&nbsp;stop)</pre>
+                                                 @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/SoundStop.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">SoundStop</a>&nbsp;stop)</pre>
 <div class="block">Creates a sound stop packet from a sound stop.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

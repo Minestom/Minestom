@@ -176,10 +176,16 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,int,net.minestom.server.utils.time.TimeUnit)">MeleeAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,int,java.time.temporal.TemporalUnit)">MeleeAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
                double&nbsp;range,
                int&nbsp;delay,
-               @NotNull <a href="../../../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</code></th>
+               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;timeUnit)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.EntityCreature,double,java.time.Duration)">MeleeAttackGoal</a></span>&#8203;(@NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+               double&nbsp;range,
+               <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;delay)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -271,7 +277,28 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,double,int,net.minestom.server.utils.time.TimeUnit)">
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,double,int,java.time.temporal.TemporalUnit)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>MeleeAttackGoal</h4>
+<pre>public&nbsp;MeleeAttackGoal&#8203;(@NotNull
+                       @NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
+                       double&nbsp;range,
+                       int&nbsp;delay,
+                       @NotNull
+                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/temporal/TemporalUnit.html?is-external=true" title="class or interface in java.time.temporal" class="externalLink">TemporalUnit</a>&nbsp;timeUnit)</pre>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entityCreature</code> - the entity to add the goal to</dd>
+<dd><code>range</code> - the allowed range the entity can attack others.</dd>
+<dd><code>delay</code> - the delay between each attacks</dd>
+<dd><code>timeUnit</code> - the unit of the delay</dd>
+</dl>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.entity.EntityCreature,double,java.time.Duration)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -280,15 +307,12 @@ extends <a href="../GoalSelector.html" title="class in net.minestom.server.entit
 <pre>public&nbsp;MeleeAttackGoal&#8203;(@NotNull
                        @NotNull <a href="../../EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a>&nbsp;entityCreature,
                        double&nbsp;range,
-                       int&nbsp;delay,
-                       @NotNull
-                       @NotNull <a href="../../../utils/time/TimeUnit.html" title="enum in net.minestom.server.utils.time">TimeUnit</a>&nbsp;timeUnit)</pre>
+                       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;delay)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>entityCreature</code> - the entity to add the goal to</dd>
 <dd><code>range</code> - the allowed range the entity can attack others.</dd>
 <dd><code>delay</code> - the delay between each attacks</dd>
-<dd><code>timeUnit</code> - the unit of the delay</dd>
 </dl>
 </li>
 </ul>

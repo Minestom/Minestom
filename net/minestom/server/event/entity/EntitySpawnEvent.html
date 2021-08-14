@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -122,26 +122,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
-<li>
-<ul class="inheritance">
-<li><a href="../EntityEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.EntityEvent</a></li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.event.entity.EntitySpawnEvent</li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code></dd>
+</dl>
 <hr>
 <pre>public class <span class="typeNameLabel">EntitySpawnEvent</span>
-extends <a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></pre>
 <div class="block">Called when a new instance is set for an entity.</div>
 </li>
 </ul>
@@ -149,23 +144,6 @@ extends <a href="../EntityEvent.html" title="class in net.minestom.server.event"
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.EntityEvent">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a></h3>
-<code><a href="../EntityEvent.html#entity">entity</a></code></li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -272,8 +250,8 @@ extends <a href="../EntityEvent.html" title="class in net.minestom.server.event"
 public&nbsp;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;getEntity()</pre>
 <div class="block">Gets the entity who spawned in the instance.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../EntityEvent.html#getEntity()">getEntity</a></code>&nbsp;in class&nbsp;<code><a href="../EntityEvent.html" title="class in net.minestom.server.event">EntityEvent</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../trait/EntityEvent.html#getEntity()">getEntity</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the entity</dd>
 </dl>
@@ -346,7 +324,7 @@ public&nbsp;@NotNull <a href="../../instance/Instance.html" title="class in net.
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

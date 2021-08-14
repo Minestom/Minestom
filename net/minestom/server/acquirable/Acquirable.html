@@ -122,7 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>@Beta
+<pre>@Experimental
 public interface <span class="typeNameLabel">Acquirable&lt;T&gt;</span></pre>
 </li>
 </ul>
@@ -274,7 +274,9 @@ public interface <span class="typeNameLabel">Acquirable&lt;T&gt;</span></pre>
 static&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/stream/Stream.html?is-external=true" title="class or interface in java.util.stream" class="externalLink">Stream</a>&lt;@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;currentEntities()</pre>
 <div class="block">Gets all the <a href="../entity/Entity.html" title="class in net.minestom.server.entity"><code>entities</code></a> being ticked in the current thread.
  <p>
- Useful when you want to ensure that no acquisition is ever done.</div>
+ Useful when you want to ensure that no acquisition is ever done.
+ <p>
+ Be aware that the entity stream is only updated at the beginning of the thread tick.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the entities ticked in the current thread</dd>

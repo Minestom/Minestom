@@ -127,7 +127,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">TagSerializer&lt;T&gt;</span></pre>
-<div class="block">Interface used to create custom types compatible with <a href="Tag.html#Custom(java.lang.String,net.minestom.server.tag.TagSerializer)"><code>Tag.Custom(String, TagSerializer)</code></a>.</div>
+<div class="block">Interface used to create custom <a href="Tag.html" title="class in net.minestom.server.tag"><code>tags</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -194,7 +194,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>reader</code> - the reader</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the deserialized value</dd>
+<dd>the deserialized value, null if invalid</dd>
 </dl>
 </li>
 </ul>
@@ -208,13 +208,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>write</h4>
 <pre class="methodSignature">void&nbsp;write&#8203;(@NotNull
            @NotNull <a href="TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a>&nbsp;writer,
-           @NotNull
+           @Nullable
            <a href="TagSerializer.html" title="type parameter in TagSerializer">T</a>&nbsp;value)</pre>
 <div class="block">Writes the custom tag to a <a href="TagWritable.html" title="interface in net.minestom.server.tag"><code>TagWritable</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>writer</code> - the writer</dd>
-<dd><code>value</code> - the value to serialize</dd>
+<dd><code>value</code> - the value to serialize, null to remove</dd>
 </dl>
 </li>
 </ul>

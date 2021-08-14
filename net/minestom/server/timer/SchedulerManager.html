@@ -140,8 +140,8 @@ implements <a href="../extensions/IExtensionObserver.html" title="interface in n
 <div class="block">An object which manages all the <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a>'s.
  <p>
  <a href="Task.html" title="class in net.minestom.server.timer"><code>Task</code></a> first need to be built with <a href="#buildTask(java.lang.Runnable)"><code>buildTask(Runnable)</code></a>, you can then specify a delay with as example
- <a href="TaskBuilder.html#delay(long,net.minestom.server.utils.time.TimeUnit)"><code>TaskBuilder.delay(long, net.minestom.server.utils.time.TimeUnit)</code></a>
- or <a href="TaskBuilder.html#repeat(long,net.minestom.server.utils.time.TimeUnit)"><code>TaskBuilder.repeat(long, net.minestom.server.utils.time.TimeUnit)</code></a>,
+ <a href="TaskBuilder.html#delay(long,java.time.temporal.TemporalUnit)"><code>TaskBuilder.delay(long, java.time.temporal.TemporalUnit)</code></a>
+ or <a href="TaskBuilder.html#repeat(long,java.time.temporal.TemporalUnit)"><code>TaskBuilder.repeat(long, java.time.temporal.TemporalUnit)</code></a>,
  and to finally schedule: <a href="TaskBuilder.html#schedule()"><code>TaskBuilder.schedule()</code></a>.
  <p>
  Shutdown tasks are built with <a href="#buildShutdownTask(java.lang.Runnable)"><code>buildShutdownTask(Runnable)</code></a> and are executed, as the name implies, when the server stops.</div>

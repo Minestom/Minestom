@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -158,23 +158,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockTags">blockTags</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#entityTags">entityTags</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fluidTags">fluidTags</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#itemTags">itemTags</a></span></code></th>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../../../../gamedata/tags/Tag.BasicTypes.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicTypes</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#tagsMap">tagsMap</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -242,13 +227,6 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readTags(net.minestom.server.utils.binary.BinaryReader,java.util.List,java.util.function.Function)">readTags</a></span>&#8203;(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
-        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;&nbsp;output,
-        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;idSupplier)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></span>&#8203;(@NotNull <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer)</code></th>
 <td class="colLast">
 <div class="block">Writes into a <a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary"><code>BinaryWriter</code></a>.</div>
@@ -278,40 +256,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="blockTags">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>blockTags</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt; blockTags</pre>
-</li>
-</ul>
-<a id="itemTags">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>itemTags</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt; itemTags</pre>
-</li>
-</ul>
-<a id="fluidTags">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>fluidTags</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt; fluidTags</pre>
-</li>
-</ul>
-<a id="entityTags">
+<a id="tagsMap">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>entityTags</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt; entityTags</pre>
+<h4>tagsMap</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="../../../../gamedata/tags/Tag.BasicTypes.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicTypes</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;&gt; tagsMap</pre>
 </li>
 </ul>
 </li>
@@ -380,17 +331,6 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>reader</code> - the reader to read from</dd>
 </dl>
-</li>
-</ul>
-<a id="readTags(net.minestom.server.utils.binary.BinaryReader,java.util.List,java.util.function.Function)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>readTags</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;readTags&#8203;(<a href="../../../../utils/binary/BinaryReader.html" title="class in net.minestom.server.utils.binary">BinaryReader</a>&nbsp;reader,
-                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../../../gamedata/tags/Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;&nbsp;output,
-                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Function.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;idSupplier)</pre>
 </li>
 </ul>
 <a id="getId()">

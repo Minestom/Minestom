@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -122,17 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
-<li>
-<ul class="inheritance">
-<li><a href="../PlayerEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.PlayerEvent</a></li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.event.player.PlayerBlockBreakEvent</li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -141,35 +131,18 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">PlayerBlockBreakEvent</span>
-extends <a href="../PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a>
-implements <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.PlayerEvent">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a></h3>
-<code><a href="../PlayerEvent.html#player">player</a></code></li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -232,62 +205,69 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the player.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>short</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResultBlockStateId()">getResultBlockStateId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the visual block id result, which will be placed after the event.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>short</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResultCustomBlockId()">getResultCustomBlockId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the custom block id result, which will be placed after the event.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
-<td class="colLast">
-<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
+<td class="colLast">
+<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultBlockId(short)">setResultBlockId</a></span>&#8203;(short&nbsp;resultBlockStateId)</code></th>
 <td class="colLast">
 <div class="block">Changes the visual block id result.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(short)">setResultCustomBlock</a></span>&#8203;(short&nbsp;customBlockId)</code></th>
 <td class="colLast">
 <div class="block">Sets both the blockStateId and customBlockId.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(java.lang.String)">setResultCustomBlock</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;customBlockId)</code></th>
 <td class="colLast">
 <div class="block">Sets both the blockId and customBlockId.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(net.minestom.server.instance.block.CustomBlock)">setResultCustomBlock</a></span>&#8203;(@NotNull <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
 <td class="colLast">
 <div class="block">Sets both the blockId and customBlockId.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlockId(short)">setResultCustomBlockId</a></span>&#8203;(short&nbsp;resultCustomBlockId)</code></th>
 <td class="colLast">
@@ -296,18 +276,18 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.PlayerEvent">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.event.<a href="../PlayerEvent.html" title="class in net.minestom.server.event">PlayerEvent</a></h3>
-<code><a href="../PlayerEvent.html#getPlayer()">getPlayer</a></code></li>
-</ul>
-<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.trait.PlayerEvent">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.event.trait.<a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></h3>
+<code><a href="../trait/PlayerEvent.html#getEntity()">getEntity</a></code></li>
 </ul>
 </li>
 </ul>
@@ -509,11 +489,11 @@ public&nbsp;@Nullable <a href="../../instance/block/CustomBlock.html" title="cla
 <li class="blockList">
 <h4>isCancelled</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCancelled()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
-<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
+<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../trait/CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the event should be cancelled</dd>
 </dl>
@@ -522,17 +502,35 @@ public&nbsp;@Nullable <a href="../../instance/block/CustomBlock.html" title="cla
 <a id="setCancelled(boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setCancelled</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
-<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
+<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
+</dl>
+</li>
+</ul>
+<a id="getPlayer()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getPlayer</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../trait/PlayerEvent.html#getPlayer()">PlayerEvent</a></code></span></div>
+<div class="block">Gets the player.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../trait/PlayerEvent.html#getPlayer()">getPlayer</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the player</dd>
 </dl>
 </li>
 </ul>
@@ -588,7 +586,7 @@ public&nbsp;@Nullable <a href="../../instance/block/CustomBlock.html" title="cla
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

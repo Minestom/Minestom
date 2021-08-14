@@ -270,7 +270,7 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#components()">components</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the components held by this object.</div>
@@ -278,7 +278,7 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;operator)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#copyWithOperator(java.util.function.UnaryOperator)">copyWithOperator</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;operator)</code></th>
 <td class="colLast">
 <div class="block">Returns a copy of this object.</div>
 </td>
@@ -353,15 +353,6 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <pre>public&nbsp;byte scale</pre>
 </li>
 </ul>
-<a id="trackingPosition">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>trackingPosition</h4>
-<pre>public&nbsp;boolean trackingPosition</pre>
-</li>
-</ul>
 <a id="locked">
 <!--   -->
 </a>
@@ -369,6 +360,15 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <li class="blockList">
 <h4>locked</h4>
 <pre>public&nbsp;boolean locked</pre>
+</li>
+</ul>
+<a id="trackingPosition">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>trackingPosition</h4>
+<pre>public&nbsp;boolean trackingPosition</pre>
 </li>
 </ul>
 <a id="icons">
@@ -518,7 +518,7 @@ implements <a href="../ComponentHoldingServerPacket.html" title="interface in ne
 <li class="blockList">
 <h4>components</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;components()</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;components()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#components()">ComponentHolder</a></code></span></div>
 <div class="block">Gets the components held by this object.</div>
 <dl>
@@ -537,7 +537,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <h4>copyWithOperator</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;copyWithOperator&#8203;(@NotNull
-                                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;operator)</pre>
+                                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&gt;&nbsp;operator)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../adventure/ComponentHolder.html#copyWithOperator(java.util.function.UnaryOperator)">ComponentHolder</a></code></span></div>
 <div class="block">Returns a copy of this object. For each component this object holds, the operator
  is applied to the copy before returning.</div>

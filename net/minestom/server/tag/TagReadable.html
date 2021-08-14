@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":1,"i1":6,"i2":6};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var data = {"i0":1,"i1":6,"i2":18};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -123,11 +123,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Known Subinterfaces:</dt>
-<dd><code><a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></dd>
+<dd><code><a href="../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="../item/metadata/CompassMeta.html" title="class in net.minestom.server.item.metadata">CompassMeta</a></code>, <code><a href="../item/metadata/CrossbowMeta.html" title="class in net.minestom.server.item.metadata">CrossbowMeta</a></code>, <code><a href="../item/metadata/EnchantedBookMeta.html" title="class in net.minestom.server.item.metadata">EnchantedBookMeta</a></code>, <code><a href="../item/metadata/FireworkEffectMeta.html" title="class in net.minestom.server.item.metadata">FireworkEffectMeta</a></code>, <code><a href="../item/metadata/FireworkMeta.html" title="class in net.minestom.server.item.metadata">FireworkMeta</a></code>, <code><a href="../item/ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></code>, <code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code>, <code><a href="../item/metadata/LeatherArmorMeta.html" title="class in net.minestom.server.item.metadata">LeatherArmorMeta</a></code>, <code><a href="../item/metadata/MapMeta.html" title="class in net.minestom.server.item.metadata">MapMeta</a></code>, <code><a href="../item/metadata/PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></code>, <code><a href="../item/metadata/PotionMeta.html" title="class in net.minestom.server.item.metadata">PotionMeta</a></code>, <code><a href="../item/metadata/SpawnEggMeta.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta</a></code>, <code><a href="../item/metadata/WritableBookMeta.html" title="class in net.minestom.server.item.metadata">WritableBookMeta</a></code>, <code><a href="../item/metadata/WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a></code></dd>
+<dd><code><a href="../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code>, <code><a href="../inventory/type/AnvilInventory.html" title="class in net.minestom.server.inventory.type">AnvilInventory</a></code>, <code><a href="../inventory/type/BeaconInventory.html" title="class in net.minestom.server.inventory.type">BeaconInventory</a></code>, <code><a href="../inventory/type/BrewingStandInventory.html" title="class in net.minestom.server.inventory.type">BrewingStandInventory</a></code>, <code><a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code>, <code><a href="../item/metadata/CompassMeta.html" title="class in net.minestom.server.item.metadata">CompassMeta</a></code>, <code><a href="../command/ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a></code>, <code><a href="../item/metadata/CrossbowMeta.html" title="class in net.minestom.server.item.metadata">CrossbowMeta</a></code>, <code><a href="../entity/damage/DamageType.html" title="class in net.minestom.server.entity.damage">DamageType</a></code>, <code><a href="../instance/DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></code>, <code><a href="../item/metadata/EnchantedBookMeta.html" title="class in net.minestom.server.item.metadata">EnchantedBookMeta</a></code>, <code><a href="../inventory/type/EnchantmentTableInventory.html" title="class in net.minestom.server.inventory.type">EnchantmentTableInventory</a></code>, <code><a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code>, <code><a href="../entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code>, <code><a href="../entity/damage/EntityDamage.html" title="class in net.minestom.server.entity.damage">EntityDamage</a></code>, <code><a href="../entity/EntityProjectile.html" title="class in net.minestom.server.entity">EntityProjectile</a></code>, <code><a href="../entity/damage/EntityProjectileDamage.html" title="class in net.minestom.server.entity.damage">EntityProjectileDamage</a></code>, <code><a href="../entity/ExperienceOrb.html" title="class in net.minestom.server.entity">ExperienceOrb</a></code>, <code><a href="../entity/fakeplayer/FakePlayer.html" title="class in net.minestom.server.entity.fakeplayer">FakePlayer</a></code>, <code><a href="../item/metadata/FireworkEffectMeta.html" title="class in net.minestom.server.item.metadata">FireworkEffectMeta</a></code>, <code><a href="../item/metadata/FireworkMeta.html" title="class in net.minestom.server.item.metadata">FireworkMeta</a></code>, <code><a href="../inventory/type/FurnaceInventory.html" title="class in net.minestom.server.inventory.type">FurnaceInventory</a></code>, <code><a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></code>, <code><a href="../instance/InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code>, <code><a href="../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code>, <code><a href="../entity/ItemEntity.html" title="class in net.minestom.server.entity">ItemEntity</a></code>, <code><a href="../item/ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></code>, <code><a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code>, <code><a href="../item/metadata/LeatherArmorMeta.html" title="class in net.minestom.server.item.metadata">LeatherArmorMeta</a></code>, <code><a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="../item/metadata/MapMeta.html" title="class in net.minestom.server.item.metadata">MapMeta</a></code>, <code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code>, <code><a href="../item/metadata/PlayerHeadMeta.html" title="class in net.minestom.server.item.metadata">PlayerHeadMeta</a></code>, <code><a href="../inventory/PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></code>, <code><a href="../item/metadata/PotionMeta.html" title="class in net.minestom.server.item.metadata">PotionMeta</a></code>, <code><a href="../command/ServerSender.html" title="class in net.minestom.server.command">ServerSender</a></code>, <code><a href="../instance/SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code>, <code><a href="../item/metadata/SpawnEggMeta.html" title="class in net.minestom.server.item.metadata">SpawnEggMeta</a></code>, <code><a href="../inventory/type/VillagerInventory.html" title="class in net.minestom.server.inventory.type">VillagerInventory</a></code>, <code><a href="../item/metadata/WritableBookMeta.html" title="class in net.minestom.server.item.metadata">WritableBookMeta</a></code>, <code><a href="../item/metadata/WrittenBookMeta.html" title="class in net.minestom.server.item.metadata">WrittenBookMeta</a></code></dd>
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">TagReadable</span></pre>
@@ -146,7 +146,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -167,7 +167,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
+<td class="colFirst"><code>default boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasTag(net.minestom.server.tag.Tag)">hasTag</a></span>&#8203;(@NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</code></th>
 <td class="colLast">
 <div class="block">Returns if a tag is present.</div>
@@ -216,8 +216,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <h4>hasTag</h4>
-<pre class="methodSignature">boolean&nbsp;hasTag&#8203;(@NotNull
-               @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</pre>
+<pre class="methodSignature">default&nbsp;boolean&nbsp;hasTag&#8203;(@NotNull
+                       @NotNull <a href="Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;?&gt;&nbsp;tag)</pre>
 <div class="block">Returns if a tag is present.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -214,11 +214,21 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>[]</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSections()">getSections</a></span>()</code></th>
+<td class="colFirst"><code>@Nullable <a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSection(int)">getSection</a></span>&#8203;(int&nbsp;section)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap&lt;<a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSectionMap()">getSectionMap</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSections()">getSections</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockAt(int,int,int,short)">setBlockAt</a></span>&#8203;(int&nbsp;x,
           int&nbsp;y,
@@ -299,13 +309,33 @@ implements <a href="../../utils/clone/PublicCloneable.html" title="interface in 
                         int&nbsp;z)</pre>
 </li>
 </ul>
+<a id="getSectionMap()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSectionMap</h4>
+<pre class="methodSignature">public&nbsp;it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap&lt;<a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>&gt;&nbsp;getSectionMap()</pre>
+</li>
+</ul>
 <a id="getSections()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getSections</h4>
-<pre class="methodSignature">public&nbsp;<a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>[]&nbsp;getSections()</pre>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>&gt;&nbsp;getSections()</pre>
+</li>
+</ul>
+<a id="getSection(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSection</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="Section.html" title="class in net.minestom.server.instance.palette">Section</a>&nbsp;getSection&#8203;(int&nbsp;section)</pre>
 </li>
 </ul>
 <a id="clean()">

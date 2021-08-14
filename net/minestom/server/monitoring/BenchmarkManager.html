@@ -134,7 +134,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Small monitoring tools that can be used to check the current memory usage and Minestom threads CPU usage.
  <p>
- Needs to be enabled with <a href="#enable(net.minestom.server.utils.time.UpdateOption)"><code>enable(UpdateOption)</code></a>. Memory can then be accessed with <a href="#getUsedMemory()"><code>getUsedMemory()</code></a>
+ Needs to be enabled with <a href="#enable(java.time.Duration)"><code>enable(Duration)</code></a>. Memory can then be accessed with <a href="#getUsedMemory()"><code>getUsedMemory()</code></a>
  and the CPUs usage with <a href="#getResultMap()"><code>getResultMap()</code></a> or <a href="#getCpuMonitoringMessage()"><code>getCpuMonitoringMessage()</code></a>.
  <p>
  Be aware that this is not the most accurate method, you should use a proper java profiler depending on your needs.</div>
@@ -214,11 +214,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enable(net.minestom.server.utils.time.UpdateOption)">enable</a></span>&#8203;(@NotNull <a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#enable(java.time.Duration)">enable</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCpuMonitoringMessage()">getCpuMonitoringMessage</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -296,14 +296,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="enable(net.minestom.server.utils.time.UpdateOption)">
+<a id="enable(java.time.Duration)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>enable</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;enable&#8203;(@NotNull
-                   @NotNull <a href="../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;updateOption)</pre>
+                   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;duration)</pre>
 </li>
 </ul>
 <a id="disable()">
@@ -356,7 +356,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <li class="blockList">
 <h4>getCpuMonitoringMessage</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getCpuMonitoringMessage()</pre>
+public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getCpuMonitoringMessage()</pre>
 </li>
 </ul>
 </li>

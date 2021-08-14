@@ -187,8 +187,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drop(net.minestom.server.entity.Player,int,int,int)">drop</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-    int&nbsp;mode,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drop(net.minestom.server.entity.Player,boolean,int,int)">drop</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+    boolean&nbsp;all,
     int&nbsp;slot,
     int&nbsp;button)</code></th>
 <td class="colLast">
@@ -331,7 +331,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
                     int&nbsp;slot)</pre>
 </li>
 </ul>
-<a id="drop(net.minestom.server.entity.Player,int,int,int)">
+<a id="drop(net.minestom.server.entity.Player,boolean,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -339,14 +339,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>drop</h4>
 <pre class="methodSignature">boolean&nbsp;drop&#8203;(@NotNull
              @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-             int&nbsp;mode,
+             boolean&nbsp;all,
              int&nbsp;slot,
              int&nbsp;button)</pre>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> press the drop button</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>player</code> - the player who clicked</dd>
-<dd><code>mode</code> - </dd>
+<dd><code>all</code> - </dd>
 <dd><code>slot</code> - the slot number</dd>
 <dd><code>button</code> - -999 if clicking outside, normal if he is not</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

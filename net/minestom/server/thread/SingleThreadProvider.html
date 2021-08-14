@@ -197,7 +197,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>long</code></td>
+<td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findThread(net.minestom.server.instance.Chunk)">findThread</a></span>&#8203;(@NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
@@ -216,7 +216,7 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.thread.<a href="ThreadProvider.html" title="class in net.minestom.server.thread">ThreadProvider</a></h3>
-<code><a href="ThreadProvider.html#addChunk(net.minestom.server.instance.Chunk)">addChunk</a>, <a href="ThreadProvider.html#getMaximumRefreshTime()">getMaximumRefreshTime</a>, <a href="ThreadProvider.html#getMinimumRefreshTime()">getMinimumRefreshTime</a>, <a href="ThreadProvider.html#getRefreshPercentage()">getRefreshPercentage</a>, <a href="ThreadProvider.html#getThreadId(net.minestom.server.instance.Chunk)">getThreadId</a>, <a href="ThreadProvider.html#getThreads()">getThreads</a>, <a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Chunk)">onChunkLoad</a>, <a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Chunk)">onChunkUnload</a>, <a href="ThreadProvider.html#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a>, <a href="ThreadProvider.html#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a>, <a href="ThreadProvider.html#refreshThreads(long)">refreshThreads</a>, <a href="ThreadProvider.html#removeChunk(net.minestom.server.instance.Chunk)">removeChunk</a>, <a href="ThreadProvider.html#removeEntity(net.minestom.server.entity.Entity)">removeEntity</a>, <a href="ThreadProvider.html#setChunkThread(net.minestom.server.instance.Chunk,java.util.function.Function)">setChunkThread</a>, <a href="ThreadProvider.html#shutdown()">shutdown</a>, <a href="ThreadProvider.html#switchChunk(net.minestom.server.instance.Chunk)">switchChunk</a>, <a href="ThreadProvider.html#update(long)">update</a>, <a href="ThreadProvider.html#updateEntity(net.minestom.server.entity.Entity)">updateEntity</a></code></li>
+<code><a href="ThreadProvider.html#getMaximumRefreshTime()">getMaximumRefreshTime</a>, <a href="ThreadProvider.html#getMinimumRefreshTime()">getMinimumRefreshTime</a>, <a href="ThreadProvider.html#getRefreshPercentage()">getRefreshPercentage</a>, <a href="ThreadProvider.html#onChunkLoad(net.minestom.server.instance.Chunk)">onChunkLoad</a>, <a href="ThreadProvider.html#onChunkUnload(net.minestom.server.instance.Chunk)">onChunkUnload</a>, <a href="ThreadProvider.html#onInstanceCreate(net.minestom.server.instance.Instance)">onInstanceCreate</a>, <a href="ThreadProvider.html#onInstanceDelete(net.minestom.server.instance.Instance)">onInstanceDelete</a>, <a href="ThreadProvider.html#refreshThreads(long)">refreshThreads</a>, <a href="ThreadProvider.html#removeEntity(net.minestom.server.entity.Entity)">removeEntity</a>, <a href="ThreadProvider.html#shutdown()">shutdown</a>, <a href="ThreadProvider.html#updateAndAwait(long)">updateAndAwait</a>, <a href="ThreadProvider.html#updateEntity(net.minestom.server.entity.Entity)">updateEntity</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -266,8 +266,8 @@ extends <a href="ThreadProvider.html" title="class in net.minestom.server.thread
 <ul class="blockList">
 <li class="blockList">
 <h4>findThread</h4>
-<pre class="methodSignature">public&nbsp;long&nbsp;findThread&#8203;(@NotNull
-                       @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
+<pre class="methodSignature">public&nbsp;int&nbsp;findThread&#8203;(@NotNull
+                      @NotNull <a href="../instance/Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="ThreadProvider.html#findThread(net.minestom.server.instance.Chunk)">ThreadProvider</a></code></span></div>
 <div class="block">Performs a server tick for all chunks based on their linked thread.</div>
 <dl>

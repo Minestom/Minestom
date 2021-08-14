@@ -158,6 +158,16 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forced">forced</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forcedMessage">forcedMessage</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hash">hash</a></span></code></th>
 <td class="colLast">&nbsp;</td>
@@ -186,6 +196,10 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">ResourcePackSendPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.resourcepack.ResourcePack)">ResourcePackSendPacket</a></span>&#8203;(@NotNull <a href="../../../../resourcepack/ResourcePack.html" title="class in net.minestom.server.resourcepack">ResourcePack</a>&nbsp;resourcePack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -263,10 +277,28 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <a id="hash">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
 <pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> hash</pre>
+</li>
+</ul>
+<a id="forced">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forced</h4>
+<pre>public&nbsp;boolean forced</pre>
+</li>
+</ul>
+<a id="forcedMessage">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>forcedMessage</h4>
+<pre>public&nbsp;<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a> forcedMessage</pre>
 </li>
 </ul>
 </li>
@@ -282,10 +314,20 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>ResourcePackSendPacket</h4>
 <pre>public&nbsp;ResourcePackSendPacket()</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.resourcepack.ResourcePack)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>ResourcePackSendPacket</h4>
+<pre>public&nbsp;ResourcePackSendPacket&#8203;(@NotNull
+                              @NotNull <a href="../../../../resourcepack/ResourcePack.html" title="class in net.minestom.server.resourcepack">ResourcePack</a>&nbsp;resourcePack)</pre>
 </li>
 </ul>
 </li>

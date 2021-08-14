@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":6,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":6,"i2":10,"i3":6,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -238,20 +238,30 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromView(net.minestom.server.entity.Entity)">fromView</a></span>&#8203;(@Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>abstract <a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromView(net.minestom.server.utils.Position)">fromView</a></span>&#8203;(@Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeX()">isRelativeX</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the 'x' field is relative.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeY()">isRelativeY</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the 'y' field is relative.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeZ()">isRelativeZ</a></span>()</code></th>
 <td class="colLast">
@@ -353,6 +363,34 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="from(net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>from</h4>
+<pre class="methodSignature">public abstract&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;from&#8203;(@Nullable
+                       @Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>position</code> - the relative position</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the location</dd>
+</dl>
+</li>
+</ul>
+<a id="fromView(net.minestom.server.utils.Position)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromView</h4>
+<pre class="methodSignature">@Experimental
+public abstract&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;fromView&#8203;(@Nullable
+                           @Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+</li>
+</ul>
 <a id="from(net.minestom.server.entity.Entity)">
 <!--   -->
 </a>
@@ -370,21 +408,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="from(net.minestom.server.utils.Position)">
+<a id="fromView(net.minestom.server.entity.Entity)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>from</h4>
-<pre class="methodSignature">public abstract&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;from&#8203;(@Nullable
-                       @Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
-<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the relative position</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the location</dd>
-</dl>
+<h4>fromView</h4>
+<pre class="methodSignature">@Experimental
+public&nbsp;<a href="RelativeLocation.html" title="type parameter in RelativeLocation">T</a>&nbsp;fromView&#8203;(@Nullable
+                  @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
 </li>
 </ul>
 <a id="isRelativeX()">

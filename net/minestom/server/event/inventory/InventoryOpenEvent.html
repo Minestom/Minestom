@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -122,17 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
-<li>
-<ul class="inheritance">
-<li><a href="../InventoryEvent.html" title="class in net.minestom.server.event">net.minestom.server.event.InventoryEvent</a></li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.event.inventory.InventoryOpenEvent</li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -141,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">InventoryOpenEvent</span>
-extends <a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a>
-implements <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a>, <a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
 <div class="block">Called when a player open an <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a>.
  <p>
  Executed by <a href="../../entity/Player.html#openInventory(net.minestom.server.inventory.Inventory)"><code>Player.openInventory(Inventory)</code></a>.</div>
@@ -156,23 +146,6 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.InventoryEvent">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></h3>
-<code><a href="../InventoryEvent.html#inventory">inventory</a></code></li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -227,14 +200,14 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
-<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -251,6 +224,13 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.trait.PlayerEvent">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.event.trait.<a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></h3>
+<code><a href="../trait/PlayerEvent.html#getEntity()">getEntity</a></code></li>
 </ul>
 </li>
 </ul>
@@ -300,6 +280,8 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;getPlayer()</pre>
 <div class="block">Gets the player who opens the inventory.</div>
 <dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../trait/PlayerEvent.html#getPlayer()">getPlayer</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the player who opens the inventory</dd>
 </dl>
@@ -315,8 +297,8 @@ public&nbsp;@NotNull <a href="../../entity/Player.html" title="class in net.mine
 public&nbsp;@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;getInventory()</pre>
 <div class="block">Gets the inventory to open, this could have been change by the <a href="#setInventory(net.minestom.server.inventory.Inventory)"><code>setInventory(Inventory)</code></a>.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../InventoryEvent.html#getInventory()">getInventory</a></code>&nbsp;in class&nbsp;<code><a href="../InventoryEvent.html" title="class in net.minestom.server.event">InventoryEvent</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../trait/InventoryEvent.html#getInventory()">getInventory</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the inventory to open, null to just close the current inventory if any</dd>
 </dl>
@@ -346,11 +328,11 @@ public&nbsp;@Nullable <a href="../../inventory/Inventory.html" title="class in n
 <li class="blockList">
 <h4>isCancelled</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCancelled()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
-<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
+<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../trait/CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the event should be cancelled</dd>
 </dl>
@@ -363,11 +345,11 @@ public&nbsp;@Nullable <a href="../../inventory/Inventory.html" title="class in n
 <li class="blockList">
 <h4>setCancelled</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setCancelled&#8203;(boolean&nbsp;cancel)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
-<div class="block">Marks the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
+<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
 </dl>
@@ -425,7 +407,7 @@ public&nbsp;@Nullable <a href="../../inventory/Inventory.html" title="class in n
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

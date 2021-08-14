@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":6,"i16":10,"i17":10,"i18":10,"i19":10,"i20":6};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":6,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
+<dd><code><a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -140,7 +140,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public abstract class <span class="typeNameLabel">AbstractInventory</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a>, <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></pre>
+implements <a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a>, <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a>, <a href="../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></pre>
 <div class="block">Represents an inventory where items can be modified/retrieved.</div>
 </li>
 </ul>
@@ -304,38 +304,45 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTag(net.minestom.server.tag.Tag)">getTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></th>
+<td class="colLast">
+<div class="block">Reads the specified tag.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStack</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
                 @NotNull <a href="TransactionType.html" title="interface in net.minestom.server.inventory">TransactionType</a>&nbsp;type,
                 @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull T&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStacks</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
                  @NotNull <a href="TransactionType.html" title="interface in net.minestom.server.inventory">TransactionType</a>&nbsp;type,
                  @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#replaceItemStack(int,java.util.function.UnaryOperator)">replaceItemStack</a></span>&#8203;(int&nbsp;slot,
                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;operator)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#safeItemInsert(int,net.minestom.server.item.ItemStack)">safeItemInsert</a></span>&#8203;(int&nbsp;slot,
               @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setData(net.minestom.server.data.Data)">setData</a></span>&#8203;(@Nullable <a href="../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
 <div class="block">Sets the <a href="../data/Data.html" title="class in net.minestom.server.data"><code>Data</code></a> of this container.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a></span>&#8203;(int&nbsp;slot,
             @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack)</code></th>
@@ -343,7 +350,15 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <div class="block">Sets an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> at the specified slot and send relevant update to the viewer(s).</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTag(net.minestom.server.tag.Tag,T)">setTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+      T&nbsp;value)</code></th>
+<td class="colLast">
+<div class="block">Writes the specified type.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">takeItemStack</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
              @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></th>
@@ -351,7 +366,7 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <div class="block">Takes an <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a> from the inventory and sends relevant update to the viewer(s).</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull T&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">takeItemStacks</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemStacks,
               @NotNull <a href="TransactionOption.html" title="interface in net.minestom.server.inventory">TransactionOption</a>&lt;T&gt;&nbsp;option)</code></th>
@@ -359,7 +374,7 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <div class="block">Takes <a href="../item/ItemStack.html" title="class in net.minestom.server.item"><code>ItemStack</code></a>s from the inventory and sends relevant updates to the viewer(s).</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>abstract void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update()">update</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -377,7 +392,21 @@ implements <a href="InventoryClickHandler.html" title="interface in net.minestom
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.inventory.<a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></h3>
-<code><a href="InventoryClickHandler.html#callClickEvent(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callClickEvent</a>, <a href="InventoryClickHandler.html#changeHeld(net.minestom.server.entity.Player,int,int)">changeHeld</a>, <a href="InventoryClickHandler.html#doubleClick(net.minestom.server.entity.Player,int)">doubleClick</a>, <a href="InventoryClickHandler.html#dragging(net.minestom.server.entity.Player,int,int)">dragging</a>, <a href="InventoryClickHandler.html#drop(net.minestom.server.entity.Player,int,int,int)">drop</a>, <a href="InventoryClickHandler.html#leftClick(net.minestom.server.entity.Player,int)">leftClick</a>, <a href="InventoryClickHandler.html#middleClick(net.minestom.server.entity.Player,int)">middleClick</a>, <a href="InventoryClickHandler.html#rightClick(net.minestom.server.entity.Player,int)">rightClick</a>, <a href="InventoryClickHandler.html#shiftClick(net.minestom.server.entity.Player,int)">shiftClick</a></code></li>
+<code><a href="InventoryClickHandler.html#callClickEvent(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callClickEvent</a>, <a href="InventoryClickHandler.html#changeHeld(net.minestom.server.entity.Player,int,int)">changeHeld</a>, <a href="InventoryClickHandler.html#doubleClick(net.minestom.server.entity.Player,int)">doubleClick</a>, <a href="InventoryClickHandler.html#dragging(net.minestom.server.entity.Player,int,int)">dragging</a>, <a href="InventoryClickHandler.html#drop(net.minestom.server.entity.Player,boolean,int,int)">drop</a>, <a href="InventoryClickHandler.html#leftClick(net.minestom.server.entity.Player,int)">leftClick</a>, <a href="InventoryClickHandler.html#middleClick(net.minestom.server.entity.Player,int)">middleClick</a>, <a href="InventoryClickHandler.html#rightClick(net.minestom.server.entity.Player,int)">rightClick</a>, <a href="InventoryClickHandler.html#shiftClick(net.minestom.server.entity.Player,int)">shiftClick</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagReadable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
+<code><a href="../tag/TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagWritable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
+<code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code></li>
 </ul>
 </li>
 </ul>
@@ -739,6 +768,54 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the size of the array is not equal to <a href="#getSize()"><code>getSize()</code></a></dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/NullPointerException.html?is-external=true" title="class or interface in java.lang" class="externalLink">NullPointerException</a></code> - if <code>itemStacks</code> contains one null element or more</dd>
+</dl>
+</li>
+</ul>
+<a id="getTag(net.minestom.server.tag.Tag)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTag</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getTag&#8203;(@NotNull
+                    @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">TagReadable</a></code></span></div>
+<div class="block">Reads the specified tag.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">getTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></dd>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the tag type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tag</code> - the tag to read</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the read tag, null if not present</dd>
+</dl>
+</li>
+</ul>
+<a id="setTag(net.minestom.server.tag.Tag,java.lang.Object)">
+<!--   -->
+</a><a id="setTag(net.minestom.server.tag.Tag,T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setTag</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;void&nbsp;setTag&#8203;(@NotNull
+                       @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+                       @Nullable
+                       T&nbsp;value)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">TagWritable</a></code></span></div>
+<div class="block">Writes the specified type.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the tag type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tag</code> - the tag to write</dd>
+<dd><code>value</code> - the tag value, null to remove</dd>
 </dl>
 </li>
 </ul>

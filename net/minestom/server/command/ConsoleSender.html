@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code>, <code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointered.html?is-external=true" title="class or interface in net.kyori.adventure.pointer" class="externalLink">Pointered</a></code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">ConsoleSender</span>
@@ -194,25 +194,40 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTag(net.minestom.server.tag.Tag)">getTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</code></th>
+<td class="colLast">
+<div class="block">Reads the specified tag.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isConsole()">isConsole</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the sender is a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String)">sendMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;message)</code></th>
 <td class="colLast">
 <div class="block">Sends a raw string message.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
-           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
-           @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/MessageType.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">MessageType</a>&nbsp;type)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)">sendMessage</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
+           @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
+           @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/MessageType.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">MessageType</a>&nbsp;type)</code></th>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTag(net.minestom.server.tag.Tag,T)">setTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+      T&nbsp;value)</code></th>
+<td class="colLast">
+<div class="block">Writes the specified type.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -226,8 +241,8 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.audience.Audience">
 <!--   -->
 </a>
-<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.<a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></h3>
-<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#clearTitle()" title="class or interface in net.kyori.adventure.audience" class="externalLink">clearTitle</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#hideBossBar(net.kyori.adventure.bossbar.BossBar)" title="class or interface in net.kyori.adventure.audience" class="externalLink">hideBossBar</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book.Builder)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound,double,double,double)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#resetTitle()" title="class or interface in net.kyori.adventure.audience" class="externalLink">resetTitle</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#showBossBar(net.kyori.adventure.bossbar.BossBar)" title="class or interface in net.kyori.adventure.audience" class="externalLink">showBossBar</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#showTitle(net.kyori.adventure.title.Title)" title="class or interface in net.kyori.adventure.audience" class="externalLink">showTitle</a>, <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#stopSound(net.kyori.adventure.sound.SoundStop)" title="class or interface in net.kyori.adventure.audience" class="externalLink">stopSound</a></code></li>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.audience.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#clearTitle()" title="class or interface in net.kyori.adventure.audience" class="externalLink">clearTitle</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#hideBossBar(net.kyori.adventure.bossbar.BossBar)" title="class or interface in net.kyori.adventure.audience" class="externalLink">hideBossBar</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#openBook(net.kyori.adventure.inventory.Book.Builder)" title="class or interface in net.kyori.adventure.audience" class="externalLink">openBook</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound,double,double,double)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#playSound(net.kyori.adventure.sound.Sound,net.kyori.adventure.sound.Sound.Emitter)" title="class or interface in net.kyori.adventure.audience" class="externalLink">playSound</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#resetTitle()" title="class or interface in net.kyori.adventure.audience" class="externalLink">resetTitle</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendActionBar(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendActionBar</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identified,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListFooter(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeader(net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeader</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.ComponentLike,net.kyori.adventure.text.ComponentLike)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendPlayerListHeaderAndFooter(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendPlayerListHeaderAndFooter</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#showBossBar(net.kyori.adventure.bossbar.BossBar)" title="class or interface in net.kyori.adventure.audience" class="externalLink">showBossBar</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#showTitle(net.kyori.adventure.title.Title)" title="class or interface in net.kyori.adventure.audience" class="externalLink">showTitle</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#stopSound(net.kyori.adventure.sound.Sound)" title="class or interface in net.kyori.adventure.audience" class="externalLink">stopSound</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#stopSound(net.kyori.adventure.sound.SoundStop)" title="class or interface in net.kyori.adventure.audience" class="externalLink">stopSound</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.CommandSender">
@@ -242,6 +257,27 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 </a>
 <h3>Methods inherited from interface&nbsp;net.minestom.server.permission.<a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></h3>
 <code><a href="../permission/PermissionHandler.html#addPermission(net.minestom.server.permission.Permission)">addPermission</a>, <a href="../permission/PermissionHandler.html#getPermission(java.lang.String)">getPermission</a>, <a href="../permission/PermissionHandler.html#hasPermission(java.lang.String)">hasPermission</a>, <a href="../permission/PermissionHandler.html#hasPermission(java.lang.String,net.minestom.server.permission.PermissionVerifier)">hasPermission</a>, <a href="../permission/PermissionHandler.html#hasPermission(net.minestom.server.permission.Permission)">hasPermission</a>, <a href="../permission/PermissionHandler.html#removePermission(java.lang.String)">removePermission</a>, <a href="../permission/PermissionHandler.html#removePermission(net.minestom.server.permission.Permission)">removePermission</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.kyori.adventure.pointer.Pointered">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.kyori.adventure.pointer.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointered.html?is-external=true" title="class or interface in net.kyori.adventure.pointer" class="externalLink">Pointered</a></h3>
+<code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointered.html?is-external=true#get(net.kyori.adventure.pointer.Pointer)" title="class or interface in net.kyori.adventure.pointer" class="externalLink">get</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointered.html?is-external=true#getOrDefault(net.kyori.adventure.pointer.Pointer,T)" title="class or interface in net.kyori.adventure.pointer" class="externalLink">getOrDefault</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointered.html?is-external=true#getOrDefaultFrom(net.kyori.adventure.pointer.Pointer,java.util.function.Supplier)" title="class or interface in net.kyori.adventure.pointer" class="externalLink">getOrDefaultFrom</a>, <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/pointer/Pointered.html?is-external=true#pointers()" title="class or interface in net.kyori.adventure.pointer" class="externalLink">pointers</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagReadable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></h3>
+<code><a href="../tag/TagReadable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagWritable">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></h3>
+<code><a href="../tag/TagWritable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a></code></li>
 </ul>
 </li>
 </ul>
@@ -303,14 +339,14 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <li class="blockList">
 <h4>sendMessage</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
-                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/identity/Identity.html?is-external=true" title="class or interface in net.kyori.adventure.identity" class="externalLink">Identity</a>&nbsp;source,
                         @NotNull
-                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;message,
                         @NotNull
-                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/MessageType.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">MessageType</a>&nbsp;type)</pre>
+                        @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/MessageType.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">MessageType</a>&nbsp;type)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.7.0/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
+<dd><code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="externalLink">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -353,7 +389,7 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <a id="asConsole()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>asConsole</h4>
 <pre class="methodSignature">public&nbsp;<a href="ConsoleSender.html" title="class in net.minestom.server.command">ConsoleSender</a>&nbsp;asConsole()</pre>
@@ -365,6 +401,54 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <dd><code><a href="CommandSender.html#asConsole()">asConsole</a></code>&nbsp;in interface&nbsp;<code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code></dd>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="CommandSender.html#isConsole()"><code>CommandSender.isConsole()</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="getTag(net.minestom.server.tag.Tag)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getTag</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;&lt;T&gt;&nbsp;T&nbsp;getTag&#8203;(@NotNull
+                    @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">TagReadable</a></code></span></div>
+<div class="block">Reads the specified tag.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../tag/TagReadable.html#getTag(net.minestom.server.tag.Tag)">getTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code></dd>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the tag type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tag</code> - the tag to read</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the read tag, null if not present</dd>
+</dl>
+</li>
+</ul>
+<a id="setTag(net.minestom.server.tag.Tag,java.lang.Object)">
+<!--   -->
+</a><a id="setTag(net.minestom.server.tag.Tag,T)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setTag</h4>
+<pre class="methodSignature">public&nbsp;&lt;T&gt;&nbsp;void&nbsp;setTag&#8203;(@NotNull
+                       @NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
+                       @Nullable
+                       T&nbsp;value)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">TagWritable</a></code></span></div>
+<div class="block">Writes the specified type.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../tag/TagWritable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a></code>&nbsp;in interface&nbsp;<code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - the tag type</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>tag</code> - the tag to write</dd>
+<dd><code>value</code> - the tag value, null to remove</dd>
 </dl>
 </li>
 </ul>

@@ -309,8 +309,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUpdateOption()">getUpdateOption</a></span>()</code></th>
+<td class="colFirst"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUpdateFrequency()">getUpdateFrequency</a></span>()</code></th>
 <td class="colLast">
 <div class="block">The update option is used to define the delay between two
  <a href="#update(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)"><code>update(Instance, BlockPosition, Data)</code></a> execution.</div>
@@ -421,7 +421,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
       @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
       @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</code></th>
 <td class="colLast">
-<div class="block">Calling delay depends on <a href="#getUpdateOption()"><code>getUpdateOption()</code></a> which should be overridden.</div>
+<div class="block">Calling delay depends on <a href="#getUpdateFrequency()"><code>getUpdateFrequency()</code></a> which should be overridden.</div>
 </td>
 </tr>
 <tr id="i25" class="rowColor">
@@ -549,26 +549,26 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                    @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
                    @Nullable
                    @Nullable <a href="../../data/Data.html" title="class in net.minestom.server.data">Data</a>&nbsp;data)</pre>
-<div class="block">Calling delay depends on <a href="#getUpdateOption()"><code>getUpdateOption()</code></a> which should be overridden.</div>
+<div class="block">Calling delay depends on <a href="#getUpdateFrequency()"><code>getUpdateFrequency()</code></a> which should be overridden.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the instance of the block</dd>
 <dd><code>blockPosition</code> - the position of the block</dd>
 <dd><code>data</code> - the data associated with the block</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if <a href="#getUpdateOption()"><code>getUpdateOption()</code></a>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang" class="externalLink">UnsupportedOperationException</a></code> - if <a href="#getUpdateFrequency()"><code>getUpdateFrequency()</code></a>
                                        is not null but the update method is not overridden</dd>
 </dl>
 </li>
 </ul>
-<a id="getUpdateOption()">
+<a id="getUpdateFrequency()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getUpdateOption</h4>
+<h4>getUpdateFrequency</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;getUpdateOption()</pre>
+public&nbsp;@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;getUpdateFrequency()</pre>
 <div class="block">The update option is used to define the delay between two
  <a href="#update(net.minestom.server.instance.Instance,net.minestom.server.utils.BlockPosition,net.minestom.server.data.Data)"><code>update(Instance, BlockPosition, Data)</code></a> execution.
  <p>
@@ -733,7 +733,7 @@ public&nbsp;@Nullable <a href="../../utils/time/UpdateOption.html" title="class 
 <div class="block">Gets if this <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> requires any tick update.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if <a href="#getUpdateOption()"><code>getUpdateOption()</code></a> is not null and the value is positive</dd>
+<dd>true if <a href="#getUpdateFrequency()"><code>getUpdateFrequency()</code></a> is not null and the value is positive</dd>
 </dl>
 </li>
 </ul>

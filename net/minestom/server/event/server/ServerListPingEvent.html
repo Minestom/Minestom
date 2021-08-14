@@ -122,12 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../Event.html" title="class in net.minestom.server.event">net.minestom.server.event.Event</a></li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.event.server.ServerListPingEvent</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -136,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">ServerListPingEvent</span>
-extends <a href="../Event.html" title="class in net.minestom.server.event">Event</a>
-implements <a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
+implements <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
 <div class="block">Called when a <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a> sends a status packet,
  usually to display information on the server list.</div>
 </li>
@@ -219,7 +214,7 @@ implements <a href="../CancellableEvent.html" title="interface in net.minestom.s
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -372,11 +367,11 @@ public&nbsp;@NotNull <a href="../../ping/ServerListPingType.html" title="enum in
 <li class="blockList">
 <h4>isCancelled</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isCancelled()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
-<div class="block">Gets if the <a href="../Event.html" title="class in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
+<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../trait/CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if the event should be cancelled</dd>
 </dl>
@@ -393,7 +388,7 @@ public&nbsp;@NotNull <a href="../../ping/ServerListPingType.html" title="enum in
  Note that this will have no effect if the ping version is <a href="../../ping/ServerListPingType.html#OPEN_TO_LAN"><code>ServerListPingType.OPEN_TO_LAN</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../CancellableEvent.html" title="interface in net.minestom.server.event">CancellableEvent</a></code></dd>
+<dd><code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
 </dl>
