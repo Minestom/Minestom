@@ -528,11 +528,12 @@ public class EventNode<T extends Event> {
 
     public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
         final var nodeType = node.eventType;
+        final var valueType = value.getClass();
         final boolean correct = getEventFilters(nodeType).stream().anyMatch(eventFilter -> {
             final var handlerType = eventFilter.handlerType();
-            return handlerType != null && handlerType.isAssignableFrom(value.getClass());
+            return handlerType != null && handlerType.isAssignableFrom(valueType);
         });
-        Check.stateCondition(!correct, "The node {0} is not compatible with objects of type {1}", nodeType, value.getClass());
+        Check.stateCondition(!correct, "The node filter {0} is not compatible with type {1}", nodeType, valueType);
         //noinspection unchecked
         this.mappedNode.put(value, (EventNode<T>) node);
     }
