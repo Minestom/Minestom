@@ -197,8 +197,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
      * <p>
      * WARNING: during unloading, all entities other than {@link Player} will be removed.
-     * <p>
-     * For {@link InstanceContainer} it is done during the next {@link InstanceContainer#tick(long)}.
      *
      * @param chunk the chunk to unload
      */

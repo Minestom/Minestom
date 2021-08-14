@@ -38,7 +38,7 @@ public final class InstanceManager {
      * Creates and register an {@link InstanceContainer}
      * with the specified {@link DimensionType} and {@link StorageLocation}.
      *
-     * @param dimensionType   the {@link DimensionType} of the instance
+     * @param dimensionType the {@link DimensionType} of the instance
      * @return the created {@link InstanceContainer}
      */
     public @NotNull InstanceContainer createInstanceContainer(@NotNull DimensionType dimensionType) {
@@ -98,19 +98,12 @@ public final class InstanceManager {
      */
     public void unregisterInstance(@NotNull Instance instance) {
         Check.stateCondition(!instance.getPlayers().isEmpty(), "You cannot unregister an instance with players inside.");
-
         synchronized (instance) {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
-                InstanceContainer instanceContainer = (InstanceContainer) instance;
-
-                Set<Chunk> scheduledChunksToRemove = instanceContainer.scheduledChunksToRemove;
-                synchronized (scheduledChunksToRemove) {
-                    scheduledChunksToRemove.addAll(instanceContainer.getChunks());
-                    instanceContainer.UNSAFE_unloadChunks();
-                }
+                instance.getChunks().forEach(instance::unloadChunk);
             }
-
+            // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
             MinecraftServer.getUpdateManager().signalInstanceDelete(instance);
