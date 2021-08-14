@@ -23,7 +23,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 
-    protected final Player player;
+    private final Player player;
     private ItemStack cursorItem = ItemStack.AIR;
 
     public PlayerInventory(@NotNull Player player) {
@@ -56,9 +56,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         return INNER_INVENTORY_SIZE;
     }
 
-    @NotNull
     @Override
-    public ItemStack getItemInMainHand() {
+    public @NotNull ItemStack getItemInMainHand() {
         return getItemStack(player.getHeldSlot());
     }
 
@@ -67,9 +66,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         safeItemInsert(player.getHeldSlot(), itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getItemInOffHand() {
+    public @NotNull ItemStack getItemInOffHand() {
         return getItemStack(OFFHAND_SLOT);
     }
 
@@ -78,9 +76,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         safeItemInsert(OFFHAND_SLOT, itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getHelmet() {
+    public @NotNull ItemStack getHelmet() {
         return getItemStack(HELMET_SLOT);
     }
 
@@ -89,9 +86,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         safeItemInsert(HELMET_SLOT, itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getChestplate() {
+    public @NotNull ItemStack getChestplate() {
         return getItemStack(CHESTPLATE_SLOT);
     }
 
@@ -100,9 +96,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         safeItemInsert(CHESTPLATE_SLOT, itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getLeggings() {
+    public @NotNull ItemStack getLeggings() {
         return getItemStack(LEGGINGS_SLOT);
     }
 
@@ -111,9 +106,8 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         safeItemInsert(LEGGINGS_SLOT, itemStack);
     }
 
-    @NotNull
     @Override
-    public ItemStack getBoots() {
+    public @NotNull ItemStack getBoots() {
         return getItemStack(BOOTS_SLOT);
     }
 
@@ -136,8 +130,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
      *
      * @return the cursor item
      */
-    @NotNull
-    public ItemStack getCursorItem() {
+    public @NotNull ItemStack getCursorItem() {
         return cursorItem;
     }
 
@@ -196,30 +189,6 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         }
         // Refresh slot
         sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
-    }
-
-    /**
-     * Sets an item from a packet slot.
-     *
-     * @param slot      a packet slot
-     * @param offset    offset (generally 9 to ignore armor and craft slots)
-     * @param itemStack the item stack to set
-     */
-    protected void setItemStack(int slot, int offset, @NotNull ItemStack itemStack) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, offset);
-        setItemStack(convertedSlot, itemStack);
-    }
-
-    /**
-     * Gets the item from a packet slot.
-     *
-     * @param slot   a packet slot
-     * @param offset offset (generally 9 to ignore armor and craft slots)
-     * @return the item in the specified slot
-     */
-    protected ItemStack getItemStack(int slot, int offset) {
-        final int convertedSlot = convertPlayerInventorySlot(slot, offset);
-        return this.itemStacks[convertedSlot];
     }
 
     /**
@@ -290,7 +259,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public boolean drop(@NotNull Player player, boolean all, int slot, int button) {
         final ItemStack cursor = getCursorItem();
         final boolean outsideDrop = slot == -999;
-        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStack(slot, OFFSET);
+        final ItemStack clicked = outsideDrop ? ItemStack.AIR : getItemStackFromPacketSlot(slot);
         final InventoryClickResult clickResult = clickProcessor.drop(player, this,
                 all, slot, button, clicked, cursor);
         if (clickResult.isCancel()) {
@@ -299,7 +268,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         }
         final ItemStack resultClicked = clickResult.getClicked();
         if (resultClicked != null && !outsideDrop) {
-            setItemStack(slot, OFFSET, resultClicked);
+            setItemStackFromPacketSlot(slot, resultClicked);
         }
         setCursorItem(clickResult.getCursor());
         return true;
@@ -308,7 +277,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean shiftClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack clicked = getItemStackFromPacketSlot(slot);
         final boolean hotBarClick = convertSlot(slot, OFFSET) < 9;
         final int start = hotBarClick ? 9 : 0;
         final int end = hotBarClick ? getSize() - 9 : 8;
@@ -320,7 +289,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
             update();
             return false;
         }
-        setItemStack(slot, OFFSET, clickResult.getClicked());
+        setItemStackFromPacketSlot(slot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
         update(); // FIXME: currently not properly client-predicted
         return true;
@@ -331,13 +300,13 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         final ItemStack cursorItem = getCursorItem();
         if (!cursorItem.isAir()) return false;
         final ItemStack heldItem = getItemStack(key);
-        final ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack clicked = getItemStackFromPacketSlot(slot);
         final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, key, clicked, heldItem);
         if (clickResult.isCancel()) {
             update();
             return false;
         }
-        setItemStack(slot, OFFSET, clickResult.getClicked());
+        setItemStackFromPacketSlot(slot, clickResult.getClicked());
         setItemStack(key, clickResult.getCursor());
         callClickEvent(player, null, slot, ClickType.CHANGE_HELD, clicked, cursorItem);
         return true;
@@ -346,11 +315,11 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean dragging(@NotNull Player player, int slot, int button) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = slot != -999 ? getItemStack(slot, OFFSET) : ItemStack.AIR;
+        final ItemStack clicked = slot != -999 ? getItemStackFromPacketSlot(slot) : ItemStack.AIR;
         final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
                 slot, button,
-                clicked, cursor, s -> getItemStack(s, OFFSET),
-                (s, item) -> setItemStack(s, OFFSET, item));
+                clicked, cursor, this::getItemStackFromPacketSlot,
+                this::setItemStackFromPacketSlot);
         if (clickResult == null || clickResult.isCancel()) {
             update();
             return false;
@@ -363,7 +332,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     @Override
     public boolean doubleClick(@NotNull Player player, int slot) {
         final ItemStack cursor = getCursorItem();
-        final ItemStack clicked = getItemStack(slot, OFFSET);
+        final ItemStack clicked = getItemStackFromPacketSlot(slot);
         final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, slot, clicked, cursor);
         if (clickResult.isCancel()) {
             update();
@@ -372,5 +341,15 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
         setCursorItem(clickResult.getCursor());
         update(); // FIXME: currently not properly client-predicted
         return true;
+    }
+
+    private void setItemStackFromPacketSlot(int slot, @NotNull ItemStack itemStack) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+        setItemStack(convertedSlot, itemStack);
+    }
+
+    private ItemStack getItemStackFromPacketSlot(int slot) {
+        final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
+        return itemStacks[convertedSlot];
     }
 }
