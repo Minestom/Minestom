@@ -1,7 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.event.trait.*;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.validate.Check;
@@ -16,8 +16,8 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Represents a single node in an event graph.
@@ -178,19 +178,13 @@ public class EventNode<T extends Event> {
         return create(name, filter, (e, h) -> consumer.test(h.getTag(tag)));
     }
 
-    public static <E extends Event, V> @NotNull Mapped<E, V> mapped(@NotNull String name,
-                                                                    @NotNull EventFilter<E, V> filter,
-                                                                    @NotNull V value) {
-        return new Mapped<>(name, filter, value);
-    }
-
     private static <E extends Event, V> EventNode<E> create(@NotNull String name,
                                                             @NotNull EventFilter<E, V> filter,
                                                             @Nullable BiPredicate<E, V> predicate) {
         return new EventNode<>(name, filter, predicate != null ? (e, o) -> predicate.test(e, (V) o) : null);
     }
 
-    private static final Map<Class<? extends Event>, List<Function<Event, Object>>> HANDLER_SUPPLIERS = new ConcurrentHashMap<>();
+    private static final Map<Class<? extends Event>, List<EventFilter<?, ?>>> HANDLER_SUPPLIERS = new ConcurrentHashMap<>();
     private static final Object GLOBAL_CHILD_LOCK = new Object();
     private final Object lock = new Object();
 
@@ -211,7 +205,7 @@ public class EventNode<T extends Event> {
         this.name = name;
         this.filter = filter;
         this.predicate = predicate;
-        this.eventType = filter.getEventType();
+        this.eventType = filter.eventType();
     }
 
     /**
@@ -254,8 +248,8 @@ public class EventNode<T extends Event> {
         // Mapped listeners
         if (!mappedNode.isEmpty()) {
             // Check mapped listeners for each individual event handler
-            getEventMapping(eventClass).forEach(function -> {
-                final var handler = function.apply(event);
+            getEventFilters(eventClass).forEach(filter -> {
+                final var handler = filter.castHandler(event);
                 final var map = mappedNode.get(handler);
                 if (map != null) map.call(event);
             });
@@ -532,8 +526,19 @@ public class EventNode<T extends Event> {
         return this;
     }
 
-    public <E extends T, V> void map(@NotNull Mapped<E, V> map) {
-        this.mappedNode.put(map.value, (EventNode<T>) map);
+    public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
+        final var nodeType = node.eventType;
+        final boolean correct = getEventFilters(nodeType).stream().anyMatch(eventFilter -> {
+            final var handlerType = eventFilter.handlerType();
+            return handlerType != null && handlerType.isAssignableFrom(value.getClass());
+        });
+        Check.stateCondition(!correct, "The node {0} is not compatible with objects of type {1}", nodeType, value.getClass());
+        //noinspection unchecked
+        this.mappedNode.put(value, (EventNode<T>) node);
+    }
+
+    public boolean unmap(@NotNull Object value) {
+        return mappedNode.remove(value) != null;
     }
 
     public <I> void addInter(@NotNull EventInterface<I> inter, @NotNull I value) {
@@ -570,32 +575,20 @@ public class EventNode<T extends Event> {
         return nameCheck && typeCheck;
     }
 
-    // Returns a list of (event->object) functions used to retrieve handler.
-    // For example `PlayerUseItemEvent` should return a function to retrieve the player,
-    // and another for the item.
-    // All event trait are currently hardcoded.
-    private static List<Function<Event, Object>> getEventMapping(Class<? extends Event> eventClass) {
-        return HANDLER_SUPPLIERS.computeIfAbsent(eventClass, clazz -> {
-            List<Function<Event, Object>> result = new ArrayList<>();
-            if (PlayerEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((PlayerEvent) e).getPlayer());
-            } else if (EntityEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((EntityEvent) e).getEntity());
-            }
-            if (ItemEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((ItemEvent) e).getItemStack());
-            }
-            if (InstanceEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((InstanceEvent) e).getInstance());
-            }
-            if (InventoryEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((InventoryEvent) e).getInventory());
-            }
-            if (BlockEvent.class.isAssignableFrom(clazz)) {
-                result.add(e -> ((BlockEvent) e).getBlock());
-            }
-            return result;
-        });
+    private static final List<EventFilter<? extends Event, ?>> FILTERS = List.of(
+            EventFilter.ENTITY,
+            EventFilter.ITEM, EventFilter.INSTANCE,
+            EventFilter.INVENTORY, EventFilter.BLOCK);
+
+    /**
+     * Returns a list of (event->object) functions used to retrieve handler.
+     * For example `PlayerUseItemEvent` should return a function to retrieve the player,
+     * and another for the item.
+     * Event traits are currently hardcoded.
+     */
+    private static List<EventFilter<?, ?>> getEventFilters(Class<? extends Event> eventType) {
+        return HANDLER_SUPPLIERS.computeIfAbsent(eventType, clazz ->
+                FILTERS.stream().filter(eventFilter -> eventFilter.eventType().isAssignableFrom(clazz)).collect(Collectors.toList()));
     }
 
     private static class ListenerEntry<T extends Event> {
@@ -607,15 +600,6 @@ public class EventNode<T extends Event> {
 
         private static int addAndGet(ListenerEntry<?> entry, int add) {
             return CHILD_UPDATER.addAndGet(entry, add);
-        }
-    }
-
-    public static final class Mapped<T extends Event, V> extends EventNode<T> {
-        private final V value;
-
-        Mapped(@NotNull String name, @NotNull EventFilter<T, ?> filter, @NotNull V value) {
-            super(name, filter, null);
-            this.value = value;
         }
     }
 }
