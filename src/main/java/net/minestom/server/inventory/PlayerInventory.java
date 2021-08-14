@@ -23,7 +23,7 @@ public class PlayerInventory extends AbstractInventory implements EquipmentHandl
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 
-    private final Player player;
+    protected final Player player;
     private ItemStack cursorItem = ItemStack.AIR;
 
     public PlayerInventory(@NotNull Player player) {
