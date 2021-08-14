@@ -197,9 +197,11 @@ public final class PacketUtils {
         return createFramedPacket(PACKET_BUFFER.get(), packet, compression);
     }
 
-    public static ByteBuffer allocateTrimmedPacket(@NotNull ServerPacket packet) {
+    @ApiStatus.Internal
+    public static FramedPacket allocateTrimmedPacket(@NotNull ServerPacket packet) {
         final var temp = PacketUtils.createFramedPacket(packet);
-        return ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
+        final var buffer= ByteBuffer.allocateDirect(temp.position()).put(temp.flip()).asReadOnlyBuffer();
+        return new FramedPacket(packet.getId(), buffer, packet);
     }
 
     @ApiStatus.Internal

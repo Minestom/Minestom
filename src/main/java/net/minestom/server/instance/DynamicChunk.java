@@ -8,10 +8,11 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFBlock;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.packet.FramedPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -19,7 +20,6 @@ import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -40,8 +40,8 @@ public class DynamicChunk extends Chunk {
 
     private volatile long lastChangeTime;
 
-    private ByteBuffer cachedChunkBuffer;
-    private ByteBuffer cachedLightBuffer;
+    private FramedPacket cachedChunkBuffer;
+    private FramedPacket cachedLightBuffer;
     private long cachedPacketTime;
 
     public DynamicChunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ) {
@@ -132,8 +132,8 @@ public class DynamicChunk extends Chunk {
         final PlayerConnection connection = player.getPlayerConnection();
         if (connection instanceof PlayerSocketConnection) {
             final long lastChange = getLastChangeTime();
-            ByteBuffer chunkPacket = cachedChunkBuffer;
-            ByteBuffer lightPacket = cachedLightBuffer;
+            var chunkPacket = cachedChunkBuffer;
+            var lightPacket = cachedLightBuffer;
             if (lastChange > cachedPacketTime || (chunkPacket == null || lightPacket == null)) {
                 chunkPacket = PacketUtils.allocateTrimmedPacket(createChunkPacket());
                 lightPacket = PacketUtils.allocateTrimmedPacket(createLightPacket());
