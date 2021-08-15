@@ -124,10 +124,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.jline/jline
     implementation group: 'org.jline', name: 'jline', version: '3.20.0'
-
-    // Jline compatibility for windows
-    // https://search.maven.org/artifact/org.fusesource.jansi/jansi/2.3.2/jar
-    implementation 'org.fusesource.jansi:jansi:2.3.2'
+    // https://mvnrepository.com/artifact/org.jline/jline-terminal-jansi
+    implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.20.0'
 
     implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
 
