@@ -103,10 +103,9 @@ public final class NBTUtils {
         for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
             final Enchantment enchantment = entry.getKey();
             final short level = entry.getValue();
-
             enchantList.add(new NBTCompound()
                     .setShort("lvl", level)
-                    .setString("id", "minecraft:" + enchantment.name().toLowerCase())
+                    .setString("id", enchantment.name())
             );
         }
         nbt.set(listName, enchantList);
