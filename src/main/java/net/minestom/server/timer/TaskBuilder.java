@@ -138,9 +138,26 @@ public class TaskBuilder {
     }
 
     /**
-     * Schedules this {@link Task} for execution.
+     * Builds a {@link Task}.
      *
      * @return the built {@link Task}
+     */
+    @NotNull
+    public Task build() {
+        return new Task(
+                this.schedulerManager,
+                this.runnable,
+                this.shutdown,
+                this.delay,
+                this.repeat,
+                this.isTransient,
+                this.owningExtension);
+    }
+
+    /**
+     * Schedules this {@link Task} for execution.
+     *
+     * @return the scheduled {@link Task}
      */
     @NotNull
     public Task schedule() {
