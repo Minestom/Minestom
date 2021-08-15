@@ -1,12 +1,13 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class AcknowledgePlayerDiggingPacket implements ServerPacket {
@@ -22,6 +23,11 @@ public class AcknowledgePlayerDiggingPacket implements ServerPacket {
         this.blockStateId = blockStateId;
         this.status = status;
         this.successful = success;
+    }
+
+    public AcknowledgePlayerDiggingPacket(@NotNull Point blockPosition, Block block,
+                                          @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
+        this(blockPosition, block.stateId(), status, success);
     }
 
     public AcknowledgePlayerDiggingPacket() {
