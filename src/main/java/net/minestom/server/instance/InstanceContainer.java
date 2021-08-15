@@ -20,6 +20,7 @@ import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -32,9 +33,8 @@ import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.function.Consumer;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
 /**
  * InstanceContainer is an instance that contains chunks in contrary to SharedInstance.
@@ -50,7 +50,7 @@ public class InstanceContainer extends Instance {
     // used as a monitor when access is required
     private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
 
-    private final ReadWriteLock changingBlockLock = new ReentrantReadWriteLock();
+    private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
 
     // the chunk loader, used when trying to load/save a chunk from another source
@@ -74,10 +74,8 @@ public class InstanceContainer extends Instance {
      */
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DimensionType dimensionType) {
         super(uniqueId, dimensionType);
-
         // Set the default chunk supplier using DynamicChunk
         setChunkSupplier(DynamicChunk::new);
-
         // Set the default chunk loader which use the Anvil format
         setChunkLoader(new AnvilLoader("world"));
         this.chunkLoader.loadInstance(this);
@@ -110,10 +108,7 @@ public class InstanceContainer extends Instance {
      */
     private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
                                  @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy) {
-        // Cannot place block in a read-only chunk
-        if (chunk.isReadOnly()) {
-            return;
-        }
+        if (chunk.isReadOnly()) return;
         synchronized (chunk) {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.currentTimeMillis();
@@ -123,13 +118,16 @@ public class InstanceContainer extends Instance {
                 // This can happen with nether portals which break the entire frame when a portal block is broken
                 return;
             }
-            setAlreadyChanged(blockPosition, block);
+            this.currentlyChangingBlocks.put(blockPosition, block);
 
             final Block previousBlock = chunk.getBlock(blockPosition);
             final BlockHandler previousHandler = previousBlock.handler();
 
             // Change id based on neighbors
-            block = executeBlockPlacementRule(block, blockPosition);
+            final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
+            if (blockPlacementRule != null) {
+                block = blockPlacementRule.blockUpdate(this, blockPosition, block);
+            }
 
             // Set the block
             chunk.setBlock(x, y, z, block);
@@ -138,7 +136,7 @@ public class InstanceContainer extends Instance {
             executeNeighboursBlockPlacementRule(blockPosition);
 
             // Refresh player chunk block
-            sendBlockChange(chunk, blockPosition, block);
+            chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
 
             if (previousHandler != null) {
                 // Previous destroy
@@ -159,8 +157,7 @@ public class InstanceContainer extends Instance {
     public boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
                               @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
         final Chunk chunk = getChunkAt(blockPosition);
-        if (!ChunkUtils.isLoaded(chunk))
-            return false;
+        if (!ChunkUtils.isLoaded(chunk)) return false;
         UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block,
                 new BlockHandler.PlayerPlacement(block, this, blockPosition, player, blockFace, cursorX, cursorY, cursorZ), null);
         return true;
@@ -170,24 +167,18 @@ public class InstanceContainer extends Instance {
     public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
-        // Cancel if the chunk is read-only
-        if (chunk.isReadOnly()) {
-            return false;
-        }
-        // Chunk unloaded, stop here
-        if (!ChunkUtils.isLoaded(chunk))
-            return false;
-        final Block block = getBlock(blockPosition);
+        if (chunk.isReadOnly()) return false;
+        if (!ChunkUtils.isLoaded(chunk)) return false;
 
+        final Block block = getBlock(blockPosition);
         final int x = blockPosition.blockX();
         final int y = blockPosition.blockY();
         final int z = blockPosition.blockZ();
-        // The player probably have a wrong version of this chunk section, send it
         if (block.isAir()) {
+            // The player probably have a wrong version of this chunk section, send it
             chunk.sendChunk(player);
             return false;
         }
-
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, blockPosition);
         EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
@@ -207,31 +198,12 @@ public class InstanceContainer extends Instance {
 
     @Override
     public @NotNull CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            // Chunk already loaded
-            return CompletableFuture.completedFuture(chunk);
-        } else {
-            // Retrieve chunk from somewhere else (file or create a new one using the ChunkGenerator)
-            return retrieveChunk(chunkX, chunkZ);
-        }
+        return loadOrRetrieve(chunkX, chunkZ, () -> retrieveChunk(chunkX, chunkZ));
     }
 
     @Override
     public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        if (chunk != null) {
-            // Chunk already loaded
-            return CompletableFuture.completedFuture(chunk);
-        } else {
-            if (hasEnabledAutoChunkLoad()) {
-                // Use `IChunkLoader` or `ChunkGenerator`
-                return retrieveChunk(chunkX, chunkZ);
-            } else {
-                // Chunk not loaded, return null
-                return CompletableFuture.completedFuture(null);
-            }
-        }
+        return loadOrRetrieve(chunkX, chunkZ, () -> hasEnabledAutoChunkLoad() ? retrieveChunk(chunkX, chunkZ) : AsyncUtils.empty());
     }
 
     @Override
@@ -246,7 +218,7 @@ public class InstanceContainer extends Instance {
             chunk.removeViewer(viewer);
         }
 
-        callChunkUnloadEvent(chunkX, chunkZ);
+        EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunkX, chunkZ));
         // Remove all entities in chunk
         getChunkEntities(chunk).forEach(entity -> {
             if (!(entity instanceof Player)) entity.remove();
@@ -287,57 +259,38 @@ public class InstanceContainer extends Instance {
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
-        final Runnable loader = () -> chunkLoader.loadChunk(this, chunkX, chunkZ)
-                .whenComplete((chunk, throwable) -> {
-                    if (chunk != null) {
-                        // Successfully loaded
-                        cacheChunk(chunk);
-                        UPDATE_MANAGER.signalChunkLoad(chunk);
-                        // Execute callback and event in the instance thread
-                        scheduleNextTick(instance -> {
-                            callChunkLoadEvent(chunkX, chunkZ);
-                            completableFuture.complete(chunk);
-                        });
-                    } else {
-                        // Not present
-                        createChunk(chunkX, chunkZ).thenAccept(completableFuture::complete);
-                    }
-                });
-        if (chunkLoader.supportsParallelLoading()) {
-            CompletableFuture.runAsync(loader);
+        final IChunkLoader loader = chunkLoader;
+        final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
+                .thenCompose(chunk -> chunk != null ? CompletableFuture.completedFuture(chunk) : createChunk(chunkX, chunkZ))
+                .whenComplete((chunk, throwable) -> scheduleNextTick(instance -> {
+                    cacheChunk(chunk);
+                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
+                    completableFuture.complete(chunk);
+                }));
+        if (loader.supportsParallelLoading()) {
+            CompletableFuture.runAsync(retriever);
         } else {
-            loader.run();
+            retriever.run();
         }
-        // Chunk is being loaded
         return completableFuture;
     }
 
     protected @NotNull CompletableFuture<@NotNull Chunk> createChunk(int chunkX, int chunkZ) {
+        final ChunkGenerator generator = this.chunkGenerator;
         Biome[] biomes = new Biome[Biome.getBiomeCount(getDimensionType())];
-        if (chunkGenerator == null) {
+        if (generator == null) {
             Arrays.fill(biomes, MinecraftServer.getBiomeManager().getById(0));
         } else {
-            chunkGenerator.fillBiomes(biomes, chunkX, chunkZ);
+            generator.fillBiomes(biomes, chunkX, chunkZ);
         }
-
         final Chunk chunk = chunkSupplier.createChunk(this, biomes, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
-
-        cacheChunk(chunk);
-
-        final Consumer<Chunk> chunkRegisterCallback = (c) -> {
-            UPDATE_MANAGER.signalChunkLoad(c);
-            callChunkLoadEvent(chunkX, chunkZ);
-        };
-
-        if (chunkGenerator != null && chunk.shouldGenerate()) {
+        if (generator != null && chunk.shouldGenerate()) {
             // Execute the chunk generator to populate the chunk
             final ChunkGenerationBatch chunkBatch = new ChunkGenerationBatch(this, chunk);
-            return chunkBatch.generate(chunkGenerator)
-                    .whenComplete((c, t) -> chunkRegisterCallback.accept(c));
+            return chunkBatch.generate(generator);
         } else {
             // No chunk generator, execute the callback with the empty chunk
-            chunkRegisterCallback.accept(chunk);
             return CompletableFuture.completedFuture(chunk);
         }
     }
@@ -431,11 +384,8 @@ public class InstanceContainer extends Instance {
             for (Chunk chunk : chunks.values()) {
                 final int chunkX = chunk.getChunkX();
                 final int chunkZ = chunk.getChunkZ();
-
                 final Chunk copiedChunk = chunk.copy(copiedInstance, chunkX, chunkZ);
-
                 copiedInstance.cacheChunk(copiedChunk);
-                UPDATE_MANAGER.signalChunkLoad(copiedChunk);
             }
         }
         return copiedInstance;
@@ -449,8 +399,7 @@ public class InstanceContainer extends Instance {
      * @return the instance source, null if not created by a copy
      * @see #copy() to create a copy of this instance with 'this' as the source
      */
-    @Nullable
-    public InstanceContainer getSrcInstance() {
+    public @Nullable InstanceContainer getSrcInstance() {
         return srcInstance;
     }
 
@@ -470,21 +419,6 @@ public class InstanceContainer extends Instance {
      */
     public void refreshLastBlockChangeTime() {
         this.lastBlockChangeTime = System.currentTimeMillis();
-    }
-
-    /**
-     * Adds a {@link Chunk} to the internal instance map.
-     * <p>
-     * WARNING: the chunk will not automatically be sent to players and
-     * {@link net.minestom.server.UpdateManager#signalChunkLoad(Chunk)} must be called manually.
-     *
-     * @param chunk the chunk to cache
-     */
-    public void cacheChunk(@NotNull Chunk chunk) {
-        final long index = ChunkUtils.getChunkIndex(chunk);
-        synchronized (chunks) {
-            this.chunks.put(index, chunk);
-        }
     }
 
     @Override
@@ -527,32 +461,15 @@ public class InstanceContainer extends Instance {
         this.chunkLoader = chunkLoader;
     }
 
-    /**
-     * Sends a {@link BlockChangePacket} at the specified position to set the block as {@code blockStateId}.
-     * <p>
-     * WARNING: this does not change the internal block data, this is strictly visual for the players.
-     *
-     * @param chunk         the chunk where the block is
-     * @param blockPosition the block position
-     * @param block         the new block
-     */
-    private void sendBlockChange(@NotNull Chunk chunk, @NotNull Point blockPosition, @NotNull Block block) {
-        chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-    }
-
     @Override
     public void tick(long time) {
         // Time/world border
         super.tick(time);
-
-        Lock wrlock = changingBlockLock.writeLock();
+        // Clear block change map
+        Lock wrlock = this.changingBlockLock;
         wrlock.lock();
-        currentlyChangingBlocks.clear();
+        this.currentlyChangingBlocks.clear();
         wrlock.unlock();
-    }
-
-    private void setAlreadyChanged(@NotNull Point blockPosition, Block block) {
-        currentlyChangingBlocks.put(blockPosition, block);
     }
 
     /**
@@ -565,24 +482,7 @@ public class InstanceContainer extends Instance {
      */
     private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
-        if (changedBlock == null)
-            return false;
-        return changedBlock.id() == block.id();
-    }
-
-    /**
-     * Calls the {@link BlockPlacementRule} for the specified block state id.
-     *
-     * @param block         the block to modify
-     * @param blockPosition the block position
-     * @return the modified block state id
-     */
-    private Block executeBlockPlacementRule(Block block, @NotNull Point blockPosition) {
-        final BlockPlacementRule blockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(block);
-        if (blockPlacementRule != null) {
-            return blockPlacementRule.blockUpdate(this, blockPosition, block);
-        }
-        return block;
+        return changedBlock != null && changedBlock.id() == block.id();
     }
 
     /**
@@ -602,33 +502,37 @@ public class InstanceContainer extends Instance {
                     final int neighborY = blockPosition.blockY() + offsetY;
                     final int neighborZ = blockPosition.blockZ() + offsetZ;
                     final Chunk chunk = getChunkAt(neighborX, neighborZ);
-
-                    // Do not try to get neighbour in an unloaded chunk
-                    if (chunk == null)
-                        continue;
+                    if (chunk == null) continue;
 
                     final Block neighborBlock = chunk.getBlock(neighborX, neighborY, neighborZ);
                     final BlockPlacementRule neighborBlockPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(neighborBlock);
-                    if (neighborBlockPlacementRule != null) {
-                        final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-                        final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
-                                neighborPosition, neighborBlock);
-                        if (neighborBlock != newNeighborBlock) {
-                            setBlock(neighborPosition, newNeighborBlock);
-                        }
+                    if (neighborBlockPlacementRule == null) continue;
+
+                    final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
+                    final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(this,
+                            neighborPosition, neighborBlock);
+                    if (neighborBlock != newNeighborBlock) {
+                        setBlock(neighborPosition, newNeighborBlock);
                     }
                 }
             }
         }
     }
 
-    private void callChunkLoadEvent(int chunkX, int chunkZ) {
-        InstanceChunkLoadEvent chunkLoadEvent = new InstanceChunkLoadEvent(this, chunkX, chunkZ);
-        EventDispatcher.call(chunkLoadEvent);
+    private CompletableFuture<Chunk> loadOrRetrieve(int chunkX, int chunkZ, Supplier<CompletableFuture<Chunk>> supplier) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        if (chunk != null) {
+            // Chunk already loaded
+            return CompletableFuture.completedFuture(chunk);
+        }
+        return supplier.get();
     }
 
-    private void callChunkUnloadEvent(int chunkX, int chunkZ) {
-        InstanceChunkUnloadEvent chunkUnloadEvent = new InstanceChunkUnloadEvent(this, chunkX, chunkZ);
-        EventDispatcher.call(chunkUnloadEvent);
+    private void cacheChunk(@NotNull Chunk chunk) {
+        final long index = ChunkUtils.getChunkIndex(chunk);
+        synchronized (chunks) {
+            this.chunks.put(index, chunk);
+        }
+        UPDATE_MANAGER.signalChunkLoad(chunk);
     }
 }

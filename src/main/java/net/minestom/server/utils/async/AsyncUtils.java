@@ -10,6 +10,10 @@ import java.util.concurrent.CompletableFuture;
 public final class AsyncUtils {
     public static final CompletableFuture<Void> VOID_FUTURE = CompletableFuture.completedFuture(null);
 
+    public static <T> CompletableFuture<T> empty() {
+        return CompletableFuture.completedFuture(null);
+    }
+
     public static @NotNull CompletableFuture<Void> runAsync(@NotNull Runnable runnable) {
         return CompletableFuture.runAsync(() -> {
             try {
