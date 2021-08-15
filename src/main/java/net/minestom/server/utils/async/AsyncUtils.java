@@ -11,7 +11,8 @@ public final class AsyncUtils {
     public static final CompletableFuture<Void> VOID_FUTURE = CompletableFuture.completedFuture(null);
 
     public static <T> CompletableFuture<T> empty() {
-        return CompletableFuture.completedFuture(null);
+        //noinspection unchecked
+        return (CompletableFuture<T>) VOID_FUTURE;
     }
 
     public static @NotNull CompletableFuture<Void> runAsync(@NotNull Runnable runnable) {
