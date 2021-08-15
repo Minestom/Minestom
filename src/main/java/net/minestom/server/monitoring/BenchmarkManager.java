@@ -105,7 +105,7 @@ public final class BenchmarkManager {
     public Component getCpuMonitoringMessage() {
         Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
         TextComponent.Builder benchmarkMessage = Component.text();
-        for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
+        for (var resultEntry : resultMap.entrySet()) {
             final String name = resultEntry.getKey();
             final ThreadResult result = resultEntry.getValue();
 

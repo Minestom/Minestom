@@ -148,10 +148,9 @@ public class CommandParser {
 
                 // Fill arguments map
                 finalContext = new CommandContext(validSyntaxHolder.commandString);
-                for (Map.Entry<Argument<?>, ArgumentParser.ArgumentResult> entry : argsValues.entrySet()) {
+                for (var entry : argsValues.entrySet()) {
                     final Argument<?> argument = entry.getKey();
                     final ArgumentParser.ArgumentResult argumentResult = entry.getValue();
-
                     finalContext.setArg(argument.getId(), argumentResult.parsedValue, argumentResult.rawArg);
                 }
             }

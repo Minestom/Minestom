@@ -21,9 +21,9 @@ public class StatusListener {
                 StatisticsPacket statisticsPacket = new StatisticsPacket();
 
                 final Map<PlayerStatistic, Integer> playerStatisticValueMap = player.getStatisticValueMap();
-                for (Map.Entry<PlayerStatistic, Integer> entry : playerStatisticValueMap.entrySet()) {
-                    PlayerStatistic playerStatistic = entry.getKey();
-                    int value = entry.getValue();
+                for (var entry : playerStatisticValueMap.entrySet()) {
+                    final PlayerStatistic playerStatistic = entry.getKey();
+                    final int value = entry.getValue();
 
                     StatisticsPacket.Statistic statistic = new StatisticsPacket.Statistic();
                     statistic.category = playerStatistic.getCategory();

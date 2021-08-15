@@ -100,7 +100,7 @@ public final class NBTUtils {
     public static void writeEnchant(@NotNull NBTCompound nbt, @NotNull String listName,
                                     @NotNull Map<Enchantment, Short> enchantmentMap) {
         NBTList<NBTCompound> enchantList = new NBTList<>(NBTTypes.TAG_Compound);
-        for (Map.Entry<Enchantment, Short> entry : enchantmentMap.entrySet()) {
+        for (var entry : enchantmentMap.entrySet()) {
             final Enchantment enchantment = entry.getKey();
             final short level = entry.getValue();
             enchantList.add(new NBTCompound()
