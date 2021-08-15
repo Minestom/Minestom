@@ -82,7 +82,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public synchronized void setBlock(int x, int y, int z, @NotNull Block block) {
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
         final Chunk chunk = getChunkAt(x, z);
         if (ChunkUtils.isLoaded(chunk)) {
             UNSAFE_setBlock(chunk, x, y, z, block, null, null);
@@ -106,8 +106,8 @@ public class InstanceContainer extends Instance {
      * @param z     the block Z
      * @param block the block to place
      */
-    private void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                 @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy) {
+    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
+                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy) {
         if (chunk.isReadOnly()) return;
         synchronized (chunk) {
             // Refresh the last block change time
@@ -261,7 +261,9 @@ public class InstanceContainer extends Instance {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
         final IChunkLoader loader = chunkLoader;
         final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
+                // create the chunk from scratch (with the generator) if the loader couldn't
                 .thenCompose(chunk -> chunk != null ? CompletableFuture.completedFuture(chunk) : createChunk(chunkX, chunkZ))
+                // cache the retrieved chunk (in the next instance tick for thread-safety)
                 .whenComplete((chunk, throwable) -> scheduleNextTick(instance -> {
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));

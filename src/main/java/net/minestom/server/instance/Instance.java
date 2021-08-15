@@ -447,8 +447,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
     @Override
-    @NotNull
-    public Set<Player> getPlayers() {
+    public @NotNull Set<@NotNull Player> getPlayers() {
         return Collections.unmodifiableSet(players);
     }
 
@@ -457,8 +456,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
-    @NotNull
-    public Set<EntityCreature> getCreatures() {
+    public @NotNull Set<@NotNull EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
     }
 
@@ -467,8 +465,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
-    @NotNull
-    public Set<ExperienceOrb> getExperienceOrbs() {
+    public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
         return Collections.unmodifiableSet(experienceOrbs);
     }
 
@@ -479,7 +476,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
-    public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
+    public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
             return Collections.emptySet();
         final Set<Entity> entities;
@@ -587,7 +584,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
 
             // Load the chunk if not already (or throw an error if auto chunk load is disabled)
             loadOptionalChunk(entityPosition).thenAccept(chunk -> {
-                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
+                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, {0}", entityPosition);
                 UNSAFE_addEntityToChunk(entity, chunk);
             });
         });
@@ -602,10 +599,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      */
     @ApiStatus.Internal
     public void UNSAFE_removeEntity(@NotNull Entity entity) {
-        final Instance entityInstance = entity.getInstance();
-        if (entityInstance != this)
-            return;
-
+        if (entity.getInstance() != this) return;
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
         EventDispatcher.callCancellable(event, () -> {
             // Remove this entity from players viewable list and send delete entities packet
@@ -697,31 +691,24 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
                 callback.accept(this);
             }
         }
-
         // Time
         {
             this.worldAge++;
-
             this.time += timeRate;
-
-            // time needs to be send to players
+            // time needs to be sent to players
             if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
                 this.lastTimeUpdate = time;
             }
 
         }
-
         // Tick event
         {
             // Process tick events
-            InstanceTickEvent chunkTickEvent = new InstanceTickEvent(this, time, lastTickAge);
-            EventDispatcher.call(chunkTickEvent);
-
+            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge));
             // Set last tick age
-            lastTickAge = time;
+            this.lastTickAge = time;
         }
-
         this.worldBorder.update();
     }
 
@@ -776,8 +763,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the instance explosion supplier, null if none was provided
      */
-    @Nullable
-    public ExplosionSupplier getExplosionSupplier() {
+    public @Nullable ExplosionSupplier getExplosionSupplier() {
         return explosionSupplier;
     }
 
@@ -797,8 +783,8 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
      *
      * @return the instance space
      */
-    @NotNull
-    public PFInstanceSpace getInstanceSpace() {
+    @ApiStatus.Internal
+    public @NotNull PFInstanceSpace getInstanceSpace() {
         return instanceSpace;
     }
 
