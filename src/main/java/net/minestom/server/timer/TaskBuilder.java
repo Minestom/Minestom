@@ -144,27 +144,10 @@ public class TaskBuilder {
      */
     @NotNull
     public Task schedule() {
-        Task task = new Task(
-                this.schedulerManager,
-                this.runnable,
-                this.shutdown,
-                this.delay,
-                this.repeat,
-                this.isTransient,
-                this.owningExtension);
+        Task task = build();
         if (this.shutdown) {
-            Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
-            synchronized (shutdownTasks) {
-                shutdownTasks.put(task.getId(), task);
-            }
-            if (owningExtension != null) {
-                this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, task);
-            }
+            task.scheduleForShutdown();
         } else {
-            Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;
-            synchronized (tasks) {
-                tasks.put(task.getId(), task);
-            }
             task.schedule();
         }
         return task;

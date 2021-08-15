@@ -100,12 +100,26 @@ public class Task implements Runnable {
      * Sets up the task for correct execution.
      */
     public void schedule() {
+        Int2ObjectMap<Task> tasks = this.schedulerManager.tasks;
+        synchronized (tasks) {
+            tasks.put(getId(), this);
+        }
         if(owningExtension != null) {
             this.schedulerManager.onScheduleFromExtension(owningExtension, this);
         }
         this.future = this.repeat == 0L ?
                 this.schedulerManager.getTimerExecutionService().schedule(this, this.delay, TimeUnit.MILLISECONDS) :
                 this.schedulerManager.getTimerExecutionService().scheduleAtFixedRate(this, this.delay, this.repeat, TimeUnit.MILLISECONDS);
+    }
+
+    public void scheduleForShutdown() {
+        Int2ObjectMap<Task> shutdownTasks = this.schedulerManager.shutdownTasks;
+        synchronized (shutdownTasks) {
+            shutdownTasks.put(getId(), this);
+        }
+        if (owningExtension != null) {
+            this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, this);
+        }
     }
 
     /**
