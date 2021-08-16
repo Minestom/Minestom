@@ -215,24 +215,6 @@ public class EventNode<T extends Event> {
     }
 
     /**
-     * Condition to enter the node.
-     *
-     * @param event the called event
-     * @return true to enter the node, false otherwise
-     */
-    protected boolean condition(@NotNull T event) {
-        if (predicate == null)
-            return true;
-        final var value = filter.getHandler(event);
-        try {
-            return predicate.test(event, value);
-        } catch (Exception e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return false;
-        }
-    }
-
-    /**
      * Executes the given event on this node. The event must pass all conditions before
      * it will be forwarded to the listeners.
      * <p>
@@ -243,13 +225,16 @@ public class EventNode<T extends Event> {
      */
     public void call(@NotNull T event) {
         final var eventClass = event.getClass();
-        if (!eventType.isAssignableFrom(eventClass)) {
-            // Invalid event type
-            return;
-        }
-        if (!condition(event)) {
-            // Cancelled by superclass
-            return;
+        if (!eventType.isAssignableFrom(eventClass)) return; // Invalid event type
+        // Conditions
+        if (predicate != null) {
+            try {
+                final var value = filter.getHandler(event);
+                if (!predicate.test(event, value)) return;
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+                return;
+            }
         }
         // Event interfaces
         if (!interfaces.isEmpty()) {
@@ -269,10 +254,7 @@ public class EventNode<T extends Event> {
         }
         // Process listener list
         final var entry = listenerMap.get(eventClass);
-        if (entry == null) {
-            // No listener nor children
-            return;
-        }
+        if (entry == null) return; // No listener nor children
 
         final var listeners = entry.listeners;
         if (!listeners.isEmpty()) {
@@ -352,9 +334,7 @@ public class EventNode<T extends Event> {
      */
     @Contract(pure = true)
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
-        if (children.isEmpty()) {
-            return Collections.emptyList();
-        }
+        if (children.isEmpty()) return Collections.emptyList();
         synchronized (GLOBAL_CHILD_LOCK) {
             List<EventNode<E>> result = new ArrayList<>();
             for (EventNode<T> child : children) {
@@ -388,9 +368,7 @@ public class EventNode<T extends Event> {
      * @param eventNode The replacement node
      */
     public <E extends T> void replaceChildren(@NotNull String name, @NotNull Class<E> eventType, @NotNull EventNode<E> eventNode) {
-        if (children.isEmpty()) {
-            return;
-        }
+        if (children.isEmpty()) return;
         synchronized (GLOBAL_CHILD_LOCK) {
             for (EventNode<T> child : children) {
                 if (EventNode.equals(child, name, eventType)) {
@@ -422,9 +400,7 @@ public class EventNode<T extends Event> {
      * @param eventType The node type to filter for
      */
     public void removeChildren(@NotNull String name, @NotNull Class<? extends T> eventType) {
-        if (children.isEmpty()) {
-            return;
-        }
+        if (children.isEmpty()) return;
         synchronized (GLOBAL_CHILD_LOCK) {
             for (EventNode<T> child : children) {
                 if (EventNode.equals(child, name, eventType)) {
@@ -463,8 +439,7 @@ public class EventNode<T extends Event> {
                 synchronized (lock) {
                     child.listenerMap.forEach((eventClass, eventListeners) -> {
                         final var entry = child.listenerMap.get(eventClass);
-                        if (entry == null)
-                            return;
+                        if (entry == null) return;
                         final int childCount = entry.listeners.size() + entry.childCount;
                         increaseChildListenerCount(eventClass, childCount);
                     });
@@ -526,8 +501,7 @@ public class EventNode<T extends Event> {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var eventType = listener.getEventType();
             var entry = listenerMap.get(eventType);
-            if (entry == null)
-                return this;
+            if (entry == null) return this;
             var listeners = entry.listeners;
             final boolean removed = listeners.remove(listener);
             if (removed && parent != null) {
