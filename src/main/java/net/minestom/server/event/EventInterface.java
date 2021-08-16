@@ -48,7 +48,6 @@ public interface EventInterface<E extends Event> {
                     final T handler = filter.getHandler(event);
                     if (!predicate.test(handler)) return;
                     final var consumer = copy.get(event.getClass());
-                    if (consumer == null) return;
                     consumer.accept(handler, event);
                 }
             };

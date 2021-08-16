@@ -57,46 +57,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         // Process listeners list
         final var entry = listenerMap.get(eventClass);
         if (entry == null) return; // No listener nor children
-        {
-            // Event interfaces
-            final var interfaces = entry.interfaces;
-            if (!interfaces.isEmpty()) {
-                for (EventInterface<T> inter : interfaces) {
-                    if (!inter.eventTypes().contains(eventClass)) continue;
-                    inter.call(event);
-                }
-            }
-            // Mapped listeners
-            final var mapped = entry.mappedNode;
-            if (!mapped.isEmpty()) {
-                synchronized (mappedNodeCache) {
-                    if (!mapped.isEmpty()) {
-                        // Check mapped listeners for each individual event handler
-                        for (var filter : entry.filters) {
-                            final var handler = filter.castHandler(event);
-                            final var map = mapped.get(handler);
-                            if (map != null) map.call(event);
-                        }
-                    }
-                }
-            }
-            // Basic listeners
-            final var listeners = entry.listeners;
-            if (!listeners.isEmpty()) {
-                for (EventListener<T> listener : listeners) {
-                    EventListener.Result result;
-                    try {
-                        result = listener.run(event);
-                    } catch (Exception e) {
-                        result = EventListener.Result.EXCEPTION;
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
-                    if (result == EventListener.Result.EXPIRED) {
-                        listeners.remove(listener);
-                    }
-                }
-            }
-        }
+        entry.call(event);
         // Process children
         if (entry.childCount > 0) {
             this.children.stream()
@@ -241,7 +202,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 });
                 Check.stateCondition(!correct, "The node filter {0} is not compatible with type {1}", nodeType, valueType);
                 synchronized (mappedNodeCache) {
-                    entry.mappedNode.put(value, (EventNode<T>) node);
+                    System.out.println("add " + value + " " + nodeImpl + " " + type);
+                    entry.mappedNode.put(value, (EventNode<T>) nodeImpl);
                     mappedNodeCache.put(value, entry);
                 }
             });
@@ -297,7 +259,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private void propagateChildCountChange(Class<? extends T> eventClass, int count) {
         var entry = getEntry(eventClass);
-        final int result = ListenerEntry.addAndGet(entry, count);
+        final int result = ListenerEntry.CHILD_UPDATER.addAndGet(entry, count);
         if (result == 0 && entry.listeners.isEmpty()) {
             this.listenerMap.remove(eventClass);
         } else if (result < 0) {
@@ -349,8 +311,37 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             this.filters = FILTERS.stream().filter(eventFilter -> eventFilter.eventType().isAssignableFrom(eventType)).collect(Collectors.toList());
         }
 
-        private static int addAndGet(ListenerEntry<?> entry, int add) {
-            return CHILD_UPDATER.addAndGet(entry, add);
+        void call(T event) {
+            // Event interfaces
+            if (!interfaces.isEmpty()) {
+                for (EventInterface<T> inter : interfaces) {
+                    inter.call(event);
+                }
+            }
+            // Mapped listeners
+            if (!mappedNode.isEmpty()) {
+                // Check mapped listeners for each individual event handler
+                for (var filter : filters) {
+                    final var handler = filter.castHandler(event);
+                    final var map = mappedNode.get(handler);
+                    if (map != null) map.call(event);
+                }
+            }
+            // Basic listeners
+            if (!listeners.isEmpty()) {
+                for (EventListener<T> listener : listeners) {
+                    EventListener.Result result;
+                    try {
+                        result = listener.run(event);
+                    } catch (Exception e) {
+                        result = EventListener.Result.EXCEPTION;
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                    if (result == EventListener.Result.EXPIRED) {
+                        listeners.remove(listener);
+                    }
+                }
+            }
         }
     }
 }
