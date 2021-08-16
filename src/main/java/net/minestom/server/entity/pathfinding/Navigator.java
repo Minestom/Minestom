@@ -58,12 +58,11 @@ public class Navigator {
         final double speedX = Math.cos(radians) * speed;
         final double speedY = dy * speed;
         final double speedZ = Math.sin(radians) * speed;
-        // Update 'position' view
-        final var view = PositionUtils.lookAlong(position, dx, direction.y(), dz);
-        this.entity.setView(view.yaw(), view.pitch());
+        final float yaw = PositionUtils.getLookYaw(dx, dz);
+        final float pitch = PositionUtils.getLookPitch(dx, direction.y(), dz);
         // Prevent ghosting
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(physicsResult.newPosition());
+        this.entity.refreshPosition(physicsResult.newPosition().withView(yaw, pitch));
     }
 
     public void jump(float height) {
