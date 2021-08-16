@@ -1,5 +1,7 @@
 package net.minestom.server.event;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.tag.Tag;
@@ -190,7 +192,7 @@ public class EventNode<T extends Event> {
 
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
-    private final Map<Object, EventNode<T>> mappedNode = new ConcurrentHashMap<>();
+    private final Map<Object, EventNode<T>> mappedNode;
 
     protected final String name;
     protected final EventFilter<T, ?> filter;
@@ -206,6 +208,9 @@ public class EventNode<T extends Event> {
         this.filter = filter;
         this.predicate = predicate;
         this.eventType = filter.eventType();
+
+        Cache<Object, EventNode<T>> mapCache = Caffeine.newBuilder().weakKeys().build();
+        this.mappedNode = mapCache.asMap();
     }
 
     /**
