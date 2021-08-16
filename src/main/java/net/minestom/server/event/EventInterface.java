@@ -2,34 +2,56 @@ package net.minestom.server.event;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
-public final class EventInterface<T> {
+public interface EventInterface<E extends Event> {
 
-    public static <T> @NotNull Builder<T> builder(@NotNull Class<T> type) {
-        return new Builder<>();
+    static <E extends Event, T> @NotNull FilteredBuilder<E, T> filtered(@NotNull EventFilter<E, T> filter, @NotNull Predicate<T> predicate) {
+        return new FilteredBuilder<>(filter, predicate);
     }
 
-    final Map<Class<? extends Event>, BiConsumer<T, Event>> mapped;
+    @NotNull Collection<Class<? extends Event>> eventTypes();
 
-    EventInterface(Map<Class<? extends Event>, BiConsumer<T, Event>> map) {
-        this.mapped = map;
-    }
+    void call(@NotNull E event);
 
-    public static class Builder<T> {
-        private final Map<Class<? extends Event>, BiConsumer<T, Event>> mapped = new HashMap<>();
+    class FilteredBuilder<E extends Event, T> {
+        private final EventFilter<E, T> filter;
+        private final Predicate<T> predicate;
+        private final Map<Class<? extends Event>, BiConsumer<Object, E>> mapped = new HashMap<>();
 
-        @SuppressWarnings("unchecked")
-        public <E extends Event> Builder<T> map(@NotNull Class<E> eventType,
-                                                @NotNull BiConsumer<@NotNull T, @NotNull E> consumer) {
-            this.mapped.put(eventType, (BiConsumer<T, Event>) consumer);
+        FilteredBuilder(EventFilter<E, T> filter, Predicate<T> predicate) {
+            this.filter = filter;
+            this.predicate = predicate;
+        }
+
+        public <M extends E> FilteredBuilder<E, T> map(@NotNull Class<M> eventType,
+                                                       @NotNull BiConsumer<@NotNull T, @NotNull M> consumer) {
+            this.mapped.put(eventType, (BiConsumer<Object, E>) consumer);
             return this;
         }
 
-        public @NotNull EventInterface<T> build() {
-            return new EventInterface<>(Map.copyOf(mapped));
+        public @NotNull EventInterface<E> build() {
+            final var copy = Map.copyOf(mapped);
+            final var eventTypes = copy.keySet();
+            return new EventInterface<>() {
+                @Override
+                public @NotNull Collection<Class<? extends Event>> eventTypes() {
+                    return eventTypes;
+                }
+
+                @Override
+                public void call(@NotNull E event) {
+                    final T handler = filter.getHandler(event);
+                    if (!predicate.test(handler)) return;
+                    final var consumer = copy.get(event.getClass());
+                    if (consumer == null) return;
+                    consumer.accept(handler, event);
+                }
+            };
         }
     }
 }

@@ -192,6 +192,7 @@ public class EventNode<T extends Event> {
 
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
+    private final Set<EventInterface<T>> interfaces = new CopyOnWriteArraySet<>();
     private final Map<Object, EventNode<T>> mappedNode;
 
     protected final String name;
@@ -249,6 +250,13 @@ public class EventNode<T extends Event> {
         if (!condition(event)) {
             // Cancelled by superclass
             return;
+        }
+        // Event interfaces
+        if (!interfaces.isEmpty()) {
+            this.interfaces.forEach(eventInterface -> {
+                if (!eventInterface.eventTypes().contains(eventClass)) return;
+                eventInterface.call(event);
+            });
         }
         // Mapped listeners
         if (!mappedNode.isEmpty()) {
@@ -547,11 +555,8 @@ public class EventNode<T extends Event> {
         return mappedNode.remove(value) != null;
     }
 
-    public <I> void addInter(@NotNull EventInterface<I> inter, @NotNull I value) {
-        inter.mapped.forEach((eventType, consumer) -> {
-            // TODO cache so listeners can be removed from the EventInterface
-            addListener((EventListener<? extends T>) EventListener.builder(eventType).handler(event -> consumer.accept(value, event)).build());
-        });
+    public void registerInterface(@NotNull EventInterface<? extends T> eventInterface) {
+        this.interfaces.add((EventInterface<T>) eventInterface);
     }
 
     private void increaseChildListenerCount(Class<? extends T> eventClass, int count) {
