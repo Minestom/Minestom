@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import com.extollit.gaming.ai.path.model.ColumnarOcclusionFieldList;
 import it.unimi.dsi.fastutil.ints.Int2ObjectAVLTreeMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
@@ -10,8 +11,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -88,20 +89,18 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void tick(long time) {
-        if (tickableMap.isEmpty())
-            return;
-        for (var entry : tickableMap.int2ObjectEntrySet()) {
+        if (tickableMap.isEmpty()) return;
+        Int2ObjectMaps.fastForEach(tickableMap, entry -> {
             final int index = entry.getIntKey();
             final Block block = entry.getValue();
-            final var handler = block.handler();
-            if (handler != null) {
-                final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-                final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-                final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-                final Vec blockPosition = new Vec(x, y, z);
-                handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
-            }
-        }
+            final BlockHandler handler = block.handler();
+            if (handler == null) return;
+            final int x = ChunkUtils.blockIndexToChunkPositionX(index);
+            final int y = ChunkUtils.blockIndexToChunkPositionY(index);
+            final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+            final Vec blockPosition = new Vec(x, y, z);
+            handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
+        });
     }
 
     @Override
