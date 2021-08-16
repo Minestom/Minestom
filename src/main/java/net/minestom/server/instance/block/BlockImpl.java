@@ -69,6 +69,8 @@ final class BlockImpl implements Block {
     private final NBTCompound nbt;
     private final BlockHandler handler;
 
+    private int hashCode; // Cache
+
     BlockImpl(@NotNull Registry.BlockEntry registry,
               @NotNull Map<Map<String, String>, Block> propertyEntry,
               @NotNull Map<String, String> properties,
@@ -151,7 +153,12 @@ final class BlockImpl implements Block {
 
     @Override
     public int hashCode() {
-        return Objects.hash(stateId(), nbt, handler);
+        int result = hashCode;
+        if (result == 0) {
+            result = Objects.hash(stateId(), nbt, handler);
+            this.hashCode = result;
+        }
+        return result;
     }
 
     @Override
