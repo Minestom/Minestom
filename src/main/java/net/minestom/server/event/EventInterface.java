@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public interface EventInterface<E extends Event> {
@@ -16,7 +17,8 @@ public interface EventInterface<E extends Event> {
 
     @NotNull Collection<Class<? extends Event>> eventTypes();
 
-    void call(@NotNull E event);
+    Consumer<E> consumer(Class<? extends Event> eventType);
+
 
     class FilteredBuilder<E extends Event, T> {
         private final EventFilter<E, T> filter;
@@ -30,6 +32,7 @@ public interface EventInterface<E extends Event> {
 
         public <M extends E> FilteredBuilder<E, T> map(@NotNull Class<M> eventType,
                                                        @NotNull BiConsumer<@NotNull T, @NotNull M> consumer) {
+            //noinspection unchecked
             this.mapped.put(eventType, (BiConsumer<Object, E>) consumer);
             return this;
         }
@@ -44,11 +47,13 @@ public interface EventInterface<E extends Event> {
                 }
 
                 @Override
-                public void call(@NotNull E event) {
-                    final T handler = filter.getHandler(event);
-                    if (!predicate.test(handler)) return;
-                    final var consumer = copy.get(event.getClass());
-                    consumer.accept(handler, event);
+                public Consumer<E> consumer(Class<? extends Event> eventType) {
+                    final var consumer = copy.get(eventType);
+                    return event -> {
+                        final T handler = filter.getHandler(event);
+                        if (!predicate.test(handler)) return;
+                        consumer.accept(handler, event);
+                    };
                 }
             };
         }

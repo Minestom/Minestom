@@ -202,7 +202,6 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 });
                 Check.stateCondition(!correct, "The node filter {0} is not compatible with type {1}", nodeType, valueType);
                 synchronized (mappedNodeCache) {
-                    System.out.println("add " + value + " " + nodeImpl + " " + type);
                     entry.mappedNode.put(value, (EventNode<T>) nodeImpl);
                     mappedNodeCache.put(value, entry);
                 }
@@ -226,7 +225,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         synchronized (GLOBAL_CHILD_LOCK) {
             for (var eventType : eventInterface.eventTypes()) {
                 var entry = getEntry((Class<? extends T>) eventType);
+                final var consumer = eventInterface.consumer(eventType);
                 entry.interfaces.add((EventInterface<T>) eventInterface);
+                entry.interfaceConsumers.add((Consumer<T>) consumer);
             }
         }
     }
@@ -304,6 +305,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         final List<EventFilter<?, ?>> filters;
         final List<EventListener<T>> listeners = new CopyOnWriteArrayList<>();
         final Set<EventInterface<T>> interfaces = new CopyOnWriteArraySet<>();
+        final Set<Consumer<T>> interfaceConsumers = new CopyOnWriteArraySet<>();
         final Map<Object, EventNode<T>> mappedNode = new WeakHashMap<>();
         volatile int childCount;
 
@@ -313,9 +315,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         void call(T event) {
             // Event interfaces
-            if (!interfaces.isEmpty()) {
-                for (EventInterface<T> inter : interfaces) {
-                    inter.call(event);
+            if (!interfaceConsumers.isEmpty()) {
+                for (var consumer : interfaceConsumers) {
+                    consumer.accept(event);
                 }
             }
             // Mapped listeners
