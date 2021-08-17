@@ -57,7 +57,7 @@ public final class RelativeVec {
      */
     public @NotNull Vec from(@Nullable Entity entity) {
         if (entity != null) {
-            return from(entity.getPosition().add(0, entity.getEyeHeight(), 0));
+            return from(entity.getPosition());
         } else {
             return from(Pos.ZERO);
         }

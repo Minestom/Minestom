@@ -33,6 +33,7 @@ import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -239,21 +240,26 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *                 can be null or empty to only load the chunk at {@code position}
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @Nullable long[] chunks) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-        CompletableFuture<Void> completableFuture = new CompletableFuture<>();
         final Runnable endCallback = () -> {
             refreshPosition(position);
             synchronizePosition(true);
-            completableFuture.complete(null);
         };
 
-        if (chunks == null || chunks.length == 0) {
-            instance.loadOptionalChunk(position).thenRun(endCallback);
-        } else {
-            ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
+        if (chunks != null && chunks.length > 0) {
+            // Chunks need to be loaded before the teleportation can happen
+            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
-        return completableFuture;
+        final Pos currentPosition = this.position;
+        if (!currentPosition.sameChunk(position)) {
+            // Ensure that the chunk is loaded
+            return instance.loadOptionalChunk(position).thenRun(endCallback);
+        } else {
+            // Position is in the same chunk, keep it sync
+            endCallback.run();
+            return AsyncUtils.empty();
+        }
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
