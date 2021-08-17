@@ -1,34 +1,38 @@
 package net.minestom.server.area;
 
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
-public interface Area extends Iterable<BlockPosition> {
+import java.util.List;
 
-    static @NotNull Area fill(@NotNull BlockPosition pos1, @NotNull BlockPosition pos2) {
-        return new AreaImpl.Fill(pos1, pos2);
+public interface Area extends Iterable<Point> {
+
+    static @NotNull Area fill(@NotNull Point point1, @NotNull Point point2) {
+        return new AreaImpl.Fill(point1, point2);
     }
 
     static @NotNull Area.Path path() {
         return new AreaImpl.Path();
     }
 
-    static @NotNull Area randomizer(Area area, double probability) {
+    static @NotNull Area randomizer(@NotNull Area area, double probability) {
         return new AreaImpl.Randomizer(area, probability);
     }
 
+    @NotNull List<@NotNull Point> asList();
+
     interface Path {
-        @NotNull Area.Path north(int factor);
+        @NotNull Area.Path north(double factor);
 
-        @NotNull Area.Path south(int factor);
+        @NotNull Area.Path south(double factor);
 
-        @NotNull Area.Path east(int factor);
+        @NotNull Area.Path east(double factor);
 
-        @NotNull Area.Path west(int factor);
+        @NotNull Area.Path west(double factor);
 
-        @NotNull Area.Path up(int factor);
+        @NotNull Area.Path up(double factor);
 
-        @NotNull Area.Path down(int factor);
+        @NotNull Area.Path down(double factor);
 
         @NotNull Area end();
 
