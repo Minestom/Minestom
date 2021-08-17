@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -182,47 +182,31 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createPlayerConnection(io.netty.channel.ChannelHandlerContext)">createPlayerConnection</a></span>&#8203;(@NotNull io.netty.channel.ChannelHandlerContext&nbsp;context)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="packet/client/handler/ClientLoginPacketsHandler.html" title="class in net.minestom.server.network.packet.client.handler">ClientLoginPacketsHandler</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLoginPacketsHandler()">getLoginPacketsHandler</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the handler for client login packets.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerConnection(io.netty.channel.ChannelHandlerContext)">getPlayerConnection</a></span>&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;context)</code></th>
-<td class="colLast">
-<div class="block">Retrieves a player connection from its channel.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="packet/client/handler/ClientPlayPacketsHandler.html" title="class in net.minestom.server.network.packet.client.handler">ClientPlayPacketsHandler</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayPacketsHandler()">getPlayPacketsHandler</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the handler for client play packets.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="packet/client/handler/ClientStatusPacketsHandler.html" title="class in net.minestom.server.network.packet.client.handler">ClientStatusPacketsHandler</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStatusPacketsHandler()">getStatusPacketsHandler</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the handler for client status packets.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.InboundPacket)">process</a></span>&#8203;(@NotNull io.netty.channel.ChannelHandlerContext&nbsp;context,
-       @NotNull <a href="netty/packet/InboundPacket.html" title="class in net.minestom.server.network.netty.packet">InboundPacket</a>&nbsp;packet)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePlayerConnection(io.netty.channel.ChannelHandlerContext)">removePlayerConnection</a></span>&#8203;(@NotNull io.netty.channel.ChannelHandlerContext&nbsp;context)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#process(net.minestom.server.network.player.PlayerSocketConnection,int,java.nio.ByteBuffer)">process</a></span>&#8203;(@NotNull <a href="player/PlayerSocketConnection.html" title="class in net.minestom.server.network.player">PlayerSocketConnection</a>&nbsp;playerConnection,
+       int&nbsp;packetId,
+       <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;body)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -268,53 +252,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="process(io.netty.channel.ChannelHandlerContext,net.minestom.server.network.netty.packet.InboundPacket)">
+<a id="process(net.minestom.server.network.player.PlayerSocketConnection,int,java.nio.ByteBuffer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>process</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;process&#8203;(@NotNull
-                    @NotNull io.netty.channel.ChannelHandlerContext&nbsp;context,
-                    @NotNull
-                    @NotNull <a href="netty/packet/InboundPacket.html" title="class in net.minestom.server.network.netty.packet">InboundPacket</a>&nbsp;packet)</pre>
-</li>
-</ul>
-<a id="getPlayerConnection(io.netty.channel.ChannelHandlerContext)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPlayerConnection</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;getPlayerConnection&#8203;(io.netty.channel.ChannelHandlerContext&nbsp;context)</pre>
-<div class="block">Retrieves a player connection from its channel.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>context</code> - the connection context</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the connection of this channel, null if not found</dd>
-</dl>
-</li>
-</ul>
-<a id="createPlayerConnection(io.netty.channel.ChannelHandlerContext)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createPlayerConnection</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;createPlayerConnection&#8203;(@NotNull
-                                   @NotNull io.netty.channel.ChannelHandlerContext&nbsp;context)</pre>
-</li>
-</ul>
-<a id="removePlayerConnection(io.netty.channel.ChannelHandlerContext)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>removePlayerConnection</h4>
-<pre class="methodSignature">public&nbsp;<a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;removePlayerConnection&#8203;(@NotNull
-                                               @NotNull io.netty.channel.ChannelHandlerContext&nbsp;context)</pre>
+                    @NotNull <a href="player/PlayerSocketConnection.html" title="class in net.minestom.server.network.player">PlayerSocketConnection</a>&nbsp;playerConnection,
+                    int&nbsp;packetId,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;body)</pre>
 </li>
 </ul>
 <a id="getStatusPacketsHandler()">

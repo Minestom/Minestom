@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":42,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -170,7 +170,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -212,59 +212,34 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createTeam(java.lang.String,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.ChatColor,net.minestom.server.chat.JsonMessage)">createTeam</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-          <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix,
-          <a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;teamColor,
-          <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#createTeam(java.lang.String,net.kyori.adventure.text.Component,net.kyori.adventure.text.format.NamedTextColor,net.kyori.adventure.text.Component)"><code>createTeam(String, Component, NamedTextColor, Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createTeam(java.lang.String,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.ChatColor,net.minestom.server.chat.JsonMessage)">createTeam</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-          <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName,
-          <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix,
-          <a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;teamColor,
-          <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#createTeam(java.lang.String,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.kyori.adventure.text.format.NamedTextColor,net.kyori.adventure.text.Component)"><code>createTeam(String, Component, Component, NamedTextColor, Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteTeam(java.lang.String)">deleteTeam</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;registryName)</code></th>
 <td class="colLast">
 <div class="block">Deletes a <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a></div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#deleteTeam(net.minestom.server.scoreboard.Team)">deleteTeam</a></span>&#8203;(@NotNull <a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
 <div class="block">Deletes a <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a></div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exists(java.lang.String)">exists</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;teamName)</code></th>
 <td class="colLast">
 <div class="block">Checks if the given name a registry name of a registered <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a></div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exists(net.minestom.server.scoreboard.Team)">exists</a></span>&#8203;(<a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
 <div class="block">Checks if the given <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> registered</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEntities(net.minestom.server.scoreboard.Team)">getEntities</a></span>&#8203;(<a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
@@ -273,7 +248,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  <b>Note:</b> The list exclude all players.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayers(net.minestom.server.scoreboard.Team)">getPlayers</a></span>&#8203;(<a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
@@ -282,21 +257,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  <b>Note:</b> The list exclude all entities.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTeam(java.lang.String)">getTeam</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;teamName)</code></th>
 <td class="colLast">
 <div class="block">Gets a <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> with the given name</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTeams()">getTeams</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Set</code></a> with all registered <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>'s</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerNewTeam(net.minestom.server.scoreboard.Team)">registerNewTeam</a></span>&#8203;(@NotNull <a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;team)</code></th>
 <td class="colLast">
@@ -430,32 +405,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="createTeam(java.lang.String,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.ChatColor,net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createTeam</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;createTeam&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix,
-                       <a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;teamColor,
-                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#createTeam(java.lang.String,net.kyori.adventure.text.Component,net.kyori.adventure.text.format.NamedTextColor,net.kyori.adventure.text.Component)"><code>createTeam(String, Component, NamedTextColor, Component)</code></a></div>
-</div>
-<div class="block">Creates a <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> with the registry name, prefix, suffix and the team color</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - The registry name</dd>
-<dd><code>prefix</code> - The team prefix</dd>
-<dd><code>teamColor</code> - The team color</dd>
-<dd><code>suffix</code> - The team suffix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the created <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> with a prefix, teamColor and suffix</dd>
-</dl>
-</li>
-</ul>
 <a id="createTeam(java.lang.String,net.kyori.adventure.text.Component,net.kyori.adventure.text.format.NamedTextColor,net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -475,34 +424,6 @@ public&nbsp;<a href="Team.html" title="class in net.minestom.server.scoreboard">
 <dd><code>suffix</code> - The team suffix</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the created <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> with a prefix, teamColor and suffix</dd>
-</dl>
-</li>
-</ul>
-<a id="createTeam(java.lang.String,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.ChatColor,net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createTeam</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="Team.html" title="class in net.minestom.server.scoreboard">Team</a>&nbsp;createTeam&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
-                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName,
-                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix,
-                       <a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;teamColor,
-                       <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#createTeam(java.lang.String,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.kyori.adventure.text.format.NamedTextColor,net.kyori.adventure.text.Component)"><code>createTeam(String, Component, Component, NamedTextColor, Component)</code></a></div>
-</div>
-<div class="block">Creates a <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> with the registry name, display name, prefix, suffix and the team colro</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - The registry name</dd>
-<dd><code>displayName</code> - The display name</dd>
-<dd><code>prefix</code> - The team prefix</dd>
-<dd><code>teamColor</code> - The team color</dd>
-<dd><code>suffix</code> - The team suffix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the created <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> with a prefix, teamColor, suffix and the display name</dd>
 </dl>
 </li>
 </ul>

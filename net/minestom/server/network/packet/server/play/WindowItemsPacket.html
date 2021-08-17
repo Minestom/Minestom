@@ -158,8 +158,18 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#carriedItem">carriedItem</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#items">items</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stateId">stateId</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -186,9 +196,14 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">WindowItemsPacket</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Default constructor, required for reflection operations.</div>
-</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(byte,int,net.minestom.server.item.ItemStack%5B%5D,net.minestom.server.item.ItemStack)">WindowItemsPacket</a></span>&#8203;(byte&nbsp;windowId,
+                 int&nbsp;stateId,
+                 <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;items,
+                 <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -262,13 +277,31 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <pre>public&nbsp;byte windowId</pre>
 </li>
 </ul>
+<a id="stateId">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stateId</h4>
+<pre>public&nbsp;int stateId</pre>
+</li>
+</ul>
 <a id="items">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>items</h4>
+<pre>public&nbsp;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[] items</pre>
+</li>
+</ul>
+<a id="carriedItem">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>items</h4>
-<pre>public&nbsp;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[] items</pre>
+<h4>carriedItem</h4>
+<pre>public&nbsp;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a> carriedItem</pre>
 </li>
 </ul>
 </li>
@@ -281,6 +314,18 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(byte,int,net.minestom.server.item.ItemStack[],net.minestom.server.item.ItemStack)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>WindowItemsPacket</h4>
+<pre>public&nbsp;WindowItemsPacket&#8203;(byte&nbsp;windowId,
+                         int&nbsp;stateId,
+                         <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>[]&nbsp;items,
+                         <a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;carriedItem)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>
@@ -288,7 +333,6 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <li class="blockList">
 <h4>WindowItemsPacket</h4>
 <pre>public&nbsp;WindowItemsPacket()</pre>
-<div class="block">Default constructor, required for reflection operations.</div>
 </li>
 </ul>
 </li>

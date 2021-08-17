@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,61 +185,46 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createInstanceContainer(net.minestom.server.world.DimensionType)">createInstanceContainer</a></span>&#8203;(@NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</code></th>
 <td class="colLast">
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a>.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createInstanceContainer(net.minestom.server.world.DimensionType,net.minestom.server.storage.StorageLocation)">createInstanceContainer</a></span>&#8203;(@NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType,
-                       @Nullable <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;storageLocation)</code></th>
-<td class="colLast">
 <div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>
  with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a> and <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createInstanceContainer(net.minestom.server.storage.StorageLocation)">createInstanceContainer</a></span>&#8203;(@Nullable <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;storageLocation)</code></th>
-<td class="colLast">
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createSharedInstance(net.minestom.server.instance.InstanceContainer)">createSharedInstance</a></span>&#8203;(@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;instanceContainer)</code></th>
 <td class="colLast">
 <div class="block">Creates and register a <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstance(java.util.UUID)">getInstance</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Gets an instance by the given UUID.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;</code></td>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getInstances()">getInstances</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the registered instances.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerInstance(net.minestom.server.instance.Instance)">registerInstance</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Registers an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> internally.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerSharedInstance(net.minestom.server.instance.SharedInstance)">registerSharedInstance</a></span>&#8203;(@NotNull <a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a>&nbsp;sharedInstance)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregisterInstance(net.minestom.server.instance.Instance)">unregisterInstance</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
@@ -307,46 +292,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="createInstanceContainer(net.minestom.server.world.DimensionType,net.minestom.server.storage.StorageLocation)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createInstanceContainer</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;createInstanceContainer&#8203;(@NotNull
-                                                          @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType,
-                                                          @Nullable
-                                                          @Nullable <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;storageLocation)</pre>
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>
- with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a> and <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>dimensionType</code> - the <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a> of the instance</dd>
-<dd><code>storageLocation</code> - the <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> of the instance, can be null</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the created <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a></dd>
-</dl>
-</li>
-</ul>
-<a id="createInstanceContainer(net.minestom.server.storage.StorageLocation)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>createInstanceContainer</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;createInstanceContainer&#8203;(@Nullable
-                                                          @Nullable <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage">StorageLocation</a>&nbsp;storageLocation)</pre>
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>storageLocation</code> - the <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> of the instance, can be null</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the created <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a></dd>
-</dl>
-</li>
-</ul>
 <a id="createInstanceContainer(net.minestom.server.world.DimensionType)">
 <!--   -->
 </a>
@@ -356,7 +301,8 @@ public&nbsp;@NotNull <a href="InstanceContainer.html" title="class in net.minest
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a>&nbsp;createInstanceContainer&#8203;(@NotNull
                                                           @NotNull <a href="../world/DimensionType.html" title="class in net.minestom.server.world">DimensionType</a>&nbsp;dimensionType)</pre>
-<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a> with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a>.</div>
+<div class="block">Creates and register an <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>
+ with the specified <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a> and <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>dimensionType</code> - the <a href="../world/DimensionType.html" title="class in net.minestom.server.world"><code>DimensionType</code></a> of the instance</dd>
@@ -446,7 +392,7 @@ public&nbsp;@NotNull <a href="SharedInstance.html" title="class in net.minestom.
 <li class="blockList">
 <h4>getInstances</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;&nbsp;getInstances()</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&gt;&nbsp;getInstances()</pre>
 <div class="block">Gets all the registered instances.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

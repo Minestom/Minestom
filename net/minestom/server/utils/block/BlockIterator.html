@@ -131,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">BlockIterator</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</pre>
+implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</pre>
 <div class="block">This class performs ray tracing and iterates along blocks on a line</div>
 </li>
 </ul>
@@ -158,6 +158,36 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Pos)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;pos)</code></th>
+<td class="colLast">
+<div class="block">Constructs the BlockIterator.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Pos,double)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;pos,
+             double&nbsp;yOffset)</code></th>
+<td class="colLast">
+<div class="block">Constructs the BlockIterator.</div>
+</td>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Pos,double,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;pos,
+             double&nbsp;yOffset,
+             int&nbsp;maxDistance)</code></th>
+<td class="colLast">
+<div class="block">Constructs the BlockIterator.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
+             @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
+             double&nbsp;yOffset,
+             int&nbsp;maxDistance)</code></th>
+<td class="colLast">
+<div class="block">Constructs the BlockIterator.</div>
+</td>
+</tr>
+<tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
@@ -165,36 +195,6 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.LivingEntity,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a>&nbsp;entity,
-             int&nbsp;maxDistance)</code></th>
-<td class="colLast">
-<div class="block">Constructs the BlockIterator.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos)</code></th>
-<td class="colLast">
-<div class="block">Constructs the BlockIterator.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
-             double&nbsp;yOffset)</code></th>
-<td class="colLast">
-<div class="block">Constructs the BlockIterator.</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Position,double,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
-             double&nbsp;yOffset,
-             int&nbsp;maxDistance)</code></th>
-<td class="colLast">
-<div class="block">Constructs the BlockIterator.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,double,int)">BlockIterator</a></span>&#8203;(@NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
-             @NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
-             double&nbsp;yOffset,
              int&nbsp;maxDistance)</code></th>
 <td class="colLast">
 <div class="block">Constructs the BlockIterator.</div>
@@ -231,7 +231,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#next()">next</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Returns the next BlockPosition in the trace</div>
@@ -278,16 +278,16 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.utils.Vector,net.minestom.server.utils.Vector,double,int)">
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Vec,double,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     @NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;start,
+                     @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;start,
                      @NotNull
-                     @NotNull <a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;direction,
+                     @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
                      double&nbsp;yOffset,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
@@ -305,14 +305,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.utils.Position,double,int)">
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Pos,double,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+                     @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;pos,
                      double&nbsp;yOffset,
                      int&nbsp;maxDistance)</pre>
 <div class="block">Constructs the BlockIterator.
@@ -329,14 +329,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.utils.Position,double)">
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Pos,double)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos,
+                     @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;pos,
                      double&nbsp;yOffset)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
@@ -349,14 +349,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.utils.Position)">
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Pos)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>BlockIterator</h4>
 <pre>public&nbsp;BlockIterator&#8203;(@NotNull
-                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pos)</pre>
+                     @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;pos)</pre>
 <div class="block">Constructs the BlockIterator.
  <p>
  This considers all blocks as 1x1x1 in size.</div>
@@ -424,7 +424,7 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <div class="block">Returns true if the iteration has more elements</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#hasNext()" title="class or interface in java.util" class="externalLink">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#hasNext()" title="class or interface in java.util" class="externalLink">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -435,12 +435,12 @@ implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base
 <li class="blockList">
 <h4>next</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;next()
-                            throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></pre>
+public&nbsp;@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;next()
+                    throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/NoSuchElementException.html?is-external=true" title="class or interface in java.util" class="externalLink">NoSuchElementException</a></pre>
 <div class="block">Returns the next BlockPosition in the trace</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#next()" title="class or interface in java.util" class="externalLink">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#next()" title="class or interface in java.util" class="externalLink">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the next BlockPosition in the trace</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -457,7 +457,7 @@ public&nbsp;@NotNull <a href="../BlockPosition.html" title="class in net.minesto
 <pre class="methodSignature">public&nbsp;void&nbsp;remove()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#remove()" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true#remove()" title="class or interface in java.util" class="externalLink">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Iterator.html?is-external=true" title="class or interface in java.util" class="externalLink">Iterator</a>&lt;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

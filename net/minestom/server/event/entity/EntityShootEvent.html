@@ -137,7 +137,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">EntityShootEvent</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
-<div class="block">Called with <a href="../../entity/EntityProjectile.html#shoot(net.minestom.server.utils.Position,double,double)"><code>EntityProjectile.shoot(Position, double, double)</code></a></div>
+<div class="block">Called with <a href="../../entity/EntityProjectile.html#shoot(net.minestom.server.coordinate.Point,double,double)"><code>EntityProjectile.shoot(Point, double, double)</code></a></div>
 </li>
 </ul>
 </div>
@@ -158,9 +158,9 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.utils.Position,double,double)">EntityShootEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,double,double)">EntityShootEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                 @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile,
-                @NotNull <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;to,
+                @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;to,
                 double&nbsp;power,
                 double&nbsp;spread)</code></th>
 <td class="colLast">&nbsp;</td>
@@ -212,7 +212,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<td class="colFirst"><code><a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTo()">getTo</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position projectile was shot to.</div>
@@ -270,7 +270,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.utils.Position,double,double)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Point,double,double)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -281,7 +281,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
                         @NotNull
                         @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;projectile,
                         @NotNull
-                        @NotNull <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;to,
+                        @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;to,
                         double&nbsp;power,
                         double&nbsp;spread)</pre>
 </li>
@@ -316,7 +316,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <ul class="blockList">
 <li class="blockList">
 <h4>getTo</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;getTo()</pre>
+<pre class="methodSignature">public&nbsp;<a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getTo()</pre>
 <div class="block">Gets the position projectile was shot to.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

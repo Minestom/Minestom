@@ -130,7 +130,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public final class <span class="typeNameLabel">Utils</span>
+<pre>@Internal
+public final class <span class="typeNameLabel">Utils</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 </li>
 </ul>
@@ -170,12 +171,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarInt(io.netty.buffer.ByteBuf)">readVarInt</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buf)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarInt(java.nio.ByteBuffer)">readVarInt</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buf)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static long</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarLong(io.netty.buffer.ByteBuf)">readVarLong</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#readVarLong(java.nio.ByteBuffer)">readVarLong</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buf)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -184,32 +185,32 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#write3BytesVarInt(io.netty.buffer.ByteBuf,int,int)">write3BytesVarInt</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
-                 int&nbsp;startIndex,
-                 int&nbsp;value)</code></th>
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeEmptyVarIntHeader(java.nio.ByteBuffer)">writeEmptyVarIntHeader</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeEmpty3BytesVarInt(io.netty.buffer.ByteBuf)">writeEmpty3BytesVarInt</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</code></th>
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePaletteBlocks(java.nio.ByteBuffer,net.minestom.server.instance.palette.Palette)">writePaletteBlocks</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
+                  <a href="../instance/palette/Palette.html" title="class in net.minestom.server.instance.palette">Palette</a>&nbsp;palette)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeSectionBlocks(io.netty.buffer.ByteBuf,net.minestom.server.instance.palette.Section)">writeSectionBlocks</a></span>&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer,
-                  <a href="../instance/palette/Section.html" title="class in net.minestom.server.instance.palette">Section</a>&nbsp;section)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarInt(java.nio.ByteBuffer,int)">writeVarInt</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buf,
+           int&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarInt(io.netty.buffer.ByteBuf,int)">writeVarInt</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buf,
-           int&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarIntHeader(java.nio.ByteBuffer,int,int)">writeVarIntHeader</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
+                 int&nbsp;startIndex,
+                 int&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarLong(net.minestom.server.utils.binary.BinaryWriter,long)">writeVarLong</a></span>&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeVarLong(java.nio.ByteBuffer,long)">writeVarLong</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
             long&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -246,65 +247,64 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public static&nbsp;int&nbsp;getVarIntSize&#8203;(int&nbsp;input)</pre>
 </li>
 </ul>
-<a id="writeVarInt(io.netty.buffer.ByteBuf,int)">
+<a id="writeVarInt(java.nio.ByteBuffer,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeVarInt</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;writeVarInt&#8203;(@NotNull
-                               @NotNull io.netty.buffer.ByteBuf&nbsp;buf,
+<pre class="methodSignature">public static&nbsp;void&nbsp;writeVarInt&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buf,
                                int&nbsp;value)</pre>
 </li>
 </ul>
-<a id="write3BytesVarInt(io.netty.buffer.ByteBuf,int,int)">
+<a id="writeVarIntHeader(java.nio.ByteBuffer,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>write3BytesVarInt</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;write3BytesVarInt&#8203;(@NotNull
-                                     @NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
+<h4>writeVarIntHeader</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;writeVarIntHeader&#8203;(@NotNull
+                                     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
                                      int&nbsp;startIndex,
                                      int&nbsp;value)</pre>
 </li>
 </ul>
-<a id="writeEmpty3BytesVarInt(io.netty.buffer.ByteBuf)">
+<a id="writeEmptyVarIntHeader(java.nio.ByteBuffer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>writeEmpty3BytesVarInt</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;writeEmpty3BytesVarInt&#8203;(@NotNull
-                                         @NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
+<h4>writeEmptyVarIntHeader</h4>
+<pre class="methodSignature">public static&nbsp;int&nbsp;writeEmptyVarIntHeader&#8203;(@NotNull
+                                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer)</pre>
 </li>
 </ul>
-<a id="readVarInt(io.netty.buffer.ByteBuf)">
+<a id="readVarInt(java.nio.ByteBuffer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>readVarInt</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;readVarInt&#8203;(io.netty.buffer.ByteBuf&nbsp;buf)</pre>
+<pre class="methodSignature">public static&nbsp;int&nbsp;readVarInt&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buf)</pre>
 </li>
 </ul>
-<a id="readVarLong(io.netty.buffer.ByteBuf)">
+<a id="readVarLong(java.nio.ByteBuffer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>readVarLong</h4>
 <pre class="methodSignature">public static&nbsp;long&nbsp;readVarLong&#8203;(@NotNull
-                               @NotNull io.netty.buffer.ByteBuf&nbsp;buffer)</pre>
+                               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buf)</pre>
 </li>
 </ul>
-<a id="writeVarLong(net.minestom.server.utils.binary.BinaryWriter,long)">
+<a id="writeVarLong(java.nio.ByteBuffer,long)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeVarLong</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;writeVarLong&#8203;(<a href="binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>&nbsp;writer,
+<pre class="methodSignature">public static&nbsp;void&nbsp;writeVarLong&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
                                 long&nbsp;value)</pre>
 </li>
 </ul>
@@ -326,14 +326,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;intArrayToUuid&#8203;(int[]&nbsp;array)</pre>
 </li>
 </ul>
-<a id="writeSectionBlocks(io.netty.buffer.ByteBuf,net.minestom.server.instance.palette.Section)">
+<a id="writePaletteBlocks(java.nio.ByteBuffer,net.minestom.server.instance.palette.Palette)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>writeSectionBlocks</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;writeSectionBlocks&#8203;(io.netty.buffer.ByteBuf&nbsp;buffer,
-                                      <a href="../instance/palette/Section.html" title="class in net.minestom.server.instance.palette">Section</a>&nbsp;section)</pre>
+<h4>writePaletteBlocks</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;writePaletteBlocks&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
+                                      <a href="../instance/palette/Palette.html" title="class in net.minestom.server.instance.palette">Palette</a>&nbsp;palette)</pre>
 </li>
 </ul>
 <a id="encodeBlocks(int[],int)">

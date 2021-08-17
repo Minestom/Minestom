@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -122,15 +122,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;T&gt;</li>
-<li>
-<ul class="inheritance">
-<li><a href="ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">net.minestom.server.command.builder.arguments.relative.ArgumentRelative</a>&lt;<a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&gt;</li>
+<li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;<a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -141,8 +136,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">ArgumentRelativeVec3</span>
-extends <a href="ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">ArgumentRelative</a>&lt;<a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&gt;</pre>
-<div class="block">Represents a <a href="../../../../utils/Vector.html" title="class in net.minestom.server.utils"><code>Vector</code></a> with 3 floating numbers (x;y;z) which can take relative coordinates.
+extends <a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&gt;</pre>
+<div class="block">Represents a <a href="../../../../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> with 3 floating numbers (x;y;z) which can take relative coordinates.
  <p>
  Example: -1.2 ~ 5</div>
 </li>
@@ -158,13 +153,29 @@ extends <a href="ArgumentRelative.html" title="class in net.minestom.server.comm
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.command.builder.arguments.relative.ArgumentRelative">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.command.builder.arguments.relative.<a href="ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">ArgumentRelative</a></h3>
-<code><a href="ArgumentRelative.html#INVALID_NUMBER_COUNT_ERROR">INVALID_NUMBER_COUNT_ERROR</a>, <a href="ArgumentRelative.html#INVALID_NUMBER_ERROR">INVALID_NUMBER_ERROR</a>, <a href="ArgumentRelative.html#RELATIVE_CHAR">RELATIVE_CHAR</a></code></li>
-</ul>
+<table class="memberSummary">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Field</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INVALID_NUMBER_COUNT_ERROR">INVALID_NUMBER_COUNT_ERROR</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#INVALID_NUMBER_ERROR">INVALID_NUMBER_ERROR</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#MIXED_TYPE_ERROR">MIXED_TYPE_ERROR</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.command.builder.arguments.Argument">
 <!--   -->
@@ -211,14 +222,21 @@ extends <a href="ArgumentRelative.html" title="class in net.minestom.server.comm
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNumberCount()">getNumberCount</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the amount of numbers that this relative location needs.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
- if the input cannot be convert to <code>T</code></div>
+ if the input cannot be converted to <code>T</code></div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
             boolean&nbsp;executable)</code></th>
@@ -226,25 +244,18 @@ extends <a href="ArgumentRelative.html" title="class in net.minestom.server.comm
 <div class="block">Turns the argument into a list of nodes for command dispatching.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.builder.arguments.relative.ArgumentRelative">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.relative.<a href="ArgumentRelative.html" title="class in net.minestom.server.command.builder.arguments.relative">ArgumentRelative</a></h3>
-<code><a href="ArgumentRelative.html#getNumberCount()">getNumberCount</a></code></li>
-</ul>
-<ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.builder.arguments.Argument">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#hashCode()">hashCode</a>, <a href="../Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#map(net.minestom.server.command.builder.arguments.ArgumentMap.Mapper)">map</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(java.util.function.Supplier)">setDefaultValue</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../Argument.html#filter(java.util.function.Predicate)">filter</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#hashCode()">hashCode</a>, <a href="../Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#map(java.util.function.Function)">map</a>, <a href="../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)">parse</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(java.util.function.Supplier)">setDefaultValue</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -262,6 +273,55 @@ extends <a href="ArgumentRelative.html" title="class in net.minestom.server.comm
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a id="INVALID_NUMBER_COUNT_ERROR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>INVALID_NUMBER_COUNT_ERROR</h4>
+<pre>public static final&nbsp;int INVALID_NUMBER_COUNT_ERROR</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3.INVALID_NUMBER_COUNT_ERROR">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="INVALID_NUMBER_ERROR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>INVALID_NUMBER_ERROR</h4>
+<pre>public static final&nbsp;int INVALID_NUMBER_ERROR</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3.INVALID_NUMBER_ERROR">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="MIXED_TYPE_ERROR">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>MIXED_TYPE_ERROR</h4>
+<pre>public static final&nbsp;int MIXED_TYPE_ERROR</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.command.builder.arguments.relative.ArgumentRelativeVec3.MIXED_TYPE_ERROR">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <section role="region">
 <ul class="blockList">
@@ -289,31 +349,6 @@ extends <a href="ArgumentRelative.html" title="class in net.minestom.server.comm
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="parse(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parse</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&nbsp;parse&#8203;(@NotNull
-                                  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)
-                           throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
-<div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
- if the input cannot be convert to <code>T</code></div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>input</code> - the argument to parse</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the parsed argument</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code> - if <code>value</code> is not valid</dd>
-</dl>
-</li>
-</ul>
 <a id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
 <!--   -->
 </a>
@@ -337,13 +372,52 @@ public&nbsp;@NotNull <a href="../../../../utils/location/RelativeVec.html" title
 <a id="toString()">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
 <pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;toString()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></code></dd>
+</dl>
+</li>
+</ul>
+<a id="parse(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parse</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&nbsp;parse&#8203;(@NotNull
+                                  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)
+                           throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
+<div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
+ if the input cannot be converted to <code>T</code></div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/location/RelativeVec.html" title="class in net.minestom.server.utils.location">RelativeVec</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>input</code> - the argument to parse</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the parsed argument</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code> - if <code>value</code> is not valid</dd>
+</dl>
+</li>
+</ul>
+<a id="getNumberCount()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getNumberCount</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getNumberCount()</pre>
+<div class="block">Gets the amount of numbers that this relative location needs.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the amount of coordinate required</dd>
 </dl>
 </li>
 </ul>
@@ -405,7 +479,7 @@ public&nbsp;@NotNull <a href="../../../../utils/location/RelativeVec.html" title
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

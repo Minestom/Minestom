@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":6,"i1":6,"i2":18,"i3":18,"i4":18};
+var data = {"i0":6,"i1":18,"i2":6,"i3":18,"i4":18,"i5":18,"i6":18};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -123,13 +123,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="MinestomBasicChunkLoader.html" title="class in net.minestom.server.instance">MinestomBasicChunkLoader</a></code></dd>
+<dd><code><a href="AnvilLoader.html" title="class in net.minestom.server.instance">AnvilLoader</a></code></dd>
 </dl>
 <hr>
 <pre>public interface <span class="typeNameLabel">IChunkLoader</span></pre>
 <div class="block">Interface implemented to change the way chunks are loaded/saved.
  <p>
- See <a href="MinestomBasicChunkLoader.html" title="class in net.minestom.server.instance"><code>MinestomBasicChunkLoader</code></a> for the default implementation used in <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>.</div>
+ See <a href="AnvilLoader.html" title="class in net.minestom.server.instance"><code>AnvilLoader</code></a> for the default implementation used in <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -151,39 +151,48 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">loadChunk</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadChunk(net.minestom.server.instance.Instance,int,int)">loadChunk</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
          int&nbsp;chunkX,
-         int&nbsp;chunkZ,
-         @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</code></th>
+         int&nbsp;chunkZ)</code></th>
 <td class="colLast">
 <div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> is not applied.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunk(net.minestom.server.instance.Chunk,java.lang.Runnable)">saveChunk</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-         @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</code></th>
+<td class="colFirst"><code>default void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#loadInstance(net.minestom.server.instance.Instance)">loadInstance</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+<td class="colLast">
+<div class="block">Loads instance data from the loader.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunk(net.minestom.server.instance.Chunk)">saveChunk</a></span>&#8203;(@NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></th>
 <td class="colLast">
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> with an optional callback for when it is done.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunks(java.util.Collection,java.lang.Runnable)">saveChunks</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks,
-          @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</code></th>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveChunks(java.util.Collection)">saveChunks</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</code></th>
 <td class="colLast">
 <div class="block">Saves multiple chunks with an optional callback for when it is done.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#saveInstance(net.minestom.server.instance.Instance)">saveInstance</a></span>&#8203;(@NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>default boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#supportsParallelLoading()">supportsParallelLoading</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Does this <a href="IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded loading of <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>default boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#supportsParallelSaving()">supportsParallelSaving</a></span>()</code></th>
 <td class="colLast">
@@ -207,70 +216,91 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="loadChunk(net.minestom.server.instance.Instance,int,int,net.minestom.server.utils.chunk.ChunkCallback)">
+<a id="loadInstance(net.minestom.server.instance.Instance)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>loadInstance</h4>
+<pre class="methodSignature">default&nbsp;void&nbsp;loadInstance&#8203;(@NotNull
+                          @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+<div class="block">Loads instance data from the loader.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>instance</code> - the instance to retrieve the data from</dd>
+</dl>
+</li>
+</ul>
+<a id="loadChunk(net.minestom.server.instance.Instance,int,int)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>loadChunk</h4>
-<pre class="methodSignature">boolean&nbsp;loadChunk&#8203;(@NotNull
-                  @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                  int&nbsp;chunkX,
-                  int&nbsp;chunkZ,
-                  @Nullable
-                  @Nullable <a href="../utils/chunk/ChunkCallback.html" title="interface in net.minestom.server.utils.chunk">ChunkCallback</a>&nbsp;callback)</pre>
+<pre class="methodSignature">@NotNull
+@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;@Nullable <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;loadChunk&#8203;(@NotNull
+                                                      @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                                      int&nbsp;chunkX,
+                                                      int&nbsp;chunkZ)</pre>
 <div class="block">Loads a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>, all blocks should be set since the <a href="ChunkGenerator.html" title="interface in net.minestom.server.instance"><code>ChunkGenerator</code></a> is not applied.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>instance</code> - the <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a> where the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> belong</dd>
 <dd><code>chunkX</code> - the chunk X</dd>
 <dd><code>chunkZ</code> - the chunk Z</dd>
-<dd><code>callback</code> - the callback executed when the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done loading,
-                 never called if the method returns false. Can be null.</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the chunk loaded successfully, false otherwise</dd>
+<dd>a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink"><code>CompletableFuture</code></a> containing the chunk, or null if not present</dd>
 </dl>
 </li>
 </ul>
-<a id="saveChunk(net.minestom.server.instance.Chunk,java.lang.Runnable)">
+<a id="saveInstance(net.minestom.server.instance.Instance)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>saveInstance</h4>
+<pre class="methodSignature">@NotNull
+default&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;&nbsp;saveInstance&#8203;(@NotNull
+                                                      @NotNull <a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+</li>
+</ul>
+<a id="saveChunk(net.minestom.server.instance.Chunk)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>saveChunk</h4>
-<pre class="methodSignature">void&nbsp;saveChunk&#8203;(@NotNull
-               @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk,
-               @Nullable
-               @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</pre>
+<pre class="methodSignature">@NotNull
+@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;&nbsp;saveChunk&#8203;(@NotNull
+                                           @NotNull <a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</pre>
 <div class="block">Saves a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> with an optional callback for when it is done.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>chunk</code> - the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to save</dd>
-<dd><code>callback</code> - the callback executed when the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done saving,
-                 should be called even if the saving failed (you can throw an exception).
-                 Can be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink"><code>CompletableFuture</code></a> executed when the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done saving,
+ should be called even if the saving failed (you can throw an exception).</dd>
 </dl>
 </li>
 </ul>
-<a id="saveChunks(java.util.Collection,java.lang.Runnable)">
+<a id="saveChunks(java.util.Collection)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>saveChunks</h4>
-<pre class="methodSignature">default&nbsp;void&nbsp;saveChunks&#8203;(@NotNull
-                        @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks,
-                        @Nullable
-                        @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Runnable</a>&nbsp;callback)</pre>
+<pre class="methodSignature">@NotNull
+default&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;&nbsp;saveChunks&#8203;(@NotNull
+                                                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;&nbsp;chunks)</pre>
 <div class="block">Saves multiple chunks with an optional callback for when it is done.
  <p>
  Implementations need to check <a href="#supportsParallelSaving()"><code>supportsParallelSaving()</code></a> to support the feature if possible.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>chunks</code> - the chunks to save</dd>
-<dd><code>callback</code> - the callback executed when the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done saving,
-                 should be called even if the saving failed (you can throw an exception).
-                 Can be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink"><code>CompletableFuture</code></a> executed when the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done saving,
+ should be called even if the saving failed (you can throw an exception).</dd>
 </dl>
 </li>
 </ul>

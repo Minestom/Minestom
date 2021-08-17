@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -132,7 +132,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public final class <span class="typeNameLabel">PacketUtils</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
-<div class="block">Utils class for packets. Including writing a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <code>ByteBuf</code>
+<div class="block">Utils class for packets. Including writing a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink"><code>ByteBuffer</code></a>
  for network processing.</div>
 </li>
 </ul>
@@ -140,6 +140,29 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="PacketUtils.LocalCache.html" title="class in net.minestom.server.utils">PacketUtils.LocalCache</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
 <!-- ========== METHOD SUMMARY =========== -->
 <section role="region">
 <ul class="blockList">
@@ -155,31 +178,40 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">compressBuffer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/zip/Deflater.html?is-external=true" title="class or interface in java.util.zip" class="externalLink">Deflater</a>&nbsp;deflater,
-              @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
-              @NotNull io.netty.buffer.ByteBuf&nbsp;compressionTarget)</code></th>
-<td class="colLast">
-<div class="block">Compress using zlib the content of a packet.</div>
-</td>
+<td class="colFirst"><code>static <a href="../network/packet/FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#allocateTrimmedPacket(net.minestom.server.network.packet.server.ServerPacket)">allocateTrimmedPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static @NotNull io.netty.buffer.ByteBuf</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
-<td class="colLast">
-<div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
- from a server packet, directly into an output buffer.</div>
-</td>
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#broadcastPacket(net.minestom.server.network.packet.server.ServerPacket)">broadcastPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#frameBuffer(io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">frameBuffer</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
-           @NotNull io.netty.buffer.ByteBuf&nbsp;frameTarget)</code></th>
-<td class="colLast">
-<div class="block">Frames a buffer for it to be understood by a Minecraft client.</div>
-</td>
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;initial,
+                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket,boolean)">createFramedPacket</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;initial,
+                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                  boolean&nbsp;compression)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">createFramedPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">createFramedPacket</a></span>&#8203;(@NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                  boolean&nbsp;compression)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket)">sendGroupedPacket</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
@@ -188,16 +220,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  but with the player validator sets to null.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendGroupedPacket(java.util.Collection,net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.utils.callback.validator.PlayerValidator)">sendGroupedPacket</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
-                 @Nullable <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</code></th>
+                 @NotNull <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</code></th>
 <td class="colLast">
 <div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendPacket(net.kyori.adventure.audience.Audience,net.minestom.server.network.packet.server.ServerPacket)">sendPacket</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true" title="class or interface in net.kyori.adventure.audience" class="externalLink">Audience</a>&nbsp;audience,
           @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
@@ -205,19 +237,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Sends a packet to an audience.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeFramedPacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writeFramedPacket</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
-                 @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writeFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket,boolean)">writeFramedPacket</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
+                 @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                 boolean&nbsp;compression)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#writePacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">writePacket</a></span>&#8203;(@NotNull io.netty.buffer.ByteBuf&nbsp;buf,
-           @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</code></th>
-<td class="colLast">
-<div class="block">Writes a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <code>ByteBuf</code>.</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -283,8 +308,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;players,
                                      @NotNull
                                      @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
-                                     @Nullable
-                                     @Nullable <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</pre>
+                                     @NotNull
+                                     @NotNull <a href="callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;playerValidator)</pre>
 <div class="block">Sends a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> to multiple players.
  <p>
  Can drastically improve performance since the packet will not have to be processed as much.</div>
@@ -314,94 +339,84 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="writePacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">
+<a id="broadcastPacket(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>writePacket</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;writePacket&#8203;(@NotNull
-                               @NotNull io.netty.buffer.ByteBuf&nbsp;buf,
-                               @NotNull
-                               @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
-<div class="block">Writes a <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server"><code>ServerPacket</code></a> into a <code>ByteBuf</code>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>buf</code> - the recipient of <code>packet</code></dd>
-<dd><code>packet</code> - the packet to write into <code>buf</code></dd>
-</dl>
+<h4>broadcastPacket</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;broadcastPacket&#8203;(@NotNull
+                                   @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
 </li>
 </ul>
-<a id="frameBuffer(io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>frameBuffer</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;frameBuffer&#8203;(@NotNull
-                               @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
-                               @NotNull
-                               @NotNull io.netty.buffer.ByteBuf&nbsp;frameTarget)</pre>
-<div class="block">Frames a buffer for it to be understood by a Minecraft client.
- <p>
- The content of <code>packetBuffer</code> can be either a compressed or uncompressed packet buffer,
- it depends of it the client did receive a <a href="../network/packet/server/login/SetCompressionPacket.html" title="class in net.minestom.server.network.packet.server.login"><code>SetCompressionPacket</code></a> packet before.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>packetBuffer</code> - the buffer containing compressed or uncompressed packet data</dd>
-<dd><code>frameTarget</code> - the buffer which will receive the framed version of <code>from</code></dd>
-</dl>
-</li>
-</ul>
-<a id="compressBuffer(java.util.zip.Deflater,io.netty.buffer.ByteBuf,io.netty.buffer.ByteBuf)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>compressBuffer</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;compressBuffer&#8203;(@NotNull
-                                  @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/zip/Deflater.html?is-external=true" title="class or interface in java.util.zip" class="externalLink">Deflater</a>&nbsp;deflater,
-                                  @NotNull
-                                  @NotNull io.netty.buffer.ByteBuf&nbsp;packetBuffer,
-                                  @NotNull
-                                  @NotNull io.netty.buffer.ByteBuf&nbsp;compressionTarget)</pre>
-<div class="block">Compress using zlib the content of a packet.
- <p>
- <code>packetBuffer</code> needs to be the packet content without any header (if you want to use it to write a Minecraft packet).</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>deflater</code> - the deflater for zlib compression</dd>
-<dd><code>packetBuffer</code> - the buffer containing all the packet fields</dd>
-<dd><code>compressionTarget</code> - the buffer which will receive the compressed version of <code>packetBuffer</code></dd>
-</dl>
-</li>
-</ul>
-<a id="writeFramedPacket(io.netty.buffer.ByteBuf,net.minestom.server.network.packet.server.ServerPacket)">
+<a id="writeFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writeFramedPacket</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;writeFramedPacket&#8203;(@NotNull
-                                     @NotNull io.netty.buffer.ByteBuf&nbsp;buffer,
+                                     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;buffer,
                                      @NotNull
-                                     @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
+                                     @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                                     boolean&nbsp;compression)</pre>
+</li>
+</ul>
+<a id="createFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFramedPacket</h4>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;createFramedPacket&#8203;(@NotNull
+                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;initial,
+                                            @NotNull
+                                            @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                                            boolean&nbsp;compression)</pre>
+</li>
+</ul>
+<a id="createFramedPacket(java.nio.ByteBuffer,net.minestom.server.network.packet.server.ServerPacket)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFramedPacket</h4>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;createFramedPacket&#8203;(@NotNull
+                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;initial,
+                                            @NotNull
+                                            @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
 </li>
 </ul>
 <a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>createFramedPacket</h4>
-<pre class="methodSignature">@NotNull
-public static&nbsp;@NotNull io.netty.buffer.ByteBuf&nbsp;createFramedPacket&#8203;(@NotNull
-                                                                  @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;serverPacket)</pre>
-<div class="block">Creates a "framed packet" (packet which can be send and understood by a Minecraft client)
- from a server packet, directly into an output buffer.
- <p>
- Can be used if you want to store a raw buffer and send it later without the additional writing cost.
- Compression is applied if <a href="../MinecraftServer.html#getCompressionThreshold()"><code>MinecraftServer.getCompressionThreshold()</code></a> is greater than 0.</div>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;createFramedPacket&#8203;(@NotNull
+                                            @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
+</li>
+</ul>
+<a id="createFramedPacket(net.minestom.server.network.packet.server.ServerPacket,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createFramedPacket</h4>
+<pre class="methodSignature">public static&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio" class="externalLink">ByteBuffer</a>&nbsp;createFramedPacket&#8203;(@NotNull
+                                            @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+                                            boolean&nbsp;compression)</pre>
+</li>
+</ul>
+<a id="allocateTrimmedPacket(net.minestom.server.network.packet.server.ServerPacket)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>allocateTrimmedPacket</h4>
+<pre class="methodSignature">@Internal
+public static&nbsp;<a href="../network/packet/FramedPacket.html" title="class in net.minestom.server.network.packet">FramedPacket</a>&nbsp;allocateTrimmedPacket&#8203;(@NotNull
+                                                 @NotNull <a href="../network/packet/server/ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet)</pre>
 </li>
 </ul>
 </li>
@@ -455,7 +470,7 @@ public static&nbsp;@NotNull io.netty.buffer.ByteBuf&nbsp;createFramedPacket&#820
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

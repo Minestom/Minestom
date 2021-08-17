@@ -158,10 +158,10 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.Direction)">PlayerUseItemOnBlockEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,net.minestom.server.coordinate.Point,net.minestom.server.utils.Direction)">PlayerUseItemOnBlockEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                          <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
                          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
-                         @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                         @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
                          @NotNull <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;blockFace)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -212,7 +212,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPosition()">getPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position of the interacted block.</div>
@@ -249,7 +249,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,net.minestom.server.utils.BlockPosition,net.minestom.server.utils.Direction)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack,net.minestom.server.coordinate.Point,net.minestom.server.utils.Direction)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -262,7 +262,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
                                  @NotNull
                                  @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
                                  @NotNull
-                                 @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;position,
+                                 @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
                                  @NotNull
                                  @NotNull <a href="../../utils/Direction.html" title="enum in net.minestom.server.utils">Direction</a>&nbsp;blockFace)</pre>
 </li>
@@ -284,7 +284,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <li class="blockList">
 <h4>getPosition</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getPosition()</pre>
+public&nbsp;@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getPosition()</pre>
 <div class="block">Gets the position of the interacted block.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

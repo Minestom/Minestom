@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":42};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -160,15 +160,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                @Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;tooltip)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)">SuggestionEntry</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;entry,
-               @Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;tooltip)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use {<a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)"><code>SuggestionEntry(String, JsonMessage)</code></a>}</div>
-</div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -181,7 +172,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -196,15 +187,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTooltip()">getTooltip</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTooltipJson()">getTooltipJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getTooltip()"><code>getTooltip()</code></a></div>
-</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -230,22 +212,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.String,net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>SuggestionEntry</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;SuggestionEntry&#8203;(@NotNull
-                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;entry,
-                       @Nullable
-                       @Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;tooltip)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use {<a href="#%3Cinit%3E(java.lang.String,net.minestom.server.chat.JsonMessage)"><code>SuggestionEntry(String, JsonMessage)</code></a>}</div>
-</div>
-</li>
-</ul>
 <a id="&lt;init&gt;(java.lang.String,net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -291,25 +257,11 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <a id="getTooltip()">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getTooltip</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getTooltip()</pre>
-</li>
-</ul>
-<a id="getTooltipJson()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getTooltipJson</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-@Nullable
-public&nbsp;@Nullable <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTooltipJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getTooltip()"><code>getTooltip()</code></a></div>
-</div>
 </li>
 </ul>
 </li>

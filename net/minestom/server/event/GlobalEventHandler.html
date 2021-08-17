@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":42};
+var data = {"i0":10,"i1":42,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -122,21 +122,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="EventNode.html" title="class in net.minestom.server.event">net.minestom.server.event.EventNode</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.event.GlobalEventHandler</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
 <hr>
 <pre>public final class <span class="typeNameLabel">GlobalEventHandler</span>
-extends <a href="EventNode.html" title="class in net.minestom.server.event">EventNode</a>&lt;<a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</pre>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Object containing all the global event listeners.</div>
 </li>
 </ul>
@@ -144,23 +143,6 @@ extends <a href="EventNode.html" title="class in net.minestom.server.event">Even
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.event.EventNode">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.event.<a href="EventNode.html" title="class in net.minestom.server.event">EventNode</a></h3>
-<code><a href="EventNode.html#eventType">eventType</a>, <a href="EventNode.html#filter">filter</a>, <a href="EventNode.html#name">name</a>, <a href="EventNode.html#predicate">predicate</a></code></li>
-</ul>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -197,6 +179,13 @@ extends <a href="EventNode.html" title="class in net.minestom.server.event">Even
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addChild(net.minestom.server.event.EventNode)">addChild</a></span>&#8203;(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends T&gt;&nbsp;child)</code></th>
+<td class="colLast">
+<div class="block">Directly adds a child node to this node.</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>&lt;V extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;<br>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">addEventCallback</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;V&gt;&nbsp;eventClass,
                 @NotNull <a href="EventCallback.html" title="interface in net.minestom.server.event">EventCallback</a>&lt;V&gt;&nbsp;eventCallback)</code></th>
@@ -206,20 +195,129 @@ extends <a href="EventNode.html" title="class in net.minestom.server.event">Even
 </div>
 </td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addListener(net.minestom.server.event.EventListener)">addListener</a></span>&#8203;(@NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends T&gt;&nbsp;listener)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#call(T)">call</a></span>&#8203;(T&nbsp;event)</code></th>
+<td class="colLast">
+<div class="block">Executes the given event on this node.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>&lt;E extends T&gt;<br>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findChildren(java.lang.String,java.lang.Class)">findChildren</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;E&gt;&nbsp;eventType)</code></th>
+<td class="colLast">
+<div class="block">Locates all child nodes with the given name and event type recursively starting at this node.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChildren()">getChildren</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Returns an unmodifiable view of the children in this node.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEventType()">getEventType</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getName()">getName</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>@Nullable <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? super T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getParent()">getParent</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPriority()">getPriority</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#map(net.minestom.server.event.EventNode,java.lang.Object)">map</a></span>&#8203;(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends T&gt;&nbsp;node,
+   @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#register(net.minestom.server.event.EventBinding)">register</a></span>&#8203;(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends T&gt;&nbsp;binding)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeChild(net.minestom.server.event.EventNode)">removeChild</a></span>&#8203;(@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends T&gt;&nbsp;child)</code></th>
+<td class="colLast">
+<div class="block">Directly removes the given child from this node.</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeChildren(java.lang.String)">removeChildren</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</code></th>
+<td class="colLast">
+<div class="block">Recursively removes children with the given name starting at this node.</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeChildren(java.lang.String,java.lang.Class)">removeChildren</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends T&gt;&nbsp;eventType)</code></th>
+<td class="colLast">
+<div class="block">Recursively removes children with the given name and type starting at this node.</div>
+</td>
+</tr>
+<tr id="i15" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeListener(net.minestom.server.event.EventListener)">removeListener</a></span>&#8203;(@NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends T&gt;&nbsp;listener)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code>&lt;E extends T&gt;<br>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)">replaceChildren</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;E&gt;&nbsp;eventType,
+               @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;&nbsp;eventNode)</code></th>
+<td class="colLast">
+<div class="block">Replaces all children matching the given name and type recursively starting from this node.</div>
+</td>
+</tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPriority(int)">setPriority</a></span>&#8203;(int&nbsp;priority)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unmap(java.lang.Object)">unmap</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#unregister(net.minestom.server.event.EventBinding)">unregister</a></span>&#8203;(@NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends T&gt;&nbsp;binding)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.EventNode">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.event.<a href="EventNode.html" title="class in net.minestom.server.event">EventNode</a></h3>
-<code><a href="EventNode.html#addChild(net.minestom.server.event.EventNode)">addChild</a>, <a href="EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)">addListener</a>, <a href="EventNode.html#addListener(net.minestom.server.event.EventListener)">addListener</a>, <a href="EventNode.html#all(java.lang.String)">all</a>, <a href="EventNode.html#call(T)">call</a>, <a href="EventNode.html#callCancellable(T,java.lang.Runnable)">callCancellable</a>, <a href="EventNode.html#condition(T)">condition</a>, <a href="EventNode.html#event(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.Predicate)">event</a>, <a href="EventNode.html#findChildren(java.lang.String)">findChildren</a>, <a href="EventNode.html#findChildren(java.lang.String,java.lang.Class)">findChildren</a>, <a href="EventNode.html#getChildren()">getChildren</a>, <a href="EventNode.html#getName()">getName</a>, <a href="EventNode.html#getParent()">getParent</a>, <a href="EventNode.html#getPriority()">getPriority</a>, <a href="EventNode.html#removeChild(net.minestom.server.event.EventNode)">removeChild</a>, <a href="EventNode.html#removeChildren(java.lang.String)">removeChildren</a>, <a href="EventNode.html#removeChildren(java.lang.String,java.lang.Class)">removeChildren</a>, <a href="EventNode.html#removeListener(net.minestom.server.event.EventListener)">removeListener</a>, <a href="EventNode.html#replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)">replaceChildren</a>, <a href="EventNode.html#replaceChildren(java.lang.String,net.minestom.server.event.EventNode)">replaceChildren</a>, <a href="EventNode.html#setPriority(int)">setPriority</a>, <a href="EventNode.html#tag(java.lang.String,net.minestom.server.event.EventFilter,net.minestom.server.tag.Tag)">tag</a>, <a href="EventNode.html#tag(java.lang.String,net.minestom.server.event.EventFilter,net.minestom.server.tag.Tag,java.util.function.Predicate)">tag</a>, <a href="EventNode.html#type(java.lang.String,net.minestom.server.event.EventFilter)">type</a>, <a href="EventNode.html#type(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.BiPredicate)">type</a>, <a href="EventNode.html#value(java.lang.String,net.minestom.server.event.EventFilter,java.util.function.Predicate)">value</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.lang" class="externalLink">equals</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#hashCode()" title="class or interface in java.lang" class="externalLink">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.event.EventNode">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;net.minestom.server.event.<a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a></h3>
+<code><a href="EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)">addListener</a>, <a href="EventNode.html#callCancellable(T,java.lang.Runnable)">callCancellable</a>, <a href="EventNode.html#findChildren(java.lang.String)">findChildren</a>, <a href="EventNode.html#replaceChildren(java.lang.String,net.minestom.server.event.EventNode)">replaceChildren</a></code></li>
 </ul>
 </li>
 </ul>
@@ -259,7 +357,7 @@ extends <a href="EventNode.html" title="class in net.minestom.server.event">Even
 <a id="addEventCallback(java.lang.Class,net.minestom.server.event.EventCallback)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>addEventCallback</h4>
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
@@ -270,6 +368,337 @@ public&nbsp;&lt;V extends <a href="Event.html" title="interface in net.minestom.
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
 <div class="deprecationComment">use <a href="EventNode.html#addListener(java.lang.Class,java.util.function.Consumer)"><code>EventNode.addListener(Class, Consumer)</code></a></div>
 </div>
+</li>
+</ul>
+<a id="call(net.minestom.server.event.Event)">
+<!--   -->
+</a><a id="call(T)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>call</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;call&#8203;(@NotNull
+                 T&nbsp;event)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#call(T)">EventNode</a></code></span></div>
+<div class="block">Executes the given event on this node. The event must pass all conditions before
+ it will be forwarded to the listeners.
+ <p>
+ Calling an event on a node will execute all child nodes, however, an event may be
+ called anywhere on the event graph and it will propagate down from there only.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#call(T)">call</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>event</code> - the event to execute</dd>
+</dl>
+</li>
+</ul>
+<a id="findChildren(java.lang.String,java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>findChildren</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;&lt;E extends T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;&gt;&nbsp;findChildren&#8203;(@NotNull
+                                                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+                                                              <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;E&gt;&nbsp;eventType)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#findChildren(java.lang.String,java.lang.Class)">EventNode</a></code></span></div>
+<div class="block">Locates all child nodes with the given name and event type recursively starting at this node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#findChildren(java.lang.String,java.lang.Class)">findChildren</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The event node name to filter for</dd>
+<dd><code>eventType</code> - The event node type to filter for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>All matching event nodes</dd>
+</dl>
+</li>
+</ul>
+<a id="getChildren()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getChildren</h4>
+<pre class="methodSignature">@Contract(pure=true)
+@NotNull
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&gt;&nbsp;getChildren()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#getChildren()">EventNode</a></code></span></div>
+<div class="block">Returns an unmodifiable view of the children in this node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#getChildren()">getChildren</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="EventNode.html#addChild(net.minestom.server.event.EventNode)"><code>EventNode.addChild(EventNode)</code></a>, 
+<a href="EventNode.html#removeChild(net.minestom.server.event.EventNode)"><code>EventNode.removeChild(EventNode)</code></a></dd>
+</dl>
+</li>
+</ul>
+<a id="replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>replaceChildren</h4>
+<pre class="methodSignature">public&nbsp;&lt;E extends T&gt;&nbsp;void&nbsp;replaceChildren&#8203;(@NotNull
+                                          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+                                          @NotNull
+                                          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;E&gt;&nbsp;eventType,
+                                          @NotNull
+                                          @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;E&gt;&nbsp;eventNode)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)">EventNode</a></code></span></div>
+<div class="block">Replaces all children matching the given name and type recursively starting from this node.
+ <p>
+ Node: The callee may not be replaced by this call.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#replaceChildren(java.lang.String,java.lang.Class,net.minestom.server.event.EventNode)">replaceChildren</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The event name to filter for</dd>
+<dd><code>eventType</code> - The event node type to filter for</dd>
+<dd><code>eventNode</code> - The replacement node</dd>
+</dl>
+</li>
+</ul>
+<a id="removeChildren(java.lang.String,java.lang.Class)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeChildren</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeChildren&#8203;(@NotNull
+                           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name,
+                           @NotNull
+                           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;? extends T&gt;&nbsp;eventType)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#removeChildren(java.lang.String,java.lang.Class)">EventNode</a></code></span></div>
+<div class="block">Recursively removes children with the given name and type starting at this node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#removeChildren(java.lang.String,java.lang.Class)">removeChildren</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The node name to filter for</dd>
+<dd><code>eventType</code> - The node type to filter for</dd>
+</dl>
+</li>
+</ul>
+<a id="removeChildren(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeChildren</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;removeChildren&#8203;(@NotNull
+                           @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;name)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#removeChildren(java.lang.String)">EventNode</a></code></span></div>
+<div class="block">Recursively removes children with the given name starting at this node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#removeChildren(java.lang.String)">removeChildren</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>name</code> - The node name to filter for</dd>
+</dl>
+</li>
+</ul>
+<a id="addChild(net.minestom.server.event.EventNode)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addChild</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&nbsp;addChild&#8203;(@NotNull
+                                      @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends T&gt;&nbsp;child)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#addChild(net.minestom.server.event.EventNode)">EventNode</a></code></span></div>
+<div class="block">Directly adds a child node to this node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#addChild(net.minestom.server.event.EventNode)">addChild</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>child</code> - The child to add</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this, can be used for chaining</dd>
+</dl>
+</li>
+</ul>
+<a id="removeChild(net.minestom.server.event.EventNode)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeChild</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&nbsp;removeChild&#8203;(@NotNull
+                                         @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends T&gt;&nbsp;child)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="EventNode.html#removeChild(net.minestom.server.event.EventNode)">EventNode</a></code></span></div>
+<div class="block">Directly removes the given child from this node.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#removeChild(net.minestom.server.event.EventNode)">removeChild</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>child</code> - The child to remove</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>this, can be used for chaining</dd>
+</dl>
+</li>
+</ul>
+<a id="addListener(net.minestom.server.event.EventListener)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addListener</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&nbsp;addListener&#8203;(@NotNull
+                                         @NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends T&gt;&nbsp;listener)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#addListener(net.minestom.server.event.EventListener)">addListener</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="removeListener(net.minestom.server.event.EventListener)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeListener</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&nbsp;removeListener&#8203;(@NotNull
+                                            @NotNull <a href="EventListener.html" title="interface in net.minestom.server.event">EventListener</a>&lt;? extends T&gt;&nbsp;listener)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#removeListener(net.minestom.server.event.EventListener)">removeListener</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="map(net.minestom.server.event.EventNode,java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>map</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;map&#8203;(@NotNull
+                @NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? extends T&gt;&nbsp;node,
+                @NotNull
+                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)">map</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="unmap(java.lang.Object)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unmap</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;unmap&#8203;(@NotNull
+                     @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>&nbsp;value)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#unmap(java.lang.Object)">unmap</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="register(net.minestom.server.event.EventBinding)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>register</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;register&#8203;(@NotNull
+                     @NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends T&gt;&nbsp;binding)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#register(net.minestom.server.event.EventBinding)">register</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="unregister(net.minestom.server.event.EventBinding)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>unregister</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;unregister&#8203;(@NotNull
+                       @NotNull <a href="EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a>&lt;? extends T&gt;&nbsp;binding)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#unregister(net.minestom.server.event.EventBinding)">unregister</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="getEventType()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getEventType</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;T&gt;&nbsp;getEventType()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#getEventType()">getEventType</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="getName()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getName</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;getName()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#getName()">getName</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="getPriority()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPriority</h4>
+<pre class="methodSignature">public&nbsp;int&nbsp;getPriority()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#getPriority()">getPriority</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="setPriority(int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPriority</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T&gt;&nbsp;setPriority&#8203;(int&nbsp;priority)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#setPriority(int)">setPriority</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a id="getParent()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getParent</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;? super T&gt;&nbsp;getParent()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="EventNode.html#getParent()">getParent</a></code>&nbsp;in interface&nbsp;<code><a href="EventNode.html" title="interface in net.minestom.server.event">EventNode</a>&lt;T extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -324,7 +753,7 @@ public&nbsp;&lt;V extends <a href="Event.html" title="interface in net.minestom.
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

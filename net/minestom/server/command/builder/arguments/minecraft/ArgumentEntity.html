@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9,"i7":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":41,"i7":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -224,7 +224,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -250,7 +250,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)</code></th>
 <td class="colLast">
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
- if the input cannot be convert to <code>T</code></div>
+ if the input cannot be converted to <code>T</code></div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -271,7 +271,11 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#staticParse(java.lang.String,boolean,boolean)">staticParse</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input,
            boolean&nbsp;onlySingleEntity,
            boolean&nbsp;onlyPlayers)</code></th>
-<td class="colLast">&nbsp;</td>
+<td class="colLast">
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)"><code>Argument.parse(Argument)</code></a></div>
+</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
@@ -284,7 +288,7 @@ extends <a href="../Argument.html" title="class in net.minestom.server.command.b
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#hashCode()">hashCode</a>, <a href="../Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#map(net.minestom.server.command.builder.arguments.ArgumentMap.Mapper)">map</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(java.util.function.Supplier)">setDefaultValue</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="../Argument.html#allowSpace()">allowSpace</a>, <a href="../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../Argument.html#filter(java.util.function.Predicate)">filter</a>, <a href="../Argument.html#getCallback()">getCallback</a>, <a href="../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../Argument.html#getId()">getId</a>, <a href="../Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../Argument.html#hashCode()">hashCode</a>, <a href="../Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="../Argument.html#isOptional()">isOptional</a>, <a href="../Argument.html#map(java.util.function.Function)">map</a>, <a href="../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)">parse</a>, <a href="../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../Argument.html#setDefaultValue(java.util.function.Supplier)">setDefaultValue</a>, <a href="../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -433,7 +437,7 @@ public&nbsp;@NotNull <a href="../../../../utils/entity/EntityFinder.html" title=
                             throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
- if the input cannot be convert to <code>T</code></div>
+ if the input cannot be converted to <code>T</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&gt;</code></dd>
@@ -472,12 +476,16 @@ public&nbsp;@NotNull <a href="../../../../utils/entity/EntityFinder.html" title=
 <ul class="blockList">
 <li class="blockList">
 <h4>staticParse</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
+@NotNull
 public static&nbsp;@NotNull <a href="../../../../utils/entity/EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;staticParse&#8203;(@NotNull
                                                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input,
                                                 boolean&nbsp;onlySingleEntity,
                                                 boolean&nbsp;onlyPlayers)
                                          throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
+<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
+<div class="deprecationComment">use <a href="../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)"><code>Argument.parse(Argument)</code></a></div>
+</div>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code></dd>

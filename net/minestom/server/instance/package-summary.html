@@ -105,26 +105,20 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
-<th class="colFirst" scope="row"><a href="BlockModifier.html" title="interface in net.minestom.server.instance">BlockModifier</a></th>
-<td class="colLast">
-<div class="block">Represents an element which can place blocks at position.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="ChunkGenerator.html" title="interface in net.minestom.server.instance">ChunkGenerator</a></th>
 <td class="colLast">
 <div class="block">Responsible for the <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> generation, can be set using <a href="Instance.html#setChunkGenerator(net.minestom.server.instance.ChunkGenerator)"><code>Instance.setChunkGenerator(ChunkGenerator)</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="ChunkPopulator.html" title="interface in net.minestom.server.instance">ChunkPopulator</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="ExplosionSupplier.html" title="interface in net.minestom.server.instance">ExplosionSupplier</a></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a></th>
 <td class="colLast">
 <div class="block">Interface implemented to change the way chunks are loaded/saved.</div>
@@ -142,56 +136,57 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </tr>
 <tbody>
 <tr class="altColor">
+<th class="colFirst" scope="row"><a href="AnvilLoader.html" title="class in net.minestom.server.instance">AnvilLoader</a></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="Chunk.html" title="class in net.minestom.server.instance">Chunk</a></th>
 <td class="colLast">
 <div class="block">A chunk is a part of an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>, limited by a size of 16x256x16 blocks and subdivided in 16 sections of 16 blocks height.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="DynamicChunk.html" title="class in net.minestom.server.instance">DynamicChunk</a></th>
 <td class="colLast">
 <div class="block">Represents a <a href="Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> which store each individual block in memory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="Explosion.html" title="class in net.minestom.server.instance">Explosion</a></th>
 <td class="colLast">
 <div class="block">Abstract explosion.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="Instance.html" title="class in net.minestom.server.instance">Instance</a></th>
 <td class="colLast">
 <div class="block">Instances are what are called "worlds" in Minecraft, you can add an entity in it using <a href="../entity/Entity.html#setInstance(net.minestom.server.instance.Instance)"><code>Entity.setInstance(Instance)</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="InstanceContainer.html" title="class in net.minestom.server.instance">InstanceContainer</a></th>
 <td class="colLast">
 <div class="block">InstanceContainer is an instance that contains chunks in contrary to SharedInstance.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="InstanceManager.html" title="class in net.minestom.server.instance">InstanceManager</a></th>
 <td class="colLast">
 <div class="block">Used to register <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
-<th class="colFirst" scope="row"><a href="MinestomBasicChunkLoader.html" title="class in net.minestom.server.instance">MinestomBasicChunkLoader</a></th>
-<td class="colLast">
-<div class="block">A <a href="IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> used by <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>
- which is based on the <a href="../storage/StorageLocation.html" title="class in net.minestom.server.storage"><code>StorageLocation</code></a> and <a href="../utils/chunk/ChunkSupplier.html" title="interface in net.minestom.server.utils.chunk"><code>ChunkSupplier</code></a> associated to it.</div>
-</td>
-</tr>
 <tr class="rowColor">
+<th class="colFirst" scope="row"><a href="Section.html" title="class in net.minestom.server.instance">Section</a></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <th class="colFirst" scope="row"><a href="SharedInstance.html" title="class in net.minestom.server.instance">SharedInstance</a></th>
 <td class="colLast">
 <div class="block">The <a href="SharedInstance.html" title="class in net.minestom.server.instance"><code>SharedInstance</code></a> is an instance that shares the same chunks as its linked <a href="InstanceContainer.html" title="class in net.minestom.server.instance"><code>InstanceContainer</code></a>,
  entities are separated.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <th class="colFirst" scope="row"><a href="WorldBorder.html" title="class in net.minestom.server.instance">WorldBorder</a></th>
 <td class="colLast">
 <div class="block">Represents the world border of an <a href="Instance.html" title="class in net.minestom.server.instance"><code>Instance</code></a>,

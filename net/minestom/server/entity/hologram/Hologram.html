@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":42,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":42};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -158,16 +158,16 @@ implements <a href="../../Viewable.html" title="interface in net.minestom.server
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.kyori.adventure.text.Component)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+        <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition,
         <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Constructs a new <a href="Hologram.html" title="class in net.minestom.server.entity.hologram"><code>Hologram</code></a> with the given parameters.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component,boolean)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.kyori.adventure.text.Component,boolean)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+        <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition,
         <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text,
         boolean&nbsp;autoViewable)</code></th>
 <td class="colLast">
@@ -175,34 +175,13 @@ implements <a href="../../Viewable.html" title="interface in net.minestom.server
 </td>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component,boolean,boolean)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.kyori.adventure.text.Component,boolean,boolean)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+        <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition,
         <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text,
         boolean&nbsp;autoViewable,
         boolean&nbsp;marker)</code></th>
 <td class="colLast">
 <div class="block">Constructs a new <a href="Hologram.html" title="class in net.minestom.server.entity.hologram"><code>Hologram</code></a> with the given parameters.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.chat.JsonMessage)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
-        <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component)"><code>Hologram(Instance, Position, Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.chat.JsonMessage,boolean)">Hologram</a></span>&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
-        <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text,
-        boolean&nbsp;autoViewable)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component,boolean)"><code>Hologram(Instance, Position, Component, boolean)</code></a></div>
-</div>
 </td>
 </tr>
 </table>
@@ -217,7 +196,7 @@ implements <a href="../../Viewable.html" title="interface in net.minestom.server
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -238,7 +217,7 @@ implements <a href="../../Viewable.html" title="interface in net.minestom.server
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<td class="colFirst"><code><a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPosition()">getPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position of the hologram.</div>
@@ -252,63 +231,45 @@ implements <a href="../../Viewable.html" title="interface in net.minestom.server
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTextJson()">getTextJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getText()"><code>getText()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Set.html?is-external=true" title="class or interface in java.util" class="externalLink">Set</a>&lt;<a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getViewers()">getViewers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all the viewers of this viewable element.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRemoved()">isRemoved</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Checks if the hologram is still present.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#remove()">remove</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Removes the hologram.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></span>&#8203;(@NotNull <a href="../Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Removes a viewer.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPosition(net.minestom.server.utils.Position)">setPosition</a></span>&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPosition(net.minestom.server.coordinate.Pos)">setPosition</a></span>&#8203;(<a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position)</code></th>
 <td class="colLast">
 <div class="block">Changes the position of the hologram.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setText(net.kyori.adventure.text.Component)">setText</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text)</code></th>
 <td class="colLast">
 <div class="block">Changes the hologram text.</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setText(net.minestom.server.chat.JsonMessage)">setText</a></span>&#8203;(<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setText(net.kyori.adventure.text.Component)"><code>setText(Component)</code></a></div>
-</div>
 </td>
 </tr>
 </table>
@@ -342,60 +303,14 @@ implements <a href="../../Viewable.html" title="interface in net.minestom.server
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.chat.JsonMessage,boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>Hologram</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
-                <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text,
-                boolean&nbsp;autoViewable)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component,boolean)"><code>Hologram(Instance, Position, Component, boolean)</code></a></div>
-</div>
-<div class="block">Constructs a new <a href="Hologram.html" title="class in net.minestom.server.entity.hologram"><code>Hologram</code></a> with the given parameters.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>instance</code> - The instance where the hologram should be spawned.</dd>
-<dd><code>spawnPosition</code> - The spawn position of this hologram.</dd>
-<dd><code>text</code> - The text of this hologram.</dd>
-<dd><code>autoViewable</code> - <code>true</code>if the hologram should be visible automatically, otherwise <code>false</code>.</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>Hologram</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
-                <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component)"><code>Hologram(Instance, Position, Component)</code></a></div>
-</div>
-<div class="block">Constructs a new <a href="Hologram.html" title="class in net.minestom.server.entity.hologram"><code>Hologram</code></a> with the given parameters.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>instance</code> - The instance where the hologram should be spawned.</dd>
-<dd><code>spawnPosition</code> - The spawn position of this hologram.</dd>
-<dd><code>text</code> - The text of this hologram.</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component)">
+<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>Hologram</h4>
 <pre>public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
+                <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition,
                 <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text)</pre>
 <div class="block">Constructs a new <a href="Hologram.html" title="class in net.minestom.server.entity.hologram"><code>Hologram</code></a> with the given parameters.</div>
 <dl>
@@ -406,14 +321,14 @@ public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class 
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component,boolean)">
+<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.kyori.adventure.text.Component,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>Hologram</h4>
 <pre>public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
+                <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition,
                 <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text,
                 boolean&nbsp;autoViewable)</pre>
 <div class="block">Constructs a new <a href="Hologram.html" title="class in net.minestom.server.entity.hologram"><code>Hologram</code></a> with the given parameters.</div>
@@ -426,14 +341,14 @@ public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class 
 </dl>
 </li>
 </ul>
-<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.utils.Position,net.kyori.adventure.text.Component,boolean,boolean)">
+<a id="&lt;init&gt;(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.kyori.adventure.text.Component,boolean,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Hologram</h4>
 <pre>public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;spawnPosition,
+                <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;spawnPosition,
                 <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;text,
                 boolean&nbsp;autoViewable,
                 boolean&nbsp;marker)</pre>
@@ -463,7 +378,7 @@ public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class 
 <ul class="blockList">
 <li class="blockList">
 <h4>getPosition</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;getPosition()</pre>
+<pre class="methodSignature">public&nbsp;<a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;getPosition()</pre>
 <div class="block">Gets the position of the hologram.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -471,35 +386,17 @@ public&nbsp;Hologram&#8203;(<a href="../../instance/Instance.html" title="class 
 </dl>
 </li>
 </ul>
-<a id="setPosition(net.minestom.server.utils.Position)">
+<a id="setPosition(net.minestom.server.coordinate.Pos)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setPosition</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setPosition&#8203;(<a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<pre class="methodSignature">public&nbsp;void&nbsp;setPosition&#8203;(<a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position)</pre>
 <div class="block">Changes the position of the hologram.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>position</code> - the new hologram's position</dd>
-</dl>
-</li>
-</ul>
-<a id="getTextJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTextJson</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTextJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getText()"><code>getText()</code></a></div>
-</div>
-<div class="block">Gets the hologram text.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the hologram text</dd>
 </dl>
 </li>
 </ul>
@@ -514,24 +411,6 @@ public&nbsp;<a href="../../chat/JsonMessage.html" title="class in net.minestom.s
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the hologram text</dd>
-</dl>
-</li>
-</ul>
-<a id="setText(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setText</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setText&#8203;(<a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setText(net.kyori.adventure.text.Component)"><code>setText(Component)</code></a></div>
-</div>
-<div class="block">Changes the hologram text.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - the new hologram text</dd>
 </dl>
 </li>
 </ul>

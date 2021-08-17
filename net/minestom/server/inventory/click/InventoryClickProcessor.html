@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,7 +131,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>@Internal
-public class <span class="typeNameLabel">InventoryClickProcessor</span>
+public final class <span class="typeNameLabel">InventoryClickProcessor</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 </li>
 </ul>
@@ -176,8 +176,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#changeHeld(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">changeHeld</a></span>&#8203;(@Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-          @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#changeHeld(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">changeHeld</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+          @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
           int&nbsp;slot,
           int&nbsp;key,
           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
@@ -190,18 +190,19 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack)">doubleClick</a></span>&#8203;(@NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;clickedInventory,
-           @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+<td class="colFirst"><code>@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doubleClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">doubleClick</a></span>&#8203;(@NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;clickedInventory,
+           @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
            @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
            int&nbsp;slot,
+           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
            @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dragging(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,it.unimi.dsi.fastutil.ints.Int2ObjectFunction,java.util.function.BiConsumer)">dragging</a></span>&#8203;(@Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-        @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dragging(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,it.unimi.dsi.fastutil.ints.Int2ObjectFunction,java.util.function.BiConsumer)">dragging</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+        @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
         int&nbsp;slot,
         int&nbsp;button,
         @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
@@ -212,8 +213,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drop(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,boolean,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">drop</a></span>&#8203;(@Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-    @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#drop(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,boolean,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">drop</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+    @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
     boolean&nbsp;all,
     int&nbsp;slot,
     int&nbsp;button,
@@ -223,8 +224,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#leftClick(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">leftClick</a></span>&#8203;(@Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-         @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#leftClick(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">leftClick</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+         @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
          int&nbsp;slot,
          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
@@ -232,29 +233,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rightClick(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">rightClick</a></span>&#8203;(@Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-          @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rightClick(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">rightClick</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+          @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
           int&nbsp;slot,
           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftClick(net.minestom.server.inventory.AbstractInventory,int,int,int,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">shiftClick</a></span>&#8203;(@NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;targetInventory,
+<td class="colFirst"><code>@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.AbstractInventory,int,int,int,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">shiftClick</a></span>&#8203;(@NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
+          @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;targetInventory,
           int&nbsp;start,
           int&nbsp;end,
           int&nbsp;step,
-          @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-          int&nbsp;slot,
-          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
-          @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">shiftClick</a></span>&#8203;(<a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;targetInventory,
-          @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
           @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
           int&nbsp;slot,
           @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
@@ -304,17 +296,17 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="leftClick(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<a id="leftClick(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>leftClick</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;leftClick&#8203;(@Nullable
-                                               @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                               @NotNull
+public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;leftClick&#8203;(@NotNull
                                                @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                               @NotNull
+                                               @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
                                                int&nbsp;slot,
                                                @NotNull
                                                @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
@@ -322,17 +314,17 @@ public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.min
                                                @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
 </li>
 </ul>
-<a id="rightClick(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<a id="rightClick(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>rightClick</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;rightClick&#8203;(@Nullable
-                                                @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                                @NotNull
+public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;rightClick&#8203;(@NotNull
                                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                                @NotNull
+                                                @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
                                                 int&nbsp;slot,
                                                 @NotNull
                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
@@ -340,17 +332,17 @@ public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.min
                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
 </li>
 </ul>
-<a id="changeHeld(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<a id="changeHeld(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>changeHeld</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;changeHeld&#8203;(@Nullable
-                                                @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                                @NotNull
+public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;changeHeld&#8203;(@NotNull
                                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                                @NotNull
+                                                @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
                                                 int&nbsp;slot,
                                                 int&nbsp;key,
                                                 @NotNull
@@ -359,57 +351,40 @@ public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.min
                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
 </li>
 </ul>
-<a id="shiftClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<a id="shiftClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.AbstractInventory,int,int,int,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>shiftClick</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;shiftClick&#8203;(<a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;targetInventory,
-                                                 @Nullable
-                                                 @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                                 @NotNull
-                                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                                                 int&nbsp;slot,
-                                                 @NotNull
-                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
-                                                 @NotNull
-                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;shiftClick&#8203;(@NotNull
+                                                @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
+                                                @NotNull
+                                                @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;targetInventory,
+                                                int&nbsp;start,
+                                                int&nbsp;end,
+                                                int&nbsp;step,
+                                                @NotNull
+                                                @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                                int&nbsp;slot,
+                                                @NotNull
+                                                @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
+                                                @NotNull
+                                                @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
 </li>
 </ul>
-<a id="shiftClick(net.minestom.server.inventory.AbstractInventory,int,int,int,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>shiftClick</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;shiftClick&#8203;(@NotNull
-                                                 @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;targetInventory,
-                                                 int&nbsp;start,
-                                                 int&nbsp;end,
-                                                 int&nbsp;step,
-                                                 @NotNull
-                                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                                                 int&nbsp;slot,
-                                                 @NotNull
-                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
-                                                 @NotNull
-                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
-</li>
-</ul>
-<a id="dragging(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,it.unimi.dsi.fastutil.ints.Int2ObjectFunction,java.util.function.BiConsumer)">
+<a id="dragging(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,it.unimi.dsi.fastutil.ints.Int2ObjectFunction,java.util.function.BiConsumer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>dragging</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;dragging&#8203;(@Nullable
-                                               @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                               @NotNull
+public&nbsp;@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;dragging&#8203;(@NotNull
                                                @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                               @NotNull
+                                               @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
                                                int&nbsp;slot,
                                                int&nbsp;button,
                                                @NotNull
@@ -422,35 +397,37 @@ public&nbsp;@Nullable <a href="InventoryClickResult.html" title="class in net.mi
                                                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/BiConsumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">BiConsumer</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>,&#8203;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&gt;&nbsp;itemSetter)</pre>
 </li>
 </ul>
-<a id="doubleClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack)">
+<a id="doubleClick(net.minestom.server.inventory.AbstractInventory,net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>doubleClick</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;doubleClick&#8203;(@NotNull
-                                                  @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;clickedInventory,
-                                                  @Nullable
-                                                  @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                                  @NotNull
-                                                  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                                                  int&nbsp;slot,
-                                                  @NotNull
-                                                  @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;doubleClick&#8203;(@NotNull
+                                                 @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;clickedInventory,
+                                                 @NotNull
+                                                 @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
+                                                 @NotNull
+                                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                                 int&nbsp;slot,
+                                                 @NotNull
+                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked,
+                                                 @NotNull
+                                                 @NotNull <a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
 </li>
 </ul>
-<a id="drop(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player,boolean,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<a id="drop(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,boolean,int,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>drop</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;drop&#8203;(@Nullable
-                                          @Nullable <a href="../Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
-                                          @NotNull
+public&nbsp;@NotNull <a href="InventoryClickResult.html" title="class in net.minestom.server.inventory.click">InventoryClickResult</a>&nbsp;drop&#8203;(@NotNull
                                           @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                                          @NotNull
+                                          @NotNull <a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
                                           boolean&nbsp;all,
                                           int&nbsp;slot,
                                           int&nbsp;button,

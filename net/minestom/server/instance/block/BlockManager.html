@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -175,52 +175,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPlacementRule(short)">getBlockPlacementRule</a></span>&#8203;(short&nbsp;blockStateId)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPlacementRule(net.minestom.server.instance.block.Block)">getBlockPlacementRule</a></span>&#8203;(@NotNull <a href="Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a> of the specific block.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPlacementRule(net.minestom.server.instance.block.Block)">getBlockPlacementRule</a></span>&#8203;(@NotNull <a href="Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
-<td class="colLast">
-<div class="block">Gets the <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a> of the specific block.</div>
-</td>
+<td class="colFirst"><code>@Nullable <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHandler(java.lang.String)">getHandler</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomBlock(short)">getCustomBlock</a></span>&#8203;(short&nbsp;id)</code></th>
-<td class="colLast">
-<div class="block">Gets the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> with the specific custom block id <a href="CustomBlock.html#getCustomBlockId()"><code>CustomBlock.getCustomBlockId()</code></a>.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomBlock(java.lang.String)">getCustomBlock</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</code></th>
-<td class="colLast">
-<div class="block">Gets the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> with the specific identifier <a href="CustomBlock.html#getIdentifier()"><code>CustomBlock.getIdentifier()</code></a>.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomBlocks()">getCustomBlocks</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets all the registered custom blocks.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerBlockPlacementRule(net.minestom.server.instance.block.rule.BlockPlacementRule)">registerBlockPlacementRule</a></span>&#8203;(@NotNull <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a>&nbsp;blockPlacementRule)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a>.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerCustomBlock(net.minestom.server.instance.block.CustomBlock)">registerCustomBlock</a></span>&#8203;(@NotNull <a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
-<td class="colLast">
-<div class="block">Registers a <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a>.</div>
-</td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerHandler(java.lang.String,java.util.function.Supplier)">registerHandler</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace,
+               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&gt;&nbsp;handlerSupplier)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -265,22 +241,27 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="registerCustomBlock(net.minestom.server.instance.block.CustomBlock)">
+<a id="registerHandler(java.lang.String,java.util.function.Supplier)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>registerCustomBlock</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;registerCustomBlock&#8203;(@NotNull
-                                @NotNull <a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</pre>
-<div class="block">Registers a <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>customBlock</code> - the custom block to register</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if <code>customBlock</code> block id is not greater than 0</dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalStateException</a></code> - if the id of <code>customBlock</code> is already registered</dd>
-</dl>
+<h4>registerHandler</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;registerHandler&#8203;(@NotNull
+                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace,
+                            @NotNull
+                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&gt;&nbsp;handlerSupplier)</pre>
+</li>
+</ul>
+<a id="getHandler(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHandler</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&nbsp;getHandler&#8203;(@NotNull
+                                         @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
 <a id="registerBlockPlacementRule(net.minestom.server.instance.block.rule.BlockPlacementRule)">
@@ -303,85 +284,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="getBlockPlacementRule(net.minestom.server.instance.block.Block)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getBlockPlacementRule</h4>
 <pre class="methodSignature">@Nullable
 public&nbsp;@Nullable <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a>&nbsp;getBlockPlacementRule&#8203;(@NotNull
-                                                          @NotNull <a href="Block.html" title="enum in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
+                                                          @NotNull <a href="Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
 <div class="block">Gets the <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a> of the specific block.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>block</code> - the block to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the block placement rule associated with the block, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="getBlockPlacementRule(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBlockPlacementRule</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a>&nbsp;getBlockPlacementRule&#8203;(short&nbsp;blockStateId)</pre>
-<div class="block">Gets the <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a> of the specific block.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>blockStateId</code> - the block id to check</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the block placement rule associated with the id, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="getCustomBlock(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCustomBlock</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;getCustomBlock&#8203;(@NotNull
-                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</pre>
-<div class="block">Gets the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> with the specific identifier <a href="CustomBlock.html#getIdentifier()"><code>CustomBlock.getIdentifier()</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>identifier</code> - the custom block identifier</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> associated with the identifier, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="getCustomBlock(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCustomBlock</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;getCustomBlock&#8203;(short&nbsp;id)</pre>
-<div class="block">Gets the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> with the specific custom block id <a href="CustomBlock.html#getCustomBlockId()"><code>CustomBlock.getCustomBlockId()</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>id</code> - the custom block id</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the <a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> associated with the id, null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="getCustomBlocks()">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getCustomBlocks</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;<a href="CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&gt;&nbsp;getCustomBlocks()</pre>
-<div class="block">Gets all the registered custom blocks.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>Collection</code></a> containing the registered custom blocks</dd>
 </dl>
 </li>
 </ul>

@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":42,"i2":10,"i3":10,"i4":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -211,7 +211,7 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -225,29 +225,20 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLegacyMapColor()">getLegacyMapColor</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getMapColor()"><code>getMapColor()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../../color/Color.html" title="class in net.minestom.server.color">Color</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMapColor()">getMapColor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the map color.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMapId()">getMapId</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the map id.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMapScaleDirection()">getMapScaleDirection</a></span>()</code></th>
 <td class="colLast">
@@ -260,14 +251,14 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.item.<a href="../ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></h3>
-<code><a href="../ItemMeta.html#builder()">builder</a>, <a href="../ItemMeta.html#equals(java.lang.Object)">equals</a>, <a href="../ItemMeta.html#get(net.minestom.server.tag.Tag)">get</a>, <a href="../ItemMeta.html#getAttributes()">getAttributes</a>, <a href="../ItemMeta.html#getCanDestroy()">getCanDestroy</a>, <a href="../ItemMeta.html#getCanPlaceOn()">getCanPlaceOn</a>, <a href="../ItemMeta.html#getCustomModelData()">getCustomModelData</a>, <a href="../ItemMeta.html#getDamage()">getDamage</a>, <a href="../ItemMeta.html#getDisplayName()">getDisplayName</a>, <a href="../ItemMeta.html#getEnchantmentMap()">getEnchantmentMap</a>, <a href="../ItemMeta.html#getHideFlag()">getHideFlag</a>, <a href="../ItemMeta.html#getLore()">getLore</a>, <a href="../ItemMeta.html#getOrDefault(net.minestom.server.tag.Tag,T)">getOrDefault</a>, <a href="../ItemMeta.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../ItemMeta.html#hashCode()">hashCode</a>, <a href="../ItemMeta.html#isUnbreakable()">isUnbreakable</a>, <a href="../ItemMeta.html#toNBT()">toNBT</a>, <a href="../ItemMeta.html#toSNBT()">toSNBT</a>, <a href="../ItemMeta.html#with(java.util.function.Consumer)">with</a>, <a href="../ItemMeta.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code></li>
+<code><a href="../ItemMeta.html#builder()">builder</a>, <a href="../ItemMeta.html#equals(java.lang.Object)">equals</a>, <a href="../ItemMeta.html#getAttributes()">getAttributes</a>, <a href="../ItemMeta.html#getCanDestroy()">getCanDestroy</a>, <a href="../ItemMeta.html#getCanPlaceOn()">getCanPlaceOn</a>, <a href="../ItemMeta.html#getCustomModelData()">getCustomModelData</a>, <a href="../ItemMeta.html#getDamage()">getDamage</a>, <a href="../ItemMeta.html#getDisplayName()">getDisplayName</a>, <a href="../ItemMeta.html#getEnchantmentMap()">getEnchantmentMap</a>, <a href="../ItemMeta.html#getHideFlag()">getHideFlag</a>, <a href="../ItemMeta.html#getLore()">getLore</a>, <a href="../ItemMeta.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../ItemMeta.html#hashCode()">hashCode</a>, <a href="../ItemMeta.html#isUnbreakable()">isUnbreakable</a>, <a href="../ItemMeta.html#toNBT()">toNBT</a>, <a href="../ItemMeta.html#toSNBT()">toSNBT</a>, <a href="../ItemMeta.html#toString()">toString</a>, <a href="../ItemMeta.html#with(java.util.function.Consumer)">with</a>, <a href="../ItemMeta.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagReadable">
@@ -356,24 +347,6 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a modifiable list containing all the map decorations</dd>
-</dl>
-</li>
-</ul>
-<a id="getLegacyMapColor()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getLegacyMapColor</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="../../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;getLegacyMapColor()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getMapColor()"><code>getMapColor()</code></a></div>
-</div>
-<div class="block">Gets the map color.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the map color</dd>
 </dl>
 </li>
 </ul>

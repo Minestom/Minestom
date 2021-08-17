@@ -162,18 +162,18 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#book">book</a></span></code></th>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pages">pages</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hand">hand</a></span></code></th>
+<td class="colFirst"><code>int</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#slot">slot</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSigning">isSigning</a></span></code></th>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#title">title</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -195,6 +195,12 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">ClientEditBookPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,java.lang.String%5B%5D,java.lang.String)">ClientEditBookPacket</a></span>&#8203;(int&nbsp;slot,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;pages,
+                    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;title)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -260,31 +266,31 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="book">
+<a id="slot">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>book</h4>
-<pre>public&nbsp;<a href="../../../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a> book</pre>
+<h4>slot</h4>
+<pre>public&nbsp;int slot</pre>
 </li>
 </ul>
-<a id="isSigning">
+<a id="pages">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>isSigning</h4>
-<pre>public&nbsp;boolean isSigning</pre>
+<h4>pages</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[] pages</pre>
 </li>
 </ul>
-<a id="hand">
+<a id="title">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>hand</h4>
-<pre>public&nbsp;<a href="../../../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a> hand</pre>
+<h4>title</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> title</pre>
 </li>
 </ul>
 </li>
@@ -297,6 +303,17 @@ extends <a href="../ClientPlayPacket.html" title="class in net.minestom.server.n
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(int,java.lang.String[],java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>ClientEditBookPacket</h4>
+<pre>public&nbsp;ClientEditBookPacket&#8203;(int&nbsp;slot,
+                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>[]&nbsp;pages,
+                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;title)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>

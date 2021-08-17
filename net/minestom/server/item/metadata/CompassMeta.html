@@ -187,10 +187,10 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected </code></td>
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.item.ItemMetaBuilder,boolean,java.lang.String,net.minestom.server.utils.Position)">CompassMeta</a></span>&#8203;(<a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.item.ItemMetaBuilder,boolean,java.lang.String,net.minestom.server.coordinate.Point)">CompassMeta</a></span>&#8203;(<a href="../ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&nbsp;metaBuilder,
            boolean&nbsp;lodestoneTracked,
            @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;lodestoneDimension,
-           @Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;lodestonePosition)</code></th>
+           @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;lodestonePosition)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -217,7 +217,7 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLodestonePosition()">getLodestonePosition</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -232,14 +232,14 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.item.<a href="../ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a></h3>
-<code><a href="../ItemMeta.html#builder()">builder</a>, <a href="../ItemMeta.html#equals(java.lang.Object)">equals</a>, <a href="../ItemMeta.html#get(net.minestom.server.tag.Tag)">get</a>, <a href="../ItemMeta.html#getAttributes()">getAttributes</a>, <a href="../ItemMeta.html#getCanDestroy()">getCanDestroy</a>, <a href="../ItemMeta.html#getCanPlaceOn()">getCanPlaceOn</a>, <a href="../ItemMeta.html#getCustomModelData()">getCustomModelData</a>, <a href="../ItemMeta.html#getDamage()">getDamage</a>, <a href="../ItemMeta.html#getDisplayName()">getDisplayName</a>, <a href="../ItemMeta.html#getEnchantmentMap()">getEnchantmentMap</a>, <a href="../ItemMeta.html#getHideFlag()">getHideFlag</a>, <a href="../ItemMeta.html#getLore()">getLore</a>, <a href="../ItemMeta.html#getOrDefault(net.minestom.server.tag.Tag,T)">getOrDefault</a>, <a href="../ItemMeta.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../ItemMeta.html#hashCode()">hashCode</a>, <a href="../ItemMeta.html#isUnbreakable()">isUnbreakable</a>, <a href="../ItemMeta.html#toNBT()">toNBT</a>, <a href="../ItemMeta.html#toSNBT()">toSNBT</a>, <a href="../ItemMeta.html#with(java.util.function.Consumer)">with</a>, <a href="../ItemMeta.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code></li>
+<code><a href="../ItemMeta.html#builder()">builder</a>, <a href="../ItemMeta.html#equals(java.lang.Object)">equals</a>, <a href="../ItemMeta.html#getAttributes()">getAttributes</a>, <a href="../ItemMeta.html#getCanDestroy()">getCanDestroy</a>, <a href="../ItemMeta.html#getCanPlaceOn()">getCanPlaceOn</a>, <a href="../ItemMeta.html#getCustomModelData()">getCustomModelData</a>, <a href="../ItemMeta.html#getDamage()">getDamage</a>, <a href="../ItemMeta.html#getDisplayName()">getDisplayName</a>, <a href="../ItemMeta.html#getEnchantmentMap()">getEnchantmentMap</a>, <a href="../ItemMeta.html#getHideFlag()">getHideFlag</a>, <a href="../ItemMeta.html#getLore()">getLore</a>, <a href="../ItemMeta.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../ItemMeta.html#hashCode()">hashCode</a>, <a href="../ItemMeta.html#isUnbreakable()">isUnbreakable</a>, <a href="../ItemMeta.html#toNBT()">toNBT</a>, <a href="../ItemMeta.html#toSNBT()">toSNBT</a>, <a href="../ItemMeta.html#toString()">toString</a>, <a href="../ItemMeta.html#with(java.util.function.Consumer)">with</a>, <a href="../ItemMeta.html#write(net.minestom.server.utils.binary.BinaryWriter)">write</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#toString()" title="class or interface in java.lang" class="externalLink">toString</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
+<code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#clone()" title="class or interface in java.lang" class="externalLink">clone</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#finalize()" title="class or interface in java.lang" class="externalLink">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#getClass()" title="class or interface in java.lang" class="externalLink">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notify()" title="class or interface in java.lang" class="externalLink">notify</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#notifyAll()" title="class or interface in java.lang" class="externalLink">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait()" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long)" title="class or interface in java.lang" class="externalLink">wait</a>, <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true#wait(long,int)" title="class or interface in java.lang" class="externalLink">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.tag.TagReadable">
@@ -264,7 +264,7 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.item.ItemMetaBuilder,boolean,java.lang.String,net.minestom.server.utils.Position)">
+<a id="&lt;init&gt;(net.minestom.server.item.ItemMetaBuilder,boolean,java.lang.String,net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -275,7 +275,7 @@ implements <a href="../ItemMetaBuilder.Provider.html" title="interface in net.mi
                       @Nullable
                       @Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;lodestoneDimension,
                       @Nullable
-                      @Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;lodestonePosition)</pre>
+                      @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;lodestonePosition)</pre>
 </li>
 </ul>
 </li>
@@ -314,7 +314,7 @@ public&nbsp;@Nullable <a href="https://docs.oracle.com/en/java/javase/11/docs/ap
 <li class="blockList">
 <h4>getLodestonePosition</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;getLodestonePosition()</pre>
+public&nbsp;@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getLodestonePosition()</pre>
 </li>
 </ul>
 </li>

@@ -216,7 +216,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="WorldBorder.CollisionAxis.html" title="enum in net.minestom.server.instance">WorldBorder.CollisionAxis</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCollisionAxis(net.minestom.server.utils.Position)">getCollisionAxis</a></span>&#8203;(@NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCollisionAxis(net.minestom.server.coordinate.Point)">getCollisionAxis</a></span>&#8203;(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
 <td class="colLast">
 <div class="block">Used to check at which axis does the position collides with the world border.</div>
 </td>
@@ -254,16 +254,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInside(net.minestom.server.entity.Entity)">isInside</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInside(net.minestom.server.coordinate.Point)">isInside</a></span>&#8203;(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></th>
 <td class="colLast">
-<div class="block">Used to know if an entity is located inside the world border or not.</div>
+<div class="block">Used to know if a position is located inside the world border or not.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInside(net.minestom.server.utils.Position)">isInside</a></span>&#8203;(@NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isInside(net.minestom.server.entity.Entity)">isInside</a></span>&#8203;(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
 <td class="colLast">
-<div class="block">Used to know if a position is located inside the world border or not.</div>
+<div class="block">Used to know if an entity is located inside the world border or not.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -525,7 +525,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="getCollisionAxis(net.minestom.server.utils.Position)">
+<a id="getCollisionAxis(net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -533,28 +533,28 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <h4>getCollisionAxis</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="WorldBorder.CollisionAxis.html" title="enum in net.minestom.server.instance">WorldBorder.CollisionAxis</a>&nbsp;getCollisionAxis&#8203;(@NotNull
-                                                           @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+                                                           @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</pre>
 <div class="block">Used to check at which axis does the position collides with the world border.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to check</dd>
+<dd><code>point</code> - the point to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the axis where the position collides with the world border</dd>
 </dl>
 </li>
 </ul>
-<a id="isInside(net.minestom.server.utils.Position)">
+<a id="isInside(net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>isInside</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isInside&#8203;(@NotNull
-                        @NotNull <a href="../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+                        @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</pre>
 <div class="block">Used to know if a position is located inside the world border or not.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to check</dd>
+<dd><code>point</code> - the point to check</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>true if <code>position</code> is inside the world border, false otherwise</dd>
 </dl>

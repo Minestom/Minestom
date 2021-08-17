@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":42,"i2":10,"i3":42,"i4":10,"i5":10,"i6":42,"i7":10,"i8":42};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -163,16 +163,6 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
                 <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;chatMessage)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage)">PlayerDeathEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText,
-                <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;chatMessage)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)"><code>PlayerDeathEvent(Player, Component, Component)</code></a></div>
-</div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -185,7 +175,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -199,67 +189,31 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getChatMessageJson()">getChatMessageJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getChatMessage()"><code>getChatMessage()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeathText()">getDeathText</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the text displayed in the death screen.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDeathTextJson()">getDeathTextJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getDeathText()"><code>getDeathText()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatMessage(net.kyori.adventure.text.Component)">setChatMessage</a></span>&#8203;(@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;chatMessage)</code></th>
 <td class="colLast">
 <div class="block">Changes the text sent in chat</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChatMessage(net.minestom.server.chat.JsonMessage)">setChatMessage</a></span>&#8203;(@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;chatMessage)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setChatMessage(net.kyori.adventure.text.Component)"><code>setChatMessage(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDeathText(net.kyori.adventure.text.Component)">setDeathText</a></span>&#8203;(@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;deathText)</code></th>
 <td class="colLast">
 <div class="block">Changes the text displayed in the death screen.</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDeathText(net.minestom.server.chat.JsonMessage)">setDeathText</a></span>&#8203;(@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setDeathText(net.kyori.adventure.text.Component)"><code>setDeathText(Component)</code></a></div>
-</div>
 </td>
 </tr>
 </table>
@@ -293,22 +247,6 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>PlayerDeathEvent</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;PlayerDeathEvent&#8203;(@NotNull
-                        @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                        <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText,
-                        <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;chatMessage)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)"><code>PlayerDeathEvent(Player, Component, Component)</code></a></div>
-</div>
-</li>
-</ul>
 <a id="&lt;init&gt;(net.minestom.server.entity.Player,net.kyori.adventure.text.Component,net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -331,25 +269,6 @@ public&nbsp;PlayerDeathEvent&#8203;(@NotNull
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="getDeathTextJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDeathTextJson</h4>
-<pre class="methodSignature">@Nullable
-<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDeathTextJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getDeathText()"><code>getDeathText()</code></a></div>
-</div>
-<div class="block">Gets the text displayed in the death screen.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the death text, can be null</dd>
-</dl>
-</li>
-</ul>
 <a id="getDeathText()">
 <!--   -->
 </a>
@@ -362,25 +281,6 @@ public&nbsp;@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyor
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the death text, can be null</dd>
-</dl>
-</li>
-</ul>
-<a id="setDeathText(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setDeathText</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setDeathText&#8203;(@Nullable
-                         @Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;deathText)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setDeathText(net.kyori.adventure.text.Component)"><code>setDeathText(Component)</code></a></div>
-</div>
-<div class="block">Changes the text displayed in the death screen.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>deathText</code> - the death text to display, null to remove</dd>
 </dl>
 </li>
 </ul>
@@ -399,25 +299,6 @@ public&nbsp;void&nbsp;setDeathText&#8203;(@Nullable
 </dl>
 </li>
 </ul>
-<a id="getChatMessageJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getChatMessageJson</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-@Nullable
-public&nbsp;@Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getChatMessageJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getChatMessage()"><code>getChatMessage()</code></a></div>
-</div>
-<div class="block">Gets the message sent to chat.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the death chat message</dd>
-</dl>
-</li>
-</ul>
 <a id="getChatMessage()">
 <!--   -->
 </a>
@@ -430,25 +311,6 @@ public&nbsp;@Nullable <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyor
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the death chat message</dd>
-</dl>
-</li>
-</ul>
-<a id="setChatMessage(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setChatMessage</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setChatMessage&#8203;(@Nullable
-                           @Nullable <a href="../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;chatMessage)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setChatMessage(net.kyori.adventure.text.Component)"><code>setChatMessage(Component)</code></a></div>
-</div>
-<div class="block">Changes the text sent in chat</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>chatMessage</code> - the death message to send, null to remove</dd>
 </dl>
 </li>
 </ul>

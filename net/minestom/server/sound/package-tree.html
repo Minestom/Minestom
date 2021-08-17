@@ -100,16 +100,25 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </div>
 <div class="contentContainer">
 <section role="region">
-<h2 title="Enum Hierarchy">Enum Hierarchy</h2>
+<h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Object</span></a>
+<li class="circle">net.kyori.adventure.key.Keyed
 <ul>
-<li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Enum</span></a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;T&gt;, java.io.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)
+<li class="circle">net.minestom.server.registry.<a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry"><span class="typeNameLink">ProtocolObject</span></a>
 <ul>
-<li class="circle">net.minestom.server.sound.<a href="SoundCategory.html" title="enum in net.minestom.server.sound"><span class="typeNameLink">SoundCategory</span></a> (implements net.kyori.adventure.sound.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Source.Provider.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Source.Provider</a>)</li>
-<li class="circle">net.minestom.server.sound.<a href="SoundEvent.html" title="enum in net.minestom.server.sound"><span class="typeNameLink">SoundEvent</span></a> (implements net.kyori.adventure.key.Keyed, net.kyori.adventure.sound.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Type.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Type</a>)</li>
+<li class="circle">net.minestom.server.sound.<a href="SoundEvent.html" title="interface in net.minestom.server.sound"><span class="typeNameLink">SoundEvent</span></a> (also extends net.kyori.adventure.sound.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Type.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Type</a>)</li>
 </ul>
 </li>
+<li class="circle">net.kyori.adventure.sound.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Type.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink"><span class="typeNameLink">Sound.Type</span></a>
+<ul>
+<li class="circle">net.minestom.server.sound.<a href="SoundEvent.html" title="interface in net.minestom.server.sound"><span class="typeNameLink">SoundEvent</span></a> (also extends net.minestom.server.registry.<a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.sound.SoundEventConstants
+<ul>
+<li class="circle">net.minestom.server.sound.<a href="SoundEvent.html" title="interface in net.minestom.server.sound"><span class="typeNameLink">SoundEvent</span></a> (also extends net.minestom.server.registry.<a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>, net.kyori.adventure.sound.<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/sound/Sound.Type.html?is-external=true" title="class or interface in net.kyori.adventure.sound" class="externalLink">Sound.Type</a>)</li>
 </ul>
 </li>
 </ul>

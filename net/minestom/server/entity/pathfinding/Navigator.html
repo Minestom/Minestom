@@ -199,7 +199,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPathPosition()">getPathPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the target pathfinder position.</div>
@@ -212,7 +212,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveTowards(net.minestom.server.utils.Position,double)">moveTowards</a></span>&#8203;(@NotNull <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;direction,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#moveTowards(net.minestom.server.coordinate.Point,double)">moveTowards</a></span>&#8203;(@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;direction,
            double&nbsp;speed)</code></th>
 <td class="colLast">
 <div class="block">Used to move the entity toward <code>direction</code> in the X and Z axis
@@ -232,21 +232,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathPosition(net.minestom.server.utils.Position)">setPathPosition</a></span>&#8203;(@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pathPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathPosition(net.minestom.server.coordinate.Point)">setPathPosition</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pathPosition)</code></th>
 <td class="colLast">
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.utils.Position)"><code>setPathTo(Position)</code></a></div>
+<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.coordinate.Point)"><code>setPathTo(Point)</code></a></div>
 </div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position)">setPathTo</a></span>&#8203;(@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.coordinate.Point)">setPathTo</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.utils.Position,boolean)">setPathTo</a></span>&#8203;(@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPathTo(net.minestom.server.coordinate.Point,boolean)">setPathTo</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
          boolean&nbsp;bestEffort)</code></th>
 <td class="colLast">
 <div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.</div>
@@ -301,14 +301,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="moveTowards(net.minestom.server.utils.Position,double)">
+<a id="moveTowards(net.minestom.server.coordinate.Point,double)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>moveTowards</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;moveTowards&#8203;(@NotNull
-                        @NotNull <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;direction,
+                        @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;direction,
                         double&nbsp;speed)</pre>
 <div class="block">Used to move the entity toward <code>direction</code> in the X and Z axis
  Gravity is still applied but the entity will not attempt to jump
@@ -329,14 +329,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;void&nbsp;jump&#8203;(float&nbsp;height)</pre>
 </li>
 </ul>
-<a id="setPathTo(net.minestom.server.utils.Position,boolean)">
+<a id="setPathTo(net.minestom.server.coordinate.Point,boolean)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setPathTo</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
-                         @Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position,
+                         @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
                          boolean&nbsp;bestEffort)</pre>
 <div class="block">Retrieves the path to <code>position</code> and ask the entity to follow the path.
  <p>
@@ -346,7 +346,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  you need to call this when you want the path to update.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the position to find the path to, null to reset the pathfinder</dd>
+<dd><code>point</code> - the position to find the path to, null to reset the pathfinder</dd>
 <dd><code>bestEffort</code> - whether to use the best-effort algorithm to the destination,
                    if false then this method is more likely to return immediately</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -354,17 +354,17 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
-<a id="setPathTo(net.minestom.server.utils.Position)">
+<a id="setPathTo(net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setPathTo</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;setPathTo&#8203;(@Nullable
-                         @Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+                         @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#setPathTo(net.minestom.server.utils.Position,boolean)"><code>with  sets to .</code></a></dd>
+<dd><a href="#setPathTo(net.minestom.server.coordinate.Point,boolean)"><code>with  sets to .</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -428,7 +428,7 @@ public&nbsp;@Nullable com.extollit.gaming.ai.path.HydrazinePathFinder&nbsp;getPa
 <li class="blockList">
 <h4>getPathPosition</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;getPathPosition()</pre>
+public&nbsp;@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getPathPosition()</pre>
 <div class="block">Gets the target pathfinder position.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -436,7 +436,7 @@ public&nbsp;@Nullable <a href="../../utils/Position.html" title="class in net.mi
 </dl>
 </li>
 </ul>
-<a id="setPathPosition(net.minestom.server.utils.Position)">
+<a id="setPathPosition(net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -444,9 +444,9 @@ public&nbsp;@Nullable <a href="../../utils/Position.html" title="class in net.mi
 <h4>setPathPosition</h4>
 <pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
 public&nbsp;void&nbsp;setPathPosition&#8203;(@Nullable
-                            @Nullable <a href="../../utils/Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;pathPosition)</pre>
+                            @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pathPosition)</pre>
 <div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.utils.Position)"><code>setPathTo(Position)</code></a></div>
+<div class="deprecationComment">Please use <a href="#setPathTo(net.minestom.server.coordinate.Point)"><code>setPathTo(Point)</code></a></div>
 </div>
 <div class="block">Changes the position this element is trying to reach.</div>
 <dl>

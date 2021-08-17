@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":42,"i9":10,"i10":10,"i11":42,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":42,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -310,16 +310,6 @@ implements <a href="Scoreboard.html" title="interface in net.minestom.server.sco
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLineContent(java.lang.String,net.minestom.server.chat.JsonMessage)">updateLineContent</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
-                 @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;content)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateLineContent(java.lang.String,net.kyori.adventure.text.Component)"><code>updateLineContent(String, Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateLineScore(java.lang.String,int)">updateLineScore</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
                int&nbsp;score)</code></th>
 <td class="colLast">
@@ -486,28 +476,6 @@ public&nbsp;void&nbsp;setTitle&#8203;(@NotNull
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalStateException</a></code> - if the sidebar cannot take more line</dd>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalArgumentException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalArgumentException</a></code> - if the sidebar already contains the line <code>scoreboardLine</code>
                                   or has a line with the same id</dd>
-</dl>
-</li>
-</ul>
-<a id="updateLineContent(java.lang.String,net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updateLineContent</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;updateLineContent&#8203;(@NotNull
-                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;id,
-                              @NotNull
-                              @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;content)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateLineContent(java.lang.String,net.kyori.adventure.text.Component)"><code>updateLineContent(String, Component)</code></a></div>
-</div>
-<div class="block">Updates a <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> content through the given identifier.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>id</code> - The identifier of the <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a></dd>
-<dd><code>content</code> - The new content for the <a href="Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a></dd>
 </dl>
 </li>
 </ul>

@@ -141,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../data/DataContainer.html" title="interface in net.minestom.server.data">DataContainer</a></code>, <code><a href="../InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code>, <code><a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dd><code><a href="../InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code>, <code><a href="../../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code>, <code><a href="../../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code>, <code><a href="../../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">EnchantmentTableInventory</span>
@@ -239,7 +239,7 @@ extends <a href="../Inventory.html" title="class in net.minestom.server.inventor
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../item/Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a></code></td>
+<td class="colFirst"><code><a href="../../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot)">getEnchantmentShown</a></span>&#8203;(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</code></th>
 <td class="colLast">
 <div class="block">Gets the enchantment shown in a slot.</div>
@@ -270,7 +270,7 @@ extends <a href="../Inventory.html" title="class in net.minestom.server.inventor
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEnchantmentShown(net.minestom.server.inventory.type.EnchantmentTableInventory.EnchantmentSlot,net.minestom.server.item.Enchantment)">setEnchantmentShown</a></span>&#8203;(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot,
-                   <a href="../../item/Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>&nbsp;enchantment)</code></th>
+                   <a href="../../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a>&nbsp;enchantment)</code></th>
 <td class="colLast">
 <div class="block">Sets the enchantment shown in a slot.</div>
 </td>
@@ -303,7 +303,7 @@ extends <a href="../Inventory.html" title="class in net.minestom.server.inventor
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.inventory.<a href="../AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></h3>
-<code><a href="../AbstractInventory.html#addInventoryCondition(net.minestom.server.inventory.condition.InventoryCondition)">addInventoryCondition</a>, <a href="../AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack)">addItemStack</a>, <a href="../AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">addItemStack</a>, <a href="../AbstractInventory.html#addItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">addItemStacks</a>, <a href="../AbstractInventory.html#copyContents(net.minestom.server.item.ItemStack%5B%5D)">copyContents</a>, <a href="../AbstractInventory.html#getData()">getData</a>, <a href="../AbstractInventory.html#getInnerSize()">getInnerSize</a>, <a href="../AbstractInventory.html#getInventoryConditions()">getInventoryConditions</a>, <a href="../AbstractInventory.html#getItemStack(int)">getItemStack</a>, <a href="../AbstractInventory.html#getItemStacks()">getItemStacks</a>, <a href="../AbstractInventory.html#getSize()">getSize</a>, <a href="../AbstractInventory.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../AbstractInventory.html#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStack</a>, <a href="../AbstractInventory.html#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStacks</a>, <a href="../AbstractInventory.html#replaceItemStack(int,java.util.function.UnaryOperator)">replaceItemStack</a>, <a href="../AbstractInventory.html#setData(net.minestom.server.data.Data)">setData</a>, <a href="../AbstractInventory.html#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a>, <a href="../AbstractInventory.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="../AbstractInventory.html#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">takeItemStack</a>, <a href="../AbstractInventory.html#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">takeItemStacks</a></code></li>
+<code><a href="../AbstractInventory.html#addInventoryCondition(net.minestom.server.inventory.condition.InventoryCondition)">addInventoryCondition</a>, <a href="../AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack)">addItemStack</a>, <a href="../AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">addItemStack</a>, <a href="../AbstractInventory.html#addItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">addItemStacks</a>, <a href="../AbstractInventory.html#copyContents(net.minestom.server.item.ItemStack%5B%5D)">copyContents</a>, <a href="../AbstractInventory.html#getInnerSize()">getInnerSize</a>, <a href="../AbstractInventory.html#getInventoryConditions()">getInventoryConditions</a>, <a href="../AbstractInventory.html#getItemStack(int)">getItemStack</a>, <a href="../AbstractInventory.html#getItemStacks()">getItemStacks</a>, <a href="../AbstractInventory.html#getSize()">getSize</a>, <a href="../AbstractInventory.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../AbstractInventory.html#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStack</a>, <a href="../AbstractInventory.html#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStacks</a>, <a href="../AbstractInventory.html#replaceItemStack(int,java.util.function.UnaryOperator)">replaceItemStack</a>, <a href="../AbstractInventory.html#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a>, <a href="../AbstractInventory.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="../AbstractInventory.html#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">takeItemStack</a>, <a href="../AbstractInventory.html#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">takeItemStacks</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -452,7 +452,7 @@ extends <a href="../Inventory.html" title="class in net.minestom.server.inventor
 <ul class="blockList">
 <li class="blockList">
 <h4>getEnchantmentShown</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../item/Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>&nbsp;getEnchantmentShown&#8203;(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</pre>
+<pre class="methodSignature">public&nbsp;<a href="../../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a>&nbsp;getEnchantmentShown&#8203;(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot)</pre>
 <div class="block">Gets the enchantment shown in a slot.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -469,7 +469,7 @@ extends <a href="../Inventory.html" title="class in net.minestom.server.inventor
 <li class="blockList">
 <h4>setEnchantmentShown</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setEnchantmentShown&#8203;(<a href="EnchantmentTableInventory.EnchantmentSlot.html" title="enum in net.minestom.server.inventory.type">EnchantmentTableInventory.EnchantmentSlot</a>&nbsp;enchantmentSlot,
-                                <a href="../../item/Enchantment.html" title="enum in net.minestom.server.item">Enchantment</a>&nbsp;enchantment)</pre>
+                                <a href="../../item/Enchantment.html" title="interface in net.minestom.server.item">Enchantment</a>&nbsp;enchantment)</pre>
 <div class="block">Sets the enchantment shown in a slot.
  <p>
  Can be set to null to hide it.</div>

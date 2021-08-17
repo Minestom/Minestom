@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9};
+var data = {"i0":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,7 +130,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">PlayerDiggingListener</span>
+<pre>public final class <span class="typeNameLabel">PlayerDiggingListener</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 </li>
 </ul>
@@ -179,13 +179,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                      <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeEffect(net.minestom.server.entity.Player)">removeEffect</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
-<td class="colLast">
-<div class="block">Used to remove the affect from <a href="#addEffect(net.minestom.server.entity.Player)"><code>addEffect(Player)</code></a>.</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -232,28 +225,11 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <a id="playerDiggingListener(net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket,net.minestom.server.entity.Player)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>playerDiggingListener</h4>
 <pre class="methodSignature">public static&nbsp;void&nbsp;playerDiggingListener&#8203;(<a href="../network/packet/client/play/ClientPlayerDiggingPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientPlayerDiggingPacket</a>&nbsp;packet,
                                          <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
-</li>
-</ul>
-<a id="removeEffect(net.minestom.server.entity.Player)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>removeEffect</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;removeEffect&#8203;(@NotNull
-                                @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
-<div class="block">Used to remove the affect from <a href="#addEffect(net.minestom.server.entity.Player)"><code>addEffect(Player)</code></a>.
- <p>
- Called when the player cancelled or finished digging the <a href="../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>player</code> - the player to remove the effect to</dd>
-</dl>
 </li>
 </ul>
 </li>

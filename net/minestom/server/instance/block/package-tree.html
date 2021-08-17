@@ -104,9 +104,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Object</span></a>
 <ul>
-<li class="circle">net.minestom.server.instance.block.<a href="BlockAlternative.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockAlternative</span></a></li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.Destroy.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.Destroy</span></a>
+<ul>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.PlayerDestroy.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.PlayerDestroy</span></a></li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.Dummy.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.Dummy</span></a> (implements net.minestom.server.instance.block.<a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>)</li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.Interaction.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.Interaction</span></a></li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.Placement.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.Placement</span></a>
+<ul>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.PlayerPlacement.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.PlayerPlacement</span></a></li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.Tick.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.Tick</span></a></li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.Touch.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler.Touch</span></a></li>
 <li class="circle">net.minestom.server.instance.block.<a href="BlockManager.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">BlockManager</span></a></li>
-<li class="circle">net.minestom.server.instance.block.<a href="CustomBlock.html" title="class in net.minestom.server.instance.block"><span class="typeNameLink">CustomBlock</span></a></li>
 </ul>
 </li>
 </ul>
@@ -114,7 +126,33 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <section role="region">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
-<li class="circle">net.minestom.server.instance.block.<a href="UpdateConsumer.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">UpdateConsumer</span></a></li>
+<li class="circle">java.util.function.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/BiPredicate.html?is-external=true" title="class or interface in java.util.function" class="externalLink"><span class="typeNameLink">BiPredicate</span></a>&lt;T,&#8203;U&gt;
+<ul>
+<li class="circle">net.minestom.server.instance.block.<a href="Block.Comparator.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">Block.Comparator</span></a></li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.instance.block.BlockConstants
+<ul>
+<li class="circle">net.minestom.server.instance.block.<a href="Block.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">Block</span></a> (also extends net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>, net.minestom.server.tag.<a href="../../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockGetter.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">BlockGetter</span></a></li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockHandler.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">BlockHandler</span></a></li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockSetter.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">BlockSetter</span></a></li>
+<li class="circle">net.kyori.adventure.key.Keyed
+<ul>
+<li class="circle">net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry"><span class="typeNameLink">ProtocolObject</span></a>
+<ul>
+<li class="circle">net.minestom.server.instance.block.<a href="Block.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">Block</span></a> (also extends net.minestom.server.tag.<a href="../../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a>)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="circle">net.minestom.server.tag.<a href="../../tag/TagReadable.html" title="interface in net.minestom.server.tag"><span class="typeNameLink">TagReadable</span></a>
+<ul>
+<li class="circle">net.minestom.server.instance.block.<a href="Block.html" title="interface in net.minestom.server.instance.block"><span class="typeNameLink">Block</span></a> (also extends net.minestom.server.registry.<a href="../../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>)</li>
+</ul>
+</li>
 </ul>
 </section>
 <section role="region">
@@ -124,8 +162,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul>
 <li class="circle">java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Enum.html?is-external=true" title="class or interface in java.lang" class="externalLink"><span class="typeNameLink">Enum</span></a>&lt;E&gt; (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang" class="externalLink">Comparable</a>&lt;T&gt;, java.io.<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Serializable.html?is-external=true" title="class or interface in java.io" class="externalLink">Serializable</a>)
 <ul>
-<li class="circle">net.minestom.server.instance.block.<a href="Block.html" title="enum in net.minestom.server.instance.block"><span class="typeNameLink">Block</span></a> (implements net.kyori.adventure.key.Keyed)</li>
 <li class="circle">net.minestom.server.instance.block.<a href="BlockFace.html" title="enum in net.minestom.server.instance.block"><span class="typeNameLink">BlockFace</span></a></li>
+<li class="circle">net.minestom.server.instance.block.<a href="BlockGetter.Condition.html" title="enum in net.minestom.server.instance.block"><span class="typeNameLink">BlockGetter.Condition</span></a></li>
 </ul>
 </li>
 </ul>

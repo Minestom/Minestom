@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":42,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":42,"i10":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -177,14 +177,6 @@ implements <a href="../trait/CancellableEvent.html" title="interface in net.mine
 <div class="block">Creates a new client ping server event with 0 delay</div>
 </td>
 </tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.network.player.PlayerConnection,long,net.minestom.server.utils.time.UpdateOption)">ClientPingServerEvent</a></span>&#8203;(@NotNull <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
-                     long&nbsp;payload,
-                     <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;delay)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -197,7 +189,7 @@ implements <a href="../trait/CancellableEvent.html" title="interface in net.mine
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -211,73 +203,55 @@ implements <a href="../trait/CancellableEvent.html" title="interface in net.mine
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addDelay(net.minestom.server.utils.time.UpdateOption)">addDelay</a></span>&#8203;(<a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;delay)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">Replaced by <a href="#addDelay(java.time.Duration)"><code>addDelay(Duration)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getConnection()">getConnection</a></span>()</code></th>
 <td class="colLast">
 <div class="block">PlayerConnection of received packet.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDelay()">getDelay</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the delay until minestom will send the ping response packet.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPayload()">getPayload</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Payload of received packet.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#noDelay()">noDelay</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Clears the delay until minestom will send the ping response packet.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
 <div class="block">Cancelling this event will cause the server to appear offline in the vanilla server list.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDelay(java.time.Duration)">setDelay</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;delay)</code></th>
 <td class="colLast">
 <div class="block">Sets the delay until minestom will send the ping response packet.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDelay(net.minestom.server.utils.time.UpdateOption)">setDelay</a></span>&#8203;(<a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;delay)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">Replaced by <a href="#setDelay(java.time.Duration)"><code>setDelay(Duration)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPayload(long)">setPayload</a></span>&#8203;(long&nbsp;payload)</code></th>
 <td class="colLast">
@@ -317,26 +291,6 @@ implements <a href="../trait/CancellableEvent.html" title="interface in net.mine
 <pre>public&nbsp;ClientPingServerEvent&#8203;(@NotNull
                              @NotNull <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
                              long&nbsp;payload)</pre>
-<div class="block">Creates a new client ping server event with 0 delay</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>connection</code> - the player connection</dd>
-<dd><code>payload</code> - the payload the client sent</dd>
-</dl>
-</li>
-</ul>
-<a id="&lt;init&gt;(net.minestom.server.network.player.PlayerConnection,long,net.minestom.server.utils.time.UpdateOption)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>ClientPingServerEvent</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
-public&nbsp;ClientPingServerEvent&#8203;(@NotNull
-                             @NotNull <a href="../../network/player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
-                             long&nbsp;payload,
-                             <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;delay)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span></div>
 <div class="block">Creates a new client ping server event with 0 delay</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -434,25 +388,6 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 </dl>
 </li>
 </ul>
-<a id="addDelay(net.minestom.server.utils.time.UpdateOption)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addDelay</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
-public&nbsp;void&nbsp;addDelay&#8203;(@NotNull
-                     <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;delay)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">Replaced by <a href="#addDelay(java.time.Duration)"><code>addDelay(Duration)</code></a></div>
-</div>
-<div class="block">Adds to the delay until minestom will send the ping response packet.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>delay</code> - the delay</dd>
-</dl>
-</li>
-</ul>
 <a id="addDelay(java.time.Duration)">
 <!--   -->
 </a>
@@ -462,25 +397,6 @@ public&nbsp;void&nbsp;addDelay&#8203;(@NotNull
 <pre class="methodSignature">public&nbsp;void&nbsp;addDelay&#8203;(@NotNull
                      @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/Duration.html?is-external=true" title="class or interface in java.time" class="externalLink">Duration</a>&nbsp;delay)</pre>
 <div class="block">Adds to the delay until minestom will send the ping response packet.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>delay</code> - the delay</dd>
-</dl>
-</li>
-</ul>
-<a id="setDelay(net.minestom.server.utils.time.UpdateOption)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setDelay</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true#forRemoval()" title="class or interface in java.lang" class="externalLink">forRemoval</a>=true)
-public&nbsp;void&nbsp;setDelay&#8203;(@NotNull
-                     <a href="../../utils/time/UpdateOption.html" title="class in net.minestom.server.utils.time">UpdateOption</a>&nbsp;delay)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated, for removal: This API element is subject to removal in a future version.</span>
-<div class="deprecationComment">Replaced by <a href="#setDelay(java.time.Duration)"><code>setDelay(Duration)</code></a></div>
-</div>
-<div class="block">Sets the delay until minestom will send the ping response packet.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>delay</code> - the delay</dd>

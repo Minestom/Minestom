@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":42,"i6":10,"i7":42,"i8":10,"i9":42,"i10":10,"i11":42,"i12":10,"i13":42,"i14":42,"i15":10,"i16":42,"i17":10,"i18":10,"i19":10,"i20":10,"i21":42,"i22":10,"i23":42,"i24":10,"i25":42,"i26":10,"i27":42,"i28":10,"i29":42,"i30":42,"i31":10,"i32":42,"i33":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -171,7 +171,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -214,229 +214,103 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#prefix(java.lang.String)">prefix</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;prefix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#prefix(net.kyori.adventure.text.Component)"><code>prefix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#prefix(net.kyori.adventure.text.Component)">prefix</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;prefix)</code></th>
 <td class="colLast">
 <div class="block">Changes the prefix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#prefix(net.minestom.server.chat.JsonMessage)">prefix</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#prefix(net.kyori.adventure.text.Component)"><code>prefix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#seeInvisiblePlayers()">seeInvisiblePlayers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Changes the friendly flags to sees invisible players of own team without an update packet.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#suffix(java.lang.String)">suffix</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;suffix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#suffix(net.kyori.adventure.text.Component)"><code>suffix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#suffix(net.kyori.adventure.text.Component)">suffix</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;suffix)</code></th>
 <td class="colLast">
 <div class="block">Changes the suffix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#suffix(net.minestom.server.chat.JsonMessage)">suffix</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#suffix(net.kyori.adventure.text.Component)"><code>suffix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teamColor(net.kyori.adventure.text.format.NamedTextColor)">teamColor</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/format/NamedTextColor.html?is-external=true" title="class or interface in net.kyori.adventure.text.format" class="externalLink">NamedTextColor</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Changes the color of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teamColor(net.minestom.server.chat.ChatColor)">teamColor</a></span>&#8203;(<a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#teamColor(net.kyori.adventure.text.format.NamedTextColor)"><code>teamColor(NamedTextColor)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teamDisplayName(java.lang.String)">teamDisplayName</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;displayName)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#teamDisplayName(net.kyori.adventure.text.Component)"><code>teamDisplayName(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i15" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teamDisplayName(net.kyori.adventure.text.Component)">teamDisplayName</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;displayName)</code></th>
 <td class="colLast">
 <div class="block">Changes the display name of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teamDisplayName(net.minestom.server.chat.JsonMessage)">teamDisplayName</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#teamDisplayName(net.kyori.adventure.text.Component)"><code>teamDisplayName(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i17" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateAllowFriendlyFire()">updateAllowFriendlyFire</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Updates the friendly flags for allow friendly fire.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateCollisionRule(net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule)">updateCollisionRule</a></span>&#8203;(<a href="../network/packet/server/play/TeamsPacket.CollisionRule.html" title="enum in net.minestom.server.network.packet.server.play">TeamsPacket.CollisionRule</a>&nbsp;rule)</code></th>
 <td class="colLast">
 <div class="block">Updates the <a href="../network/packet/server/play/TeamsPacket.CollisionRule.html" title="enum in net.minestom.server.network.packet.server.play"><code>TeamsPacket.CollisionRule</code></a> of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateFriendlyFlags(byte)">updateFriendlyFlags</a></span>&#8203;(byte&nbsp;flag)</code></th>
 <td class="colLast">
 <div class="block">Updates the friendly flags of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateNameTagVisibility(net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility)">updateNameTagVisibility</a></span>&#8203;(<a href="../network/packet/server/play/TeamsPacket.NameTagVisibility.html" title="enum in net.minestom.server.network.packet.server.play">TeamsPacket.NameTagVisibility</a>&nbsp;visibility)</code></th>
 <td class="colLast">
 <div class="block">Updates the <a href="../network/packet/server/play/TeamsPacket.NameTagVisibility.html" title="enum in net.minestom.server.network.packet.server.play"><code>TeamsPacket.NameTagVisibility</code></a> of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePrefix(java.lang.String)">updatePrefix</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;prefix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updatePrefix(net.kyori.adventure.text.Component)"><code>updatePrefix(Component)</code></a>}</div>
-</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePrefix(net.kyori.adventure.text.Component)">updatePrefix</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;prefix)</code></th>
 <td class="colLast">
 <div class="block">Updates the prefix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updatePrefix(net.minestom.server.chat.JsonMessage)">updatePrefix</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updatePrefix(net.kyori.adventure.text.Component)"><code>updatePrefix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i24" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateSeeInvisiblePlayers()">updateSeeInvisiblePlayers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Updates the friendly flags to sees invisible players of own team.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateSuffix(java.lang.String)">updateSuffix</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;suffix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateSuffix(net.kyori.adventure.text.Component)"><code>updateSuffix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i26" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateSuffix(net.kyori.adventure.text.Component)">updateSuffix</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;suffix)</code></th>
 <td class="colLast">
 <div class="block">Updates the suffix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateSuffix(net.minestom.server.chat.JsonMessage)">updateSuffix</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateSuffix(net.kyori.adventure.text.Component)"><code>updateSuffix(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i28" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTeamColor(net.kyori.adventure.text.format.NamedTextColor)">updateTeamColor</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/format/NamedTextColor.html?is-external=true" title="class or interface in net.kyori.adventure.text.format" class="externalLink">NamedTextColor</a>&nbsp;color)</code></th>
 <td class="colLast">
 <div class="block">Updates the color of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTeamColor(net.minestom.server.chat.ChatColor)">updateTeamColor</a></span>&#8203;(<a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateTeamColor(net.kyori.adventure.text.format.NamedTextColor)"><code>updateTeamColor(NamedTextColor)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i30" class="altColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTeamDisplayName(java.lang.String)">updateTeamDisplayName</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;displayName)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateTeamDisplayName(net.kyori.adventure.text.Component)"><code>updateTeamDisplayName(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i31" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTeamDisplayName(net.kyori.adventure.text.Component)">updateTeamDisplayName</a></span>&#8203;(<a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;displayName)</code></th>
 <td class="colLast">
 <div class="block">Updates the display name of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
-<td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTeamDisplayName(net.minestom.server.chat.JsonMessage)">updateTeamDisplayName</a></span>&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateTeamDisplayName(net.kyori.adventure.text.Component)"><code>updateTeamDisplayName(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i33" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code><a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateTeamPacket()">updateTeamPacket</a></span>()</code></th>
 <td class="colLast">
@@ -493,46 +367,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="updatePrefix(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updatePrefix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updatePrefix&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;prefix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updatePrefix(net.kyori.adventure.text.Component)"><code>updatePrefix(Component)</code></a>}</div>
-</div>
-<div class="block">Updates the prefix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>prefix</code> - The new prefix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="updatePrefix(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updatePrefix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updatePrefix&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updatePrefix(net.kyori.adventure.text.Component)"><code>updatePrefix(Component)</code></a></div>
-</div>
-<div class="block">Updates the prefix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>prefix</code> - The new prefix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
 <a id="updatePrefix(net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -544,26 +378,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>prefix</code> - The new prefix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="updateTeamColor(net.minestom.server.chat.ChatColor)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updateTeamColor</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updateTeamColor&#8203;(<a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateTeamColor(net.kyori.adventure.text.format.NamedTextColor)"><code>updateTeamColor(NamedTextColor)</code></a></div>
-</div>
-<div class="block">Updates the color of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>color</code> - The new color</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>
@@ -585,46 +399,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 </dl>
 </li>
 </ul>
-<a id="updateSuffix(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updateSuffix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updateSuffix&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;suffix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateSuffix(net.kyori.adventure.text.Component)"><code>updateSuffix(Component)</code></a></div>
-</div>
-<div class="block">Updates the suffix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>suffix</code> - The new suffix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="updateSuffix(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updateSuffix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updateSuffix&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateSuffix(net.kyori.adventure.text.Component)"><code>updateSuffix(Component)</code></a></div>
-</div>
-<div class="block">Updates the suffix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>suffix</code> - The new suffix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
 <a id="updateSuffix(net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -636,46 +410,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>suffix</code> - The new suffix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="updateTeamDisplayName(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updateTeamDisplayName</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updateTeamDisplayName&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;displayName)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateTeamDisplayName(net.kyori.adventure.text.Component)"><code>updateTeamDisplayName(Component)</code></a></div>
-</div>
-<div class="block">Updates the display name of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>displayName</code> - The new display name</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="updateTeamDisplayName(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>updateTeamDisplayName</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;updateTeamDisplayName&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#updateTeamDisplayName(net.kyori.adventure.text.Component)"><code>updateTeamDisplayName(Component)</code></a></div>
-</div>
-<div class="block">Updates the display name of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>displayName</code> - The new display name</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>
@@ -773,50 +507,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 </dl>
 </li>
 </ul>
-<a id="prefix(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>prefix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;prefix&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;prefix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#prefix(net.kyori.adventure.text.Component)"><code>prefix(Component)</code></a></div>
-</div>
-<div class="block">Changes the prefix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>prefix</code> - The new prefix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="prefix(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>prefix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;prefix&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;prefix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#prefix(net.kyori.adventure.text.Component)"><code>prefix(Component)</code></a></div>
-</div>
-<div class="block">Changes the prefix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>prefix</code> - The new prefix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
 <a id="prefix(net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -830,50 +520,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>prefix</code> - The new prefix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="suffix(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>suffix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;suffix&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;suffix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#suffix(net.kyori.adventure.text.Component)"><code>suffix(Component)</code></a></div>
-</div>
-<div class="block">Changes the suffix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>suffix</code> - The new suffix</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="suffix(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>suffix</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;suffix&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;suffix)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#suffix(net.kyori.adventure.text.Component)"><code>suffix(Component)</code></a></div>
-</div>
-<div class="block">Changes the suffix of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>suffix</code> - The new suffix</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>
@@ -897,28 +543,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 </dl>
 </li>
 </ul>
-<a id="teamColor(net.minestom.server.chat.ChatColor)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>teamColor</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;teamColor&#8203;(<a href="../chat/ChatColor.html" title="class in net.minestom.server.chat">ChatColor</a>&nbsp;color)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#teamColor(net.kyori.adventure.text.format.NamedTextColor)"><code>teamColor(NamedTextColor)</code></a></div>
-</div>
-<div class="block">Changes the color of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>color</code> - The new team color</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
 <a id="teamColor(net.kyori.adventure.text.format.NamedTextColor)">
 <!--   -->
 </a>
@@ -932,50 +556,6 @@ public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.score
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>color</code> - The new team color</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="teamDisplayName(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>teamDisplayName</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;teamDisplayName&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;displayName)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#teamDisplayName(net.kyori.adventure.text.Component)"><code>teamDisplayName(Component)</code></a></div>
-</div>
-<div class="block">Changes the display name of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>displayName</code> - The new display name</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>this builder, for chaining</dd>
-</dl>
-</li>
-</ul>
-<a id="teamDisplayName(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>teamDisplayName</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;<a href="TeamBuilder.html" title="class in net.minestom.server.scoreboard">TeamBuilder</a>&nbsp;teamDisplayName&#8203;(<a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;displayName)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#teamDisplayName(net.kyori.adventure.text.Component)"><code>teamDisplayName(Component)</code></a></div>
-</div>
-<div class="block">Changes the display name of the <a href="Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> without an update packet.
- <br><br>
- <b>Warning: </b> If you do not call <a href="#updateTeamPacket()"><code>updateTeamPacket()</code></a>, this is only changed of the <b>server side</b>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>displayName</code> - The new display name</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>this builder, for chaining</dd>
 </dl>

@@ -173,7 +173,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code><a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#blockPosition">blockPosition</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -196,6 +196,20 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">BlockActionPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,byte,byte,int)">BlockActionPacket</a></span>&#8203;(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+                 byte&nbsp;actionId,
+                 byte&nbsp;actionParam,
+                 int&nbsp;blockId)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,byte,byte,net.minestom.server.instance.block.Block)">BlockActionPacket</a></span>&#8203;(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+                 byte&nbsp;actionId,
+                 byte&nbsp;actionParam,
+                 <a href="../../../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -267,7 +281,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <ul class="blockList">
 <li class="blockList">
 <h4>blockPosition</h4>
-<pre>public&nbsp;<a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a> blockPosition</pre>
+<pre>public&nbsp;<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> blockPosition</pre>
 </li>
 </ul>
 <a id="actionId">
@@ -307,6 +321,30 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Point,byte,byte,int)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BlockActionPacket</h4>
+<pre>public&nbsp;BlockActionPacket&#8203;(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+                         byte&nbsp;actionId,
+                         byte&nbsp;actionParam,
+                         int&nbsp;blockId)</pre>
+</li>
+</ul>
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Point,byte,byte,net.minestom.server.instance.block.Block)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>BlockActionPacket</h4>
+<pre>public&nbsp;BlockActionPacket&#8203;(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
+                         byte&nbsp;actionId,
+                         byte&nbsp;actionParam,
+                         <a href="../../../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>

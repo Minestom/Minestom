@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":42,"i1":10,"i2":42,"i3":42,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":42,"i13":42,"i14":10,"i15":42,"i16":10,"i17":42,"i18":42,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":42,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":42,"i8":42,"i9":10,"i10":10,"i11":42,"i12":42,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -175,76 +175,41 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addPlayerInitialization(java.util.function.Consumer)">addPlayerInitialization</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;playerInitialization)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use the event API instead</div>
-</div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addWaitingPlayer(net.minestom.server.entity.Player)">addWaitingPlayer</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
-<td class="colLast">
-<div class="block">Adds a player into the waiting list, to be handled during the next server tick.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#broadcastMessage(net.minestom.server.chat.JsonMessage)">broadcastMessage</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;jsonMessage)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a> on <a href="../adventure/audience/Audiences.html#players()"><code>Audiences.players()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#broadcastMessage(net.minestom.server.chat.JsonMessage,net.minestom.server.utils.callback.validator.PlayerValidator)">broadcastMessage</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;jsonMessage,
-                @Nullable <a href="../utils/callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;condition)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../adventure/audience/Audiences.html#players(java.util.function.Predicate)"><code>Audiences.players(Predicate)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#findPlayer(java.lang.String)">findPlayer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Finds the closest player matching a given username.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Collection.html?is-external=true" title="class or interface in java.util" class="externalLink">Collection</a>&lt;@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getOnlinePlayers()">getOnlinePlayers</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets all online players.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@Nullable <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer(java.lang.String)">getPlayer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</code></th>
 <td class="colLast">
 <div class="block">Gets the first player which validate <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true#equalsIgnoreCase(java.lang.String)" title="class or interface in java.lang" class="externalLink"><code>String.equalsIgnoreCase(String)</code></a>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer(java.util.UUID)">getPlayer</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid)</code></th>
 <td class="colLast">
 <div class="block">Gets the first player which validate <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true#equals(java.lang.Object)" title="class or interface in java.util" class="externalLink"><code>UUID.equals(Object)</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer(net.minestom.server.network.player.PlayerConnection)">getPlayer</a></span>&#8203;(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Gets the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> linked to a <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerConnectionUuid(net.minestom.server.network.player.PlayerConnection,java.lang.String)">getPlayerConnectionUuid</a></span>&#8203;(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
                        @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;username)</code></th>
@@ -252,21 +217,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Computes the UUID of the specified connection.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerInitializations()">getPlayerInitializations</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Those are all the consumers called when a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> join.</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayerProvider()">getPlayerProvider</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Retrieves the current <a href="PlayerProvider.html" title="interface in net.minestom.server.network"><code>PlayerProvider</code></a>, can be the default one if none is defined.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getReceivePacketConsumers()">getReceivePacketConsumers</a></span>()</code></th>
 <td class="colLast">
@@ -275,7 +233,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSendPacketConsumers()">getSendPacketConsumers</a></span>()</code></th>
 <td class="colLast">
@@ -284,30 +242,21 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownText()">getShutdownText</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getShutdownTextJson()">getShutdownTextJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getShutdownText()"><code>getShutdownText()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i16" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#handleKeepAlive(long)">handleKeepAlive</a></span>&#8203;(long&nbsp;tickStart)</code></th>
 <td class="colLast">
 <div class="block">Updates keep alive by checking the last keep alive packet and send a new one if needed.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketReceive(net.minestom.server.listener.manager.ClientPacketConsumer)">onPacketReceive</a></span>&#8203;(@NotNull <a href="../listener/manager/ClientPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ClientPacketConsumer</a>&nbsp;clientPacketConsumer)</code></th>
 <td class="colLast">
@@ -316,7 +265,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#onPacketSend(net.minestom.server.listener.manager.ServerPacketConsumer)">onPacketSend</a></span>&#8203;(@NotNull <a href="../listener/manager/ServerPacketConsumer.html" title="interface in net.minestom.server.listener.manager">ServerPacketConsumer</a>&nbsp;serverPacketConsumer)</code></th>
 <td class="colLast">
@@ -325,65 +274,49 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerPlayer(net.minestom.server.entity.Player)">registerPlayer</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></th>
 <td class="colLast">
 <div class="block">Adds a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> in the players list.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)">removePlayer</a></span>&#8203;(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></th>
 <td class="colLast">
 <div class="block">Removes a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from the players list.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removePlayerInitialization(java.util.function.Consumer)">removePlayerInitialization</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;playerInitialization)</code></th>
-<td class="colLast">
-<div class="block">Removes an existing player initialization consumer.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)">setPlayerProvider</a></span>&#8203;(@Nullable <a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></th>
 <td class="colLast">
 <div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShutdownText(net.kyori.adventure.text.Component)">setShutdownText</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;shutdownText)</code></th>
 <td class="colLast">
 <div class="block">Changes the kick reason in case of a shutdown.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShutdownText(net.minestom.server.chat.JsonMessage)">setShutdownText</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;shutdownText)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setShutdownText(net.kyori.adventure.text.Component)"><code>setShutdownText(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i25" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUuidProvider(net.minestom.server.network.UuidProvider)">setUuidProvider</a></span>&#8203;(@Nullable <a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a>&nbsp;uuidProvider)</code></th>
 <td class="colLast">
 <div class="block">Changes how <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink"><code>UUID</code></a> are attributed to players.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shutdown()">shutdown</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Shutdowns the connection manager by kicking all the currently connected players.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.entity.Player,boolean)">startPlayState</a></span>&#8203;(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
               boolean&nbsp;register)</code></th>
@@ -391,7 +324,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Calls the player initialization callbacks and the event <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#startPlayState(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String,boolean)">startPlayState</a></span>&#8203;(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/UUID.html?is-external=true" title="class or interface in java.util" class="externalLink">UUID</a>&nbsp;uuid,
@@ -402,7 +335,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  and execute <a href="#startPlayState(net.minestom.server.entity.Player,boolean)"><code>startPlayState(Player, boolean)</code></a>.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateWaitingPlayers()">updateWaitingPlayers</a></span>()</code></th>
 <td class="colLast">
@@ -539,47 +472,6 @@ public&nbsp;@Nullable <a href="../entity/Player.html" title="class in net.minest
 <dd><code>uuid</code> - the player UUID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the first player who validate the UUID condition, null if none was found</dd>
-</dl>
-</li>
-</ul>
-<a id="broadcastMessage(net.minestom.server.chat.JsonMessage,net.minestom.server.utils.callback.validator.PlayerValidator)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>broadcastMessage</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;broadcastMessage&#8203;(@NotNull
-                             @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;jsonMessage,
-                             @Nullable
-                             @Nullable <a href="../utils/callback/validator/PlayerValidator.html" title="interface in net.minestom.server.utils.callback.validator">PlayerValidator</a>&nbsp;condition)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="../adventure/audience/Audiences.html#players(java.util.function.Predicate)"><code>Audiences.players(Predicate)</code></a></div>
-</div>
-<div class="block">Sends a <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> to all online players who validate the condition <code>condition</code>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>jsonMessage</code> - the message to send, probably a <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a> or <a href="../chat/RichMessage.html" title="class in net.minestom.server.chat"><code>RichMessage</code></a></dd>
-<dd><code>condition</code> - the condition to receive the message</dd>
-</dl>
-</li>
-</ul>
-<a id="broadcastMessage(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>broadcastMessage</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;broadcastMessage&#8203;(@NotNull
-                             @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;jsonMessage)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a> on <a href="../adventure/audience/Audiences.html#players()"><code>Audiences.players()</code></a></div>
-</div>
-<div class="block">Sends a <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> to all online players.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>jsonMessage</code> - the message to send, probably a <a href="../chat/ColoredText.html" title="class in net.minestom.server.chat"><code>ColoredText</code></a> or <a href="../chat/RichMessage.html" title="class in net.minestom.server.chat"><code>RichMessage</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -739,82 +631,6 @@ public&nbsp;@NotNull <a href="PlayerProvider.html" title="interface in net.mines
 </dl>
 </li>
 </ul>
-<a id="getPlayerInitializations()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getPlayerInitializations</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&gt;&nbsp;getPlayerInitializations()</pre>
-<div class="block">Those are all the consumers called when a new <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> join.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>an unmodifiable list containing all the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> initialization consumer</dd>
-</dl>
-</li>
-</ul>
-<a id="addPlayerInitialization(java.util.function.Consumer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addPlayerInitialization</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;addPlayerInitialization&#8203;(@NotNull
-                                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;playerInitialization)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use the event API instead</div>
-</div>
-<div class="block">Adds a new player initialization consumer. Those are called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> join,
- mainly to add event callbacks to the player.
- <p>
- This callback should be exclusively used to add event listeners since it is called directly after a
- player join (before any chunk is sent) and the client behavior can therefore be unpredictable.
- You can add your "init" code in <a href="../event/player/PlayerLoginEvent.html" title="class in net.minestom.server.event.player"><code>PlayerLoginEvent</code></a>
- or even <a href="../event/player/AsyncPlayerPreLoginEvent.html" title="class in net.minestom.server.event.player"><code>AsyncPlayerPreLoginEvent</code></a>.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>playerInitialization</code> - the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> initialization consumer</dd>
-</dl>
-</li>
-</ul>
-<a id="removePlayerInitialization(java.util.function.Consumer)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>removePlayerInitialization</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;removePlayerInitialization&#8203;(@NotNull
-                                       @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;playerInitialization)</pre>
-<div class="block">Removes an existing player initialization consumer.
- <p>
- Removal of player initializations should be done by reference, and not cloning.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>playerInitialization</code> - the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> initialization consumer</dd>
-</dl>
-</li>
-</ul>
-<a id="getShutdownTextJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getShutdownTextJson</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-@NotNull
-public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getShutdownTextJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getShutdownText()"><code>getShutdownText()</code></a></div>
-</div>
-<div class="block">Gets the kick reason when the server is shutdown using <a href="../MinecraftServer.html#stopCleanly()"><code>MinecraftServer.stopCleanly()</code></a>.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the kick reason in case on a shutdown</dd>
-</dl>
-</li>
-</ul>
 <a id="getShutdownText()">
 <!--   -->
 </a>
@@ -827,27 +643,6 @@ public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the kick reason in case on a shutdown</dd>
-</dl>
-</li>
-</ul>
-<a id="setShutdownText(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setShutdownText</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setShutdownText&#8203;(@NotNull
-                            @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;shutdownText)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setShutdownText(net.kyori.adventure.text.Component)"><code>setShutdownText(Component)</code></a></div>
-</div>
-<div class="block">Changes the kick reason in case of a shutdown.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>shutdownText</code> - the new shutdown kick reason</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#getShutdownTextJson()"><code>getShutdownTextJson()</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -972,7 +767,7 @@ public&nbsp;@NotNull <a href="../entity/Player.html" title="class in net.minesto
 <a id="handleKeepAlive(long)">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>handleKeepAlive</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;handleKeepAlive&#8203;(long&nbsp;tickStart)</pre>
@@ -980,21 +775,6 @@ public&nbsp;@NotNull <a href="../entity/Player.html" title="class in net.minesto
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>tickStart</code> - the time of the update in milliseconds, forwarded to the packet</dd>
-</dl>
-</li>
-</ul>
-<a id="addWaitingPlayer(net.minestom.server.entity.Player)">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>addWaitingPlayer</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addWaitingPlayer&#8203;(@NotNull
-                             @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</pre>
-<div class="block">Adds a player into the waiting list, to be handled during the next server tick.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>player</code> - the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>player</code></a> to add into the waiting list</dd>
 </dl>
 </li>
 </ul>

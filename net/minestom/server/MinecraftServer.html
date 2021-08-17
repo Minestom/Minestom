@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":41,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":9,"i45":9,"i46":9,"i47":9,"i48":9,"i49":9,"i50":9,"i51":10,"i52":42,"i53":9};
+var data = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":41,"i24":9,"i25":9,"i26":9,"i27":9,"i28":9,"i29":9,"i30":9,"i31":9,"i32":9,"i33":9,"i34":9,"i35":9,"i36":9,"i37":9,"i38":9,"i39":9,"i40":9,"i41":9,"i42":9,"i43":9,"i44":10,"i45":42,"i46":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -290,7 +290,8 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colFirst"><code>static <a href="instance/block/BlockManager.html" title="class in net.minestom.server.instance.block">BlockManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockManager()">getBlockManager</a></span>()</code></th>
 <td class="colLast">
-<div class="block">Gets the manager handling <a href="instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> and <a href="instance/block/rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a>.</div>
+<div class="block">Gets the manager handling <a href="instance/block/BlockHandler.html" title="interface in net.minestom.server.instance.block"><code>block handlers</code></a>
+ and <a href="instance/block/rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>placement rules</code></a>.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -392,62 +393,41 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i18" class="altColor">
-<td class="colFirst"><code>static <a href="gamedata/loottables/LootTableManager.html" title="class in net.minestom.server.gamedata.loottables">LootTableManager</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLootTableManager()">getLootTableManager</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the manager handling loot tables.</div>
-</td>
-</tr>
-<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMaxPacketSize()">getMaxPacketSize</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the maximum packet size (in bytes) that a client can send without getting disconnected.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
-<td class="colFirst"><code>static <a href="network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNettyServer()">getNettyServer</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the netty server.</div>
-</td>
-</tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>static int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getNettyThreadCount()">getNettyThreadCount</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the number of threads used by Netty.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static <a href="listener/manager/PacketListenerManager.html" title="class in net.minestom.server.listener.manager">PacketListenerManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPacketListenerManager()">getPacketListenerManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling all incoming packets</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static <a href="network/PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPacketProcessor()">getPacketProcessor</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the object handling the client packets processing.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRateLimit()">getRateLimit</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the maximum number of packets a client can send over 1 second.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static <a href="recipe/RecipeManager.html" title="class in net.minestom.server.recipe">RecipeManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRecipeManager()">getRecipeManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling recipes show to the clients.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static <a href="ping/ResponseDataConsumer.html" title="interface in net.minestom.server.ping">ResponseDataConsumer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResponseDataConsumer()">getResponseDataConsumer</a></span>()</code></th>
 <td class="colLast">
@@ -456,173 +436,143 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static <a href="timer/SchedulerManager.html" title="class in net.minestom.server.timer">SchedulerManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getSchedulerManager()">getSchedulerManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling scheduled tasks.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code>static <a href="network/socket/Server.html" title="class in net.minestom.server.network.socket">Server</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getServer()">getServer</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static <a href="storage/StorageManager.html" title="class in net.minestom.server.storage">StorageManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getStorageManager()">getStorageManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling storage.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>static <a href="gamedata/tags/TagManager.html" title="class in net.minestom.server.gamedata.tags">TagManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTagManager()">getTagManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling tags.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>static <a href="scoreboard/TeamManager.html" title="class in net.minestom.server.scoreboard">TeamManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTeamManager()">getTeamManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling teams.</div>
 </td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>static <a href="UpdateManager.html" title="class in net.minestom.server">UpdateManager</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUpdateManager()">getUpdateManager</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the manager handling the server ticks.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasGroupedPacket()">hasGroupedPacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the packet caching feature is enabled.</div>
 </td>
 </tr>
-<tr id="i33" class="rowColor">
-<td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasPacketCaching()">hasPacketCaching</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets if the packet caching feature is enabled.</div>
-</td>
-</tr>
-<tr id="i34" class="altColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static <a href="MinecraftServer.html" title="class in net.minestom.server">MinecraftServer</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#init()">init</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i35" class="rowColor">
+<tr id="i32" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isStarted()">isStarted</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the server is up and running.</div>
 </td>
 </tr>
-<tr id="i36" class="altColor">
+<tr id="i33" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isStopping()">isStopping</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the server is currently being shutdown using <a href="#stopCleanly()"><code>stopCleanly()</code></a>.</div>
 </td>
 </tr>
-<tr id="i37" class="rowColor">
+<tr id="i34" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isTerminalEnabled()">isTerminalEnabled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the built in Minestom terminal is enabled.</div>
 </td>
 </tr>
-<tr id="i38" class="altColor">
+<tr id="i35" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBrandName(java.lang.String)">setBrandName</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;brandName)</code></th>
 <td class="colLast">
 <div class="block">Changes the server brand name and send the change to all connected players.</div>
 </td>
 </tr>
-<tr id="i39" class="rowColor">
+<tr id="i36" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setChunkViewDistance(int)">setChunkViewDistance</a></span>&#8203;(int&nbsp;chunkViewDistance)</code></th>
 <td class="colLast">
 <div class="block">Changes the chunk view distance of the server.</div>
 </td>
 </tr>
-<tr id="i40" class="altColor">
+<tr id="i37" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCompressionThreshold(int)">setCompressionThreshold</a></span>&#8203;(int&nbsp;compressionThreshold)</code></th>
 <td class="colLast">
 <div class="block">Changes the compression threshold of the server.</div>
 </td>
 </tr>
-<tr id="i41" class="rowColor">
+<tr id="i38" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDifficulty(net.minestom.server.world.Difficulty)">setDifficulty</a></span>&#8203;(@NotNull <a href="world/Difficulty.html" title="enum in net.minestom.server.world">Difficulty</a>&nbsp;difficulty)</code></th>
 <td class="colLast">
 <div class="block">Changes the server difficulty and send the appropriate packet to all connected clients.</div>
 </td>
 </tr>
-<tr id="i42" class="altColor">
+<tr id="i39" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntityViewDistance(int)">setEntityViewDistance</a></span>&#8203;(int&nbsp;entityViewDistance)</code></th>
 <td class="colLast">
 <div class="block">Changes the entity view distance of the server.</div>
 </td>
 </tr>
-<tr id="i43" class="rowColor">
+<tr id="i40" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setGroupedPacket(boolean)">setGroupedPacket</a></span>&#8203;(boolean&nbsp;groupedPacket)</code></th>
 <td class="colLast">
 <div class="block">Enables or disable grouped packet.</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i41" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setMaxPacketSize(int)">setMaxPacketSize</a></span>&#8203;(int&nbsp;maxPacketSize)</code></th>
 <td class="colLast">
 <div class="block">Changes the maximum packet size (in bytes) that a client can send without getting disconnected.</div>
 </td>
 </tr>
-<tr id="i45" class="rowColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setNettyThreadCount(int)">setNettyThreadCount</a></span>&#8203;(int&nbsp;nettyThreadCount)</code></th>
-<td class="colLast">
-<div class="block">Changes the number of threads used by Netty.</div>
-</td>
-</tr>
-<tr id="i46" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPacketCaching(boolean)">setPacketCaching</a></span>&#8203;(boolean&nbsp;packetCaching)</code></th>
-<td class="colLast">
-<div class="block">Enables or disable packet caching.</div>
-</td>
-</tr>
-<tr id="i47" class="rowColor">
+<tr id="i42" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRateLimit(int)">setRateLimit</a></span>&#8203;(int&nbsp;rateLimit)</code></th>
 <td class="colLast">
 <div class="block">Changes the number of packet a client can send over 1 second without being disconnected.</div>
 </td>
 </tr>
-<tr id="i48" class="altColor">
-<td class="colFirst"><code>static void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setShouldProcessNettyErrors(boolean)">setShouldProcessNettyErrors</a></span>&#8203;(boolean&nbsp;processNettyErrors)</code></th>
-<td class="colLast">
-<div class="block">Sets if the server should process netty errors and other unnecessary netty events.</div>
-</td>
-</tr>
-<tr id="i49" class="rowColor">
+<tr id="i43" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTerminalEnabled(boolean)">setTerminalEnabled</a></span>&#8203;(boolean&nbsp;enabled)</code></th>
 <td class="colLast">
 <div class="block">Enabled/disables the built in Minestom terminal.</div>
 </td>
 </tr>
-<tr id="i50" class="altColor">
-<td class="colFirst"><code>static boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldProcessNettyErrors()">shouldProcessNettyErrors</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets if the server should process netty errors and other unnecessary netty events.</div>
-</td>
-</tr>
-<tr id="i51" class="rowColor">
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int)">start</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;address,
      int&nbsp;port)</code></th>
@@ -630,7 +580,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="block">Starts the server.</div>
 </td>
 </tr>
-<tr id="i52" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)">start</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;address,
      int&nbsp;port,
@@ -641,7 +591,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </div>
 </td>
 </tr>
-<tr id="i53" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#stopCleanly()">stopCleanly</a></span>()</code></th>
 <td class="colLast">
@@ -1017,20 +967,6 @@ public static&nbsp;@NotNull <a href="event/GlobalEventHandler.html" title="class
 </dl>
 </li>
 </ul>
-<a id="getNettyServer()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNettyServer</h4>
-<pre class="methodSignature">public static&nbsp;<a href="network/netty/NettyServer.html" title="class in net.minestom.server.network.netty">NettyServer</a>&nbsp;getNettyServer()</pre>
-<div class="block">Gets the netty server.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the netty server</dd>
-</dl>
-</li>
-</ul>
 <a id="getInstanceManager()">
 <!--   -->
 </a>
@@ -1052,7 +988,8 @@ public static&nbsp;@NotNull <a href="event/GlobalEventHandler.html" title="class
 <li class="blockList">
 <h4>getBlockManager</h4>
 <pre class="methodSignature">public static&nbsp;<a href="instance/block/BlockManager.html" title="class in net.minestom.server.instance.block">BlockManager</a>&nbsp;getBlockManager()</pre>
-<div class="block">Gets the manager handling <a href="instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block"><code>CustomBlock</code></a> and <a href="instance/block/rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a>.</div>
+<div class="block">Gets the manager handling <a href="instance/block/BlockHandler.html" title="interface in net.minestom.server.instance.block"><code>block handlers</code></a>
+ and <a href="instance/block/rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>placement rules</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the block manager</dd>
@@ -1335,45 +1272,6 @@ public static&nbsp;@NotNull <a href="event/GlobalEventHandler.html" title="class
 </dl>
 </li>
 </ul>
-<a id="hasPacketCaching()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>hasPacketCaching</h4>
-<pre class="methodSignature">public static&nbsp;boolean&nbsp;hasPacketCaching()</pre>
-<div class="block">Gets if the packet caching feature is enabled.
- <p>
- This feature allows some packets (implementing the <a href="utils/cache/CacheablePacket.html" title="interface in net.minestom.server.utils.cache"><code>CacheablePacket</code></a> to be cached
- in order to do not have to be written and compressed over and over again), this is especially useful for chunk and light packets.
- <p>
- It is enabled by default and it is our recommendation,
- you should only disable it if you want to focus on low memory usage
- at the cost of many packet writing and compression.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if the packet caching feature is enabled, false otherwise</dd>
-</dl>
-</li>
-</ul>
-<a id="setPacketCaching(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPacketCaching</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;setPacketCaching&#8203;(boolean&nbsp;packetCaching)</pre>
-<div class="block">Enables or disable packet caching.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>packetCaching</code> - true to enable packet caching</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalStateException</a></code> - if this is called after the server started</dd>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="#hasPacketCaching()"><code>hasPacketCaching()</code></a></dd>
-</dl>
-</li>
-</ul>
 <a id="hasGroupedPacket()">
 <!--   -->
 </a>
@@ -1456,20 +1354,6 @@ public static&nbsp;<a href="ping/ResponseDataConsumer.html" title="interface in 
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the response data consumer</dd>
-</dl>
-</li>
-</ul>
-<a id="getLootTableManager()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getLootTableManager</h4>
-<pre class="methodSignature">public static&nbsp;<a href="gamedata/loottables/LootTableManager.html" title="class in net.minestom.server.gamedata.loottables">LootTableManager</a>&nbsp;getLootTableManager()</pre>
-<div class="block">Gets the manager handling loot tables.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the loot table manager</dd>
 </dl>
 </li>
 </ul>
@@ -1557,65 +1441,13 @@ public static&nbsp;<a href="ping/ResponseDataConsumer.html" title="interface in 
 </dl>
 </li>
 </ul>
-<a id="getNettyThreadCount()">
+<a id="getServer()">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getNettyThreadCount</h4>
-<pre class="methodSignature">public static&nbsp;int&nbsp;getNettyThreadCount()</pre>
-<div class="block">Gets the number of threads used by Netty.
- <p>
- Is the number of vCPU by default.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number of netty threads</dd>
-</dl>
-</li>
-</ul>
-<a id="setNettyThreadCount(int)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setNettyThreadCount</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;setNettyThreadCount&#8203;(int&nbsp;nettyThreadCount)</pre>
-<div class="block">Changes the number of threads used by Netty.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nettyThreadCount</code> - the number of threads</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/IllegalStateException.html?is-external=true" title="class or interface in java.lang" class="externalLink">IllegalStateException</a></code> - if the server is already started</dd>
-</dl>
-</li>
-</ul>
-<a id="shouldProcessNettyErrors()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>shouldProcessNettyErrors</h4>
-<pre class="methodSignature">public static&nbsp;boolean&nbsp;shouldProcessNettyErrors()</pre>
-<div class="block">Gets if the server should process netty errors and other unnecessary netty events.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>should process netty errors</dd>
-</dl>
-</li>
-</ul>
-<a id="setShouldProcessNettyErrors(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setShouldProcessNettyErrors</h4>
-<pre class="methodSignature">public static&nbsp;void&nbsp;setShouldProcessNettyErrors&#8203;(boolean&nbsp;processNettyErrors)</pre>
-<div class="block">Sets if the server should process netty errors and other unnecessary netty events.
- false is faster</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>processNettyErrors</code> - should process netty errors</dd>
-</dl>
+<h4>getServer</h4>
+<pre class="methodSignature">public static&nbsp;<a href="network/socket/Server.html" title="class in net.minestom.server.network.socket">Server</a>&nbsp;getServer()</pre>
 </li>
 </ul>
 <a id="start(java.lang.String,int,net.minestom.server.ping.ResponseDataConsumer)">

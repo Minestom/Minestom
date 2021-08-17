@@ -231,7 +231,7 @@ extends <a href="EntityMeta.html" title="class in net.minestom.server.entity.met
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBedInWhichSleepingPosition()">getBedInWhichSleepingPosition</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -277,7 +277,7 @@ extends <a href="EntityMeta.html" title="class in net.minestom.server.entity.met
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBedInWhichSleepingPosition(net.minestom.server.utils.BlockPosition)">setBedInWhichSleepingPosition</a></span>&#8203;(@Nullable <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;value)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBedInWhichSleepingPosition(net.minestom.server.coordinate.Point)">setBedInWhichSleepingPosition</a></span>&#8203;(@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
@@ -316,7 +316,7 @@ extends <a href="EntityMeta.html" title="class in net.minestom.server.entity.met
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.metadata.<a href="EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></h3>
-<code><a href="EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="EntityMeta.html#getCustomName()">getCustomName</a>, <a href="EntityMeta.html#getCustomNameJson()">getCustomNameJson</a>, <a href="EntityMeta.html#getMask(int)">getMask</a>, <a href="EntityMeta.html#getMaskBit(int,byte)">getMaskBit</a>, <a href="EntityMeta.html#getPose()">getPose</a>, <a href="EntityMeta.html#getTickFrozen()">getTickFrozen</a>, <a href="EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="EntityMeta.html#isInvisible()">isInvisible</a>, <a href="EntityMeta.html#isOnFire()">isOnFire</a>, <a href="EntityMeta.html#isSilent()">isSilent</a>, <a href="EntityMeta.html#isSneaking()">isSneaking</a>, <a href="EntityMeta.html#isSprinting()">isSprinting</a>, <a href="EntityMeta.html#isSwimming()">isSwimming</a>, <a href="EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="EntityMeta.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="EntityMeta.html#setMask(int,byte)">setMask</a>, <a href="EntityMeta.html#setMaskBit(int,byte,boolean)">setMaskBit</a>, <a href="EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="EntityMeta.html#setSwimming(boolean)">setSwimming</a>, <a href="EntityMeta.html#setTickFrozen(int)">setTickFrozen</a></code></li>
+<code><a href="EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="EntityMeta.html#getCustomName()">getCustomName</a>, <a href="EntityMeta.html#getMask(int)">getMask</a>, <a href="EntityMeta.html#getMaskBit(int,byte)">getMaskBit</a>, <a href="EntityMeta.html#getPose()">getPose</a>, <a href="EntityMeta.html#getTickFrozen()">getTickFrozen</a>, <a href="EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="EntityMeta.html#isInvisible()">isInvisible</a>, <a href="EntityMeta.html#isOnFire()">isOnFire</a>, <a href="EntityMeta.html#isSilent()">isSilent</a>, <a href="EntityMeta.html#isSneaking()">isSneaking</a>, <a href="EntityMeta.html#isSprinting()">isSprinting</a>, <a href="EntityMeta.html#isSwimming()">isSwimming</a>, <a href="EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="EntityMeta.html#setMask(int,byte)">setMask</a>, <a href="EntityMeta.html#setMaskBit(int,byte,boolean)">setMaskBit</a>, <a href="EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="EntityMeta.html#setSwimming(boolean)">setSwimming</a>, <a href="EntityMeta.html#setTickFrozen(int)">setTickFrozen</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -552,17 +552,17 @@ public&nbsp;<a href="../Player.Hand.html" title="enum in net.minestom.server.ent
 <li class="blockList">
 <h4>getBedInWhichSleepingPosition</h4>
 <pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getBedInWhichSleepingPosition()</pre>
+public&nbsp;@Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getBedInWhichSleepingPosition()</pre>
 </li>
 </ul>
-<a id="setBedInWhichSleepingPosition(net.minestom.server.utils.BlockPosition)">
+<a id="setBedInWhichSleepingPosition(net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setBedInWhichSleepingPosition</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setBedInWhichSleepingPosition&#8203;(@Nullable
-                                          @Nullable <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;value)</pre>
+                                          @Nullable <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;value)</pre>
 </li>
 </ul>
 </li>

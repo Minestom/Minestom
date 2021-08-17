@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">PlayerBlockBreakEvent</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
+implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a>, <a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
 </li>
 </ul>
 </div>
@@ -157,12 +157,10 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition,short,net.minestom.server.instance.block.CustomBlock,short,short)">PlayerBlockBreakEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                     @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-                     short&nbsp;blockStateId,
-                     @Nullable <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock,
-                     short&nbsp;resultBlockStateId,
-                     short&nbsp;resultCustomBlockId)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point)">PlayerBlockBreakEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+                     @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                     @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;resultBlock,
+                     @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -184,94 +182,52 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlock()">getBlock</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the block to break</div>
+</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPosition()">getBlockPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the block position.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockStateId()">getBlockStateId</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the broken block state id.</div>
-</td>
-</tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@Nullable <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCustomBlock()">getCustomBlock</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the broken custom block.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player.</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResultBlock()">getResultBlock</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets the block which will replace <a href="#getBlock()"><code>getBlock()</code></a>.</div>
+</td>
+</tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResultBlockStateId()">getResultBlockStateId</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the visual block id result, which will be placed after the event.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>short</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getResultCustomBlockId()">getResultCustomBlockId</a></span>()</code></th>
-<td class="colLast">
-<div class="block">Gets the custom block id result, which will be placed after the event.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
 <div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultBlockId(short)">setResultBlockId</a></span>&#8203;(short&nbsp;resultBlockStateId)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultBlock(net.minestom.server.instance.block.Block)">setResultBlock</a></span>&#8203;(@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;resultBlock)</code></th>
 <td class="colLast">
-<div class="block">Changes the visual block id result.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(short)">setResultCustomBlock</a></span>&#8203;(short&nbsp;customBlockId)</code></th>
-<td class="colLast">
-<div class="block">Sets both the blockStateId and customBlockId.</div>
-</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(java.lang.String)">setResultCustomBlock</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;customBlockId)</code></th>
-<td class="colLast">
-<div class="block">Sets both the blockId and customBlockId.</div>
-</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlock(net.minestom.server.instance.block.CustomBlock)">setResultCustomBlock</a></span>&#8203;(@NotNull <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</code></th>
-<td class="colLast">
-<div class="block">Sets both the blockId and customBlockId.</div>
-</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setResultCustomBlockId(short)">setResultCustomBlockId</a></span>&#8203;(short&nbsp;resultCustomBlockId)</code></th>
-<td class="colLast">
-<div class="block">Changes the custom block id result, which will be placed after the event.</div>
+<div class="block">Changes the result of the event.</div>
 </td>
 </tr>
 </table>
@@ -305,7 +261,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition,short,net.minestom.server.instance.block.CustomBlock,short,short)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.instance.block.Block,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -314,12 +270,11 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <pre>public&nbsp;PlayerBlockBreakEvent&#8203;(@NotNull
                              @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                              @NotNull
-                             @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-                             short&nbsp;blockStateId,
-                             @Nullable
-                             @Nullable <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock,
-                             short&nbsp;resultBlockStateId,
-                             short&nbsp;resultCustomBlockId)</pre>
+                             @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                             @NotNull
+                             @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;resultBlock,
+                             @NotNull
+                             @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</pre>
 </li>
 </ul>
 </li>
@@ -332,6 +287,53 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a id="getBlock()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBlock</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;getBlock()</pre>
+<div class="block">Gets the block to break</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../trait/BlockEvent.html#getBlock()">getBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the block</dd>
+</dl>
+</li>
+</ul>
+<a id="getResultBlock()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getResultBlock</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;getResultBlock()</pre>
+<div class="block">Gets the block which will replace <a href="#getBlock()"><code>getBlock()</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the result block</dd>
+</dl>
+</li>
+</ul>
+<a id="setResultBlock(net.minestom.server.instance.block.Block)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setResultBlock</h4>
+<pre class="methodSignature">public&nbsp;void&nbsp;setResultBlock&#8203;(@NotNull
+                           @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;resultBlock)</pre>
+<div class="block">Changes the result of the event.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>resultBlock</code> - the new block</dd>
+</dl>
+</li>
+</ul>
 <a id="getBlockPosition()">
 <!--   -->
 </a>
@@ -339,146 +341,11 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <li class="blockList">
 <h4>getBlockPosition</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getBlockPosition()</pre>
+public&nbsp;@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getBlockPosition()</pre>
 <div class="block">Gets the block position.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the block position</dd>
-</dl>
-</li>
-</ul>
-<a id="getBlockStateId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getBlockStateId</h4>
-<pre class="methodSignature">public&nbsp;short&nbsp;getBlockStateId()</pre>
-<div class="block">Gets the broken block state id.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the block id</dd>
-</dl>
-</li>
-</ul>
-<a id="getCustomBlock()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getCustomBlock</h4>
-<pre class="methodSignature">@Nullable
-public&nbsp;@Nullable <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;getCustomBlock()</pre>
-<div class="block">Gets the broken custom block.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the custom block,
- null if not any</dd>
-</dl>
-</li>
-</ul>
-<a id="getResultBlockStateId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getResultBlockStateId</h4>
-<pre class="methodSignature">public&nbsp;short&nbsp;getResultBlockStateId()</pre>
-<div class="block">Gets the visual block id result, which will be placed after the event.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the block id that will be set at <a href="#getBlockPosition()"><code>getBlockPosition()</code></a>
- set to 0 to remove</dd>
-</dl>
-</li>
-</ul>
-<a id="setResultBlockId(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setResultBlockId</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setResultBlockId&#8203;(short&nbsp;resultBlockStateId)</pre>
-<div class="block">Changes the visual block id result.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>resultBlockStateId</code> - the result block id</dd>
-</dl>
-</li>
-</ul>
-<a id="getResultCustomBlockId()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getResultCustomBlockId</h4>
-<pre class="methodSignature">public&nbsp;short&nbsp;getResultCustomBlockId()</pre>
-<div class="block">Gets the custom block id result, which will be placed after the event.
- <p>
- Warning: the visual block will not be changed, be sure to call <a href="#setResultBlockId(short)"><code>setResultBlockId(short)</code></a>
- if you want the visual to be the same as <a href="../../instance/block/CustomBlock.html#getDefaultBlockStateId()"><code>CustomBlock.getDefaultBlockStateId()</code></a>.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the custom block id that will be set at <a href="#getBlockPosition()"><code>getBlockPosition()</code></a>
- set to 0 to remove</dd>
-</dl>
-</li>
-</ul>
-<a id="setResultCustomBlockId(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setResultCustomBlockId</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlockId&#8203;(short&nbsp;resultCustomBlockId)</pre>
-<div class="block">Changes the custom block id result, which will be placed after the event.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>resultCustomBlockId</code> - the custom block id result</dd>
-</dl>
-</li>
-</ul>
-<a id="setResultCustomBlock(net.minestom.server.instance.block.CustomBlock)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setResultCustomBlock</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlock&#8203;(@NotNull
-                                 @NotNull <a href="../../instance/block/CustomBlock.html" title="class in net.minestom.server.instance.block">CustomBlock</a>&nbsp;customBlock)</pre>
-<div class="block">Sets both the blockId and customBlockId.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>customBlock</code> - the result custom block</dd>
-</dl>
-</li>
-</ul>
-<a id="setResultCustomBlock(short)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setResultCustomBlock</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlock&#8203;(short&nbsp;customBlockId)</pre>
-<div class="block">Sets both the blockStateId and customBlockId.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>customBlockId</code> - the result custom block</dd>
-</dl>
-</li>
-</ul>
-<a id="setResultCustomBlock(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setResultCustomBlock</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;setResultCustomBlock&#8203;(@NotNull
-                                 @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;customBlockId)</pre>
-<div class="block">Sets both the blockId and customBlockId.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>customBlockId</code> - the result custom block id</dd>
 </dl>
 </li>
 </ul>

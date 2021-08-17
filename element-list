@@ -7,7 +7,6 @@ net.minestom.server.adventure.audience
 net.minestom.server.adventure.bossbar
 net.minestom.server.adventure.provider
 net.minestom.server.attribute
-net.minestom.server.chat
 net.minestom.server.collision
 net.minestom.server.color
 net.minestom.server.command
@@ -21,6 +20,7 @@ net.minestom.server.command.builder.condition
 net.minestom.server.command.builder.exception
 net.minestom.server.command.builder.parser
 net.minestom.server.command.builder.suggestion
+net.minestom.server.coordinate
 net.minestom.server.data
 net.minestom.server.data.type
 net.minestom.server.data.type.array
@@ -74,18 +74,12 @@ net.minestom.server.extras.selfmodification
 net.minestom.server.extras.selfmodification.mixins
 net.minestom.server.extras.velocity
 net.minestom.server.fluid
-net.minestom.server.gamedata
-net.minestom.server.gamedata.conditions
-net.minestom.server.gamedata.loottables
-net.minestom.server.gamedata.loottables.entries
-net.minestom.server.gamedata.loottables.tabletypes
 net.minestom.server.gamedata.tags
 net.minestom.server.instance
 net.minestom.server.instance.batch
 net.minestom.server.instance.block
 net.minestom.server.instance.block.rule
 net.minestom.server.instance.block.rule.vanilla
-net.minestom.server.instance.block.states
 net.minestom.server.instance.palette
 net.minestom.server.inventory
 net.minestom.server.inventory.click
@@ -103,10 +97,7 @@ net.minestom.server.map.framebuffers
 net.minestom.server.message
 net.minestom.server.monitoring
 net.minestom.server.network
-net.minestom.server.network.netty
-net.minestom.server.network.netty.channel
-net.minestom.server.network.netty.codec
-net.minestom.server.network.netty.packet
+net.minestom.server.network.packet
 net.minestom.server.network.packet.client
 net.minestom.server.network.packet.client.handler
 net.minestom.server.network.packet.client.handshake
@@ -119,6 +110,7 @@ net.minestom.server.network.packet.server.login
 net.minestom.server.network.packet.server.play
 net.minestom.server.network.packet.server.status
 net.minestom.server.network.player
+net.minestom.server.network.socket
 net.minestom.server.particle
 net.minestom.server.permission
 net.minestom.server.ping
@@ -128,10 +120,8 @@ net.minestom.server.registry
 net.minestom.server.resourcepack
 net.minestom.server.scoreboard
 net.minestom.server.sound
-net.minestom.server.stat
 net.minestom.server.statistic
 net.minestom.server.storage
-net.minestom.server.storage.systems
 net.minestom.server.tag
 net.minestom.server.terminal
 net.minestom.server.thread
@@ -141,7 +131,6 @@ net.minestom.server.utils.advancement
 net.minestom.server.utils.async
 net.minestom.server.utils.binary
 net.minestom.server.utils.block
-net.minestom.server.utils.cache
 net.minestom.server.utils.callback
 net.minestom.server.utils.callback.validator
 net.minestom.server.utils.chunk

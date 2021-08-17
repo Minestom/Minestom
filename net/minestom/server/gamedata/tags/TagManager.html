@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,7 +87,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -130,7 +130,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">TagManager</span>
+<pre>public final class <span class="typeNameLabel">TagManager</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 <div class="block">Handles loading and caching of tags.</div>
 </li>
@@ -139,29 +139,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<section role="region">
-<ul class="blockList">
-<li class="blockList"><a id="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colSecond" scope="col">Class</th>
-<th class="colLast" scope="col">Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static interface&nbsp;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="TagManager.ReaderSupplierWithFileNotFound.html" title="interface in net.minestom.server.gamedata.tags">TagManager.ReaderSupplierWithFileNotFound</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
-</section>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
@@ -198,54 +175,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addRequiredTag(net.minestom.server.gamedata.tags.Tag.BasicTypes,net.minestom.server.utils.NamespaceID)">addRequiredTag</a></span>&#8203;(<a href="Tag.BasicTypes.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicTypes</a>&nbsp;type,
-              <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</code></th>
-<td class="colLast">
-<div class="block">Adds a required tag to send to players when they connect</div>
-</td>
+<td class="colFirst"><code>@Nullable <a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTag(net.minestom.server.gamedata.tags.Tag.BasicType,java.lang.String)">getTag</a></span>&#8203;(<a href="Tag.BasicType.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicType</a>&nbsp;type,
+      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#addRequiredTagsToPacket(net.minestom.server.network.packet.server.play.TagsPacket)">addRequiredTagsToPacket</a></span>&#8203;(<a href="../../network/packet/server/play/TagsPacket.html" title="class in net.minestom.server.network.packet.server.play">TagsPacket</a>&nbsp;tagsPacket)</code></th>
-<td class="colLast">
-<div class="block">Adds the required tags for the game to function correctly</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forceLoad(net.minestom.server.utils.NamespaceID,java.lang.String,net.minestom.server.gamedata.tags.TagManager.ReaderSupplierWithFileNotFound)">forceLoad</a></span>&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType,
-         <a href="TagManager.ReaderSupplierWithFileNotFound.html" title="interface in net.minestom.server.gamedata.tags">TagManager.ReaderSupplierWithFileNotFound</a>&nbsp;readerSupplier)</code></th>
-<td class="colLast">
-<div class="block">Loads a tag with the given name.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(net.minestom.server.utils.NamespaceID,java.lang.String)">load</a></span>&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType)</code></th>
-<td class="colLast">
-<div class="block">Loads a tag with the given name.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(net.minestom.server.utils.NamespaceID,java.lang.String,java.io.Reader)">load</a></span>&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType,
-    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Reader.html?is-external=true" title="class or interface in java.io" class="externalLink">Reader</a>&nbsp;reader)</code></th>
-<td class="colLast">
-<div class="block">Loads a tag with the given name.</div>
-</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#load(net.minestom.server.utils.NamespaceID,java.lang.String,net.minestom.server.gamedata.tags.TagManager.ReaderSupplierWithFileNotFound)">load</a></span>&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-    <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType,
-    <a href="TagManager.ReaderSupplierWithFileNotFound.html" title="interface in net.minestom.server.gamedata.tags">TagManager.ReaderSupplierWithFileNotFound</a>&nbsp;readerSupplier)</code></th>
-<td class="colLast">
-<div class="block">Loads a tag with the given name.</div>
-</td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="Tag.BasicType.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicType</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;&gt;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTagMap()">getTagMap</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -290,120 +228,24 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="load(net.minestom.server.utils.NamespaceID,java.lang.String)">
+<a id="getTag(net.minestom.server.gamedata.tags.Tag.BasicType,java.lang.String)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>load</h4>
-<pre class="methodSignature">public&nbsp;<a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&nbsp;load&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType)
-         throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></pre>
-<div class="block">Loads a tag with the given name. This method attempts to read from "data/&lt;name.domain&gt;/tags/&lt;tagType&gt;/&lt;name.path&gt;.json" if the given name is not already present in cache</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - </dd>
-<dd><code>tagType</code> - the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></code> - if the file does not exist</dd>
-</dl>
+<h4>getTag</h4>
+<pre class="methodSignature">@Nullable
+public&nbsp;@Nullable <a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&nbsp;getTag&#8203;(<a href="Tag.BasicType.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicType</a>&nbsp;type,
+                            <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
-<a id="load(net.minestom.server.utils.NamespaceID,java.lang.String,java.io.Reader)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>load</h4>
-<pre class="methodSignature">public&nbsp;<a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&nbsp;load&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType,
-                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/Reader.html?is-external=true" title="class or interface in java.io" class="externalLink">Reader</a>&nbsp;reader)
-         throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></pre>
-<div class="block">Loads a tag with the given name. This method attempts to read from 'reader' if the given name is not already present in cache</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - </dd>
-<dd><code>tagType</code> - the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)</dd>
-<dd><code>reader</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a id="forceLoad(net.minestom.server.utils.NamespaceID,java.lang.String,net.minestom.server.gamedata.tags.TagManager.ReaderSupplierWithFileNotFound)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>forceLoad</h4>
-<pre class="methodSignature">public&nbsp;<a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&nbsp;forceLoad&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-                     <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType,
-                     <a href="TagManager.ReaderSupplierWithFileNotFound.html" title="interface in net.minestom.server.gamedata.tags">TagManager.ReaderSupplierWithFileNotFound</a>&nbsp;readerSupplier)
-              throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></pre>
-<div class="block">Loads a tag with the given name. This method reads from 'reader'. This will override the previous tag</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - </dd>
-<dd><code>tagType</code> - the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)</dd>
-<dd><code>readerSupplier</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a id="load(net.minestom.server.utils.NamespaceID,java.lang.String,net.minestom.server.gamedata.tags.TagManager.ReaderSupplierWithFileNotFound)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>load</h4>
-<pre class="methodSignature">public&nbsp;<a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&nbsp;load&#8203;(<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
-                <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;tagType,
-                <a href="TagManager.ReaderSupplierWithFileNotFound.html" title="interface in net.minestom.server.gamedata.tags">TagManager.ReaderSupplierWithFileNotFound</a>&nbsp;readerSupplier)
-         throws <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></pre>
-<div class="block">Loads a tag with the given name. This method attempts to read from 'reader' if the given name is not already present in cache</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>name</code> - </dd>
-<dd><code>tagType</code> - the type of the tag to load, used to resolve paths (blocks, items, entity_types, fluids, functions are the vanilla variants)</dd>
-<dd><code>readerSupplier</code> - </dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io" class="externalLink">FileNotFoundException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a id="addRequiredTagsToPacket(net.minestom.server.network.packet.server.play.TagsPacket)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>addRequiredTagsToPacket</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addRequiredTagsToPacket&#8203;(<a href="../../network/packet/server/play/TagsPacket.html" title="class in net.minestom.server.network.packet.server.play">TagsPacket</a>&nbsp;tagsPacket)</pre>
-<div class="block">Adds the required tags for the game to function correctly</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>tagsPacket</code> - the packet to add the tags to</dd>
-</dl>
-</li>
-</ul>
-<a id="addRequiredTag(net.minestom.server.gamedata.tags.Tag.BasicTypes,net.minestom.server.utils.NamespaceID)">
+<a id="getTagMap()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>addRequiredTag</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;addRequiredTag&#8203;(<a href="Tag.BasicTypes.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicTypes</a>&nbsp;type,
-                           <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</pre>
-<div class="block">Adds a required tag to send to players when they connect</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>type</code> - type of tag to send. Required so the client knows its use</dd>
-<dd><code>name</code> - the name of the tag to load</dd>
-</dl>
+<h4>getTagMap</h4>
+<pre class="methodSignature">public&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Map.html?is-external=true" title="class or interface in java.util" class="externalLink">Map</a>&lt;<a href="Tag.BasicType.html" title="enum in net.minestom.server.gamedata.tags">Tag.BasicType</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="Tag.html" title="class in net.minestom.server.gamedata.tags">Tag</a>&gt;&gt;&nbsp;getTagMap()</pre>
 </li>
 </ul>
 </li>
@@ -457,7 +299,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

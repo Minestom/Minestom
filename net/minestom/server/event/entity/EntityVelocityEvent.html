@@ -137,7 +137,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <pre>public class <span class="typeNameLabel">EntityVelocityEvent</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
 implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
-<div class="block">Called when a velocity is applied to an entity using <a href="../../entity/Entity.html#setVelocity(net.minestom.server.utils.Vector)"><code>Entity.setVelocity(Vector)</code></a>.</div>
+<div class="block">Called when a velocity is applied to an entity using <a href="../../entity/Entity.html#setVelocity(net.minestom.server.coordinate.Vec)"><code>Entity.setVelocity(Vec)</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -158,8 +158,8 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector)">EntityVelocityEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
-                   @NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)">EntityVelocityEvent</a></span>&#8203;(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+                   @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -188,7 +188,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getVelocity()">getVelocity</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the velocity which will be applied.</div>
@@ -210,7 +210,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVelocity(net.minestom.server.utils.Vector)">setVelocity</a></span>&#8203;(@NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setVelocity(net.minestom.server.coordinate.Vec)">setVelocity</a></span>&#8203;(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity)</code></th>
 <td class="colLast">
 <div class="block">Changes the applied velocity.</div>
 </td>
@@ -239,7 +239,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.utils.Vector)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -248,7 +248,7 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <pre>public&nbsp;EntityVelocityEvent&#8203;(@NotNull
                            @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
                            @NotNull
-                           @NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</pre>
+                           @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity)</pre>
 </li>
 </ul>
 </li>
@@ -285,7 +285,7 @@ public&nbsp;@NotNull <a href="../../entity/Entity.html" title="class in net.mine
 <li class="blockList">
 <h4>getVelocity</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;getVelocity()</pre>
+public&nbsp;@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;getVelocity()</pre>
 <div class="block">Gets the velocity which will be applied.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -293,14 +293,14 @@ public&nbsp;@NotNull <a href="../../utils/Vector.html" title="class in net.mines
 </dl>
 </li>
 </ul>
-<a id="setVelocity(net.minestom.server.utils.Vector)">
+<a id="setVelocity(net.minestom.server.coordinate.Vec)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setVelocity</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setVelocity&#8203;(@NotNull
-                        @NotNull <a href="../../utils/Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;velocity)</pre>
+                        @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity)</pre>
 <div class="block">Changes the applied velocity.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

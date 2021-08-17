@@ -159,27 +159,22 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>static int @NotNull []</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDifferencesBetweenArray(long%5B%5D,long%5B%5D)">getDifferencesBetweenArray</a></span>&#8203;(long @NotNull []&nbsp;a,
-                          long @NotNull []&nbsp;b)</code></th>
-<td class="colLast">
-<div class="block">Gets the differences between 2 arrays.</div>
-</td>
+<td class="colFirst"><code>static boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#empty(byte%5B%5D)">empty</a></span>&#8203;(byte[]&nbsp;array)</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#forDifferencesBetweenArray(long%5B%5D,long%5B%5D,java.util.function.LongConsumer)">forDifferencesBetweenArray</a></span>&#8203;(long @NotNull []&nbsp;a,
+                          long @NotNull []&nbsp;b,
+                          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/LongConsumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">LongConsumer</a>&nbsp;consumer)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#removeElement(java.lang.Object%5B%5D,int)">removeElement</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>[]&nbsp;arr,
              int&nbsp;index)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>static &lt;T&gt;&nbsp;boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sameStart(T%5B%5D,T%5B%5D,int)">sameStart</a></span>&#8203;(@NotNull T[]&nbsp;first,
-         @NotNull T[]&nbsp;second,
-         int&nbsp;length)</code></th>
-<td class="colLast">
-<div class="block">Gets if two arrays share the same start until <code>length</code>.</div>
-</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static int @NotNull []</code></td>
@@ -230,22 +225,16 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                  int&nbsp;index)</pre>
 </li>
 </ul>
-<a id="getDifferencesBetweenArray(long[],long[])">
+<a id="forDifferencesBetweenArray(long[],long[],java.util.function.LongConsumer)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getDifferencesBetweenArray</h4>
-<pre class="methodSignature">public static&nbsp;int @NotNull []&nbsp;getDifferencesBetweenArray&#8203;(long @NotNull []&nbsp;a,
-                                                         long @NotNull []&nbsp;b)</pre>
-<div class="block">Gets the differences between 2 arrays.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>a</code> - the first array</dd>
-<dd><code>b</code> - the second array</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>an array containing a's indexes that aren't in b array</dd>
-</dl>
+<h4>forDifferencesBetweenArray</h4>
+<pre class="methodSignature">public static&nbsp;void&nbsp;forDifferencesBetweenArray&#8203;(long @NotNull []&nbsp;a,
+                                              long @NotNull []&nbsp;b,
+                                              @NotNull
+                                              @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/LongConsumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">LongConsumer</a>&nbsp;consumer)</pre>
 </li>
 </ul>
 <a id="toArray(it.unimi.dsi.fastutil.ints.IntList)">
@@ -258,30 +247,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                       @NotNull it.unimi.dsi.fastutil.ints.IntList&nbsp;list)</pre>
 </li>
 </ul>
-<a id="sameStart(java.lang.Object[],java.lang.Object[],int)">
-<!--   -->
-</a><a id="sameStart(T[],T[],int)">
+<a id="empty(byte[])">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>sameStart</h4>
-<pre class="methodSignature">public static&nbsp;&lt;T&gt;&nbsp;boolean&nbsp;sameStart&#8203;(@NotNull
-                                    @NotNull T[]&nbsp;first,
-                                    @NotNull
-                                    @NotNull T[]&nbsp;second,
-                                    int&nbsp;length)</pre>
-<div class="block">Gets if two arrays share the same start until <code>length</code>.</div>
-<dl>
-<dt><span class="paramLabel">Type Parameters:</span></dt>
-<dd><code>T</code> - the type of the arrays</dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>first</code> - the first array</dd>
-<dd><code>second</code> - the second array</dd>
-<dd><code>length</code> - the length to check (0-length)</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if both arrays share the same start</dd>
-</dl>
+<h4>empty</h4>
+<pre class="methodSignature">public static&nbsp;boolean&nbsp;empty&#8203;(byte[]&nbsp;array)</pre>
 </li>
 </ul>
 </li>

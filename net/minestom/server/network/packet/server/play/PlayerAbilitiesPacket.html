@@ -158,33 +158,38 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#allowFlying">allowFlying</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fieldViewModifier">fieldViewModifier</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FLAG_ALLOW_FLYING">FLAG_ALLOW_FLYING</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flying">flying</a></span></code></th>
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FLAG_FLYING">FLAG_FLYING</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FLAG_INSTANT_BREAK">FLAG_INSTANT_BREAK</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#FLAG_INVULNERABLE">FLAG_INVULNERABLE</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>byte</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flags">flags</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#flyingSpeed">flyingSpeed</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#instantBreak">instantBreak</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#invulnerable">invulnerable</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -206,6 +211,12 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">PlayerAbilitiesPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(byte,float,float)">PlayerAbilitiesPacket</a></span>&#8203;(byte&nbsp;flags,
+                     float&nbsp;flyingSpeed,
+                     float&nbsp;fieldViewModifier)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -271,40 +282,65 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="invulnerable">
+<a id="FLAG_INVULNERABLE">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>invulnerable</h4>
-<pre>public&nbsp;boolean invulnerable</pre>
+<h4>FLAG_INVULNERABLE</h4>
+<pre>public static final&nbsp;byte FLAG_INVULNERABLE</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket.FLAG_INVULNERABLE">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
-<a id="flying">
+<a id="FLAG_FLYING">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>flying</h4>
-<pre>public&nbsp;boolean flying</pre>
+<h4>FLAG_FLYING</h4>
+<pre>public static final&nbsp;byte FLAG_FLYING</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket.FLAG_FLYING">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
-<a id="allowFlying">
+<a id="FLAG_ALLOW_FLYING">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>allowFlying</h4>
-<pre>public&nbsp;boolean allowFlying</pre>
+<h4>FLAG_ALLOW_FLYING</h4>
+<pre>public static final&nbsp;byte FLAG_ALLOW_FLYING</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket.FLAG_ALLOW_FLYING">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
-<a id="instantBreak">
+<a id="FLAG_INSTANT_BREAK">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>instantBreak</h4>
-<pre>public&nbsp;boolean instantBreak</pre>
+<h4>FLAG_INSTANT_BREAK</h4>
+<pre>public static final&nbsp;byte FLAG_INSTANT_BREAK</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../../constant-values.html#net.minestom.server.network.packet.server.play.PlayerAbilitiesPacket.FLAG_INSTANT_BREAK">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a id="flags">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>flags</h4>
+<pre>public&nbsp;byte flags</pre>
 </li>
 </ul>
 <a id="flyingSpeed">
@@ -335,6 +371,17 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(byte,float,float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>PlayerAbilitiesPacket</h4>
+<pre>public&nbsp;PlayerAbilitiesPacket&#8203;(byte&nbsp;flags,
+                             float&nbsp;flyingSpeed,
+                             float&nbsp;fieldViewModifier)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>

@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":42,"i3":10,"i4":10,"i5":10,"i6":42};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -217,7 +217,7 @@ extends <a href="AbstractMinecartMeta.html" title="class in net.minestom.server.
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -234,37 +234,19 @@ extends <a href="AbstractMinecartMeta.html" title="class in net.minestom.server.
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getLastOutputJson()">getLastOutputJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getLastOutput()"><code>getLastOutput()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getObjectData()">getObjectData</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCommand(java.lang.String)">setCommand</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLastOutput(net.kyori.adventure.text.Component)">setLastOutput</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setLastOutput(net.minestom.server.chat.JsonMessage)">setLastOutput</a></span>&#8203;(@NotNull <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;value)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setLastOutput(net.kyori.adventure.text.Component)"><code>setLastOutput(Component)</code></a></div>
-</div>
-</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -279,7 +261,7 @@ extends <a href="AbstractMinecartMeta.html" title="class in net.minestom.server.
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.entity.metadata.<a href="../EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></h3>
-<code><a href="../EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="../EntityMeta.html#getCustomName()">getCustomName</a>, <a href="../EntityMeta.html#getCustomNameJson()">getCustomNameJson</a>, <a href="../EntityMeta.html#getMask(int)">getMask</a>, <a href="../EntityMeta.html#getMaskBit(int,byte)">getMaskBit</a>, <a href="../EntityMeta.html#getPose()">getPose</a>, <a href="../EntityMeta.html#getTickFrozen()">getTickFrozen</a>, <a href="../EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="../EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="../EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="../EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="../EntityMeta.html#isInvisible()">isInvisible</a>, <a href="../EntityMeta.html#isOnFire()">isOnFire</a>, <a href="../EntityMeta.html#isSilent()">isSilent</a>, <a href="../EntityMeta.html#isSneaking()">isSneaking</a>, <a href="../EntityMeta.html#isSprinting()">isSprinting</a>, <a href="../EntityMeta.html#isSwimming()">isSwimming</a>, <a href="../EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="../EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="../EntityMeta.html#setCustomName(net.minestom.server.chat.JsonMessage)">setCustomName</a>, <a href="../EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="../EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="../EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="../EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="../EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="../EntityMeta.html#setMask(int,byte)">setMask</a>, <a href="../EntityMeta.html#setMaskBit(int,byte,boolean)">setMaskBit</a>, <a href="../EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="../EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="../EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="../EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="../EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="../EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="../EntityMeta.html#setSwimming(boolean)">setSwimming</a>, <a href="../EntityMeta.html#setTickFrozen(int)">setTickFrozen</a></code></li>
+<code><a href="../EntityMeta.html#getAirTicks()">getAirTicks</a>, <a href="../EntityMeta.html#getCustomName()">getCustomName</a>, <a href="../EntityMeta.html#getMask(int)">getMask</a>, <a href="../EntityMeta.html#getMaskBit(int,byte)">getMaskBit</a>, <a href="../EntityMeta.html#getPose()">getPose</a>, <a href="../EntityMeta.html#getTickFrozen()">getTickFrozen</a>, <a href="../EntityMeta.html#isCustomNameVisible()">isCustomNameVisible</a>, <a href="../EntityMeta.html#isFlyingWithElytra()">isFlyingWithElytra</a>, <a href="../EntityMeta.html#isHasGlowingEffect()">isHasGlowingEffect</a>, <a href="../EntityMeta.html#isHasNoGravity()">isHasNoGravity</a>, <a href="../EntityMeta.html#isInvisible()">isInvisible</a>, <a href="../EntityMeta.html#isOnFire()">isOnFire</a>, <a href="../EntityMeta.html#isSilent()">isSilent</a>, <a href="../EntityMeta.html#isSneaking()">isSneaking</a>, <a href="../EntityMeta.html#isSprinting()">isSprinting</a>, <a href="../EntityMeta.html#isSwimming()">isSwimming</a>, <a href="../EntityMeta.html#setAirTicks(int)">setAirTicks</a>, <a href="../EntityMeta.html#setBoundingBox(double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setBoundingBox(double,double,double)">setBoundingBox</a>, <a href="../EntityMeta.html#setCustomName(net.kyori.adventure.text.Component)">setCustomName</a>, <a href="../EntityMeta.html#setCustomNameVisible(boolean)">setCustomNameVisible</a>, <a href="../EntityMeta.html#setFlyingWithElytra(boolean)">setFlyingWithElytra</a>, <a href="../EntityMeta.html#setHasGlowingEffect(boolean)">setHasGlowingEffect</a>, <a href="../EntityMeta.html#setHasNoGravity(boolean)">setHasNoGravity</a>, <a href="../EntityMeta.html#setInvisible(boolean)">setInvisible</a>, <a href="../EntityMeta.html#setMask(int,byte)">setMask</a>, <a href="../EntityMeta.html#setMaskBit(int,byte,boolean)">setMaskBit</a>, <a href="../EntityMeta.html#setNotifyAboutChanges(boolean)">setNotifyAboutChanges</a>, <a href="../EntityMeta.html#setOnFire(boolean)">setOnFire</a>, <a href="../EntityMeta.html#setPose(net.minestom.server.entity.Entity.Pose)">setPose</a>, <a href="../EntityMeta.html#setSilent(boolean)">setSilent</a>, <a href="../EntityMeta.html#setSneaking(boolean)">setSneaking</a>, <a href="../EntityMeta.html#setSprinting(boolean)">setSprinting</a>, <a href="../EntityMeta.html#setSwimming(boolean)">setSwimming</a>, <a href="../EntityMeta.html#setTickFrozen(int)">setTickFrozen</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -382,20 +364,6 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
                        @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;value)</pre>
 </li>
 </ul>
-<a id="getLastOutputJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getLastOutputJson</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-@NotNull
-public&nbsp;@NotNull <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getLastOutputJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getLastOutput()"><code>getLastOutput()</code></a></div>
-</div>
-</li>
-</ul>
 <a id="getLastOutput()">
 <!--   -->
 </a>
@@ -404,20 +372,6 @@ public&nbsp;@NotNull <a href="../../../chat/JsonMessage.html" title="class in ne
 <h4>getLastOutput</h4>
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;getLastOutput()</pre>
-</li>
-</ul>
-<a id="setLastOutput(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setLastOutput</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setLastOutput&#8203;(@NotNull
-                          @NotNull <a href="../../../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;value)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setLastOutput(net.kyori.adventure.text.Component)"><code>setLastOutput(Component)</code></a></div>
-</div>
 </li>
 </ul>
 <a id="setLastOutput(net.kyori.adventure.text.Component)">

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var data = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -130,7 +130,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">InventoryClickResult</span>
+<pre>public final class <span class="typeNameLabel">InventoryClickResult</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
 </li>
 </ul>
@@ -175,53 +175,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#doRefresh()">doRefresh</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getClicked()">getClicked</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCursor()">getCursor</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancel()">isCancel</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isPlayerInventory()">isPlayerInventory</a></span>()</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancel(boolean)">setCancel</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setClicked(net.minestom.server.item.ItemStack)">setClicked</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCursor(net.minestom.server.item.ItemStack)">setCursor</a></span>&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setPlayerInventory(boolean)">setPlayerInventory</a></span>&#8203;(boolean&nbsp;playerInventory)</code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setRefresh(boolean)">setRefresh</a></span>&#8203;(boolean&nbsp;refresh)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -277,15 +242,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getClicked()</pre>
 </li>
 </ul>
-<a id="setClicked(net.minestom.server.item.ItemStack)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setClicked</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setClicked&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;clicked)</pre>
-</li>
-</ul>
 <a id="getCursor()">
 <!--   -->
 </a>
@@ -295,67 +251,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">public&nbsp;<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;getCursor()</pre>
 </li>
 </ul>
-<a id="setCursor(net.minestom.server.item.ItemStack)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCursor</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setCursor&#8203;(<a href="../../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;cursor)</pre>
-</li>
-</ul>
-<a id="isPlayerInventory()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isPlayerInventory</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isPlayerInventory()</pre>
-</li>
-</ul>
-<a id="setPlayerInventory(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setPlayerInventory</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setPlayerInventory&#8203;(boolean&nbsp;playerInventory)</pre>
-</li>
-</ul>
 <a id="isCancel()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isCancel</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;isCancel()</pre>
-</li>
-</ul>
-<a id="setCancel(boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setCancel</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setCancel&#8203;(boolean&nbsp;cancel)</pre>
-</li>
-</ul>
-<a id="doRefresh()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>doRefresh</h4>
-<pre class="methodSignature">public&nbsp;boolean&nbsp;doRefresh()</pre>
-</li>
-</ul>
-<a id="setRefresh(boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>setRefresh</h4>
-<pre class="methodSignature">protected&nbsp;void&nbsp;setRefresh&#8203;(boolean&nbsp;refresh)</pre>
+<h4>isCancel</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isCancel()</pre>
 </li>
 </ul>
 </li>

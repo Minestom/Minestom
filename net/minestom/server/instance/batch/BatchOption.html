@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -199,16 +199,26 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setSendUpdate(boolean)">setSendUpdate</a></span>&#8203;(boolean&nbsp;sendUpdate)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setUnsafeApply(boolean)">setUnsafeApply</a></span>&#8203;(boolean&nbsp;unsafeApply)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldCalculateInverse()">shouldCalculateInverse</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.</div>
 </td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shouldSendUpdate()">shouldSendUpdate</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -315,6 +325,15 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </dl>
 </li>
 </ul>
+<a id="shouldSendUpdate()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>shouldSendUpdate</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;shouldSendUpdate()</pre>
+</li>
+</ul>
 <a id="setFullChunk(boolean)">
 <!--   -->
 </a>
@@ -356,7 +375,7 @@ public&nbsp;@NotNull <a href="BatchOption.html" title="class in net.minestom.ser
 <a id="setUnsafeApply(boolean)">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setUnsafeApply</h4>
 <pre class="methodSignature">@NotNull
@@ -371,6 +390,16 @@ public&nbsp;@NotNull <a href="BatchOption.html" title="class in net.minestom.ser
 <dd><a href="#isUnsafeApply()"><code>isUnsafeApply()</code></a>, 
 <a href="Batch.html#isReady()"><code>Batch.isReady()</code></a></dd>
 </dl>
+</li>
+</ul>
+<a id="setSendUpdate(boolean)">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setSendUpdate</h4>
+<pre class="methodSignature">@Contract("_ -&gt; this")
+public&nbsp;<a href="BatchOption.html" title="class in net.minestom.server.instance.batch">BatchOption</a>&nbsp;setSendUpdate&#8203;(boolean&nbsp;sendUpdate)</pre>
 </li>
 </ul>
 </li>

@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -131,12 +131,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 </dl>
 <hr>
 <pre>public class <span class="typeNameLabel">PlayerBlockInteractEvent</span>
 extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a>
-implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
+implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a>, <a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></pre>
 <div class="block">Called when a player interacts with a block (right-click).
  This is also called when a block is placed.</div>
 </li>
@@ -159,9 +159,10 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.BlockFace)">PlayerBlockInteractEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
-                        @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">PlayerBlockInteractEvent</a></span>&#8203;(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                         <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+                        @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                        @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
                         @NotNull <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -184,53 +185,58 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlock()">getBlock</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>@NotNull <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockFace()">getBlockFace</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the block face.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getBlockPosition()">getBlockPosition</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the position of the interacted block.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHand()">getHand</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the hand used for the interaction.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getPlayer()">getPlayer</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the player.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isBlockingItemUse()">isBlockingItemUse</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the event should block the item use.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isCancelled()">isCancelled</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBlockingItemUse(boolean)">setBlockingItemUse</a></span>&#8203;(boolean&nbsp;blocks)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setCancelled(boolean)">setCancelled</a></span>&#8203;(boolean&nbsp;cancel)</code></th>
 <td class="colLast">
@@ -268,7 +274,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.utils.BlockPosition,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.BlockFace)">
+<a id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Player.Hand,net.minestom.server.instance.block.Block,net.minestom.server.coordinate.Point,net.minestom.server.instance.block.BlockFace)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -277,9 +283,11 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <pre>public&nbsp;PlayerBlockInteractEvent&#8203;(@NotNull
                                 @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
                                 @NotNull
-                                @NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;blockPosition,
-                                @NotNull
                                 <a href="../../entity/Player.Hand.html" title="enum in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+                                @NotNull
+                                @NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block,
+                                @NotNull
+                                @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition,
                                 @NotNull
                                 @NotNull <a href="../../instance/block/BlockFace.html" title="enum in net.minestom.server.instance.block">BlockFace</a>&nbsp;blockFace)</pre>
 </li>
@@ -317,6 +325,20 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <pre class="methodSignature">public&nbsp;void&nbsp;setBlockingItemUse&#8203;(boolean&nbsp;blocks)</pre>
 </li>
 </ul>
+<a id="getBlock()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBlock</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;getBlock()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../trait/BlockEvent.html#getBlock()">getBlock</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/BlockEvent.html" title="interface in net.minestom.server.event.trait">BlockEvent</a></code></dd>
+</dl>
+</li>
+</ul>
 <a id="getBlockPosition()">
 <!--   -->
 </a>
@@ -324,7 +346,7 @@ implements <a href="../trait/PlayerEvent.html" title="interface in net.minestom.
 <li class="blockList">
 <h4>getBlockPosition</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&nbsp;getBlockPosition()</pre>
+public&nbsp;@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;getBlockPosition()</pre>
 <div class="block">Gets the position of the interacted block.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

@@ -208,7 +208,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#postExplosion(net.minestom.server.instance.Instance,java.util.List,net.minestom.server.network.packet.server.play.ExplosionPacket)">postExplosion</a></span>&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;&nbsp;blocks,
+             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;&nbsp;blocks,
              <a href="../network/packet/server/play/ExplosionPacket.html" title="class in net.minestom.server.network.packet.server.play">ExplosionPacket</a>&nbsp;packet)</code></th>
 <td class="colLast">
 <div class="block">Called after removing blocks and preparing the packet, but before sending it.</div>
@@ -217,13 +217,13 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#postSend(net.minestom.server.instance.Instance,java.util.List)">postSend</a></span>&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;&nbsp;blocks)</code></th>
+        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;&nbsp;blocks)</code></th>
 <td class="colLast">
 <div class="block">Called after sending the explosion packet.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code>protected abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;</code></td>
+<td class="colFirst"><code>protected abstract <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#prepare(net.minestom.server.instance.Instance)">prepare</a></span>&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></th>
 <td class="colLast">
 <div class="block">Prepares the list of blocks that will be broken.</div>
@@ -317,7 +317,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <ul class="blockList">
 <li class="blockList">
 <h4>prepare</h4>
-<pre class="methodSignature">protected abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;&nbsp;prepare&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
+<pre class="methodSignature">protected abstract&nbsp;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;&nbsp;prepare&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</pre>
 <div class="block">Prepares the list of blocks that will be broken. Also pushes and damage entities affected by this explosion</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -349,7 +349,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>postExplosion</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;postExplosion&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;&nbsp;blocks,
+                             <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;&nbsp;blocks,
                              <a href="../network/packet/server/play/ExplosionPacket.html" title="class in net.minestom.server.network.packet.server.play">ExplosionPacket</a>&nbsp;packet)</pre>
 <div class="block">Called after removing blocks and preparing the packet, but before sending it.</div>
 <dl>
@@ -370,7 +370,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>postSend</h4>
 <pre class="methodSignature">protected&nbsp;void&nbsp;postSend&#8203;(<a href="Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a>&gt;&nbsp;blocks)</pre>
+                        <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;&nbsp;blocks)</pre>
 <div class="block">Called after sending the explosion packet. Can be used to (re)set blocks that have been destroyed.
  This is necessary to do after the packet being sent, because the client sets the positions received to air.</div>
 <dl>

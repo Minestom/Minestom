@@ -173,7 +173,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a></code></td>
+<td class="colFirst"><code><a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#position">position</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -196,6 +196,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">EffectPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(int,net.minestom.server.coordinate.Point,int,boolean)">EffectPacket</a></span>&#8203;(int&nbsp;effectId,
+            <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+            int&nbsp;data,
+            boolean&nbsp;disableRelativeVolume)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -276,7 +283,7 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <ul class="blockList">
 <li class="blockList">
 <h4>position</h4>
-<pre>public&nbsp;<a href="../../../../utils/BlockPosition.html" title="class in net.minestom.server.utils">BlockPosition</a> position</pre>
+<pre>public&nbsp;<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> position</pre>
 </li>
 </ul>
 <a id="data">
@@ -307,6 +314,18 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(int,net.minestom.server.coordinate.Point,int,boolean)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>EffectPacket</h4>
+<pre>public&nbsp;EffectPacket&#8203;(int&nbsp;effectId,
+                    <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+                    int&nbsp;data,
+                    boolean&nbsp;disableRelativeVolume)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>

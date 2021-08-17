@@ -209,12 +209,12 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#find(net.minestom.server.command.CommandSender)">find</a></span>&#8203;(@NotNull <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
+<td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#find(net.minestom.server.instance.Instance,net.minestom.server.entity.Entity)">find</a></span>&#8203;(@Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
     @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;self)</code></th>
 <td class="colLast">
@@ -270,7 +270,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntity(net.minestom.server.entity.EntityType,net.minestom.server.utils.entity.EntityFinder.ToggleableType)">setEntity</a></span>&#8203;(@NotNull <a href="../../entity/EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setEntity(net.minestom.server.entity.EntityType,net.minestom.server.utils.entity.EntityFinder.ToggleableType)">setEntity</a></span>&#8203;(@NotNull <a href="../../entity/EntityType.html" title="interface in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
          @NotNull <a href="EntityFinder.ToggleableType.html" title="enum in net.minestom.server.utils.entity">EntityFinder.ToggleableType</a>&nbsp;toggleableType)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -303,7 +303,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStartPosition(net.minestom.server.utils.Position)">setStartPosition</a></span>&#8203;(@NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;startPosition)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setStartPosition(net.minestom.server.coordinate.Point)">setStartPosition</a></span>&#8203;(@NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;startPosition)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
@@ -380,14 +380,14 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
                                   @NotNull <a href="EntityFinder.EntitySort.html" title="enum in net.minestom.server.utils.entity">EntityFinder.EntitySort</a>&nbsp;entitySort)</pre>
 </li>
 </ul>
-<a id="setStartPosition(net.minestom.server.utils.Position)">
+<a id="setStartPosition(net.minestom.server.coordinate.Point)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setStartPosition</h4>
 <pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setStartPosition&#8203;(@NotNull
-                                     @NotNull <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;startPosition)</pre>
+                                     @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;startPosition)</pre>
 </li>
 </ul>
 <a id="setDistance(net.minestom.server.utils.math.IntRange)">
@@ -426,7 +426,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>setEntity</h4>
 <pre class="methodSignature">public&nbsp;<a href="EntityFinder.html" title="class in net.minestom.server.utils.entity">EntityFinder</a>&nbsp;setEntity&#8203;(@NotNull
-                              @NotNull <a href="../../entity/EntityType.html" title="enum in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+                              @NotNull <a href="../../entity/EntityType.html" title="interface in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
                               @NotNull
                               @NotNull <a href="EntityFinder.ToggleableType.html" title="enum in net.minestom.server.utils.entity">EntityFinder.ToggleableType</a>&nbsp;toggleableType)</pre>
 </li>
@@ -505,10 +505,10 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <li class="blockList">
 <h4>find</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;find&#8203;(@Nullable
-                                  @Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
-                                  @Nullable
-                                  @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;self)</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;find&#8203;(@Nullable
+                                           @Nullable <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+                                           @Nullable
+                                           @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;self)</pre>
 <div class="block">Find a list of entities (could be empty) based on the conditions</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -527,8 +527,8 @@ public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api
 <li class="blockList">
 <h4>find</h4>
 <pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;<a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;find&#8203;(@NotNull
-                                  @NotNull <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</pre>
+public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/List.html?is-external=true" title="class or interface in java.util" class="externalLink">List</a>&lt;@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&gt;&nbsp;find&#8203;(@NotNull
+                                           @NotNull <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</pre>
 </li>
 </ul>
 <a id="findFirstPlayer(net.minestom.server.instance.Instance,net.minestom.server.entity.Entity)">

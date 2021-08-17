@@ -163,18 +163,8 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#x">x</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#y">y</a></span></code></th>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>int</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#z">z</a></span></code></th>
+<td class="colFirst"><code><a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#position">position</a></span></code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -196,6 +186,11 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E()">SpawnPositionPacket</a></span>()</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,float)">SpawnPositionPacket</a></span>&#8203;(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+                   float&nbsp;angle)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
@@ -261,31 +256,13 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a id="x">
+<a id="position">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>x</h4>
-<pre>public&nbsp;int x</pre>
-</li>
-</ul>
-<a id="y">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>y</h4>
-<pre>public&nbsp;int y</pre>
-</li>
-</ul>
-<a id="z">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>z</h4>
-<pre>public&nbsp;int z</pre>
+<h4>position</h4>
+<pre>public&nbsp;<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> position</pre>
 </li>
 </ul>
 <a id="angle">
@@ -307,6 +284,16 @@ implements <a href="../ServerPacket.html" title="interface in net.minestom.serve
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Point,float)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SpawnPositionPacket</h4>
+<pre>public&nbsp;SpawnPositionPacket&#8203;(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
+                           float&nbsp;angle)</pre>
+</li>
+</ul>
 <a id="&lt;init&gt;()">
 <!--   -->
 </a>

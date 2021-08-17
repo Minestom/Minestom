@@ -125,7 +125,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;T&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentRegistry</a>&lt;<a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a>&gt;</li>
+<li><a href="ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentRegistry</a>&lt;<a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle</li>
@@ -141,8 +141,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">ArgumentParticle</span>
-extends <a href="ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a>&lt;<a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a>&gt;</pre>
-<div class="block">Represents an argument giving a <a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle"><code>Particle</code></a>.</div>
+extends <a href="ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a>&lt;<a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&gt;</pre>
+<div class="block">Represents an argument giving a <a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle"><code>Particle</code></a>.</div>
 </li>
 </ul>
 </div>
@@ -209,7 +209,7 @@ extends <a href="ArgumentRegistry.html" title="class in net.minestom.server.comm
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a></code></td>
+<td class="colFirst"><code><a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getRegistry(java.lang.String)">getRegistry</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;value)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -239,7 +239,7 @@ extends <a href="ArgumentRegistry.html" title="class in net.minestom.server.comm
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../../Argument.html#allowSpace()">allowSpace</a>, <a href="../../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../../Argument.html#getCallback()">getCallback</a>, <a href="../../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../../Argument.html#getId()">getId</a>, <a href="../../Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="../../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../../Argument.html#hashCode()">hashCode</a>, <a href="../../Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="../../Argument.html#isOptional()">isOptional</a>, <a href="../../Argument.html#map(net.minestom.server.command.builder.arguments.ArgumentMap.Mapper)">map</a>, <a href="../../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../../Argument.html#setDefaultValue(java.util.function.Supplier)">setDefaultValue</a>, <a href="../../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../../Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="../../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../../Argument.html#useRemaining()">useRemaining</a></code></li>
+<code><a href="../../Argument.html#allowSpace()">allowSpace</a>, <a href="../../Argument.html#equals(java.lang.Object)">equals</a>, <a href="../../Argument.html#filter(java.util.function.Predicate)">filter</a>, <a href="../../Argument.html#getCallback()">getCallback</a>, <a href="../../Argument.html#getDefaultValue()">getDefaultValue</a>, <a href="../../Argument.html#getId()">getId</a>, <a href="../../Argument.html#getSuggestionCallback()">getSuggestionCallback</a>, <a href="../../Argument.html#hasErrorCallback()">hasErrorCallback</a>, <a href="../../Argument.html#hashCode()">hashCode</a>, <a href="../../Argument.html#hasSuggestion()">hasSuggestion</a>, <a href="../../Argument.html#isOptional()">isOptional</a>, <a href="../../Argument.html#map(java.util.function.Function)">map</a>, <a href="../../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)">parse</a>, <a href="../../Argument.html#setCallback(net.minestom.server.command.builder.ArgumentCallback)">setCallback</a>, <a href="../../Argument.html#setDefaultValue(java.util.function.Supplier)">setDefaultValue</a>, <a href="../../Argument.html#setDefaultValue(T)">setDefaultValue</a>, <a href="../../Argument.html#setSuggestionCallback(net.minestom.server.command.builder.suggestion.SuggestionCallback)">setSuggestionCallback</a>, <a href="../../Argument.html#simpleArgumentNode(net.minestom.server.command.builder.arguments.Argument,boolean,boolean,boolean)">simpleArgumentNode</a>, <a href="../../Argument.html#useRemaining()">useRemaining</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
@@ -289,11 +289,11 @@ extends <a href="ArgumentRegistry.html" title="class in net.minestom.server.comm
 <ul class="blockList">
 <li class="blockList">
 <h4>getRegistry</h4>
-<pre class="methodSignature">public&nbsp;<a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a>&nbsp;getRegistry&#8203;(@NotNull
+<pre class="methodSignature">public&nbsp;<a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;getRegistry&#8203;(@NotNull
                             @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;value)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="ArgumentRegistry.html#getRegistry(java.lang.String)">getRegistry</a></code>&nbsp;in class&nbsp;<code><a href="ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a>&lt;<a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a>&gt;</code></dd>
+<dd><code><a href="ArgumentRegistry.html#getRegistry(java.lang.String)">getRegistry</a></code>&nbsp;in class&nbsp;<code><a href="ArgumentRegistry.html" title="class in net.minestom.server.command.builder.arguments.minecraft.registry">ArgumentRegistry</a>&lt;<a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -310,7 +310,7 @@ extends <a href="ArgumentRegistry.html" title="class in net.minestom.server.comm
 <div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../../particle/Particle.html" title="enum in net.minestom.server.particle">Particle</a>&gt;</code></dd>
+<dd><code><a href="../../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
 <dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>

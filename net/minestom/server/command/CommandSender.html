@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18,"i6":50};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":18,"i1":18,"i2":18,"i3":18,"i4":18,"i5":18};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],16:["t5","Default Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -149,7 +149,7 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t5" class="tableTab"><span><a href="javascript:show(16);">Default Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -195,15 +195,6 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(java.lang.String%5B%5D)">sendMessage</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a> @NotNull []&nbsp;messages)</code></th>
 <td class="colLast">
 <div class="block">Sends multiple raw string messages.</div>
-</td>
-</tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code>default void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#sendMessage(net.minestom.server.chat.JsonMessage)">sendMessage</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
-</div>
 </td>
 </tr>
 </table>
@@ -285,26 +276,6 @@ extends <a href="../permission/PermissionHandler.html" title="interface in net.m
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>messages</code> - the messages to send</dd>
-</dl>
-</li>
-</ul>
-<a id="sendMessage(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>sendMessage</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-default&nbsp;void&nbsp;sendMessage&#8203;(@NotNull
-                         @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;text)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/audience/Audience.html?is-external=true#sendMessage(net.kyori.adventure.text.Component)" title="class or interface in net.kyori.adventure.audience" class="externalLink"><code>Audience.sendMessage(Component)</code></a></div>
-</div>
-<div class="block">Sends a <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> message.
- If this is not a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>, only the content of the message will be sent as a string.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>text</code> - The <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat"><code>JsonMessage</code></a> to send.</dd>
 </dl>
 </li>
 </ul>

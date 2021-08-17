@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":42,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":42,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":42,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":42,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -184,7 +184,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;title,
            @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description,
-           @NotNull <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
+           @NotNull <a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;icon,
            @NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
            float&nbsp;x,
            float&nbsp;y)</code></th>
@@ -199,32 +199,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
            float&nbsp;y)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-           @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
-           @NotNull <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
-           @NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
-           float&nbsp;x,
-           float&nbsp;y)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)"><code>Advancement(Component, Component, Material, FrameType, float, float)</code></a></div>
-</div>
-</td>
-</tr>
-<tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">Advancement</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-           <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
-           @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon,
-           @NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
-           float&nbsp;x,
-           float&nbsp;y)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)"><code>Advancement(Component, Component, ItemStack, FrameType, float, float)</code></a></div>
-</div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -237,7 +211,7 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
@@ -251,29 +225,20 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDescriptionJson()">getDescriptionJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getDescription()"><code>getDescription()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getFrameType()">getFrameType</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the advancement frame type.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIcon()">getIcon</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the advancement icon.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getIdentifier()">getIdentifier</a></span>()</code></th>
 <td class="colLast">
@@ -281,204 +246,177 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
  in the <a href="AdvancementTab.html" title="class in net.minestom.server.advancements"><code>AdvancementTab</code></a>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>protected @Nullable <a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getParent()">getParent</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the advancement parent.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>@Nullable <a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTab()">getTab</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the advancement tab linked to this advancement.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitle()">getTitle</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the title of the advancement.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getTitleJson()">getTitleJson</a></span>()</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getTitle()"><code>getTitle()</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/AdvancementsPacket.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getUpdatePacket()">getUpdatePacket</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the packet used to add this advancement to the already existing tab.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getX()">getX</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the X position of this advancement.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getY()">getY</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets the Y position of this advancement.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasToast()">hasToast</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if this advancement has a toast.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isAchieved()">isAchieved</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Gets if the advancement is achieved.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isHidden()">isHidden</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setAchieved(boolean)">setAchieved</a></span>&#8203;(boolean&nbsp;achieved)</code></th>
 <td class="colLast">
 <div class="block">Makes the advancement achieved.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setBackground(java.lang.String)">setBackground</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;background)</code></th>
 <td class="colLast">
 <div class="block">Sets the background.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.kyori.adventure.text.Component)">setDescription</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</code></th>
 <td class="colLast">
 <div class="block">Changes the description title.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setDescription(net.minestom.server.chat.JsonMessage)">setDescription</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setDescription(net.kyori.adventure.text.Component)"><code>setDescription(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i19" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setFrameType(net.minestom.server.advancements.FrameType)">setFrameType</a></span>&#8203;(<a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType)</code></th>
 <td class="colLast">
 <div class="block">Changes the advancement frame type.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setHidden(boolean)">setHidden</a></span>&#8203;(boolean&nbsp;hidden)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setIcon(net.minestom.server.item.ItemStack)">setIcon</a></span>&#8203;(@NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon)</code></th>
 <td class="colLast">
 <div class="block">Changes the advancement icon.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setIdentifier(java.lang.String)">setIdentifier</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;identifier)</code></th>
 <td class="colLast">
 <div class="block">Changes the advancement identifier.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setParent(net.minestom.server.advancements.Advancement)">setParent</a></span>&#8203;(<a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a>&nbsp;parent)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTab(net.minestom.server.advancements.AdvancementTab)">setTab</a></span>&#8203;(@NotNull <a href="AdvancementTab.html" title="class in net.minestom.server.advancements">AdvancementTab</a>&nbsp;tab)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(net.kyori.adventure.text.Component)">setTitle</a></span>&#8203;(@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;title)</code></th>
 <td class="colLast">
 <div class="block">Changes the advancement title.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setTitle(net.minestom.server.chat.JsonMessage)">setTitle</a></span>&#8203;(@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setTitle(net.kyori.adventure.text.Component)"><code>setTitle(Component)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i27" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setX(float)">setX</a></span>&#8203;(float&nbsp;x)</code></th>
 <td class="colLast">
 <div class="block">Changes this advancement X coordinate.</div>
 </td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#setY(float)">setY</a></span>&#8203;(float&nbsp;y)</code></th>
 <td class="colLast">
 <div class="block">Changes this advancement Y coordinate.</div>
 </td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="Advancement.html" title="class in net.minestom.server.advancements">Advancement</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#showToast(boolean)">showToast</a></span>&#8203;(boolean&nbsp;toast)</code></th>
 <td class="colLast">
 <div class="block">Makes this argument a toast.</div>
 </td>
 </tr>
-<tr id="i30" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/AdvancementsPacket.DisplayData.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.DisplayData</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toDisplayData()">toDisplayData</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i31" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.AdvancementMapping</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toMapping()">toMapping</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Converts this advancement to an <a href="../network/packet/server/play/AdvancementsPacket.AdvancementMapping.html" title="class in net.minestom.server.network.packet.server.play"><code>AdvancementsPacket.AdvancementMapping</code></a>.</div>
 </td>
 </tr>
-<tr id="i32" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>protected <a href="../network/packet/server/play/AdvancementsPacket.ProgressMapping.html" title="class in net.minestom.server.network.packet.server.play">AdvancementsPacket.ProgressMapping</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toProgressMapping()">toProgressMapping</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i33" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#update()">update</a></span>()</code></th>
 <td class="colLast">
 <div class="block">Sends update to all tab viewers if one of the advancement value changes.</div>
 </td>
 </tr>
-<tr id="i34" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#updateCriteria()">updateCriteria</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
@@ -526,49 +464,6 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>Advancement</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;Advancement&#8203;(@NotNull
-                   @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-                   <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
-                   @NotNull
-                   @NotNull <a href="../item/ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;icon,
-                   @NotNull
-                   @NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
-                   float&nbsp;x,
-                   float&nbsp;y)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)"><code>Advancement(Component, Component, ItemStack, FrameType, float, float)</code></a></div>
-</div>
-</li>
-</ul>
-<a id="&lt;init&gt;(net.minestom.server.chat.JsonMessage,net.minestom.server.chat.JsonMessage,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>Advancement</h4>
-<pre><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;Advancement&#8203;(@NotNull
-                   @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title,
-                   @NotNull
-                   @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description,
-                   @NotNull
-                   @NotNull <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
-                   @NotNull
-                   @NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
-                   float&nbsp;x,
-                   float&nbsp;y)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#%3Cinit%3E(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.item.Material,net.minestom.server.advancements.FrameType,float,float)"><code>Advancement(Component, Component, Material, FrameType, float, float)</code></a></div>
-</div>
-</li>
-</ul>
 <a id="&lt;init&gt;(net.kyori.adventure.text.Component,net.kyori.adventure.text.Component,net.minestom.server.item.ItemStack,net.minestom.server.advancements.FrameType,float,float)">
 <!--   -->
 </a>
@@ -597,7 +492,7 @@ public&nbsp;Advancement&#8203;(@NotNull
                    @NotNull
                    @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description,
                    @NotNull
-                   @NotNull <a href="../item/Material.html" title="enum in net.minestom.server.item">Material</a>&nbsp;icon,
+                   @NotNull <a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;icon,
                    @NotNull
                    @NotNull <a href="FrameType.html" title="enum in net.minestom.server.advancements">FrameType</a>&nbsp;frameType,
                    float&nbsp;x,
@@ -683,25 +578,6 @@ public&nbsp;@Nullable <a href="AdvancementTab.html" title="class in net.minestom
 </dl>
 </li>
 </ul>
-<a id="getTitleJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTitleJson</h4>
-<pre class="methodSignature">@NotNull
-<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getTitleJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getTitle()"><code>getTitle()</code></a></div>
-</div>
-<div class="block">Gets the title of the advancement.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the advancement title</dd>
-</dl>
-</li>
-</ul>
 <a id="setTitle(net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -710,25 +586,6 @@ public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.mine
 <h4>setTitle</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setTitle&#8203;(@NotNull
                      @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;title)</pre>
-<div class="block">Changes the advancement title.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>title</code> - the new title</dd>
-</dl>
-</li>
-</ul>
-<a id="setTitle(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setTitle</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setTitle&#8203;(@NotNull
-                     @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;title)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setTitle(net.kyori.adventure.text.Component)"><code>setTitle(Component)</code></a></div>
-</div>
 <div class="block">Changes the advancement title.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -751,25 +608,6 @@ public&nbsp;@NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori
 </dl>
 </li>
 </ul>
-<a id="getDescriptionJson()">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDescriptionJson</h4>
-<pre class="methodSignature">@NotNull
-<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;getDescriptionJson()</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#getDescription()"><code>getDescription()</code></a></div>
-</div>
-<div class="block">Gets the description of the advancement.</div>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the description title</dd>
-</dl>
-</li>
-</ul>
 <a id="setDescription(net.kyori.adventure.text.Component)">
 <!--   -->
 </a>
@@ -778,25 +616,6 @@ public&nbsp;@NotNull <a href="../chat/JsonMessage.html" title="class in net.mine
 <h4>setDescription</h4>
 <pre class="methodSignature">public&nbsp;void&nbsp;setDescription&#8203;(@NotNull
                            @NotNull <a href="https://jd.adventure.kyori.net/api/4.8.1/net/kyori/adventure/text/Component.html?is-external=true" title="class or interface in net.kyori.adventure.text" class="externalLink">Component</a>&nbsp;description)</pre>
-<div class="block">Changes the description title.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>description</code> - the new description</dd>
-</dl>
-</li>
-</ul>
-<a id="setDescription(net.minestom.server.chat.JsonMessage)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setDescription</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-public&nbsp;void&nbsp;setDescription&#8203;(@NotNull
-                           @NotNull <a href="../chat/JsonMessage.html" title="class in net.minestom.server.chat">JsonMessage</a>&nbsp;description)</pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">Use <a href="#setDescription(net.kyori.adventure.text.Component)"><code>setDescription(Component)</code></a></div>
-</div>
 <div class="block">Changes the description title.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>

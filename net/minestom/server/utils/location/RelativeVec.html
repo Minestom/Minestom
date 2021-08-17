@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -87,8 +87,8 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -122,12 +122,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">net.minestom.server.utils.location.RelativeLocation</a>&lt;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&gt;</li>
-<li>
-<ul class="inheritance">
 <li>net.minestom.server.utils.location.RelativeVec</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -135,33 +130,35 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <ul class="blockList">
 <li class="blockList">
 <hr>
-<pre>public class <span class="typeNameLabel">RelativeVec</span>
-extends <a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a>&lt;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&gt;</pre>
-<div class="block">Represents a relative <a href="../Vector.html" title="class in net.minestom.server.utils"><code>Vector</code></a>.</div>
-<dl>
-<dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="RelativeLocation.html" title="class in net.minestom.server.utils.location"><code>RelativeLocation</code></a></dd>
-</dl>
+<pre>public final class <span class="typeNameLabel">RelativeVec</span>
+extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Object.html?is-external=true" title="class or interface in java.lang" class="externalLink">Object</a></pre>
+<div class="block">Represents a location which can have fields relative to an <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
+<!-- ======== NESTED CLASS SUMMARY ======== -->
 <section role="region">
 <ul class="blockList">
-<li class="blockList"><a id="field.summary">
+<li class="blockList"><a id="nested.class.summary">
 <!--   -->
 </a>
-<h3>Field Summary</h3>
-<ul class="blockList">
-<li class="blockList"><a id="fields.inherited.from.class.net.minestom.server.utils.location.RelativeLocation">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;net.minestom.server.utils.location.<a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a></h3>
-<code><a href="RelativeLocation.html#location">location</a>, <a href="RelativeLocation.html#relativeX">relativeX</a>, <a href="RelativeLocation.html#relativeY">relativeY</a>, <a href="RelativeLocation.html#relativeZ">relativeZ</a></code></li>
-</ul>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Class</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="RelativeVec.CoordinateType.html" title="enum in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></span></code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+</table>
 </li>
 </ul>
 </section>
@@ -179,7 +176,8 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr class="altColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.utils.Vector,boolean,boolean,boolean)">RelativeVec</a></span>&#8203;(<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;location,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(net.minestom.server.coordinate.Vec,net.minestom.server.utils.location.RelativeVec.CoordinateType,boolean,boolean,boolean)">RelativeVec</a></span>&#8203;(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;vec,
+           @NotNull <a href="RelativeVec.CoordinateType.html" title="enum in net.minestom.server.utils.location">RelativeVec.CoordinateType</a>&nbsp;coordinateType,
            boolean&nbsp;relativeX,
            boolean&nbsp;relativeY,
            boolean&nbsp;relativeZ)</code></th>
@@ -204,25 +202,56 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.utils.Position)">from</a></span>&#8203;(@Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.coordinate.Pos)">from</a></span>&#8203;(@Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;origin)</code></th>
 <td class="colLast">
 <div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromView(net.minestom.server.utils.Position)">fromView</a></span>&#8203;(@Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</code></th>
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#from(net.minestom.server.entity.Entity)">from</a></span>&#8203;(@Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<td class="colLast">
+<div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromSender(net.minestom.server.command.CommandSender)">fromSender</a></span>&#8203;(@Nullable <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromView(net.minestom.server.coordinate.Pos)">fromView</a></span>&#8203;(@Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;point)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#fromView(net.minestom.server.entity.Entity)">fromView</a></span>&#8203;(@Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeX()">isRelativeX</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the 'x' field is relative.</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeY()">isRelativeY</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the 'y' field is relative.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRelativeZ()">isRelativeZ</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if the 'z' field is relative.</div>
+</td>
+</tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.utils.location.RelativeLocation">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;net.minestom.server.utils.location.<a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a></h3>
-<code><a href="RelativeLocation.html#from(net.minestom.server.entity.Entity)">from</a>, <a href="RelativeLocation.html#fromView(net.minestom.server.entity.Entity)">fromView</a>, <a href="RelativeLocation.html#isRelativeX()">isRelativeX</a>, <a href="RelativeLocation.html#isRelativeY()">isRelativeY</a>, <a href="RelativeLocation.html#isRelativeZ()">isRelativeZ</a></code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -246,13 +275,16 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(net.minestom.server.utils.Vector,boolean,boolean,boolean)">
+<a id="&lt;init&gt;(net.minestom.server.coordinate.Vec,net.minestom.server.utils.location.RelativeVec.CoordinateType,boolean,boolean,boolean)">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RelativeVec</h4>
-<pre>public&nbsp;RelativeVec&#8203;(<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;location,
+<pre>public&nbsp;RelativeVec&#8203;(@NotNull
+                   @NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;vec,
+                   @NotNull
+                   @NotNull <a href="RelativeVec.CoordinateType.html" title="enum in net.minestom.server.utils.location">RelativeVec.CoordinateType</a>&nbsp;coordinateType,
                    boolean&nbsp;relativeX,
                    boolean&nbsp;relativeY,
                    boolean&nbsp;relativeZ)</pre>
@@ -268,37 +300,115 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="from(net.minestom.server.utils.Position)">
+<a id="from(net.minestom.server.coordinate.Pos)">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>from</h4>
-<pre class="methodSignature">public&nbsp;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;from&#8203;(@Nullable
-                   @Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="RelativeLocation.html#from(net.minestom.server.utils.Position)">RelativeLocation</a></code></span></div>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;from&#8203;(@Nullable
+                         @Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;origin)</pre>
 <div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="RelativeLocation.html#from(net.minestom.server.utils.Position)">from</a></code>&nbsp;in class&nbsp;<code><a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a>&lt;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>position</code> - the relative position</dd>
+<dd><code>origin</code> - the origin position, null if none</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the location</dd>
 </dl>
 </li>
 </ul>
-<a id="fromView(net.minestom.server.utils.Position)">
+<a id="fromView(net.minestom.server.coordinate.Pos)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromView</h4>
+<pre class="methodSignature">@Experimental
+public&nbsp;<a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;fromView&#8203;(@Nullable
+                    @Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;point)</pre>
+</li>
+</ul>
+<a id="from(net.minestom.server.entity.Entity)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>from</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;from&#8203;(@Nullable
+                         @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+<div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entity</code> - the entity to get the relative position from</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the location</dd>
+</dl>
+</li>
+</ul>
+<a id="fromSender(net.minestom.server.command.CommandSender)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromSender</h4>
+<pre class="methodSignature">@NotNull
+public&nbsp;@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;fromSender&#8203;(@Nullable
+                               @Nullable <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</pre>
+</li>
+</ul>
+<a id="fromView(net.minestom.server.entity.Entity)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>fromView</h4>
+<pre class="methodSignature">@Experimental
+@NotNull
+public&nbsp;@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;fromView&#8203;(@Nullable
+                             @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</pre>
+</li>
+</ul>
+<a id="isRelativeX()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isRelativeX</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isRelativeX()</pre>
+<div class="block">Gets if the 'x' field is relative.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the 'x' field is relative</dd>
+</dl>
+</li>
+</ul>
+<a id="isRelativeY()">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isRelativeY</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isRelativeY()</pre>
+<div class="block">Gets if the 'y' field is relative.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the 'y' field is relative</dd>
+</dl>
+</li>
+</ul>
+<a id="isRelativeZ()">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>fromView</h4>
-<pre class="methodSignature">public&nbsp;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&nbsp;fromView&#8203;(@Nullable
-                       @Nullable <a href="../Position.html" title="class in net.minestom.server.utils">Position</a>&nbsp;position)</pre>
+<h4>isRelativeZ</h4>
+<pre class="methodSignature">public&nbsp;boolean&nbsp;isRelativeZ()</pre>
+<div class="block">Gets if the 'z' field is relative.</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="RelativeLocation.html#fromView(net.minestom.server.utils.Position)">fromView</a></code>&nbsp;in class&nbsp;<code><a href="RelativeLocation.html" title="class in net.minestom.server.utils.location">RelativeLocation</a>&lt;<a href="../Vector.html" title="class in net.minestom.server.utils">Vector</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the 'z' field is relative</dd>
 </dl>
 </li>
 </ul>
@@ -353,8 +463,8 @@ extends <a href="RelativeLocation.html" title="class in net.minestom.server.util
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
