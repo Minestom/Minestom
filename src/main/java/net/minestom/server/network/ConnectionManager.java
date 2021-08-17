@@ -293,9 +293,7 @@ public final class ConnectionManager {
             EventDispatcher.call(asyncPlayerPreLoginEvent);
             // Close the player channel if he has been disconnected (kick)
             if (!player.isOnline()) {
-                if (playerConnection instanceof PlayerSocketConnection) {
-                    ((PlayerSocketConnection) playerConnection).flush();
-                }
+                playerConnection.flush();
                 //playerConnection.disconnect();
                 return;
             }

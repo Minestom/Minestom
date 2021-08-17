@@ -7,7 +7,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.SingleThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
 import org.jetbrains.annotations.NotNull;
@@ -83,10 +82,7 @@ public final class UpdateManager {
 
                     // Flush all waiting packets
                     for (Player player : connectionManager.getOnlinePlayers()) {
-                        final var connection = player.getPlayerConnection();
-                        if (connection instanceof PlayerSocketConnection) {
-                            ((PlayerSocketConnection) connection).flush();
-                        }
+                        player.getPlayerConnection().flush();
                     }
 
                     // Disable thread until next tick

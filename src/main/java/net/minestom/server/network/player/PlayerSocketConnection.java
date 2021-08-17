@@ -252,6 +252,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
     }
 
+    @Override
     public void flush() {
         if (!channel.isOpen()) return;
         synchronized (tickBuffer) {

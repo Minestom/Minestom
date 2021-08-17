@@ -50,9 +50,8 @@ public abstract class PlayerConnection {
             if (tickCounter % MinecraftServer.TICK_PER_SECOND == 0 && tickCounter > 0) {
                 tickCounter = 0;
                 // Retrieve the packet count
-                final int count = packetCounter.get();
+                final int count = packetCounter.getAndSet(0);
                 this.lastPacketCounter.set(count);
-                this.packetCounter.set(0);
                 if (count > MinecraftServer.getRateLimit()) {
                     // Sent too many packets
                     player.kick(rateLimitKickMessage);
@@ -100,6 +99,15 @@ public abstract class PlayerConnection {
      * @see #shouldSendPacket(ServerPacket)
      */
     public abstract void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating);
+
+    /**
+     * Flush waiting data to the connection.
+     * <p>
+     * Might not do anything depending on the implementation.
+     */
+    public void flush() {
+        // Empty
+    }
 
     protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
         return player == null ||

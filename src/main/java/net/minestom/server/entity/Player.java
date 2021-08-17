@@ -571,9 +571,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         EventDispatcher.call(spawnEvent);
 
-        if (playerConnection instanceof PlayerSocketConnection) {
-            ((PlayerSocketConnection) playerConnection).flush();
-        }
+        this.playerConnection.flush();
     }
 
     /**
