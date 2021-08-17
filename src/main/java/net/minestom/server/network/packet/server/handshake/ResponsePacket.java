@@ -13,6 +13,10 @@ public class ResponsePacket implements ServerPacket {
         this.jsonResponse = jsonResponse;
     }
 
+    public ResponsePacket() {
+        this("");
+    }
+
     @Override
     public void write(@NotNull BinaryWriter writer) {
         writer.writeSizedString(jsonResponse);
