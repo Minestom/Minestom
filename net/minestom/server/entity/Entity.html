@@ -976,8 +976,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </tr>
 <tr id="i96" class="altColor">
 <td class="colFirst"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.coordinate.Pos,@org.jetbrains.annotations.Nullablelong%5B%5D)">teleport</a></span>&#8203;(@NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
-        @org.jetbrains.annotations.Nullable long[]&nbsp;chunks)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#teleport(net.minestom.server.coordinate.Pos,long%5B%5D)">teleport</a></span>&#8203;(@NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
+        long @Nullable []&nbsp;chunks)</code></th>
 <td class="colLast">
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
  <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
@@ -1382,7 +1382,7 @@ public&nbsp;@NotNull <a href="metadata/EntityMeta.html" title="class in net.mine
 </dl>
 </li>
 </ul>
-<a id="teleport(net.minestom.server.coordinate.Pos,@org.jetbrains.annotations.Nullablelong[])">
+<a id="teleport(net.minestom.server.coordinate.Pos,long[])">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -1391,8 +1391,7 @@ public&nbsp;@NotNull <a href="metadata/EntityMeta.html" title="class in net.mine
 <pre class="methodSignature">@NotNull
 public&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/CompletableFuture.html?is-external=true" title="class or interface in java.util.concurrent" class="externalLink">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Void.html?is-external=true" title="class or interface in java.lang" class="externalLink">Void</a>&gt;&nbsp;teleport&#8203;(@NotNull
                                                  @NotNull <a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;position,
-                                                 @Nullable
-                                                 @org.jetbrains.annotations.Nullable long[]&nbsp;chunks)</pre>
+                                                 long @Nullable []&nbsp;chunks)</pre>
 <div class="block">Teleports the entity only if the chunk at <code>position</code> is loaded or if
  <a href="../instance/Instance.html#hasEnabledAutoChunkLoad()"><code>Instance.hasEnabledAutoChunkLoad()</code></a> returns true.</div>
 <dl>
