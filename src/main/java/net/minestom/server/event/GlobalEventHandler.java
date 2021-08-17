@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 /**
  * Object containing all the global event listeners.
  */
-public final class GlobalEventHandler extends EventNode<Event> {
+public final class GlobalEventHandler extends EventNodeImpl<Event> {
     public GlobalEventHandler() {
         super("global", EventFilter.ALL, null);
     }
