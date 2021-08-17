@@ -4,16 +4,15 @@ import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.Set;
 
 /**
@@ -24,7 +23,7 @@ public class ItemEntity extends Entity {
     /**
      * Used to slow down the merge check delay
      */
-    private static UpdateOption mergeUpdateOption = new UpdateOption(10, TimeUnit.TICK);
+    private static Duration mergeDelay = Duration.of(10, TimeUnit.SERVER_TICK);
 
     /**
      * The last time that this item has checked his neighbors for merge
@@ -40,19 +39,10 @@ public class ItemEntity extends Entity {
     private long spawnTime;
     private long pickupDelay;
 
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
-        super(EntityType.ITEM, spawnPosition);
+    public ItemEntity(@NotNull ItemStack itemStack) {
+        super(EntityType.ITEM);
         setItemStack(itemStack);
-        setGravity(0.02f, 0.04f, 1.96f);
         setBoundingBox(0.25f, 0.25f, 0.25f);
-    }
-
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        this(itemStack, spawnPosition);
-
-        if (instance != null) {
-            setInstance(instance);
-        }
     }
 
     /**
@@ -61,24 +51,24 @@ public class ItemEntity extends Entity {
      * @return the merge update option
      */
     @Nullable
-    public static UpdateOption getMergeUpdateOption() {
-        return mergeUpdateOption;
+    public static Duration getMergeDelay() {
+        return mergeDelay;
     }
 
     /**
-     * Changes the merge update option.
+     * Changes the merge delay.
      * Can be set to null to entirely remove the delay.
      *
-     * @param mergeUpdateOption the new merge update option
+     * @param delay the new merge delay
      */
-    public static void setMergeUpdateOption(@Nullable UpdateOption mergeUpdateOption) {
-        ItemEntity.mergeUpdateOption = mergeUpdateOption;
+    public static void setMergeDelay(@Nullable Duration delay) {
+        ItemEntity.mergeDelay = delay;
     }
 
     @Override
     public void update(long time) {
         if (isMergeable() && isPickable() &&
-                (mergeUpdateOption == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeUpdateOption))) {
+                (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
             final Chunk chunk = instance.getChunkAt(getPosition());
@@ -214,7 +204,7 @@ public class ItemEntity extends Entity {
     }
 
     /**
-     * Gets the pickup delay in milliseconds, defined by {@link #setPickupDelay(long, TimeUnit)}.
+     * Gets the pickup delay in milliseconds, defined by {@link #setPickupDelay(Duration)}.
      *
      * @return the pickup delay
      */
@@ -225,11 +215,20 @@ public class ItemEntity extends Entity {
     /**
      * Sets the pickup delay of the ItemEntity.
      *
-     * @param delay    the pickup delay
-     * @param timeUnit the unit of the delay
+     * @param delay        the pickup delay
+     * @param temporalUnit the unit of the delay
      */
-    public void setPickupDelay(long delay, @NotNull TimeUnit timeUnit) {
-        this.pickupDelay = timeUnit.toMilliseconds(delay);
+    public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
+        setPickupDelay(Duration.of(delay, temporalUnit));
+    }
+
+    /**
+     * Sets the pickup delay of the ItemEntity.
+     *
+     * @param delay the pickup delay
+     */
+    public void setPickupDelay(Duration delay) {
+        this.pickupDelay = delay.toMillis();
     }
 
     /**

@@ -5,6 +5,8 @@ import net.minestom.server.attribute.Attribute;
 import net.minestom.server.attribute.AttributeInstance;
 import net.minestom.server.attribute.Attributes;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
@@ -25,16 +27,14 @@ import net.minestom.server.network.packet.server.play.SoundEffectPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,7 +42,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     // ItemStack pickup
     protected boolean canPickupItem;
-    protected Cooldown itemPickupCooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    protected Cooldown itemPickupCooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     protected boolean isDead;
 
@@ -89,28 +89,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
-        this(entityType, uuid, new Position());
-        setGravity(0.02f, 0.08f, 3.92f);
+        super(entityType, uuid);
         initEquipments();
     }
 
     public LivingEntity(@NotNull EntityType entityType) {
         this(entityType, UUID.randomUUID());
-    }
-
-    /**
-     * Constructor which allows to specify an UUID. Only use if you know what you are doing!
-     */
-    @Deprecated
-    public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid, @NotNull Position spawnPosition) {
-        super(entityType, uuid, spawnPosition);
-        setGravity(0.02f, 0.08f, 3.92f);
-        initEquipments();
-    }
-
-    @Deprecated
-    public LivingEntity(@NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        this(entityType, UUID.randomUUID(), spawnPosition);
     }
 
     private void initEquipments() {
@@ -222,8 +206,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             final Set<Entity> entities = instance.getChunkEntities(chunk);
             for (Entity entity : entities) {
                 if (entity instanceof ItemEntity) {
-
-                    // Do not pickup if not visible
+                    // Do not pick up if not visible
                     if (this instanceof Player && !entity.isViewer((Player) this))
                         continue;
 
@@ -238,12 +221,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                         PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
                         EventDispatcher.callCancellable(pickupItemEvent, () -> {
                             final ItemStack item = itemEntity.getItemStack();
-
-                            CollectItemPacket collectItemPacket = new CollectItemPacket();
-                            collectItemPacket.collectedEntityId = itemEntity.getEntityId();
-                            collectItemPacket.collectorEntityId = getEntityId();
-                            collectItemPacket.pickupItemCount = item.getAmount();
-                            sendPacketToViewersAndSelf(collectItemPacket);
+                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.getAmount()));
                             entity.remove();
                         });
                     }
@@ -301,7 +279,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         setHealth(0);
 
         // Reset velocity
-        velocity.zero();
+        this.velocity = Vec.ZERO;
 
         // Remove passengers if any
         if (hasPassenger()) {
@@ -318,21 +296,31 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param duration duration in ticks of the effect
      */
     public void setFireForDuration(int duration) {
-        setFireForDuration(duration, TimeUnit.TICK);
+        setFireForDuration(duration, TimeUnit.SERVER_TICK);
+    }
+
+    /**
+     * Sets fire to this entity for a given duration.
+     *
+     * @param duration     duration of the effect
+     * @param temporalUnit unit used to express the duration
+     * @see #setOnFire(boolean) if you want it to be permanent without any event callback
+     */
+    public void setFireForDuration(int duration, TemporalUnit temporalUnit) {
+        setFireForDuration(Duration.of(duration, temporalUnit));
     }
 
     /**
      * Sets fire to this entity for a given duration.
      *
      * @param duration duration of the effect
-     * @param unit     unit used to express the duration
      * @see #setOnFire(boolean) if you want it to be permanent without any event callback
      */
-    public void setFireForDuration(int duration, TimeUnit unit) {
-        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration, unit);
+    public void setFireForDuration(Duration duration) {
+        EntityFireEvent entityFireEvent = new EntityFireEvent(this, duration);
 
         // Do not start fire event if the fire needs to be removed (< 0 duration)
-        if (duration > 0) {
+        if (duration.toMillis() > 0) {
             EventDispatcher.callCancellable(entityFireEvent, () -> {
                 final long fireTime = entityFireEvent.getFireTime(TimeUnit.MILLISECOND);
                 setOnFire(true);
@@ -364,10 +352,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
             float remainingDamage = entityDamageEvent.getDamage();
 
-            EntityAnimationPacket entityAnimationPacket = new EntityAnimationPacket();
-            entityAnimationPacket.entityId = getEntityId();
-            entityAnimationPacket.animation = EntityAnimationPacket.Animation.TAKE_DAMAGE;
-            sendPacketToViewersAndSelf(entityAnimationPacket);
+            sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
 
             // Additional hearts support
             if (this instanceof Player) {
@@ -498,10 +483,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 // connection null during Player initialization (due to #super call)
                 self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
             }
+            EntityPropertiesPacket propertiesPacket = getPropertiesPacket(Collections.singleton(attributeInstance));
             if (self) {
-                sendPacketToViewersAndSelf(getPropertiesPacket());
+                sendPacketToViewersAndSelf(propertiesPacket);
             } else {
-                sendPacketToViewers(getPropertiesPacket());
+                sendPacketToViewers(propertiesPacket);
             }
         }
     }
@@ -552,11 +538,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         final PlayerConnection playerConnection = player.getPlayerConnection();
         playerConnection.sendPacket(getEquipmentsPacket());
         playerConnection.sendPacket(getPropertiesPacket());
-
         if (getTeam() != null) {
             playerConnection.sendPacket(getTeam().createTeamsCreationPacket());
         }
-
         return true;
     }
 
@@ -571,10 +555,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingMainHand() {
-        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
-        animationPacket.entityId = getEntityId();
-        animationPacket.animation = EntityAnimationPacket.Animation.SWING_MAIN_ARM;
-        sendPacketToViewers(animationPacket);
+        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_MAIN_ARM));
     }
 
     /**
@@ -582,10 +563,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * (can be used for attack animation).
      */
     public void swingOffHand() {
-        EntityAnimationPacket animationPacket = new EntityAnimationPacket();
-        animationPacket.entityId = getEntityId();
-        animationPacket.animation = EntityAnimationPacket.Animation.SWING_OFF_HAND;
-        sendPacketToViewers(animationPacket);
+        sendPacketToViewers(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.SWING_OFF_HAND));
     }
 
     public void refreshActiveHand(boolean isHandActive, boolean offHand, boolean riptideSpinAttack) {
@@ -623,8 +601,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @NotNull
     protected EntityPropertiesPacket getPropertiesPacket() {
+        return getPropertiesPacket(attributeModifiers.values());
+    }
+
+    /**
+     * Gets an {@link EntityPropertiesPacket} for this entity with the specified attribute values.
+     *
+     * @param attributes the attributes to include in the packet
+     * @return an {@link EntityPropertiesPacket} linked to this entity
+     */
+    @NotNull
+    protected EntityPropertiesPacket getPropertiesPacket(@NotNull Collection<AttributeInstance> attributes) {
         // Get all the attributes which should be sent to the client
-        final AttributeInstance[] instances = attributeModifiers.values().stream()
+        final AttributeInstance[] instances = attributes.stream()
                 .filter(i -> i.getAttribute().isShared())
                 .toArray(AttributeInstance[]::new);
 
@@ -661,7 +650,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Gets the time in ms between two fire damage applications.
      *
      * @return the time in ms
-     * @see #setFireDamagePeriod(long, TimeUnit)
+     * @see #setFireDamagePeriod(Duration)
      */
     public long getFireDamagePeriod() {
         return fireDamagePeriod;
@@ -671,11 +660,19 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * Changes the delay between two fire damage applications.
      *
      * @param fireDamagePeriod the delay
-     * @param timeUnit         the time unit
+     * @param temporalUnit     the time unit
      */
-    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TimeUnit timeUnit) {
-        fireDamagePeriod = timeUnit.toMilliseconds(fireDamagePeriod);
-        this.fireDamagePeriod = fireDamagePeriod;
+    public void setFireDamagePeriod(long fireDamagePeriod, @NotNull TemporalUnit temporalUnit) {
+        setFireDamagePeriod(Duration.of(fireDamagePeriod, temporalUnit));
+    }
+
+    /**
+     * Changes the delay between two fire damage applications.
+     *
+     * @param fireDamagePeriod the delay
+     */
+    public void setFireDamagePeriod(Duration fireDamagePeriod) {
+        this.fireDamagePeriod = fireDamagePeriod.toMillis();
     }
 
     /**
@@ -715,17 +712,17 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the line of sight in {@link BlockPosition} of the entity.
+     * Gets the line of sight of the entity.
      *
      * @param maxDistance The max distance to scan
-     * @return A list of {@link BlockPosition} in this entities line of sight
+     * @return A list of {@link Point poiints} in this entities line of sight
      */
-    public List<BlockPosition> getLineOfSight(int maxDistance) {
-        List<BlockPosition> blocks = new ArrayList<>();
-        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+    public List<Point> getLineOfSight(int maxDistance) {
+        List<Point> blocks = new ArrayList<>();
+        Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
-            BlockPosition position = it.next();
-            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) blocks.add(position);
+            final Point position = it.next();
+            if (!getInstance().getBlock(position).isAir()) blocks.add(position);
         }
         return blocks;
     }
@@ -739,14 +736,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return if the current entity has line of sight to the given one.
      */
     public boolean hasLineOfSight(Entity entity) {
-        Vector start = getPosition().toVector().add(0D, getEyeHeight(), 0D);
-        Vector end = entity.getPosition().toVector().add(0D, getEyeHeight(), 0D);
-        Vector direction = end.subtract(start);
-        int maxDistance = (int) Math.ceil(direction.length());
+        final var start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final var end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final var direction = end.sub(start);
+        final int maxDistance = (int) Math.ceil(direction.length());
 
-        Iterator<BlockPosition> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        Iterator<Point> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
-            Block block = Block.fromStateId(getInstance().getBlockStateId(it.next()));
+            Block block = getInstance().getBlock(it.next());
             if (!block.isAir() && !block.isLiquid()) {
                 return false;
             }
@@ -755,16 +752,16 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the target (not-air) {@link BlockPosition} of the entity.
+     * Gets the target (not-air) block position of the entity.
      *
      * @param maxDistance The max distance to scan before returning null
-     * @return The {@link BlockPosition} targeted by this entity, null if non are found
+     * @return The block position targeted by this entity, null if non are found
      */
-    public BlockPosition getTargetBlockPosition(int maxDistance) {
-        Iterator<BlockPosition> it = new BlockIterator(this, maxDistance);
+    public Point getTargetBlockPosition(int maxDistance) {
+        Iterator<Point> it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
-            BlockPosition position = it.next();
-            if (Block.fromStateId(getInstance().getBlockStateId(position)) != Block.AIR) return position;
+            final Point position = it.next();
+            if (!getInstance().getBlock(position).isAir()) return position;
         }
         return null;
     }
@@ -781,4 +778,18 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         return null;
     }
 
+    /**
+     * Applies knockback
+     * <p>
+     * Note: The strength is reduced based on knockback resistance
+     *
+     * @param strength the strength of the knockback, 0.4 is the vanilla value for a bare hand hit
+     * @param x        knockback on x axle, for default knockback use the following formula <pre>sin(attacker.yaw * (pi/180))</pre>
+     * @param z        knockback on z axle, for default knockback use the following formula <pre>-cos(attacker.yaw * (pi/180))</pre>
+     */
+    @Override
+    public void takeKnockback(float strength, final double x, final double z) {
+        strength *= 1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE);
+        super.takeKnockback(strength, x, z);
+    }
 }

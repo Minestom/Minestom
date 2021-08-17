@@ -142,7 +142,7 @@ public class BasicQueryResponse implements Writeable {
         writer.writeNullTerminatedString(this.map, Query.CHARSET);
         writer.writeNullTerminatedString(this.numPlayers, Query.CHARSET);
         writer.writeNullTerminatedString(this.maxPlayers, Query.CHARSET);
-        writer.getBuffer().writeShortLE(MinecraftServer.getNettyServer().getPort());
-        writer.writeNullTerminatedString(Objects.requireNonNullElse(MinecraftServer.getNettyServer().getAddress(), ""), Query.CHARSET);
+        writer.getBuffer().putShort((short) MinecraftServer.getServer().getPort()); // TODO little endian?
+        writer.writeNullTerminatedString(Objects.requireNonNullElse(MinecraftServer.getServer().getAddress(), ""), Query.CHARSET);
     }
 }

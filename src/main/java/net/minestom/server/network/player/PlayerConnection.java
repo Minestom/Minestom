@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * It can be extended to create a new kind of player (NPC for instance).
  */
 public abstract class PlayerConnection {
-
     protected static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     private Player player;
@@ -51,9 +50,8 @@ public abstract class PlayerConnection {
             if (tickCounter % MinecraftServer.TICK_PER_SECOND == 0 && tickCounter > 0) {
                 tickCounter = 0;
                 // Retrieve the packet count
-                final int count = packetCounter.get();
+                final int count = packetCounter.getAndSet(0);
                 this.lastPacketCounter.set(count);
-                this.packetCounter.set(0);
                 if (count > MinecraftServer.getRateLimit()) {
                     // Sent too many packets
                     player.kick(rateLimitKickMessage);
@@ -63,8 +61,7 @@ public abstract class PlayerConnection {
         }
     }
 
-    @NotNull
-    public AtomicInteger getPacketCounter() {
+    public @NotNull AtomicInteger getPacketCounter() {
         return packetCounter;
     }
 
@@ -74,8 +71,7 @@ public abstract class PlayerConnection {
      *
      * @return this connection identifier
      */
-    @NotNull
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         final Player player = getPlayer();
         return player != null ?
                 player.getUsername() :
@@ -104,6 +100,15 @@ public abstract class PlayerConnection {
      */
     public abstract void sendPacket(@NotNull ServerPacket serverPacket, boolean skipTranslating);
 
+    /**
+     * Flush waiting data to the connection.
+     * <p>
+     * Might not do anything depending on the implementation.
+     */
+    public void flush() {
+        // Empty
+    }
+
     protected boolean shouldSendPacket(@NotNull ServerPacket serverPacket) {
         return player == null ||
                 PACKET_LISTENER_MANAGER.processServerPacket(serverPacket, Collections.singleton(player));
@@ -114,9 +119,7 @@ public abstract class PlayerConnection {
      *
      * @return the remote address
      */
-    @NotNull
-    public abstract SocketAddress getRemoteAddress();
-
+    public abstract @NotNull SocketAddress getRemoteAddress();
 
     /**
      * Gets protocol version of client.
@@ -135,7 +138,7 @@ public abstract class PlayerConnection {
      * @return the server address used
      */
     public @Nullable String getServerAddress() {
-        return MinecraftServer.getNettyServer().getAddress();
+        return MinecraftServer.getServer().getAddress();
     }
 
 
@@ -147,9 +150,8 @@ public abstract class PlayerConnection {
      * @return the server port used
      */
     public int getServerPort() {
-        return MinecraftServer.getNettyServer().getPort();
+        return MinecraftServer.getServer().getPort();
     }
-
 
     /**
      * Forcing the player to disconnect.
@@ -161,8 +163,7 @@ public abstract class PlayerConnection {
      *
      * @return the player, can be null if not initialized yet
      */
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return player;
     }
 
@@ -199,8 +200,7 @@ public abstract class PlayerConnection {
      *
      * @return the client connection state
      */
-    @NotNull
-    public ConnectionState getConnectionState() {
+    public @NotNull ConnectionState getConnectionState() {
         return connectionState;
     }
 

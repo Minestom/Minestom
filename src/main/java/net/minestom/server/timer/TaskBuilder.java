@@ -2,14 +2,15 @@ package net.minestom.server.timer;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.extras.selfmodification.MinestomRootClassLoader;
-import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 /**
  * A builder which represents a fluent Object to schedule tasks.
  * <p>
- * You can specify a delay with {@link #delay(long, TimeUnit)} or {@link #repeat(long, TimeUnit)}
+ * You can specify a delay with {@link #delay(long, TemporalUnit)} or {@link #repeat(long, TemporalUnit)}
  * and then schedule the {@link Task} with {@link #schedule()}.
  */
 public class TaskBuilder {
@@ -20,7 +21,9 @@ public class TaskBuilder {
     private final Runnable runnable;
     // True if the task planned for the application shutdown
     private final boolean shutdown;
-    /** Extension which owns this task, or null if none */
+    /**
+     * Extension which owns this task, or null if none
+     */
     private final String owningExtension;
     // Delay value for the task execution
     private long delay;
@@ -28,8 +31,8 @@ public class TaskBuilder {
     private long repeat;
     /**
      * If this task is owned by an extension, should it survive the unloading of said extension?
-     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     *  reload of that extension.
+     * May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     * reload of that extension.
      */
     private boolean isTransient;
 
@@ -67,21 +70,18 @@ public class TaskBuilder {
      * @param unit The unit of time for {@code time}
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder delay(long time, @NotNull TimeUnit unit) {
-        this.delay = unit.toMilliseconds(time);
-        return this;
+    public @NotNull TaskBuilder delay(long time, @NotNull TemporalUnit unit) {
+        return delay(Duration.of(time, unit));
     }
 
     /**
      * Specifies that the {@link Task} should delay its execution by the specified amount of time.
      *
-     * @param updateOption the UpdateOption for this builder.
+     * @param duration the Duration for this builder.
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder delay(UpdateOption updateOption) {
-        this.delay = updateOption.toMilliseconds();
+    public @NotNull TaskBuilder delay(@NotNull Duration duration) {
+        this.delay = duration.toMillis();
         return this;
     }
 
@@ -89,24 +89,21 @@ public class TaskBuilder {
      * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
      *
      * @param time The time until the repetition
-     * @param unit The {@link TimeUnit} for {@code time}
+     * @param unit The {@link TemporalUnit} for {@code time}
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder repeat(long time, @NotNull TimeUnit unit) {
-        this.repeat = unit.toMilliseconds(time);
-        return this;
+    public @NotNull TaskBuilder repeat(long time, @NotNull TemporalUnit unit) {
+        return repeat(Duration.of(time, unit));
     }
 
     /**
      * Specifies that the {@link Task} should continue to run after waiting for the specified value until it is terminated.
      *
-     * @param updateOption the UpdateOption for this builder.
+     * @param duration the Duration for this builder.
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder repeat(UpdateOption updateOption) {
-        this.repeat = updateOption.toMilliseconds();
+    public @NotNull TaskBuilder repeat(@NotNull Duration duration) {
+        this.repeat = duration.toMillis();
         return this;
     }
 
@@ -115,8 +112,7 @@ public class TaskBuilder {
      *
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder clearDelay() {
+    public @NotNull TaskBuilder clearDelay() {
         this.delay = 0L;
         return this;
     }
@@ -126,15 +122,16 @@ public class TaskBuilder {
      *
      * @return this builder, for chaining
      */
-    @NotNull
-    public TaskBuilder clearRepeat() {
+    public @NotNull TaskBuilder clearRepeat() {
         this.repeat = 0L;
         return this;
     }
 
-    /** If this task is owned by an extension, should it survive the unloading of said extension?
-     *  May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
-     *  reload of that extension. */
+    /**
+     * If this task is owned by an extension, should it survive the unloading of said extension?
+     * May be useful for delay tasks, but it can prevent the extension classes from being unloaded, and preventing a full
+     * reload of that extension.
+     */
     public TaskBuilder makeTransient() {
         isTransient = true;
         return this;
@@ -160,7 +157,7 @@ public class TaskBuilder {
             synchronized (shutdownTasks) {
                 shutdownTasks.put(task.getId(), task);
             }
-            if(owningExtension != null) {
+            if (owningExtension != null) {
                 this.schedulerManager.onScheduleShutdownFromExtension(owningExtension, task);
             }
         } else {

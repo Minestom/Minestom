@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Phaser;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
@@ -44,7 +44,6 @@ public class TickThread extends Thread {
     }
 
     protected static class BatchRunnable implements Runnable {
-
         private static final AtomicReferenceFieldUpdater<BatchRunnable, TickContext> CONTEXT_UPDATER =
                 AtomicReferenceFieldUpdater.newUpdater(BatchRunnable.class, TickContext.class, "tickContext");
 
@@ -57,25 +56,20 @@ public class TickThread extends Thread {
         public void run() {
             Check.notNull(tickThread, "The linked BatchThread cannot be null!");
             while (!stop) {
-                LockSupport.park(tickThread);
-                if (stop)
-                    break;
-                TickContext localContext = tickContext;
+                final TickContext localContext = tickContext;
                 // The context is necessary to control the tick rates
-                if (localContext == null) {
-                    continue;
+                if (localContext != null) {
+                    // Execute tick
+                    CONTEXT_UPDATER.compareAndSet(this, localContext, null);
+                    localContext.runnable.run();
+                    localContext.phaser.arriveAndDeregister();
                 }
-
-                // Execute tick
-                localContext.runnable.run();
-
-                localContext.countDownLatch.countDown();
-                CONTEXT_UPDATER.compareAndSet(this, localContext, null);
+                LockSupport.park(this);
             }
         }
 
-        protected void startTick(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
-            this.tickContext = new TickContext(countDownLatch, runnable);
+        protected void startTick(@NotNull Phaser phaser, @NotNull Runnable runnable) {
+            this.tickContext = new TickContext(phaser, runnable);
             LockSupport.unpark(tickThread);
         }
 
@@ -85,13 +79,12 @@ public class TickThread extends Thread {
     }
 
     private static class TickContext {
-        private final CountDownLatch countDownLatch;
+        private final Phaser phaser;
         private final Runnable runnable;
 
-        private TickContext(@NotNull CountDownLatch countDownLatch, @NotNull Runnable runnable) {
-            this.countDownLatch = countDownLatch;
+        private TickContext(@NotNull Phaser phaser, @NotNull Runnable runnable) {
+            this.phaser = phaser;
             this.runnable = runnable;
         }
     }
-
 }

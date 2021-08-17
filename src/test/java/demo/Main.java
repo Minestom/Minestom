@@ -1,8 +1,5 @@
 package demo;
 
-import demo.blocks.BurningTorchBlock;
-import demo.blocks.CustomBlockSample;
-import demo.blocks.UpdatableBlockDemo;
 import demo.commands.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -18,11 +15,10 @@ import net.minestom.server.extras.optifine.OptifineSupport;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.vanilla.RedstonePlacementRule;
 import net.minestom.server.ping.ResponseData;
-import net.minestom.server.storage.StorageManager;
-import net.minestom.server.storage.systems.FileStorageSystem;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
+
+import java.time.Duration;
 
 public class Main {
 
@@ -30,9 +26,6 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
-        blockManager.registerCustomBlock(new CustomBlockSample());
-        blockManager.registerCustomBlock(new UpdatableBlockDemo());
-        blockManager.registerCustomBlock(new BurningTorchBlock());
 
         blockManager.registerBlockPlacementRule(new RedstonePlacementRule());
 
@@ -55,18 +48,15 @@ public class Main {
         commandManager.register(new SummonCommand());
         commandManager.register(new RemoveCommand());
         commandManager.register(new GiveCommand());
+        commandManager.register(new SetBlockCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
-
-        StorageManager storageManager = MinecraftServer.getStorageManager();
-        storageManager.defineDefaultStorageSystem(FileStorageSystem::new);
-
-        MinecraftServer.getBenchmarkManager().enable(new UpdateOption(10 * 1000, TimeUnit.MILLISECOND));
+        MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night")).schedule();
 
-        MinecraftServer.getGlobalEventHandler().addEventCallback(ServerListPingEvent.class, event -> {
+        MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
             ResponseData responseData = event.getResponseData();
             responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
             responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
@@ -110,7 +100,7 @@ public class Main {
         //MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
-        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(new UpdateOption(1, TimeUnit.DAY)));
+        OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
 
         minecraftServer.start("0.0.0.0", 25565);
         //Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));

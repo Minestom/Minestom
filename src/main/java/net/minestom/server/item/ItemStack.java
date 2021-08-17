@@ -7,6 +7,7 @@ import net.minestom.server.item.rule.VanillaStackingRule;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.NBTUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +27,8 @@ import java.util.function.UnaryOperator;
  */
 public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent.ShowItem> {
 
+    private static final @NotNull VanillaStackingRule DEFAULT_STACKING_RULE = new VanillaStackingRule();
+
     /**
      * Constant AIR item. Should be used instead of 'null'.
      */
@@ -37,13 +40,13 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     private final int amount;
     private final ItemMeta meta;
 
-    protected ItemStack(@NotNull Material material, int amount,
-                        @NotNull ItemMeta meta,
-                        @Nullable StackingRule stackingRule) {
+    ItemStack(@NotNull Material material, int amount,
+              @NotNull ItemMeta meta,
+              @Nullable StackingRule stackingRule) {
         this.material = material;
         this.amount = amount;
         this.meta = meta;
-        this.stackingRule = Objects.requireNonNullElseGet(stackingRule, VanillaStackingRule::new);
+        this.stackingRule = Objects.requireNonNullElse(stackingRule, DEFAULT_STACKING_RULE);
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -101,6 +104,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
     @Contract(value = "_, -> new", pure = true)
     public @NotNull ItemStack withAmount(@NotNull IntUnaryOperator intUnaryOperator) {
         return withAmount(intUnaryOperator.applyAsInt(amount));
+    }
+
+    @ApiStatus.Experimental
+    @Contract(value = "_, -> new", pure = true)
+    public @NotNull ItemStack consume(int amount) {
+        return stackingRule.apply(this, currentAmount -> currentAmount - amount);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -186,11 +195,14 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return result;
     }
 
-    @Contract(value = "-> new", pure = true)
-    protected @NotNull ItemStackBuilder builder() {
-        return new ItemStackBuilder(material, meta.builder())
-                .amount(amount)
-                .stackingRule(stackingRule);
+    @Override
+    public String toString() {
+        return "ItemStack{" +
+                "stackingRule=" + stackingRule +
+                ", material=" + material +
+                ", amount=" + amount +
+                ", meta=" + meta +
+                '}';
     }
 
     @Contract(value = "_, _ -> new", pure = true)
@@ -208,5 +220,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.of(this.material,
                 this.amount,
                 NBTUtils.asBinaryTagHolder(this.meta.toNBT().getCompound("tag")))));
+    }
+
+    @Contract(value = "-> new", pure = true)
+    private @NotNull ItemStackBuilder builder() {
+        return new ItemStackBuilder(material, meta.builder())
+                .amount(amount)
+                .stackingRule(stackingRule);
     }
 }

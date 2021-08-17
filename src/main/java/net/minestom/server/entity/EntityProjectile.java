@@ -1,8 +1,5 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.metadata.ProjectileMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -10,9 +7,9 @@ import net.minestom.server.event.entity.EntityShootEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,19 +32,11 @@ public class EntityProjectile extends Entity {
         setup();
     }
 
-    @Deprecated
-    public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType, @NotNull Position spawnPosition) {
-        super(entityType, spawnPosition);
-        this.shooter = shooter;
-        setup();
-    }
-
     private void setup() {
         super.hasPhysics = false;
         if (getEntityMeta() instanceof ProjectileMeta) {
             ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
         }
-        setGravity(0.02f, 0.04f, 1.96f);
     }
 
     @Nullable
@@ -71,21 +60,21 @@ public class EntityProjectile extends Entity {
 
     }
 
-    public void shoot(Position to, double power, double spread) {
+    public void shoot(Point to, double power, double spread) {
         EntityShootEvent shootEvent = new EntityShootEvent(this.shooter, this, to, power, spread);
         EventDispatcher.call(shootEvent);
         if (shootEvent.isCancelled()) {
             remove();
             return;
         }
-        Position from = this.shooter.getPosition().clone().add(0D, this.shooter.getEyeHeight(), 0D);
+        final var from = this.shooter.getPosition().add(0D, this.shooter.getEyeHeight(), 0D);
         shoot(from, to, shootEvent.getPower(), shootEvent.getSpread());
     }
 
-    private void shoot(@NotNull Position from, @NotNull Position to, double power, double spread) {
-        double dx = to.getX() - from.getX();
-        double dy = to.getY() - from.getY();
-        double dz = to.getZ() - from.getZ();
+    private void shoot(@NotNull Point from, @NotNull Point to, double power, double spread) {
+        double dx = to.x() - from.x();
+        double dy = to.y() - from.y();
+        double dz = to.z() - from.z();
         double xzLength = Math.sqrt(dx * dx + dz * dz);
         dy += xzLength * 0.20000000298023224D;
 
@@ -98,10 +87,9 @@ public class EntityProjectile extends Entity {
         dx += random.nextGaussian() * spread;
         dy += random.nextGaussian() * spread;
         dz += random.nextGaussian() * spread;
-        super.velocity.setX(dx);
-        super.velocity.setY(dy);
-        super.velocity.setZ(dz);
-        super.velocity.multiply(20 * power);
+
+        final double mul = 20 * power;
+        this.velocity = new Vec(dx * mul, dy * mul, dz * mul);
         setView(
                 (float) Math.toDegrees(Math.atan2(dx, dz)),
                 (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))
@@ -110,15 +98,15 @@ public class EntityProjectile extends Entity {
 
     @Override
     public void tick(long time) {
-        Position posBefore = getPosition().clone();
+        final var posBefore = getPosition();
         super.tick(time);
-        Position posNow = getPosition().clone();
+        final var posNow = getPosition();
         if (isStuck(posBefore, posNow)) {
             if (super.onGround) {
                 return;
             }
             super.onGround = true;
-            getVelocity().zero();
+            this.velocity = Vec.ZERO;
             sendPacketToViewersAndSelf(getVelocityPacket());
             setNoGravity(true);
             onStuck();
@@ -140,8 +128,8 @@ public class EntityProjectile extends Entity {
      * @return if an arrow is stuck in block / hit an entity.
      */
     @SuppressWarnings("ConstantConditions")
-    private boolean isStuck(Position pos, Position posNow) {
-        if (pos.isSimilar(posNow)) {
+    private boolean isStuck(Pos pos, Pos posNow) {
+        if (pos.samePoint(posNow)) {
             return true;
         }
 
@@ -154,25 +142,21 @@ public class EntityProjectile extends Entity {
           For each point we will be checking blocks and entities we're in.
          */
         double part = .25D; // half of the bounding box
-        Vector dir = posNow.toVector().subtract(pos.toVector());
+        final var dir = posNow.sub(pos).asVec();
         int parts = (int) Math.ceil(dir.length() / part);
-        Position direction = dir.normalize().multiply(part).toPosition();
+        final var direction = dir.normalize().mul(part).asPosition();
         for (int i = 0; i < parts; ++i) {
             // If we're at last part, we can't just add another direction-vector, because we can exceed end point.
             if (i == parts - 1) {
-                pos.setX(posNow.getX());
-                pos.setY(posNow.getY());
-                pos.setZ(posNow.getZ());
+                pos = posNow;
             } else {
-                pos.add(direction);
+                pos = pos.add(direction);
             }
-            BlockPosition bpos = pos.toBlockPosition();
-            Block block = instance.getBlock(bpos.getX(), bpos.getY() - 1, bpos.getZ());
+            Block block = instance.getBlock(pos);
             if (!block.isAir() && !block.isLiquid()) {
                 teleport(pos);
                 return true;
             }
-
             Chunk currentChunk = instance.getChunkAt(pos);
             if (currentChunk != chunk) {
                 chunk = currentChunk;
@@ -188,8 +172,9 @@ public class EntityProjectile extends Entity {
             if (getAliveTicks() < 3) {
                 continue;
             }
+            final Pos finalPos = pos;
             Optional<Entity> victimOptional = entities.stream()
-                    .filter(entity -> entity.getBoundingBox().intersect(pos.getX(), pos.getY(), pos.getZ()))
+                    .filter(entity -> entity.getBoundingBox().intersect(finalPos))
                     .findAny();
             if (victimOptional.isPresent()) {
                 LivingEntity victim = (LivingEntity) victimOptional.get();
@@ -201,5 +186,4 @@ public class EntityProjectile extends Entity {
         }
         return false;
     }
-
 }

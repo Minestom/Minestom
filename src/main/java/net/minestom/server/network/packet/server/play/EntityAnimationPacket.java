@@ -11,8 +11,13 @@ public class EntityAnimationPacket implements ServerPacket {
     public int entityId;
     public Animation animation;
 
+    public EntityAnimationPacket(int entityId, Animation animation) {
+        this.entityId = entityId;
+        this.animation = animation;
+    }
+
     public EntityAnimationPacket() {
-        animation = Animation.SWING_MAIN_ARM;
+        this(0, Animation.SWING_MAIN_ARM);
     }
 
     @Override

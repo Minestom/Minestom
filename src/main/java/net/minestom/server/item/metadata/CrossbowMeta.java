@@ -4,7 +4,6 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -81,7 +80,9 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
     public static class Builder extends ItemMetaBuilder {
 
         private boolean triple;
-        private ItemStack projectile1, projectile2, projectile3 = ItemStack.AIR;
+        private ItemStack projectile1 = ItemStack.AIR;
+        private ItemStack projectile2 = ItemStack.AIR;
+        private ItemStack projectile3 = ItemStack.AIR;
         private boolean charged;
 
         /**
@@ -97,7 +98,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             if (!projectile.isAir()) {
                 chargedProjectiles.add(getItemCompound(projectile));
             }
-            this.nbt.set("ChargedProjectiles", chargedProjectiles);
+            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
 
             return this;
         }
@@ -123,7 +124,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             chargedProjectiles.add(getItemCompound(projectile1));
             chargedProjectiles.add(getItemCompound(projectile2));
             chargedProjectiles.add(getItemCompound(projectile3));
-            this.nbt.set("ChargedProjectiles", chargedProjectiles);
+            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
 
             return this;
         }
@@ -135,7 +136,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
          */
         public Builder charged(boolean charged) {
             this.charged = charged;
-            this.nbt.setByte("Charged", (byte) (charged ? 1 : 0));
+            mutateNbt(compound -> compound.setByte("Charged", (byte) (charged ? 1 : 0)));
             return this;
         }
 
@@ -152,7 +153,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
                 for (NBTCompound projectileCompound : projectilesList) {
                     final byte count = projectileCompound.getByte("Count");
                     final String id = projectileCompound.getString("id");
-                    final Material material = Registries.getMaterial(id);
+                    final Material material = Material.fromNamespaceId(id);
 
                     final NBTCompound tagsCompound = projectileCompound.getCompound("tag");
                     ItemStack itemStack = ItemStack.fromNBT(material, tagsCompound, count);
@@ -181,7 +182,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
         private @NotNull NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
             NBTCompound compound = itemStack.getMeta().toNBT();
             compound.setByte("Count", (byte) itemStack.getAmount());
-            compound.setString("id", itemStack.getMaterial().getName());
+            compound.setString("id", itemStack.getMaterial().name());
             return compound;
         }
     }

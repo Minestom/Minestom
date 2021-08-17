@@ -476,12 +476,10 @@ public class ExtensionManager {
             ).isEmpty()
             ) {
                 // Get all "loadable" (not actually being loaded!) extensions and put them in the sorted list.
-                for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : loadableExtensions) {
-
+                for (var entry : loadableExtensions) {
                     // Add to sorted list.
                     sortedList.add(entry.getKey());
-
-                    // Remove to make the next iterations a little bit quicker (hopefully) and to find cyclic dependencies.
+                    // Remove to make the next iterations a little quicker (hopefully) and to find cyclic dependencies.
                     dependencyMap.remove(entry.getKey());
 
                     // Remove this dependency from all the lists (if they include it) to make way for next level of extensions.
@@ -496,7 +494,7 @@ public class ExtensionManager {
         if (!dependencyMap.isEmpty()) {
             LOGGER.error("Minestom found {} cyclic extensions.", dependencyMap.size());
             LOGGER.error("Cyclic extensions depend on each other and can therefore not be loaded.");
-            for (Map.Entry<DiscoveredExtension, List<DiscoveredExtension>> entry : dependencyMap.entrySet()) {
+            for (var entry : dependencyMap.entrySet()) {
                 DiscoveredExtension discoveredExtension = entry.getKey();
                 LOGGER.error("{} could not be loaded, as it depends on: {}.",
                         discoveredExtension.getName(),

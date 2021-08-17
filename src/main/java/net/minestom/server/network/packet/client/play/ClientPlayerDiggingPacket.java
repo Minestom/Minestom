@@ -2,15 +2,16 @@ package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.client.ClientPlayPacket;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 public class ClientPlayerDiggingPacket extends ClientPlayPacket {
 
     public Status status = Status.SWAP_ITEM_HAND;
-    public BlockPosition blockPosition = new BlockPosition(0,0,0);
+    public Point blockPosition = Vec.ZERO;
     public BlockFace blockFace = BlockFace.TOP;
 
     @Override

@@ -52,6 +52,9 @@ public class DeclareCommandsPacket implements ServerPacket {
         public void write(@NotNull BinaryWriter writer) {
             writer.writeByte(flags);
 
+            if (children != null && children.length > 262114) {
+                throw new RuntimeException("Children length " + children.length + " is bigger than the maximum allowed " + 262114);
+            }
             writer.writeVarIntArray(children);
 
             if ((flags & 0x08) != 0) {

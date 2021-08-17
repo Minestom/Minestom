@@ -1,45 +1,36 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.UpdateManager;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
-import net.minestom.server.event.EventCallback;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.EventFilter;
-import net.minestom.server.event.EventNode;
-import net.minestom.server.event.handler.EventHandler;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
-import net.minestom.server.event.trait.InstanceEvent;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.*;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
-import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -47,7 +38,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
+import java.time.Duration;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
@@ -63,7 +56,7 @@ import java.util.function.Consumer;
  * you need to be sure to signal the {@link UpdateManager} of the changes using
  * {@link UpdateManager#signalChunkLoad(Chunk)} and {@link UpdateManager#signalChunkUnload(Chunk)}.
  */
-public abstract class Instance implements BlockModifier, Tickable, TagHandler, PacketGroupingAudience, EventHandler<InstanceEvent>, DataContainer {
+public abstract class Instance implements BlockGetter, BlockSetter, Tickable, TagHandler, PacketGroupingAudience {
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
@@ -80,13 +73,11 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
     // The time of the instance
     private long time;
     private int timeRate = 1;
-    private UpdateOption timeUpdate = new UpdateOption(1, TimeUnit.SECOND);
+    private Duration timeUpdate = Duration.of(1, TimeUnit.SECOND);
     private long lastTimeUpdate;
 
     // Field for tick events
     private long lastTickAge = System.currentTimeMillis();
-
-    private final EventNode<InstanceEvent> eventNode;
 
     // Entities present in this instance
     protected final Set<Entity> entities = ConcurrentHashMap.newKeySet();
@@ -94,8 +85,8 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
     protected final Set<EntityCreature> creatures = ConcurrentHashMap.newKeySet();
     protected final Set<ExperienceOrb> experienceOrbs = ConcurrentHashMap.newKeySet();
     // Entities per chunk
-    protected final Map<Long, Set<Entity>> chunkEntities = new ConcurrentHashMap<>();
-    private final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
+    protected final Object entitiesLock = new Object(); // Lock used to prevent the entities Set and Map to be subject to race condition
+    protected final Long2ObjectMap<Set<Entity>> chunkEntities = new Long2ObjectOpenHashMap<>();
 
     // the uuid of this instance
     protected UUID uniqueId;
@@ -106,7 +97,6 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
     // instance custom data
     private final Object nbtLock = new Object();
     private final NBTCompound nbt = new NBTCompound();
-    private Data data;
 
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
@@ -131,8 +121,6 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
 
         this.worldBorder = new WorldBorder(this);
 
-        this.eventNode = EventNode.value("instance-" + uniqueId, EventFilter.INSTANCE, this::equals);
-
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUniqueId)
                 .build();
@@ -149,57 +137,82 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
         this.nextTick.add(callback);
     }
 
-    /**
-     * Used to change the id of the block in a specific {@link BlockPosition}.
-     * <p>
-     * In case of a {@link CustomBlock} it does not remove it but only refresh its visual.
-     *
-     * @param blockPosition the block position
-     * @param blockStateId  the new block state
-     */
-    public abstract void refreshBlockStateId(@NotNull BlockPosition blockPosition, short blockStateId);
+    @ApiStatus.Internal
+    public abstract boolean placeBlock(@NotNull Player player, @NotNull Block block, @NotNull Point blockPosition,
+                                       @NotNull BlockFace blockFace, float cursorX, float cursorY, float cursorZ);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
      * and send particle packets
      *
      * @param player        the {@link Player} who break the block
-     * @param blockPosition the {@link BlockPosition} of the broken block
+     * @param blockPosition the position of the broken block
      * @return true if the block has been broken, false if it has been cancelled
      */
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull BlockPosition blockPosition);
+    @ApiStatus.Internal
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link ChunkGenerator} are defined.
      *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @param callback optional consumer called after the chunk has been generated,
-     *                 the returned chunk will never be null
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return a {@link CompletableFuture} completed once the chunk has been loaded
      */
-    public abstract void loadChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
+    public abstract @NotNull CompletableFuture<@NotNull Chunk> loadChunk(int chunkX, int chunkZ);
+
+    /**
+     * Loads the chunk at the given {@link Point} with a callback.
+     *
+     * @param point the chunk position
+     */
+    public @NotNull CompletableFuture<@NotNull Chunk> loadChunk(@NotNull Point point) {
+        return loadChunk(ChunkUtils.getChunkCoordinate(point.x()),
+                ChunkUtils.getChunkCoordinate(point.z()));
+    }
 
     /**
      * Loads the chunk if the chunk is already loaded or if
      * {@link #hasEnabledAutoChunkLoad()} returns true.
      *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @param callback optional consumer called after the chunk has tried to be loaded,
-     *                 contains a chunk if it is successful, null otherwise
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, can be null if not loaded
      */
-    public abstract void loadOptionalChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
+    public abstract @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(int chunkX, int chunkZ);
+
+    /**
+     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
+     * at the given {@link Point} with a callback.
+     *
+     * @param point the chunk position
+     * @return a {@link CompletableFuture} completed once the chunk has been processed, null if not loaded
+     */
+    public @NotNull CompletableFuture<@Nullable Chunk> loadOptionalChunk(@NotNull Point point) {
+        return loadOptionalChunk(ChunkUtils.getChunkCoordinate(point.x()),
+                ChunkUtils.getChunkCoordinate(point.z()));
+    }
 
     /**
      * Schedules the removal of a {@link Chunk}, this method does not promise when it will be done.
      * <p>
      * WARNING: during unloading, all entities other than {@link Player} will be removed.
-     * <p>
-     * For {@link InstanceContainer} it is done during the next {@link InstanceContainer#tick(long)}.
      *
      * @param chunk the chunk to unload
      */
     public abstract void unloadChunk(@NotNull Chunk chunk);
+
+    /**
+     * Unloads the chunk at the given position.
+     *
+     * @param chunkX the chunk X
+     * @param chunkZ the chunk Z
+     */
+    public void unloadChunk(int chunkX, int chunkZ) {
+        final Chunk chunk = getChunk(chunkX, chunkZ);
+        Check.notNull(chunk, "The chunk at {0}:{1} is already unloaded", chunkX, chunkZ);
+        unloadChunk(chunk);
+    }
 
     /**
      * Gets the loaded {@link Chunk} at a position.
@@ -210,31 +223,40 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      * @param chunkZ the chunk Z
      * @return the chunk at the specified position, null if not loaded
      */
-    @Nullable
-    public abstract Chunk getChunk(int chunkX, int chunkZ);
+    public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
+
+    /**
+     * Saves the current instance tags.
+     * <p>
+     * Warning: only the global instance data will be saved, not chunks.
+     * You would need to call {@link #saveChunksToStorage()} too.
+     *
+     * @return the future called once the instance data has been saved
+     */
+    @ApiStatus.Experimental
+    public abstract @NotNull CompletableFuture<Void> saveInstance();
 
     /**
      * Saves a {@link Chunk} to permanent storage.
      *
-     * @param chunk    the {@link Chunk} to save
-     * @param callback optional callback called when the {@link Chunk} is done saving
+     * @param chunk the {@link Chunk} to save
+     * @return future called when the chunk is done saving
      */
-    public abstract void saveChunkToStorage(@NotNull Chunk chunk, @Nullable Runnable callback);
+    public abstract @NotNull CompletableFuture<Void> saveChunkToStorage(@NotNull Chunk chunk);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
-     * @param callback optional callback called when the chunks are done saving
+     * @return future called when the chunks are done saving
      */
-    public abstract void saveChunksToStorage(@Nullable Runnable callback);
+    public abstract @NotNull CompletableFuture<Void> saveChunksToStorage();
 
     /**
      * Gets the instance {@link ChunkGenerator}.
      *
      * @return the {@link ChunkGenerator} of the instance
      */
-    @Nullable
-    public abstract ChunkGenerator getChunkGenerator();
+    public abstract @Nullable ChunkGenerator getChunkGenerator();
 
     /**
      * Changes the instance {@link ChunkGenerator}.
@@ -248,52 +270,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return an unmodifiable containing all the instance chunks
      */
-    @NotNull
-    public abstract Collection<Chunk> getChunks();
-
-    /**
-     * Gets the instance {@link StorageLocation}.
-     *
-     * @return the {@link StorageLocation} of the instance
-     */
-    @Nullable
-    public abstract StorageLocation getStorageLocation();
-
-    /**
-     * Changes the instance {@link StorageLocation}.
-     *
-     * @param storageLocation the new {@link StorageLocation} of the instance
-     */
-    public abstract void setStorageLocation(@Nullable StorageLocation storageLocation);
-
-    /**
-     * Used when a {@link Chunk} is not currently loaded in memory and need to be retrieved from somewhere else.
-     * Could be read from disk, or generated from scratch.
-     * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
-     * that this chunk has been loaded.
-     * <p>
-     * WARNING: it has to retrieve a chunk, this is not optional and should execute the callback in all case.
-     *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk X
-     * @param callback the optional callback executed once the {@link Chunk} has been retrieved
-     */
-    protected abstract void retrieveChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
-
-    /**
-     * Called to generated a new {@link Chunk} from scratch.
-     * <p>
-     * Be sure to signal the chunk using {@link UpdateManager#signalChunkLoad(Chunk)} and to cache
-     * that this chunk has been loaded.
-     * <p>
-     * This is where you can put your chunk generation code.
-     *
-     * @param chunkX   the chunk X
-     * @param chunkZ   the chunk Z
-     * @param callback the optional callback executed with the newly created {@link Chunk}
-     */
-    protected abstract void createChunk(int chunkX, int chunkZ, @Nullable ChunkCallback callback);
+    public abstract @NotNull Collection<@NotNull Chunk> getChunks();
 
     /**
      * When set to true, chunks will load automatically when requested.
@@ -315,10 +292,10 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      * <p>
      * Always returning false allow entities to survive in the void.
      *
-     * @param position the position in the world
-     * @return true iif position is inside the void
+     * @param point the point in the world
+     * @return true if the point is inside the void
      */
-    public abstract boolean isInVoid(@NotNull Position position);
+    public abstract boolean isInVoid(@NotNull Point point);
 
     /**
      * Gets if the instance has been registered in {@link InstanceManager}.
@@ -415,8 +392,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return the client update rate for time related packet
      */
-    @Nullable
-    public UpdateOption getTimeUpdate() {
+    public @Nullable Duration getTimeUpdate() {
         return timeUpdate;
     }
 
@@ -428,7 +404,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @param timeUpdate the new update rate concerning time
      */
-    public void setTimeUpdate(@Nullable UpdateOption timeUpdate) {
+    public void setTimeUpdate(@Nullable Duration timeUpdate) {
         this.timeUpdate = timeUpdate;
     }
 
@@ -437,12 +413,14 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return the {@link TimeUpdatePacket} with this instance data
      */
-    @NotNull
-    private TimeUpdatePacket createTimePacket() {
-        TimeUpdatePacket timeUpdatePacket = new TimeUpdatePacket();
-        timeUpdatePacket.worldAge = worldAge;
-        timeUpdatePacket.timeOfDay = time;
-        return timeUpdatePacket;
+    private @NotNull TimeUpdatePacket createTimePacket() {
+        long time = this.time;
+        if (timeRate == 0) {
+            //Negative values stop the sun and moon from moving
+            //0 as a long cannot be negative
+            time = time == 0 ? -24000L : -Math.abs(time);
+        }
+        return new TimeUpdatePacket(worldAge, time);
     }
 
     /**
@@ -450,8 +428,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return the {@link WorldBorder} linked to the instance
      */
-    @NotNull
-    public WorldBorder getWorldBorder() {
+    public @NotNull WorldBorder getWorldBorder() {
         return worldBorder;
     }
 
@@ -460,8 +437,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
-    @NotNull
-    public Set<Entity> getEntities() {
+    public @NotNull Set<@NotNull Entity> getEntities() {
         return Collections.unmodifiableSet(entities);
     }
 
@@ -471,8 +447,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      * @return an unmodifiable {@link Set} containing all the players in the instance
      */
     @Override
-    @NotNull
-    public Set<Player> getPlayers() {
+    public @NotNull Set<@NotNull Player> getPlayers() {
         return Collections.unmodifiableSet(players);
     }
 
@@ -481,8 +456,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return an unmodifiable {@link Set} containing all the creatures in the instance
      */
-    @NotNull
-    public Set<EntityCreature> getCreatures() {
+    public @NotNull Set<@NotNull EntityCreature> getCreatures() {
         return Collections.unmodifiableSet(creatures);
     }
 
@@ -491,8 +465,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
      */
-    @NotNull
-    public Set<ExperienceOrb> getExperienceOrbs() {
+    public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
         return Collections.unmodifiableSet(experienceOrbs);
     }
 
@@ -503,190 +476,25 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      * @return an unmodifiable {@link Set} containing all the entities in a chunk,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
-    public @NotNull Set<Entity> getChunkEntities(Chunk chunk) {
+    public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
         if (!ChunkUtils.isLoaded(chunk))
             return Collections.emptySet();
-
-        final long index = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        final Set<Entity> entities = getEntitiesInChunk(index);
+        final Set<Entity> entities;
+        synchronized (entitiesLock) {
+            if ((entities = chunkEntities.get(ChunkUtils.getChunkIndex(chunk))) == null) {
+                return Collections.emptySet();
+            }
+        }
         return Collections.unmodifiableSet(entities);
     }
 
-    /**
-     * Refreshes the visual block id at the position.
-     * <p>
-     * WARNING: the custom block id at the position will not change.
-     *
-     * @param x            the X position
-     * @param y            the Y position
-     * @param z            the Z position
-     * @param blockStateId the new block state id
-     */
-    public void refreshBlockStateId(int x, int y, int z, short blockStateId) {
-        refreshBlockStateId(new BlockPosition(x, y, z), blockStateId);
-    }
-
-    /**
-     * Refreshes the visual block id at the position.
-     * <p>
-     * WARNING: the custom block id at the position will not change.
-     *
-     * @param x     the X position
-     * @param y     the Y position
-     * @param z     the Z position
-     * @param block the new visual block
-     */
-    public void refreshBlockId(int x, int y, int z, @NotNull Block block) {
-        refreshBlockStateId(x, y, z, block.getBlockId());
-    }
-
-    /**
-     * Refreshes the visual block id at the {@link BlockPosition}.
-     * <p>
-     * WARNING: the custom block id at the position will not change.
-     *
-     * @param blockPosition the block position
-     * @param block         the new visual block
-     */
-    public void refreshBlockId(@NotNull BlockPosition blockPosition, @NotNull Block block) {
-        refreshBlockStateId(blockPosition, block.getBlockId());
-    }
-
-    /**
-     * Loads the {@link Chunk} at the given position without any callback.
-     * <p>
-     * WARNING: this is a non-blocking task.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     */
-    public void loadChunk(int chunkX, int chunkZ) {
-        loadChunk(chunkX, chunkZ, null);
-    }
-
-    /**
-     * Loads the chunk at the given {@link Position} with a callback.
-     *
-     * @param position the chunk position
-     * @param callback the optional callback to run when the chunk is loaded
-     */
-    public void loadChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
-        loadChunk(chunkX, chunkZ, callback);
-    }
-
-    /**
-     * Loads a {@link Chunk} (if {@link #hasEnabledAutoChunkLoad()} returns true)
-     * at the given {@link Position} with a callback.
-     *
-     * @param position the chunk position
-     * @param callback the optional callback executed when the chunk is loaded (or with a null chunk if not)
-     */
-    public void loadOptionalChunk(@NotNull Position position, @Nullable ChunkCallback callback) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(position.getX());
-        final int chunkZ = ChunkUtils.getChunkCoordinate(position.getZ());
-        loadOptionalChunk(chunkX, chunkZ, callback);
-    }
-
-    /**
-     * Unloads the chunk at the given position.
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     */
-    public void unloadChunk(int chunkX, int chunkZ) {
-        final Chunk chunk = getChunk(chunkX, chunkZ);
-        Check.notNull(chunk, "The chunk at " + chunkX + ":" + chunkZ + " is already unloaded");
-        unloadChunk(chunk);
-    }
-
-    /**
-     * Gets block from given position.
-     *
-     * @param position position to get from
-     * @return Block at given position.
-     */
-    public Block getBlock(BlockPosition position) {
-        return getBlock(position.getX(), position.getY(), position.getZ());
-    }
-
-    /**
-     * Gets Block type from given coordinates.
-     *
-     * @param x x coordinate
-     * @param y y coordinate
-     * @param z z coordinate
-     * @return Block at given position.
-     */
-    public Block getBlock(int x, int y, int z) {
-        return Block.fromStateId(getBlockStateId(x, y, z));
-    }
-
-    /**
-     * Gives the block state id at the given position.
-     *
-     * @param x the X position
-     * @param y the Y position
-     * @param z the Z position
-     * @return the block state id at the position
-     */
-    public short getBlockStateId(int x, int y, int z) {
+    @Override
+    public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         final Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
+        Check.notNull(chunk, "The chunk at {0}:{1} is not loaded", x, z);
         synchronized (chunk) {
-            return chunk.getBlockStateId(x, y, z);
+            return chunk.getBlock(x, y, z, condition);
         }
-    }
-
-    /**
-     * Gives the block state id at the given position.
-     *
-     * @param x the X position
-     * @param y the Y position
-     * @param z the Z position
-     * @return the block state id at the position
-     */
-    public short getBlockStateId(double x, double y, double z) {
-        return getBlockStateId((int) Math.round(x), (int) Math.round(y), (int) Math.round(z));
-    }
-
-    /**
-     * Gives the block state id at the given {@link BlockPosition}.
-     *
-     * @param blockPosition the block position
-     * @return the block state id at the position
-     */
-    public short getBlockStateId(@NotNull BlockPosition blockPosition) {
-        return getBlockStateId(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-    }
-
-    /**
-     * Gets the custom block object at the given position.
-     *
-     * @param x the X position
-     * @param y the Y position
-     * @param z the Z position
-     * @return the custom block object at the position, null if not any
-     */
-    @Nullable
-    public CustomBlock getCustomBlock(int x, int y, int z) {
-        final Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        synchronized (chunk) {
-            return chunk.getCustomBlock(x, y, z);
-        }
-    }
-
-    /**
-     * Gets the custom block object at the given {@link BlockPosition}.
-     *
-     * @param blockPosition the block position
-     * @return the custom block object at the position, null if not any
-     */
-    @Nullable
-    public CustomBlock getCustomBlock(@NotNull BlockPosition blockPosition) {
-        return getCustomBlock(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
     }
 
     /**
@@ -697,137 +505,32 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      * @param actionParam   the action parameter, depends on the block
      * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
-    public void sendBlockAction(@NotNull BlockPosition blockPosition, byte actionId, byte actionParam) {
-        final short blockStateId = getBlockStateId(blockPosition);
-        final Block block = Block.fromStateId(blockStateId);
-
-        BlockActionPacket blockActionPacket = new BlockActionPacket();
-        blockActionPacket.blockPosition = blockPosition;
-        blockActionPacket.actionId = actionId;
-        blockActionPacket.actionParam = actionParam;
-        blockActionPacket.blockId = block.getBlockId();
-
+    public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
+        final Block block = getBlock(blockPosition);
         final Chunk chunk = getChunkAt(blockPosition);
-        Check.notNull(chunk, "The chunk at " + blockPosition + " is not loaded!");
-        chunk.sendPacketToViewers(blockActionPacket);
+        Check.notNull(chunk, "The chunk at {0} is not loaded!", blockPosition);
+        chunk.sendPacketToViewers(new BlockActionPacket(blockPosition, actionId, actionParam, block));
     }
 
     /**
-     * Gets the block data at the given position.
-     *
-     * @param x the X position
-     * @param y the Y position
-     * @param z the Z position
-     * @return the block data at the position, null if not any
-     */
-    @Nullable
-    public Data getBlockData(int x, int y, int z) {
-        final Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
-        synchronized (chunk) {
-            return chunk.getBlockData(index);
-        }
-    }
-
-    /**
-     * Gets the block {@link Data} at the given {@link BlockPosition}.
-     *
-     * @param blockPosition the block position
-     * @return the block data at the position, null if not any
-     */
-    @Nullable
-    public Data getBlockData(@NotNull BlockPosition blockPosition) {
-        return getBlockData(blockPosition.getX(), blockPosition.getY(), blockPosition.getZ());
-    }
-
-    /**
-     * Sets the block {@link Data} at the given {@link BlockPosition}.
-     *
-     * @param x    the X position
-     * @param y    the Y position
-     * @param z    the Z position
-     * @param data the data to be set, can be null
-     */
-    public void setBlockData(int x, int y, int z, @Nullable Data data) {
-        final Chunk chunk = getChunkAt(x, z);
-        Check.notNull(chunk, "The chunk at " + x + ":" + z + " is not loaded");
-        synchronized (chunk) {
-            chunk.setBlockData(x, (byte) y, z, data);
-        }
-    }
-
-    /**
-     * Sets the block {@link Data} at the given {@link BlockPosition}.
-     *
-     * @param blockPosition the block position
-     * @param data          the data to be set, can be null
-     */
-    public void setBlockData(@NotNull BlockPosition blockPosition, @Nullable Data data) {
-        setBlockData(blockPosition.getX(), (byte) blockPosition.getY(), blockPosition.getZ(), data);
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
+     * Gets the {@link Chunk} at the given block position, null if not loaded.
      *
      * @param x the X position
      * @param z the Z position
      * @return the chunk at the given position, null if not loaded
      */
-    @Nullable
-    public Chunk getChunkAt(double x, double z) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(x);
-        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-        return getChunk(chunkX, chunkZ);
+    public @Nullable Chunk getChunkAt(double x, double z) {
+        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
     }
 
     /**
-     * Checks if the {@link Chunk} at the position is loaded.
+     * Gets the {@link Chunk} at the given {@link Point}, null if not loaded.
      *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return true if the chunk is loaded, false otherwise
-     */
-    public boolean isChunkLoaded(int chunkX, int chunkZ) {
-        return getChunk(chunkX, chunkZ) != null;
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given {@link BlockPosition}, null if not loaded.
-     *
-     * @param blockPosition the chunk position
+     * @param point the chunk position
      * @return the chunk at the given position, null if not loaded
      */
-    @Nullable
-    public Chunk getChunkAt(@NotNull BlockPosition blockPosition) {
-        return getChunkAt(blockPosition.getX(), blockPosition.getZ());
-    }
-
-    /**
-     * Gets the {@link Chunk} at the given {@link Position}, null if not loaded.
-     *
-     * @param position the chunk position
-     * @return the chunk at the given position, null if not loaded
-     */
-    @Nullable
-    public Chunk getChunkAt(@NotNull Position position) {
-        return getChunkAt(position.getX(), position.getZ());
-    }
-
-    /**
-     * Saves a {@link Chunk} without any callback.
-     *
-     * @param chunk the chunk to save
-     */
-    public void saveChunkToStorage(@NotNull Chunk chunk) {
-        saveChunkToStorage(chunk, null);
-    }
-
-    /**
-     * Saves all {@link Chunk} without any callback.
-     */
-    public void saveChunksToStorage() {
-        saveChunksToStorage(null);
+    public @Nullable Chunk getChunkAt(@NotNull Point point) {
+        return getChunkAt(point.x(), point.z());
     }
 
     /**
@@ -835,35 +538,11 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return the instance unique id
      */
-    @NotNull
-    public UUID getUniqueId() {
+    public @NotNull UUID getUniqueId() {
         return uniqueId;
     }
 
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
-    }
-
-    @Override
-    public @NotNull EventNode<InstanceEvent> getEventNode() {
-        return eventNode;
-    }
-
-    @Override
-    public synchronized <V extends InstanceEvent> boolean addEventCallback(@NotNull Class<V> eventClass, @NotNull EventCallback<V> eventCallback) {
-        if (eventNode.getParent() == null) {
-            MinecraftServer.getGlobalEventHandler().addChild(eventNode);
-        }
-        return EventHandler.super.addEventCallback(eventClass, eventCallback);
-    }
-
-    // UNSAFE METHODS (need most of time to be synchronized)
+    // UNSAFE METHODS (need most of the time to be synchronized)
 
     /**
      * Used when called {@link Entity#setInstance(Instance)}, it is used to refresh viewable chunks
@@ -881,7 +560,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(this, entity);
         EventDispatcher.callCancellable(event, () -> {
-            final Position entityPosition = entity.getPosition();
+            final Pos entityPosition = entity.getPosition();
             final boolean isPlayer = entity instanceof Player;
 
             if (isPlayer) {
@@ -904,8 +583,8 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
             });
 
             // Load the chunk if not already (or throw an error if auto chunk load is disabled)
-            loadOptionalChunk(entityPosition, chunk -> {
-                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, " + entityPosition);
+            loadOptionalChunk(entityPosition).thenAccept(chunk -> {
+                Check.notNull(chunk, "You tried to spawn an entity in an unloaded chunk, {0}", entityPosition);
                 UNSAFE_addEntityToChunk(entity, chunk);
             });
         });
@@ -920,10 +599,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      */
     @ApiStatus.Internal
     public void UNSAFE_removeEntity(@NotNull Entity entity) {
-        final Instance entityInstance = entity.getInstance();
-        if (entityInstance != this)
-            return;
-
+        if (entity.getInstance() != this) return;
         RemoveEntityFromInstanceEvent event = new RemoveEntityFromInstanceEvent(this, entity);
         EventDispatcher.callCancellable(event, () -> {
             // Remove this entity from players viewable list and send delete entities packet
@@ -937,8 +613,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
     }
 
     /**
-     * Synchronized method to execute {@link #UNSAFE_removeEntityFromChunk(Entity, Chunk)}
-     * and {@link #UNSAFE_addEntityToChunk(Entity, Chunk)} simultaneously.
+     * Changes an entity chunk.
      *
      * @param entity    the entity to change its chunk
      * @param lastChunk the last entity chunk
@@ -946,28 +621,20 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      */
     @ApiStatus.Internal
     public synchronized void UNSAFE_switchEntityChunk(@NotNull Entity entity, @NotNull Chunk lastChunk, @NotNull Chunk newChunk) {
-        UNSAFE_removeEntityFromChunk(entity, lastChunk);
-        UNSAFE_addEntityToChunk(entity, newChunk);
+        Check.notNull(newChunk, "The chunk {0} is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)", newChunk);
+        Check.argCondition(!newChunk.isLoaded(), "Chunk {0} has been unloaded previously", newChunk);
+        final long oldIndex = ChunkUtils.getChunkIndex(lastChunk);
+        final long newIndex = ChunkUtils.getChunkIndex(newChunk);
+        synchronized (entitiesLock) {
+            removeEntityChunk(oldIndex, entity);
+            addEntityChunk(newIndex, entity);
+        }
     }
 
-    /**
-     * Adds the specified {@link Entity} to the instance entities cache.
-     * <p>
-     * Warning: this is done automatically when the entity move out of his chunk.
-     *
-     * @param entity the entity to add
-     * @param chunk  the chunk where the entity will be added
-     */
-    @ApiStatus.Internal
-    public void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
-        Check.notNull(chunk,
-                "The chunk " + chunk + " is not loaded, you can make it automatic by using Instance#enableAutoChunkLoad(true)");
-        Check.argCondition(!chunk.isLoaded(), "Chunk " + chunk + " has been unloaded previously");
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+    private void UNSAFE_addEntityToChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
         synchronized (entitiesLock) {
-            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-            entities.add(entity);
-
+            addEntityChunk(chunkIndex, entity);
             this.entities.add(entity);
             if (entity instanceof Player) {
                 this.players.add((Player) entity);
@@ -979,21 +646,10 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
         }
     }
 
-    /**
-     * Removes the specified {@link Entity} to the instance entities cache.
-     * <p>
-     * Warning: this is done automatically when the entity move out of his chunk.
-     *
-     * @param entity the entity to remove
-     * @param chunk  the chunk where the entity will be removed
-     */
-    @ApiStatus.Internal
-    public void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+    private void UNSAFE_removeEntityFromChunk(@NotNull Entity entity, @NotNull Chunk chunk) {
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunk);
         synchronized (entitiesLock) {
-            final long chunkIndex = ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-            Set<Entity> entities = getEntitiesInChunk(chunkIndex);
-            entities.remove(entity);
-
+            removeEntityChunk(chunkIndex, entity);
             this.entities.remove(entity);
             if (entity instanceof Player) {
                 this.players.remove(entity);
@@ -1005,22 +661,19 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
         }
     }
 
-    @NotNull
-    private Set<Entity> getEntitiesInChunk(long index) {
-        return chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet());
+    private void addEntityChunk(long index, Entity entity) {
+        this.chunkEntities.computeIfAbsent(index, i -> ConcurrentHashMap.newKeySet()).add(entity);
     }
 
-    /**
-     * Schedules a block update at a given {@link BlockPosition}.
-     * Does nothing if no {@link CustomBlock} is present at {@code position}.
-     * <p>
-     * Cancelled if the block changes between this call and the actual update.
-     *
-     * @param time     in how long this update must be performed?
-     * @param unit     in what unit is the time expressed
-     * @param position the location of the block to update
-     */
-    public abstract void scheduleUpdate(int time, @NotNull TimeUnit unit, @NotNull BlockPosition position);
+    private void removeEntityChunk(long index, Entity entity) {
+        var chunkEntities = this.chunkEntities.get(index);
+        if (chunkEntities != null) {
+            chunkEntities.remove(entity);
+            if (chunkEntities.isEmpty()) {
+                this.chunkEntities.remove(index);
+            }
+        }
+    }
 
     /**
      * Performs a single tick in the instance, including scheduled tasks from {@link #scheduleNextTick(Consumer)}.
@@ -1038,31 +691,24 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
                 callback.accept(this);
             }
         }
-
         // Time
         {
             this.worldAge++;
-
             this.time += timeRate;
-
-            // time needs to be send to players
+            // time needs to be sent to players
             if (timeUpdate != null && !Cooldown.hasCooldown(time, lastTimeUpdate, timeUpdate)) {
                 PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
                 this.lastTimeUpdate = time;
             }
 
         }
-
         // Tick event
         {
             // Process tick events
-            InstanceTickEvent chunkTickEvent = new InstanceTickEvent(this, time, lastTickAge);
-            EventDispatcher.call(chunkTickEvent);
-
+            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge));
             // Set last tick age
-            lastTickAge = time;
+            this.lastTickAge = time;
         }
-
         this.worldBorder.update();
     }
 
@@ -1117,8 +763,7 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return the instance explosion supplier, null if none was provided
      */
-    @Nullable
-    public ExplosionSupplier getExplosionSupplier() {
+    public @Nullable ExplosionSupplier getExplosionSupplier() {
         return explosionSupplier;
     }
 
@@ -1138,8 +783,8 @@ public abstract class Instance implements BlockModifier, Tickable, TagHandler, P
      *
      * @return the instance space
      */
-    @NotNull
-    public PFInstanceSpace getInstanceSpace() {
+    @ApiStatus.Internal
+    public @NotNull PFInstanceSpace getInstanceSpace() {
         return instanceSpace;
     }
 

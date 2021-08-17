@@ -2,17 +2,17 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.entity.EntityProjectile;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
 /**
@@ -20,16 +20,14 @@ import java.util.function.Function;
  */
 public class CombinedAttackGoal extends GoalSelector {
 
-    private final Cooldown cooldown = new Cooldown(new UpdateOption(5, TimeUnit.TICK));
+    private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private final int meleeRangeSquared;
-    private final int meleeDelay;
-    private final TimeUnit meleeTimeUnit;
+    private final Duration meleeDelay;
     private final int rangedRangeSquared;
     private final double rangedPower;
     private final double rangedSpread;
-    private final int rangedDelay;
-    private final TimeUnit rangedTimeUnit;
+    private final Duration rangedDelay;
     private final int desirableRangeSquared;
     private final boolean comeClose;
 
@@ -52,12 +50,34 @@ public class CombinedAttackGoal extends GoalSelector {
      */
     public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
                               int meleeRange, int rangedRange, double rangedPower, double rangedSpread,
-                              int delay, TimeUnit timeUnit,
+                              int delay, TemporalUnit timeUnit,
                               int desirableRange, boolean comeClose) {
         this(
                 entityCreature,
                 meleeRange, delay, timeUnit,
                 rangedRange, rangedPower, rangedSpread, delay, timeUnit,
+                desirableRange, comeClose
+        );
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to.
+     * @param meleeRange     the allowed range the entity can hit others in melee.
+     * @param rangedRange    the allowed range the entity can shoot others.
+     * @param rangedPower    shot power (1 for normal).
+     * @param rangedSpread   shot spread (0 for best accuracy).
+     * @param delay          the delay between any attacks.
+     * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
+     * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
+     */
+    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+                              int meleeRange, int rangedRange, double rangedPower, double rangedSpread,
+                              Duration delay,
+                              int desirableRange, boolean comeClose) {
+        this(
+                entityCreature,
+                meleeRange, delay,
+                rangedRange, rangedPower, rangedSpread, delay,
                 desirableRange, comeClose
         );
     }
@@ -76,18 +96,35 @@ public class CombinedAttackGoal extends GoalSelector {
      * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
      */
     public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
-                              int meleeRange, int meleeDelay, TimeUnit meleeTimeUnit,
-                              int rangedRange, double rangedPower, double rangedSpread, int rangedDelay, TimeUnit rangedTimeUnit,
+                              int meleeRange, int meleeDelay, TemporalUnit meleeTimeUnit,
+                              int rangedRange, double rangedPower, double rangedSpread, int rangedDelay, TemporalUnit rangedTimeUnit,
+                              int desirableRange, boolean comeClose) {
+        this(entityCreature, meleeRange, Duration.of(meleeDelay, meleeTimeUnit), rangedRange, rangedPower, rangedSpread,
+                Duration.of(rangedDelay, rangedTimeUnit), desirableRange, comeClose);
+    }
+
+    /**
+     * @param entityCreature the entity to add the goal to.
+     * @param meleeRange     the allowed range the entity can hit others in melee.
+     * @param meleeDelay     the delay between melee attacks.
+     * @param rangedRange    the allowed range the entity can shoot others.
+     * @param rangedPower    shot power (1 for normal).
+     * @param rangedSpread   shot spread (0 for best accuracy).
+     * @param rangedDelay    the delay between ranged attacks.
+     * @param desirableRange the desirable range: the entity will try to stay no further than this distance.
+     * @param comeClose      if entity should go as close as possible to the target whether target is not in line of sight for a ranged attack.
+     */
+    public CombinedAttackGoal(@NotNull EntityCreature entityCreature,
+                              int meleeRange, Duration meleeDelay,
+                              int rangedRange, double rangedPower, double rangedSpread, Duration rangedDelay,
                               int desirableRange, boolean comeClose) {
         super(entityCreature);
         this.meleeRangeSquared = meleeRange * meleeRange;
         this.meleeDelay = meleeDelay;
-        this.meleeTimeUnit = meleeTimeUnit;
         this.rangedRangeSquared = rangedRange * rangedRange;
         this.rangedPower = rangedPower;
         this.rangedSpread = rangedSpread;
         this.rangedDelay = rangedDelay;
-        this.rangedTimeUnit = rangedTimeUnit;
         this.desirableRangeSquared = desirableRange * desirableRange;
         this.comeClose = comeClose;
         Check.argCondition(desirableRange > rangedRange, "Desirable range can not exceed ranged range!");
@@ -129,15 +166,15 @@ public class CombinedAttackGoal extends GoalSelector {
         boolean comeClose = false;
         // First of all, checking if to perform melee or ranged attack depending on the distance to target.
         if (distanceSquared <= this.meleeRangeSquared) {
-            if (!Cooldown.hasCooldown(time, this.lastAttack, this.meleeTimeUnit, this.meleeDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.meleeDelay)) {
                 this.entityCreature.attack(target, true);
                 this.lastAttack = time;
             }
         } else if (distanceSquared <= this.rangedRangeSquared) {
-            if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedTimeUnit, this.rangedDelay)) {
+            if (!Cooldown.hasCooldown(time, this.lastAttack, this.rangedDelay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
                     // If target is on line of entity sight, ranged attack can be performed
-                    Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
+                    final var to = target.getPosition().add(0D, target.getEyeHeight(), 0D);
 
                     Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
                     if (projectileGenerator == null) {
@@ -155,7 +192,7 @@ public class CombinedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        Position pathPosition = navigator.getPathPosition();
+        final var pathPosition = navigator.getPathPosition();
         // If we don't want to come close and we're already within desirable range, no movement is needed.
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
@@ -164,8 +201,8 @@ public class CombinedAttackGoal extends GoalSelector {
             return;
         }
         // Otherwise going to the target.
-        Position targetPosition = target.getPosition();
-        if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
+        final var targetPosition = target.getPosition();
+        if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
             if (this.cooldown.isReady(time)) {
                 this.cooldown.refreshLastUpdate(time);
                 navigator.setPathTo(targetPosition);

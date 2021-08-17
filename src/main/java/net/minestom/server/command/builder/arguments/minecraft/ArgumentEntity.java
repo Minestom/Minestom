@@ -6,11 +6,10 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.math.IntRange;
-import net.minestom.server.utils.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -90,6 +89,10 @@ public class ArgumentEntity extends Argument<EntityFinder> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     @NotNull
     public static EntityFinder staticParse(@NotNull String input,
                                            boolean onlySingleEntity, boolean onlyPlayers) throws ArgumentSyntaxException {
@@ -207,7 +210,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             case "type": {
                 final boolean include = !value.startsWith("!");
                 final String entityName = include ? value : value.substring(1);
-                final EntityType entityType = Registries.getEntityType(entityName);
+                final EntityType entityType = EntityType.fromNamespaceId(entityName);
                 if (entityType == null)
                     throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
                 entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);

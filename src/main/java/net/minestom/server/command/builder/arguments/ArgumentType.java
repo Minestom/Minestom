@@ -254,10 +254,8 @@ public class ArgumentType {
     }
 
     /**
-     * @see ArgumentLoop
-     * @deprecated brigadier does not support long
+     * @see ArgumentLong
      */
-    @Deprecated
     public static ArgumentLong Long(@NotNull String id) {
         return new ArgumentLong(id);
     }

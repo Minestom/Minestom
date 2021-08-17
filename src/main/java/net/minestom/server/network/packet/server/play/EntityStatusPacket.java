@@ -11,7 +11,14 @@ public class EntityStatusPacket implements ServerPacket {
     public int entityId;
     public byte status;
 
-    public EntityStatusPacket() {}
+    public EntityStatusPacket(int entityId, byte status) {
+        this.entityId = entityId;
+        this.status = status;
+    }
+
+    public EntityStatusPacket() {
+        this(0, (byte) 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

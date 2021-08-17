@@ -8,8 +8,8 @@ import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.player.NettyPlayerConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,14 @@ public class HandshakePacket implements ClientPreplayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.protocolVersion = reader.readVarInt();
-        this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
+        try {
+            this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
+        } catch (Exception e) {
+            if (BungeeCordProxy.isEnabled()) {
+                System.err.println("Legacy proxy forwarding is enabled but the read did underflow. Please check your proxy.");
+            }
+            e.printStackTrace();
+        }
         this.serverPort = reader.readUnsignedShort();
         this.nextState = reader.readVarInt();
     }
@@ -42,8 +49,8 @@ public class HandshakePacket implements ClientPreplayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(protocolVersion);
         int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
-        if(serverAddress.length() > maxLength) {
-            throw new IllegalArgumentException("serverAddress is "+serverAddress.length()+" characters long, maximum allowed is "+maxLength);
+        if (serverAddress.length() > maxLength) {
+            throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
         writer.writeSizedString(serverAddress);
         writer.writeUnsignedShort(serverPort);
@@ -54,8 +61,8 @@ public class HandshakePacket implements ClientPreplayPacket {
     public void process(@NotNull PlayerConnection connection) {
 
         // Bungee support (IP forwarding)
-        if (BungeeCordProxy.isEnabled() && connection instanceof NettyPlayerConnection) {
-            NettyPlayerConnection nettyPlayerConnection = (NettyPlayerConnection) connection;
+        if (BungeeCordProxy.isEnabled() && connection instanceof PlayerSocketConnection) {
+            PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
 
             if (serverAddress != null) {
                 final String[] split = serverAddress.split("\00");
@@ -65,7 +72,7 @@ public class HandshakePacket implements ClientPreplayPacket {
 
                     final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
                             ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
-                    nettyPlayerConnection.setRemoteAddress(socketAddress);
+                    socketConnection.setRemoteAddress(socketAddress);
 
                     UUID playerUuid = UUID.fromString(
                             split[2]
@@ -79,11 +86,11 @@ public class HandshakePacket implements ClientPreplayPacket {
                         playerSkin = BungeeCordProxy.readSkin(split[3]);
                     }
 
-                    nettyPlayerConnection.UNSAFE_setBungeeUuid(playerUuid);
-                    nettyPlayerConnection.UNSAFE_setBungeeSkin(playerSkin);
+                    socketConnection.UNSAFE_setBungeeUuid(playerUuid);
+                    socketConnection.UNSAFE_setBungeeSkin(playerSkin);
                 } else {
-                    nettyPlayerConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
-                    nettyPlayerConnection.disconnect();
+                    socketConnection.sendPacket(new LoginDisconnectPacket(INVALID_BUNGEE_FORWARDING));
+                    socketConnection.disconnect();
                     return;
                 }
             } else {
@@ -92,9 +99,9 @@ public class HandshakePacket implements ClientPreplayPacket {
             }
         }
 
-        if (connection instanceof NettyPlayerConnection) {
+        if (connection instanceof PlayerSocketConnection) {
             // Give to the connection the server info that the client used
-            ((NettyPlayerConnection) connection).refreshServerInformation(serverAddress, serverPort, protocolVersion);
+            ((PlayerSocketConnection) connection).refreshServerInformation(serverAddress, serverPort, protocolVersion);
         }
 
         switch (nextState) {

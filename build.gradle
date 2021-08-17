@@ -39,7 +39,6 @@ allprojects {
     }
     javadoc {
         options {
-            destinationDir(file("docs"))
             addBooleanOption('html5', true)
             links "https://jd.adventure.kyori.net/api/$adventureVersion/"
             links "https://docs.oracle.com/en/java/javase/11/docs/api/"
@@ -101,47 +100,36 @@ tasks.withType(Zip).configureEach {
 
 dependencies {
     // Junit Testing Framework
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.2'
-    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.7.2')
 
     // Only here to ensure J9 module support for extensions and our classloaders
-    testCompileOnly "org.mockito:mockito-core:2.28.2"
-
-    // Netty
-    api 'io.netty:netty-handler:4.1.65.Final'
-    api 'io.netty:netty-codec:4.1.65.Final'
-    api 'io.netty:netty-transport-native-epoll:4.1.65.Final:linux-x86_64'
-    api 'io.netty:netty-transport-native-kqueue:4.1.65.Final:osx-x86_64'
+    testCompileOnly 'org.mockito:mockito-core:3.11.1'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.5.4'
 
     // https://mvnrepository.com/artifact/com.google.code.gson/gson
-    api 'com.google.code.gson:gson:2.8.6'
+    api 'com.google.code.gson:gson:2.8.7'
 
     // Noise library for terrain generation
     // https://jitpack.io/#Articdive/Jnoise
     api 'com.github.Articdive:Jnoise:2.1.0'
 
-    // https://mvnrepository.com/artifact/org.rocksdb/rocksdbjni
-    api 'org.rocksdb:rocksdbjni:6.16.4'
-
     // Logging
-    api 'org.apache.logging.log4j:log4j-core:2.14.0'
+    api 'org.apache.logging.log4j:log4j-core:2.14.1'
     // SLF4J is the base logger for most libraries, therefore we can hook it into log4j2.
-    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.0'
+    api 'org.apache.logging.log4j:log4j-slf4j-impl:2.14.1'
 
     // https://mvnrepository.com/artifact/org.jline/jline
     implementation group: 'org.jline', name: 'jline', version: '3.20.0'
+    // https://mvnrepository.com/artifact/org.jline/jline-terminal-jansi
+    implementation group: 'org.jline', name: 'jline-terminal-jansi', version: '3.20.0'
 
-    // Jline compatibility for windows
-    // https://search.maven.org/artifact/org.fusesource.jansi/jansi/2.3.2/jar
-    implementation 'org.fusesource.jansi:jansi:2.3.2'
-
-    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.2'
+    implementation 'com.github.ben-manes.caffeine:caffeine:3.0.3'
 
     // Guava 21.0+ required for Mixin
-    api 'com.google.guava:guava:30.1-jre'
+    api 'com.google.guava:guava:30.1.1-jre'
 
     // Code modification
     api "org.ow2.asm:asm:${asmVersion}"
@@ -167,6 +155,7 @@ dependencies {
     }
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
+    implementation 'com.github.Minestom:MinestomDataGenerator:7636d5d473'
 
     // Adventure, for user-interface
     api "net.kyori:adventure-api:$adventureVersion"

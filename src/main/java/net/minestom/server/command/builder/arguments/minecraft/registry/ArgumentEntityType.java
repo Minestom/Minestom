@@ -4,7 +4,6 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.registry.Registries;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -18,7 +17,7 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 
     @Override
     public EntityType getRegistry(@NotNull String value) {
-        return Registries.getEntityType(value);
+        return EntityType.fromNamespaceId(value);
     }
 
     @Override

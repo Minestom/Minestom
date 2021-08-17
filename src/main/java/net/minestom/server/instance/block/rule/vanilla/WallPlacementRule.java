@@ -5,23 +5,22 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.BlockPosition;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Map;
 
 public class WallPlacementRule extends BlockPlacementRule {
 
-    Block block;
-
-    public WallPlacementRule(Block block) {
+    public WallPlacementRule(@NotNull Block block) {
         super(block);
-        this.block = block;
     }
 
     @Override
-    public short blockUpdate(@NotNull Instance instance, @NotNull BlockPosition blockPosition, short currentId) {
-        final int x = blockPosition.getX();
-        final int y = blockPosition.getY();
-        final int z = blockPosition.getZ();
+    public @NotNull Block blockUpdate(@NotNull Instance instance, @NotNull Point blockPosition, @NotNull Block block) {
+        final int x = blockPosition.blockX();
+        final int y = blockPosition.blockY();
+        final int z = blockPosition.blockZ();
 
         String east = "none";
         String north = "none";
@@ -46,21 +45,23 @@ public class WallPlacementRule extends BlockPlacementRule {
             north = "low";
         }
 
-
-        return block.withProperties("east=" + east, "north=" + north, "south=" + south, "up=" + up,
-                "waterlogged=" + waterlogged, "west=" + west);
+        return block.withProperties(Map.of(
+                "east", east,
+                "north", north,
+                "south", south,
+                "west", west,
+                "up", up,
+                "waterlogged", waterlogged));
     }
 
     @Override
-    public short blockPlace(@NotNull Instance instance,
-                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull BlockPosition blockPosition,
+    public Block blockPlace(@NotNull Instance instance,
+                            @NotNull Block block, @NotNull BlockFace blockFace, @NotNull Point blockPosition,
                             @NotNull Player pl) {
-        return getBlockId();
+        return block;
     }
 
     private boolean isBlock(Instance instance, int x, int y, int z) {
-        final short blockStateId = instance.getBlockStateId(x, y, z);
-        return Block.fromStateId(blockStateId).isSolid();
+        return instance.getBlock(x, y, z).isSolid();
     }
-
 }

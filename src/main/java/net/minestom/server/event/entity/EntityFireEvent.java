@@ -3,37 +3,37 @@ package net.minestom.server.event.entity;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 public class EntityFireEvent implements EntityEvent, CancellableEvent {
 
     private final Entity entity;
-    private int duration;
-    private TimeUnit timeUnit;
+    private Duration duration;
 
     private boolean cancelled;
 
-    public EntityFireEvent(Entity entity, int duration, TimeUnit timeUnit) {
+    public EntityFireEvent(Entity entity, int duration, TemporalUnit temporalUnit) {
+        this(entity, Duration.of(duration, temporalUnit));
+    }
+
+    public EntityFireEvent(Entity entity, Duration duration) {
         this.entity = entity;
-        setFireTime(duration, timeUnit);
+        setFireTime(duration);
     }
 
-    public long getFireTime(TimeUnit timeUnit) {
-        switch (timeUnit) {
-            case TICK:
-                return duration;
-            case MILLISECOND:
-                return timeUnit.toMilliseconds(duration);
-            default:
-                // Unexpected
-                return -1;
-        }
+    public long getFireTime(TemporalUnit temporalUnit) {
+        return duration.toNanos() / temporalUnit.getDuration().toNanos();
     }
 
-    public void setFireTime(int duration, TimeUnit timeUnit) {
+    public void setFireTime(int duration, TemporalUnit temporalUnit) {
+        setFireTime(Duration.of(duration, temporalUnit));
+    }
+
+    public void setFireTime(Duration duration) {
         this.duration = duration;
-        this.timeUnit = timeUnit;
     }
 
     @Override

@@ -316,9 +316,9 @@ public final class CommandManager {
         final int literalNodeId = addCommandNameNode(literalNode, rootChildren, nodes);
 
         // Contains the arguments of the already-parsed syntaxes
-        List<Argument<?>[]> syntaxesArguments = new ArrayList<>();
+        Map<CommandSyntax, Argument<?>[]> syntaxesArguments = new HashMap<>();
         // Contains the nodes of an argument
-        Map<Argument<?>, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
+        Map<IndexedArgument, List<DeclareCommandsPacket.Node[]>> storedArgumentsNodes = new HashMap<>();
 
         // Sort syntaxes by argument count. Brigadier requires it.
         syntaxes = syntaxes.stream().sorted(Comparator.comparingInt(o -> -o.getArguments().length)).collect(Collectors.toList());
@@ -347,14 +347,19 @@ public final class CommandManager {
                 {
                     // Find shared part
                     boolean foundSharedPart = false;
-                    for (Argument<?>[] parsedArguments : syntaxesArguments) {
+                    for (var entry : syntaxesArguments.entrySet()) {
+                        final var parsedArguments = entry.getValue();
                         final int index = i + 1;
-                        if (ArrayUtils.sameStart(arguments, parsedArguments, index)) {
+                        if (Arrays.mismatch(arguments, 0, index, parsedArguments, 0, index) == -1) {
                             final Argument<?> sharedArgument = parsedArguments[i];
-                            final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(sharedArgument);
+                            final var sharedSyntax = entry.getKey();
+                            final var indexed = new IndexedArgument(sharedSyntax, sharedArgument, i);
+                            final List<DeclareCommandsPacket.Node[]> storedNodes = storedArgumentsNodes.get(indexed);
+                            if (storedNodes == null)
+                                continue; // Retrieved argument has already been redirected
 
                             argChildren = new IntArrayList();
-                            lastNodes = storedNodes.get(index);
+                            lastNodes = storedNodes.get(storedNodes.size() > index ? index : i);
                             foundSharedPart = true;
                         }
                     }
@@ -369,7 +374,7 @@ public final class CommandManager {
 
                     // Each node array represent a layer
                     final List<DeclareCommandsPacket.Node[]> nodesLayer = nodeMaker.getNodes();
-                    storedArgumentsNodes.put(argument, new ArrayList<>(nodesLayer));
+                    storedArgumentsNodes.put(new IndexedArgument(syntax, argument, i), new ArrayList<>(nodesLayer));
                     for (int nodeIndex = lastArgumentNodeIndex; nodeIndex < nodesLayer.size(); nodeIndex++) {
                         final NodeMaker.ConfiguredNodes configuredNodes = nodeMaker.getConfiguredNodes().get(nodeIndex);
                         final NodeMaker.Options options = configuredNodes.getOptions();
@@ -417,17 +422,18 @@ public final class CommandManager {
 
             nodeRequests.addAll(nodeMaker.getNodeRequests());
 
-            syntaxesArguments.add(arguments);
+            syntaxesArguments.put(syntax, arguments);
         }
 
-        storedArgumentsNodes.forEach((argument, argNodes) -> {
+        storedArgumentsNodes.forEach((indexedArgument, argNodes) -> {
             int value = 0;
             for (DeclareCommandsPacket.Node[] n1 : argNodes) {
                 for (DeclareCommandsPacket.Node n2 : n1) {
                     value = nodes.indexOf(n2);
                 }
             }
-            argumentIdentityMap.put(argument, value);
+            // FIXME: add syntax for indexing
+            argumentIdentityMap.put(indexedArgument.argument, value);
         });
 
         literalNode.children = ArrayUtils.toArray(cmdChildren);
@@ -450,5 +456,39 @@ public final class CommandManager {
         rootChildren.add(node);
         nodes.add(commandNode);
         return node;
+    }
+
+    private static class IndexedArgument {
+        private final CommandSyntax syntax;
+        private final Argument<?> argument;
+        private final int index;
+
+        public IndexedArgument(CommandSyntax syntax, Argument<?> argument, int index) {
+            this.syntax = syntax;
+            this.argument = argument;
+            this.index = index;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            IndexedArgument that = (IndexedArgument) o;
+            return index == that.index && Objects.equals(syntax, that.syntax) && Objects.equals(argument, that.argument);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(syntax, argument, index);
+        }
+
+        @Override
+        public String toString() {
+            return "IndexedArgument{" +
+                    "syntax=" + syntax +
+                    ", argument=" + argument +
+                    ", index=" + index +
+                    '}';
+        }
     }
 }

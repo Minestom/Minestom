@@ -10,10 +10,14 @@ public class UnloadChunkPacket implements ServerPacket {
 
     public int chunkX, chunkZ;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public UnloadChunkPacket() {}
+    public UnloadChunkPacket(int chunkX, int chunkZ) {
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+    }
+
+    public UnloadChunkPacket() {
+        this(0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

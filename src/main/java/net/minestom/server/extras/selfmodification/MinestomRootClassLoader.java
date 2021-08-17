@@ -28,7 +28,7 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinestomRootClassLoader.class);
 
-    private static MinestomRootClassLoader INSTANCE;
+    private static volatile MinestomRootClassLoader INSTANCE;
 
     /**
      * Classes that cannot be loaded/modified by this classloader.
@@ -42,12 +42,16 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     };
     public final Set<String> protectedPackages = new HashSet<>() {
         {
-            add("com.google");
+            add("com.google.j2objc");
+            add("com.google.common"); // guava
+            add("com.google.errorprone");
+            add("com.google.gson");
             add("com.mojang");
             add("org.objectweb.asm");
             add("org.slf4j");
-            add("org.apache");
-            add("org.spongepowered");
+            add("org.apache.logging");
+            add("org.spongepowered.asm"); // Mixin
+            add("org.spongepowered.tools"); // Mixin
             add("net.minestom.server.extras.selfmodification");
             add("org.jboss.shrinkwrap.resolver");
             add("kotlin");

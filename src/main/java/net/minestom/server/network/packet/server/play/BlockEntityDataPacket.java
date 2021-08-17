@@ -3,9 +3,10 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
@@ -15,12 +16,12 @@ import java.io.IOException;
 
 public class BlockEntityDataPacket implements ServerPacket {
 
-    public BlockPosition blockPosition;
+    public Point blockPosition;
     public byte action;
     public NBTCompound nbtCompound;
 
     public BlockEntityDataPacket() {
-        blockPosition = new BlockPosition(0,0,0);
+        blockPosition = Vec.ZERO;
     }
 
     @Override
@@ -41,7 +42,7 @@ public class BlockEntityDataPacket implements ServerPacket {
         action = reader.readByte();
         try {
             NBT tag = reader.readTag();
-            if(tag instanceof NBTCompound) {
+            if (tag instanceof NBTCompound) {
                 nbtCompound = (NBTCompound) tag;
             }
         } catch (IOException | NBTException e) {

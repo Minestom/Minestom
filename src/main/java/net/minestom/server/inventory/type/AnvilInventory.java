@@ -1,14 +1,20 @@
 package net.minestom.server.inventory.type;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
+import org.jetbrains.annotations.NotNull;
 
 public class AnvilInventory extends Inventory {
 
     private short repairCost;
 
-    public AnvilInventory(String title) {
+    public AnvilInventory(@NotNull Component title) {
+        super(InventoryType.ANVIL, title);
+    }
+
+    public AnvilInventory(@NotNull String title) {
         super(InventoryType.ANVIL, title);
     }
 

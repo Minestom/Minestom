@@ -109,9 +109,9 @@ public class ItemStackBuilder {
 
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack build() {
-        if (amount > 0)
-            return new ItemStack(material, amount, metaBuilder.build(), stackingRule);
-        return ItemStack.AIR;
+        if (amount < 1)
+            return ItemStack.AIR;
+        return new ItemStack(material, amount, metaBuilder.generate(), stackingRule);
     }
 
     private static final class DefaultMeta extends ItemMetaBuilder {
@@ -130,5 +130,4 @@ public class ItemStackBuilder {
             return DefaultMeta::new;
         }
     }
-
 }

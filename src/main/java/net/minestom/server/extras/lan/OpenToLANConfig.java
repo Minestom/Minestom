@@ -2,10 +2,10 @@ package net.minestom.server.extras.lan;
 
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.time.UpdateOption;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Duration;
 import java.util.Objects;
 
 /**
@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 public class OpenToLANConfig {
     int port;
-    UpdateOption delayBetweenPings, delayBetweenEvent;
+    Duration delayBetweenPings, delayBetweenEvent;
 
     /**
      * Creates a new config with the port set to random and the delay between pings set
@@ -23,8 +23,8 @@ public class OpenToLANConfig {
      */
     public OpenToLANConfig() {
         this.port = 0;
-        this.delayBetweenPings = new UpdateOption(1500, TimeUnit.MILLISECOND);
-        this.delayBetweenEvent = new UpdateOption(30, TimeUnit.SECOND);
+        this.delayBetweenPings = Duration.of(1500, TimeUnit.MILLISECOND);
+        this.delayBetweenEvent = Duration.of(30, TimeUnit.SECOND);
     }
 
     /**
@@ -46,7 +46,7 @@ public class OpenToLANConfig {
      * @return {@code this}, for chaining
      */
     @Contract("_ -> this")
-    public @NotNull OpenToLANConfig pingDelay(@NotNull UpdateOption delay) {
+    public @NotNull OpenToLANConfig pingDelay(@NotNull Duration delay) {
         this.delayBetweenPings = Objects.requireNonNull(delay, "delay");
         return this;
     }
@@ -58,7 +58,7 @@ public class OpenToLANConfig {
      * @return {@code this}, for chaining
      */
     @Contract("_ -> this")
-    public @NotNull OpenToLANConfig eventCallDelay(@NotNull UpdateOption delay) {
+    public @NotNull OpenToLANConfig eventCallDelay(@NotNull Duration delay) {
         this.delayBetweenEvent = Objects.requireNonNull(delay, "delay");
         return this;
     }

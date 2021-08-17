@@ -5,19 +5,22 @@ import demo.generator.NoiseTestGenerator;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.event.Event;
-import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.event.player.*;
-import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.player.PlayerDeathEvent;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import net.minestom.server.event.player.PlayerLoginEvent;
+import net.minestom.server.event.player.PlayerSpawnEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -25,17 +28,14 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.ItemTag;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.metadata.CompassMeta;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.world.DimensionType;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.Random;
 import java.util.Set;
@@ -50,16 +50,12 @@ public class PlayerInit {
             .addListener(EntityAttackEvent.class, event -> {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
+
+                entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
+
                 if (entity instanceof Player) {
                     Player target = (Player) entity;
-                    Vector velocity = source.getPosition().clone().getDirection().multiply(4);
-                    velocity.setY(3.5f);
-                    target.setVelocity(velocity);
                     target.damage(DamageType.fromEntity(source), 5);
-                } else {
-                    Vector velocity = source.getPosition().clone().getDirection().multiply(3);
-                    velocity.setY(3f);
-                    entity.setVelocity(velocity);
                 }
 
                 if (source instanceof Player) {
@@ -79,11 +75,11 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 ItemStack droppedItem = event.getItemStack();
 
-                Position position = player.getPosition().clone().add(0, 1.5f, 0);
-                ItemEntity itemEntity = new ItemEntity(droppedItem, position);
-                itemEntity.setPickupDelay(500, TimeUnit.MILLISECOND);
-                itemEntity.setInstance(player.getInstance());
-                Vector velocity = player.getPosition().clone().getDirection().multiply(6);
+                Pos playerPos = player.getPosition();
+                ItemEntity itemEntity = new ItemEntity(droppedItem);
+                itemEntity.setPickupDelay(Duration.of(500, TimeUnit.MILLISECOND));
+                itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
+                Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
@@ -95,7 +91,7 @@ public class PlayerInit {
                 event.setSpawningInstance(instance);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
-                player.setRespawnPoint(new Position(0, 42f, 0));
+                player.setRespawnPoint(new Pos(0, 42f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
@@ -112,55 +108,23 @@ public class PlayerInit {
 
     static {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        //StorageLocation storageLocation = MinecraftServer.getStorageManager().getLocation("instance_data", new StorageOptions().setCompression(true));
         ChunkGeneratorDemo chunkGeneratorDemo = new ChunkGeneratorDemo();
         NoiseTestGenerator noiseTestGenerator = new NoiseTestGenerator();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer(DimensionType.OVERWORLD);
-        instanceContainer.enableAutoChunkLoad(true);
         instanceContainer.setChunkGenerator(chunkGeneratorDemo);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
-        /*inventory.addInventoryCondition((p, slot, clickType, inventoryConditionResult) -> {
-            p.sendMessage("click type inventory: " + clickType);
-            System.out.println("slot inv: " + slot)0;
-            inventoryConditionResult.setCancel(slot == 3);
-        });*/
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
-
-        {
-            CompassMeta compassMeta = new CompassMeta.Builder()
-                    .lodestonePosition(new Position(0, 0, 0))
-                    .build();
-
-            ItemStack itemStack = ItemStack.builder(Material.COMPASS)
-                    .meta(CompassMeta.class, builder -> {
-                        builder.lodestonePosition(new Position(0, 0, 0));
-                        builder.set(ItemTag.Integer("int"), 25);
-                    })
-                    .build();
-
-            itemStack = itemStack.with(itemBuilder -> itemBuilder
-                    .amount(10)
-                    .meta(CompassMeta.class, builder -> {
-                        builder.lodestonePosition(new Position(5, 0, 0));
-                    })
-                    .lore(Component.text("Lore")));
-        }
-
     }
 
-    private static AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+    private static final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
     public static void init() {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
-        var children = eventHandler.findChildren("demo", Event.class);
 
-        eventHandler.replaceChildren("demo", PlayerEvent.class, EventNode.type("random", EventFilter.PLAYER));
-
-        MinecraftServer.getUpdateManager().addTickMonitor(tickMonitor ->
-                LAST_TICK.set(tickMonitor));
+        MinecraftServer.getUpdateManager().addTickMonitor(LAST_TICK::set);
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {
@@ -179,8 +143,6 @@ public class PlayerInit {
                     .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
-        }).repeat(10, TimeUnit.TICK).schedule();
+        }).repeat(10, TimeUnit.SERVER_TICK).schedule();
     }
-
-
 }

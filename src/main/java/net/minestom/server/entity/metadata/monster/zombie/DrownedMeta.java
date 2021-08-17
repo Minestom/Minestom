@@ -2,7 +2,6 @@ package net.minestom.server.entity.metadata.monster.zombie;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
-import net.minestom.server.entity.metadata.monster.MonsterMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class DrownedMeta extends ZombieMeta {

@@ -1,9 +1,11 @@
 package net.minestom.server.inventory.type;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 public class BeaconInventory extends Inventory {
 
@@ -11,7 +13,11 @@ public class BeaconInventory extends Inventory {
     private PotionEffect firstPotionEffect;
     private PotionEffect secondPotionEffect;
 
-    public BeaconInventory(String title) {
+    public BeaconInventory(@NotNull Component title) {
+        super(InventoryType.BEACON, title);
+    }
+
+    public BeaconInventory(@NotNull String title) {
         super(InventoryType.BEACON, title);
     }
 
@@ -50,7 +56,7 @@ public class BeaconInventory extends Inventory {
      */
     public void setFirstPotionEffect(PotionEffect firstPotionEffect) {
         this.firstPotionEffect = firstPotionEffect;
-        sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.getId());
+        sendProperty(InventoryProperty.BEACON_FIRST_POTION, (short) firstPotionEffect.id());
     }
 
     /**
@@ -69,7 +75,6 @@ public class BeaconInventory extends Inventory {
      */
     public void setSecondPotionEffect(PotionEffect secondPotionEffect) {
         this.secondPotionEffect = secondPotionEffect;
-        sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.getId());
+        sendProperty(InventoryProperty.BEACON_SECOND_POTION, (short) secondPotionEffect.id());
     }
-
 }

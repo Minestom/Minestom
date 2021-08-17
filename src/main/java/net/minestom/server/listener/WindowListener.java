@@ -13,12 +13,10 @@ import net.minestom.server.network.packet.client.play.ClientPongPacket;
 import net.minestom.server.network.packet.server.play.PingPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 
-import java.util.Objects;
-
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
-        final byte windowId = packet.windowId;
+        final int windowId = packet.windowId;
         final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
         if (inventory == null) {
             // Invalid packet
@@ -33,11 +31,10 @@ public class WindowListener {
 
         boolean successful = false;
 
-        // prevent click in a non interactive slot (why does it exist?)
+        // prevent click in a non-interactive slot (why does it exist?)
         if (slot == -1) {
             return;
         }
-
         if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
             if (button == 0) {
                 if (slot != -999) {
@@ -70,11 +67,7 @@ public class WindowListener {
         }
 
         // Prevent the player from picking a ghost item in cursor
-        if (Objects.equals(player.getOpenInventory(), inventory)) {
-            assert inventory instanceof Inventory;
-            refreshCursorItem(player, (Inventory) inventory);
-        }
-
+        refreshCursorItem(player, inventory);
         // Prevent ghost item when the click is cancelled
         if (!successful) {
             player.getInventory().update();
@@ -82,7 +75,7 @@ public class WindowListener {
                 ((Inventory) inventory).update(player);
             }
         }
-
+        // (Why is the ping packet necessary?)
         PingPacket pingPacket = new PingPacket();
         pingPacket.id = (1 << 30) | (windowId << 16);
         player.getPlayerConnection().sendPacket(pingPacket);
@@ -108,9 +101,15 @@ public class WindowListener {
      * @param player    the player to refresh the cursor item
      * @param inventory the player open inventory, null if not any (could be player inventory)
      */
-    private static void refreshCursorItem(Player player, Inventory inventory) {
-        ItemStack cursorItem = inventory != null ?
-                inventory.getCursorItem(player) : player.getInventory().getCursorItem();
+    private static void refreshCursorItem(Player player, AbstractInventory inventory) {
+        ItemStack cursorItem;
+        if (inventory instanceof PlayerInventory) {
+            cursorItem = ((PlayerInventory) inventory).getCursorItem();
+        } else if (inventory instanceof Inventory) {
+            cursorItem = ((Inventory) inventory).getCursorItem(player);
+        } else {
+            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
+        }
         final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
         player.getPlayerConnection().sendPacket(setSlotPacket);
     }
@@ -121,8 +120,7 @@ public class WindowListener {
         } else if (inventory instanceof Inventory) {
             ((Inventory) inventory).setCursorItem(player, itemStack);
         } else {
-            System.err.println("Invalid inventory: " + inventory.getClass());
+            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
         }
     }
-
 }

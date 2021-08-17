@@ -28,7 +28,7 @@ public class FireworkEffectMeta extends ItemMeta implements ItemMetaBuilder.Prov
 
         public Builder effect(@Nullable FireworkEffect fireworkEffect) {
             this.fireworkEffect = fireworkEffect;
-            this.nbt.set("Explosion", this.fireworkEffect.asCompound());
+            mutateNbt(compound -> compound.set("Explosion", this.fireworkEffect.asCompound()));
             return this;
         }
 

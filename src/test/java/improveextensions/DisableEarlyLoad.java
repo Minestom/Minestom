@@ -17,7 +17,7 @@ public class DisableEarlyLoad extends Extension {
     @Override
     public void initialize() {
         // force load of InstanceContainer class
-        InstanceContainer c = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null);
+        InstanceContainer c = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD);
         System.out.println(c.toString());
         try {
             Assertions.assertFalse(MixinIntoMinestomCore.success, "InstanceContainer must NOT have been mixed in with improveextensions.InstanceContainerMixin, because early loading has been disabled");

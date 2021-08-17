@@ -1,203 +1,159 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgePlayerDiggingPacket;
-import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
-import net.minestom.server.potion.Potion;
-import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.utils.BlockPosition;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-public class PlayerDiggingListener {
-
-    private static final List<Player> playersEffect = new CopyOnWriteArrayList<>();
+public final class PlayerDiggingListener {
 
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
         final ClientPlayerDiggingPacket.Status status = packet.status;
-        final BlockPosition blockPosition = packet.blockPosition;
-
+        final Point blockPosition = packet.blockPosition;
         final Instance instance = player.getInstance();
+        if (instance == null) return;
 
-        if (instance == null)
-            return;
-
+        DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
-            final short blockStateId = instance.getBlockStateId(blockPosition);
-
-            //Check if the player is allowed to break blocks based on their game mode
-            if (player.getGameMode() == GameMode.SPECTATOR) {
-                sendAcknowledgePacket(player, blockPosition, blockStateId,
-                        ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                return; //Spectators can't break blocks
-            } else if (player.getGameMode() == GameMode.ADVENTURE) {
-                //Check if the item can break the block with the current item
-                ItemStack itemInMainHand = player.getItemInMainHand();
-                Block destroyedBlock = instance.getBlock(blockPosition);
-                if (!itemInMainHand.getMeta().getCanDestroy().contains(destroyedBlock)) {
-                    sendAcknowledgePacket(player, blockPosition, blockStateId,
-                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                    return;
-                }
-            }
-
-            final boolean instantBreak = player.isCreative() ||
-                    player.isInstantBreak() ||
-                    Block.fromStateId(blockStateId).breaksInstantaneously();
-
-            if (instantBreak) {
-                // No need to check custom block
-                breakBlock(instance, player, blockPosition, blockStateId, status);
-            } else {
-                final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-                final int customBlockId = customBlock == null ? 0 : customBlock.getCustomBlockId();
-
-                PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, blockPosition, blockStateId, customBlockId);
-                EventDispatcher.call(playerStartDiggingEvent);
-
-                if (playerStartDiggingEvent.isCancelled()) {
-                    addEffect(player);
-
-                    // Unsuccessful digging
-                    sendAcknowledgePacket(player, blockPosition, blockStateId,
-                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, false);
-                } else if (customBlock != null) {
-                    // Start digging the custom block
-                    if (customBlock.enableCustomBreakDelay()) {
-                        customBlock.startDigging(instance, blockPosition, player);
-                        addEffect(player);
-                    }
-
-                    sendAcknowledgePacket(player, blockPosition, blockStateId,
-                            ClientPlayerDiggingPacket.Status.STARTED_DIGGING, true);
-                }
-            }
-
+            diggingResult = startDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
-
-            final short blockStateId = instance.getBlockStateId(blockPosition);
-            // Remove custom block target
-            player.resetTargetBlock();
-
-            sendAcknowledgePacket(player, blockPosition, blockStateId,
-                    ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING, true);
-
+            diggingResult = cancelDigging(instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
-
-            final short blockStateId = instance.getBlockStateId(blockPosition);
-            final CustomBlock customBlock = instance.getCustomBlock(blockPosition);
-            if (customBlock != null && customBlock.enableCustomBreakDelay()) {
-                // Is not supposed to happen, probably a bug
-                sendAcknowledgePacket(player, blockPosition, blockStateId,
-                        ClientPlayerDiggingPacket.Status.FINISHED_DIGGING, false);
-            } else {
-                // Vanilla block
-                breakBlock(instance, player, blockPosition, blockStateId, status);
-            }
-
+            diggingResult = finishDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
-
-            final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
-            dropItem(player, droppedItemStack, ItemStack.AIR);
-
+            dropStack(player);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
-
-            final int dropAmount = 1;
-
-            ItemStack handItem = player.getInventory().getItemInMainHand();
-            final StackingRule stackingRule = handItem.getStackingRule();
-            final int handAmount = stackingRule.getAmount(handItem);
-
-            if (handAmount <= dropAmount) {
-                // Drop the whole item without copy
-                dropItem(player, handItem, ItemStack.AIR);
-            } else {
-                // Drop a single item, need a copy
-                ItemStack droppedItemStack2 = stackingRule.apply(handItem, dropAmount);
-
-                handItem = stackingRule.apply(handItem, handAmount - dropAmount);
-
-                dropItem(player, droppedItemStack2, handItem);
-            }
-
+            dropSingle(player);
         } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
-            Player.Hand hand = null;
-            if (player.isEating()) {
-                hand = player.getEatingHand();
-            } else if (player.getItemInHand(Player.Hand.OFF).getMaterial().hasState()) {
-                hand = Player.Hand.OFF;
-            } else if (player.getItemInHand(Player.Hand.MAIN).getMaterial().hasState()) {
-                hand = Player.Hand.MAIN;
-            }
-
-            player.refreshEating(null);
-            player.triggerStatus((byte) 9);
-
-            ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
-
-            if (itemUpdateStateEvent == null) {
-                player.refreshActiveHand(true, false, false);
-            } else {
-                final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-                player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffHand, false);
-            }
-
+            updateItemState(player);
         } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
+            swapItemHand(player);
+        }
 
-            final PlayerInventory playerInventory = player.getInventory();
-            final ItemStack mainHand = playerInventory.getItemInMainHand();
-            final ItemStack offHand = playerInventory.getItemInOffHand();
-
-            PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
-            EventDispatcher.callCancellable(swapItemEvent, () -> {
-                playerInventory.setItemInMainHand(swapItemEvent.getMainHandItem());
-                playerInventory.setItemInOffHand(swapItemEvent.getOffHandItem());
-            });
-
+        // Acknowledge start/cancel/finish digging status
+        if (diggingResult != null) {
+            player.getPlayerConnection().sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, diggingResult.block,
+                    status, diggingResult.success));
         }
     }
 
-    private static void breakBlock(Instance instance,
-                                   Player player,
-                                   BlockPosition blockPosition, int blockStateId,
-                                   ClientPlayerDiggingPacket.Status status) {
-        // Finished digging, remove effect if any
-        player.resetTargetBlock();
+    private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition) {
+        final Block block = instance.getBlock(blockPosition);
+        final GameMode gameMode = player.getGameMode();
 
+        if (gameMode == GameMode.SPECTATOR) {
+            // Spectators can't break blocks
+            return new DiggingResult(block, false);
+        } else if (gameMode == GameMode.ADVENTURE) {
+            // Check if the item can break the block with the current item
+            final ItemStack itemInMainHand = player.getItemInMainHand();
+            if (!itemInMainHand.getMeta().getCanDestroy().contains(block)) {
+                return new DiggingResult(block, false);
+            }
+        } else if (gameMode == GameMode.CREATIVE) {
+            return breakBlock(instance, player, blockPosition, block);
+        }
+
+        // Survival digging
+        // FIXME: verify mineable tag and enchantment
+        final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
+        if (!instantBreak) {
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, blockPosition);
+            EventDispatcher.call(playerStartDiggingEvent);
+            return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
+        }
+        // Client only send a single STARTED_DIGGING when insta-break is enabled
+        return breakBlock(instance, player, blockPosition, block);
+    }
+
+    private static DiggingResult cancelDigging(Instance instance, Point blockPosition) {
+        final Block block = instance.getBlock(blockPosition);
+        return new DiggingResult(block, true);
+    }
+
+    private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition) {
+        final Block block = instance.getBlock(blockPosition);
+        // TODO sanity check
+        return breakBlock(instance, player, blockPosition, block);
+    }
+
+    private static void dropStack(Player player) {
+        final ItemStack droppedItemStack = player.getInventory().getItemInMainHand();
+        dropItem(player, droppedItemStack, ItemStack.AIR);
+    }
+
+    private static void dropSingle(Player player) {
+        final ItemStack handItem = player.getInventory().getItemInMainHand();
+        final StackingRule stackingRule = handItem.getStackingRule();
+        final int handAmount = stackingRule.getAmount(handItem);
+        if (handAmount <= 1) {
+            // Drop the whole item without copy
+            dropItem(player, handItem, ItemStack.AIR);
+        } else {
+            // Drop a single item
+            dropItem(player,
+                    stackingRule.apply(handItem, 1), // Single dropped item
+                    stackingRule.apply(handItem, handAmount - 1)); // Updated hand
+        }
+    }
+
+    private static void updateItemState(Player player) {
+        PlayerMeta meta = player.getEntityMeta();
+        if (!meta.isHandActive()) return;
+        Player.Hand hand = meta.getActiveHand();
+
+        player.refreshEating(null);
+        player.triggerStatus((byte) 9);
+
+        ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
+        if (itemUpdateStateEvent == null) {
+            player.refreshActiveHand(true, false, false);
+        } else {
+            final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+            player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(), isOffHand, false);
+        }
+    }
+
+    private static void swapItemHand(Player player) {
+        final PlayerInventory inventory = player.getInventory();
+        final ItemStack mainHand = inventory.getItemInMainHand();
+        final ItemStack offHand = inventory.getItemInOffHand();
+        PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
+        EventDispatcher.callCancellable(swapItemEvent, () -> {
+            inventory.setItemInMainHand(swapItemEvent.getMainHandItem());
+            inventory.setItemInOffHand(swapItemEvent.getOffHandItem());
+        });
+    }
+
+    private static DiggingResult breakBlock(Instance instance,
+                                            Player player,
+                                            Point blockPosition, Block previousBlock) {
         // Unverified block break, client is fully responsible
-        final boolean result = instance.breakBlock(player, blockPosition);
-
-        final int updatedBlockId = instance.getBlockStateId(blockPosition);
-
-        // Send acknowledge packet to allow or cancel the digging process
-        sendAcknowledgePacket(player, blockPosition, updatedBlockId,
-                status, result);
-
-        if (!result) {
-            final boolean solid = Block.fromStateId((short) blockStateId).isSolid();
-            if (solid) {
-                final BlockPosition playerBlockPosition = player.getPosition().toBlockPosition();
-
+        final boolean success = instance.breakBlock(player, blockPosition);
+        final Block updatedBlock = instance.getBlock(blockPosition);
+        if (!success) {
+            if (previousBlock.isSolid()) {
+                final Pos playerPosition = player.getPosition();
                 // Teleport the player back if he broke a solid block just below him
-                if (playerBlockPosition.subtract(0, 1, 0).equals(blockPosition))
-                    player.teleport(player.getPosition());
+                if (playerPosition.sub(0, 1, 0).samePoint(blockPosition)) {
+                    player.teleport(playerPosition);
+                }
             }
         }
+        return new DiggingResult(updatedBlock, success);
     }
 
     private static void dropItem(@NotNull Player player,
@@ -210,59 +166,13 @@ public class PlayerDiggingListener {
         }
     }
 
-    /**
-     * Adds the effect {@link PotionEffect#DIG_SLOWDOWN} to the player.
-     * <p>
-     * Used for {@link CustomBlock} break delay or when the {@link PlayerStartDiggingEvent} is cancelled
-     * to remove the player break animation.
-     *
-     * @param player the player to add the effect to
-     */
-    private static void addEffect(@NotNull Player player) {
-        playersEffect.add(player);
+    private static final class DiggingResult {
+        public final Block block;
+        public final boolean success;
 
-        EntityEffectPacket entityEffectPacket = new EntityEffectPacket();
-        entityEffectPacket.entityId = player.getEntityId();
-        entityEffectPacket.potion = new Potion(
-                PotionEffect.DIG_SLOWDOWN,
-                (byte) -1,
-                0,
-                false,
-                false,
-                false
-        );
-        player.getPlayerConnection().sendPacket(entityEffectPacket);
-    }
-
-    /**
-     * Used to remove the affect from {@link #addEffect(Player)}.
-     * <p>
-     * Called when the player cancelled or finished digging the {@link CustomBlock}.
-     *
-     * @param player the player to remove the effect to
-     */
-    public static void removeEffect(@NotNull Player player) {
-        if (playersEffect.contains(player)) {
-            playersEffect.remove(player);
-
-            RemoveEntityEffectPacket removeEntityEffectPacket = new RemoveEntityEffectPacket();
-            removeEntityEffectPacket.entityId = player.getEntityId();
-            removeEntityEffectPacket.effect = PotionEffect.DIG_SLOWDOWN;
-            player.getPlayerConnection().sendPacket(removeEntityEffectPacket);
+        public DiggingResult(Block block, boolean success) {
+            this.block = block;
+            this.success = success;
         }
-    }
-
-    /**
-     * Sends an {@link AcknowledgePlayerDiggingPacket} to a connection.
-     *
-     * @param player        the player
-     * @param blockPosition the block position
-     * @param blockStateId  the block state id
-     * @param status        the status of the digging
-     * @param success       true to notify of a success, false otherwise
-     */
-    private static void sendAcknowledgePacket(@NotNull Player player, @NotNull BlockPosition blockPosition, int blockStateId,
-                                              @NotNull ClientPlayerDiggingPacket.Status status, boolean success) {
-        player.getPlayerConnection().sendPacket(new AcknowledgePlayerDiggingPacket(blockPosition, blockStateId, status, success));
     }
 }

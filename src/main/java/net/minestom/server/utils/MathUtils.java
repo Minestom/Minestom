@@ -1,9 +1,11 @@
 package net.minestom.server.utils;
 
+import org.jetbrains.annotations.ApiStatus;
+
+@ApiStatus.Internal
 public final class MathUtils {
 
     private MathUtils() {
-
     }
 
     public static int square(int num) {
@@ -93,13 +95,5 @@ public final class MathUtils {
 
     public static double mod(final double a, final double b) {
         return (a % b + b) % b;
-    }
-
-    public static Integer tryParse(String string) {
-        try {
-            return Integer.parseInt(string);
-        } catch (NumberFormatException ignored) {
-            return null;
-        }
     }
 }

@@ -4,13 +4,14 @@ import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import com.extollit.gaming.ai.path.PathOptions;
 import com.extollit.gaming.ai.path.model.IPath;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.Vector;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class Navigator {
     private final PFPathingEntity pathingEntity;
     private HydrazinePathFinder pathFinder;
     private IPath path;
-    private Position pathPosition;
+    private Point pathPosition;
 
     private final Entity entity;
 
@@ -43,52 +44,30 @@ public class Navigator {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Position direction, double speed) {
-
-        final Position position = entity.getPosition();
-
-        final double currentX = position.getX();
-        final double currentY = position.getY();
-        final double currentZ = position.getZ();
-
-        final double targetX = direction.getX();
-        final double targetY = direction.getY();
-        final double targetZ = direction.getZ();
-
-        final double dx = targetX - currentX;
-        final double dy = targetY - currentY;
-        final double dz = targetZ - currentZ;
-
+    public void moveTowards(@NotNull Point direction, double speed) {
+        final Pos position = entity.getPosition();
+        final double dx = direction.x() - position.x();
+        final double dy = direction.y() - position.y();
+        final double dz = direction.z() - position.z();
         // the purpose of these few lines is to slow down entities when they reach their destination
         final double distSquared = dx * dx + dy * dy + dz * dz;
         if (speed > distSquared) {
             speed = distSquared;
         }
-
         final double radians = Math.atan2(dz, dx);
         final double speedX = Math.cos(radians) * speed;
         final double speedY = dy * speed;
         final double speedZ = Math.sin(radians) * speed;
-
-        // Update 'position' view
-        PositionUtils.lookAlong(position, dx, direction.getY(), dz);
-
-        Position newPosition = new Position();
-        Vector newVelocityOut = new Vector();
-
+        final float yaw = PositionUtils.getLookYaw(dx, dz);
+        final float pitch = PositionUtils.getLookPitch(dx, direction.y(), dz);
         // Prevent ghosting
-        CollisionUtils.handlePhysics(entity,
-                new Vector(speedX, speedY, speedZ),
-                newPosition, newVelocityOut);
-
-        // Will move the entity during Entity#tick
-        position.copyCoordinates(newPosition);
+        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
+        this.entity.refreshPosition(physicsResult.newPosition().withView(yaw, pitch));
     }
 
     public void jump(float height) {
         // FIXME magic value
-        final Vector velocity = new Vector(0, height * 2.5f, 0);
-        this.entity.setVelocity(velocity);
+        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
     }
 
     /**
@@ -99,13 +78,13 @@ public class Navigator {
      * The position is cloned, if you want the entity to continually follow this position object
      * you need to call this when you want the path to update.
      *
-     * @param position   the position to find the path to, null to reset the pathfinder
+     * @param point      the position to find the path to, null to reset the pathfinder
      * @param bestEffort whether to use the best-effort algorithm to the destination,
      *                   if false then this method is more likely to return immediately
      * @return true if a path has been found
      */
-    public synchronized boolean setPathTo(@Nullable Position position, boolean bestEffort) {
-        if (position != null && pathPosition != null && position.isSimilar(pathPosition)) {
+    public synchronized boolean setPathTo(@Nullable Point point, boolean bestEffort) {
+        if (point != null && pathPosition != null && point.samePoint(pathPosition)) {
             // Tried to set path to the same target position
             return false;
         }
@@ -118,7 +97,7 @@ public class Navigator {
         }
 
         pathFinder.reset();
-        if (position == null) {
+        if (point == null) {
             return false;
         }
 
@@ -127,40 +106,38 @@ public class Navigator {
             return false;
         }
 
-        // Can't path outside of the world border
+        // Can't path outside the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
-        if (!worldBorder.isInside(position)) {
+        if (!worldBorder.isInside(point)) {
             return false;
         }
 
         // Can't path in an unloaded chunk
-        final Chunk chunk = instance.getChunkAt(position);
+        final Chunk chunk = instance.getChunkAt(point);
         if (!ChunkUtils.isLoaded(chunk)) {
             return false;
         }
-
-        final Position targetPosition = position.clone();
 
         final PathOptions pathOptions = new PathOptions()
                 .targetingStrategy(bestEffort ? PathOptions.TargetingStrategy.gravitySnap :
                         PathOptions.TargetingStrategy.none);
         final IPath path = pathFinder.initiatePathTo(
-                targetPosition.getX(),
-                targetPosition.getY(),
-                targetPosition.getZ(),
+                point.x(),
+                point.y(),
+                point.z(),
                 pathOptions);
         this.path = path;
 
         final boolean success = path != null;
-        this.pathPosition = success ? targetPosition : null;
+        this.pathPosition = success ? point : null;
 
         return success;
     }
 
     /**
-     * @see #setPathTo(Position, boolean) with {@code bestEffort} sets to {@code true}.
+     * @see #setPathTo(Point, boolean) with {@code bestEffort} sets to {@code true}.
      */
-    public boolean setPathTo(@Nullable Position position) {
+    public boolean setPathTo(@Nullable Point position) {
         return setPathTo(position, true);
     }
 
@@ -174,7 +151,7 @@ public class Navigator {
             this.path = path;
 
             if (path != null) {
-                final Position targetPosition = pathingEntity.getTargetPosition();
+                final Point targetPosition = pathingEntity.getTargetPosition();
                 if (targetPosition != null) {
                     moveTowards(targetPosition, speed);
                 }
@@ -220,8 +197,7 @@ public class Navigator {
      *
      * @return the target pathfinder position, null if there is no one
      */
-    @Nullable
-    public Position getPathPosition() {
+    public @Nullable Point getPathPosition() {
         return pathPosition;
     }
 
@@ -229,10 +205,10 @@ public class Navigator {
      * Changes the position this element is trying to reach.
      *
      * @param pathPosition the new current path position
-     * @deprecated Please use {@link #setPathTo(Position)}
+     * @deprecated Please use {@link #setPathTo(Point)}
      */
     @Deprecated
-    public void setPathPosition(@Nullable Position pathPosition) {
+    public void setPathPosition(@Nullable Point pathPosition) {
         this.pathPosition = pathPosition;
     }
 
