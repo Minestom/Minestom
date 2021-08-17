@@ -311,7 +311,9 @@ public interface EventNode<T extends Event> {
     @NotNull EventNode<T> addListener(@NotNull EventListener<? extends T> listener);
 
     @Contract(value = "_, _ -> this")
-    <E extends T> @NotNull EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener);
+    default <E extends T> @NotNull EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Consumer<@NotNull E> listener) {
+        return addListener(EventListener.of(eventType, listener));
+    }
 
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
