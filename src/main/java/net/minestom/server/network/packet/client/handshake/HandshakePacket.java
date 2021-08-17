@@ -8,8 +8,8 @@ import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPreplayPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.utils.binary.BinaryReader;
 import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +33,14 @@ public class HandshakePacket implements ClientPreplayPacket {
     @Override
     public void read(@NotNull BinaryReader reader) {
         this.protocolVersion = reader.readVarInt();
-        this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
+        try {
+            this.serverAddress = reader.readSizedString(BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255);
+        } catch (Exception e) {
+            if (BungeeCordProxy.isEnabled()) {
+                System.err.println("Legacy proxy forwarding is enabled but the read did underflow. Please check your proxy.");
+            }
+            e.printStackTrace();
+        }
         this.serverPort = reader.readUnsignedShort();
         this.nextState = reader.readVarInt();
     }
@@ -42,8 +49,8 @@ public class HandshakePacket implements ClientPreplayPacket {
     public void write(@NotNull BinaryWriter writer) {
         writer.writeVarInt(protocolVersion);
         int maxLength = BungeeCordProxy.isEnabled() ? Short.MAX_VALUE : 255;
-        if(serverAddress.length() > maxLength) {
-            throw new IllegalArgumentException("serverAddress is "+serverAddress.length()+" characters long, maximum allowed is "+maxLength);
+        if (serverAddress.length() > maxLength) {
+            throw new IllegalArgumentException("serverAddress is " + serverAddress.length() + " characters long, maximum allowed is " + maxLength);
         }
         writer.writeSizedString(serverAddress);
         writer.writeUnsignedShort(serverPort);

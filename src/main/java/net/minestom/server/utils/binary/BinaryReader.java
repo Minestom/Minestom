@@ -15,6 +15,7 @@ import org.jglrxavpok.hephaistos.nbt.NBTReader;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
@@ -104,7 +105,11 @@ public class BinaryReader extends InputStream {
     public String readSizedString(int maxLength) {
         final int length = readVarInt();
         byte[] bytes = new byte[length];
-        buffer.get(bytes);
+        try {
+            this.buffer.get(bytes);
+        } catch (BufferUnderflowException e) {
+            throw new RuntimeException("Could not read " + length + ", " + buffer.remaining() + " remaining.");
+        }
         final String str = new String(bytes, StandardCharsets.UTF_8);
         Check.stateCondition(str.length() > maxLength,
                 "String length ({0}) was higher than the max length of {1}", length, maxLength);
