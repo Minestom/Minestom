@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -9,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@ApiStatus.Experimental
 public interface EventBinding<E extends Event> {
 
     static <E extends Event, T> @NotNull FilteredBuilder<E, T> filtered(@NotNull EventFilter<E, T> filter, @NotNull Predicate<T> predicate) {

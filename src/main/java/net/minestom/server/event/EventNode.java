@@ -318,11 +318,15 @@ public interface EventNode<T extends Event> {
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
 
+    @ApiStatus.Experimental
     void map(@NotNull EventNode<? extends T> node, @NotNull Object value);
 
+    @ApiStatus.Experimental
     boolean unmap(@NotNull Object value);
 
+    @ApiStatus.Experimental
     void register(@NotNull EventBinding<? extends T> binding);
 
+    @ApiStatus.Experimental
     void unregister(@NotNull EventBinding<? extends T> binding);
 }
