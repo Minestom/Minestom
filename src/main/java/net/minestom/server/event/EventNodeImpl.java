@@ -156,12 +156,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var eventType = listener.getEventType();
             var entry = getEntry(eventType);
             entry.listeners.add((EventListener<T>) listener);
-            final var parent = this.parent;
-            if (parent != null) {
-                synchronized (parent.lock) {
-                    parent.propagateChildCountChange(eventType, 1);
-                }
-            }
+            propagateToParent(eventType, 1);
         }
         return this;
     }
@@ -174,11 +169,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             if (entry == null) return this;
             var listeners = entry.listeners;
             final boolean removed = listeners.remove(listener);
-            if (removed && parent != null) {
-                synchronized (parent.lock) {
-                    parent.propagateChildCountChange(eventType, -1);
-                }
-            }
+            if (removed) propagateToParent(eventType, -1);
         }
         return this;
     }
@@ -198,6 +189,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 synchronized (mappedNodeCache) {
                     entry.mappedNode.put(value, (EventNode<T>) nodeImpl);
                     mappedNodeCache.put(value, entry);
+                    // TODO propagate
                 }
             });
         }
@@ -209,7 +201,12 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             synchronized (mappedNodeCache) {
                 var entry = mappedNodeCache.remove(value);
                 if (entry == null) return false;
-                return entry.mappedNode.remove(value) != null;
+                final EventNode<T> previousNode = entry.mappedNode.remove(value);
+                if (previousNode != null) {
+                    // TODO propagate
+                    return true;
+                }
+                return false;
             }
         }
     }
@@ -219,7 +216,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         synchronized (GLOBAL_CHILD_LOCK) {
             for (var eventType : binding.eventTypes()) {
                 var entry = getEntry((Class<? extends T>) eventType);
-                entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
+                final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
+                if (added) propagateToParent((Class<? extends T>) eventType, 1);
             }
         }
     }
@@ -230,7 +228,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             for (var eventType : binding.eventTypes()) {
                 var entry = listenerMap.get(eventType);
                 if (entry == null) return;
-                entry.bindingConsumers.remove(binding.consumer(eventType));
+                final boolean removed = entry.bindingConsumers.remove(binding.consumer(eventType));
+                if (removed) propagateToParent((Class<? extends T>) eventType, -1);
             }
         }
     }
@@ -271,6 +270,15 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
         if (parent != null) {
             parent.propagateChildCountChange(eventClass, count);
+        }
+    }
+
+    private void propagateToParent(Class<? extends T> eventClass, int count) {
+        final var parent = this.parent;
+        if (parent != null) {
+            synchronized (parent.lock) {
+                parent.propagateChildCountChange(eventClass, count);
+            }
         }
     }
 
