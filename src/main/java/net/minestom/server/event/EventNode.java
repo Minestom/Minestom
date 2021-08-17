@@ -320,5 +320,7 @@ public interface EventNode<T extends Event> {
 
     boolean unmap(@NotNull Object value);
 
-    void registerInterface(@NotNull EventInterface<? extends T> eventInterface);
+    void register(@NotNull EventBinding<? extends T> binding);
+
+    void unregister(@NotNull EventBinding<? extends T> binding);
 }

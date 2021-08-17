@@ -9,7 +9,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public interface EventInterface<E extends Event> {
+public interface EventBinding<E extends Event> {
 
     static <E extends Event, T> @NotNull FilteredBuilder<E, T> filtered(@NotNull EventFilter<E, T> filter, @NotNull Predicate<T> predicate) {
         return new FilteredBuilder<>(filter, predicate);
@@ -17,8 +17,7 @@ public interface EventInterface<E extends Event> {
 
     @NotNull Collection<Class<? extends Event>> eventTypes();
 
-    Consumer<E> consumer(Class<? extends Event> eventType);
-
+    @NotNull Consumer<@NotNull E> consumer(@NotNull Class<? extends Event> eventType);
 
     class FilteredBuilder<E extends Event, T> {
         private final EventFilter<E, T> filter;
@@ -37,23 +36,28 @@ public interface EventInterface<E extends Event> {
             return this;
         }
 
-        public @NotNull EventInterface<E> build() {
+        public @NotNull EventBinding<E> build() {
             final var copy = Map.copyOf(mapped);
             final var eventTypes = copy.keySet();
-            return new EventInterface<>() {
+
+            Map<Class<? extends Event>, Consumer<E>> consumers = new HashMap<>(eventTypes.size());
+            for (var eventType : eventTypes) {
+                final var consumer = copy.get(eventType);
+                consumers.put(eventType, event -> {
+                    final T handler = filter.getHandler(event);
+                    if (!predicate.test(handler)) return;
+                    consumer.accept(handler, event);
+                });
+            }
+            return new EventBinding<>() {
                 @Override
                 public @NotNull Collection<Class<? extends Event>> eventTypes() {
                     return eventTypes;
                 }
 
                 @Override
-                public Consumer<E> consumer(Class<? extends Event> eventType) {
-                    final var consumer = copy.get(eventType);
-                    return event -> {
-                        final T handler = filter.getHandler(event);
-                        if (!predicate.test(handler)) return;
-                        consumer.accept(handler, event);
-                    };
+                public @NotNull Consumer<E> consumer(@NotNull Class<? extends Event> eventType) {
+                    return consumers.get(eventType);
                 }
             };
         }

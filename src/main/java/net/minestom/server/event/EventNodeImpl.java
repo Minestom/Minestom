@@ -221,13 +221,23 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void registerInterface(@NotNull EventInterface<? extends T> eventInterface) {
+    public void register(@NotNull EventBinding<? extends T> binding) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            for (var eventType : eventInterface.eventTypes()) {
+            for (var eventType : binding.eventTypes()) {
                 var entry = getEntry((Class<? extends T>) eventType);
-                final var consumer = eventInterface.consumer(eventType);
-                entry.interfaces.add((EventInterface<T>) eventInterface);
-                entry.interfaceConsumers.add((Consumer<T>) consumer);
+                final var consumer = binding.consumer(eventType);
+                entry.bindingConsumers.add((Consumer<T>) consumer);
+            }
+        }
+    }
+
+    @Override
+    public void unregister(@NotNull EventBinding<? extends T> binding) {
+        synchronized (GLOBAL_CHILD_LOCK) {
+            for (var eventType : binding.eventTypes()) {
+                var entry = listenerMap.get(eventType);
+                if (entry == null) return;
+                entry.bindingConsumers.remove(binding.consumer(eventType));
             }
         }
     }
@@ -304,8 +314,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         final List<EventFilter<?, ?>> filters;
         final List<EventListener<T>> listeners = new CopyOnWriteArrayList<>();
-        final Set<EventInterface<T>> interfaces = new CopyOnWriteArraySet<>();
-        final Set<Consumer<T>> interfaceConsumers = new CopyOnWriteArraySet<>();
+        final Set<Consumer<T>> bindingConsumers = new CopyOnWriteArraySet<>();
         final Map<Object, EventNode<T>> mappedNode = new WeakHashMap<>();
         volatile int childCount;
 
@@ -315,8 +324,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         void call(T event) {
             // Event interfaces
-            if (!interfaceConsumers.isEmpty()) {
-                for (var consumer : interfaceConsumers) {
+            if (!bindingConsumers.isEmpty()) {
+                for (var consumer : bindingConsumers) {
                     consumer.accept(event);
                 }
             }
