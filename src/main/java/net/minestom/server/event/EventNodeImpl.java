@@ -335,13 +335,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Mapped listeners
             if (!mappedNode.isEmpty()) {
                 synchronized (node.mappedNodeCache) {
-                    if (!mappedNode.isEmpty()) {
-                        // Check mapped listeners for each individual event handler
-                        for (var filter : filters) {
-                            final var handler = filter.castHandler(event);
-                            final var map = mappedNode.get(handler);
-                            if (map != null) map.call(event);
-                        }
+                    // Check mapped listeners for each individual event handler
+                    for (var filter : filters) {
+                        final var handler = filter.castHandler(event);
+                        final var map = mappedNode.get(handler);
+                        if (map != null) map.call(event);
                     }
                 }
             }
