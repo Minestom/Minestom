@@ -1,6 +1,7 @@
 package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -124,24 +125,20 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ? new AbsoluteBlockBatch(inverseOption) : null;
         synchronized (chunkBatchesMap) {
             AtomicInteger counter = new AtomicInteger();
-            for (Long2ObjectMap.Entry<ChunkBatch> entry : chunkBatchesMap.long2ObjectEntrySet()) {
+            for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
                 final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
                 final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
-
                 ChunkBatch chunkInverse = batch.apply(instance, chunkX, chunkZ, c -> {
                     final boolean isLast = counter.incrementAndGet() == chunkBatchesMap.size();
-
                     // Execute the callback if this was the last chunk to process
                     if (isLast) {
                         if (inverse != null) inverse.readyLatch.countDown();
-
                         if (instance instanceof InstanceContainer) {
                             // FIXME: put method in Instance instead
                             ((InstanceContainer) instance).refreshLastBlockChangeTime();
                         }
-
                         if (callback != null) {
                             if (safeCallback) {
                                 instance.scheduleNextTick(inst -> callback.run());
@@ -151,9 +148,7 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
                         }
                     }
                 });
-
-                if (inverse != null)
-                    inverse.chunkBatchesMap.put(chunkIndex, chunkInverse);
+                if (inverse != null) inverse.chunkBatchesMap.put(chunkIndex, chunkInverse);
             }
         }
 

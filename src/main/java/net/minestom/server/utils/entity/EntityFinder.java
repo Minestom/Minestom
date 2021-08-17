@@ -1,6 +1,6 @@
 package net.minestom.server.utils.entity;
 
-import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMaps;
 import it.unimi.dsi.fastutil.objects.Object2BooleanOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
@@ -358,7 +358,7 @@ public class EntityFinder {
     }
 
     private static <T> boolean filterToggleableMap(@NotNull T value, @NotNull ToggleableMap<T> map) {
-        for (Object2BooleanMap.Entry<T> entry : map.object2BooleanEntrySet()) {
+        for (var entry : Object2BooleanMaps.fastIterable(map)) {
             if (entry.getBooleanValue() != Objects.equals(value, entry.getKey())) {
                 return false;
             }
