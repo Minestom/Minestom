@@ -1,37 +1,30 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
-import net.minestom.server.data.Data;
-import net.minestom.server.data.DataContainer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
+import net.minestom.server.instance.block.BlockGetter;
+import net.minestom.server.instance.block.BlockSetter;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.network.packet.server.play.UpdateLightPacket;
-import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Position;
-import net.minestom.server.utils.binary.BinaryReader;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.world.biomes.Biome;
-import net.minestom.server.world.biomes.BiomeManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 // TODO light data & API
@@ -41,20 +34,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * Should contains all the blocks located at those positions and manage their tick updates.
  * Be aware that implementations do not need to be thread-safe, all chunks are guarded by their own instance ('this').
  * <p>
- * Chunks can be serialized using {@link #getSerializedData()} and deserialized back with {@link #readChunk(BinaryReader, ChunkCallback)},
- * allowing you to implement your own storage solution if needed.
- * <p>
  * You can create your own implementation of this class by extending it
  * and create the objects in {@link InstanceContainer#setChunkSupplier(ChunkSupplier)}.
  * <p>
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
-public abstract class Chunk implements Viewable, Tickable, TagHandler, DataContainer {
-
-    protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
-    protected static final BiomeManager BIOME_MANAGER = MinecraftServer.getBiomeManager();
-
+public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Tickable, TagHandler {
     public static final int CHUNK_SIZE_X = 16;
     public static final int CHUNK_SIZE_Z = 16;
     public static final int CHUNK_SECTION_SIZE = 16;
@@ -79,7 +65,6 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
 
     // Data
     private final NBTCompound nbt = new NBTCompound();
-    protected Data data;
 
     public Chunk(@NotNull Instance instance, @Nullable Biome[] biomes, int chunkX, int chunkZ, boolean shouldGenerate) {
         this.identifier = UUID.randomUUID();
@@ -101,21 +86,21 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
      * <p>
      * This is used when the previous block has to be destroyed/replaced, meaning that it clears the previous data and update method.
      * <p>
-     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch}s)
-     * The thread-safe version is {@link InstanceContainer#setSeparateBlocks(int, int, int, short, short, Data)} (or any similar instance methods)
+     * WARNING: this method is not thread-safe (in order to bring performance improvement with {@link net.minestom.server.instance.batch.Batch batches})
+     * The thread-safe version is {@link Instance#setBlock(int, int, int, Block)} (or any similar instance methods)
      * Otherwise, you can simply do not forget to have this chunk synchronized when this is called.
      *
-     * @param x             the block X
-     * @param y             the block Y
-     * @param z             the block Z
-     * @param blockStateId  the block state id
-     * @param customBlockId the custom block id, 0 if not
-     * @param data          the {@link Data} of the block, can be null
-     * @param updatable     true if the block has an update method
-     *                      Warning: <code>customBlockId</code> cannot be 0 in this case and needs to be valid since the update delay and method
-     *                      will be retrieved from the associated {@link CustomBlock} object
+     * @param x     the block X
+     * @param y     the block Y
+     * @param z     the block Z
+     * @param block the block to place
      */
-    public abstract void UNSAFE_setBlock(int x, int y, int z, short blockStateId, short customBlockId, @Nullable Data data, boolean updatable);
+    @Override
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
+
+    public abstract @NotNull Map<Integer, Section> getSections();
+
+    public abstract @NotNull Section getSection(int section);
 
     /**
      * Executes a chunk tick.
@@ -130,74 +115,6 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
     public abstract void tick(long time);
 
     /**
-     * Gets the block state id at a position.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the block state id at the position
-     */
-    public abstract short getBlockStateId(int x, int y, int z);
-
-    /**
-     * Gets the custom block id at a position.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the custom block id at the position
-     */
-    public abstract short getCustomBlockId(int x, int y, int z);
-
-    /**
-     * Changes the block state id and the custom block id at a position.
-     *
-     * @param x             the block X
-     * @param y             the block Y
-     * @param z             the block Z
-     * @param blockStateId  the new block state id
-     * @param customBlockId the new custom block id
-     */
-    protected abstract void refreshBlockValue(int x, int y, int z, short blockStateId, short customBlockId);
-
-    /**
-     * Changes the block state id at a position (the custom block id stays the same).
-     *
-     * @param x            the block X
-     * @param y            the block Y
-     * @param z            the block Z
-     * @param blockStateId the new block state id
-     */
-    protected abstract void refreshBlockStateId(int x, int y, int z, short blockStateId);
-
-    /**
-     * Gets the {@link Data} at a block index.
-     *
-     * @param index the block index
-     * @return the {@link Data} at the block index, null if none
-     */
-    @Nullable
-    public abstract Data getBlockData(int index);
-
-    /**
-     * Sets the {@link Data} at a position.
-     *
-     * @param x    the block X
-     * @param y    the block Y
-     * @param z    the block Z
-     * @param data the new data, can be null
-     */
-    public abstract void setBlockData(int x, int y, int z, @Nullable Data data);
-
-    /**
-     * Gets all the block entities in this chunk.
-     *
-     * @return the block entities in this chunk
-     */
-    @NotNull
-    public abstract Set<Integer> getBlockEntities();
-
-    /**
      * Gets the last time that this chunk changed.
      * <p>
      * "Change" means here data used in {@link ChunkDataPacket}.
@@ -209,34 +126,13 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
     public abstract long getLastChangeTime();
 
     /**
-     * Serializes the chunk into bytes.
+     * Sends the chunk data to {@code player}.
      *
-     * @return the serialized chunk, can be null if this chunk cannot be serialized
-     * @see #readChunk(BinaryReader, ChunkCallback) which should be able to read what is written in this method
+     * @param player the player
      */
-    public abstract byte[] getSerializedData();
+    public abstract void sendChunk(@NotNull Player player);
 
-    /**
-     * Reads the chunk from binary.
-     * <p>
-     * Used if the chunk is loaded from file.
-     *
-     * @param reader   the data reader
-     *                 WARNING: the data will not necessary be read directly in the same thread,
-     *                 be sure that the data is only used for this reading.
-     * @param callback the optional callback to execute once the chunk is done reading
-     *                 WARNING: this need to be called to notify the instance.
-     * @see #getSerializedData() which is responsible for the serialized data given
-     */
-    public abstract void readChunk(@NotNull BinaryReader reader, @Nullable ChunkCallback callback);
-
-    /**
-     * Creates a {@link ChunkDataPacket} with this chunk data ready to be written.
-     *
-     * @return a new chunk data packet
-     */
-    @NotNull
-    public abstract ChunkDataPacket createChunkPacket();
+    public abstract void sendChunk();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.
@@ -248,8 +144,7 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
      * @param chunkZ   the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
-    @NotNull
-    public abstract Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
+    public abstract @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ);
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
@@ -257,42 +152,13 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
     public abstract void reset();
 
     /**
-     * Gets the {@link CustomBlock} at a position.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the {@link CustomBlock} at the position
-     */
-    @Nullable
-    public CustomBlock getCustomBlock(int x, int y, int z) {
-        final short customBlockId = getCustomBlockId(x, y, z);
-        return customBlockId != 0 ? BLOCK_MANAGER.getCustomBlock(customBlockId) : null;
-    }
-
-    /**
-     * Gets the {@link CustomBlock} at a block index.
-     *
-     * @param index the block index
-     * @return the {@link CustomBlock} at the block index
-     */
-    @Nullable
-    protected CustomBlock getCustomBlock(int index) {
-        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-        final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
-        return getCustomBlock(x, y, z);
-    }
-
-    /**
      * Gets the unique identifier of this chunk.
      * <p>
-     * WARNING: this UUID is not persistent but randomized once the object is instantiate.
+     * WARNING: this UUID is not persistent but randomized once the object is instantiated.
      *
      * @return the chunk identifier
      */
-    @NotNull
-    public UUID getIdentifier() {
+    public @NotNull UUID getIdentifier() {
         return identifier;
     }
 
@@ -301,8 +167,7 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
      *
      * @return the linked instance
      */
-    @NotNull
-    public Instance getInstance() {
+    public @NotNull Instance getInstance() {
         return instance;
     }
 
@@ -329,13 +194,12 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
     }
 
     /**
-     * Creates a {@link Position} object based on this chunk.
+     * Gets the world position of this chunk.
      *
      * @return the position of this chunk
      */
-    @NotNull
-    public Position toPosition() {
-        return new Position(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+    public @NotNull Point toPosition() {
+        return new Vec(CHUNK_SIZE_Z * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
     }
 
     /**
@@ -380,41 +244,6 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
      */
     public void setColumnarSpace(PFColumnarSpace columnarSpace) {
         this.columnarSpace = columnarSpace;
-    }
-
-    /**
-     * Gets the light packet of this chunk.
-     *
-     * @return the light packet
-     */
-    @NotNull
-    public UpdateLightPacket getLightPacket() {
-        // TODO do not hardcode light
-
-        // Creates a light packet for the given number of sections with all block light at max and no sky light.
-        UpdateLightPacket updateLightPacket = new UpdateLightPacket(getIdentifier(), getLastChangeTime());
-        updateLightPacket.chunkX = getChunkX();
-        updateLightPacket.chunkZ = getChunkZ();
-
-        final int sectionCount = (getInstance().getDimensionType().getTotalHeight() / 16) + 2;
-        final int maskLength = (int) Math.ceil((double) sectionCount / 64);
-
-        updateLightPacket.skyLightMask = new long[maskLength];
-        updateLightPacket.blockLightMask = new long[maskLength];
-        updateLightPacket.emptySkyLightMask = new long[maskLength];
-        updateLightPacket.emptyBlockLightMask = new long[maskLength];
-        // Set all block light and no sky light
-        Arrays.fill(updateLightPacket.blockLightMask, -1L);
-        Arrays.fill(updateLightPacket.emptySkyLightMask, -1L);
-
-        byte[] bytes = new byte[2048];
-        Arrays.fill(bytes, (byte) 0xFF);
-        final List<byte[]> temp = new ArrayList<>(sectionCount);
-        for (int i = 0; i < sectionCount; ++i) {
-            temp.add(bytes);
-        }
-        updateLightPacket.blockLight = temp;
-        return updateLightPacket;
     }
 
     /**
@@ -494,112 +323,10 @@ public abstract class Chunk implements Viewable, Tickable, TagHandler, DataConta
         tag.write(nbt, value);
     }
 
-    @Nullable
-    @Override
-    public Data getData() {
-        return data;
-    }
-
-    @Override
-    public void setData(@Nullable Data data) {
-        this.data = data;
-    }
-
-    /**
-     * Sends the chunk data to {@code player}.
-     *
-     * @param player the player
-     */
-    public synchronized void sendChunk(@NotNull Player player) {
-        // Only send loaded chunk
-        if (!isLoaded())
-            return;
-
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(getLightPacket());
-        playerConnection.sendPacket(createChunkPacket());
-    }
-
-    public synchronized void sendChunk() {
-        if (!isLoaded()) {
-            return;
-        }
-        sendPacketToViewers(getLightPacket());
-        sendPacketToViewers(createChunkPacket());
-    }
-
-    /**
-     * Sends a full {@link ChunkDataPacket} to {@code player}.
-     *
-     * @param player the player to update the chunk to
-     */
-    public synchronized void sendChunkUpdate(@NotNull Player player) {
-        final PlayerConnection playerConnection = player.getPlayerConnection();
-        playerConnection.sendPacket(createChunkPacket());
-    }
-
-    /**
-     * Sends a full {@link ChunkDataPacket} to all chunk viewers.
-     */
-    public synchronized void sendChunkUpdate() {
-        PacketUtils.sendGroupedPacket(getViewers(), createChunkPacket());
-    }
-
-    /**
-     * Sends a chunk section update packet to {@code player}.
-     *
-     * @param section the section to update
-     * @param player  the player to send the packet to
-     * @throws IllegalArgumentException if {@code section} is not a valid section
-     */
-    public synchronized void sendChunkSectionUpdate(int section, @NotNull Player player) {
-        if (!PlayerUtils.isNettyClient(player))
-            return;
-        player.getPlayerConnection().sendPacket(createChunkSectionUpdatePacket(section));
-    }
-
-    /**
-     * Gets the {@link ChunkDataPacket} to update a single chunk section.
-     *
-     * @param section the chunk section to update
-     * @return the {@link ChunkDataPacket} to update a single chunk section
-     */
-    @NotNull
-    protected ChunkDataPacket createChunkSectionUpdatePacket(int section) {
-        ChunkDataPacket chunkDataPacket = createChunkPacket();
-        // TODO
-        return chunkDataPacket;
-    }
-
     /**
      * Sets the chunk as "unloaded".
      */
     protected void unload() {
         this.loaded = false;
-        ChunkDataPacket.CACHE.invalidate(getIdentifier());
-        UpdateLightPacket.CACHE.invalidate(getIdentifier());
-    }
-
-    /**
-     * Gets if a block state id represents a block entity.
-     *
-     * @param blockStateId the block state id to check
-     * @return true if {@code blockStateId} represents a block entity
-     */
-    protected boolean isBlockEntity(short blockStateId) {
-        final Block block = Block.fromStateId(blockStateId);
-        return block.hasBlockEntity();
-    }
-
-    /**
-     * Gets the index of a position, used to store blocks.
-     *
-     * @param x the block X
-     * @param y the block Y
-     * @param z the block Z
-     * @return the block index
-     */
-    protected int getBlockIndex(int x, int y, int z) {
-        return ChunkUtils.getBlockIndex(x, y, z);
     }
 }

@@ -1,7 +1,6 @@
 package net.minestom.server.item.metadata;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.chat.ChatColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
@@ -60,17 +59,6 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
      */
     public List<MapDecoration> getDecorations() {
         return decorations;
-    }
-
-    /**
-     * Gets the map color.
-     *
-     * @return the map color
-     * @deprecated Use {@link #getMapColor()}
-     */
-    @Deprecated
-    public ChatColor getLegacyMapColor() {
-        return this.mapColor.asLegacyChatColor();
     }
 
     /**

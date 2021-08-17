@@ -1,5 +1,8 @@
 package net.minestom.server.utils;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
+
 public final class SerializerUtils {
 
     private SerializerUtils() {
@@ -10,11 +13,10 @@ public final class SerializerUtils {
         return (((long) x & 0x3FFFFFF) << 38) | (((long) z & 0x3FFFFFF) << 12) | ((long) y & 0xFFF);
     }
 
-    public static BlockPosition longToBlockPosition(long value) {
+    public static Point longToBlockPosition(long value) {
         final int x = (int) (value >> 38);
         final int y = (int) (value & 0xFFF);
         final int z = (int) (value << 26 >> 38);
-        return new BlockPosition(x, y, z);
+        return new Vec(x, y, z);
     }
-
 }

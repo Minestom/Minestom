@@ -36,9 +36,6 @@ public final class BenchmarkManager {
     private static final List<String> THREADS = new ArrayList<>();
 
     static {
-        THREAD_MX_BEAN.setThreadContentionMonitoringEnabled(true);
-        THREAD_MX_BEAN.setThreadCpuTimeEnabled(true);
-
         THREADS.add(THREAD_NAME_BLOCK_BATCH);
         THREADS.add(THREAD_NAME_SCHEDULER);
         THREADS.add(THREAD_NAME_TICK_SCHEDULER);
@@ -59,23 +56,21 @@ public final class BenchmarkManager {
 
     public void enable(@NotNull Duration duration) {
         Check.stateCondition(enabled, "A benchmark is already running, please disable it first.");
+        THREAD_MX_BEAN.setThreadContentionMonitoringEnabled(true);
+        THREAD_MX_BEAN.setThreadCpuTimeEnabled(true);
 
-        time = duration.toMillis();
+        this.time = duration.toMillis();
 
         final Thread thread = new Thread(null, () -> {
-
             while (!stop) {
                 refreshData();
-
                 try {
                     Thread.sleep(time);
                 } catch (InterruptedException e) {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
-
             stop = false;
-
         }, MinecraftServer.THREAD_NAME_BENCHMARK);
         thread.setDaemon(true);
         thread.start();
@@ -110,7 +105,7 @@ public final class BenchmarkManager {
     public Component getCpuMonitoringMessage() {
         Check.stateCondition(!enabled, "CPU monitoring is only possible when the benchmark manager is enabled.");
         TextComponent.Builder benchmarkMessage = Component.text();
-        for (Map.Entry<String, ThreadResult> resultEntry : resultMap.entrySet()) {
+        for (var resultEntry : resultMap.entrySet()) {
             final String name = resultEntry.getKey();
             final ThreadResult result = resultEntry.getValue();
 

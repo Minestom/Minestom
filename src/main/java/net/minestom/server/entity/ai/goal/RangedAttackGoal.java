@@ -2,11 +2,10 @@ package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
+import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.entity.EntityProjectile;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -17,7 +16,6 @@ import java.time.temporal.TemporalUnit;
 import java.util.function.Function;
 
 public class RangedAttackGoal extends GoalSelector {
-
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
     private long lastShot;
@@ -104,7 +102,7 @@ public class RangedAttackGoal extends GoalSelector {
         if (distanceSquared <= this.attackRangeSquared) {
             if (!Cooldown.hasCooldown(time, this.lastShot, this.delay)) {
                 if (this.entityCreature.hasLineOfSight(target)) {
-                    Position to = target.getPosition().clone().add(0D, target.getEyeHeight(), 0D);
+                    final var to = target.getPosition().add(0D, target.getEyeHeight(), 0D);
 
                     Function<Entity, EntityProjectile> projectileGenerator = this.projectileGenerator;
                     if (projectileGenerator == null) {
@@ -121,15 +119,15 @@ public class RangedAttackGoal extends GoalSelector {
             }
         }
         Navigator navigator = this.entityCreature.getNavigator();
-        Position pathPosition = navigator.getPathPosition();
+        final var pathPosition = navigator.getPathPosition();
         if (!comeClose && distanceSquared <= this.desirableRangeSquared) {
             if (pathPosition != null) {
                 navigator.setPathTo(null);
             }
             return;
         }
-        Position targetPosition = target.getPosition();
-        if (pathPosition == null || !pathPosition.isSimilar(targetPosition)) {
+        final var targetPosition = target.getPosition();
+        if (pathPosition == null || !pathPosition.samePoint(targetPosition)) {
             if (this.cooldown.isReady(time)) {
                 this.cooldown.refreshLastUpdate(time);
                 navigator.setPathTo(targetPosition);

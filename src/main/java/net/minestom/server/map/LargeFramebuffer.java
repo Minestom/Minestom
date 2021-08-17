@@ -37,7 +37,7 @@ public interface LargeFramebuffer {
         final int height = Math.min(height(), top + Framebuffer.HEIGHT) - top;
         for (int y = top; y < height; y++) {
             for (int x = left; x < width; x++) {
-                final byte color = getMapColor(left, top);
+                final byte color = getMapColor(x, y);
                 colors[Framebuffer.index(x - left, y - top)] = color;
             }
         }

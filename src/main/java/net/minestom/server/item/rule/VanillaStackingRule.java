@@ -31,7 +31,7 @@ public class VanillaStackingRule implements StackingRule {
 
     @Override
     public int getMaxSize(@NotNull ItemStack itemStack) {
-        return itemStack.getMaterial().getMaxDefaultStackSize();
+        return itemStack.getMaterial().maxStackSize();
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.minestom.server.command;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.chat.JsonMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.permission.PermissionHandler;
 import net.minestom.server.tag.TagHandler;
@@ -33,18 +32,6 @@ public interface CommandSender extends PermissionHandler, Audience, TagHandler {
         for (String message : messages) {
             sendMessage(message);
         }
-    }
-
-    /**
-     * Sends a {@link JsonMessage} message.
-     * If this is not a {@link Player}, only the content of the message will be sent as a string.
-     *
-     * @param text The {@link JsonMessage} to send.
-     * @deprecated Use {@link #sendMessage(Component)}
-     */
-    @Deprecated
-    default void sendMessage(@NotNull JsonMessage text) {
-        this.sendMessage(text.asComponent());
     }
 
     /**

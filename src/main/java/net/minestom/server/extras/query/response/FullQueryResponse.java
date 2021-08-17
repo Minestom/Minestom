@@ -42,7 +42,7 @@ public class FullQueryResponse implements Writeable {
     /**
      * Puts a key-value mapping into the response.
      *
-     * @param key the key
+     * @param key   the key
      * @param value the value
      */
     public void put(@NotNull QueryKey key, @NotNull String value) {
@@ -52,7 +52,7 @@ public class FullQueryResponse implements Writeable {
     /**
      * Puts a key-value mapping into the response.
      *
-     * @param key the key
+     * @param key   the key
      * @param value the value
      */
     public void put(@NotNull String key, @NotNull String value) {
@@ -82,7 +82,7 @@ public class FullQueryResponse implements Writeable {
      *
      * @param players the players
      */
-    public void addPlayers(@NotNull String @NotNull... players) {
+    public void addPlayers(@NotNull String @NotNull ... players) {
         Collections.addAll(this.players, players);
     }
 
@@ -143,7 +143,7 @@ public class FullQueryResponse implements Writeable {
         writer.writeBytes(PADDING_11);
 
         // key-values
-        for (Map.Entry<String, String> entry : this.kv.entrySet()) {
+        for (var entry : this.kv.entrySet()) {
             writer.writeNullTerminatedString(entry.getKey(), Query.CHARSET);
             writer.writeNullTerminatedString(entry.getValue(), Query.CHARSET);
         }

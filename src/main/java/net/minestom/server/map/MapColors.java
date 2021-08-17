@@ -74,7 +74,7 @@ public enum MapColors {
 
     private static final ConcurrentHashMap<Integer, PreciseMapColor> rgbMap = new ConcurrentHashMap<>();
     // only used if mappingStrategy == ColorMappingStrategy.PRECISE
-    private static PreciseMapColor[] rgbArray = null;
+    private static volatile PreciseMapColor[] rgbArray = null;
 
     private static final ColorMappingStrategy mappingStrategy;
     private static final String MAPPING_ARGUMENT = "minestom.map.rgbmapping";

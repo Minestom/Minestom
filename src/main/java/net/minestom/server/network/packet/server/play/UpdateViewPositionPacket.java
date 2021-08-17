@@ -10,10 +10,14 @@ public class UpdateViewPositionPacket implements ServerPacket {
 
     public int chunkX, chunkZ;
 
-    /**
-     * Default constructor, required for reflection operations.
-     */
-    public UpdateViewPositionPacket() {}
+    public UpdateViewPositionPacket(int chunkX, int chunkZ) {
+        this.chunkX = chunkX;
+        this.chunkZ = chunkZ;
+    }
+
+    public UpdateViewPositionPacket() {
+        this(0, 0);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

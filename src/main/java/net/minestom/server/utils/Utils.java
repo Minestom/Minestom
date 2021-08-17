@@ -1,13 +1,14 @@
 package net.minestom.server.utils;
 
-import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.shorts.Short2ShortLinkedOpenHashMap;
-import net.minestom.server.instance.palette.Section;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.nio.ByteBuffer;
 import java.util.UUID;
 
+@ApiStatus.Internal
 public final class Utils {
 
     private Utils() {
@@ -21,77 +22,74 @@ public final class Utils {
                 ? 4 : 5;
     }
 
-    public static void writeVarInt(@NotNull ByteBuf buf, int value) {
-        // Took from velocity
+    public static void writeVarInt(ByteBuffer buf, int value) {
         if ((value & (0xFFFFFFFF << 7)) == 0) {
-            buf.writeByte(value);
+            buf.put((byte) value);
         } else if ((value & (0xFFFFFFFF << 14)) == 0) {
-            int w = (value & 0x7F | 0x80) << 8 | (value >>> 7);
-            buf.writeShort(w);
+            buf.putShort((short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
         } else if ((value & (0xFFFFFFFF << 21)) == 0) {
-            int w = (value & 0x7F | 0x80) << 16 | ((value >>> 7) & 0x7F | 0x80) << 8 | (value >>> 14);
-            buf.writeMedium(w);
+            buf.put((byte) (value & 0x7F | 0x80));
+            buf.put((byte) ((value >>> 7) & 0x7F | 0x80));
+            buf.put((byte) (value >>> 14));
+        } else if ((value & (0xFFFFFFFF << 28)) == 0) {
+            buf.putInt((value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
+                    | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
         } else {
-            int w = (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
-                    | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80);
-            buf.writeInt(w);
-            buf.writeByte(value >>> 28);
+            buf.putInt((value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
+                    | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
+            buf.put((byte) (value >>> 28));
         }
     }
 
-    public static void write3BytesVarInt(@NotNull ByteBuf buffer, int startIndex, int value) {
-        final int indexCache = buffer.writerIndex();
-        buffer.writerIndex(startIndex);
-        final int w = (value & 0x7F | 0x80) << 16 | ((value >>> 7) & 0x7F | 0x80) << 8 | (value >>> 14);
-        buffer.writeMedium(w);
-        buffer.writerIndex(indexCache);
+    public static void writeVarIntHeader(@NotNull ByteBuffer buffer, int startIndex, int value) {
+        final int indexCache = buffer.position();
+        buffer.position(startIndex);
+        buffer.put((byte) (value & 0x7F | 0x80));
+        buffer.put((byte) ((value >>> 7) & 0x7F | 0x80));
+        buffer.put((byte) (value >>> 14));
+        buffer.position(indexCache);
     }
 
-    public static int writeEmpty3BytesVarInt(@NotNull ByteBuf buffer) {
-        final int index = buffer.writerIndex();
-        buffer.writeMedium(0);
+    public static int writeEmptyVarIntHeader(@NotNull ByteBuffer buffer) {
+        final int index = buffer.position();
+        buffer.putShort((short) 0);
+        buffer.put((byte) 0);
         return index;
     }
 
-    public static int readVarInt(ByteBuf buf) {
-        int i = 0;
-        final int maxRead = Math.min(5, buf.readableBytes());
-        for (int j = 0; j < maxRead; j++) {
-            final int k = buf.readByte();
-            i |= (k & 0x7F) << j * 7;
-            if ((k & 0x80) != 128) {
-                return i;
+    public static int readVarInt(ByteBuffer buf) {
+        // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
+        int result = 0;
+        for (int shift = 0; ; shift += 7) {
+            byte b = buf.get();
+            result |= (b & 0x7f) << shift;
+            if (b >= 0) {
+                return result;
             }
         }
-        throw new RuntimeException("VarInt is too big");
     }
 
-    public static long readVarLong(@NotNull ByteBuf buffer) {
-        int numRead = 0;
+    public static long readVarLong(@NotNull ByteBuffer buf) {
+        // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L404
         long result = 0;
-        byte read;
-        do {
-            read = buffer.readByte();
-            long value = (read & 0b01111111);
-            result |= (value << (7 * numRead));
-
-            numRead++;
-            if (numRead > 10) {
-                throw new RuntimeException("VarLong is too big");
+        for (int shift = 0; shift < 56; shift += 7) {
+            byte b = buf.get();
+            result |= (b & 0x7fL) << shift;
+            if (b >= 0) {
+                return result;
             }
-        } while ((read & 0b10000000) != 0);
-
-        return result;
+        }
+        return result | (buf.get() & 0xffL) << 56;
     }
 
-    public static void writeVarLong(BinaryWriter writer, long value) {
+    public static void writeVarLong(ByteBuffer buffer, long value) {
         do {
             byte temp = (byte) (value & 0b01111111);
             value >>>= 7;
             if (value != 0) {
                 temp |= 0b10000000;
             }
-            writer.writeByte(temp);
+            buffer.put(temp);
         } while (value != 0);
     }
 
@@ -117,28 +115,27 @@ public final class Utils {
         return new UUID(uuidMost, uuidLeast);
     }
 
-    public static void writeSectionBlocks(ByteBuf buffer, Section section) {
+    public static void writePaletteBlocks(ByteBuffer buffer, Palette palette) {
+        final short blockCount = palette.getBlockCount();
+        final int bitsPerEntry = palette.getBitsPerEntry();
 
-        final short blockCount = section.getBlockCount();
-        final int bitsPerEntry = section.getBitsPerEntry();
-
-        buffer.writeShort(blockCount);
-        buffer.writeByte((byte) bitsPerEntry);
+        buffer.putShort(blockCount);
+        buffer.put((byte) bitsPerEntry);
 
         // Palette
         if (bitsPerEntry < 9) {
             // Palette has to exist
-            final Short2ShortLinkedOpenHashMap paletteBlockMap = section.getPaletteBlockMap();
+            final Short2ShortLinkedOpenHashMap paletteBlockMap = palette.getPaletteBlockMap();
             writeVarInt(buffer, paletteBlockMap.size());
             for (short paletteValue : paletteBlockMap.values()) {
                 writeVarInt(buffer, paletteValue);
             }
         }
 
-        final long[] blocks = section.getBlocks();
+        final long[] blocks = palette.getBlocks();
         writeVarInt(buffer, blocks.length);
         for (long datum : blocks) {
-            buffer.writeLong(datum);
+            buffer.putLong(datum);
         }
     }
 

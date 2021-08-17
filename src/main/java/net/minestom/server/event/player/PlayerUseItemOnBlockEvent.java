@@ -4,8 +4,8 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerEvent;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -16,12 +16,12 @@ public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
     private final Player player;
     private final Player.Hand hand;
     private final ItemStack itemStack;
-    private final BlockPosition position;
+    private final Point position;
     private final Direction blockFace;
 
     public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull Player.Hand hand,
                                      @NotNull ItemStack itemStack,
-                                     @NotNull BlockPosition position, @NotNull Direction blockFace) {
+                                     @NotNull Point position, @NotNull Direction blockFace) {
         this.player = player;
         this.hand = hand;
         this.itemStack = itemStack;
@@ -34,8 +34,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
      *
      * @return the block position
      */
-    @NotNull
-    public BlockPosition getPosition() {
+    public @NotNull Point getPosition() {
         return position;
     }
 
@@ -44,8 +43,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
      *
      * @return the block face
      */
-    @NotNull
-    public Direction getBlockFace() {
+    public @NotNull Direction getBlockFace() {
         return blockFace;
     }
 
@@ -54,8 +52,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
      *
      * @return the hand
      */
-    @NotNull
-    public Player.Hand getHand() {
+    public @NotNull Player.Hand getHand() {
         return hand;
     }
 
@@ -64,8 +61,8 @@ public class PlayerUseItemOnBlockEvent implements PlayerEvent, ItemEvent {
      *
      * @return the item
      */
-    @NotNull
-    public ItemStack getItemStack() {
+    @Override
+    public @NotNull ItemStack getItemStack() {
         return itemStack;
     }
 

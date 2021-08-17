@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(MinestomCodeGenerator.class);
@@ -25,5 +26,9 @@ public abstract class MinestomCodeGenerator {
                 LOGGER.error("An error occured while writing source code to the file system.", e);
             }
         }
+    }
+
+    protected static String toConstant(String namespace) {
+        return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
     }
 }

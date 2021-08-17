@@ -6,40 +6,28 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.data.DataManager;
 import net.minestom.server.data.DataType;
 import net.minestom.server.data.SerializableData;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.extensions.Extension;
 import net.minestom.server.extensions.ExtensionManager;
 import net.minestom.server.fluid.Fluid;
-import net.minestom.server.gamedata.loottables.LootTableManager;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.CustomBlock;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.item.Enchantment;
-import net.minestom.server.item.Material;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
-import net.minestom.server.network.netty.NettyServer;
 import net.minestom.server.network.packet.server.play.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.packet.server.play.UpdateViewDistancePacket;
-import net.minestom.server.particle.Particle;
+import net.minestom.server.network.socket.Server;
 import net.minestom.server.ping.ResponseDataConsumer;
-import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.potion.PotionType;
 import net.minestom.server.recipe.RecipeManager;
-import net.minestom.server.registry.ResourceGatherer;
 import net.minestom.server.scoreboard.TeamManager;
-import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.statistic.StatisticType;
 import net.minestom.server.storage.StorageLocation;
 import net.minestom.server.storage.StorageManager;
 import net.minestom.server.terminal.MinestomTerminal;
@@ -57,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 
 /**
  * The main server class used to start the server and retrieve all the managers.
@@ -68,8 +57,8 @@ public final class MinecraftServer {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(MinecraftServer.class);
 
-    public static final String VERSION_NAME = "1.17";
-    public static final int PROTOCOL_VERSION = 755;
+    public static final String VERSION_NAME = "1.17.1";
+    public static final int PROTOCOL_VERSION = 756;
 
     // Threads
     public static final String THREAD_NAME_BENCHMARK = "Ms-Benchmark";
@@ -99,9 +88,7 @@ public final class MinecraftServer {
     // Network
     private static PacketListenerManager packetListenerManager;
     private static PacketProcessor packetProcessor;
-    private static NettyServer nettyServer;
-    private static int nettyThreadCount = Runtime.getRuntime().availableProcessors();
-    private static boolean processNettyErrors = true;
+    private static Server server;
 
     private static ExceptionManager exceptionManager;
 
@@ -136,13 +123,11 @@ public final class MinecraftServer {
     private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
     private static int compressionThreshold = 256;
-    private static boolean packetCaching = true;
     private static boolean groupedPacket = true;
     private static boolean terminalEnabled = System.getProperty("minestom.terminal.disabled") == null;
     private static ResponseDataConsumer responseDataConsumer;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
-    private static LootTableManager lootTableManager;
     private static TagManager tagManager;
 
     public static MinecraftServer init() {
@@ -158,15 +143,6 @@ public final class MinecraftServer {
         // without this line, registry types that are not loaded explicitly will have an internal empty registry in Registries
         // That can happen with PotionType for instance, if no code tries to access a PotionType field
         // TODO: automate (probably with code generation)
-        Block.values();
-        Material.values();
-        PotionType.values();
-        PotionEffect.values();
-        Enchantment.values();
-        EntityType.values();
-        SoundEvent.values();
-        Particle.values();
-        StatisticType.values();
         Fluid.values();
 
         connectionManager = new ConnectionManager();
@@ -190,16 +166,12 @@ public final class MinecraftServer {
 
         updateManager = new UpdateManager();
 
-        lootTableManager = new LootTableManager();
         tagManager = new TagManager();
 
-        nettyServer = new NettyServer(packetProcessor);
-
-        // Registry
         try {
-            ResourceGatherer.ensureResourcesArePresent(VERSION_NAME);
+            server = new Server(packetProcessor);
         } catch (IOException e) {
-            LOGGER.error("An error happened during resource gathering. Minestom will attempt to load anyway, but things may not work, and crashes can happen.", e);
+            e.printStackTrace();
         }
 
         initialized = true;
@@ -284,12 +256,8 @@ public final class MinecraftServer {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-
         // Send the packet to all online players
-        ServerDifficultyPacket serverDifficultyPacket = new ServerDifficultyPacket();
-        serverDifficultyPacket.difficulty = difficulty;
-        serverDifficultyPacket.locked = true; // Can only be modified on single-player
-        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), serverDifficultyPacket);
+        PacketUtils.sendGroupedPacket(connectionManager.getOnlinePlayers(), new ServerDifficultyPacket(difficulty, true));
     }
 
     /**
@@ -314,16 +282,6 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the netty server.
-     *
-     * @return the netty server
-     */
-    public static NettyServer getNettyServer() {
-        checkInitStatus(nettyServer);
-        return nettyServer;
-    }
-
-    /**
      * Gets the manager handling all registered instances.
      *
      * @return the instance manager
@@ -334,7 +292,8 @@ public final class MinecraftServer {
     }
 
     /**
-     * Gets the manager handling {@link CustomBlock} and {@link BlockPlacementRule}.
+     * Gets the manager handling {@link net.minestom.server.instance.block.BlockHandler block handlers}
+     * and {@link BlockPlacementRule placement rules}.
      *
      * @return the block manager
      */
@@ -493,15 +452,10 @@ public final class MinecraftServer {
                 "The chunk view distance must be between 2 and 32");
         MinecraftServer.chunkViewDistance = chunkViewDistance;
         if (started) {
-
             for (final Player player : connectionManager.getOnlinePlayers()) {
                 final Chunk playerChunk = player.getChunk();
                 if (playerChunk != null) {
-
-                    UpdateViewDistancePacket updateViewDistancePacket = new UpdateViewDistancePacket();
-                    updateViewDistancePacket.viewDistance = player.getChunkRange();
-                    player.getPlayerConnection().sendPacket(updateViewDistancePacket);
-
+                    player.getPlayerConnection().sendPacket(new UpdateViewDistancePacket(player.getChunkRange()));
                     player.refreshVisibleChunks(playerChunk);
                 }
             }
@@ -562,34 +516,6 @@ public final class MinecraftServer {
     /**
      * Gets if the packet caching feature is enabled.
      * <p>
-     * This feature allows some packets (implementing the {@link net.minestom.server.utils.cache.CacheablePacket} to be cached
-     * in order to do not have to be written and compressed over and over again), this is especially useful for chunk and light packets.
-     * <p>
-     * It is enabled by default and it is our recommendation,
-     * you should only disable it if you want to focus on low memory usage
-     * at the cost of many packet writing and compression.
-     *
-     * @return true if the packet caching feature is enabled, false otherwise
-     */
-    public static boolean hasPacketCaching() {
-        return packetCaching;
-    }
-
-    /**
-     * Enables or disable packet caching.
-     *
-     * @param packetCaching true to enable packet caching
-     * @throws IllegalStateException if this is called after the server started
-     * @see #hasPacketCaching()
-     */
-    public static void setPacketCaching(boolean packetCaching) {
-        Check.stateCondition(started, "You cannot change the packet caching value after the server has been started.");
-        MinecraftServer.packetCaching = packetCaching;
-    }
-
-    /**
-     * Gets if the packet caching feature is enabled.
-     * <p>
      * This features allow sending the exact same packet/buffer to multiple connections.
      * It does provide a great performance benefit by allocating and writing/compressing only once.
      * <p>
@@ -617,6 +543,7 @@ public final class MinecraftServer {
 
     /**
      * Gets if the built in Minestom terminal is enabled.
+     *
      * @return true if the terminal is enabled
      */
     public static boolean isTerminalEnabled() {
@@ -643,16 +570,6 @@ public final class MinecraftServer {
     public static ResponseDataConsumer getResponseDataConsumer() {
         checkInitStatus(responseDataConsumer);
         return responseDataConsumer;
-    }
-
-    /**
-     * Gets the manager handling loot tables.
-     *
-     * @return the loot table manager
-     */
-    public static LootTableManager getLootTableManager() {
-        checkInitStatus(lootTableManager);
-        return lootTableManager;
     }
 
     /**
@@ -715,45 +632,9 @@ public final class MinecraftServer {
         return updateManager;
     }
 
-    /**
-     * Gets the number of threads used by Netty.
-     * <p>
-     * Is the number of vCPU by default.
-     *
-     * @return the number of netty threads
-     */
-    public static int getNettyThreadCount() {
-        return nettyThreadCount;
-    }
-
-    /**
-     * Changes the number of threads used by Netty.
-     *
-     * @param nettyThreadCount the number of threads
-     * @throws IllegalStateException if the server is already started
-     */
-    public static void setNettyThreadCount(int nettyThreadCount) {
-        Check.stateCondition(started, "Netty thread count can only be changed before the server starts!");
-        MinecraftServer.nettyThreadCount = nettyThreadCount;
-    }
-
-    /**
-     * Gets if the server should process netty errors and other unnecessary netty events.
-     *
-     * @return should process netty errors
-     */
-    public static boolean shouldProcessNettyErrors() {
-        return processNettyErrors;
-    }
-
-    /**
-     * Sets if the server should process netty errors and other unnecessary netty events.
-     * false is faster
-     *
-     * @param processNettyErrors should process netty errors
-     */
-    public static void setShouldProcessNettyErrors(boolean processNettyErrors) {
-        MinecraftServer.processNettyErrors = processNettyErrors;
+    public static Server getServer() {
+        checkInitStatus(server);
+        return server;
     }
 
     /**
@@ -793,8 +674,11 @@ public final class MinecraftServer {
         updateManager.start();
 
         // Init & start the TCP server
-        nettyServer.init();
-        nettyServer.start(address, port);
+        try {
+            server.start(new InetSocketAddress(address, port));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         if (extensionManager.shouldLoadOnStartup()) {
             final long loadStartTime = System.nanoTime();
@@ -828,7 +712,7 @@ public final class MinecraftServer {
         updateManager.stop();
         schedulerManager.shutdown();
         connectionManager.shutdown();
-        nettyServer.stop();
+        server.stop();
         storageManager.getLoadedLocations().forEach(StorageLocation::close);
         LOGGER.info("Unloading all extensions.");
         extensionManager.shutdown();

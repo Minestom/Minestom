@@ -350,7 +350,7 @@ public final class CommandManager {
                     for (var entry : syntaxesArguments.entrySet()) {
                         final var parsedArguments = entry.getValue();
                         final int index = i + 1;
-                        if (ArrayUtils.sameStart(arguments, parsedArguments, index)) {
+                        if (Arrays.mismatch(arguments, 0, index, parsedArguments, 0, index) == -1) {
                             final Argument<?> sharedArgument = parsedArguments[i];
                             final var sharedSyntax = entry.getKey();
                             final var indexed = new IndexedArgument(sharedSyntax, sharedArgument, i);

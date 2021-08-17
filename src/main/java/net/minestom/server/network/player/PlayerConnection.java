@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * It can be extended to create a new kind of player (NPC for instance).
  */
 public abstract class PlayerConnection {
-
     protected static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     private Player player;
@@ -63,8 +62,7 @@ public abstract class PlayerConnection {
         }
     }
 
-    @NotNull
-    public AtomicInteger getPacketCounter() {
+    public @NotNull AtomicInteger getPacketCounter() {
         return packetCounter;
     }
 
@@ -74,8 +72,7 @@ public abstract class PlayerConnection {
      *
      * @return this connection identifier
      */
-    @NotNull
-    public String getIdentifier() {
+    public @NotNull String getIdentifier() {
         final Player player = getPlayer();
         return player != null ?
                 player.getUsername() :
@@ -114,9 +111,7 @@ public abstract class PlayerConnection {
      *
      * @return the remote address
      */
-    @NotNull
-    public abstract SocketAddress getRemoteAddress();
-
+    public abstract @NotNull SocketAddress getRemoteAddress();
 
     /**
      * Gets protocol version of client.
@@ -135,7 +130,7 @@ public abstract class PlayerConnection {
      * @return the server address used
      */
     public @Nullable String getServerAddress() {
-        return MinecraftServer.getNettyServer().getAddress();
+        return MinecraftServer.getServer().getAddress();
     }
 
 
@@ -147,9 +142,8 @@ public abstract class PlayerConnection {
      * @return the server port used
      */
     public int getServerPort() {
-        return MinecraftServer.getNettyServer().getPort();
+        return MinecraftServer.getServer().getPort();
     }
-
 
     /**
      * Forcing the player to disconnect.
@@ -161,8 +155,7 @@ public abstract class PlayerConnection {
      *
      * @return the player, can be null if not initialized yet
      */
-    @Nullable
-    public Player getPlayer() {
+    public @Nullable Player getPlayer() {
         return player;
     }
 
@@ -199,8 +192,7 @@ public abstract class PlayerConnection {
      *
      * @return the client connection state
      */
-    @NotNull
-    public ConnectionState getConnectionState() {
+    public @NotNull ConnectionState getConnectionState() {
         return connectionState;
     }
 

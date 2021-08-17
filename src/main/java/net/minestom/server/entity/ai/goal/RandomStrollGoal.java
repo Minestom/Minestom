@@ -1,8 +1,8 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.utils.Position;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -14,14 +14,13 @@ public class RandomStrollGoal extends GoalSelector {
     private static final long DELAY = 2500;
 
     private final int radius;
-    private final List<Position> closePositions;
+    private final List<Vec> closePositions;
 
     private long lastStroll;
 
     public RandomStrollGoal(@NotNull EntityCreature entityCreature, int radius) {
         super(entityCreature);
         this.radius = radius;
-
         this.closePositions = getNearbyBlocks(radius);
     }
 
@@ -33,20 +32,17 @@ public class RandomStrollGoal extends GoalSelector {
     @Override
     public void start() {
         Collections.shuffle(closePositions);
-
-        for (Position position : closePositions) {
-            final Position target = position.clone().add(entityCreature.getPosition());
+        for (var position : closePositions) {
+            final var target = entityCreature.getPosition().add(position);
             final boolean result = entityCreature.getNavigator().setPathTo(target);
             if (result) {
                 break;
             }
         }
-
     }
 
     @Override
     public void tick(long time) {
-
     }
 
     @Override
@@ -63,18 +59,15 @@ public class RandomStrollGoal extends GoalSelector {
         return radius;
     }
 
-    @NotNull
-    private List<Position> getNearbyBlocks(int radius) {
-        List<Position> blocks = new ArrayList<>();
+    private static @NotNull List<Vec> getNearbyBlocks(int radius) {
+        List<Vec> blocks = new ArrayList<>();
         for (int x = -radius; x <= radius; x++) {
             for (int y = -radius; y <= radius; y++) {
                 for (int z = -radius; z <= radius; z++) {
-                    final Position position = new Position(x, y, z);
-                    blocks.add(position);
+                    blocks.add(new Vec(x, y, z));
                 }
             }
         }
         return blocks;
     }
-
 }

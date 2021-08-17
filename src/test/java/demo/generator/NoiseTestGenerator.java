@@ -3,12 +3,12 @@ package demo.generator;
 import de.articdive.jnoise.JNoise;
 import de.articdive.jnoise.interpolation.InterpolationType;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.ChunkGenerator;
 import net.minestom.server.instance.ChunkPopulator;
 import net.minestom.server.instance.batch.ChunkBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.BlockPosition;
 import net.minestom.server.world.biomes.Biome;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,20 +35,12 @@ public class NoiseTestGenerator implements ChunkGenerator {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 final int height = getHeight(x + chunkX * 16, z + chunkZ * 16);
                 for (int y = 0; y < height; y++) {
-                    //if (random.nextInt(100) > 10) {
-                    //    batch.setBlock(x, y, z, Block.DIAMOND_BLOCK);
-                    //} else {
-                    //    batch.setBlock(x, y, z, Block.GOLD_BLOCK);
-                    //}
                     if (y == 0) {
                         batch.setBlock(x, y, z, Block.BEDROCK);
                     } else if (y == height - 1) {
                         batch.setBlock(x, y, z, Block.GRASS_BLOCK);
                     } else if (y > height - 7) {
-                        // Data for debugging purpose
-                        //SerializableData serializableData = new SerializableDataImpl();
-                        //serializableData.set("test", 55, Integer.class);
-                        batch.setBlockStateId(x, y, z, Block.DIRT.getBlockId());
+                        batch.setBlock(x, y, z, Block.DIRT);
                     } else {
                         batch.setBlock(x, y, z, Block.STONE);
                     }
@@ -173,7 +165,7 @@ public class NoiseTestGenerator implements ChunkGenerator {
                 for (int j = -2; j < 18; j++) {
                     if (jNoise2.getNoise(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16) > 0.75) {
                         int y = getHeight(i + chunk.getChunkX() * 16, j + chunk.getChunkZ() * 16);
-                        tree.build(batch, new BlockPosition(i, y, j));
+                        tree.build(batch, new Vec(i, y, j));
                     }
                 }
             }

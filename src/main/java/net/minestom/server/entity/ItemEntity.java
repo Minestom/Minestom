@@ -4,10 +4,8 @@ import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.StackingRule;
-import net.minestom.server.utils.Position;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -41,18 +39,10 @@ public class ItemEntity extends Entity {
     private long spawnTime;
     private long pickupDelay;
 
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition) {
-        super(EntityType.ITEM, spawnPosition);
+    public ItemEntity(@NotNull ItemStack itemStack) {
+        super(EntityType.ITEM);
         setItemStack(itemStack);
         setBoundingBox(0.25f, 0.25f, 0.25f);
-    }
-
-    public ItemEntity(@NotNull ItemStack itemStack, @NotNull Position spawnPosition, @Nullable Instance instance) {
-        this(itemStack, spawnPosition);
-
-        if (instance != null) {
-            setInstance(instance);
-        }
     }
 
     /**
@@ -63,20 +53,6 @@ public class ItemEntity extends Entity {
     @Nullable
     public static Duration getMergeDelay() {
         return mergeDelay;
-    }
-
-    /**
-     * Changes the merge update option.
-     * Can be set to null to entirely remove the delay.
-     *
-     * @param mergeUpdateOption the new merge update option
-     *
-     * @deprecated Replaced by {@link #setMergeDelay(Duration)}
-     */
-    @SuppressWarnings("removal")
-    @Deprecated(forRemoval = true)
-    public static void setMergeUpdateOption(@Nullable net.minestom.server.utils.time.UpdateOption mergeUpdateOption) {
-        setMergeDelay(mergeUpdateOption != null ? mergeUpdateOption.toDuration() : null);
     }
 
     /**
@@ -239,7 +215,7 @@ public class ItemEntity extends Entity {
     /**
      * Sets the pickup delay of the ItemEntity.
      *
-     * @param delay    the pickup delay
+     * @param delay        the pickup delay
      * @param temporalUnit the unit of the delay
      */
     public void setPickupDelay(long delay, @NotNull TemporalUnit temporalUnit) {
@@ -249,7 +225,7 @@ public class ItemEntity extends Entity {
     /**
      * Sets the pickup delay of the ItemEntity.
      *
-     * @param delay    the pickup delay
+     * @param delay the pickup delay
      */
     public void setPickupDelay(Duration delay) {
         this.pickupDelay = delay.toMillis();

@@ -12,7 +12,16 @@ public class EntityRotationPacket implements ServerPacket {
     public float yaw, pitch;
     public boolean onGround;
 
-    public EntityRotationPacket() {}
+    public EntityRotationPacket(int entityId, float yaw, float pitch, boolean onGround) {
+        this.entityId = entityId;
+        this.yaw = yaw;
+        this.pitch = pitch;
+        this.onGround = onGround;
+    }
+
+    public EntityRotationPacket() {
+        this(0, 0, 0, false);
+    }
 
     @Override
     public void write(@NotNull BinaryWriter writer) {

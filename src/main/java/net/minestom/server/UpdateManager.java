@@ -1,20 +1,21 @@
 package net.minestom.server;
 
 import net.minestom.server.acquirable.Acquirable;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.player.NettyPlayerConnection;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.SingleThreadProvider;
 import net.minestom.server.thread.ThreadProvider;
-import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
@@ -38,13 +39,13 @@ public final class UpdateManager {
     /**
      * Should only be created in MinecraftServer.
      */
-    protected UpdateManager() {
+    UpdateManager() {
     }
 
     /**
      * Starts the server loop in the update thread.
      */
-    protected void start() {
+    void start() {
         final ConnectionManager connectionManager = MinecraftServer.getConnectionManager();
 
         new Thread(() -> {
@@ -81,10 +82,12 @@ public final class UpdateManager {
                     }
 
                     // Flush all waiting packets
-                    AsyncUtils.runAsync(() -> connectionManager.getOnlinePlayers().parallelStream()
-                            .filter(player -> player.getPlayerConnection() instanceof NettyPlayerConnection)
-                            .map(player -> (NettyPlayerConnection) player.getPlayerConnection())
-                            .forEach(NettyPlayerConnection::flush));
+                    for (Player player : connectionManager.getOnlinePlayers()) {
+                        final var connection = player.getPlayerConnection();
+                        if (connection instanceof PlayerSocketConnection) {
+                            ((PlayerSocketConnection) connection).flush();
+                        }
+                    }
 
                     // Disable thread until next tick
                     LockSupport.parkNanos((long) ((MinecraftServer.TICK_MS * 1e6) - tickTime));
@@ -92,6 +95,7 @@ public final class UpdateManager {
                     MinecraftServer.getExceptionManager().handleException(e);
                 }
             }
+            this.threadProvider.shutdown();
         }, MinecraftServer.THREAD_NAME_TICK_SCHEDULER).start();
     }
 
@@ -102,8 +106,13 @@ public final class UpdateManager {
      */
     private void serverTick(long tickStart) {
         // Tick all instances
-        MinecraftServer.getInstanceManager().getInstances().forEach(instance ->
-                instance.tick(tickStart));
+        MinecraftServer.getInstanceManager().getInstances().forEach(instance -> {
+            try {
+                instance.tick(tickStart);
+            } catch (Exception e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+        });
         // Tick all chunks (and entities inside)
         this.threadProvider.updateAndAwait(tickStart);
 
@@ -233,6 +242,5 @@ public final class UpdateManager {
      */
     public void stop() {
         this.stopRequested = true;
-        this.threadProvider.shutdown();
     }
 }

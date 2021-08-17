@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments;
 
-import io.netty.util.internal.StringUtil;
 import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
@@ -43,13 +42,15 @@ public class ArgumentString extends Argument<String> {
         nodeMaker.addNodes(new DeclareCommandsPacket.Node[]{argumentNode});
     }
 
-    @NotNull
+    /**
+     * @deprecated use {@link Argument#parse(Argument)}
+     */
+    @Deprecated
     public static String staticParse(@NotNull String input) throws ArgumentSyntaxException {
-
         // Return if not quoted
         if (!input.contains(String.valueOf(DOUBLE_QUOTE)) &&
                 !input.contains(String.valueOf(QUOTE)) &&
-                !input.contains(String.valueOf(StringUtil.SPACE))) {
+                !input.contains(StringUtils.SPACE)) {
             return input;
         }
 
