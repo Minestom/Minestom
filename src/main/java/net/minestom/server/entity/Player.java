@@ -543,9 +543,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
                              boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
+        final Set<Chunk> previousChunks = Set.copyOf(viewableChunks);
         if (!firstSpawn) {
             // Player instance changed, clear current viewable collections
-            this.viewableChunks.forEach(chunk -> chunk.removeViewer(this));
+            previousChunks.forEach(chunk -> chunk.removeViewer(this));
             this.viewableEntities.forEach(entity -> entity.removeViewer(this));
         }
 
@@ -557,7 +558,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         if (updateChunks) {
             // Warning: loop to remove once `refreshVisibleChunks` manage it
-            this.viewableChunks.forEach(chunk ->
+            previousChunks.forEach(chunk ->
                     playerConnection.sendPacket(new UnloadChunkPacket(chunk.getChunkX(), chunk.getChunkZ())));
             refreshVisibleChunks();
         }
@@ -569,6 +570,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         PlayerSpawnEvent spawnEvent = new PlayerSpawnEvent(this, instance, firstSpawn);
         EventDispatcher.call(spawnEvent);
+
+        if (playerConnection instanceof PlayerSocketConnection) {
+            ((PlayerSocketConnection) playerConnection).flush();
+        }
     }
 
     /**
