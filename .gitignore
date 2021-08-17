@@ -55,6 +55,3 @@ gradle-app.setting
 # When running the demo we generate the extensions folder
 /extensions/
 /.mixin.out/
-
-# When compiling we get a docs folder
-**/docs
