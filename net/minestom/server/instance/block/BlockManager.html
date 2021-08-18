@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":10,"i3":10};
+var data = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -186,13 +186,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>@Nullable <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getHandlerOrDummy(java.lang.String)">getHandlerOrDummy</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerBlockPlacementRule(net.minestom.server.instance.block.rule.BlockPlacementRule)">registerBlockPlacementRule</a></span>&#8203;(@NotNull <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule">BlockPlacementRule</a>&nbsp;blockPlacementRule)</code></th>
 <td class="colLast">
 <div class="block">Registers a <a href="rule/BlockPlacementRule.html" title="class in net.minestom.server.instance.block.rule"><code>BlockPlacementRule</code></a>.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#registerHandler(java.lang.String,java.util.function.Supplier)">registerHandler</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace,
                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Supplier.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Supplier</a>&lt;@NotNull <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&gt;&nbsp;handlerSupplier)</code></th>
@@ -262,6 +267,18 @@ extends <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/ja
 <pre class="methodSignature">@Nullable
 public&nbsp;@Nullable <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&nbsp;getHandler&#8203;(@NotNull
                                          @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</pre>
+</li>
+</ul>
+<a id="getHandlerOrDummy(java.lang.String)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHandlerOrDummy</h4>
+<pre class="methodSignature">@Internal
+@Nullable
+public&nbsp;@Nullable <a href="BlockHandler.html" title="interface in net.minestom.server.instance.block">BlockHandler</a>&nbsp;getHandlerOrDummy&#8203;(@NotNull
+                                                @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;namespace)</pre>
 </li>
 </ul>
 <a id="registerBlockPlacementRule(net.minestom.server.instance.block.rule.BlockPlacementRule)">
