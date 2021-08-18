@@ -7,6 +7,10 @@ import java.util.List;
 
 public interface Area extends Iterable<Point> {
 
+    static @NotNull Area fromList(@NotNull List<? extends Point> list) {
+        return AreaImpl.fromList(list);
+    }
+
     static @NotNull Area fill(@NotNull Point point1, @NotNull Point point2) {
         return new AreaImpl.Fill(point1, point2);
     }
@@ -16,7 +20,7 @@ public interface Area extends Iterable<Point> {
     }
 
     static @NotNull Area randomizer(@NotNull Area area, double probability) {
-        return new AreaImpl.Randomizer(area, probability);
+        return AreaImpl.Randomize(area, probability);
     }
 
     @NotNull List<@NotNull Point> asList();

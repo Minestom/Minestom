@@ -12,6 +12,23 @@ import java.util.function.UnaryOperator;
 
 class AreaImpl {
 
+    @SuppressWarnings("unchecked")
+    static Area fromList(List<? extends Point> list) {
+        final var copy = List.copyOf(list); // Defensive copy
+        return new Area() {
+            @Override
+            public @NotNull List<@NotNull Point> asList() {
+                return (List<Point>) copy;
+            }
+
+            @NotNull
+            @Override
+            public Iterator<Point> iterator() {
+                return (Iterator<Point>) copy.iterator();
+            }
+        };
+    }
+
     static class Fill implements Area {
         private final Point min, max;
 
@@ -85,19 +102,7 @@ class AreaImpl {
 
         @Override
         public @NotNull Area end() {
-            final List<Point> list = List.copyOf(positions);
-            return new Area() {
-                @Override
-                public @NotNull List<@NotNull Point> asList() {
-                    return list;
-                }
-
-                @NotNull
-                @Override
-                public Iterator<Point> iterator() {
-                    return list.iterator();
-                }
-            };
+            return fromList(positions);
         }
 
         private Area.Path with(UnaryOperator<Point> operator) {
@@ -107,30 +112,15 @@ class AreaImpl {
         }
     }
 
-    static class Randomizer implements Area {
-        private final List<Point> points;
-
-        protected Randomizer(Area area, double probability) {
-            var random = ThreadLocalRandom.current();
-            List<Point> positions = new ArrayList<>();
-            area.forEach(blockPosition -> {
-                final double value = random.nextDouble();
-                if (value <= probability) {
-                    positions.add(blockPosition);
-                }
-            });
-            this.points = List.copyOf(positions);
-        }
-
-        @NotNull
-        @Override
-        public Iterator<Point> iterator() {
-            return points.iterator();
-        }
-
-        @Override
-        public @NotNull List<@NotNull Point> asList() {
-            return points;
-        }
+    static Area Randomize(Area area, double probability) {
+        List<Point> points = new ArrayList<>();
+        var localRandom = ThreadLocalRandom.current();
+        area.forEach(blockPosition -> {
+            final double value = localRandom.nextDouble();
+            if (value <= probability) {
+                points.add(blockPosition);
+            }
+        });
+        return fromList(points);
     }
 }
