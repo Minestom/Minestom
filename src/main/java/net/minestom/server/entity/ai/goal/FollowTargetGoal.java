@@ -1,6 +1,7 @@
 package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
@@ -15,6 +16,8 @@ public class FollowTargetGoal extends GoalSelector {
     private boolean forceEnd = false;
     private Point lastTargetPos;
 
+    private Entity target;
+
     /**
      * Creates a follow target goal object.
      *
@@ -28,8 +31,14 @@ public class FollowTargetGoal extends GoalSelector {
 
     @Override
     public boolean shouldStart() {
-        return entityCreature.getTarget() != null &&
-                entityCreature.getTarget().getPosition().distance(entityCreature.getPosition()) >= 2;
+        Entity target = entityCreature.getTarget();
+        if (target == null) target = findTarget();
+        if (target == null) return false;
+        final boolean result = target.getPosition().distance(entityCreature.getPosition()) >= 2;
+        if (result) {
+            this.target = target;
+        }
+        return result;
     }
 
     @Override
@@ -37,23 +46,23 @@ public class FollowTargetGoal extends GoalSelector {
         lastUpdateTime = 0;
         forceEnd = false;
         lastTargetPos = null;
-        final Entity target = entityCreature.getTarget();
-        if (target != null) {
-            Navigator navigator = entityCreature.getNavigator();
-
-            lastTargetPos = target.getPosition();
-            if (lastTargetPos.distance(entityCreature.getPosition()) < 2) {
-                forceEnd = true;
-                navigator.setPathTo(null);
-                return;
-            }
-
-            if (navigator.getPathPosition() == null ||
-                    (!navigator.getPathPosition().samePoint(lastTargetPos))) {
-                navigator.setPathTo(lastTargetPos);
-            } else {
-                forceEnd = true;
-            }
+        if (target == null) {
+            // No defined target
+            this.forceEnd = true;
+            return;
+        }
+        this.entityCreature.setTarget(target);
+        Navigator navigator = entityCreature.getNavigator();
+        this.lastTargetPos = target.getPosition();
+        if (lastTargetPos.distance(entityCreature.getPosition()) < 2) {
+            // Target is too far
+            this.forceEnd = true;
+            navigator.setPathTo(null);
+            return;
+        }
+        if (navigator.getPathPosition() == null ||
+                (!navigator.getPathPosition().samePoint(lastTargetPos))) {
+            navigator.setPathTo(lastTargetPos);
         } else {
             forceEnd = true;
         }
@@ -66,7 +75,7 @@ public class FollowTargetGoal extends GoalSelector {
                 pathDuration.toMillis() + lastUpdateTime > time) {
             return;
         }
-        final var targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;
+        final Pos targetPos = entityCreature.getTarget() != null ? entityCreature.getTarget().getPosition() : null;
         if (targetPos != null && !targetPos.samePoint(lastTargetPos)) {
             this.lastUpdateTime = time;
             this.lastTargetPos = targetPos;
@@ -79,11 +88,12 @@ public class FollowTargetGoal extends GoalSelector {
         final Entity target = entityCreature.getTarget();
         return forceEnd ||
                 target == null ||
+                target.isRemoved() ||
                 target.getPosition().distance(entityCreature.getPosition()) < 2;
     }
 
     @Override
     public void end() {
-        entityCreature.getNavigator().setPathTo(null);
+        this.entityCreature.getNavigator().setPathTo(null);
     }
 }
