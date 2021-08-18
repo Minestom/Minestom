@@ -147,8 +147,8 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        chunkX = reader.readInt();
-        chunkZ = reader.readInt();
+        this.chunkX = reader.readInt();
+        this.chunkZ = reader.readInt();
 
         int maskCount = reader.readVarInt();
         long[] masks = new long[maskCount];
@@ -158,7 +158,7 @@ public class ChunkDataPacket implements ServerPacket {
         try {
             // TODO: Use heightmaps
             // unused at the moment
-            heightmapsNBT = (NBTCompound) reader.readTag();
+            this.heightmapsNBT = (NBTCompound) reader.readTag();
 
             // Biomes
             int[] biomesIds = reader.readVarIntArray();
@@ -168,23 +168,22 @@ public class ChunkDataPacket implements ServerPacket {
             }
 
             // Data
+            this.sections = new HashMap<>();
             int blockArrayLength = reader.readVarInt();
             if (maskCount > 0) {
                 final long mask = masks[0]; // TODO support for variable size
                 for (int sectionIndex = 0; sectionIndex < CHUNK_SECTION_COUNT; sectionIndex++) {
-                    boolean hasSection = (mask & 1 << sectionIndex) != 0;
-                    if (!hasSection)
-                        continue;
+                    final boolean hasSection = (mask & 1 << sectionIndex) != 0;
+                    if (!hasSection) continue;
                     final Section section = sections.computeIfAbsent(sectionIndex, i -> new Section());
                     final Palette palette = section.getPalette();
-                    short blockCount = reader.readShort();
-                    byte bitsPerEntry = reader.readByte();
-
+                    final short blockCount = reader.readShort();
+                    palette.setBlockCount(blockCount);
+                    final byte bitsPerEntry = reader.readByte();
                     // Resize palette if necessary
                     if (bitsPerEntry > palette.getBitsPerEntry()) {
                         palette.resize(bitsPerEntry);
                     }
-
                     // Retrieve palette values
                     if (bitsPerEntry < 9) {
                         int paletteSize = reader.readVarInt();
@@ -194,24 +193,18 @@ public class ChunkDataPacket implements ServerPacket {
                             palette.getBlockPaletteMap().put((short) paletteValue, (short) i);
                         }
                     }
-
                     // Read blocks
-                    int dataLength = reader.readVarInt();
-                    long[] data = palette.getBlocks();
-                    for (int i = 0; i < dataLength; i++) {
-                        data[i] = reader.readLong();
-                    }
+                    palette.setBlocks(reader.readLongArray());
                 }
             }
 
             // Block entities
             final int blockEntityCount = reader.readVarInt();
-
-            entries = new Int2ObjectOpenHashMap<>();
+            this.entries = new Int2ObjectOpenHashMap<>(blockEntityCount);
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
                 final String id = tag.getString("id");
-                // TODO retrieve handler by namespace
+                final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(id);
                 final int x = tag.getInt("x");
                 final int y = tag.getInt("y");
                 final int z = tag.getInt("z");
