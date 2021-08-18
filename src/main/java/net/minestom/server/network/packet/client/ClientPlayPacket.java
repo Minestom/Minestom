@@ -6,7 +6,6 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class ClientPlayPacket implements ClientPacket {
-
     private static final PacketListenerManager PACKET_LISTENER_MANAGER = MinecraftServer.getPacketListenerManager();
 
     /**
@@ -19,5 +18,4 @@ public abstract class ClientPlayPacket implements ClientPacket {
     public void process(@NotNull Player player) {
         PACKET_LISTENER_MANAGER.processClientPacket(this, player);
     }
-
 }

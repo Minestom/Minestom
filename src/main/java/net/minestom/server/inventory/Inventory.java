@@ -267,7 +267,8 @@ public class Inventory extends AbstractInventory implements Viewable {
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final InventoryClickResult clickResult = clickProcessor.leftClick(player, this, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.leftClick(player,
+                isInWindow ? this : playerInventory, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -289,7 +290,8 @@ public class Inventory extends AbstractInventory implements Viewable {
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final InventoryClickResult clickResult = clickProcessor.rightClick(player, this, slot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.rightClick(player,
+                isInWindow ? this : playerInventory, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -337,7 +339,8 @@ public class Inventory extends AbstractInventory implements Viewable {
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack heldItem = playerInventory.getItemStack(key);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, this, slot, key, clicked, heldItem);
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player,
+                isInWindow ? this : playerInventory, clickSlot, key, clicked, heldItem);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -368,8 +371,8 @@ public class Inventory extends AbstractInventory implements Viewable {
         final ItemStack clicked = outsideDrop ?
                 ItemStack.AIR : (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot));
         final ItemStack cursor = getCursorItem(player);
-        final InventoryClickResult clickResult = clickProcessor.drop(player, this,
-                all, slot, button, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.drop(player,
+                isInWindow ? this : playerInventory, all, clickSlot, button, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -395,8 +398,9 @@ public class Inventory extends AbstractInventory implements Viewable {
                 (isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot)) :
                 ItemStack.AIR;
         final ItemStack cursor = getCursorItem(player);
-        final InventoryClickResult clickResult = clickProcessor.dragging(player, this,
-                slot, button,
+        final InventoryClickResult clickResult = clickProcessor.dragging(player,
+                isInWindow ? this : playerInventory,
+                clickSlot, button,
                 clicked, cursor,
 
                 s -> isClickInWindow(s) ? getItemStack(s) :
