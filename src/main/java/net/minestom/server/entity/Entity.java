@@ -1431,7 +1431,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             //TODO check possible side effects of unnatural TPS (other than 20TPS)
             final Vec velocityModifier = new Vec(x, z)
                     .normalize()
-                    .mul(strength * MinecraftServer.TICK_PER_SECOND / 2);
+                    .mul(strength * MinecraftServer.TICK_PER_SECOND);
             setVelocity(new Vec(velocity.x() / 2d - velocityModifier.x(),
                     onGround ? Math.min(.4d, velocity.y() / 2d + strength) * MinecraftServer.TICK_PER_SECOND : velocity.y(),
                     velocity.z() / 2d - velocityModifier.z()
