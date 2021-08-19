@@ -349,11 +349,14 @@ public final class ConnectionManager {
             if (playerConnection instanceof PlayerSocketConnection) {
                 final PlayerSocketConnection socketConnection = (PlayerSocketConnection) playerConnection;
                 socketConnection.writeAndFlush(disconnectPacket);
+                playerConnection.disconnect();
                 try {
                     socketConnection.getChannel().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                player.remove();
             }
         }
         this.players.clear();
