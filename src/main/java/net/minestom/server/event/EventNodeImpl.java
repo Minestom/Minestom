@@ -41,11 +41,14 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     public <E extends T> void call(@NotNull E event, ListenerHandle<E> handle) {
         var castedHandle = (Handle<T>) handle;
         Check.stateCondition(castedHandle.node != this, "Invalid handle owner");
+        List<Consumer<T>> listeners = castedHandle.listeners;
         if (!castedHandle.updated) {
-            handle(castedHandle);
+            listeners.clear();
+            synchronized (GLOBAL_CHILD_LOCK) {
+                handle(castedHandle);
+            }
             castedHandle.updated = true;
         }
-        List<Consumer<T>> listeners = castedHandle.listeners;
         if (listeners.isEmpty()) return;
         for (Consumer<T> listener : listeners) {
             listener.accept(event);
@@ -61,9 +64,13 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private void handle(Handle<T> handle) {
         ListenerEntry<T> entry = listenerMap.get(handle.eventType);
         if (entry != null) {
+            // Add normal listeners
             for (var listener : entry.listeners) {
                 handle.listeners.add(listener::run);
             }
+            // Add bindings
+            handle.listeners.addAll(entry.bindingConsumers);
+            // TODO mapped node
         }
         // Add children
         if (children.isEmpty()) return;
@@ -189,12 +196,25 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public void register(@NotNull EventBinding<? extends T> binding) {
-        // TODO
+        synchronized (GLOBAL_CHILD_LOCK) {
+            for (var eventType : binding.eventTypes()) {
+                ListenerEntry<T> entry = getEntry((Class<? extends T>) eventType);
+                final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
+                if (added) propagateEvent((Class<? extends T>) eventType);
+            }
+        }
     }
 
     @Override
     public void unregister(@NotNull EventBinding<? extends T> binding) {
-        // TODO
+        synchronized (GLOBAL_CHILD_LOCK) {
+            for (var eventType : binding.eventTypes()) {
+                ListenerEntry<T> entry = listenerMap.get(eventType);
+                if (entry == null) return;
+                final boolean removed = entry.bindingConsumers.remove(binding.consumer(eventType));
+                if (removed) propagateEvent((Class<? extends T>) eventType);
+            }
+        }
     }
 
     @Override
@@ -224,15 +244,15 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private void propagateEvents() {
-        this.listenerMap.forEach((eventClass, eventListeners) -> propagateEvent(eventClass));
+        this.listenerMap.keySet().forEach(this::propagateEvent);
     }
 
     private void propagateEvent(Class<? extends T> eventClass) {
         final var parent = this.parent;
         if (parent == null) return;
-        var handle = parent.handleMap.get(eventClass);
-        if (handle == null) return;
-        handle.updated = false;
+        Handle<? super T> parentHandle = parent.handleMap.get(eventClass);
+        if (parentHandle == null) return;
+        parentHandle.updated = false;
         parent.propagateEvent(eventClass);
     }
 
@@ -248,13 +268,13 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     private static class ListenerEntry<T extends Event> {
         final List<EventListener<T>> listeners = new CopyOnWriteArrayList<>();
+        final Set<Consumer<T>> bindingConsumers = new CopyOnWriteArraySet<>();
     }
 
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
         private final EventNode<E> node;
         private final Class<E> eventType;
         private final List<Consumer<E>> listeners = new CopyOnWriteArrayList<>();
-
         private volatile boolean updated;
 
         Handle(EventNode<E> node, Class<E> eventType) {
