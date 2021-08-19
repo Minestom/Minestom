@@ -54,6 +54,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static GameEventEntry gameEvent(final @NotNull String namespace, final @NotNull JsonObject jsonObject, final @Nullable JsonObject override) {
+        return new GameEventEntry(namespace, jsonObject, override);
+    }
+
+    @ApiStatus.Internal
     public static JsonObject load(Resource resource) {
         final var resourceStream = ClassLoader.getSystemResourceAsStream(resource.name);
         Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
@@ -127,6 +132,7 @@ public final class Registry {
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
         PARTICLES("particles.json"),
+        GAME_EVENTS("game_events.json"),
 
         BLOCK_TAGS("tags/block_tags.json"),
         ENTITY_TYPE_TAGS("tags/entity_type_tags.json"),
@@ -458,6 +464,31 @@ public final class Registry {
 
         public boolean isInstantaneous() {
             return isInstantaneous;
+        }
+    }
+
+    public static class GameEventEntry extends Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final int notificationRadius;
+
+        private GameEventEntry(final String namespace, final JsonObject main, final JsonObject override) {
+            super(main, override);
+            this.namespace = NamespaceID.from(namespace);
+            this.id = getInt("id");
+            this.notificationRadius = getInt("notificationRadius");
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public int notificationRadius() {
+            return notificationRadius;
         }
     }
 
