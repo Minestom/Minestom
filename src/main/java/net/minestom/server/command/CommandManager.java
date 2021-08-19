@@ -99,22 +99,17 @@ public final class CommandManager {
      * @return the execution result
      */
     public @NotNull CommandResult execute(@NotNull CommandSender sender, @NotNull String command) {
-
         // Command event
         if (sender instanceof Player) {
-            Player player = (Player) sender;
-
+            final Player player = (Player) sender;
             PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
             EventDispatcher.call(playerCommandEvent);
-
             if (playerCommandEvent.isCancelled())
                 return CommandResult.of(CommandResult.Type.CANCELLED, command);
-
             command = playerCommandEvent.getCommand();
         }
-
         // Process the command
-        final var result = dispatcher.execute(sender, command);
+        final CommandResult result = dispatcher.execute(sender, command);
         if (result.getType() == CommandResult.Type.UNKNOWN) {
             if (unknownCommandCallback != null) {
                 this.unknownCommandCallback.apply(sender, command);
