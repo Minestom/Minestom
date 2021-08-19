@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -10,16 +9,14 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
-import java.util.function.IntUnaryOperator;
-import java.util.stream.Collectors;
 
 class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final Object GLOBAL_CHILD_LOCK = new Object();
     private final Object lock = new Object();
 
+    private final Map<Class<? extends T>, Handle<T>> handleMap = new ConcurrentHashMap<>();
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
     private final Map<Object, ListenerEntry<T>> mappedNodeCache = new WeakHashMap<>();
@@ -41,29 +38,38 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void call(@NotNull T event) {
-        final var eventClass = event.getClass();
-        if (!eventType.isAssignableFrom(eventClass)) return; // Invalid event type
-        // Conditions
-        if (predicate != null) {
-            try {
-                final var value = filter.getHandler(event);
-                if (!predicate.test(event, value)) return;
-            } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                return;
+    public <E extends T> void call(@NotNull E event, ListenerHandle<E> handle) {
+        var castedHandle = (Handle<T>) handle;
+        Check.stateCondition(castedHandle.node != this, "Invalid handle owner");
+        if (!castedHandle.updated) {
+            handle(castedHandle);
+            castedHandle.updated = true;
+        }
+        List<Consumer<T>> listeners = castedHandle.listeners;
+        if (listeners.isEmpty()) return;
+        for (Consumer<T> listener : listeners) {
+            listener.accept(event);
+        }
+    }
+
+    @Override
+    public <E extends T> ListenerHandle<E> getHandle(Class<E> handleType) {
+        return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
+                aClass -> new Handle<>(this, (Class<T>) aClass));
+    }
+
+    private void handle(Handle<T> handle) {
+        ListenerEntry<T> entry = listenerMap.get(handle.eventType);
+        if (entry != null) {
+            for (var listener : entry.listeners) {
+                handle.listeners.add(listener::run);
             }
         }
-        // Process listeners list
-        final var entry = listenerMap.get(eventClass);
-        if (entry == null) return; // No listener nor children
-        entry.call(event);
-        // Process children
-        if (entry.childCount > 0) {
-            this.children.stream()
-                    .sorted(Comparator.comparing(EventNode::getPriority))
-                    .forEach(child -> child.call(event));
-        }
+        // Add children
+        if (children.isEmpty()) return;
+        this.children.stream()
+                .sorted(Comparator.comparing(EventNode::getPriority))
+                .forEach(child -> ((EventNodeImpl) child).handle(handle));
     }
 
     @Override
@@ -127,11 +133,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             Check.stateCondition(childImpl.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
             final boolean result = this.children.add((EventNodeImpl<T>) childImpl);
-            if (result) {
-                childImpl.parent = this;
-                // Increase listener count
-                propagateNode(childImpl, IntUnaryOperator.identity());
-            }
+            if (!result) return this;
+            childImpl.parent = this;
+            childImpl.propagateEvents(); // Propagate after setting the parent
         }
         return this;
     }
@@ -140,12 +144,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     public @NotNull EventNode<T> removeChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final boolean result = this.children.remove(child);
-            if (result) {
-                final var childImpl = (EventNodeImpl<? extends T>) child;
-                childImpl.parent = null;
-                // Decrease listener count
-                propagateNode(childImpl, count -> -count);
-            }
+            if (!result) return this;
+            final var childImpl = (EventNodeImpl<? extends T>) child;
+            childImpl.propagateEvents(); // Propagate before removing the parent
+            childImpl.parent = null;
         }
         return this;
     }
@@ -156,7 +158,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var eventType = listener.getEventType();
             var entry = getEntry(eventType);
             entry.listeners.add((EventListener<T>) listener);
-            propagateToParent(eventType, 1);
+            propagateEvent(eventType);
         }
         return this;
     }
@@ -169,69 +171,30 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             if (entry == null) return this;
             var listeners = entry.listeners;
             final boolean removed = listeners.remove(listener);
-            if (removed) propagateToParent(eventType, -1);
+            if (removed) propagateEvent(eventType);
         }
         return this;
     }
 
     @Override
     public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
-        final var nodeImpl = (EventNodeImpl<? extends T>) node;
-        final var valueType = value.getClass();
-        synchronized (GLOBAL_CHILD_LOCK) {
-            nodeImpl.listenerMap.forEach((type, listenerEntry) -> {
-                final var entry = getEntry(type);
-                final boolean correct = entry.filters.stream().anyMatch(eventFilter -> {
-                    final var handlerType = eventFilter.handlerType();
-                    return handlerType != null && handlerType.isAssignableFrom(valueType);
-                });
-                Check.stateCondition(!correct, "The node filter {0} is not compatible with type {1}", nodeImpl.eventType, valueType);
-                synchronized (mappedNodeCache) {
-                    entry.mappedNode.put(value, (EventNode<T>) nodeImpl);
-                    mappedNodeCache.put(value, entry);
-                    // TODO propagate
-                }
-            });
-        }
+        // TODO
     }
 
     @Override
     public boolean unmap(@NotNull Object value) {
-        synchronized (GLOBAL_CHILD_LOCK) {
-            synchronized (mappedNodeCache) {
-                var entry = mappedNodeCache.remove(value);
-                if (entry == null) return false;
-                final EventNode<T> previousNode = entry.mappedNode.remove(value);
-                if (previousNode != null) {
-                    // TODO propagate
-                    return true;
-                }
-                return false;
-            }
-        }
+        // TODO
+        return false;
     }
 
     @Override
     public void register(@NotNull EventBinding<? extends T> binding) {
-        synchronized (GLOBAL_CHILD_LOCK) {
-            for (var eventType : binding.eventTypes()) {
-                var entry = getEntry((Class<? extends T>) eventType);
-                final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
-                if (added) propagateToParent((Class<? extends T>) eventType, 1);
-            }
-        }
+        // TODO
     }
 
     @Override
     public void unregister(@NotNull EventBinding<? extends T> binding) {
-        synchronized (GLOBAL_CHILD_LOCK) {
-            for (var eventType : binding.eventTypes()) {
-                var entry = listenerMap.get(eventType);
-                if (entry == null) return;
-                final boolean removed = entry.bindingConsumers.remove(binding.consumer(eventType));
-                if (removed) propagateToParent((Class<? extends T>) eventType, -1);
-            }
-        }
+        // TODO
     }
 
     @Override
@@ -260,42 +223,21 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         return parent;
     }
 
-    private void propagateChildCountChange(Class<? extends T> eventClass, int count) {
-        var entry = getEntry(eventClass);
-        final int result = ListenerEntry.CHILD_UPDATER.addAndGet(entry, count);
-        if (result == 0 && entry.listeners.isEmpty()) {
-            this.listenerMap.remove(eventClass);
-        } else if (result < 0) {
-            throw new IllegalStateException("Something wrong happened, listener count: " + result);
-        }
-        if (parent != null) {
-            parent.propagateChildCountChange(eventClass, count);
-        }
+    private void propagateEvents() {
+        this.listenerMap.forEach((eventClass, eventListeners) -> propagateEvent(eventClass));
     }
 
-    private void propagateToParent(Class<? extends T> eventClass, int count) {
+    private void propagateEvent(Class<? extends T> eventClass) {
         final var parent = this.parent;
-        if (parent != null) {
-            synchronized (parent.lock) {
-                parent.propagateChildCountChange(eventClass, count);
-            }
-        }
-    }
-
-    private void propagateNode(EventNodeImpl<? extends T> child, IntUnaryOperator operator) {
-        synchronized (lock) {
-            final var listeners = child.listenerMap;
-            listeners.forEach((eventClass, eventListeners) -> {
-                final var entry = listeners.get(eventClass);
-                if (entry == null) return;
-                final int childCount = entry.listeners.size() + entry.childCount;
-                propagateChildCountChange(eventClass, operator.applyAsInt(childCount));
-            });
-        }
+        if (parent == null) return;
+        var handle = parent.handleMap.get(eventClass);
+        if (handle == null) return;
+        handle.updated = false;
+        parent.propagateEvent(eventClass);
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
-        return listenerMap.computeIfAbsent(type, aClass -> new ListenerEntry<>(this, (Class<T>) aClass));
+        return listenerMap.computeIfAbsent(type, aClass -> new ListenerEntry<>());
     }
 
     private static boolean equals(EventNode<?> node, String name, Class<?> eventType) {
@@ -305,59 +247,19 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private static class ListenerEntry<T extends Event> {
-        private static final List<EventFilter<? extends Event, ?>> FILTERS = List.of(
-                EventFilter.ENTITY,
-                EventFilter.ITEM, EventFilter.INSTANCE,
-                EventFilter.INVENTORY, EventFilter.BLOCK);
-        @SuppressWarnings("rawtypes")
-        private static final AtomicIntegerFieldUpdater<ListenerEntry> CHILD_UPDATER =
-                AtomicIntegerFieldUpdater.newUpdater(ListenerEntry.class, "childCount");
-
-        final EventNodeImpl<T> node;
-        final List<EventFilter<?, ?>> filters;
         final List<EventListener<T>> listeners = new CopyOnWriteArrayList<>();
-        final Set<Consumer<T>> bindingConsumers = new CopyOnWriteArraySet<>();
-        final Map<Object, EventNode<T>> mappedNode = new WeakHashMap<>();
-        volatile int childCount;
+    }
 
-        ListenerEntry(EventNodeImpl<T> node, Class<T> eventType) {
+    private static final class Handle<E extends Event> implements ListenerHandle<E> {
+        private final EventNode<E> node;
+        private final Class<E> eventType;
+        private final List<Consumer<E>> listeners = new CopyOnWriteArrayList<>();
+
+        private volatile boolean updated;
+
+        Handle(EventNode<E> node, Class<E> eventType) {
             this.node = node;
-            this.filters = FILTERS.stream().filter(eventFilter -> eventFilter.eventType().isAssignableFrom(eventType)).collect(Collectors.toList());
-        }
-
-        void call(T event) {
-            // Event interfaces
-            if (!bindingConsumers.isEmpty()) {
-                for (var consumer : bindingConsumers) {
-                    consumer.accept(event);
-                }
-            }
-            // Mapped listeners
-            if (!mappedNode.isEmpty()) {
-                synchronized (node.mappedNodeCache) {
-                    // Check mapped listeners for each individual event handler
-                    for (var filter : filters) {
-                        final var handler = filter.castHandler(event);
-                        final var map = mappedNode.get(handler);
-                        if (map != null) map.call(event);
-                    }
-                }
-            }
-            // Basic listeners
-            if (!listeners.isEmpty()) {
-                for (EventListener<T> listener : listeners) {
-                    EventListener.Result result;
-                    try {
-                        result = listener.run(event);
-                    } catch (Exception e) {
-                        result = EventListener.Result.EXCEPTION;
-                        MinecraftServer.getExceptionManager().handleException(e);
-                    }
-                    if (result == EventListener.Result.EXPIRED) {
-                        listeners.remove(listener);
-                    }
-                }
-            }
+            this.eventType = eventType;
         }
     }
 }

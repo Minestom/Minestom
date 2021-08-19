@@ -190,7 +190,13 @@ public interface EventNode<T extends Event> {
      *
      * @param event the event to execute
      */
-    void call(@NotNull T event);
+    default void call(@NotNull T event) {
+        call(event, getHandle((Class<T>) event.getClass()));
+    }
+
+    <E extends T> void call(@NotNull E event, ListenerHandle<E> handle);
+
+    <E extends T> ListenerHandle<E> getHandle(Class<E> handleType);
 
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.
