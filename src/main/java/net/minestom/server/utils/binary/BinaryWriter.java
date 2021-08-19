@@ -235,6 +235,7 @@ public class BinaryWriter extends OutputStream {
      * @param bytes the byte array to write
      */
     public void writeBytes(byte @NotNull [] bytes) {
+        if (bytes.length == 0) return;
         ensureSize(bytes.length);
         buffer.put(bytes);
     }
