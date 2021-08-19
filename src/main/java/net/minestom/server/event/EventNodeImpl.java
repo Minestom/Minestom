@@ -172,7 +172,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public @NotNull EventNode<T> addListener(@NotNull EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var eventType = listener.getEventType();
+            final var eventType = listener.eventType();
             var entry = getEntry(eventType);
             entry.listeners.add((EventListener<T>) listener);
             propagateEvent(eventType);
@@ -183,7 +183,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var eventType = listener.getEventType();
+            final var eventType = listener.eventType();
             var entry = listenerMap.get(eventType);
             if (entry == null) return this;
             var listeners = entry.listeners;
