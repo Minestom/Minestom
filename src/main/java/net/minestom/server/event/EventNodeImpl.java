@@ -14,11 +14,10 @@ import java.util.function.Consumer;
 
 class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final Object GLOBAL_CHILD_LOCK = new Object();
-    private final Object lock = new Object();
 
     private final Map<Class<? extends T>, Handle<T>> handleMap = new ConcurrentHashMap<>();
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
-    private final Set<EventNode<T>> children = new CopyOnWriteArraySet<>();
+    private final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
     private final Map<Object, ListenerEntry<T>> mappedNodeCache = new WeakHashMap<>();
 
     private final String name;
@@ -45,7 +44,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         if (!castedHandle.updated) {
             listeners.clear();
             synchronized (GLOBAL_CHILD_LOCK) {
-                handle(castedHandle);
+                handle(castedHandle.eventType, castedHandle.listeners);
             }
             castedHandle.updated = true;
         }
@@ -61,22 +60,33 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 aClass -> new Handle<>(this, (Class<T>) aClass));
     }
 
-    private void handle(Handle<T> handle) {
-        ListenerEntry<T> entry = listenerMap.get(handle.eventType);
+    private void handle(Class<T> handleType, List<Consumer<T>> listeners) {
+        ListenerEntry<T> entry = listenerMap.get(handleType);
         if (entry != null) {
             // Add normal listeners
             for (var listener : entry.listeners) {
-                handle.listeners.add(listener::run);
+                if (predicate != null) {
+                    // Ensure that the event is valid before running
+                    listeners.add(event -> {
+                        final var value = filter.getHandler(event);
+                        if (!predicate.test(event, value)) return;
+                        listener.run(event);
+                    });
+                } else {
+                    // No predicate, run directly
+                    listeners.add(listener::run);
+                }
             }
             // Add bindings
-            handle.listeners.addAll(entry.bindingConsumers);
+            listeners.addAll(entry.bindingConsumers);
             // TODO mapped node
         }
         // Add children
         if (children.isEmpty()) return;
         this.children.stream()
                 .sorted(Comparator.comparing(EventNode::getPriority))
-                .forEach(child -> ((EventNodeImpl) child).handle(handle));
+                .filter(child -> child.eventType.isAssignableFrom(handleType)) // Invalid event type
+                .forEach(child -> child.handle(handleType, listeners));
     }
 
     @Override
