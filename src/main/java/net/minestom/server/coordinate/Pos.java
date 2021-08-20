@@ -23,7 +23,7 @@ public final class Pos implements Point {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.yaw = yaw;
+        this.yaw = fixYaw(yaw);
         this.pitch = pitch;
     }
 
@@ -108,7 +108,7 @@ public final class Pos implements Point {
 
     @Contract(pure = true)
     public @NotNull Pos withYaw(@NotNull DoubleUnaryOperator operator) {
-        return new Pos(x, y, z, (float) operator.applyAsDouble(yaw), pitch);
+        return withYaw((float) operator.applyAsDouble(yaw));
     }
 
     @Contract(pure = true)
@@ -118,7 +118,7 @@ public final class Pos implements Point {
 
     @Contract(pure = true)
     public @NotNull Pos withPitch(@NotNull DoubleUnaryOperator operator) {
-        return new Pos(x, y, z, yaw, (float) operator.applyAsDouble(pitch));
+        return withPitch((float) operator.applyAsDouble(pitch));
     }
 
     /**
@@ -324,5 +324,22 @@ public final class Pos implements Point {
     @FunctionalInterface
     public interface Operator {
         @NotNull Pos apply(double x, double y, double z, float yaw, float pitch);
+    }
+
+    /**
+     * Fixes a yaw value that is not between -180.0F and 180.0F
+     * So for example -1355.0F becomes 85.0F and 225.0F becomes -135.0F
+     *
+     * @param yaw The possible "wrong" yaw
+     * @return a fixed yaw
+     */
+    private static float fixYaw(float yaw) {
+        yaw = yaw % 360;
+        if (yaw < -180.0F) {
+            yaw += 360.0F;
+        } else if (yaw > 180.0F) {
+            yaw -= 360.0F;
+        }
+        return yaw;
     }
 }

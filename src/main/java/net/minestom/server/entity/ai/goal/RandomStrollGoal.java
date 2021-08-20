@@ -6,8 +6,8 @@ import net.minestom.server.entity.ai.GoalSelector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class RandomStrollGoal extends GoalSelector {
 
@@ -15,6 +15,7 @@ public class RandomStrollGoal extends GoalSelector {
 
     private final int radius;
     private final List<Vec> closePositions;
+    private final Random random = new Random();
 
     private long lastStroll;
 
@@ -31,8 +32,11 @@ public class RandomStrollGoal extends GoalSelector {
 
     @Override
     public void start() {
-        Collections.shuffle(closePositions);
-        for (var position : closePositions) {
+        int remainingAttempt = closePositions.size();
+        while (remainingAttempt-- > 0) {
+            final int index = random.nextInt(closePositions.size());
+            final Vec position = closePositions.get(index);
+
             final var target = entityCreature.getPosition().add(position);
             final boolean result = entityCreature.getNavigator().setPathTo(target);
             if (result) {

@@ -65,8 +65,7 @@ public class CommandDispatcher {
         this.cache.invalidateAll();
     }
 
-    @NotNull
-    public Set<Command> getCommands() {
+    public @NotNull Set<Command> getCommands() {
         return Collections.unmodifiableSet(commands);
     }
 
@@ -76,8 +75,7 @@ public class CommandDispatcher {
      * @param commandName the command name
      * @return the {@link Command} associated with the name, null if not any
      */
-    @Nullable
-    public Command findCommand(@NotNull String commandName) {
+    public @Nullable Command findCommand(@NotNull String commandName) {
         commandName = commandName.toLowerCase();
         return commandMap.getOrDefault(commandName, null);
     }
@@ -89,8 +87,7 @@ public class CommandDispatcher {
      * @param commandString the command with the argument(s)
      * @return the command result
      */
-    @NotNull
-    public CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
+    public @NotNull CommandResult execute(@NotNull CommandSender source, @NotNull String commandString) {
         CommandResult commandResult = parse(commandString);
         ParsedCommand parsedCommand = commandResult.parsedCommand;
         if (parsedCommand != null) {
@@ -105,10 +102,8 @@ public class CommandDispatcher {
      * @param commandString the command (containing the command name and the args if any)
      * @return the parsing result
      */
-    @NotNull
-    public CommandResult parse(@NotNull String commandString) {
+    public @NotNull CommandResult parse(@NotNull String commandString) {
         commandString = commandString.trim();
-
         // Verify if the result is cached
         {
             final CommandResult cachedResult = cache.getIfPresent(commandString);
@@ -134,18 +129,15 @@ public class CommandDispatcher {
         findParsedCommand(command, commandName, commandQueryResult.args, commandString, result);
 
         // Cache result
-        {
-            this.cache.put(commandString, result);
-        }
+        this.cache.put(commandString, result);
 
         return result;
     }
 
-    @Nullable
-    private ParsedCommand findParsedCommand(@NotNull Command command,
-                                            @NotNull String commandName, @NotNull String[] args,
-                                            @NotNull String commandString,
-                                            @NotNull CommandResult result) {
+    private @Nullable ParsedCommand findParsedCommand(@NotNull Command command,
+                                                      @NotNull String commandName, @NotNull String[] args,
+                                                      @NotNull String commandString,
+                                                      @NotNull CommandResult result) {
         final boolean hasArgument = args.length > 0;
 
         // Search for subcommand
@@ -162,41 +154,37 @@ public class CommandDispatcher {
 
         final String input = commandName + StringUtils.SPACE + String.join(StringUtils.SPACE, args);
 
-
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
         parsedCommand.commandString = commandString;
 
         // The default executor should be used if no argument is provided
-        {
-            if (!hasArgument) {
-                Optional<CommandSyntax> optionalSyntax = command.getSyntaxes()
-                        .stream()
-                        .filter(syntax -> syntax.getArguments().length == 0)
-                        .findFirst();
+        if (!hasArgument) {
+            Optional<CommandSyntax> optionalSyntax = command.getSyntaxes()
+                    .stream()
+                    .filter(syntax -> syntax.getArguments().length == 0)
+                    .findFirst();
 
-                if (optionalSyntax.isPresent()) {
-                    // Empty syntax found
-                    final CommandSyntax syntax = optionalSyntax.get();
+            if (optionalSyntax.isPresent()) {
+                // Empty syntax found
+                final CommandSyntax syntax = optionalSyntax.get();
+                parsedCommand.syntax = syntax;
+                parsedCommand.executor = syntax.getExecutor();
+                parsedCommand.context = new CommandContext(input);
 
-                    parsedCommand.syntax = syntax;
-                    parsedCommand.executor = syntax.getExecutor();
+                result.type = CommandResult.Type.SUCCESS;
+                result.parsedCommand = parsedCommand;
+                return parsedCommand;
+            } else {
+                // No empty syntax, use default executor if any
+                final CommandExecutor defaultExecutor = command.getDefaultExecutor();
+                if (defaultExecutor != null) {
+                    parsedCommand.executor = defaultExecutor;
                     parsedCommand.context = new CommandContext(input);
 
                     result.type = CommandResult.Type.SUCCESS;
                     result.parsedCommand = parsedCommand;
                     return parsedCommand;
-                } else {
-                    // No empty syntax, use default executor if any
-                    final CommandExecutor defaultExecutor = command.getDefaultExecutor();
-                    if (defaultExecutor != null) {
-                        parsedCommand.executor = defaultExecutor;
-                        parsedCommand.context = new CommandContext(input);
-
-                        result.type = CommandResult.Type.SUCCESS;
-                        result.parsedCommand = parsedCommand;
-                        return parsedCommand;
-                    }
                 }
             }
         }
@@ -207,7 +195,6 @@ public class CommandDispatcher {
         final Collection<CommandSyntax> syntaxes = command.getSyntaxes();
         // Contains all the fully validated syntaxes (we later find the one with the most amount of arguments)
         List<ValidSyntaxHolder> validSyntaxes = new ArrayList<>(syntaxes.size());
-
         // Contains all the syntaxes that are not fully correct, used to later, retrieve the "most correct syntax"
         // Number of correct argument - The data about the failing argument
         Int2ObjectRBTreeMap<CommandSuggestionHolder> syntaxesSuggestions = new Int2ObjectRBTreeMap<>(Collections.reverseOrder());
@@ -233,29 +220,25 @@ public class CommandDispatcher {
                 result.parsedCommand = parsedCommand;
                 return parsedCommand;
             }
-
         }
 
         // No all-correct syntax, find the closest one to use the argument callback
-        {
-            // Get closest valid syntax
-            if (!syntaxesSuggestions.isEmpty()) {
-                final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
-                final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
-                final CommandSyntax syntax = suggestionHolder.syntax;
-                final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
-                final int argIndex = suggestionHolder.argIndex;
+        if (!syntaxesSuggestions.isEmpty()) {
+            final int max = syntaxesSuggestions.firstIntKey(); // number of correct arguments in the most correct syntax
+            final CommandSuggestionHolder suggestionHolder = syntaxesSuggestions.get(max);
+            final CommandSyntax syntax = suggestionHolder.syntax;
+            final ArgumentSyntaxException argumentSyntaxException = suggestionHolder.argumentSyntaxException;
+            final int argIndex = suggestionHolder.argIndex;
 
-                // Found the closest syntax with at least 1 correct argument
-                final Argument<?> argument = syntax.getArguments()[argIndex];
-                if (argument.hasErrorCallback()) {
-                    parsedCommand.callback = argument.getCallback();
-                    parsedCommand.argumentSyntaxException = argumentSyntaxException;
+            // Found the closest syntax with at least 1 correct argument
+            final Argument<?> argument = syntax.getArguments()[argIndex];
+            if (argument.hasErrorCallback() && argumentSyntaxException != null) {
+                parsedCommand.callback = argument.getCallback();
+                parsedCommand.argumentSyntaxException = argumentSyntaxException;
 
-                    result.type = CommandResult.Type.INVALID_SYNTAX;
-                    result.parsedCommand = parsedCommand;
-                    return parsedCommand;
-                }
+                result.type = CommandResult.Type.INVALID_SYNTAX;
+                result.parsedCommand = parsedCommand;
+                return parsedCommand;
             }
         }
 

@@ -233,6 +233,7 @@ public class AnvilLoader implements IChunkLoader {
         try {
             LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
             mcaFile.writeColumn(column);
+            mcaFile.forget(column);
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);

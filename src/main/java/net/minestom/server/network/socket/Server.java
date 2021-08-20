@@ -17,7 +17,7 @@ public final class Server {
     public static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
     public static final int WORKER_COUNT = Integer.getInteger("minestom.workers",
             Runtime.getRuntime().availableProcessors());
-    public static final int SOCKET_BUFFER_SIZE = Integer.getInteger("minestom.buffer-size", 262_143);
+    public static final int SOCKET_BUFFER_SIZE = Integer.getInteger("minestom.buffer-size", 1_048_575);
     public static final int MAX_PACKET_SIZE = 2_097_151; // 3 bytes var-int
     public static final boolean NO_DELAY = true;
 
