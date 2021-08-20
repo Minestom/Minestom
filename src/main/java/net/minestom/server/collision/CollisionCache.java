@@ -1,13 +1,10 @@
 package net.minestom.server.collision;
 
 import kotlin.Pair;
-import kotlin.Triple;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.instance.Chunk;
-import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
 
