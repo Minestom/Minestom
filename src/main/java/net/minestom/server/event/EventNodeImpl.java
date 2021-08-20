@@ -238,15 +238,14 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private void propagateEvent(Class<? extends T> eventClass) {
-        // Recursive event
-        forEachRecursive(eventType, recursiveClass -> propagateEvent((Class<? extends T>) recursiveClass));
-        // Propagate
-        final var parent = this.parent;
-        if (parent == null) return;
-        Handle<? super T> parentHandle = parent.handleMap.get(eventClass);
-        if (parentHandle == null) return;
-        parentHandle.updated = false;
-        parent.propagateEvent(eventClass);
+        forTargetEvents(eventClass, type -> {
+            final var parent = this.parent;
+            if (parent == null) return;
+            Handle<? super T> parentHandle = parent.handleMap.get(type);
+            if (parentHandle == null) return;
+            parentHandle.updated = false;
+            parent.propagateEvent((Class<? extends T>) type);
+        });
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
@@ -259,17 +258,14 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         return nameCheck && typeCheck;
     }
 
-    private static boolean isRecursive(Class<?> type) {
-        if (type == null) return false;
-        return RecursiveEvent.class.isAssignableFrom(type);
-    }
-
-    private static void forEachRecursive(Class<?> type, Consumer<Class<? extends RecursiveEvent>> consumer) {
-        if (isRecursive(type)) {
+    private static void forTargetEvents(Class<?> type, Consumer<Class<?>> consumer) {
+        consumer.accept(type);
+        // Recursion
+        if (RecursiveEvent.class.isAssignableFrom(type)) {
             final var superclass = type.getSuperclass();
-            if (isRecursive(superclass)) consumer.accept((Class<? extends RecursiveEvent>) superclass);
+            if (superclass != null && RecursiveEvent.class.isAssignableFrom(superclass)) consumer.accept(superclass);
             for (var inter : type.getInterfaces()) {
-                if (isRecursive(inter)) consumer.accept((Class<? extends RecursiveEvent>) inter);
+                if (RecursiveEvent.class.isAssignableFrom(inter)) consumer.accept(inter);
             }
         }
     }
@@ -300,12 +296,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         private void recursiveUpdate(EventNodeImpl<E> targetNode) {
             final var handleType = eventType;
-            ListenerEntry<E> entry = targetNode.listenerMap.get(handleType);
-            if (entry != null) appendEntry(listeners, entry, targetNode);
-            // Recursive event
-            forEachRecursive(eventType, recursiveClass -> {
-                ListenerEntry<E> recursiveEntry = targetNode.listenerMap.get(recursiveClass);
-                if (recursiveEntry != null) appendEntry(listeners, recursiveEntry, targetNode);
+            forTargetEvents(handleType, type -> {
+                ListenerEntry<E> entry = targetNode.listenerMap.get(type);
+                if (entry != null) appendEntry(listeners, entry, targetNode);
             });
             // Add children
             final var children = targetNode.children;
