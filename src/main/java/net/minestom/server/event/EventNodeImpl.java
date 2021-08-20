@@ -43,11 +43,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         Check.argCondition(castedHandle.node != this, "Invalid handle owner");
         List<Consumer<T>> listeners = castedHandle.listeners;
         if (!castedHandle.updated) {
-            synchronized (GLOBAL_CHILD_LOCK) {
-                listeners.clear();
-                castedHandle.update(this);
-                castedHandle.updated = true;
-            }
+            castedHandle.update();
         }
         if (listeners.isEmpty()) return;
         for (Consumer<T> listener : listeners) {
@@ -60,6 +56,16 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         //noinspection unchecked
         return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
                 aClass -> new Handle<>(this, (Class<T>) aClass));
+    }
+
+    @Override
+    public <E extends T> boolean hasListener(@NotNull ListenerHandle<E> handle) {
+        var castedHandle = (Handle<T>) handle;
+        List<Consumer<T>> listeners = castedHandle.listeners;
+        if (!castedHandle.updated) {
+            castedHandle.update();
+        }
+        return !listeners.isEmpty();
     }
 
     @Override
@@ -255,17 +261,25 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
-        private final EventNode<E> node;
+        private final EventNodeImpl<E> node;
         private final Class<E> eventType;
         private final List<Consumer<E>> listeners = new CopyOnWriteArrayList<>();
         private volatile boolean updated;
 
-        Handle(EventNode<E> node, Class<E> eventType) {
+        Handle(EventNodeImpl<E> node, Class<E> eventType) {
             this.node = node;
             this.eventType = eventType;
         }
 
-        void update(EventNodeImpl<E> targetNode) {
+        void update() {
+            synchronized (GLOBAL_CHILD_LOCK) {
+                listeners.clear();
+                recursiveUpdate(node);
+                updated = true;
+            }
+        }
+
+        private void recursiveUpdate(EventNodeImpl<E> targetNode) {
             final var handleType = eventType;
             ListenerEntry<E> entry = targetNode.listenerMap.get(handleType);
             if (entry != null) appendEntry(listeners, entry, targetNode);
@@ -275,7 +289,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             children.stream()
                     .filter(child -> child.eventType.isAssignableFrom(handleType)) // Invalid event type
                     .sorted(Comparator.comparing(EventNode::getPriority))
-                    .forEach(this::update);
+                    .forEach(this::recursiveUpdate);
         }
 
         static <E extends Event> void appendEntry(List<Consumer<E>> handleListeners, ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {

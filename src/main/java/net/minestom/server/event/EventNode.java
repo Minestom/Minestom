@@ -214,6 +214,20 @@ public interface EventNode<T extends Event> {
     <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
 
     /**
+     * Gets if any listener has been registered for the given handle.
+     * May trigger an update if the cached data is not correct.
+     * <p>
+     * Useful if you are able to avoid expensive computation in the case where
+     * the event is unused. Be aware that {@link #call(Event, ListenerHandle)}
+     * has similar optimization built-in.
+     *
+     * @param handle the listener handle
+     * @param <E>    the event type
+     * @return true if the event has 1 or more listeners
+     */
+    <E extends T> boolean hasListener(@NotNull ListenerHandle<E> handle);
+
+    /**
      * Execute a cancellable event with a callback to execute if the event is successful.
      * Event conditions and propagation is the same as {@link #call(Event)}.
      *
