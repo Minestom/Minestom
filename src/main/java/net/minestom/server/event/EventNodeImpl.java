@@ -319,22 +319,25 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             });
             // Mapped nodes
             {
-                Set<EventFilter<E, ?>> filters = new HashSet<>();
-                for (var mappedEntry : targetNode.mappedNodeCache.entrySet()) {
+                final var mappedNodeCache = targetNode.mappedNodeCache;
+                Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
+                // Retrieve all filters used to retrieve potential handlers
+                for (var mappedEntry : mappedNodeCache.entrySet()) {
                     var mappedNode = mappedEntry.getValue();
                     if (!mappedNode.eventType.isAssignableFrom(handleType)) continue;
                     forTargetEvents(handleType, type -> {
-                        final boolean hasEvent = mappedNode.listenerMap.containsKey(type);
-                        if (!hasEvent) return;
+                        if (!mappedNode.listenerMap.containsKey(type)) return; // No normal listener to this handle type
                         filters.add(mappedNode.filter);
                     });
                 }
+                // If at least one mapped node listen to this handle type,
+                // loop through them and forward to mapped node if there is a match
                 if (!filters.isEmpty()) {
                     this.listeners.add(event -> {
                         for (var filter : filters) {
-                            final var handler = filter.castHandler(event);
-                            final var map = targetNode.mappedNodeCache.get(handler);
-                            if (map != null) map.call(event);
+                            final Object handler = filter.castHandler(event);
+                            final EventNode<E> mappedNode = mappedNodeCache.get(handler);
+                            if (mappedNode != null) mappedNode.call(event);
                         }
                     });
                 }
