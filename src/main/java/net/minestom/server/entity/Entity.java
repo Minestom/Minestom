@@ -67,6 +67,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected Instance instance;
     protected Chunk currentChunk;
     protected Pos position;
+    protected Pos previousPosition;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
@@ -137,6 +138,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         this.entityType = entityType;
         this.uuid = uuid;
         this.position = Pos.ZERO;
+        this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
         setBoundingBox(entityType.width(), entityType.height(), entityType.width());
@@ -244,6 +246,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Runnable endCallback = () -> {
             refreshPosition(position);
+            previousPosition = position;
             synchronizePosition(true);
         };
 
@@ -497,14 +500,16 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     private void velocityTick() {
         final boolean isSocketClient = PlayerUtils.isSocketClient(this);
+        if (isSocketClient) {
+            // Calculate velocity from client
+            velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
+            previousPosition = position;
+            return;
+        }
+
         final boolean noGravity = hasNoGravity();
         final boolean hasVelocity = hasVelocity();
-        boolean applyVelocity;
-        // Non-player entities with either velocity or gravity enabled
-        applyVelocity = !isSocketClient && (hasVelocity || !noGravity);
-        // Players with a velocity applied (client is responsible for gravity)
-        applyVelocity |= isSocketClient && hasVelocity;
-        if (!applyVelocity) {
+        if (!hasVelocity && noGravity) {
             return;
         }
         final float tps = MinecraftServer.TICK_PER_SECOND;
@@ -531,7 +536,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final var finalVelocityPosition = CollisionUtils.applyWorldBorder(instance, position, newPosition);
         if (finalVelocityPosition.samePoint(position)) {
             this.velocity = Vec.ZERO;
-            if (hasVelocity && !isSocketClient) {
+            if (hasVelocity) {
                 sendPacketToViewers(getVelocityPacket());
             }
             return;
@@ -552,27 +557,22 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
-            if (onGround && isSocketClient) {
-                // Stop player velocity
-                this.velocity = Vec.ZERO;
-            } else {
-                final double drag = this.onGround ?
-                        finalChunk.getBlock(position).registry().friction() : 0.91;
-                this.velocity = newVelocity
-                        // Convert from block/tick to block/sec
-                        .mul(tps)
-                        // Apply drag
-                        .apply((x, y, z) -> new Vec(
-                                x * drag,
-                                !noGravity ? y * (1 - gravityDragPerTick) : y,
-                                z * drag
-                        ))
-                        // Prevent infinitely decreasing velocity
-                        .apply(Vec.Operator.EPSILON);
-            }
+            final double drag = this.onGround ?
+                    finalChunk.getBlock(position).registry().friction() : 0.91;
+            this.velocity = newVelocity
+                    // Convert from block/tick to block/sec
+                    .mul(tps)
+                    // Apply drag
+                    .apply((x, y, z) -> new Vec(
+                            x * drag,
+                            !noGravity ? y * (1 - gravityDragPerTick) : y,
+                            z * drag
+                    ))
+                    // Prevent infinitely decreasing velocity
+                    .apply(Vec.Operator.EPSILON);
         }
         // Verify if velocity packet has to be sent
-        if ((hasVelocity || gravityTickCount > 0) && !isSocketClient) {
+        if (hasVelocity || gravityTickCount > 0) {
             sendPacketToViewers(getVelocityPacket());
         }
     }
@@ -723,6 +723,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             previousInstance.UNSAFE_removeEntity(this);
         }
         this.position = spawnPosition;
+        this.previousPosition = spawnPosition;
         this.isActive = true;
         this.instance = instance;
         return instance.loadOptionalChunk(position).thenAccept(chunk -> {
@@ -1179,6 +1180,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         if (hasPassenger()) {
             for (Entity passenger : getPassengers()) {
                 passenger.position = passenger.position.withCoord(newPosition);
+                passenger.previousPosition = passenger.position;
                 passenger.refreshCoordinate(newPosition);
             }
         }
