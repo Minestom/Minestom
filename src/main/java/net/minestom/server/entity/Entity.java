@@ -521,7 +521,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Vec newVelocity;
         if (this.hasPhysics) {
             final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
-            onGround = physicsResult.isOnGround();
+            this.onGround = physicsResult.isOnGround();
             newPosition = physicsResult.newPosition();
             newVelocity = physicsResult.newVelocity();
         } else {
