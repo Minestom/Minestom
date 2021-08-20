@@ -1,38 +1,42 @@
 package net.minestom.server.collision;
 
-import kotlin.Pair;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-
-import java.util.Objects;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
+import org.jetbrains.annotations.Nullable;
 
 public class CollisionCache {
+    private final Entity entity;
     long cachedAt;
     boolean wasOnGround;
     int cornerHash;
-    final Entity entity;
+
+    private Instance instance;
+    private CollisionUtils.PhysicsResult physicsResult;
 
     public CollisionCache(Entity entity) {
         this.entity = entity;
-        update(entity.getPosition());
     }
-    
-    public void update(Point position) {
+
+    public void update(CollisionUtils.PhysicsResult result) {
+        final Pos position = result.newPosition();
+        this.instance = entity.getInstance();
+        this.physicsResult = result;
         this.cachedAt = System.currentTimeMillis();
         this.cornerHash = hashCorners(position.x(), position.y(), position.z(), entity.getBoundingBox());
         this.wasOnGround = entity.isOnGround();
     }
 
     /**
-     * @return first - is cache valid; second - velocity (redundant if first is false)
+     * @return the new entity velocity, null if this should be fully computed
      */
-    public Pair<Boolean, Vec> isValid(Vec velocity) {
-        if (entity.getChunk().getLastChangeTime() > cachedAt) {
-            // Chunk changed
-            return new Pair<>(false, null);
-        }
+    public @Nullable Vec getCachedVelocity(Vec velocity) {
+        if (entity.getInstance() != instance) return null;
+        final Chunk currentChunk = entity.getChunk();
+        // Check chunk change
+        if (currentChunk == null || currentChunk.getLastChangeTime() > cachedAt) return null;
         if (wasOnGround && velocity.y() <= 0) {
             // Ignore negative/zero y
             velocity = velocity.withY(0);
@@ -40,18 +44,29 @@ public class CollisionCache {
 
         final Pos position = entity.getPosition();
         final int cornerHash = hashCorners(position.x(), position.y(), position.z(), entity.getBoundingBox());
-        return new Pair<>(this.cornerHash == cornerHash, velocity);
+        if (this.cornerHash != cornerHash) return null;
+        return velocity;
+    }
+
+    public @Nullable CollisionUtils.PhysicsResult getLastPhysicsResult() {
+        return physicsResult;
     }
 
     public static int hashCorners(double x, double y, double z, BoundingBox box) {
         final double sizeX = box.getWidth() / 2, sizeY = box.getHeight() / 2, sizeZ = box.getDepth() / 2;
-        return Objects.hash(
-                Math.floor(x - sizeX),
-                Math.floor(y - sizeY),
-                Math.floor(z - sizeZ),
-                Math.floor(x + sizeX),
-                Math.floor(y + sizeY),
-                Math.floor(z + sizeZ)
-        );
+        int result = 1;
+        result = apply(result, Math.floor(x - sizeX));
+        result = apply(result, Math.floor(y - sizeY));
+        result = apply(result, Math.floor(z - sizeZ));
+
+        result = apply(result, Math.floor(x + sizeX));
+        result = apply(result, Math.floor(y + sizeY));
+        result = apply(result, Math.floor(z + sizeZ));
+        return result;
+    }
+
+    private static int apply(int result, double element) {
+        final long bits = Double.doubleToLongBits(element);
+        return 31 * result + (int) (bits ^ (bits >>> 32));
     }
 }

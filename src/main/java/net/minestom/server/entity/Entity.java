@@ -72,6 +72,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     protected boolean onGround;
 
     private BoundingBox boundingBox;
+    private final CollisionCache collisionCache = new CollisionCache(this);
 
     protected Entity vehicle;
 
@@ -132,7 +133,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Lock used to support #switchEntityType
      */
     private final Object entityTypeLock = new Object();
-    private final CollisionCache collisionCache;
 
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
@@ -152,8 +152,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         this.gravityAcceleration = EntityTypeImpl.getAcceleration(entityType.name());
         this.gravityDragPerTick = EntityTypeImpl.getDrag(entityType.name());
-
-        this.collisionCache = new CollisionCache(this);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -522,19 +520,10 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final var result = collisionCache.isValid(deltaPos);
-            if (result.getFirst()) {
-                // Cache valid
-                newPosition = position.add(result.getSecond());
-                newVelocity = result.getSecond();
-            } else {
-                // Update cache
-                final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
-                onGround = physicsResult.isOnGround();
-                newPosition = physicsResult.newPosition();
-                newVelocity = physicsResult.newVelocity();
-                collisionCache.update(newPosition);
-            }
+            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+            onGround = physicsResult.isOnGround();
+            newPosition = physicsResult.newPosition();
+            newVelocity = physicsResult.newVelocity();
         } else {
             newVelocity = deltaPos;
             newPosition = position.add(currentVelocity.div(20));
@@ -693,6 +682,11 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      */
     public void setBoundingBox(BoundingBox boundingBox) {
         this.boundingBox = boundingBox;
+    }
+
+    @ApiStatus.Internal
+    public @NotNull CollisionCache getCollisionCache() {
+        return collisionCache;
     }
 
     /**

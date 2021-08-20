@@ -26,6 +26,22 @@ public class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec deltaPosition) {
+        CollisionCache collisionCache = entity.getCollisionCache();
+        // Verify cache
+        {
+            final Vec cachedVelocity = collisionCache.getCachedVelocity(deltaPosition);
+            if (cachedVelocity != null) {
+                // Cache valid
+                final PhysicsResult lastResult = collisionCache.getLastPhysicsResult();
+                if (lastResult != null) {
+                    return new PhysicsResult(entity.getPosition().add(cachedVelocity),
+                            cachedVelocity,
+                            lastResult.isOnGround());
+                }
+            }
+        }
+
+
         // TODO handle collisions with nearby entities (should it be done here?)
         final Instance instance = entity.getInstance();
         final Chunk originChunk = entity.getChunk();
@@ -56,11 +72,13 @@ public class CollisionUtils {
             stepVec = zCollision.newPosition;
         }
 
-        return new PhysicsResult(currentPosition.samePoint(stepVec) ? currentPosition : currentPosition.withCoord(stepVec),
+        final PhysicsResult result = new PhysicsResult(currentPosition.samePoint(stepVec) ? currentPosition : currentPosition.withCoord(stepVec),
                 new Vec(xCheck ? 0 : deltaPosition.x(),
                         yCheck ? 0 : deltaPosition.y(),
                         zCheck ? 0 : deltaPosition.z()),
                 yCheck && deltaPosition.y() < 0);
+        collisionCache.update(result);
+        return result;
     }
 
     /**
