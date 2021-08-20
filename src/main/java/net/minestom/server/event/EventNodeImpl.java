@@ -20,7 +20,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private final Map<Class<? extends T>, Handle<T>> handleMap = new ConcurrentHashMap<>();
     private final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     private final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
-    private final Map<Object, ListenerEntry<T>> mappedNodeCache = new WeakHashMap<>();
+    private final Map<Object, EventNodeImpl<T>> mappedNodeCache = new WeakHashMap<>();
 
     private final String name;
     private final EventFilter<T, ?> filter;
@@ -175,13 +175,30 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public void map(@NotNull EventNode<? extends T> node, @NotNull Object value) {
-        // TODO
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final var nodeImpl = (EventNodeImpl<? extends T>) node;
+            Check.stateCondition(nodeImpl.parent != null, "Node already has a parent");
+            Check.stateCondition(Objects.equals(parent, nodeImpl), "Cannot map to self");
+            var previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
+            if (previous != null) {
+                previous.propagateEvents(); // Propagate before removing the parent
+                previous.parent = null;
+            }
+            nodeImpl.parent = this;
+            nodeImpl.propagateEvents(); // Propagate after setting the parent
+        }
     }
 
     @Override
     public boolean unmap(@NotNull Object value) {
-        // TODO
-        return false;
+        synchronized (GLOBAL_CHILD_LOCK) {
+            final var mappedNode = this.mappedNodeCache.remove(value);
+            if (mappedNode == null) return false;
+            final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
+            childImpl.propagateEvents(); // Propagate before removing the parent
+            childImpl.parent = null;
+            return true;
+        }
     }
 
     @Override
@@ -287,18 +304,41 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         void update() {
             synchronized (GLOBAL_CHILD_LOCK) {
-                listeners.clear();
+                this.listeners.clear();
                 recursiveUpdate(node);
-                updated = true;
+                this.updated = true;
             }
         }
 
         private void recursiveUpdate(EventNodeImpl<E> targetNode) {
             final var handleType = eventType;
+            // Standalone listeners
             forTargetEvents(handleType, type -> {
                 ListenerEntry<E> entry = targetNode.listenerMap.get(type);
-                if (entry != null) appendEntry(listeners, entry, targetNode);
+                if (entry != null) appendEntries(listeners, entry, targetNode);
             });
+            // Mapped nodes
+            {
+                Set<EventFilter<E, ?>> filters = new HashSet<>();
+                for (var mappedEntry : targetNode.mappedNodeCache.entrySet()) {
+                    var mappedNode = mappedEntry.getValue();
+                    if (!mappedNode.eventType.isAssignableFrom(handleType)) continue;
+                    forTargetEvents(handleType, type -> {
+                        final boolean hasEvent = mappedNode.listenerMap.containsKey(type);
+                        if (!hasEvent) return;
+                        filters.add(mappedNode.filter);
+                    });
+                }
+                if (!filters.isEmpty()) {
+                    this.listeners.add(event -> {
+                        for (var filter : filters) {
+                            final var handler = filter.castHandler(event);
+                            final var map = targetNode.mappedNodeCache.get(handler);
+                            if (map != null) map.call(event);
+                        }
+                    });
+                }
+            }
             // Add children
             final var children = targetNode.children;
             if (children.isEmpty()) return;
@@ -308,10 +348,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                     .forEach(this::recursiveUpdate);
         }
 
-        static <E extends Event> void appendEntry(List<Consumer<E>> handleListeners, ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
+        static <E extends Event> void appendEntries(List<Consumer<E>> handleListeners, ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
             final var filter = targetNode.filter;
             final var predicate = targetNode.predicate;
-            // Add normal listeners
+            // Normal listeners
             for (var listener : entry.listeners) {
                 if (predicate != null) {
                     // Ensure that the event is valid before running
@@ -325,9 +365,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                     handleListeners.add(e -> callListener(targetNode, listener, e));
                 }
             }
-            // Add bindings
+            // Bindings
             handleListeners.addAll(entry.bindingConsumers);
-            // TODO mapped node
         }
 
         static <E extends Event> void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
