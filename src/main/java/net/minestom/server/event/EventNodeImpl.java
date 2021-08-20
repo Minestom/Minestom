@@ -38,9 +38,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public <E extends T> void call(@NotNull E event, ListenerHandle<E> handle) {
+    public <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle) {
         var castedHandle = (Handle<T>) handle;
-        Check.stateCondition(castedHandle.node != this, "Invalid handle owner");
+        Check.argCondition(castedHandle.node != this, "Invalid handle owner");
         List<Consumer<T>> listeners = castedHandle.listeners;
         if (!castedHandle.updated) {
             synchronized (GLOBAL_CHILD_LOCK) {
@@ -56,7 +56,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public <E extends T> ListenerHandle<E> getHandle(Class<E> handleType) {
+    public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
+        //noinspection unchecked
         return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
                 aClass -> new Handle<>(this, (Class<T>) aClass));
     }

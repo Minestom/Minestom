@@ -182,21 +182,36 @@ public interface EventNode<T extends Event> {
     }
 
     /**
-     * Executes the given event on this node. The event must pass all conditions before
-     * it will be forwarded to the listeners.
-     * <p>
-     * Calling an event on a node will execute all child nodes, however, an event may be
-     * called anywhere on the event graph and it will propagate down from there only.
+     * Calls an event starting from this node.
      *
-     * @param event the event to execute
+     * @param event the event to call
      */
     default void call(@NotNull T event) {
+        //noinspection unchecked
         call(event, getHandle((Class<T>) event.getClass()));
     }
 
-    <E extends T> void call(@NotNull E event, ListenerHandle<E> handle);
+    /**
+     * Calls an event starting from this node.
+     * <p>
+     * The event handle can be retrieved using {@link #getHandle(Class)}
+     * and is useful to avoid map lookups for high-frequency events.
+     *
+     * @param event  the event to call
+     * @param handle the event handle linked to this node
+     * @param <E>    the event type
+     * @throws IllegalArgumentException if {@param handle}'s owner is not {@code this}
+     */
+    <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle);
 
-    <E extends T> ListenerHandle<E> getHandle(Class<E> handleType);
+    /**
+     * Gets the handle of an event type.
+     *
+     * @param handleType the handle type
+     * @param <E>        the event type
+     * @return the handle linked to {@param handleType}
+     */
+    <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
 
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.
