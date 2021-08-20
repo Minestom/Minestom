@@ -2,25 +2,30 @@ package net.minestom.server.collision;
 
 import kotlin.Pair;
 import kotlin.Triple;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Chunk;
+import org.jetbrains.annotations.Contract;
 
 import java.util.Objects;
 
 public class CollisionCache {
-    final long cachedAt;
-    final boolean wasOnGround;
-    final int cornerHash;
+    long cachedAt;
+    boolean wasOnGround;
+    int cornerHash;
     final Entity entity;
 
-    public CollisionCache(long cachedAt, boolean wasOnGround, Entity entity) {
-        this.cachedAt = cachedAt;
-        final Pos position = entity.getPosition();
-        this.cornerHash = hashCorners(position.x(), position.y(), position.z(), entity);
-        this.wasOnGround = wasOnGround;
+    public CollisionCache(Entity entity) {
         this.entity = entity;
+        update(entity.getPosition());
+    }
+    
+    public void update(Point position) {
+        this.cachedAt = System.currentTimeMillis();
+        this.cornerHash = hashCorners(position.x(), position.y(), position.z(), entity.getBoundingBox());
+        this.wasOnGround = entity.isOnGround();
     }
 
     /**
@@ -37,12 +42,12 @@ public class CollisionCache {
         }
 
         final Pos position = entity.getPosition();
-        final int cornerHash = hashCorners(position.x(), position.y(), position.z(), entity);
+        final int cornerHash = hashCorners(position.x(), position.y(), position.z(), entity.getBoundingBox());
         return new Pair<>(this.cornerHash == cornerHash, velocity);
     }
 
-    public static int hashCorners(double x, double y, double z, Entity entity) {
-        final double sizeX = entity.getBoundingBox().getWidth() / 2, sizeY = entity.getBoundingBox().getHeight() / 2, sizeZ = entity.getBoundingBox().getDepth() / 2;
+    public static int hashCorners(double x, double y, double z, BoundingBox box) {
+        final double sizeX = box.getWidth() / 2, sizeY = box.getHeight() / 2, sizeZ = box.getDepth() / 2;
         return Objects.hash(
                 Math.floor(x - sizeX),
                 Math.floor(y - sizeY),
