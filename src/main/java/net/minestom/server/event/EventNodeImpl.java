@@ -262,10 +262,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         consumer.accept(type);
         // Recursion
         if (RecursiveEvent.class.isAssignableFrom(type)) {
-            final var superclass = type.getSuperclass();
-            if (superclass != null && RecursiveEvent.class.isAssignableFrom(superclass)) consumer.accept(superclass);
-            for (var inter : type.getInterfaces()) {
-                if (RecursiveEvent.class.isAssignableFrom(inter)) consumer.accept(inter);
+            final Class<?> superclass = type.getSuperclass();
+            if (superclass != null && RecursiveEvent.class.isAssignableFrom(superclass)) {
+                forTargetEvents(superclass, consumer);
             }
         }
     }
