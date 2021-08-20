@@ -10,6 +10,7 @@ import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.acquirable.Acquirable;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.collision.CollisionCache;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -131,6 +132,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Lock used to support #switchEntityType
      */
     private final Object entityTypeLock = new Object();
+    private final CollisionCache collisionCache;
 
     public Entity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         this.id = generateId();
@@ -150,6 +152,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         this.gravityAcceleration = EntityTypeImpl.getAcceleration(entityType.name());
         this.gravityDragPerTick = EntityTypeImpl.getDrag(entityType.name());
+
+        this.collisionCache = new CollisionCache(this);
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -518,10 +522,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         final Pos newPosition;
         final Vec newVelocity;
         if (this.hasPhysics) {
-            final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
-            this.onGround = physicsResult.isOnGround();
-            newPosition = physicsResult.newPosition();
-            newVelocity = physicsResult.newVelocity();
+            final var result = collisionCache.isValid(deltaPos);
+            if (result.getFirst()) {
+                // Cache valid
+                newPosition = position.add(result.getSecond());
+                newVelocity = result.getSecond();
+            } else {
+                // Update cache
+                final var physicsResult = CollisionUtils.handlePhysics(this, deltaPos);
+                onGround = physicsResult.isOnGround();
+                newPosition = physicsResult.newPosition();
+                newVelocity = physicsResult.newVelocity();
+                collisionCache.update(newPosition);
+            }
         } else {
             newVelocity = deltaPos;
             newPosition = position.add(currentVelocity.div(20));
