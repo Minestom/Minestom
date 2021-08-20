@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -42,11 +43,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         Check.stateCondition(castedHandle.node != this, "Invalid handle owner");
         List<Consumer<T>> listeners = castedHandle.listeners;
         if (!castedHandle.updated) {
-            listeners.clear();
             synchronized (GLOBAL_CHILD_LOCK) {
-                handle(castedHandle.eventType, castedHandle.listeners);
+                listeners.clear();
+                castedHandle.update(this);
+                castedHandle.updated = true;
             }
-            castedHandle.updated = true;
         }
         if (listeners.isEmpty()) return;
         for (Consumer<T> listener : listeners) {
@@ -58,35 +59,6 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     public <E extends T> ListenerHandle<E> getHandle(Class<E> handleType) {
         return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
                 aClass -> new Handle<>(this, (Class<T>) aClass));
-    }
-
-    private void handle(Class<T> handleType, List<Consumer<T>> listeners) {
-        ListenerEntry<T> entry = listenerMap.get(handleType);
-        if (entry != null) {
-            // Add normal listeners
-            for (var listener : entry.listeners) {
-                if (predicate != null) {
-                    // Ensure that the event is valid before running
-                    listeners.add(event -> {
-                        final var value = filter.getHandler(event);
-                        if (!predicate.test(event, value)) return;
-                        listener.run(event);
-                    });
-                } else {
-                    // No predicate, run directly
-                    listeners.add(listener::run);
-                }
-            }
-            // Add bindings
-            listeners.addAll(entry.bindingConsumers);
-            // TODO mapped node
-        }
-        // Add children
-        if (children.isEmpty()) return;
-        this.children.stream()
-                .sorted(Comparator.comparing(EventNode::getPriority))
-                .filter(child -> child.eventType.isAssignableFrom(handleType)) // Invalid event type
-                .forEach(child -> child.handle(handleType, listeners));
     }
 
     @Override
@@ -290,6 +262,54 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         Handle(EventNode<E> node, Class<E> eventType) {
             this.node = node;
             this.eventType = eventType;
+        }
+
+        void update(EventNodeImpl<E> targetNode) {
+            final var handleType = eventType;
+            ListenerEntry<E> entry = targetNode.listenerMap.get(handleType);
+            if (entry != null) appendEntry(listeners, entry, targetNode);
+            // Add children
+            final var children = targetNode.children;
+            if (children.isEmpty()) return;
+            children.stream()
+                    .filter(child -> child.eventType.isAssignableFrom(handleType)) // Invalid event type
+                    .sorted(Comparator.comparing(EventNode::getPriority))
+                    .forEach(this::update);
+        }
+
+        static <E extends Event> void appendEntry(List<Consumer<E>> handleListeners, ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
+            final var filter = targetNode.filter;
+            final var predicate = targetNode.predicate;
+            // Add normal listeners
+            for (var listener : entry.listeners) {
+                if (predicate != null) {
+                    // Ensure that the event is valid before running
+                    handleListeners.add(e -> {
+                        final var value = filter.getHandler(e);
+                        if (!predicate.test(e, value)) return;
+                        callListener(targetNode, listener, e);
+                    });
+                } else {
+                    // No predicate, run directly
+                    handleListeners.add(e -> callListener(targetNode, listener, e));
+                }
+            }
+            // Add bindings
+            handleListeners.addAll(entry.bindingConsumers);
+            // TODO mapped node
+        }
+
+        static <E extends Event> void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
+            EventListener.Result result;
+            try {
+                result = listener.run(event);
+            } catch (Exception e) {
+                result = EventListener.Result.EXCEPTION;
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
+            if (result == EventListener.Result.EXPIRED) {
+                targetNode.removeListener(listener);
+            }
         }
     }
 }
