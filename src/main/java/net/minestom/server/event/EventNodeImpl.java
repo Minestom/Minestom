@@ -1,6 +1,7 @@
 package net.minestom.server.event;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -237,6 +238,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private void propagateEvent(Class<? extends T> eventClass) {
+        // Recursive event
+        forEachRecursive(eventType, recursiveClass -> propagateEvent((Class<? extends T>) recursiveClass));
+        // Propagate
         final var parent = this.parent;
         if (parent == null) return;
         Handle<? super T> parentHandle = parent.handleMap.get(eventClass);
@@ -253,6 +257,21 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         final boolean nameCheck = node.getName().equals(name);
         final boolean typeCheck = eventType.isAssignableFrom(((EventNodeImpl<?>) node).eventType);
         return nameCheck && typeCheck;
+    }
+
+    private static boolean isRecursive(Class<?> type) {
+        if (type == null) return false;
+        return RecursiveEvent.class.isAssignableFrom(type);
+    }
+
+    private static void forEachRecursive(Class<?> type, Consumer<Class<? extends RecursiveEvent>> consumer) {
+        if (isRecursive(type)) {
+            final var superclass = type.getSuperclass();
+            if (isRecursive(superclass)) consumer.accept((Class<? extends RecursiveEvent>) superclass);
+            for (var inter : type.getInterfaces()) {
+                if (isRecursive(inter)) consumer.accept((Class<? extends RecursiveEvent>) inter);
+            }
+        }
     }
 
     private static class ListenerEntry<T extends Event> {
@@ -283,6 +302,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var handleType = eventType;
             ListenerEntry<E> entry = targetNode.listenerMap.get(handleType);
             if (entry != null) appendEntry(listeners, entry, targetNode);
+            // Recursive event
+            forEachRecursive(eventType, recursiveClass -> {
+                ListenerEntry<E> recursiveEntry = targetNode.listenerMap.get(recursiveClass);
+                if (recursiveEntry != null) appendEntry(listeners, recursiveEntry, targetNode);
+            });
             // Add children
             final var children = targetNode.children;
             if (children.isEmpty()) return;
