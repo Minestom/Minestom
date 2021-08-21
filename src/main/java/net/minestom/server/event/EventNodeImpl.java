@@ -29,9 +29,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private volatile int priority;
     private volatile EventNodeImpl<? super T> parent;
 
-    protected EventNodeImpl(@NotNull String name,
-                            @NotNull EventFilter<T, ?> filter,
-                            @Nullable BiPredicate<T, Object> predicate) {
+    EventNodeImpl(@NotNull String name,
+                  @NotNull EventFilter<T, ?> filter,
+                  @Nullable BiPredicate<T, Object> predicate) {
         this.name = name;
         this.filter = filter;
         this.predicate = predicate;
@@ -313,8 +313,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         private void recursiveUpdate(EventNodeImpl<E> targetNode) {
             // Standalone listeners
             forTargetEvents(eventType, type -> {
-                ListenerEntry<E> entry = targetNode.listenerMap.get(type);
-                if (entry != null) appendEntries(listeners, entry, targetNode);
+                final ListenerEntry<E> entry = targetNode.listenerMap.get(type);
+                if (entry != null) appendEntries(entry, targetNode);
             });
             // Mapped nodes
             handleMappedNode(targetNode);
@@ -356,27 +356,27 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
         }
 
-        static <E extends Event> void appendEntries(List<Consumer<E>> handleListeners, ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
+        private void appendEntries(ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
             final var filter = targetNode.filter;
             final var predicate = targetNode.predicate;
             // Normal listeners
             for (var listener : entry.listeners) {
                 if (predicate != null) {
                     // Ensure that the event is valid before running
-                    handleListeners.add(e -> {
+                    this.listeners.add(e -> {
                         final var value = filter.getHandler(e);
                         if (!predicate.test(e, value)) return;
                         callListener(targetNode, listener, e);
                     });
                 } else {
                     // No predicate, run directly
-                    handleListeners.add(e -> callListener(targetNode, listener, e));
+                    this.listeners.add(e -> callListener(targetNode, listener, e));
                 }
             }
             // Bindings
             final var bindingConsumers = entry.bindingConsumers;
             if (!bindingConsumers.isEmpty()) { // Ensure no array clone
-                handleListeners.addAll(bindingConsumers);
+                this.listeners.addAll(bindingConsumers);
             }
         }
 
