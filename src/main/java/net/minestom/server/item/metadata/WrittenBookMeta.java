@@ -14,6 +14,7 @@ import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WrittenBookMeta.Builder> {
 
@@ -115,13 +116,12 @@ public class WrittenBookMeta extends ItemMeta implements ItemMetaBuilder.Provide
         public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = new ArrayList<>(pages);
 
-            handleCollection(pages, "pages", () -> {
-                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-                for (Component page : pages) {
-                    list.add(new NBTString(GsonComponentSerializer.gson().serialize(page)));
-                }
-                return list;
-            });
+            handleCollection(pages, "pages", () -> NBT.List(
+                    NBTType.TAG_String,
+                    pages.stream()
+                            .map(page -> new NBTString(GsonComponentSerializer.gson().serialize(page)))
+                            .collect(Collectors.toList())
+            ));
 
             return this;
         }

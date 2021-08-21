@@ -8,7 +8,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,6 +121,7 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.triple = true;
 
             NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
+            // TODO: 'add' will fail here
             chargedProjectiles.add(getItemCompound(projectile1));
             chargedProjectiles.add(getItemCompound(projectile2));
             chargedProjectiles.add(getItemCompound(projectile3));
@@ -181,9 +182,10 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
 
         private @NotNull NBTCompound getItemCompound(@NotNull ItemStack itemStack) {
             NBTCompound compound = itemStack.getMeta().toNBT();
-            compound.setByte("Count", (byte) itemStack.getAmount());
-            compound.setString("id", itemStack.getMaterial().name());
-            return compound;
+            return compound.modify(n -> {
+                n.setByte("Count", (byte) itemStack.getAmount());
+                n.setString("id", itemStack.getMaterial().name());
+            });
         }
     }
 }

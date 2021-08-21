@@ -6,6 +6,7 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.function.Supplier;
@@ -57,7 +58,7 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
                 if (lodestoneDimension != null) {
                     compound.setString("LodestoneDimension", lodestoneDimension);
                 } else {
-                    compound.removeTag("LodestoneDimension");
+                    compound.remove("LodestoneDimension");
                 }
             });
 
@@ -69,13 +70,13 @@ public class CompassMeta extends ItemMeta implements ItemMetaBuilder.Provider<Co
 
             mutateNbt(compound -> {
                 if (lodestonePosition != null) {
-                    NBTCompound posCompound = new NBTCompound();
-                    posCompound.setInt("X", lodestonePosition.blockX());
-                    posCompound.setInt("Y", lodestonePosition.blockY());
-                    posCompound.setInt("Z", lodestonePosition.blockZ());
-                    compound.set("LodestonePos", posCompound);
+                    compound.set("LodestonePos", NBT.Compound(posCompound -> {
+                        posCompound.setInt("X", lodestonePosition.blockX());
+                        posCompound.setInt("Y", lodestonePosition.blockY());
+                        posCompound.setInt("Z", lodestonePosition.blockZ());
+                    }));
                 } else {
-                    compound.removeTag("LodestonePos");
+                    compound.remove("LodestonePos");
                 }
             });
 

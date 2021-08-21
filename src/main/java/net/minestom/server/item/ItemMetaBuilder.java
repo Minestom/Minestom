@@ -12,11 +12,13 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public abstract class ItemMetaBuilder implements TagWritable {
 
@@ -85,10 +87,11 @@ public abstract class ItemMetaBuilder implements TagWritable {
     public @NotNull ItemMetaBuilder lore(@NotNull List<@NotNull Component> lore) {
         this.lore = new ArrayList<>(lore);
         handleCompound("display", nbtCompound -> {
-            final NBTList<NBTString> loreNBT = new NBTList<>(NBTTypes.TAG_String);
-            for (Component line : lore) {
-                loreNBT.add(new NBTString(GsonComponentSerializer.gson().serialize(line)));
-            }
+            final NBTList<NBTString> loreNBT = NBT.List(NBTType.TAG_String,
+                    lore.stream()
+                            .map(line -> new NBTString(GsonComponentSerializer.gson().serialize(line)))
+                            .collect(Collectors.toList())
+            );
             nbtCompound.set("Lore", loreNBT);
         });
         return this;
@@ -203,13 +206,16 @@ public abstract class ItemMetaBuilder implements TagWritable {
 
     protected abstract @NotNull Supplier<@NotNull ItemMetaBuilder> getSupplier();
 
-    protected synchronized void mutateNbt(Consumer<NBTCompound> consumer) {
+    protected synchronized void mutateNbt(Consumer<MutableNBTCompound> consumer) {
+        MutableNBTCompound copy = new MutableNBTCompound(nbt);
+        consumer.accept(copy);
         if (built) {
             built = false;
             final var currentNbt = nbt;
-            NBT_UPDATER.compareAndSet(this, currentNbt, currentNbt.deepClone());
+            NBT_UPDATER.compareAndSet(this, currentNbt, copy.toCompound());
+        } else {
+            nbt = copy.toCompound();
         }
-        consumer.accept(nbt);
     }
 
     protected synchronized NBTCompound nbt() {
@@ -287,7 +293,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract(value = "_, _ -> new", pure = true)
     public static @NotNull ItemMetaBuilder fromNBT(@NotNull ItemMetaBuilder src, @NotNull NBTCompound nbtCompound) {
         ItemMetaBuilder dest = src.getSupplier().get();
-        dest.nbt = nbtCompound.deepClone();
+        dest.nbt = nbtCompound;
         NBTUtils.loadDataIntoMeta(dest, dest.nbt);
         return dest;
     }

@@ -7,7 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
-import org.jglrxavpok.hephaistos.nbt.SNBTParser;
+import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.io.StringReader;
 import java.util.Objects;

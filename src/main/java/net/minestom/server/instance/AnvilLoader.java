@@ -247,7 +247,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
-        NBTList<NBTCompound> tileEntities = new NBTList<>(NBTTypes.TAG_Compound);
+        NBTList<NBTCompound> tileEntities = new NBTList<>(NBTType.TAG_Compound);
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
