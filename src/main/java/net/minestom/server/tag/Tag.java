@@ -4,9 +4,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTException;
+import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.jglrxavpok.hephaistos.parser.SNBTParser;
 
 import java.io.StringReader;
@@ -31,7 +30,7 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<String> SNBT = new Tag<>(null, NBTCompound::toSNBT, (original, snbt) -> {
+    public static final Tag<String> SNBT = new Tag<>(null, n -> n.toCompound().toSNBT(), (original, snbt) -> {
         try {
             final var updated = new SNBTParser(new StringReader(snbt)).parse();
             if (!(updated instanceof NBTCompound updatedCompound))
@@ -50,20 +49,20 @@ public class Tag<T> {
      * Writing will override all tags. Proceed with caution.
      */
     @ApiStatus.Experimental
-    public static final Tag<NBTCompound> NBT = new Tag<>(null, NBTCompound::deepClone, (original, updated) -> {
+    public static final Tag<NBTCompound> NBT = new Tag<>(null, n -> n.toCompound(), (original, updated) -> {
         original.clear();
         updated.getKeys().forEach(s -> original.set(s, Objects.requireNonNull(updated.get(s))));
     }, null);
 
     private final String key;
-    private final Function<NBTCompound, T> readFunction;
-    private final BiConsumer<NBTCompound, T> writeConsumer;
+    private final Function<NBTCompoundLike, T> readFunction;
+    private final BiConsumer<MutableNBTCompound, T> writeConsumer;
 
     private final Supplier<T> defaultValue;
 
     protected Tag(@Nullable String key,
-                  @NotNull Function<NBTCompound, T> readFunction,
-                  @Nullable BiConsumer<NBTCompound, T> writeConsumer,
+                  @NotNull Function<NBTCompoundLike, T> readFunction,
+                  @Nullable BiConsumer<MutableNBTCompound, T> writeConsumer,
                   @Nullable Supplier<T> defaultValue) {
         this.key = key;
         this.readFunction = readFunction;
@@ -73,8 +72,8 @@ public class Tag<T> {
     }
 
     protected Tag(@Nullable String key,
-                  @NotNull Function<NBTCompound, T> readFunction,
-                  @Nullable BiConsumer<NBTCompound, T> writeConsumer) {
+                  @NotNull Function<NBTCompoundLike, T> readFunction,
+                  @Nullable BiConsumer<MutableNBTCompound, T> writeConsumer) {
         this(key, readFunction, writeConsumer, null);
     }
 
@@ -126,7 +125,7 @@ public class Tag<T> {
                 });
     }
 
-    public @Nullable T read(@NotNull NBTCompound nbtCompound) {
+    public @Nullable T read(@NotNull NBTCompoundLike nbtCompound) {
         T result = readFunction.apply(nbtCompound);
         if (result == null) {
             final var supplier = defaultValue;
@@ -135,15 +134,15 @@ public class Tag<T> {
         return result;
     }
 
-    public void write(@NotNull NBTCompound nbtCompound, @Nullable T value) {
+    public void write(@NotNull MutableNBTCompound nbtCompound, @Nullable T value) {
         if (key == null || value != null) {
             this.writeConsumer.accept(nbtCompound, value);
         } else {
-            nbtCompound.removeTag(key);
+            nbtCompound.remove(key);
         }
     }
 
-    public void writeUnsafe(@NotNull NBTCompound nbtCompound, @Nullable Object value) {
+    public void writeUnsafe(@NotNull MutableNBTCompound nbtCompound, @Nullable Object value) {
         write(nbtCompound, (T) value);
     }
 
@@ -185,7 +184,7 @@ public class Tag<T> {
 
     public static @NotNull Tag<byte[]> ByteArray(@NotNull String key) {
         return new Tag<>(key,
-                nbtCompound -> nbtCompound.getByteArray(key),
+                nbtCompound -> nbtCompound.getByteArray(key).copyArray(),
                 (nbtCompound, value) -> nbtCompound.setByteArray(key, value));
     }
 
@@ -199,24 +198,20 @@ public class Tag<T> {
         return new Tag<>(key,
                 nbt -> {
                     final var currentNBT = nbt.get(key);
-                    // Avoid a NPE when cloning a null variable.
-                    if (currentNBT == null) {
-                        return null;
-                    }
-                    return (T) currentNBT.deepClone();
+                    return (T) currentNBT;
                 },
-                ((nbt, value) -> nbt.set(key, value.deepClone())));
+                ((nbt, value) -> nbt.set(key, value)));
     }
 
     public static @NotNull Tag<int[]> IntArray(@NotNull String key) {
         return new Tag<>(key,
-                nbtCompound -> nbtCompound.getIntArray(key),
+                nbtCompound -> nbtCompound.getIntArray(key).copyArray(),
                 (nbtCompound, value) -> nbtCompound.setIntArray(key, value));
     }
 
     public static @NotNull Tag<long[]> LongArray(@NotNull String key) {
         return new Tag<>(key,
-                nbtCompound -> nbtCompound.getLongArray(key),
+                nbtCompound -> nbtCompound.getLongArray(key).copyArray(),
                 (nbtCompound, value) -> nbtCompound.setLongArray(key, value));
     }
 
@@ -238,12 +233,15 @@ public class Tag<T> {
                     return serializer.read(TagReadable.fromCompound(compound));
                 },
                 (nbtCompound, value) -> {
-                    var compound = nbtCompound.getCompound(key);
-                    if (compound == null) {
-                        compound = new NBTCompound();
-                        nbtCompound.set(key, compound);
+                    var originalCompound = nbtCompound.getCompound(key);
+                    MutableNBTCompound mutableCopy;
+                    if (originalCompound == null) {
+                        mutableCopy = new MutableNBTCompound();
+                    } else {
+                        mutableCopy = new MutableNBTCompound(originalCompound);
                     }
-                    serializer.write(TagWritable.fromCompound(compound), value);
+                    serializer.write(TagWritable.fromCompound(mutableCopy), value);
+                    nbtCompound.set(key, mutableCopy.toCompound());
                 });
     }
 

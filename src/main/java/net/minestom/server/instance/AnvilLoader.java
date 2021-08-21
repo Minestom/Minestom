@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.mca.*;
 import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +101,7 @@ public class AnvilLoader implements IChunkLoader {
         loadBlocks(chunk, fileChunk);
         loadTileEntities(chunk, fileChunk);
         // Lights
-        for (var chunkSection : fileChunk.getSections()) {
+        for (var chunkSection : fileChunk.getSections().values()) {
             Section section = chunk.getSection(chunkSection.getY());
             section.setSkyLight(chunkSection.getSkyLights());
             section.setBlockLight(chunkSection.getBlockLights());
@@ -127,7 +128,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void loadBlocks(Chunk chunk, ChunkColumn fileChunk) {
-        for (var section : fileChunk.getSections()) {
+        for (var section : fileChunk.getSections().values()) {
             if (section.getEmpty()) continue;
             final int yOffset = Chunk.CHUNK_SECTION_SIZE * section.getY();
             for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
@@ -172,9 +173,11 @@ public class AnvilLoader implements IChunkLoader {
                 block = block.withHandler(handler);
             }
             // Remove anvil tags
-            te.removeTag("id")
-                    .removeTag("x").removeTag("y").removeTag("z")
-                    .removeTag("keepPacked");
+            te.remove("id");
+            te.remove("x");
+            te.remove("y");
+            te.remove("z");
+            te.remove("keepPacked");
             // Place block
             final var finalBlock = te.getSize() > 0 ?
                     block.withNbt(te) : block;
@@ -258,10 +261,16 @@ public class AnvilLoader implements IChunkLoader {
                     chunkColumn.setBiome(x, 0, z, chunk.getBiome(x, y, z).id());
 
                     // Tile entity
-                    var nbt = block.nbt();
                     final BlockHandler handler = block.handler();
-                    if (nbt != null || handler != null) {
-                        nbt = Objects.requireNonNullElseGet(nbt, NBTCompound::new);
+                    var originalNBT = block.nbt();
+                    if (originalNBT != null || handler != null) {
+                        MutableNBTCompound nbt;
+                        if(originalNBT == null) {
+                            nbt = new MutableNBTCompound();
+                        } else {
+                            nbt = new MutableNBTCompound(originalNBT);
+                        }
+
                         if (handler != null) {
                             nbt.setString("id", handler.getNamespaceId().asString());
                         }
@@ -269,7 +278,7 @@ public class AnvilLoader implements IChunkLoader {
                         nbt.setInt("y", y);
                         nbt.setInt("z", z + Chunk.CHUNK_SIZE_Z * chunk.getChunkZ());
                         nbt.setByte("keepPacked", (byte) 0);
-                        tileEntities.add(nbt);
+                        tileEntities.add(nbt.toCompound());
                     }
                 }
             }

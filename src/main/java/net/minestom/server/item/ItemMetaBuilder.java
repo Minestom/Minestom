@@ -77,7 +77,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
                 final String name = GsonComponentSerializer.gson().serialize(displayName);
                 nbtCompound.setString("Name", name);
             } else {
-                nbtCompound.removeTag("Name");
+                nbtCompound.remove("Name");
             }
         });
         return this;
@@ -107,8 +107,9 @@ public abstract class ItemMetaBuilder implements TagWritable {
     public @NotNull ItemMetaBuilder enchantments(@NotNull Map<Enchantment, Short> enchantments) {
         this.enchantmentMap = new HashMap<>(enchantments);
         handleMap(enchantmentMap, "Enchantments", () -> {
-            NBTUtils.writeEnchant(nbt, "Enchantments", enchantmentMap);
-            return nbt.get("Enchantments");
+            MutableNBTCompound mutableCopy = new MutableNBTCompound(nbt);
+            NBTUtils.writeEnchant(mutableCopy, "Enchantments", enchantmentMap);
+            return mutableCopy.get("Enchantments");
         });
         return this;
     }
@@ -130,22 +131,20 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder attributes(@NotNull List<@NotNull ItemAttribute> attributes) {
         this.attributes = new ArrayList<>(attributes);
-        handleCollection(attributes, "AttributeModifiers", () -> {
-            NBTList<NBTCompound> attributesNBT = new NBTList<>(NBTTypes.TAG_Compound);
-            for (ItemAttribute itemAttribute : attributes) {
-                final UUID uuid = itemAttribute.getUuid();
-                attributesNBT.add(
-                        new NBTCompound()
-                                .setIntArray("UUID", Utils.uuidToIntArray(uuid))
-                                .setDouble("Amount", itemAttribute.getValue())
-                                .setString("Slot", itemAttribute.getSlot().name().toLowerCase())
-                                .setString("AttributeName", itemAttribute.getAttribute().getKey())
-                                .setInt("Operation", itemAttribute.getOperation().getId())
-                                .setString("Name", itemAttribute.getInternalName())
-                );
-            }
-            return attributesNBT;
-        });
+
+        handleCollection(attributes, "AttributeModifiers", () -> NBT.List(
+                NBTType.TAG_Compound,
+                attributes.stream()
+                        .map(itemAttribute -> NBT.Compound(nbt -> {
+                            nbt.setIntArray("UUID", Utils.uuidToIntArray(itemAttribute.getUuid()));
+                            nbt.setDouble("Amount", itemAttribute.getValue());
+                            nbt.setString("Slot", itemAttribute.getSlot().name().toLowerCase());
+                            nbt.setString("AttributeName", itemAttribute.getAttribute().getKey());
+                            nbt.setInt("Operation", itemAttribute.getOperation().getId());
+                            nbt.setString("Name", itemAttribute.getInternalName());
+                        }))
+                        .collect(Collectors.toList())
+        ));
 
         return this;
     }
@@ -160,11 +159,12 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canPlaceOn(@NotNull Set<@NotNull Block> blocks) {
         this.canPlaceOn = new HashSet<>(blocks);
-        handleCollection(canPlaceOn, "CanPlaceOn", () -> {
-            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canPlaceOn.forEach(block -> list.add(new NBTString(block.name())));
-            return list;
-        });
+        handleCollection(canPlaceOn, "CanPlaceOn", () -> NBT.List(
+                NBTType.TAG_String,
+                canPlaceOn.stream()
+                        .map(block -> new NBTString(block.name()))
+                        .collect(Collectors.toList())
+        ));
         return this;
     }
 
@@ -176,11 +176,12 @@ public abstract class ItemMetaBuilder implements TagWritable {
     @Contract("_ -> this")
     public @NotNull ItemMetaBuilder canDestroy(@NotNull Set<@NotNull Block> blocks) {
         this.canDestroy = new HashSet<>(blocks);
-        handleCollection(canDestroy, "CanDestroy", () -> {
-            NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-            canDestroy.forEach(block -> list.add(new NBTString(block.name())));
-            return list;
-        });
+        handleCollection(canPlaceOn, "CanPlaceOn", () -> NBT.List(
+                NBTType.TAG_String,
+                canDestroy.stream()
+                        .map(block -> new NBTString(block.name()))
+                        .collect(Collectors.toList())
+        ));
         return this;
     }
 
@@ -228,29 +229,12 @@ public abstract class ItemMetaBuilder implements TagWritable {
     }
 
     protected void handleCompound(@NotNull String key,
-                                  @NotNull Consumer<@NotNull NBTCompound> consumer) {
+                                  @NotNull Consumer<@NotNull MutableNBTCompound> consumer) {
         mutateNbt(nbt -> {
-            NBTCompound compound = null;
-            boolean newNbt = false;
-            if (nbt.containsKey(key)) {
-                NBT dNbt = nbt.get(key);
-                if (dNbt instanceof NBTCompound) {
-                    compound = (NBTCompound) dNbt;
-                }
-            } else {
-                compound = new NBTCompound();
-                newNbt = true;
-            }
+            MutableNBTCompound newCompound = new MutableNBTCompound();
+            consumer.accept(newCompound);
 
-            if (compound != null) {
-                consumer.accept(compound);
-
-                if (newNbt && compound.getSize() > 0) {
-                    this.nbt.set(key, compound);
-                } else if (!newNbt && compound.getSize() == 0) {
-                    this.nbt.removeTag(key);
-                }
-            }
+            nbt.set(key, newCompound.toCompound());
         });
     }
 
@@ -261,7 +245,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
             if (value != null) {
                 compound.set(key, supplier.get());
             } else {
-                compound.removeTag(key);
+                compound.remove(key);
             }
         });
     }
@@ -273,7 +257,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
             if (!objects.isEmpty()) {
                 compound.set(key, supplier.get());
             } else {
-                compound.removeTag(key);
+                compound.remove(key);
             }
         });
     }
@@ -285,7 +269,7 @@ public abstract class ItemMetaBuilder implements TagWritable {
             if (!objects.isEmpty()) {
                 compound.set(key, supplier.get());
             } else {
-                compound.removeTag(key);
+                compound.remove(key);
             }
         });
     }
