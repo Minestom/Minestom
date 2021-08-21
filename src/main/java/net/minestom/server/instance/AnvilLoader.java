@@ -25,6 +25,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.Map;
 import java.util.Objects;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -250,7 +252,7 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private void save(Chunk chunk, ChunkColumn chunkColumn) {
-        NBTList<NBTCompound> tileEntities = new NBTList<>(NBTType.TAG_Compound);
+        List<NBTCompound> tileEntities = new LinkedList<>();
         chunkColumn.setGenerationStatus(ChunkColumn.GenerationStatus.Full);
         for (int x = 0; x < Chunk.CHUNK_SIZE_X; x++) {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
@@ -283,7 +285,7 @@ public class AnvilLoader implements IChunkLoader {
                 }
             }
         }
-        chunkColumn.setTileEntities(tileEntities);
+        chunkColumn.setTileEntities(NBT.List(NBTType.TAG_Compound, tileEntities));
     }
 
     @Override
