@@ -222,10 +222,9 @@ public interface EventNode<T extends Event> {
      * has similar optimization built-in.
      *
      * @param handle the listener handle
-     * @param <E>    the event type
      * @return true if the event has 1 or more listeners
      */
-    <E extends T> boolean hasListener(@NotNull ListenerHandle<E> handle);
+    boolean hasListener(@NotNull ListenerHandle<? extends T> handle);
 
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.

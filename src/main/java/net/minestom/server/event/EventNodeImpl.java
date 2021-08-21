@@ -58,7 +58,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public <E extends T> boolean hasListener(@NotNull ListenerHandle<E> handle) {
+    public boolean hasListener(@NotNull ListenerHandle<? extends T> handle) {
         final Handle<T> castedHandle = (Handle<T>) handle;
         if (!castedHandle.updated) castedHandle.update();
         return !castedHandle.listeners.isEmpty();
