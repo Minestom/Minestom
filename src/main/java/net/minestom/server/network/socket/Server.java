@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
@@ -41,6 +42,12 @@ public final class Server {
     }
 
     public void start(SocketAddress address) throws IOException {
+        if (address instanceof InetSocketAddress) {
+            InetSocketAddress inetSocketAddress = (InetSocketAddress) address;
+            this.address = inetSocketAddress.getHostString();
+            this.port = inetSocketAddress.getPort();
+        } // TODO unix domain support
+
         this.serverSocket = ServerSocketChannel.open();
         serverSocket.bind(address);
         serverSocket.configureBlocking(false);
