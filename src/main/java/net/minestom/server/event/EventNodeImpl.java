@@ -1,5 +1,6 @@
 package net.minestom.server.event;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
@@ -11,6 +12,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
 
@@ -320,53 +322,43 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var mappedNodeCache = targetNode.mappedNodeCache;
             if (mappedNodeCache.isEmpty()) return;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
+            Map<Object, Pair<EventNode<E>, ListenerHandle<E>>> handlers = new HashMap<>(mappedNodeCache.size());
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
-                if (!mappedNode.eventType.isAssignableFrom(eventType)) continue;
-                final var mappedListeners = mappedNode.listenerMap;
-                if (mappedListeners.isEmpty())
+                final Class<E> mappedNodeType = mappedNode.eventType;
+                if (!mappedNodeType.isAssignableFrom(eventType)) continue;
+                if (mappedNode.listenerMap.isEmpty())
                     continue; // The mapped node does not have any listener (perhaps throw a warning?)
-                forTargetEvents(eventType, type -> {
-                    if (!mappedListeners.containsKey(type)) return; // No normal listener to this handle type
-                    filters.add(mappedNode.filter);
-                });
+                filters.add(mappedNode.filter);
+                handlers.put(mappedEntry.getKey(), Pair.of(mappedNode, mappedNode.getHandle(eventType)));
             }
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
             if (!filters.isEmpty()) {
                 final var filterList = List.copyOf(filters);
                 final int size = filterList.size();
+                final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
+                    final Object handler = filter.castHandler(event);
+                    final var mapResult = handlers.get(handler);
+                    if (mapResult != null) mapResult.first().call(event, mapResult.second());
+                };
                 if (size == 1) {
                     final var firstFilter = filterList.get(0);
-                    this.listeners.add(event -> {
-                        // Common case where there is only one filter
-                        final Object handler = firstFilter.castHandler(event);
-                        final EventNode<E> mappedNode = mappedNodeCache.get(handler);
-                        if (mappedNode != null) mappedNode.call(event);
-                    });
+                    // Common case where there is only one filter
+                    this.listeners.add(event -> mapper.accept(firstFilter, event));
                 } else if (size == 2) {
                     final var firstFilter = filterList.get(0);
                     final var secondFilter = filterList.get(1);
                     this.listeners.add(event -> {
-                        // First check
-                        final Object handler1 = firstFilter.castHandler(event);
-                        final EventNode<E> mappedNode1 = mappedNodeCache.get(handler1);
-                        if (mappedNode1 != null) mappedNode1.call(event);
-
-                        // Second check
-                        final Object handler2 = secondFilter.castHandler(event);
-                        final EventNode<E> mappedNode2 = mappedNodeCache.get(handler2);
-                        if (mappedNode2 != null) mappedNode2.call(event);
+                        mapper.accept(firstFilter, event);
+                        mapper.accept(secondFilter, event);
                     });
                 } else {
                     this.listeners.add(event -> {
                         for (var filter : filterList) {
-                            final Object handler = filter.castHandler(event);
-                            final EventNode<E> mappedNode = mappedNodeCache.get(handler);
-                            if (mappedNode != null) mappedNode.call(event);
+                            mapper.accept(filter, event);
                         }
-
                     });
                 }
             }
