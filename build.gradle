@@ -3,7 +3,7 @@ import org.gradle.internal.os.OperatingSystem
 plugins {
     id 'java-library'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.0'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.21'
     id 'checkstyle'
 }
 
@@ -104,7 +104,7 @@ dependencies {
     testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.7.2')
 
     // Only here to ensure J9 module support for extensions and our classloaders
-    testCompileOnly 'org.mockito:mockito-core:3.11.1'
+    testCompileOnly 'org.mockito:mockito-core:3.11.2'
 
     // https://mvnrepository.com/artifact/it.unimi.dsi/fastutil
     api 'it.unimi.dsi:fastutil:8.5.4'
