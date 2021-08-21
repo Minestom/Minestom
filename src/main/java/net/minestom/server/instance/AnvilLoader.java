@@ -164,11 +164,7 @@ public class AnvilLoader implements IChunkLoader {
 
             final String tileEntityID = te.getString("id");
             if (tileEntityID != null) {
-                var handler = BLOCK_MANAGER.getHandler(tileEntityID);
-                if (handler == null) {
-                    LOGGER.warn("Block {} does not have any corresponding handler, default to dummy.", tileEntityID);
-                    handler = BlockHandler.Dummy.get(tileEntityID);
-                }
+                final BlockHandler handler = BLOCK_MANAGER.getHandlerOrDummy(tileEntityID);
                 block = block.withHandler(handler);
             }
             // Remove anvil tags
@@ -237,6 +233,7 @@ public class AnvilLoader implements IChunkLoader {
         try {
             LOGGER.debug("Attempt saving at {} {}", chunk.getChunkX(), chunk.getChunkZ());
             mcaFile.writeColumn(column);
+            mcaFile.forget(column);
         } catch (IOException e) {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             EXCEPTION_MANAGER.handleException(e);

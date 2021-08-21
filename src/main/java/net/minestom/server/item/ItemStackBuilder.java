@@ -51,6 +51,7 @@ public class ItemStackBuilder {
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_CHESTPLATE, LeatherArmorMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_LEGGINGS, LeatherArmorMeta.Builder::new);
         MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_BOOTS, LeatherArmorMeta.Builder::new);
+        MATERIAL_SUPPLIER_MAP.put(Material.LEATHER_HORSE_ARMOR, LeatherArmorMeta.Builder::new);
     }
 
     protected ItemStackBuilder(@NotNull Material material) {

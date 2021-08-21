@@ -114,31 +114,29 @@ public class ChunkDataPacket implements ServerPacket {
             List<NBTCompound> compounds = new ArrayList<>();
             for (var entry : entries.entrySet()) {
                 final int index = entry.getKey();
-                final var block = entry.getValue();
+                final Block block = entry.getValue();
+                final String blockEntity = block.registry().blockEntity();
+                if (blockEntity == null) continue; // Only send block entities to client
+                final NBTCompound resultNbt = new NBTCompound();
+                // Append handler tags
                 final BlockHandler handler = block.handler();
-                if (handler == null)
-                    continue;
-                final var blockEntityTags = handler.getBlockEntityTags();
-                if (blockEntityTags.isEmpty()) // Verify if the block should be sent as block entity to client
-                    continue;
-                final var blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                final var resultNbt = new NBTCompound();
-                for (Tag<?> tag : blockEntityTags) {
-                    final var value = tag.read(blockNbt);
-                    if (value != null) {
-                        // Tag is present and valid
-                        tag.writeUnsafe(resultNbt, value);
+                if (handler != null) {
+                    final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                    for (Tag<?> tag : handler.getBlockEntityTags()) {
+                        final var value = tag.read(blockNbt);
+                        if (value != null) {
+                            // Tag is present and valid
+                            tag.writeUnsafe(resultNbt, value);
+                        }
                     }
                 }
-
-                if (resultNbt.getSize() > 0) {
-                    final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-                    resultNbt.setString("id", handler.getNamespaceId().asString())
-                            .setInt("x", blockPosition.blockX())
-                            .setInt("y", blockPosition.blockY())
-                            .setInt("z", blockPosition.blockZ());
-                    compounds.add(resultNbt);
-                }
+                // Add block entity
+                final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                resultNbt.setString("id", blockEntity)
+                        .setInt("x", blockPosition.blockX())
+                        .setInt("y", blockPosition.blockY())
+                        .setInt("z", blockPosition.blockZ());
+                compounds.add(resultNbt);
             }
             writer.writeVarInt(compounds.size());
             compounds.forEach(nbtCompound -> writer.writeNBT("", nbtCompound));
@@ -147,8 +145,8 @@ public class ChunkDataPacket implements ServerPacket {
 
     @Override
     public void read(@NotNull BinaryReader reader) {
-        chunkX = reader.readInt();
-        chunkZ = reader.readInt();
+        this.chunkX = reader.readInt();
+        this.chunkZ = reader.readInt();
 
         int maskCount = reader.readVarInt();
         long[] masks = new long[maskCount];
@@ -158,7 +156,7 @@ public class ChunkDataPacket implements ServerPacket {
         try {
             // TODO: Use heightmaps
             // unused at the moment
-            heightmapsNBT = (NBTCompound) reader.readTag();
+            this.heightmapsNBT = (NBTCompound) reader.readTag();
 
             // Biomes
             int[] biomesIds = reader.readVarIntArray();
@@ -168,23 +166,22 @@ public class ChunkDataPacket implements ServerPacket {
             }
 
             // Data
+            this.sections = new HashMap<>();
             int blockArrayLength = reader.readVarInt();
             if (maskCount > 0) {
                 final long mask = masks[0]; // TODO support for variable size
                 for (int sectionIndex = 0; sectionIndex < CHUNK_SECTION_COUNT; sectionIndex++) {
-                    boolean hasSection = (mask & 1 << sectionIndex) != 0;
-                    if (!hasSection)
-                        continue;
+                    final boolean hasSection = (mask & 1 << sectionIndex) != 0;
+                    if (!hasSection) continue;
                     final Section section = sections.computeIfAbsent(sectionIndex, i -> new Section());
                     final Palette palette = section.getPalette();
-                    short blockCount = reader.readShort();
-                    byte bitsPerEntry = reader.readByte();
-
+                    final short blockCount = reader.readShort();
+                    palette.setBlockCount(blockCount);
+                    final byte bitsPerEntry = reader.readByte();
                     // Resize palette if necessary
                     if (bitsPerEntry > palette.getBitsPerEntry()) {
                         palette.resize(bitsPerEntry);
                     }
-
                     // Retrieve palette values
                     if (bitsPerEntry < 9) {
                         int paletteSize = reader.readVarInt();
@@ -194,24 +191,18 @@ public class ChunkDataPacket implements ServerPacket {
                             palette.getBlockPaletteMap().put((short) paletteValue, (short) i);
                         }
                     }
-
                     // Read blocks
-                    int dataLength = reader.readVarInt();
-                    long[] data = palette.getBlocks();
-                    for (int i = 0; i < dataLength; i++) {
-                        data[i] = reader.readLong();
-                    }
+                    palette.setBlocks(reader.readLongArray());
                 }
             }
 
             // Block entities
             final int blockEntityCount = reader.readVarInt();
-
-            entries = new Int2ObjectOpenHashMap<>();
+            this.entries = new Int2ObjectOpenHashMap<>(blockEntityCount);
             for (int i = 0; i < blockEntityCount; i++) {
                 NBTCompound tag = (NBTCompound) reader.readTag();
                 final String id = tag.getString("id");
-                // TODO retrieve handler by namespace
+                final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(id);
                 final int x = tag.getInt("x");
                 final int y = tag.getInt("y");
                 final int z = tag.getInt("z");

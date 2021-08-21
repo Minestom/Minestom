@@ -122,6 +122,12 @@ public final class ItemStack implements TagReadable, HoverEventSource<HoverEvent
         return builder().meta(metaOperator).build();
     }
 
+    @ApiStatus.Experimental
+    @Contract(value = "_ -> new", pure = true)
+    public @NotNull ItemStack withMeta(@NotNull ItemMeta meta) {
+        return builder().meta(meta).build();
+    }
+
     @Contract(pure = true)
     public @Nullable Component getDisplayName() {
         return meta.getDisplayName();

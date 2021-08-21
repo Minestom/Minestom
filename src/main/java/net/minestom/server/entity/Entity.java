@@ -557,8 +557,9 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         // Update velocity
         if (hasVelocity || !newVelocity.isZero()) {
+            final double airDrag = this instanceof LivingEntity ? 0.91 : 0.98;
             final double drag = this.onGround ?
-                    finalChunk.getBlock(position).registry().friction() : 0.91;
+                    finalChunk.getBlock(position).registry().friction() : airDrag;
             this.velocity = newVelocity
                     // Convert from block/tick to block/sec
                     .mul(tps)

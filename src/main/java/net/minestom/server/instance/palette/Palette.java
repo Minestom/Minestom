@@ -192,6 +192,10 @@ public final class Palette implements PublicCloneable<Palette> {
         return blocks;
     }
 
+    public void setBlocks(long[] blocks) {
+        this.blocks = blocks;
+    }
+
     /**
      * Get the amount of non air blocks in this section.
      *
@@ -199,6 +203,10 @@ public final class Palette implements PublicCloneable<Palette> {
      */
     public short getBlockCount() {
         return blockCount;
+    }
+
+    public void setBlockCount(short blockCount) {
+        this.blockCount = blockCount;
     }
 
     public Short2ShortLinkedOpenHashMap getPaletteBlockMap() {

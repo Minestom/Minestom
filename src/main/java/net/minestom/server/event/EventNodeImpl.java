@@ -68,8 +68,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
     @Override
     public <E extends T> @NotNull List<EventNode<E>> findChildren(@NotNull String name, Class<E> eventType) {
-        if (children.isEmpty()) return Collections.emptyList();
         synchronized (GLOBAL_CHILD_LOCK) {
+            if (children.isEmpty()) return Collections.emptyList();
             List<EventNode<E>> result = new ArrayList<>();
             for (EventNode<T> child : children) {
                 if (equals(child, name, eventType)) {
