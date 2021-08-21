@@ -6,11 +6,13 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTList;
 import org.jglrxavpok.hephaistos.nbt.NBTType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -94,11 +96,11 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile1 = projectile;
             this.triple = false;
 
-            NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
+            List<NBTCompound> chargedProjectiles = new LinkedList<>();
             if (!projectile.isAir()) {
                 chargedProjectiles.add(getItemCompound(projectile));
             }
-            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
+            mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
 
             return this;
         }
@@ -120,12 +122,11 @@ public class CrossbowMeta extends ItemMeta implements ItemMetaBuilder.Provider<S
             this.projectile3 = projectile3;
             this.triple = true;
 
-            NBTList<NBTCompound> chargedProjectiles = new NBTList<>(NBTTypes.TAG_Compound);
-            // TODO: 'add' will fail here
+            List<NBTCompound> chargedProjectiles = new LinkedList<>();
             chargedProjectiles.add(getItemCompound(projectile1));
             chargedProjectiles.add(getItemCompound(projectile2));
             chargedProjectiles.add(getItemCompound(projectile3));
-            mutateNbt(compound -> compound.set("ChargedProjectiles", chargedProjectiles));
+            mutateNbt(compound -> compound.set("ChargedProjectiles", NBT.List(NBTType.TAG_Compound, chargedProjectiles)));
 
             return this;
         }

@@ -9,6 +9,8 @@ import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.NBTCompoundLike;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.util.*;
@@ -105,9 +107,9 @@ final class BlockImpl implements Block {
 
     @Override
     public @NotNull <T> Block withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        var temporaryNbt = nbt != null ? nbt.deepClone() : new NBTCompound();
+        var temporaryNbt = new MutableNBTCompound(nbt != null ? nbt : NBTCompound.EMPTY);
         tag.write(temporaryNbt, value);
-        final var finalNbt = temporaryNbt.getSize() > 0 ? NBT_CACHE.get(temporaryNbt, Function.identity()) : null;
+        final var finalNbt = temporaryNbt.getSize() > 0 ? NBT_CACHE.get(temporaryNbt.toCompound(), Function.identity()) : null;
         return new BlockImpl(registry, propertyEntry, properties, finalNbt, handler);
     }
 

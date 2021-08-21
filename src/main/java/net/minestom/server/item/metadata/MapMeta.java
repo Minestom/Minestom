@@ -114,14 +114,7 @@ public class MapMeta extends ItemMeta implements ItemMetaBuilder.Provider<MapMet
         public Builder mapColor(Color value) {
             this.mapColor = value;
 
-            mutateNbt(nbt -> {
-                NBTCompound displayCompound;
-                if (nbt.containsKey("display")) {
-                    displayCompound = nbt.getCompound("display");
-                } else {
-                    displayCompound = new NBTCompound();
-                    nbt.set("display", displayCompound);
-                }
+            handleCompound("display", displayCompound -> {
                 displayCompound.setInt("MapColor", mapColor.asRGB());
             });
 

@@ -20,10 +20,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.*;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 // for lack of a better name
 public final class NBTUtils {
@@ -86,27 +88,29 @@ public final class NBTUtils {
             NBTCompound tag = stack.getMeta().toNBT();
 
             // TODO: FIX, this WILL crash
+            final int slotIndex = i;
             list.add(NBT.Compound(nbt -> {
                 nbt.set("tag", tag);
-                nbt.setByte("Slot", (byte) i);
+                nbt.setByte("Slot", (byte) slotIndex);
                 nbt.setByte("Count", (byte) stack.getAmount());
                 nbt.setString("id", stack.getMaterial().name());
             }));
         }
     }
 
-    public static void writeEnchant(@NotNull NBTCompound nbt, @NotNull String listName,
+    public static void writeEnchant(@NotNull MutableNBTCompound nbt, @NotNull String listName,
                                     @NotNull Map<Enchantment, Short> enchantmentMap) {
-        NBTList<NBTCompound> enchantList = new NBTList<>(NBTTypes.TAG_Compound);
-        for (var entry : enchantmentMap.entrySet()) {
-            final Enchantment enchantment = entry.getKey();
-            final short level = entry.getValue();
-            enchantList.add(new NBTCompound()
-                    .setShort("lvl", level)
-                    .setString("id", enchantment.name())
-            );
-        }
-        nbt.set(listName, enchantList);
+        nbt.set(listName, NBT.List(
+                NBTType.TAG_Compound,
+                enchantmentMap.entrySet().stream()
+                        .map(entry ->
+                            NBT.Compound(n -> {
+                                n.setShort("lvl", entry.getValue());
+                                n.setString("id", entry.getKey().name());
+                            })
+                        )
+                        .collect(Collectors.toList())
+        ));
     }
 
     public static @NotNull ItemStack readItemStack(@NotNull BinaryReader reader) {
@@ -161,7 +165,7 @@ public final class NBTUtils {
             for (NBTCompound attributeNBT : nbtAttributes) {
                 final UUID uuid;
                 {
-                    final int[] uuidArray = attributeNBT.getIntArray("UUID");
+                    final int[] uuidArray = attributeNBT.getIntArray("UUID").copyArray();
                     uuid = Utils.intArrayToUuid(uuidArray);
                 }
 

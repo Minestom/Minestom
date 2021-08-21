@@ -51,6 +51,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
+import org.jglrxavpok.hephaistos.nbt.mutable.MutableNBTCompound;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
@@ -143,7 +144,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.addition.accept(player) : null,
             this instanceof Player player ? entity -> entity.viewEngine.viewableOption.removal.accept(player) : null);
     protected final Set<Player> viewers = viewEngine.asSet();
-    private final NBTCompound nbtCompound = new NBTCompound();
+    private final MutableNBTCompound nbtCompound = new MutableNBTCompound();
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
     protected UUID uuid;
@@ -1565,7 +1566,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     @Override
     public <T> @Nullable T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbtCompound);
+        return tag.read(nbtCompound.toCompound());
     }
 
     @Override
