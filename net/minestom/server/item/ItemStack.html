@@ -26,7 +26,7 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":9,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10};
+var data = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":9,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":9,"i17":9,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -328,12 +328,17 @@ implements <a href="../tag/TagReadable.html" title="interface in net.minestom.se
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr id="i27" class="rowColor">
+<td class="colFirst"><code>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withMeta(net.minestom.server.item.ItemMeta)">withMeta</a></span>&#8203;(@NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a>&nbsp;meta)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>&lt;T extends <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>,&#8203;U extends <a href="ItemMetaBuilder.Provider.html" title="interface in net.minestom.server.item">ItemMetaBuilder.Provider</a>&lt;T&gt;&gt;<br>@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withMeta(java.lang.Class,java.util.function.Consumer)">withMeta</a></span>&#8203;(<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;U&gt;&nbsp;metaType,
         <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/Consumer.html?is-external=true" title="class or interface in java.util.function" class="externalLink">Consumer</a>&lt;T&gt;&nbsp;metaConsumer)</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#withTag(net.minestom.server.tag.Tag,T)">withTag</a></span>&#8203;(@NotNull <a href="../tag/Tag.html" title="class in net.minestom.server.tag">Tag</a>&lt;T&gt;&nbsp;tag,
        T&nbsp;value)</code></th>
@@ -565,6 +570,20 @@ public&nbsp;&lt;T extends <a href="ItemMetaBuilder.html" title="class in net.min
 @NotNull
 public&nbsp;@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;withMeta&#8203;(@NotNull
                                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/function/UnaryOperator.html?is-external=true" title="class or interface in java.util.function" class="externalLink">UnaryOperator</a>&lt;@NotNull <a href="ItemMetaBuilder.html" title="class in net.minestom.server.item">ItemMetaBuilder</a>&gt;&nbsp;metaOperator)</pre>
+</li>
+</ul>
+<a id="withMeta(net.minestom.server.item.ItemMeta)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>withMeta</h4>
+<pre class="methodSignature">@Experimental
+@Contract(value="_ -&gt; new",
+          pure=true)
+@NotNull
+public&nbsp;@NotNull <a href="ItemStack.html" title="class in net.minestom.server.item">ItemStack</a>&nbsp;withMeta&#8203;(@NotNull
+                                   @NotNull <a href="ItemMeta.html" title="class in net.minestom.server.item">ItemMeta</a>&nbsp;meta)</pre>
 </li>
 </ul>
 <a id="getDisplayName()">
