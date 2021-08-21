@@ -114,31 +114,29 @@ public class ChunkDataPacket implements ServerPacket {
             List<NBTCompound> compounds = new ArrayList<>();
             for (var entry : entries.entrySet()) {
                 final int index = entry.getKey();
-                final var block = entry.getValue();
+                final Block block = entry.getValue();
+                final String blockEntity = block.registry().blockEntity();
+                if (blockEntity == null) continue; // Only send block entities to client
+                final NBTCompound resultNbt = new NBTCompound();
+                // Append handler tags
                 final BlockHandler handler = block.handler();
-                if (handler == null)
-                    continue;
-                final var blockEntityTags = handler.getBlockEntityTags();
-                if (blockEntityTags.isEmpty()) // Verify if the block should be sent as block entity to client
-                    continue;
-                final var blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
-                final var resultNbt = new NBTCompound();
-                for (Tag<?> tag : blockEntityTags) {
-                    final var value = tag.read(blockNbt);
-                    if (value != null) {
-                        // Tag is present and valid
-                        tag.writeUnsafe(resultNbt, value);
+                if (handler != null) {
+                    final NBTCompound blockNbt = Objects.requireNonNullElseGet(block.nbt(), NBTCompound::new);
+                    for (Tag<?> tag : handler.getBlockEntityTags()) {
+                        final var value = tag.read(blockNbt);
+                        if (value != null) {
+                            // Tag is present and valid
+                            tag.writeUnsafe(resultNbt, value);
+                        }
                     }
                 }
-
-                if (resultNbt.getSize() > 0) {
-                    final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
-                    resultNbt.setString("id", handler.getNamespaceId().asString())
-                            .setInt("x", blockPosition.blockX())
-                            .setInt("y", blockPosition.blockY())
-                            .setInt("z", blockPosition.blockZ());
-                    compounds.add(resultNbt);
-                }
+                // Add block entity
+                final var blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+                resultNbt.setString("id", blockEntity)
+                        .setInt("x", blockPosition.blockX())
+                        .setInt("y", blockPosition.blockY())
+                        .setInt("z", blockPosition.blockZ());
+                compounds.add(resultNbt);
             }
             writer.writeVarInt(compounds.size());
             compounds.forEach(nbtCompound -> writer.writeNBT("", nbtCompound));
