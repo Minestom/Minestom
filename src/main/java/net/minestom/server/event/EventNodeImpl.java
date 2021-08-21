@@ -335,13 +335,40 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
             if (!filters.isEmpty()) {
-                this.listeners.add(event -> {
-                    for (var filter : filters) {
-                        final Object handler = filter.castHandler(event);
+                final var filterList = List.copyOf(filters);
+                final int size = filterList.size();
+                if (size == 1) {
+                    final var firstFilter = filterList.get(0);
+                    this.listeners.add(event -> {
+                        // Common case where there is only one filter
+                        final Object handler = firstFilter.castHandler(event);
                         final EventNode<E> mappedNode = mappedNodeCache.get(handler);
                         if (mappedNode != null) mappedNode.call(event);
-                    }
-                });
+                    });
+                } else if (size == 2) {
+                    final var firstFilter = filterList.get(0);
+                    final var secondFilter = filterList.get(1);
+                    this.listeners.add(event -> {
+                        // First check
+                        final Object handler1 = firstFilter.castHandler(event);
+                        final EventNode<E> mappedNode1 = mappedNodeCache.get(handler1);
+                        if (mappedNode1 != null) mappedNode1.call(event);
+
+                        // Second check
+                        final Object handler2 = secondFilter.castHandler(event);
+                        final EventNode<E> mappedNode2 = mappedNodeCache.get(handler2);
+                        if (mappedNode2 != null) mappedNode2.call(event);
+                    });
+                } else {
+                    this.listeners.add(event -> {
+                        for (var filter : filterList) {
+                            final Object handler = filter.castHandler(event);
+                            final EventNode<E> mappedNode = mappedNodeCache.get(handler);
+                            if (mappedNode != null) mappedNode.call(event);
+                        }
+
+                    });
+                }
             }
         }
 
