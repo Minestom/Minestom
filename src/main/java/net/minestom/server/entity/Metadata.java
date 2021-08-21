@@ -306,7 +306,7 @@ public class Metadata {
             case TYPE_DIRECTION -> (Value<T>) Direction(Direction.DOWN);
             case TYPE_OPTUUID -> (Value<T>) OptUUID(null);
             case TYPE_OPTBLOCKID -> (Value<T>) OptBlockID(null);
-            case TYPE_NBT -> (Value<T>) NBT(new NBTEnd());
+            case TYPE_NBT -> (Value<T>) NBT(NBTEnd.INSTANCE);
             case TYPE_PARTICLE -> throw new UnsupportedOperationException();
             case TYPE_VILLAGERDATA -> (Value<T>) VillagerData(0, 0, 0);
             case TYPE_OPTVARINT -> (Value<T>) OptVarInt(null);

@@ -84,16 +84,16 @@ public final class NBTUtils {
     public static void saveAllItems(@NotNull NBTList<NBTCompound> list, @NotNull Inventory inventory) {
         for (int i = 0; i < inventory.getSize(); i++) {
             final ItemStack stack = inventory.getItemStack(i);
-            NBTCompound nbt = new NBTCompound();
 
             NBTCompound tag = stack.getMeta().toNBT();
 
-            nbt.set("tag", tag);
-            nbt.setByte("Slot", (byte) i);
-            nbt.setByte("Count", (byte) stack.getAmount());
-            nbt.setString("id", stack.getMaterial().name());
-
-            list.add(nbt);
+            // TODO: FIX, this WILL crash
+            list.add(NBT.Compound(nbt -> {
+                nbt.set("tag", tag);
+                nbt.setByte("Slot", (byte) i);
+                nbt.setByte("Count", (byte) stack.getAmount());
+                nbt.setString("id", stack.getMaterial().name());
+            }));
         }
     }
 

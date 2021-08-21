@@ -9,6 +9,7 @@ import net.minestom.server.utils.SerializerUtils;
 import net.minestom.server.utils.Utils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.CompressedProcesser;
 import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 import org.jglrxavpok.hephaistos.nbt.NBTReader;
@@ -28,7 +29,7 @@ import java.util.function.Supplier;
  */
 public class BinaryReader extends InputStream {
     private final ByteBuffer buffer;
-    private NBTReader nbtReader;
+    private NBTReader nbtReader = null;
 
     public BinaryReader(@NotNull ByteBuffer buffer) {
         this.buffer = buffer;
@@ -237,7 +238,7 @@ public class BinaryReader extends InputStream {
     public NBT readTag() throws IOException, NBTException {
         NBTReader reader = this.nbtReader;
         if (reader == null) {
-            reader = new NBTReader(this, false);
+            reader = new NBTReader(this, CompressedProcesser.NONE);
             this.nbtReader = reader;
         }
         return reader.read();

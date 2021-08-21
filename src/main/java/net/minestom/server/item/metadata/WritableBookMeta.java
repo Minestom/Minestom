@@ -6,16 +6,14 @@ import net.minestom.server.item.ItemMeta;
 import net.minestom.server.item.ItemMetaBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.nbt.NBTList;
-import org.jglrxavpok.hephaistos.nbt.NBTString;
-import org.jglrxavpok.hephaistos.nbt.NBTTypes;
+import org.jglrxavpok.hephaistos.nbt.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provider<WritableBookMeta.Builder> {
 
@@ -67,13 +65,12 @@ public class WritableBookMeta extends ItemMeta implements ItemMetaBuilder.Provid
         public Builder pages(@NotNull List<@NotNull Component> pages) {
             this.pages = new ArrayList<>(pages);
 
-            handleCollection(pages, "pages", () -> {
-                NBTList<NBTString> list = new NBTList<>(NBTTypes.TAG_String);
-                for (Component page : pages) {
-                    list.add(new NBTString(LegacyComponentSerializer.legacySection().serialize(page)));
-                }
-                return list;
-            });
+            handleCollection(pages, "pages", () -> NBT.List(
+                    NBTType.TAG_String,
+                    pages.stream()
+                            .map(page -> new NBTString(LegacyComponentSerializer.legacySection().serialize(page)))
+                            .collect(Collectors.toList())
+            ));
 
             return this;
         }

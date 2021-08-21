@@ -153,13 +153,13 @@ dependencies {
     api "org.jetbrains.kotlin:kotlin-reflect:${project.kotlinVersion}"
 
     // NBT parsing/manipulation/saving
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}:gson")
-    api("com.github.jglrxavpok:Hephaistos:${project.hephaistosVersion}") {
+    api("io.github.jglrxavpok.hephaistos:common:${project.hephaistosVersion}")
+    api("io.github.jglrxavpok.hephaistos:gson:${project.hephaistosVersion}")
+/*    api("io.github.jglrxavpok.hephaistos:common:${project.hephaistosVersion}") {
         capabilities {
-            requireCapability("org.jglrxavpok.nbt:Hephaistos-gson")
+            requireCapability("io.github.jglrxavpok.hephaistos:Hephaistos-gson")
         }
-    }
+    }*/
 
     api "com.github.Minestom:DependencyGetter:v1.0.1"
     implementation 'com.github.Minestom:MinestomDataGenerator:1131e7a842090919f2860dac7469d20a247da2dc'

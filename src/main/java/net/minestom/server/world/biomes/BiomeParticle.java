@@ -3,16 +3,18 @@ package net.minestom.server.world.biomes;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.utils.NamespaceID;
+import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 
 import java.util.Map;
 
 public record BiomeParticle(float probability, Option option) {
     public NBTCompound toNbt() {
-        NBTCompound nbt = new NBTCompound();
-        nbt.setFloat("probability", probability);
-        nbt.set("options", option.toNbt());
-        return nbt;
+        return NBT.Compound(nbt -> {
+            nbt.setFloat("probability", probability);
+            nbt.set("options", option.toNbt());
+        });
     }
 
     public interface Option {
@@ -25,16 +27,16 @@ public record BiomeParticle(float probability, Option option) {
 
         @Override
         public NBTCompound toNbt() {
-            NBTCompound nbtCompound = new NBTCompound();
-            nbtCompound.setString("type", type);
-            nbtCompound.setString("Name", block.name());
-            Map<String, String> propertiesMap = block.properties();
-            if (propertiesMap.size() != 0) {
-                NBTCompound properties = new NBTCompound();
-                propertiesMap.forEach(properties::setString);
-                nbtCompound.set("Properties", properties);
-            }
-            return nbtCompound;
+            return NBT.Compound(nbtCompound -> {
+                nbtCompound.setString("type", type);
+                nbtCompound.setString("Name", block.name());
+                Map<String, String> propertiesMap = block.properties();
+                if (propertiesMap.size() != 0) {
+                    nbtCompound.set("Properties", NBT.Compound(p -> {
+                        propertiesMap.forEach(p::setString);
+                    }));
+                }
+            });
         }
     }
 
@@ -43,13 +45,13 @@ public record BiomeParticle(float probability, Option option) {
 
         @Override
         public NBTCompound toNbt() {
-            NBTCompound nbtCompound = new NBTCompound();
-            nbtCompound.setString("type", type);
-            nbtCompound.setFloat("r", red);
-            nbtCompound.setFloat("g", green);
-            nbtCompound.setFloat("b", blue);
-            nbtCompound.setFloat("scale", scale);
-            return nbtCompound;
+            return NBT.Compound(nbtCompound -> {
+                nbtCompound.setString("type", type);
+                nbtCompound.setFloat("r", red);
+                nbtCompound.setFloat("g", green);
+                nbtCompound.setFloat("b", blue);
+                nbtCompound.setFloat("scale", scale);
+            });
         }
     }
 
@@ -60,17 +62,18 @@ public record BiomeParticle(float probability, Option option) {
         public NBTCompound toNbt() {
             //todo test count might be wrong type
             NBTCompound nbtCompound = item.getMeta().toNBT();
-            nbtCompound.setString("type", type);
-            return nbtCompound;
+            return nbtCompound.modify(n -> {
+                n.setString("type", type);
+            });
         }
     }
 
     public record NormalOption(NamespaceID type) implements Option {
         @Override
         public NBTCompound toNbt() {
-            NBTCompound nbtCompound = new NBTCompound();
-            nbtCompound.setString("type", type.toString());
-            return nbtCompound;
+            return NBT.Compound(nbt -> {
+                nbt.setString("type", type.toString());
+            });
         }
     }
 }

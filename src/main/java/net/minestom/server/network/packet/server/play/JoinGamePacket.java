@@ -9,6 +9,7 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
+import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.jglrxavpok.hephaistos.nbt.NBTException;
 
@@ -50,14 +51,13 @@ public class JoinGamePacket implements ServerPacket {
         //array of worlds
         writer.writeVarInt(1);
         writer.writeSizedString("minestom:world");
-        NBTCompound nbt = new NBTCompound();
         NBTCompound dimensions = MinecraftServer.getDimensionTypeManager().toNBT();
         NBTCompound biomes = MinecraftServer.getBiomeManager().toNBT();
 
-        nbt.set("minecraft:dimension_type", dimensions);
-        nbt.set("minecraft:worldgen/biome", biomes);
-
-        writer.writeNBT("", nbt);
+        writer.writeNBT("", NBT.Compound(nbt -> {
+            nbt.set("minecraft:dimension_type", dimensions);
+            nbt.set("minecraft:worldgen/biome", biomes);
+        }));
         writer.writeNBT("", dimensionType.toNBT());
 
         writer.writeSizedString(dimensionType.getName().toString());

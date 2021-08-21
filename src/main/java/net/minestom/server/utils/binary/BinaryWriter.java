@@ -292,7 +292,7 @@ public class BinaryWriter extends OutputStream {
 
     public void writeNBT(@NotNull String name, @NotNull NBT tag) {
         if (nbtWriter == null) {
-            this.nbtWriter = new NBTWriter(this, false);
+            this.nbtWriter = new NBTWriter(this);
         }
         try {
             nbtWriter.writeNamed(name, tag);
