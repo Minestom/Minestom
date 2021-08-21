@@ -326,8 +326,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
-                final Class<E> mappedNodeType = mappedNode.eventType;
-                if (!mappedNodeType.isAssignableFrom(eventType)) continue;
+                if (!mappedNode.eventType.isAssignableFrom(eventType)) continue;
                 if (mappedNode.listenerMap.isEmpty())
                     continue; // The mapped node does not have any listener (perhaps throw a warning?)
                 filters.add(mappedNode.filter);

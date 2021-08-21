@@ -352,9 +352,24 @@ public interface EventNode<T extends Event> {
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
 
+    /**
+     * Maps a specific object to a node.
+     * <p>
+     * Be aware that such structure have huge performance penalty as they will
+     * always require a map lookup. Use only at last resort.
+     *
+     * @param node  the node to map
+     * @param value the mapped value
+     */
     @ApiStatus.Experimental
     void map(@NotNull EventNode<? extends T> node, @NotNull Object value);
 
+    /**
+     * Undo {@link #map(EventNode, Object)}
+     *
+     * @param value the value to unmap
+     * @return true if the value has been unmapped, false if nothing happened
+     */
     @ApiStatus.Experimental
     boolean unmap(@NotNull Object value);
 
