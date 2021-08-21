@@ -311,44 +311,49 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         }
 
         private void recursiveUpdate(EventNodeImpl<E> targetNode) {
-            final var handleType = eventType;
             // Standalone listeners
-            forTargetEvents(handleType, type -> {
+            forTargetEvents(eventType, type -> {
                 ListenerEntry<E> entry = targetNode.listenerMap.get(type);
                 if (entry != null) appendEntries(listeners, entry, targetNode);
             });
             // Mapped nodes
-            {
-                final var mappedNodeCache = targetNode.mappedNodeCache;
-                Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
-                // Retrieve all filters used to retrieve potential handlers
-                for (var mappedEntry : mappedNodeCache.entrySet()) {
-                    var mappedNode = mappedEntry.getValue();
-                    if (!mappedNode.eventType.isAssignableFrom(handleType)) continue;
-                    forTargetEvents(handleType, type -> {
-                        if (!mappedNode.listenerMap.containsKey(type)) return; // No normal listener to this handle type
-                        filters.add(mappedNode.filter);
-                    });
-                }
-                // If at least one mapped node listen to this handle type,
-                // loop through them and forward to mapped node if there is a match
-                if (!filters.isEmpty()) {
-                    this.listeners.add(event -> {
-                        for (var filter : filters) {
-                            final Object handler = filter.castHandler(event);
-                            final EventNode<E> mappedNode = mappedNodeCache.get(handler);
-                            if (mappedNode != null) mappedNode.call(event);
-                        }
-                    });
-                }
-            }
+            handleMappedNode(targetNode);
             // Add children
             final var children = targetNode.children;
             if (children.isEmpty()) return;
             children.stream()
-                    .filter(child -> child.eventType.isAssignableFrom(handleType)) // Invalid event type
+                    .filter(child -> child.eventType.isAssignableFrom(eventType)) // Invalid event type
                     .sorted(Comparator.comparing(EventNode::getPriority))
                     .forEach(this::recursiveUpdate);
+        }
+
+        private void handleMappedNode(EventNodeImpl<E> targetNode) {
+            final var mappedNodeCache = targetNode.mappedNodeCache;
+            if (mappedNodeCache.isEmpty()) return;
+            Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
+            // Retrieve all filters used to retrieve potential handlers
+            for (var mappedEntry : mappedNodeCache.entrySet()) {
+                final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
+                if (!mappedNode.eventType.isAssignableFrom(eventType)) continue;
+                final var mappedListeners = mappedNode.listenerMap;
+                if (mappedListeners.isEmpty())
+                    continue; // The mapped node does not have any listener (perhaps throw a warning?)
+                forTargetEvents(eventType, type -> {
+                    if (!mappedListeners.containsKey(type)) return; // No normal listener to this handle type
+                    filters.add(mappedNode.filter);
+                });
+            }
+            // If at least one mapped node listen to this handle type,
+            // loop through them and forward to mapped node if there is a match
+            if (!filters.isEmpty()) {
+                this.listeners.add(event -> {
+                    for (var filter : filters) {
+                        final Object handler = filter.castHandler(event);
+                        final EventNode<E> mappedNode = mappedNodeCache.get(handler);
+                        if (mappedNode != null) mappedNode.call(event);
+                    }
+                });
+            }
         }
 
         static <E extends Event> void appendEntries(List<Consumer<E>> handleListeners, ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
@@ -369,7 +374,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 }
             }
             // Bindings
-            handleListeners.addAll(entry.bindingConsumers);
+            final var bindingConsumers = entry.bindingConsumers;
+            if (!bindingConsumers.isEmpty()) { // Ensure no array clone
+                handleListeners.addAll(bindingConsumers);
+            }
         }
 
         static <E extends Event> void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
