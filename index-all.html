@@ -1738,11 +1738,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Constructs the BlockIterator.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/block/BlockIterator.html#%3Cinit%3E(net.minestom.server.entity.LivingEntity)">BlockIterator(LivingEntity)</a></span> - Constructor for class net.minestom.server.utils.block.<a href="net/minestom/server/utils/block/BlockIterator.html" title="class in net.minestom.server.utils.block">BlockIterator</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/block/BlockIterator.html#%3Cinit%3E(net.minestom.server.entity.Entity)">BlockIterator(Entity)</a></span> - Constructor for class net.minestom.server.utils.block.<a href="net/minestom/server/utils/block/BlockIterator.html" title="class in net.minestom.server.utils.block">BlockIterator</a></dt>
 <dd>
 <div class="block">Constructs the BlockIterator.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/utils/block/BlockIterator.html#%3Cinit%3E(net.minestom.server.entity.LivingEntity,int)">BlockIterator(LivingEntity, int)</a></span> - Constructor for class net.minestom.server.utils.block.<a href="net/minestom/server/utils/block/BlockIterator.html" title="class in net.minestom.server.utils.block">BlockIterator</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/utils/block/BlockIterator.html#%3Cinit%3E(net.minestom.server.entity.Entity,int)">BlockIterator(Entity, int)</a></span> - Constructor for class net.minestom.server.utils.block.<a href="net/minestom/server/utils/block/BlockIterator.html" title="class in net.minestom.server.utils.block">BlockIterator</a></dt>
 <dd>
 <div class="block">Constructs the BlockIterator.</div>
 </dd>
@@ -8065,9 +8065,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Gets a <a href="net/minestom/server/scoreboard/Sidebar.ScoreboardLine.html" title="class in net.minestom.server.scoreboard"><code>Sidebar.ScoreboardLine</code></a> through the given identifier</div>
 </dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/LivingEntity.html#getLineOfSight(int)">getLineOfSight(int)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#getLineOfSight(int)">getLineOfSight(int)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>
 <div class="block">Gets the line of sight of the entity.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#getLineOfSightEntity(double,java.util.function.Predicate)">getLineOfSightEntity(double, Predicate&lt;Entity&gt;)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
+<dd>
+<div class="block">Gets first entity on the line of sight of the current one that matches the given predicate.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/scoreboard/Sidebar.html#getLines()">getLines()</a></span> - Method in class net.minestom.server.scoreboard.<a href="net/minestom/server/scoreboard/Sidebar.html" title="class in net.minestom.server.scoreboard">Sidebar</a></dt>
 <dd>
@@ -8415,6 +8419,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/permission/Permission.html#getNBTData()">getNBTData()</a></span> - Method in class net.minestom.server.permission.<a href="net/minestom/server/permission/Permission.html" title="class in net.minestom.server.permission">Permission</a></dt>
 <dd>
 <div class="block">Gets the data associated to this permission.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/instance/Instance.html#getNearbyEntities(net.minestom.server.coordinate.Point,double)">getNearbyEntities(Point, double)</a></span> - Method in class net.minestom.server.instance.<a href="net/minestom/server/instance/Instance.html" title="class in net.minestom.server.instance">Instance</a></dt>
+<dd>
+<div class="block">Gets nearby entities to the given position.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/inventory/InventoryCloseEvent.html#getNewInventory()">getNewInventory()</a></span> - Method in class net.minestom.server.event.inventory.<a href="net/minestom/server/event/inventory/InventoryCloseEvent.html" title="class in net.minestom.server.event.inventory">InventoryCloseEvent</a></dt>
 <dd>
@@ -10249,7 +10257,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/data/SerializableDataImpl.html#hasKey(java.lang.String)">hasKey(String)</a></span> - Method in class net.minestom.server.data.<a href="net/minestom/server/data/SerializableDataImpl.html" title="class in net.minestom.server.data">SerializableDataImpl</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/entity/LivingEntity.html#hasLineOfSight(net.minestom.server.entity.Entity)">hasLineOfSight(Entity)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></dt>
+<dt><span class="memberNameLink"><a href="net/minestom/server/entity/Entity.html#hasLineOfSight(net.minestom.server.entity.Entity)">hasLineOfSight(Entity)</a></span> - Method in class net.minestom.server.entity.<a href="net/minestom/server/entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></dt>
 <dd>
 <div class="block">Checks whether the current entity has line of sight to the given one.</div>
 </dd>
@@ -10735,13 +10743,25 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/coordinate/Vec.html#interpolate(net.minestom.server.coordinate.Vec,double,net.minestom.server.coordinate.Vec.Interpolation)">interpolate(Vec, double, Vec.Interpolation)</a></span> - Method in class net.minestom.server.coordinate.<a href="net/minestom/server/coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/collision/BoundingBox.html#intersect(double,double,double)">intersect(double, double, double)</a></span> - Method in class net.minestom.server.collision.<a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Used to know if the bounding box intersects (contains) a point.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/collision/BoundingBox.html#intersect(double,double,double,double,double,double)">intersect(double, double, double, double, double, double)</a></span> - Method in class net.minestom.server.collision.<a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></dt>
+<dd>
+<div class="block">Used to know if the bounding box intersects a line segment.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/collision/BoundingBox.html#intersect(net.minestom.server.collision.BoundingBox)">intersect(BoundingBox)</a></span> - Method in class net.minestom.server.collision.<a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></dt>
 <dd>
 <div class="block">Used to know if two <a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersect with each other.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/collision/BoundingBox.html#intersect(net.minestom.server.coordinate.Point)">intersect(Point)</a></span> - Method in class net.minestom.server.collision.<a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Used to know if the bounding box intersects (contains) a point.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/collision/BoundingBox.html#intersect(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)">intersect(Point, Point)</a></span> - Method in class net.minestom.server.collision.<a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></dt>
+<dd>
+<div class="block">Used to know if the bounding box intersects a line segment.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/collision/BoundingBox.html#intersect(net.minestom.server.entity.Entity)">intersect(Entity)</a></span> - Method in class net.minestom.server.collision.<a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></dt>
 <dd>
 <div class="block">Used to know if this <a href="net/minestom/server/collision/BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> intersects with the bounding box of an entity.</div>
