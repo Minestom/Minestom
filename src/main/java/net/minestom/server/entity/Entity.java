@@ -465,6 +465,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private void velocityTick() {
         final boolean isSocketClient = PlayerUtils.isSocketClient(this);
         if (isSocketClient) {
+            if (position.samePoint(previousPosition))
+                return; // Didn't move since last tick
             // Calculate velocity from client
             velocity = position.sub(previousPosition).asVec().mul(MinecraftServer.TICK_PER_SECOND);
             previousPosition = position;

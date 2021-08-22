@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.CancellableEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class EventDispatcher {
+public final class EventDispatcher {
 
     public static void call(@NotNull Event event) {
         MinecraftServer.getGlobalEventHandler().call(event);
