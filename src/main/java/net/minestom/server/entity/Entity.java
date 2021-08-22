@@ -124,7 +124,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
     // Tick related
     private long ticks;
-    private final EntityTickEvent tickEvent = new EntityTickEvent(this);
 
     private final Acquirable<Entity> acquirable = Acquirable.of(this);
 
@@ -438,33 +437,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             velocityTick();
 
             // handle block contacts
-            // TODO do not call every tick (it is pretty expensive)
-            final int minX = (int) Math.floor(boundingBox.getMinX());
-            final int maxX = (int) Math.ceil(boundingBox.getMaxX());
-            final int minY = (int) Math.floor(boundingBox.getMinY());
-            final int maxY = (int) Math.ceil(boundingBox.getMaxY());
-            final int minZ = (int) Math.floor(boundingBox.getMinZ());
-            final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
-            for (int y = minY; y <= maxY; y++) {
-                for (int x = minX; x <= maxX; x++) {
-                    for (int z = minZ; z <= maxZ; z++) {
-                        final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
-                        if (!ChunkUtils.isLoaded(chunk))
-                            continue;
-                        final Block block = chunk.getBlock(x, y, z, BlockGetter.Condition.CACHED);
-                        if (block == null)
-                            continue;
-                        final BlockHandler handler = block.handler();
-                        if (handler != null) {
-                            // checks that we are actually in the block, and not just here because of a rounding error
-                            if (boundingBox.intersectWithBlock(x, y, z)) {
-                                // TODO: replace with check with custom block bounding box
-                                handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
-                            }
-                        }
-                    }
-                }
-            }
+            touchTick();
 
             handleVoid();
 
@@ -472,7 +445,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             update(time);
 
             ticks++;
-            EventDispatcher.call(tickEvent); // reuse tickEvent to avoid recreating it each tick
+            EventDispatcher.call(new EntityTickEvent(this));
 
             // remove expired effects
             if (!effects.isEmpty()) {
@@ -575,6 +548,36 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         // Verify if velocity packet has to be sent
         if (hasVelocity || gravityTickCount > 0) {
             sendPacketToViewers(getVelocityPacket());
+        }
+    }
+
+    private void touchTick() {
+        // TODO do not call every tick (it is pretty expensive)
+        final int minX = (int) Math.floor(boundingBox.getMinX());
+        final int maxX = (int) Math.ceil(boundingBox.getMaxX());
+        final int minY = (int) Math.floor(boundingBox.getMinY());
+        final int maxY = (int) Math.ceil(boundingBox.getMaxY());
+        final int minZ = (int) Math.floor(boundingBox.getMinZ());
+        final int maxZ = (int) Math.ceil(boundingBox.getMaxZ());
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    final Chunk chunk = ChunkUtils.retrieve(instance, currentChunk, x, z);
+                    if (!ChunkUtils.isLoaded(chunk))
+                        continue;
+                    final Block block = chunk.getBlock(x, y, z, BlockGetter.Condition.CACHED);
+                    if (block == null)
+                        continue;
+                    final BlockHandler handler = block.handler();
+                    if (handler != null) {
+                        // checks that we are actually in the block, and not just here because of a rounding error
+                        if (boundingBox.intersectWithBlock(x, y, z)) {
+                            // TODO: replace with check with custom block bounding box
+                            handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
+                        }
+                    }
+                }
+            }
         }
     }
 
