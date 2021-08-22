@@ -17,7 +17,7 @@ import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFInstanceSpace;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.ListenerHandle;
+import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
@@ -61,8 +61,6 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
 
     protected static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
     protected static final UpdateManager UPDATE_MANAGER = MinecraftServer.getUpdateManager();
-
-    private static final ListenerHandle<InstanceTickEvent> INSTANCE_TICK_HANDLER = EventDispatcher.getHandle(InstanceTickEvent.class);
 
     private boolean registered;
 
@@ -708,7 +706,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         // Tick event
         {
             // Process tick events
-            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge), INSTANCE_TICK_HANDLER);
+            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge), GlobalHandles.INSTANCE_TICK);
             // Set last tick age
             this.lastTickAge = time;
         }

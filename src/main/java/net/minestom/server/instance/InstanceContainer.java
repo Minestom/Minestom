@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -273,7 +274,7 @@ public class InstanceContainer extends Instance {
                 // cache the retrieved chunk (in the next instance tick for thread-safety)
                 .whenComplete((chunk, throwable) -> scheduleNextTick(instance -> {
                     cacheChunk(chunk);
-                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
+                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ), GlobalHandles.INSTANCE_CHUNK_LOAD);
                     synchronized (loadingChunks) {
                         this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
                     }

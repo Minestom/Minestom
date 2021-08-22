@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.pathfinding.PFColumnarSpace;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
 import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.block.Block;
@@ -279,7 +280,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
 
         if (result) {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-            EventDispatcher.call(playerChunkLoadEvent);
+            EventDispatcher.call(playerChunkLoadEvent, GlobalHandles.PLAYER_CHUNK_LOAD);
         }
 
         return result;
