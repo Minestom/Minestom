@@ -18,7 +18,8 @@ import java.util.regex.Pattern;
 public class ArgumentNumber<T extends Number> extends Argument<T> {
 
     public static final int NOT_NUMBER_ERROR = 1;
-    public static final int RANGE_ERROR = 2;
+    public static final int TOO_LOW_ERROR = 2;
+    public static final int TOO_HIGH_ERROR = 3;
 
     protected boolean hasMin, hasMax;
     protected T min, max;
@@ -53,10 +54,10 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
 
             // Check range
             if (hasMin && comparator.compare(value, min) < 0) {
-                throw new ArgumentSyntaxException("Input is lower than the minimum required value", input, RANGE_ERROR);
+                throw new ArgumentSyntaxException("Input is lower than the minimum allowed value", input, TOO_LOW_ERROR);
             }
             if (hasMax && comparator.compare(value, max) > 0) {
-                throw new ArgumentSyntaxException("Input is higher than the minimum required value", input, RANGE_ERROR);
+                throw new ArgumentSyntaxException("Input is higher than the maximum allowed value", input, TOO_HIGH_ERROR);
             }
 
             return value;
