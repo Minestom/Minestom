@@ -271,15 +271,16 @@ public class InstanceContainer extends Instance {
         final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
                 // create the chunk from scratch (with the generator) if the loader couldn't
                 .thenCompose(chunk -> chunk != null ? CompletableFuture.completedFuture(chunk) : createChunk(chunkX, chunkZ))
-                // cache the retrieved chunk (in the next instance tick for thread-safety)
-                .whenComplete((chunk, throwable) -> scheduleNextTick(instance -> {
+                // cache the retrieved chunk
+                .whenComplete((chunk, throwable) -> {
+                    // TODO run in the instance thread?
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ), GlobalHandles.INSTANCE_CHUNK_LOAD);
                     synchronized (loadingChunks) {
                         this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
                     }
                     completableFuture.complete(chunk);
-                }));
+                });
         if (loader.supportsParallelLoading()) {
             CompletableFuture.runAsync(retriever);
         } else {
