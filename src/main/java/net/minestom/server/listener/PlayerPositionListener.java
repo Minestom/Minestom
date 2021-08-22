@@ -3,6 +3,7 @@ package net.minestom.server.listener;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
@@ -10,6 +11,8 @@ import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 public class PlayerPositionListener {
+
+    private static final ListenerHandle<PlayerMoveEvent> PLAYER_MOVE_HANDLER = EventDispatcher.getHandle(PlayerMoveEvent.class);
 
     public static void playerPacketListener(ClientPlayerPacket packet, Player player) {
         player.refreshOnGround(packet.onGround);
@@ -53,7 +56,7 @@ public class PlayerPositionListener {
         }
 
         PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, newPosition);
-        EventDispatcher.call(playerMoveEvent);
+        EventDispatcher.call(playerMoveEvent, PLAYER_MOVE_HANDLER);
         // True if the event call changed the player position (possibly a teleport)
         if (!playerMoveEvent.isCancelled() && currentPosition.equals(player.getPosition())) {
             // Move the player

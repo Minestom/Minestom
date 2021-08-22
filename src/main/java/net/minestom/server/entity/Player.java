@@ -32,6 +32,7 @@ import net.minestom.server.entity.fakeplayer.FakePlayer;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.ItemUpdateStateEvent;
@@ -97,6 +98,8 @@ import java.util.function.UnaryOperator;
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
 public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
+
+    private static final ListenerHandle<PlayerTickEvent> PLAYER_TICK_HANDLER = EventDispatcher.getHandle(PlayerTickEvent.class);
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -165,9 +168,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Vehicle
     private final PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
-
-    // Tick related
-    private final PlayerTickEvent playerTickEvent = new PlayerTickEvent(this);
 
     // Adventure
     private Identity identity;
@@ -353,7 +353,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Tick event
-        EventDispatcher.call(playerTickEvent);
+        EventDispatcher.call(new PlayerTickEvent(this), PLAYER_TICK_HANDLER);
     }
 
     @Override

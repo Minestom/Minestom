@@ -3,6 +3,7 @@ package net.minestom.server.listener.manager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.network.ConnectionManager;
@@ -22,6 +23,8 @@ public final class PacketListenerManager {
 
     public final static Logger LOGGER = LoggerFactory.getLogger(PacketListenerManager.class);
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
+
+    private static final ListenerHandle<PlayerPacketEvent> PLAYER_PACKET_HANDLER = EventDispatcher.getHandle(PlayerPacketEvent.class);
 
     private final Map<Class<? extends ClientPlayPacket>, PacketListenerConsumer> listeners = new ConcurrentHashMap<>();
 
@@ -89,7 +92,7 @@ public final class PacketListenerManager {
 
         // Event
         PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
-        EventDispatcher.call(playerPacketEvent);
+        EventDispatcher.call(playerPacketEvent, PLAYER_PACKET_HANDLER);
         if (playerPacketEvent.isCancelled()) {
             return;
         }

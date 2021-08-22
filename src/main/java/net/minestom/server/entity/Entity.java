@@ -16,6 +16,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.entity.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -63,6 +64,8 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     private static final Map<Integer, Entity> ENTITY_BY_ID = new ConcurrentHashMap<>();
     private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
+
+    private static final ListenerHandle<EntityTickEvent> ENTITY_TICK_HANDLER = EventDispatcher.getHandle(EntityTickEvent.class);
 
     protected Instance instance;
     protected Chunk currentChunk;
@@ -445,7 +448,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             update(time);
 
             ticks++;
-            EventDispatcher.call(new EntityTickEvent(this));
+            EventDispatcher.call(new EntityTickEvent(this), ENTITY_TICK_HANDLER);
 
             // remove expired effects
             effectTick(time);

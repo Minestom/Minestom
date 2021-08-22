@@ -10,6 +10,14 @@ public class EventDispatcher {
         MinecraftServer.getGlobalEventHandler().call(event);
     }
 
+    public static <E extends Event> void call(@NotNull E event, @NotNull ListenerHandle<E> handle) {
+        MinecraftServer.getGlobalEventHandler().call(event, handle);
+    }
+
+    public static <E extends Event> ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
+        return MinecraftServer.getGlobalEventHandler().getHandle(handleType);
+    }
+
     public static void callCancellable(@NotNull CancellableEvent event, @NotNull Runnable successCallback) {
         MinecraftServer.getGlobalEventHandler().callCancellable(event, successCallback);
     }
