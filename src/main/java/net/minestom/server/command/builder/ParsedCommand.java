@@ -7,6 +7,8 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 /**
  * Represents a {@link Command} ready to be executed (already parsed).
  */
@@ -35,10 +37,9 @@ public class ParsedCommand {
      * @param source the command source
      * @return the command data, null if none
      */
-    @Nullable
-    public CommandData execute(@NotNull CommandSender source) {
+    public @Nullable CommandData execute(@NotNull CommandSender source) {
         // Global listener
-        command.globalListener(source, context, commandString);
+        command.globalListener(source, Objects.requireNonNullElseGet(context, () -> new CommandContext(commandString)), commandString);
         // Command condition check
         final CommandCondition condition = command.getCondition();
         if (condition != null) {
@@ -83,8 +84,7 @@ public class ParsedCommand {
         return context.getReturnData();
     }
 
-    @NotNull
-    public static ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
+    public static @NotNull ParsedCommand withDefaultExecutor(@NotNull Command command, @NotNull String input) {
         ParsedCommand parsedCommand = new ParsedCommand();
         parsedCommand.command = command;
         parsedCommand.commandString = input;
@@ -92,5 +92,4 @@ public class ParsedCommand {
         parsedCommand.context = new CommandContext(input);
         return parsedCommand;
     }
-
 }
