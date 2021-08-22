@@ -4,7 +4,7 @@ import net.minestom.server.command.builder.NodeMaker;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.packet.server.play.DeclareCommandsPacket;
-import net.minestom.server.utils.math.FloatRange;
+import net.minestom.server.utils.math.Range;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.BiFunction;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * @param <T> the type of the range
  */
-public abstract class ArgumentRange<T, N extends Number> extends Argument<T> {
+public abstract class ArgumentRange<T extends Range<N>, N extends Number> extends Argument<T> {
 
     public static final int FORMAT_ERROR = -1;
     private final N min;
@@ -25,7 +25,7 @@ public abstract class ArgumentRange<T, N extends Number> extends Argument<T> {
     private final String parserName;
     private final BiFunction<N, N, T> rangeConstructor;
 
-    public ArgumentRange(@NotNull String id, N min, N max, Function<String, N> parser, String parserName, BiFunction<N, N, T> rangeConstructor) {
+    public ArgumentRange(@NotNull String id, String parserName, N min, N max, Function<String, N> parser, BiFunction<N, N, T> rangeConstructor) {
         super(id);
         this.min = min;
         this.max = max;

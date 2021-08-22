@@ -10,7 +10,7 @@ import net.minestom.server.utils.math.IntRange;
 public class ArgumentIntRange extends ArgumentRange<IntRange, Integer> {
 
     public ArgumentIntRange(String id) {
-        super(id, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer::parseInt, "minecraft:int_range", IntRange::new);
+        super(id, "minecraft:int_range", Integer.MIN_VALUE, Integer.MAX_VALUE, Integer::parseInt, IntRange::new);
     }
 
     @Override
