@@ -383,7 +383,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 return;
             }
 
-            // Worth case scenario, try to run everything
+            // Worse case scenario, try to run everything
             this.listeners.add(e -> {
                 if (hasPredicate) {
                     final var value = filter.getHandler(e);
