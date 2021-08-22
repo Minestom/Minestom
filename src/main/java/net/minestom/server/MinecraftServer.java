@@ -118,7 +118,7 @@ public final class MinecraftServer {
     // Data
     private static boolean initialized;
     private static boolean started;
-    private static boolean stopping;
+    private static volatile boolean stopping;
 
     private static int chunkViewDistance = 8;
     private static int entityViewDistance = 5;
@@ -709,6 +709,7 @@ public final class MinecraftServer {
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
     public static void stopCleanly() {
+        if (stopping) return;
         stopping = true;
         LOGGER.info("Stopping Minestom server.");
         extensionManager.unloadAllExtensions();
