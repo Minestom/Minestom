@@ -2143,9 +2143,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventDispatcher.html#call(net.minestom.server.event.Event)">call(Event)</a></span> - Static method in class net.minestom.server.event.<a href="net/minestom/server/event/EventDispatcher.html" title="class in net.minestom.server.event">EventDispatcher</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#call(E,net.minestom.server.event.ListenerHandle)">call(E, ListenerHandle&lt;E&gt;)</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
+<dd>
+<div class="block">Calls an event starting from this node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#call(T)">call(T)</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
 <dd>
-<div class="block">Executes the given event on this node.</div>
+<div class="block">Calls an event starting from this node.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/ParsedCommand.html#callback">callback</a></span> - Variable in class net.minestom.server.command.builder.<a href="net/minestom/server/command/builder/ParsedCommand.html" title="class in net.minestom.server.command.builder">ParsedCommand</a></dt>
 <dd>&nbsp;</dd>
@@ -5026,6 +5030,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">The event type to filter on.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/EventListener.html#eventType()">eventType()</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventListener.html" title="interface in net.minestom.server.event">EventListener</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventBinding.html#eventTypes()">eventTypes()</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventBinding.html" title="interface in net.minestom.server.event">EventBinding</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="net/minestom/server/entity/metadata/other/EvokerFangsMeta.html" title="class in net.minestom.server.entity.metadata.other"><span class="typeNameLink">EvokerFangsMeta</span></a> - Class in <a href="net/minestom/server/entity/metadata/other/package-summary.html">net.minestom.server.entity.metadata.other</a></dt>
@@ -7105,8 +7111,6 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/extensions/Extension.html#getEventNode()">getEventNode()</a></span> - Method in class net.minestom.server.extensions.<a href="net/minestom/server/extensions/Extension.html" title="class in net.minestom.server.extensions">Extension</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="net/minestom/server/event/EventListener.html#getEventType()">getEventType()</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventListener.html" title="interface in net.minestom.server.event">EventListener</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#getEventType()">getEventType()</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/exception/ExceptionManager.html#getExceptionHandler()">getExceptionHandler()</a></span> - Method in class net.minestom.server.exception.<a href="net/minestom/server/exception/ExceptionManager.html" title="class in net.minestom.server.exception">ExceptionManager</a></dt>
@@ -7371,6 +7375,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/instance/block/BlockHandler.Interaction.html#getHand()">getHand()</a></span> - Method in class net.minestom.server.instance.block.<a href="net/minestom/server/instance/block/BlockHandler.Interaction.html" title="class in net.minestom.server.instance.block">BlockHandler.Interaction</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#getHandle(java.lang.Class)">getHandle(Class&lt;E&gt;)</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
+<dd>
+<div class="block">Gets the handle of an event type.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/acquirable/Acquirable.html#getHandler()">getHandler()</a></span> - Method in interface net.minestom.server.acquirable.<a href="net/minestom/server/acquirable/Acquirable.html" title="interface in net.minestom.server.acquirable">Acquirable</a></dt>
 <dd>
 <div class="block">Gets the <a href="net/minestom/server/acquirable/Acquirable.Handler.html" title="class in net.minestom.server.acquirable"><code>Acquirable.Handler</code></a> of this acquirable element,
@@ -10232,6 +10240,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>
 <div class="block">Checks whether the current entity has line of sight to the given one.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#hasListener(net.minestom.server.event.ListenerHandle)">hasListener(ListenerHandle&lt;? extends T&gt;)</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
+<dd>
+<div class="block">Gets if any listener has been registered for the given handle.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/number/ArgumentNumber.html#hasMax">hasMax</a></span> - Variable in class net.minestom.server.command.builder.arguments.number.<a href="net/minestom/server/command/builder/arguments/number/ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/number/ArgumentNumber.html#hasMax()">hasMax()</a></span> - Method in class net.minestom.server.command.builder.arguments.number.<a href="net/minestom/server/command/builder/arguments/number/ArgumentNumber.html" title="class in net.minestom.server.command.builder.arguments.number">ArgumentNumber</a></dt>
@@ -12050,6 +12062,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/listener/TabCompleteListener.html#listener(net.minestom.server.network.packet.client.play.ClientTabCompletePacket,net.minestom.server.entity.Player)">listener(ClientTabCompletePacket, Player)</a></span> - Static method in class net.minestom.server.listener.<a href="net/minestom/server/listener/TabCompleteListener.html" title="class in net.minestom.server.listener">TabCompleteListener</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/event/ListenerHandle.html" title="interface in net.minestom.server.event"><span class="typeNameLink">ListenerHandle</span></a>&lt;<a href="net/minestom/server/event/ListenerHandle.html" title="type parameter in ListenerHandle">E</a> extends <a href="net/minestom/server/event/Event.html" title="interface in net.minestom.server.event">Event</a>&gt; - Interface in <a href="net/minestom/server/event/package-summary.html">net.minestom.server.event</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/command/builder/arguments/ArgumentType.html#Literal(java.lang.String)">Literal(String)</a></span> - Static method in class net.minestom.server.command.builder.arguments.<a href="net/minestom/server/command/builder/arguments/ArgumentType.html" title="class in net.minestom.server.command.builder.arguments">ArgumentType</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/DeclareCommandsPacket.NodeType.html#LITERAL">LITERAL</a></span> - net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/DeclareCommandsPacket.NodeType.html" title="enum in net.minestom.server.network.packet.server.play">DeclareCommandsPacket.NodeType</a></dt>
@@ -12354,7 +12368,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/tag/Tag.html#map(java.util.function.Function,java.util.function.Function)">map(Function&lt;T, R&gt;, Function&lt;R, T&gt;)</a></span> - Method in class net.minestom.server.tag.<a href="net/minestom/server/tag/Tag.html" title="class in net.minestom.server.tag">Tag</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)">map(EventNode&lt;? extends T&gt;, Object)</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Maps a specific object to a node.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/extras/query/response/QueryKey.html#MAP">MAP</a></span> - net.minestom.server.extras.query.response.<a href="net/minestom/server/extras/query/response/QueryKey.html" title="enum in net.minestom.server.extras.query.response">QueryKey</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/ServerPacketIdentifier.html#MAP_DATA">MAP_DATA</a></span> - Static variable in class net.minestom.server.network.packet.server.<a href="net/minestom/server/network/packet/server/ServerPacketIdentifier.html" title="class in net.minestom.server.network.packet.server">ServerPacketIdentifier</a></dt>
@@ -16123,6 +16139,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <dt><span class="memberNameLink"><a href="net/minestom/server/recipe/Recipe.html#recipeType">recipeType</a></span> - Variable in class net.minestom.server.recipe.<a href="net/minestom/server/recipe/Recipe.html" title="class in net.minestom.server.recipe">Recipe</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/network/packet/server/play/ExplosionPacket.html#records">records</a></span> - Variable in class net.minestom.server.network.packet.server.play.<a href="net/minestom/server/network/packet/server/play/ExplosionPacket.html" title="class in net.minestom.server.network.packet.server.play">ExplosionPacket</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="net/minestom/server/event/trait/RecursiveEvent.html" title="interface in net.minestom.server.event.trait"><span class="typeNameLink">RecursiveEvent</span></a> - Interface in <a href="net/minestom/server/event/trait/package-summary.html">net.minestom.server.event.trait</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/color/Color.html#red()">red()</a></span> - Method in class net.minestom.server.color.<a href="net/minestom/server/color/Color.html" title="class in net.minestom.server.color">Color</a></dt>
 <dd>&nbsp;</dd>
@@ -21083,7 +21101,9 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">Default constructor, required for reflection operations.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/event/EventNode.html#unmap(java.lang.Object)">unmap(Object)</a></span> - Method in interface net.minestom.server.event.<a href="net/minestom/server/event/EventNode.html" title="interface in net.minestom.server.event">EventNode</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Undo <a href="net/minestom/server/event/EventNode.html#map(net.minestom.server.event.EventNode,java.lang.Object)"><code>EventNode.map(EventNode, Object)</code></a></div>
+</dd>
 <dt><span class="memberNameLink"><a href="net/minestom/server/world/biomes/BiomeManager.html#unmodifiableCollection()">unmodifiableCollection()</a></span> - Method in class net.minestom.server.world.biomes.<a href="net/minestom/server/world/biomes/BiomeManager.html" title="class in net.minestom.server.world.biomes">BiomeManager</a></dt>
 <dd>
 <div class="block">Returns an immutable copy of the biomes already registered.</div>
