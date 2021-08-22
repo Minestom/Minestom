@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.trait.RecursiveEvent;
 import net.minestom.server.utils.validate.Check;
@@ -322,17 +321,14 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var mappedNodeCache = targetNode.mappedNodeCache;
             if (mappedNodeCache.isEmpty()) return;
             Set<EventFilter<E, ?>> filters = new HashSet<>(mappedNodeCache.size());
-            Map<Object, Pair<EventNode<E>, ListenerHandle<E>>> handlers = new HashMap<>(mappedNodeCache.size());
+            Map<Object, Handle<E>> handlers = new HashMap<>(mappedNodeCache.size());
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
-                if (!mappedNode.eventType.isAssignableFrom(eventType)) continue;
-                final var listenerMap = mappedNode.listenerMap;
-                if (listenerMap.isEmpty())
-                    continue; // The mapped node does not have any listener (perhaps throw a warning?)
-                if (!listenerMap.containsKey(eventType)) continue;
+                final var handle = (Handle<E>) mappedNode.getHandle(eventType);
+                if (!mappedNode.hasListener(handle)) continue; // Implicit update
                 filters.add(mappedNode.filter);
-                handlers.put(mappedEntry.getKey(), Pair.of(mappedNode, mappedNode.getHandle(eventType)));
+                handlers.put(mappedEntry.getKey(), handle);
             }
             // If at least one mapped node listen to this handle type,
             // loop through them and forward to mapped node if there is a match
@@ -341,8 +337,13 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 final int size = filterList.size();
                 final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                     final Object handler = filter.castHandler(event);
-                    final var mapResult = handlers.get(handler);
-                    if (mapResult != null) mapResult.first().call(event, mapResult.second());
+                    final var handle = handlers.get(handler);
+                    if (handle != null) {
+                        if (!handle.updated) handle.update();
+                        for (Consumer<E> listener : handle.listeners) {
+                            listener.accept(event);
+                        }
+                    }
                 };
                 if (size == 1) {
                     final var firstFilter = filterList.get(0);
