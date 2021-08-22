@@ -138,6 +138,8 @@ public class BoundingBox {
      * @return true if the bounding box intersects with the line segment, false otherwise.
      */
     public boolean intersect(double x1, double y1, double z1, double x2, double y2, double z2) {
+        // originally from http://www.3dkingdoms.com/weekly/weekly.php?a=3
+
         double x3 = getMinX();
         double x4 = getMaxX();
         double y3 = getMinY();
@@ -152,12 +154,12 @@ public class BoundingBox {
             z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
             return false;
         }
-        return isInsideBoxWithAxis(1, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(1, getSegmentIntersection(x1 - x4, x2 - x4, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(2, getSegmentIntersection(y1 - y3, y2 - y3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(2, getSegmentIntersection(y1 - y4, y2 - y4, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(3, getSegmentIntersection(z1 - z3, z2 - z3, x1, y1, z1, x2, y2, z2)) ||
-                isInsideBoxWithAxis(3, getSegmentIntersection(z1 - z4, z2 - z4, x1, y1, z1, x2, y2, z2));
+        return isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.X, getSegmentIntersection(x1 - x4, x2 - x4, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y3, y2 - y3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Y, getSegmentIntersection(y1 - y4, y2 - y4, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z3, z2 - z3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(Axis.Z, getSegmentIntersection(z1 - z4, z2 - z4, x1, y1, z1, x2, y2, z2));
     }
 
     /**
@@ -190,7 +192,7 @@ public class BoundingBox {
         );
     }
 
-    private boolean isInsideBoxWithAxis(int axis, @Nullable Vec intersection) {
+    private boolean isInsideBoxWithAxis(Axis axis, @Nullable Vec intersection) {
         if (intersection == null) {
             return false;
         }
@@ -200,9 +202,9 @@ public class BoundingBox {
         double y2 = getMaxY();
         double z1 = getMinZ();
         double z2 = getMaxZ();
-        return axis == 1 && intersection.z() > z1 && intersection.z() < z2 && intersection.y() > y1 && intersection.y() < y2 ||
-                axis == 2 && intersection.z() > z1 && intersection.z() < z2 && intersection.x() > x1 && intersection.x() < x2 ||
-                axis == 3 && intersection.x() > x1 && intersection.x() < x2 && intersection.y() > y1 && intersection.y() < y2;
+        return axis == Axis.X && intersection.z() > z1 && intersection.z() < z2 && intersection.y() > y1 && intersection.y() < y2 ||
+                axis == Axis.Y && intersection.z() > z1 && intersection.z() < z2 && intersection.x() > x1 && intersection.x() < x2 ||
+                axis == Axis.Z && intersection.x() > x1 && intersection.x() < x2 && intersection.y() > y1 && intersection.y() < y2;
     }
 
     /**
@@ -417,4 +419,9 @@ public class BoundingBox {
         this.lastPosition = entityPos;
         return vecSupplier.get();
     }
+
+    private enum Axis {
+        X, Y, Z
+    }
+
 }

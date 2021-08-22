@@ -489,6 +489,32 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         return Collections.unmodifiableSet(entities);
     }
 
+    /**
+     * Gets nearby entities to the given position.
+     *
+     * @param point position to look at
+     * @param range max range from the given point to collect entities at
+     * @return entities that are not further than the specified distance from the transmitted position.
+     */
+    public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
+        int minX = ChunkUtils.getChunkCoordinate(point.x() - range);
+        int maxX = ChunkUtils.getChunkCoordinate(point.x() + range);
+        int minZ = ChunkUtils.getChunkCoordinate(point.z() - range);
+        int maxZ = ChunkUtils.getChunkCoordinate(point.z() + range);
+        List<Entity> result = new ArrayList<>();
+        synchronized (entitiesLock) {
+            for (int x = minX; x <= maxX; ++x) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    Chunk chunk = getChunk(x, z);
+                    if (chunk != null) {
+                        result.addAll(getChunkEntities(chunk));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     @Override
     public @Nullable Block getBlock(int x, int y, int z, @NotNull Condition condition) {
         final Chunk chunk = getChunkAt(x, z);

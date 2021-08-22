@@ -1455,26 +1455,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
         }
     }
 
-    public Collection<Entity> getNearbyEntities(double range) {
-        Instance instance = getInstance();
-        if (instance == null) {
-            return Collections.emptySet();
-        }
-        int minX = ChunkUtils.getChunkCoordinate(position.x() - range);
-        int maxX = ChunkUtils.getChunkCoordinate(position.x() + range);
-        int minZ = ChunkUtils.getChunkCoordinate(position.z() - range);
-        int maxZ = ChunkUtils.getChunkCoordinate(position.z() + range);
-        List<Entity> result = new ArrayList<>();
-        for (int x = minX; x <= maxX; ++x) {
-            for (int z = minZ; z <= maxZ; ++z) {
-                Chunk chunk = instance.getChunk(x, z);
-                if (chunk != null) {
-                    result.addAll(instance.getChunkEntities(chunk));
-                }
-            }
-        }
-        return result;
-    }
+
 
     /**
      * Gets the line of sight of the entity.
@@ -1483,11 +1464,16 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return A list of {@link Point poiints} in this entities line of sight
      */
     public List<Point> getLineOfSight(int maxDistance) {
+        Instance instance = getInstance();
+        if (instance == null) {
+            return Collections.emptyList();
+        }
+
         List<Point> blocks = new ArrayList<>();
-        Iterator<Point> it = new BlockIterator(this, maxDistance);
+        var it = new BlockIterator(this, maxDistance);
         while (it.hasNext()) {
             final Point position = it.next();
-            if (!getInstance().getBlock(position).isAir()) blocks.add(position);
+            if (!instance.getBlock(position).isAir()) blocks.add(position);
         }
         return blocks;
     }
@@ -1501,14 +1487,19 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * @return if the current entity has line of sight to the given one.
      */
     public boolean hasLineOfSight(Entity entity) {
-        final var start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
-        final var end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
-        final var direction = end.sub(start);
+        Instance instance = getInstance();
+        if (instance == null) {
+            return false;
+        }
+
+        final Vec start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final Vec end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final Vec direction = end.sub(start);
         final int maxDistance = (int) Math.ceil(direction.length());
 
-        Iterator<Point> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        var it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (it.hasNext()) {
-            Block block = getInstance().getBlock(it.next());
+            Block block = instance.getBlock(it.next());
             if (!block.isAir() && !block.isLiquid()) {
                 return false;
             }
@@ -1520,34 +1511,32 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      * Gets first entity on the line of sight of the current one that matches the given predicate.
      *
      * @param range max length of the line of sight of the current entity to be checked.
-     * @param predicate optional predicate, defaults to "accept any".
+     * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
-    public @Nullable Entity getLineOfSightEntity(double range, @Nullable Predicate<Entity> predicate) {
-        var instance = getInstance();
+    public @Nullable Entity getLineOfSightEntity(double range, Predicate<Entity> predicate) {
+        Instance instance = getInstance();
         if (instance == null) {
             return null;
         }
 
-        var start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
-        var end = start.add(position.direction().mul(range));
+        Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
+        Vec end = start.add(position.direction().mul(range));
 
-        var finalPredicate = Objects.requireNonNullElseGet(predicate, () -> e -> true);
-
-        var nearby = getNearbyEntities(range).stream()
-                .filter(e -> e != this && e.boundingBox.intersect(start, end) && finalPredicate.test(e))
+        List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
+                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e))
                 .collect(Collectors.toList());
         if (nearby.isEmpty()) {
             return null;
         }
 
-        var direction = end.sub(start);
+        Vec direction = end.sub(start);
         int maxDistance = (int) Math.ceil(direction.length());
         double maxVisibleDistanceSquared = direction.lengthSquared();
 
-        Iterator<Point> iterator = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        var iterator = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
         while (iterator.hasNext()) {
-            var blockPos = iterator.next();
+            Point blockPos = iterator.next();
             Block block = instance.getBlock(blockPos);
             if (!block.isAir() && !block.isLiquid()) {
                 maxVisibleDistanceSquared = blockPos.distanceSquared(position);
@@ -1557,7 +1546,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
 
         Entity result = null;
         double minDistanceSquared = 0D;
-        for (var entity : nearby) {
+        for (Entity entity : nearby) {
             double distanceSquared = entity.getDistanceSquared(this);
             if (result == null || minDistanceSquared > distanceSquared) {
                 result = entity;
