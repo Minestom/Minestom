@@ -44,8 +44,7 @@ public class ParsedCommand {
         final CommandCondition condition = command.getCondition();
         if (condition != null) {
             final boolean result = condition.canUse(source, commandString);
-            if (!result)
-                return null;
+            if (!result) return null;
         }
         // Condition is respected
         if (executor != null) {
@@ -58,16 +57,16 @@ public class ParsedCommand {
                     context.retrieveDefaultValues(syntax.getDefaultValuesMap());
                     try {
                         executor.apply(source, context);
-                    } catch (Exception exception) {
-                        MinecraftServer.getExceptionManager().handleException(exception);
+                    } catch (Throwable throwable) {
+                        MinecraftServer.getExceptionManager().handleException(throwable);
                     }
                 }
             } else {
                 // The executor is probably the default one
                 try {
                     executor.apply(source, context);
-                } catch (Exception exception) {
-                    MinecraftServer.getExceptionManager().handleException(exception);
+                } catch (Throwable throwable) {
+                    MinecraftServer.getExceptionManager().handleException(throwable);
                 }
             }
         } else if (callback != null && argumentSyntaxException != null) {

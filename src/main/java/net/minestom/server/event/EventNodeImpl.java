@@ -397,7 +397,12 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             this.listeners.add(e -> {
                 if (hasPredicate) {
                     final Object value = filter.getHandler(e);
-                    if (!predicate.test(e, value)) return;
+                    try {
+                        if (!predicate.test(e, value)) return;
+                    } catch (Throwable t) {
+                        MinecraftServer.getExceptionManager().handleException(t);
+                        return;
+                    }
                 }
                 if (!listenersCopy.isEmpty()) {
                     for (EventListener<E> listener : listenersCopy) {
@@ -406,7 +411,11 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 }
                 if (!bindingsCopy.isEmpty()) {
                     for (Consumer<E> eConsumer : bindingsCopy) {
-                        eConsumer.accept(e);
+                        try {
+                            eConsumer.accept(e);
+                        } catch (Throwable t) {
+                            MinecraftServer.getExceptionManager().handleException(t);
+                        }
                     }
                 }
             });
@@ -416,9 +425,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventListener.Result result;
             try {
                 result = listener.run(event);
-            } catch (Exception e) {
+            } catch (Throwable t) {
                 result = EventListener.Result.EXCEPTION;
-                MinecraftServer.getExceptionManager().handleException(e);
+                MinecraftServer.getExceptionManager().handleException(t);
             }
             if (result == EventListener.Result.EXPIRED) {
                 targetNode.removeListener(listener);
