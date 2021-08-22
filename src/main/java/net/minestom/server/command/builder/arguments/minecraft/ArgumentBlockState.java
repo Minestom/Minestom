@@ -13,6 +13,7 @@ public class ArgumentBlockState extends Argument<Block> {
     public static final int NO_BLOCK = 1;
     public static final int INVALID_BLOCK = 2;
     public static final int INVALID_PROPERTY = 3;
+    public static final int INVALID_PROPERTY_VALUE = 4;
 
     public ArgumentBlockState(@NotNull String id) {
         super(id, true, false);
@@ -58,7 +59,11 @@ public class ArgumentBlockState extends Argument<Block> {
             // Compute properties
             final String query = input.substring(nbtIndex);
             final var propertyMap = BlockUtils.parseProperties(query);
-            return block.withProperties(propertyMap);
+            try {
+                return block.withProperties(propertyMap);
+            } catch (IllegalArgumentException e) {
+                throw new ArgumentSyntaxException("Invalid property values", input, INVALID_PROPERTY_VALUE);
+            }
         }
     }
 
