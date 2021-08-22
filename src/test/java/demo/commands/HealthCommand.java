@@ -45,7 +45,8 @@ public class HealthCommand extends Command {
             case ArgumentNumber.NOT_NUMBER_ERROR:
                 sender.sendMessage(Component.text("SYNTAX ERROR: '" + input + "' isn't a number!"));
                 break;
-            case ArgumentNumber.RANGE_ERROR:
+            case ArgumentNumber.TOO_LOW_ERROR:
+            case ArgumentNumber.TOO_HIGH_ERROR:
                 sender.sendMessage(Component.text("SYNTAX ERROR: " + input + " is not between 0 and 100"));
                 break;
         }
