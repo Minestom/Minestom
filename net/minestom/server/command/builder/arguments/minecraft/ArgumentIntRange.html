@@ -26,8 +26,8 @@
     catch(err) {
     }
 //-->
-var data = {"i0":10,"i1":10,"i2":41,"i3":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
+var data = {"i0":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -125,7 +125,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">net.minestom.server.command.builder.arguments.Argument</a>&lt;T&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">net.minestom.server.command.builder.arguments.minecraft.ArgumentRange</a>&lt;<a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&gt;</li>
+<li><a href="ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">net.minestom.server.command.builder.arguments.minecraft.ArgumentRange</a>&lt;<a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>net.minestom.server.command.builder.arguments.minecraft.ArgumentIntRange</li>
@@ -141,7 +141,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <hr>
 <pre>public class <span class="typeNameLabel">ArgumentIntRange</span>
-extends <a href="ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentRange</a>&lt;<a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&gt;</pre>
+extends <a href="ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentRange</a>&lt;<a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>,&#8203;<a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Integer.html?is-external=true" title="class or interface in java.lang" class="externalLink">Integer</a>&gt;</pre>
 <div class="block">Represents an argument which will give you an <a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math"><code>IntRange</code></a>.
  <p>
  Example: ..3, 3.., 5..10, 15</div>
@@ -204,43 +204,25 @@ extends <a href="ArgumentRange.html" title="class in net.minestom.server.command
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t6" class="tableTab"><span><a href="javascript:show(32);">Deprecated Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colSecond" scope="col">Method</th>
 <th class="colLast" scope="col">Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>@NotNull <a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#parse(java.lang.String)">parse</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)</code></th>
-<td class="colLast">
-<div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
- if the input cannot be converted to <code>T</code></div>
-</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></span>&#8203;(@NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
-            boolean&nbsp;executable)</code></th>
-<td class="colLast">
-<div class="block">Turns the argument into a list of nodes for command dispatching.</div>
-</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>static @NotNull <a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#staticParse(java.lang.String)">staticParse</a></span>&#8203;(@NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)</code></th>
-<td class="colLast">
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)"><code>Argument.parse(Argument)</code></a></div>
-</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toString()">toString</a></span>()</code></th>
 <td class="colLast">&nbsp;</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.builder.arguments.minecraft.ArgumentRange">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;net.minestom.server.command.builder.arguments.minecraft.<a href="ArgumentRange.html" title="class in net.minestom.server.command.builder.arguments.minecraft">ArgumentRange</a></h3>
+<code><a href="ArgumentRange.html#parse(java.lang.String)">parse</a>, <a href="ArgumentRange.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a id="methods.inherited.from.class.net.minestom.server.command.builder.arguments.Argument">
 <!--   -->
@@ -290,71 +272,6 @@ extends <a href="ArgumentRange.html" title="class in net.minestom.server.command
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a id="parse(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>parse</h4>
-<pre class="methodSignature">@NotNull
-public&nbsp;@NotNull <a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&nbsp;parse&#8203;(@NotNull
-                               @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)
-                        throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#parse(java.lang.String)">Argument</a></code></span></div>
-<div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
- if the input cannot be converted to <code>T</code></div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#parse(java.lang.String)">parse</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>input</code> - the argument to parse</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the parsed argument</dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code> - if <code>value</code> is not valid</dd>
-</dl>
-</li>
-</ul>
-<a id="staticParse(java.lang.String)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>staticParse</h4>
-<pre class="methodSignature"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Deprecated.html?is-external=true" title="class or interface in java.lang" class="externalLink">@Deprecated</a>
-@NotNull
-public static&nbsp;@NotNull <a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&nbsp;staticParse&#8203;(@NotNull
-                                            @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/String.html?is-external=true" title="class or interface in java.lang" class="externalLink">String</a>&nbsp;input)
-                                     throws <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></pre>
-<div class="deprecationBlock"><span class="deprecatedLabel">Deprecated.</span>
-<div class="deprecationComment">use <a href="../Argument.html#parse(net.minestom.server.command.builder.arguments.Argument)"><code>Argument.parse(Argument)</code></a></div>
-</div>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception">ArgumentSyntaxException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a id="processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>processNodes</h4>
-<pre class="methodSignature">public&nbsp;void&nbsp;processNodes&#8203;(@NotNull
-                         @NotNull <a href="../../NodeMaker.html" title="class in net.minestom.server.command.builder">NodeMaker</a>&nbsp;nodeMaker,
-                         boolean&nbsp;executable)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">Argument</a></code></span></div>
-<div class="block">Turns the argument into a list of nodes for command dispatching. Make sure to set the Node's parser.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../Argument.html#processNodes(net.minestom.server.command.builder.NodeMaker,boolean)">processNodes</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="../../../../utils/math/IntRange.html" title="class in net.minestom.server.utils.math">IntRange</a>&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>nodeMaker</code> - helper object used to create and modify nodes</dd>
-<dd><code>executable</code> - true if this will be the last argument, false otherwise</dd>
-</dl>
-</li>
-</ul>
 <a id="toString()">
 <!--   -->
 </a>
