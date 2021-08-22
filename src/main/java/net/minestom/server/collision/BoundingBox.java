@@ -102,14 +102,107 @@ public class BoundingBox {
         return intersectWithBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ());
     }
 
+    /**
+     * Used to know if the bounding box intersects (contains) a point.
+     *
+     * @param x x-coord of a point
+     * @param y y-coord of a point
+     * @param z z-coord of a point
+     * @return true if the bounding box intersects (contains) with the point, false otherwise
+     */
     public boolean intersect(double x, double y, double z) {
         return (x >= getMinX() && x <= getMaxX()) &&
                 (y >= getMinY() && y <= getMaxY()) &&
                 (z >= getMinZ() && z <= getMaxZ());
     }
 
+    /**
+     * Used to know if the bounding box intersects (contains) a point.
+     *
+     * @param point the point to check
+     * @return true if the bounding box intersects (contains) with the point, false otherwise
+     */
     public boolean intersect(@NotNull Point point) {
         return intersect(point.x(), point.y(), point.z());
+    }
+
+    /**
+     * Used to know if the bounding box intersects a line segment.
+     *
+     * @param x1 x-coord of first line segment point
+     * @param y1 y-coord of first line segment point
+     * @param z1 z-coord of first line segment point
+     * @param x2 x-coord of second line segment point
+     * @param y2 y-coord of second line segment point
+     * @param z2 z-coord of second line segment point
+     * @return true if the bounding box intersects with the line segment, false otherwise.
+     */
+    public boolean intersect(double x1, double y1, double z1, double x2, double y2, double z2) {
+        double x3 = getMinX();
+        double x4 = getMaxX();
+        double y3 = getMinY();
+        double y4 = getMaxY();
+        double z3 = getMinZ();
+        double z4 = getMaxZ();
+        if (x1 > x3 && x1 < x4 && y1 > y3 && y1 < y4 && z1 > z3 && z1 < z4) {
+            return true;
+        }
+        if (x1 < x3 && x2 < x3 || x1 > x4 && x2 > x4 ||
+            y1 < y3 && y2 < y3 || y1 > y4 && y2 > y4 ||
+            z1 < z3 && z2 < z3 || z1 > z4 && z2 > z4) {
+            return false;
+        }
+        return isInsideBoxWithAxis(1, getSegmentIntersection(x1 - x3, x2 - x3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(1, getSegmentIntersection(x1 - x4, x2 - x4, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(2, getSegmentIntersection(y1 - y3, y2 - y3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(2, getSegmentIntersection(y1 - y4, y2 - y4, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(3, getSegmentIntersection(z1 - z3, z2 - z3, x1, y1, z1, x2, y2, z2)) ||
+                isInsideBoxWithAxis(3, getSegmentIntersection(z1 - z4, z2 - z4, x1, y1, z1, x2, y2, z2));
+    }
+
+    /**
+     * Used to know if the bounding box intersects a line segment.
+     *
+     * @param start first line segment point
+     * @param end second line segment point
+     * @return true if the bounding box intersects with the line segment, false otherwise.
+     */
+    public boolean intersect(@NotNull Point start, @NotNull Point end) {
+        return intersect(
+                Math.min(start.x(), end.x()),
+                Math.min(start.y(), end.y()),
+                Math.min(start.z(), end.z()),
+                Math.max(start.x(), end.x()),
+                Math.max(start.y(), end.y()),
+                Math.max(start.z(), end.z())
+        );
+    }
+
+    private @Nullable Vec getSegmentIntersection(double dst1, double dst2, double x1, double y1, double z1, double x2, double y2, double z2) {
+        if (dst1 == dst2 || dst1 * dst2 >= 0D) {
+            return null;
+        }
+        double delta = dst1 / (dst1 - dst2);
+        return new Vec(
+                x1 + (x2 - x1) * delta,
+                y1 + (y2 - y1) * delta,
+                z1 + (z2 - z1) * delta
+        );
+    }
+
+    private boolean isInsideBoxWithAxis(int axis, @Nullable Vec intersection) {
+        if (intersection == null) {
+            return false;
+        }
+        double x1 = getMinX();
+        double x2 = getMaxX();
+        double y1 = getMinY();
+        double y2 = getMaxY();
+        double z1 = getMinZ();
+        double z2 = getMaxZ();
+        return axis == 1 && intersection.z() > z1 && intersection.z() < z2 && intersection.y() > y1 && intersection.y() < y2 ||
+                axis == 2 && intersection.z() > z1 && intersection.z() < z2 && intersection.x() > x1 && intersection.x() < x2 ||
+                axis == 3 && intersection.x() > x1 && intersection.x() < x2 && intersection.y() > y1 && intersection.y() < y2;
     }
 
     /**
