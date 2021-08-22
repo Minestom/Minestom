@@ -309,7 +309,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Mapped nodes
             handleMappedNode(targetNode);
             // Add children
-            final var children = targetNode.children;
+            final Set<EventNodeImpl<E>> children = targetNode.children;
             if (children.isEmpty()) return;
             children.stream()
                     .filter(child -> child.eventType.isAssignableFrom(eventType)) // Invalid event type
@@ -317,6 +317,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                     .forEach(this::recursiveUpdate);
         }
 
+        /**
+         * Add the node's listeners from {@link EventNode#map(EventNode, Object)}.
+         * The goal is to limit the amount of map lookup.
+         */
         private void handleMappedNode(EventNodeImpl<E> targetNode) {
             final var mappedNodeCache = targetNode.mappedNodeCache;
             if (mappedNodeCache.isEmpty()) return;
@@ -325,7 +329,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
-                final var handle = (Handle<E>) mappedNode.getHandle(eventType);
+                final Handle<E> handle = (Handle<E>) mappedNode.getHandle(eventType);
                 if (!mappedNode.hasListener(handle)) continue; // Implicit update
                 filters.add(mappedNode.filter);
                 handlers.put(mappedEntry.getKey(), handle);
@@ -337,8 +341,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 final int size = filterList.size();
                 final BiConsumer<EventFilter<E, ?>, E> mapper = (filter, event) -> {
                     final Object handler = filter.castHandler(event);
-                    final var handle = handlers.get(handler);
-                    if (handle != null) {
+                    final Handle<E> handle = handlers.get(handler);
+                    if (handle != null) { // Run the listeners of the mapped node
                         if (!handle.updated) handle.update();
                         for (Consumer<E> listener : handle.listeners) {
                             listener.accept(event);
@@ -366,13 +370,19 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
         }
 
+        /**
+         * Add listeners from {@link EventNode#addListener(EventListener)} and
+         * {@link EventNode#register(EventBinding)} to the handle list.
+         * <p>
+         * Most computation should ideally be done outside the consumers as a one-time cost.
+         */
         private void appendEntries(ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
             final var filter = targetNode.filter;
             final var predicate = targetNode.predicate;
 
             final boolean hasPredicate = predicate != null;
-            final var listenersCopy = List.copyOf(entry.listeners);
-            final var bindingsCopy = List.copyOf(entry.bindingConsumers);
+            final List<EventListener<E>> listenersCopy = List.copyOf(entry.listeners);
+            final List<Consumer<E>> bindingsCopy = List.copyOf(entry.bindingConsumers);
             if (!hasPredicate && listenersCopy.isEmpty() && bindingsCopy.isEmpty())
                 return; // Nothing to run
 
@@ -386,7 +396,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             // Worse case scenario, try to run everything
             this.listeners.add(e -> {
                 if (hasPredicate) {
-                    final var value = filter.getHandler(e);
+                    final Object value = filter.getHandler(e);
                     if (!predicate.test(e, value)) return;
                 }
                 if (!listenersCopy.isEmpty()) {
