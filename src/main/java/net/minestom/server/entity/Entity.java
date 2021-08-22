@@ -448,19 +448,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             EventDispatcher.call(new EntityTickEvent(this));
 
             // remove expired effects
-            if (!effects.isEmpty()) {
-                this.effects.removeIf(timedPotion -> {
-                    final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
-                    // Remove if the potion should be expired
-                    if (time >= timedPotion.getStartingTime() + potionTime) {
-                        // Send the packet that the potion should no longer be applied
-                        timedPotion.getPotion().sendRemovePacket(this);
-                        EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
-                        return true;
-                    }
-                    return false;
-                });
-            }
+            effectTick(time);
         }
         // Scheduled synchronization
         if (!Cooldown.hasCooldown(time, lastAbsoluteSynchronizationTime, getSynchronizationCooldown())) {
@@ -579,6 +567,22 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                 }
             }
         }
+    }
+
+    private void effectTick(long time) {
+        final List<TimedPotion> effects = this.effects;
+        if (effects.isEmpty()) return;
+        effects.removeIf(timedPotion -> {
+            final long potionTime = (long) timedPotion.getPotion().getDuration() * MinecraftServer.TICK_MS;
+            // Remove if the potion should be expired
+            if (time >= timedPotion.getStartingTime() + potionTime) {
+                // Send the packet that the potion should no longer be applied
+                timedPotion.getPotion().sendRemovePacket(this);
+                EventDispatcher.call(new EntityPotionRemoveEvent(this, timedPotion.getPotion()));
+                return true;
+            }
+            return false;
+        });
     }
 
     /**
