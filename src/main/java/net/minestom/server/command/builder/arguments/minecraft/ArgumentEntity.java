@@ -245,7 +245,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "level":
                 try {
-                    final IntRange level = ArgumentIntRange.staticParse(value);
+                    final IntRange level = Argument.parse(new ArgumentIntRange(value));
                     entityFinder.setLevel(level);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
@@ -253,7 +253,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "distance":
                 try {
-                    final IntRange distance = ArgumentIntRange.staticParse(value);
+                    final IntRange distance = Argument.parse(new ArgumentIntRange(value));
                     entityFinder.setDistance(distance);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
