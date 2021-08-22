@@ -700,6 +700,9 @@ public final class MinecraftServer {
         if (terminalEnabled) {
             MinestomTerminal.start();
         }
+
+        // Stop the server on SIGINT
+        Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
     }
 
     /**
