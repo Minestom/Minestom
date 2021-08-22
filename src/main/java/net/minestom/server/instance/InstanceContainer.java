@@ -49,6 +49,7 @@ public class InstanceContainer extends Instance {
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectMap<Chunk> chunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<CompletableFuture<Chunk>> loadingChunks = new Long2ObjectOpenHashMap<>();
 
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
@@ -259,6 +260,12 @@ public class InstanceContainer extends Instance {
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
+        synchronized (loadingChunks) {
+            final long index = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+            CompletableFuture<Chunk> loadingChunk = loadingChunks.get(index);
+            if (loadingChunk != null) return loadingChunk;
+            this.loadingChunks.put(index, completableFuture);
+        }
         final IChunkLoader loader = chunkLoader;
         final Runnable retriever = () -> loader.loadChunk(this, chunkX, chunkZ)
                 // create the chunk from scratch (with the generator) if the loader couldn't
@@ -267,6 +274,9 @@ public class InstanceContainer extends Instance {
                 .whenComplete((chunk, throwable) -> scheduleNextTick(instance -> {
                     cacheChunk(chunk);
                     EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
+                    synchronized (loadingChunks) {
+                        this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
+                    }
                     completableFuture.complete(chunk);
                 }));
         if (loader.supportsParallelLoading()) {
