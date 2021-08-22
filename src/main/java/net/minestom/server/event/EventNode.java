@@ -182,15 +182,49 @@ public interface EventNode<T extends Event> {
     }
 
     /**
-     * Executes the given event on this node. The event must pass all conditions before
-     * it will be forwarded to the listeners.
-     * <p>
-     * Calling an event on a node will execute all child nodes, however, an event may be
-     * called anywhere on the event graph and it will propagate down from there only.
+     * Calls an event starting from this node.
      *
-     * @param event the event to execute
+     * @param event the event to call
      */
-    void call(@NotNull T event);
+    default void call(@NotNull T event) {
+        //noinspection unchecked
+        call(event, getHandle((Class<T>) event.getClass()));
+    }
+
+    /**
+     * Calls an event starting from this node.
+     * <p>
+     * The event handle can be retrieved using {@link #getHandle(Class)}
+     * and is useful to avoid map lookups for high-frequency events.
+     *
+     * @param event  the event to call
+     * @param handle the event handle linked to this node
+     * @param <E>    the event type
+     * @throws IllegalArgumentException if {@param handle}'s owner is not {@code this}
+     */
+    <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle);
+
+    /**
+     * Gets the handle of an event type.
+     *
+     * @param handleType the handle type
+     * @param <E>        the event type
+     * @return the handle linked to {@param handleType}
+     */
+    <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
+
+    /**
+     * Gets if any listener has been registered for the given handle.
+     * May trigger an update if the cached data is not correct.
+     * <p>
+     * Useful if you are able to avoid expensive computation in the case where
+     * the event is unused. Be aware that {@link #call(Event, ListenerHandle)}
+     * has similar optimization built-in.
+     *
+     * @param handle the listener handle
+     * @return true if the event has 1 or more listeners
+     */
+    boolean hasListener(@NotNull ListenerHandle<? extends T> handle);
 
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.
@@ -318,9 +352,24 @@ public interface EventNode<T extends Event> {
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
 
+    /**
+     * Maps a specific object to a node.
+     * <p>
+     * Be aware that such structure have huge performance penalty as they will
+     * always require a map lookup. Use only at last resort.
+     *
+     * @param node  the node to map
+     * @param value the mapped value
+     */
     @ApiStatus.Experimental
     void map(@NotNull EventNode<? extends T> node, @NotNull Object value);
 
+    /**
+     * Undo {@link #map(EventNode, Object)}
+     *
+     * @param value the value to unmap
+     * @return true if the value has been unmapped, false if nothing happened
+     */
     @ApiStatus.Experimental
     boolean unmap(@NotNull Object value);
 

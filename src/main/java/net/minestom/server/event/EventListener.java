@@ -19,7 +19,7 @@ import java.util.function.Predicate;
  */
 public interface EventListener<T extends Event> {
 
-    @NotNull Class<T> getEventType();
+    @NotNull Class<T> eventType();
 
     @NotNull Result run(@NotNull T event);
 
@@ -122,7 +122,7 @@ public interface EventListener<T extends Event> {
             final var handler = this.handler;
             return new EventListener<>() {
                 @Override
-                public @NotNull Class<T> getEventType() {
+                public @NotNull Class<T> eventType() {
                     return eventType;
                 }
 
