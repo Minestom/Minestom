@@ -327,8 +327,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
                 if (!mappedNode.eventType.isAssignableFrom(eventType)) continue;
-                if (mappedNode.listenerMap.isEmpty())
+                final var listenerMap = mappedNode.listenerMap;
+                if (listenerMap.isEmpty())
                     continue; // The mapped node does not have any listener (perhaps throw a warning?)
+                if (!listenerMap.containsKey(eventType)) continue;
                 filters.add(mappedNode.filter);
                 handlers.put(mappedEntry.getKey(), Pair.of(mappedNode, mappedNode.getHandle(eventType)));
             }
@@ -366,25 +368,37 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         private void appendEntries(ListenerEntry<E> entry, EventNodeImpl<E> targetNode) {
             final var filter = targetNode.filter;
             final var predicate = targetNode.predicate;
-            // Normal listeners
-            for (var listener : entry.listeners) {
-                if (predicate != null) {
-                    // Ensure that the event is valid before running
-                    this.listeners.add(e -> {
-                        final var value = filter.getHandler(e);
-                        if (!predicate.test(e, value)) return;
-                        callListener(targetNode, listener, e);
-                    });
-                } else {
-                    // No predicate, run directly
-                    this.listeners.add(e -> callListener(targetNode, listener, e));
+
+            final boolean hasPredicate = predicate != null;
+            final var listenersCopy = List.copyOf(entry.listeners);
+            final var bindingsCopy = List.copyOf(entry.bindingConsumers);
+            if (!hasPredicate && listenersCopy.isEmpty() && bindingsCopy.isEmpty())
+                return; // Nothing to run
+
+            if (!hasPredicate && bindingsCopy.isEmpty() && listenersCopy.size() == 1) {
+                // Only one normal listener
+                final EventListener<E> listener = listenersCopy.get(0);
+                this.listeners.add(e -> callListener(targetNode, listener, e));
+                return;
+            }
+
+            // Worth case scenario, try to run everything
+            this.listeners.add(e -> {
+                if (hasPredicate) {
+                    final var value = filter.getHandler(e);
+                    if (!predicate.test(e, value)) return;
                 }
-            }
-            // Bindings
-            final var bindingConsumers = entry.bindingConsumers;
-            if (!bindingConsumers.isEmpty()) { // Ensure no array clone
-                this.listeners.addAll(bindingConsumers);
-            }
+                if (!listenersCopy.isEmpty()) {
+                    for (EventListener<E> listener : listenersCopy) {
+                        callListener(targetNode, listener, e);
+                    }
+                }
+                if (!bindingsCopy.isEmpty()) {
+                    for (Consumer<E> eConsumer : bindingsCopy) {
+                        eConsumer.accept(e);
+                    }
+                }
+            });
         }
 
         static <E extends Event> void callListener(EventNodeImpl<E> targetNode, EventListener<E> listener, E event) {
