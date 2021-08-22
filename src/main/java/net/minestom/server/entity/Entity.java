@@ -35,6 +35,7 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.player.PlayerUtils;
@@ -52,7 +53,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * Could be a player, a monster, or an object.
@@ -1449,6 +1452,111 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
                     onGround ? Math.min(.4d, velocity.y() / 2d + strength) * MinecraftServer.TICK_PER_SECOND : velocity.y(),
                     velocity.z() / 2d - velocityModifier.z()
             ));
+        }
+    }
+
+
+
+    /**
+     * Gets the line of sight of the entity.
+     *
+     * @param maxDistance The max distance to scan
+     * @return A list of {@link Point poiints} in this entities line of sight
+     */
+    public List<Point> getLineOfSight(int maxDistance) {
+        Instance instance = getInstance();
+        if (instance == null) {
+            return Collections.emptyList();
+        }
+
+        List<Point> blocks = new ArrayList<>();
+        var it = new BlockIterator(this, maxDistance);
+        while (it.hasNext()) {
+            final Point position = it.next();
+            if (!instance.getBlock(position).isAir()) blocks.add(position);
+        }
+        return blocks;
+    }
+
+    /**
+     * Checks whether the current entity has line of sight to the given one.
+     * If so, it doesn't mean that the given entity is IN line of sight of the current,
+     * but the current one can rotate so that it will be true.
+     *
+     * @param entity the entity to be checked.
+     * @return if the current entity has line of sight to the given one.
+     */
+    public boolean hasLineOfSight(Entity entity) {
+        Instance instance = getInstance();
+        if (instance == null) {
+            return false;
+        }
+
+        final Vec start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final Vec end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
+        final Vec direction = end.sub(start);
+        final int maxDistance = (int) Math.ceil(direction.length());
+
+        var it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        while (it.hasNext()) {
+            Block block = instance.getBlock(it.next());
+            if (!block.isAir() && !block.isLiquid()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Gets first entity on the line of sight of the current one that matches the given predicate.
+     *
+     * @param range max length of the line of sight of the current entity to be checked.
+     * @param predicate optional predicate
+     * @return resulting entity whether there're any, null otherwise.
+     */
+    public @Nullable Entity getLineOfSightEntity(double range, Predicate<Entity> predicate) {
+        Instance instance = getInstance();
+        if (instance == null) {
+            return null;
+        }
+
+        Vec start = new Vec(position.x(), position.y() + getEyeHeight(), position.z());
+        Vec end = start.add(position.direction().mul(range));
+
+        List<Entity> nearby = instance.getNearbyEntities(position, range).stream()
+                .filter(e -> e != this && e.boundingBox.intersect(start, end) && predicate.test(e))
+                .collect(Collectors.toList());
+        if (nearby.isEmpty()) {
+            return null;
+        }
+
+        Vec direction = end.sub(start);
+        int maxDistance = (int) Math.ceil(direction.length());
+        double maxVisibleDistanceSquared = direction.lengthSquared();
+
+        var iterator = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
+        while (iterator.hasNext()) {
+            Point blockPos = iterator.next();
+            Block block = instance.getBlock(blockPos);
+            if (!block.isAir() && !block.isLiquid()) {
+                maxVisibleDistanceSquared = blockPos.distanceSquared(position);
+                break;
+            }
+        }
+
+        Entity result = null;
+        double minDistanceSquared = 0D;
+        for (Entity entity : nearby) {
+            double distanceSquared = entity.getDistanceSquared(this);
+            if (result == null || minDistanceSquared > distanceSquared) {
+                result = entity;
+                minDistanceSquared = distanceSquared;
+            }
+        }
+        if (minDistanceSquared < maxVisibleDistanceSquared) {
+            return result;
+        } else {
+            return null;
         }
     }
 

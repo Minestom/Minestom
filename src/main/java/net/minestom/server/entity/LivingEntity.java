@@ -37,6 +37,7 @@ import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
@@ -709,46 +710,6 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public Team getTeam() {
         return team;
-    }
-
-    /**
-     * Gets the line of sight of the entity.
-     *
-     * @param maxDistance The max distance to scan
-     * @return A list of {@link Point poiints} in this entities line of sight
-     */
-    public List<Point> getLineOfSight(int maxDistance) {
-        List<Point> blocks = new ArrayList<>();
-        Iterator<Point> it = new BlockIterator(this, maxDistance);
-        while (it.hasNext()) {
-            final Point position = it.next();
-            if (!getInstance().getBlock(position).isAir()) blocks.add(position);
-        }
-        return blocks;
-    }
-
-    /**
-     * Checks whether the current entity has line of sight to the given one.
-     * If so, it doesn't mean that the given entity is IN line of sight of the current,
-     * but the current one can rotate so that it will be true.
-     *
-     * @param entity the entity to be checked.
-     * @return if the current entity has line of sight to the given one.
-     */
-    public boolean hasLineOfSight(Entity entity) {
-        final var start = getPosition().asVec().add(0D, getEyeHeight(), 0D);
-        final var end = entity.getPosition().asVec().add(0D, getEyeHeight(), 0D);
-        final var direction = end.sub(start);
-        final int maxDistance = (int) Math.ceil(direction.length());
-
-        Iterator<Point> it = new BlockIterator(start, direction.normalize(), 0D, maxDistance);
-        while (it.hasNext()) {
-            Block block = getInstance().getBlock(it.next());
-            if (!block.isAir() && !block.isLiquid()) {
-                return false;
-            }
-        }
-        return true;
     }
 
     /**
