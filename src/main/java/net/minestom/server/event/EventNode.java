@@ -200,7 +200,7 @@ public interface EventNode<T extends Event> {
      * @param event  the event to call
      * @param handle the event handle linked to this node
      * @param <E>    the event type
-     * @throws IllegalArgumentException if {@param handle}'s owner is not {@code this}
+     * @throws IllegalArgumentException if {@code handle}'s owner is not {@code this}
      */
     <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle);
 
@@ -209,7 +209,7 @@ public interface EventNode<T extends Event> {
      *
      * @param handleType the handle type
      * @param <E>        the event type
-     * @return the handle linked to {@param handleType}
+     * @return the handle linked to {@code handleType}
      */
     <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
 
