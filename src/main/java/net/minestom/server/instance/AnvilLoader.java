@@ -175,14 +175,15 @@ public class AnvilLoader implements IChunkLoader {
                 block = block.withHandler(handler);
             }
             // Remove anvil tags
-            te.remove("id");
-            te.remove("x");
-            te.remove("y");
-            te.remove("z");
-            te.remove("keepPacked");
+            MutableNBTCompound mutableCopy = te.toMutableCompound();
+            mutableCopy.remove("id");
+            mutableCopy.remove("x");
+            mutableCopy.remove("y");
+            mutableCopy.remove("z");
+            mutableCopy.remove("keepPacked");
             // Place block
-            final var finalBlock = te.getSize() > 0 ?
-                    block.withNbt(te) : block;
+            final var finalBlock = mutableCopy.getSize() > 0 ?
+                    block.withNbt(mutableCopy.toCompound()) : block;
             loadedChunk.setBlock(x, y, z, finalBlock);
         }
     }
