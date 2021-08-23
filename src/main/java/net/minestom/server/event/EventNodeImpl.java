@@ -127,7 +127,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
             if (!children.add((EventNodeImpl<T>) childImpl)) return this; // Couldn't add the child (already present?)
             childImpl.parent = this;
-            childImpl.propagateEvents(this); // Propagate after setting the parent
+            childImpl.propagateEvents(this);
         }
         return this;
     }
@@ -138,8 +138,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var childImpl = (EventNodeImpl<? extends T>) child;
             final boolean result = this.children.remove(childImpl);
             if (!result) return this; // Child not found
-            childImpl.propagateEvents(parent); // Propagate before removing the parent
             childImpl.parent = null;
+            childImpl.propagateEvents(this);
         }
         return this;
     }
@@ -173,10 +173,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var nodeImpl = (EventNodeImpl<? extends T>) node;
             Check.stateCondition(nodeImpl.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, nodeImpl), "Cannot map to self");
-            var previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
+            EventNodeImpl<T> previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
             if (previous != null) previous.parent = null;
             nodeImpl.parent = this;
-            nodeImpl.propagateEvents(this); // Propagate after setting the parent
+            nodeImpl.propagateEvents(this);
         }
     }
 
@@ -186,8 +186,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var mappedNode = this.mappedNodeCache.remove(value);
             if (mappedNode == null) return false; // Mapped node not found
             final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
-            childImpl.propagateEvents(parent); // Propagate before removing the parent
             childImpl.parent = null;
+            childImpl.propagateEvents(this);
             return true;
         }
     }
