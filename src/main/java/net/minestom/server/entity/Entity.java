@@ -877,13 +877,15 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
      *
      * @param entity the new passenger
      * @throws NullPointerException  if {@code entity} is null
-     * @throws IllegalStateException if {@link #getInstance()} returns null
+     * @throws IllegalStateException if {@link #getInstance()} returns null or the passenger cannot be added
      */
     public void addPassenger(@NotNull Entity entity) {
         Check.stateCondition(instance == null, "You need to set an instance using Entity#setInstance");
+        Check.stateCondition(entity == getVehicle(), "Cannot add the entity vehicle as a passenger");
 
-        if (entity.getVehicle() != null) {
-            entity.getVehicle().removePassenger(entity);
+        final Entity vehicle = entity.getVehicle();
+        if (vehicle != null) {
+            vehicle.removePassenger(entity);
         }
 
         this.passengers.add(entity);
@@ -1456,7 +1458,6 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     }
 
 
-
     /**
      * Gets the line of sight of the entity.
      *
@@ -1510,7 +1511,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
     /**
      * Gets first entity on the line of sight of the current one that matches the given predicate.
      *
-     * @param range max length of the line of sight of the current entity to be checked.
+     * @param range     max length of the line of sight of the current entity to be checked.
      * @param predicate optional predicate
      * @return resulting entity whether there're any, null otherwise.
      */
