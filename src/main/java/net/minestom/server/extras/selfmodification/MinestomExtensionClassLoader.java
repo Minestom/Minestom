@@ -76,7 +76,6 @@ public class MinestomExtensionClassLoader extends HierarchyClassLoader {
             }
             try (in) {
                 byte[] bytes = in.readAllBytes();
-                bytes = root.transformBytes(bytes, name);
                 Class<?> clazz = defineClass(name, bytes, 0, bytes.length);
                 if (resolve) {
                     resolveClass(clazz);

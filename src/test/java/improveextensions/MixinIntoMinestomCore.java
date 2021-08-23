@@ -21,12 +21,12 @@ public class MixinIntoMinestomCore extends Extension {
         // force load of InstanceContainer class
         InstanceContainer c = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD);
         System.out.println(c.toString());
-        try {
-            Assertions.assertTrue(success, "InstanceContainer must have been mixed in with improveextensions.InstanceContainerMixin");
-            Assertions.assertEquals(1, MinecraftServer.getExtensionManager().getExtensions().stream().map(extension -> extension.getOrigin().getMinestomExtensionClassLoader()).toArray().length, "Only one extension classloader (this extension's) must be active.");
-        } catch (AssertionFailedError e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Assertions.assertTrue(success, "InstanceContainer must have been mixed in with improveextensions.InstanceContainerMixin");
+//            Assertions.assertEquals(1, MinecraftServer.getExtensionManager().getExtensions().stream().map(extension -> extension.getOrigin().getMinestomExtensionClassLoader()).toArray().length, "Only one extension classloader (this extension's) must be active.");
+//        } catch (AssertionFailedError e) {
+//            e.printStackTrace();
+//        }
         MinecraftServer.stopCleanly();
     }
 
