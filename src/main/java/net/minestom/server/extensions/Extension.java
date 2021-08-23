@@ -234,13 +234,6 @@ public abstract class Extension {
     }
 
     /**
-     * If this extension registers code modifiers and/or mixins, are they loaded correctly?
-     */
-    public boolean areCodeModifiersAllLoadedCorrectly() {
-        return !getOrigin().hasFailedToLoadMixin() && getOrigin().getMissingCodeModifiers().isEmpty();
-    }
-
-    /**
      * Removes all expired reference to observers
      *
      * @see #observers
