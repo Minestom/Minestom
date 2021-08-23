@@ -162,11 +162,7 @@ public class TaskBuilder {
     @NotNull
     public Task schedule() {
         Task task = build();
-        if (this.shutdown) {
-            task.scheduleForShutdown();
-        } else {
-            task.schedule();
-        }
+        task.schedule();
         return task;
     }
 }
