@@ -399,7 +399,7 @@ public class Inventory extends AbstractInventory implements Viewable {
                 ItemStack.AIR;
         final ItemStack cursor = getCursorItem(player);
         final InventoryClickResult clickResult = clickProcessor.dragging(player,
-                isInWindow ? this : playerInventory,
+                slot != -999 ? (isInWindow ? this : playerInventory) : null,
                 clickSlot, button,
                 clicked, cursor,
 

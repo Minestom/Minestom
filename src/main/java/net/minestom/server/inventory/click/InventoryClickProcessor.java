@@ -19,6 +19,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
@@ -140,7 +141,7 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @Nullable InventoryClickResult dragging(@NotNull Player player, @NotNull AbstractInventory inventory,
+    public @Nullable InventoryClickResult dragging(@NotNull Player player, @Nullable AbstractInventory inventory,
                                                    int slot, int button,
                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor,
                                                    @NotNull Int2ObjectFunction<ItemStack> itemGetter,
@@ -386,7 +387,7 @@ public final class InventoryClickProcessor {
     }
 
     private @NotNull InventoryClickResult startCondition(@NotNull Player player,
-                                                         @NotNull AbstractInventory inventory,
+                                                         @Nullable AbstractInventory inventory,
                                                          int slot, @NotNull ClickType clickType,
                                                          @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
@@ -408,22 +409,24 @@ public final class InventoryClickProcessor {
         }
         // Inventory conditions
         {
-            final var inventoryConditions = inventory.getInventoryConditions();
-            if (!inventoryConditions.isEmpty()) {
-                for (InventoryCondition inventoryCondition : inventoryConditions) {
-                    var result = new InventoryConditionResult(clickResult.getClicked(), clickResult.getCursor());
-                    inventoryCondition.accept(player, slot, clickType, result);
+            if (inventory != null) {
+                final List<InventoryCondition> inventoryConditions = inventory.getInventoryConditions();
+                if (!inventoryConditions.isEmpty()) {
+                    for (InventoryCondition inventoryCondition : inventoryConditions) {
+                        var result = new InventoryConditionResult(clickResult.getClicked(), clickResult.getCursor());
+                        inventoryCondition.accept(player, slot, clickType, result);
 
-                    clickResult.setCursor(result.getCursorItem());
-                    clickResult.setClicked(result.getClickedItem());
-                    if (result.isCancel()) {
-                        clickResult.setCancel(true);
+                        clickResult.setCursor(result.getCursorItem());
+                        clickResult.setClicked(result.getClickedItem());
+                        if (result.isCancel()) {
+                            clickResult.setCancel(true);
+                        }
                     }
-                }
-                // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
-                if (player.didCloseInventory()) {
-                    clickResult.setCancel(true);
-                    player.UNSAFE_changeDidCloseInventory(false);
+                    // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
+                    if (player.didCloseInventory()) {
+                        clickResult.setCancel(true);
+                        player.UNSAFE_changeDidCloseInventory(false);
+                    }
                 }
             }
         }
