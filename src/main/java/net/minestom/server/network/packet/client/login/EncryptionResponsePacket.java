@@ -15,11 +15,13 @@ import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigInteger;
-import java.net.URL;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -41,40 +43,56 @@ public class EncryptionResponsePacket implements ClientPreplayPacket {
         }
         final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
         AsyncUtils.runAsync(() -> {
-            try {
-                final String loginUsername = socketConnection.getLoginUsername();
-                if (!Arrays.equals(socketConnection.getNonce(), getNonce())) {
-                    MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
+            final String loginUsername = socketConnection.getLoginUsername();
+            if (loginUsername == null || loginUsername.isEmpty()) {
+                // Shouldn't happen
+                return;
+            }
+            if (!Arrays.equals(socketConnection.getNonce(), getNonce())) {
+                MinecraftServer.LOGGER.error("{} tried to login with an invalid nonce!", loginUsername);
+                return;
+            }
+
+            final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
+            if (digestedData == null) {
+                // Incorrect key, probably because of the client
+                MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", socketConnection.getRemoteAddress());
+                connection.disconnect();
+                return;
+            }
+            // Query Mojang's session server.
+            final String serverId = new BigInteger(digestedData).toString(16);
+            final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
+
+            final String url = "https://sessionserver.mojang.com/session/minecraft/hasJoined?"
+                    + "username=" + username + "&"
+                    + "serverId=" + serverId;
+            // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
+
+            final HttpClient client = HttpClient.newHttpClient();
+            final HttpRequest request = HttpRequest.newBuilder(URI.create(url)).GET().build();
+            client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).whenComplete((response, throwable) -> {
+                if (throwable != null) {
+                    MinecraftServer.getExceptionManager().handleException(throwable);
                     return;
                 }
-                if (loginUsername != null && !loginUsername.isEmpty()) {
-                    final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey());
-                    if (digestedData == null) {
-                        // Incorrect key, probably because of the client
-                        MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", socketConnection.getRemoteAddress());
-                        connection.disconnect();
+                try {
+                    final JsonObject gameProfile = GSON.fromJson(response.body(), JsonObject.class);
+                    if (gameProfile == null) {
+                        // Invalid response
                         return;
                     }
-                    // Query Mojang's sessionserver.
-                    final String serverId = new BigInteger(digestedData).toString(16);
-                    InputStream gameProfileStream = new URL(
-                            "https://sessionserver.mojang.com/session/minecraft/hasJoined?"
-                                    + "username=" + loginUsername + "&"
-                                    + "serverId=" + serverId
-                            // TODO: Add ability to add ip query tag. See: https://wiki.vg/Protocol_Encryption#Authentication
-                    ).openStream();
-
-                    final JsonObject gameProfile = GSON.fromJson(new InputStreamReader(gameProfileStream), JsonObject.class);
                     socketConnection.setEncryptionKey(getSecretKey());
-                    UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString().replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
-                    String profileName = gameProfile.get("name").getAsString();
+                    UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString()
+                            .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+                    final String profileName = gameProfile.get("name").getAsString();
 
                     MinecraftServer.LOGGER.info("UUID of player {} is {}", loginUsername, profileUUID);
                     CONNECTION_MANAGER.startPlayState(connection, profileUUID, profileName, true);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
                 }
-            } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
+            });
         });
     }
 
