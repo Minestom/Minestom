@@ -16,10 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Mixins;
-import org.spongepowered.asm.mixin.throwables.MixinError;
-import org.spongepowered.asm.mixin.throwables.MixinException;
-import org.spongepowered.asm.service.ServiceNotAvailableError;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
@@ -179,7 +175,6 @@ public class ExtensionManager {
 
             // remove invalid extensions
             discoveredExtensions.removeIf(ext -> ext.loadStatus != DiscoveredExtension.LoadStatus.LOAD_SUCCESS);
-            setupCodeModifiers(discoveredExtensions);
 
             // Load the extensions
             for (DiscoveredExtension discoveredExtension : discoveredExtensions) {
@@ -616,61 +611,6 @@ public class ExtensionManager {
         return extensions.containsKey(name);
     }
 
-    /**
-     * Extensions are allowed to apply Mixin transformers, the magic happens here.
-     */
-    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions) {
-        final ClassLoader cl = getClass().getClassLoader();
-        if (!(cl instanceof MinestomRootClassLoader modifiableClassLoader)) {
-            LOGGER.warn("Current class loader is not a MinestomOverwriteClassLoader, but {}. " +
-                    "This disables code modifiers (Mixin support is therefore disabled). " +
-                    "This can be fixed by starting your server using Bootstrap#bootstrap (optional).", cl);
-            return;
-        }
-        setupCodeModifiers(extensions, modifiableClassLoader);
-    }
-
-    private void setupCodeModifiers(@NotNull List<DiscoveredExtension> extensions, MinestomRootClassLoader modifiableClassLoader) {
-        LOGGER.info("Start loading code modifiers...");
-        for (DiscoveredExtension extension : extensions) {
-            try {
-                for (String codeModifierClass : extension.getCodeModifiers()) {
-                    boolean loaded = modifiableClassLoader.loadModifier(extension.files.toArray(new URL[0]), codeModifierClass);
-                    if (!loaded) {
-                        extension.addMissingCodeModifier(codeModifierClass);
-                    }
-                }
-                if (!extension.getMixinConfig().isEmpty()) {
-                    final String mixinConfigFile = extension.getMixinConfig();
-                    try {
-                        Mixins.addConfiguration(mixinConfigFile);
-                        LOGGER.info("Found mixin in extension {}: {}", extension.getName(), mixinConfigFile);
-                    } catch (ServiceNotAvailableError | MixinError | MixinException e) {
-                        if (MinecraftServer.getExceptionManager() != null) {
-                            MinecraftServer.getExceptionManager().handleException(e);
-                        } else {
-                            e.printStackTrace();
-                        }
-                        LOGGER.error("Could not load Mixin configuration: " + mixinConfigFile);
-                        extension.setFailedToLoadMixinFlag();
-                    }
-                }
-            } catch (Exception e) {
-                if (MinecraftServer.getExceptionManager() != null) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                } else {
-                    e.printStackTrace();
-                }
-                LOGGER.error("Failed to load code modifier for extension in files: " +
-                        extension.files
-                                .stream()
-                                .map(URL::toExternalForm)
-                                .collect(Collectors.joining(", ")), e);
-            }
-        }
-        LOGGER.info("Done loading code modifiers.");
-    }
-
     private void unload(@NotNull Extension ext) {
         ext.preTerminate();
         ext.terminate();
@@ -784,10 +724,6 @@ public class ExtensionManager {
             toReload.setMinestomExtensionClassLoader(toReload.makeClassLoader());
         }
 
-        // setup code modifiers for these extensions
-        // TODO: it is possible the new modifiers cannot be applied (because the targeted classes are already loaded), should we issue a warning?
-        setupCodeModifiers(extensionsToLoad);
-
         List<Extension> newExtensions = new LinkedList<>();
         for (DiscoveredExtension toReload : extensionsToLoad) {
             // reload extensions
@@ -837,38 +773,10 @@ public class ExtensionManager {
      * Shutdowns all the extensions by unloading them.
      */
     public void shutdown() {
+        //todo(mattw) what is different here from the method below?
         for (Extension extension : getExtensions()) {
             extension.unload();
         }
-    }
-
-    /**
-     * Loads code modifiers early, that is before <code>MinecraftServer.init()</code> is called.
-     */
-    public static void loadCodeModifiersEarly() {
-        // allow users to disable early code modifier load
-        if ("true".equalsIgnoreCase(System.getProperty(DISABLE_EARLY_LOAD_SYSTEM_KEY))) {
-            return;
-        }
-        LOGGER.info("Early load of code modifiers from extensions.");
-        ExtensionManager manager = new ExtensionManager();
-
-        // discover extensions that are present
-        List<DiscoveredExtension> discovered = manager.discoverExtensions();
-
-        // setup extension class loaders, so that Mixin can load the json configuration file correctly
-        for (DiscoveredExtension e : discovered) {
-            e.setMinestomExtensionClassLoader(e.makeClassLoader());
-        }
-
-        // setup code modifiers and mixins
-        manager.setupCodeModifiers(discovered, MinestomRootClassLoader.getInstance());
-
-        // setup is done, remove all extension classloaders
-        for (Extension extension : manager.getExtensions()) {
-            MinestomRootClassLoader.getInstance().removeChildInHierarchy(extension.getOrigin().getMinestomExtensionClassLoader());
-        }
-        LOGGER.info("Early load of code modifiers from extensions done!");
     }
 
     /**
