@@ -37,26 +37,14 @@ public final class DiscoveredExtension {
     /** Version of this extension, highly reccomended to set it. */
     private String version;
 
-    /** Points to sponge mixin config in resources folder. */
-    private String mixinConfig;
-
     /** People who have made this extension. */
     private String[] authors;
-
-    /** All code modifiers (the classes they point to) */
-    private String[] codeModifiers;
 
     /** List of extension names that this depends on. */
     private String[] dependencies;
 
     /** List of Repositories and URLs that this depends on. */
     private ExternalDependencies externalDependencies;
-
-    /** A list of any missing code modifiers to be used for logging. */
-    private final List<String> missingCodeModifiers = new LinkedList<>();
-
-    /** If this extension couldn't load its mixin configuration. */
-    private boolean failedToLoadMixin = false;
 
     /**
      * Extra meta on the object.
@@ -97,21 +85,8 @@ public final class DiscoveredExtension {
     }
 
     @NotNull
-    public String getMixinConfig() {
-        return mixinConfig;
-    }
-
-    @NotNull
     public String[] getAuthors() {
         return authors;
-    }
-
-    @NotNull
-    public String[] getCodeModifiers() {
-        if (codeModifiers == null) {
-            codeModifiers = new String[0];
-        }
-        return codeModifiers;
     }
 
     @NotNull
@@ -204,16 +179,8 @@ public final class DiscoveredExtension {
             extension.version = "Unspecified";
         }
 
-        if (extension.mixinConfig == null) {
-            extension.mixinConfig = "";
-        }
-
         if (extension.authors == null) {
             extension.authors = new String[0];
-        }
-
-        if (extension.codeModifiers == null) {
-            extension.codeModifiers = new String[0];
         }
 
         // No dependencies were specified
@@ -236,22 +203,6 @@ public final class DiscoveredExtension {
     @NotNull
     public JsonObject getMeta() {
         return meta;
-    }
-
-    public void addMissingCodeModifier(String codeModifierClass) {
-        missingCodeModifiers.add(codeModifierClass);
-    }
-
-    public void setFailedToLoadMixinFlag() {
-        failedToLoadMixin = true;
-    }
-
-    public List<String> getMissingCodeModifiers() {
-        return missingCodeModifiers;
-    }
-
-    public boolean hasFailedToLoadMixin() {
-        return failedToLoadMixin;
     }
 
     public MinestomExtensionClassLoader makeClassLoader() {

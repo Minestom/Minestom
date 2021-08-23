@@ -4,9 +4,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extensions.ExtensionManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.ClassNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,9 +63,6 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
     // TODO: replace by tree to optimize lookup times. We can use the fact that package names are split with '.' to allow for fast lookup
     // TODO: eg. Node("java", Node("lang"), Node("io")). Loading "java.nio.Channel" would apply modifiers from "java", but not "java.io" or "java.lang".
     // TODO: that's an example, please don't modify standard library classes. And this classloader should not let you do it because it first asks the platform classloader
-
-    // TODO: priorities?
-    private final List<CodeModifier> modifiers = new LinkedList<>();
 
     /**
      * Whether Minestom detected that it is running in a dev environment.
@@ -216,54 +210,16 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         if (input == null) {
             throw new ClassNotFoundException("Could not find resource " + path);
         }
-        byte[] originalBytes = input.readAllBytes();
-        if (transform) {
-            return transformBytes(originalBytes, name);
-        }
-        return originalBytes;
+        return input.readAllBytes();
     }
 
     public byte[] loadBytesWithChildren(@NotNull String name, boolean transform) throws IOException, ClassNotFoundException {
-
         String path = name.replace(".", "/") + ".class";
         InputStream input = getResourceAsStreamWithChildren(path);
         if (input == null) {
             throw new ClassNotFoundException("Could not find resource " + path);
         }
-        byte[] originalBytes = input.readAllBytes();
-        if (transform) {
-            return transformBytes(originalBytes, name);
-        }
-        return originalBytes;
-    }
-
-    byte[] transformBytes(byte[] classBytecode, String name) {
-        if (!isProtected(name)) {
-            ClassReader reader = new ClassReader(classBytecode);
-            ClassNode node = new ClassNode();
-            reader.accept(node, 0);
-            boolean modified = false;
-            synchronized (modifiers) {
-                for (CodeModifier modifier : modifiers) {
-                    boolean shouldModify = modifier.getNamespace() == null || name.startsWith(modifier.getNamespace());
-                    if (shouldModify) {
-                        modified |= modifier.transform(node);
-                    }
-                }
-            }
-            if (modified) {
-                ClassWriter writer = new ClassWriter(ClassWriter.COMPUTE_FRAMES) {
-                    @Override
-                    protected ClassLoader getClassLoader() {
-                        return asmClassLoader;
-                    }
-                };
-                node.accept(writer);
-                classBytecode = writer.toByteArray();
-                LOGGER.trace("Modified {}", name);
-            }
-        }
-        return classBytecode;
+        return input.readAllBytes();
     }
 
     // overriden to increase access (from protected to public)
@@ -277,51 +233,9 @@ public class MinestomRootClassLoader extends HierarchyClassLoader {
         return URLClassLoader.newInstance(urls, this);
     }
 
-    /**
-     * Loads a code modifier.
-     * @param urls
-     * @param codeModifierClass
-     * @return whether the modifier has been loaded. Returns 'true' even if the code modifier is already loaded before calling this method
-     */
-    public boolean loadModifier(URL[] urls, String codeModifierClass) {
-        if(alreadyLoadedCodeModifiers.contains(codeModifierClass)) {
-            return true;
-        }
-        try {
-            URLClassLoader loader = newChild(urls);
-            Class<?> modifierClass = loader.loadClass(codeModifierClass);
-            if (CodeModifier.class.isAssignableFrom(modifierClass)) {
-                CodeModifier modifier = (CodeModifier) modifierClass.getDeclaredConstructor().newInstance();
-                synchronized (modifiers) {
-                    LOGGER.warn("Added Code modifier: {}", modifier);
-                    addCodeModifier(modifier);
-                    alreadyLoadedCodeModifiers.add(codeModifierClass);
-                }
-            }
-            return true;
-        } catch (ClassNotFoundException | InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException e) {
-            if (MinecraftServer.getExceptionManager() != null) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            } else {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    public void addCodeModifier(CodeModifier modifier) {
-        synchronized (modifiers) {
-            modifiers.add(modifier);
-        }
-    }
-
     @Override
     public void addURL(URL url) {
         super.addURL(url);
-    }
-
-    public List<CodeModifier> getModifiers() {
-        return modifiers;
     }
 
     /**
