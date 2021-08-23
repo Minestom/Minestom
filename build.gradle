@@ -139,14 +139,6 @@ dependencies {
     // Guava 21.0+ required for Mixin
     api 'com.google.guava:guava:31.0.1-jre'
 
-    // Code modification
-    api "org.ow2.asm:asm:${asmVersion}"
-    api "org.ow2.asm:asm-tree:${asmVersion}"
-    api "org.ow2.asm:asm-analysis:${asmVersion}"
-    api "org.ow2.asm:asm-util:${asmVersion}"
-    api "org.ow2.asm:asm-commons:${asmVersion}"
-    api "org.spongepowered:mixin:${mixinVersion}"
-
     // Path finding
     api 'com.github.MadMartian:hydrazine-path-finding:1.6.0'
 
