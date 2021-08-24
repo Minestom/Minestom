@@ -26,6 +26,12 @@
     catch(err) {
     }
 //-->
+var data = {"i0":6,"i1":6};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 var pathtoroot = "../../../../";
 var useModuleDirectories = true;
 loadScripts(document, 'script');</script>
@@ -84,13 +90,13 @@ loadScripts(document, 'script');</script>
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.top">
@@ -125,6 +131,89 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 public interface <span class="typeNameLabel">ListenerHandle&lt;E extends <a href="Event.html" title="interface in net.minestom.server.event">Event</a>&gt;</span></pre>
 <div class="block">Represents a key to access an <a href="EventNode.html" title="interface in net.minestom.server.event"><code>EventNode</code></a> listeners.
  Useful to avoid map lookups.</div>
+</li>
+</ul>
+</div>
+<div class="summary">
+<ul class="blockList">
+<li class="blockList">
+<!-- ========== METHOD SUMMARY =========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="method.summary">
+<!--   -->
+</a>
+<h3>Method Summary</h3>
+<table class="memberSummary">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colSecond" scope="col">Method</th>
+<th class="colLast" scope="col">Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#call(E)">call</a></span>&#8203;(<a href="ListenerHandle.html" title="type parameter in ListenerHandle">E</a>&nbsp;event)</code></th>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hasListener()">hasListener</a></span>()</code></th>
+<td class="colLast">
+<div class="block">Gets if any listener has been registered for the given handle.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
+</section>
+</li>
+</ul>
+</div>
+<div class="details">
+<ul class="blockList">
+<li class="blockList">
+<!-- ============ METHOD DETAIL ========== -->
+<section role="region">
+<ul class="blockList">
+<li class="blockList"><a id="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a id="call(net.minestom.server.event.Event)">
+<!--   -->
+</a><a id="call(E)">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>call</h4>
+<pre class="methodSignature">void&nbsp;call&#8203;(@NotNull
+          <a href="ListenerHandle.html" title="type parameter in ListenerHandle">E</a>&nbsp;event)</pre>
+</li>
+</ul>
+<a id="hasListener()">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>hasListener</h4>
+<pre class="methodSignature">boolean&nbsp;hasListener()</pre>
+<div class="block">Gets if any listener has been registered for the given handle.
+ May trigger an update if the cached data is not correct.
+ <p>
+ Useful if you are able to avoid expensive computation in the case where
+ the event is unused. Be aware that <a href="#call(E)"><code>call(Event)</code></a>
+ has similar optimization built-in.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if the event has 1 or more listeners</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
 </li>
 </ul>
 </div>
@@ -176,13 +265,13 @@ public interface <span class="typeNameLabel">ListenerHandle&lt;E extends <a href
 <li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a id="skip.navbar.bottom">
