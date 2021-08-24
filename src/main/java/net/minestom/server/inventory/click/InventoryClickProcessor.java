@@ -3,17 +3,16 @@ package net.minestom.server.inventory.click;
 import it.unimi.dsi.fastutil.ints.Int2ObjectFunction;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
-import net.minestom.server.inventory.TransactionOption;
-import net.minestom.server.inventory.TransactionType;
+import net.minestom.server.inventory.*;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.item.StackingRule;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -126,6 +125,26 @@ public final class InventoryClickProcessor {
         InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
         if (clicked.isAir()) return clickResult.cancelled();
+
+        // Handle armor equip
+        if (inventory instanceof PlayerInventory && targetInventory instanceof PlayerInventory) {
+            final Material material = clicked.getMaterial();
+            final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
+            if (equipmentSlot != null) {
+                // Shift-click equip
+                final ItemStack currentArmor = player.getEquipment(equipmentSlot);
+                if (currentArmor.isAir()) {
+                    final int armorSlot = equipmentSlot.armorSlot();
+                    InventoryClickResult result = startCondition(player, targetInventory, armorSlot, ClickType.SHIFT_CLICK, clicked, cursor);
+                    if (result.isCancel()) return clickResult;
+                    result.setClicked(ItemStack.AIR);
+                    result.setCursor(cursor);
+                    player.setEquipment(equipmentSlot, clicked);
+                    return result;
+                }
+            }
+        }
+
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
