@@ -104,6 +104,11 @@ public class SharedInstance extends Instance {
         return instanceContainer.isInVoid(point);
     }
 
+    @Override
+    protected void setRegistered(boolean registered) {
+        instanceContainer.setRegistered(registered);
+    }
+
     /**
      * Gets the {@link InstanceContainer} from where this instance takes its chunks from.
      *

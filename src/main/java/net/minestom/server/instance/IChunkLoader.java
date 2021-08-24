@@ -27,6 +27,14 @@ public interface IChunkLoader {
     }
 
     /**
+     * Clears loaded data from the loader.
+     *
+     * @param instance the instance the data was loaded from
+     */
+    default void unloadInstance(@NotNull Instance instance) {
+    }
+
+    /**
      * Loads a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied.
      *
      * @param instance the {@link Instance} where the {@link Chunk} belong

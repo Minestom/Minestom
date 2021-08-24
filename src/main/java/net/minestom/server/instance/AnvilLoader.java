@@ -65,6 +65,17 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
+    public void unloadInstance(@NotNull Instance instance) {
+        try {
+            for (RegionFile rf : alreadyLoaded.values()) {
+                rf.close();
+            }
+        } catch (IOException e) {
+            EXCEPTION_MANAGER.handleException(e);
+        }
+    }
+
+    @Override
     public @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         LOGGER.debug("Attempt loading at {} {}", chunkX, chunkZ);
         if (!Files.exists(path)) {

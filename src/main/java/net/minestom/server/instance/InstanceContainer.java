@@ -325,6 +325,14 @@ public class InstanceContainer extends Instance {
         return point.y() < -64;
     }
 
+    @Override
+    protected void setRegistered(boolean registered) {
+        super.setRegistered(registered);
+        if (!registered) {
+            chunkLoader.unloadInstance(this);
+        }
+    }
+
     /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
