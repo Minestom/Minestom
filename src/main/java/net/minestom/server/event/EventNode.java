@@ -202,6 +202,7 @@ public interface EventNode<T extends Event> {
      * @param <E>    the event type
      * @throws IllegalArgumentException if {@code handle}'s owner is not {@code this}
      */
+    @ApiStatus.Experimental
     <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle);
 
     /**
@@ -211,6 +212,7 @@ public interface EventNode<T extends Event> {
      * @param <E>        the event type
      * @return the handle linked to {@code handleType}
      */
+    @ApiStatus.Experimental
     <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
 
     /**
@@ -224,6 +226,7 @@ public interface EventNode<T extends Event> {
      * @param handle the listener handle
      * @return true if the event has 1 or more listeners
      */
+    @ApiStatus.Experimental
     boolean hasListener(@NotNull ListenerHandle<? extends T> handle);
 
     /**

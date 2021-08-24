@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
  *
  * @param <E> the event type
  */
+@ApiStatus.Experimental
 @ApiStatus.NonExtendable
 public interface ListenerHandle<E extends Event> {
 }
