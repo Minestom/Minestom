@@ -665,7 +665,8 @@ static&nbsp;&lt;E extends <a href="Event.html" title="interface in net.minestom.
 <ul class="blockList">
 <li class="blockList">
 <h4>call</h4>
-<pre class="methodSignature">&lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;void&nbsp;call&#8203;(@NotNull
+<pre class="methodSignature">@Experimental
+&lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;void&nbsp;call&#8203;(@NotNull
                         E&nbsp;event,
                         @NotNull
                         @NotNull <a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;E&gt;&nbsp;handle)</pre>
@@ -690,7 +691,8 @@ static&nbsp;&lt;E extends <a href="Event.html" title="interface in net.minestom.
 <ul class="blockList">
 <li class="blockList">
 <h4>getHandle</h4>
-<pre class="methodSignature">@NotNull
+<pre class="methodSignature">@Experimental
+@NotNull
 &lt;E extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;@NotNull <a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;E&gt;&nbsp;getHandle&#8203;(@NotNull
                                                    @NotNull <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Class.html?is-external=true" title="class or interface in java.lang" class="externalLink">Class</a>&lt;E&gt;&nbsp;handleType)</pre>
 <div class="block">Gets the handle of an event type.</div>
@@ -710,7 +712,8 @@ static&nbsp;&lt;E extends <a href="Event.html" title="interface in net.minestom.
 <ul class="blockList">
 <li class="blockList">
 <h4>hasListener</h4>
-<pre class="methodSignature">boolean&nbsp;hasListener&#8203;(@NotNull
+<pre class="methodSignature">@Experimental
+boolean&nbsp;hasListener&#8203;(@NotNull
                     @NotNull <a href="ListenerHandle.html" title="interface in net.minestom.server.event">ListenerHandle</a>&lt;? extends <a href="EventNode.html" title="type parameter in EventNode">T</a>&gt;&nbsp;handle)</pre>
 <div class="block">Gets if any listener has been registered for the given handle.
  May trigger an update if the cached data is not correct.
