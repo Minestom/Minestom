@@ -183,6 +183,10 @@ public interface EquipmentHandler {
         }
     }
 
+    default boolean hasEquipment(@NotNull EquipmentSlot slot) {
+        return !getEquipment(slot).isAir();
+    }
+
     /**
      * Sends a specific equipment to viewers.
      *
