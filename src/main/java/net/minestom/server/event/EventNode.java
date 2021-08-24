@@ -321,7 +321,9 @@ public interface EventNode<T extends Event> {
      *
      * @param name The node name to filter for
      */
-    void removeChildren(@NotNull String name);
+    default void removeChildren(@NotNull String name) {
+        removeChildren(name, getEventType());
+    }
 
     /**
      * Directly adds a child node to this node.

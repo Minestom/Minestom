@@ -115,11 +115,6 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public void removeChildren(@NotNull String name) {
-        removeChildren(name, eventType);
-    }
-
-    @Override
     public @NotNull EventNode<T> addChild(@NotNull EventNode<? extends T> child) {
         synchronized (GLOBAL_CHILD_LOCK) {
             final var childImpl = (EventNodeImpl<? extends T>) child;
@@ -127,7 +122,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             Check.stateCondition(Objects.equals(parent, child), "Cannot have a child as parent");
             if (!children.add((EventNodeImpl<T>) childImpl)) return this; // Couldn't add the child (already present?)
             childImpl.parent = this;
-            childImpl.propagateEvents(this);
+            childImpl.invalidateEventsFor(this);
         }
         return this;
     }
@@ -139,7 +134,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final boolean result = this.children.remove(childImpl);
             if (!result) return this; // Child not found
             childImpl.parent = null;
-            childImpl.propagateEvents(this);
+            childImpl.invalidateEventsFor(this);
         }
         return this;
     }
@@ -150,7 +145,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var eventType = listener.eventType();
             ListenerEntry<T> entry = getEntry(eventType);
             entry.listeners.add((EventListener<T>) listener);
-            propagateEvent(parent, eventType);
+            invalidateEvent(eventType);
         }
         return this;
     }
@@ -161,8 +156,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var eventType = listener.eventType();
             ListenerEntry<T> entry = listenerMap.get(eventType);
             if (entry == null) return this; // There is no listener with such type
-            var listeners = entry.listeners;
-            if (listeners.remove(listener)) propagateEvent(parent, eventType);
+            if (entry.listeners.remove(listener)) invalidateEvent(eventType);
         }
         return this;
     }
@@ -176,7 +170,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             EventNodeImpl<T> previous = this.mappedNodeCache.put(value, (EventNodeImpl<T>) nodeImpl);
             if (previous != null) previous.parent = null;
             nodeImpl.parent = this;
-            nodeImpl.propagateEvents(this);
+            nodeImpl.invalidateEventsFor(this);
         }
     }
 
@@ -187,7 +181,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             if (mappedNode == null) return false; // Mapped node not found
             final var childImpl = (EventNodeImpl<? extends T>) mappedNode;
             childImpl.parent = null;
-            childImpl.propagateEvents(this);
+            childImpl.invalidateEventsFor(this);
             return true;
         }
     }
@@ -198,7 +192,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             for (var eventType : binding.eventTypes()) {
                 ListenerEntry<T> entry = getEntry((Class<? extends T>) eventType);
                 final boolean added = entry.bindingConsumers.add((Consumer<T>) binding.consumer(eventType));
-                if (added) propagateEvent(parent, (Class<? extends T>) eventType);
+                if (added) invalidateEvent((Class<? extends T>) eventType);
             }
         }
     }
@@ -210,7 +204,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 ListenerEntry<T> entry = listenerMap.get(eventType);
                 if (entry == null) return;
                 final boolean removed = entry.bindingConsumers.remove(binding.consumer(eventType));
-                if (removed) propagateEvent(parent, (Class<? extends T>) eventType);
+                if (removed) invalidateEvent((Class<? extends T>) eventType);
             }
         }
     }
@@ -241,18 +235,19 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         return parent;
     }
 
-    private void propagateEvents(EventNodeImpl<? super T> parent) {
-        this.listenerMap.keySet().forEach(aClass -> propagateEvent(parent, aClass));
+    private void invalidateEventsFor(EventNodeImpl<? super T> node) {
+        for (Class<? extends T> eventType : listenerMap.keySet()) {
+            node.invalidateEvent(eventType);
+        }
     }
 
-    private void propagateEvent(EventNodeImpl parent, Class<? extends T> eventClass) {
-        if (parent == null) return;
+    private void invalidateEvent(Class<? extends T> eventClass) {
         forTargetEvents(eventClass, type -> {
-            Handle<? super T> parentHandle = (Handle<? super T>) parent.handleMap.get(type);
-            if (parentHandle == null) return;
-            parentHandle.updated = false;
-            parent.propagateEvent(parent.parent, type);
+            Handle<? super T> handle = handleMap.get(type);
+            if (handle != null) handle.updated = false;
         });
+        final EventNodeImpl<? super T> parent = this.parent;
+        if (parent != null) parent.invalidateEvent(eventClass);
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
@@ -260,9 +255,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     private static boolean equals(EventNode<?> node, String name, Class<?> eventType) {
-        final boolean nameCheck = node.getName().equals(name);
-        final boolean typeCheck = eventType.isAssignableFrom(((EventNodeImpl<?>) node).eventType);
-        return nameCheck && typeCheck;
+        return node.getName().equals(name) && eventType.isAssignableFrom((node.getEventType()));
     }
 
     private static void forTargetEvents(Class<?> type, Consumer<Class<?>> consumer) {
