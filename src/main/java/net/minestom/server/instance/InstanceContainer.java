@@ -275,7 +275,7 @@ public class InstanceContainer extends Instance {
                 .whenComplete((chunk, throwable) -> {
                     // TODO run in the instance thread?
                     cacheChunk(chunk);
-                    EventDispatcher.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ), GlobalHandles.INSTANCE_CHUNK_LOAD);
+                    GlobalHandles.INSTANCE_CHUNK_LOAD.call(new InstanceChunkLoadEvent(this, chunkX, chunkZ));
                     synchronized (loadingChunks) {
                         this.loadingChunks.remove(ChunkUtils.getChunkIndex(chunk));
                     }

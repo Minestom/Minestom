@@ -449,7 +449,7 @@ public class Entity implements Viewable, Tickable, TagHandler, PermissionHandler
             update(time);
 
             ticks++;
-            EventDispatcher.call(new EntityTickEvent(this), GlobalHandles.ENTITY_TICK);
+            GlobalHandles.ENTITY_TICK.call(new EntityTickEvent(this));
 
             // remove expired effects
             effectTick(time);

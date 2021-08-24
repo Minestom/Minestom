@@ -10,10 +10,6 @@ public final class EventDispatcher {
         MinecraftServer.getGlobalEventHandler().call(event);
     }
 
-    public static <E extends Event> void call(@NotNull E event, @NotNull ListenerHandle<E> handle) {
-        MinecraftServer.getGlobalEventHandler().call(event, handle);
-    }
-
     public static <E extends Event> ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
         return MinecraftServer.getGlobalEventHandler().getHandle(handleType);
     }

@@ -280,7 +280,7 @@ public abstract class Chunk implements BlockGetter, BlockSetter, Viewable, Ticka
 
         if (result) {
             PlayerChunkLoadEvent playerChunkLoadEvent = new PlayerChunkLoadEvent(player, chunkX, chunkZ);
-            EventDispatcher.call(playerChunkLoadEvent, GlobalHandles.PLAYER_CHUNK_LOAD);
+            GlobalHandles.PLAYER_CHUNK_LOAD.call(playerChunkLoadEvent);
         }
 
         return result;

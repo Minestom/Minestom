@@ -2,7 +2,6 @@ package net.minestom.server.listener.manager;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalHandles;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
@@ -90,7 +89,7 @@ public final class PacketListenerManager {
 
         // Event
         PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
-        EventDispatcher.call(playerPacketEvent, GlobalHandles.PLAYER_PACKET);
+        GlobalHandles.PLAYER_PACKET.call(playerPacketEvent);
         if (playerPacketEvent.isCancelled()) {
             return;
         }

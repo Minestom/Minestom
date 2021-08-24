@@ -351,7 +351,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // Tick event
-        EventDispatcher.call(new PlayerTickEvent(this), GlobalHandles.PLAYER_TICK);
+        GlobalHandles.PLAYER_TICK.call(new PlayerTickEvent(this));
     }
 
     @Override

@@ -732,7 +732,7 @@ public abstract class Instance implements BlockGetter, BlockSetter, Tickable, Ta
         // Tick event
         {
             // Process tick events
-            EventDispatcher.call(new InstanceTickEvent(this, time, lastTickAge), GlobalHandles.INSTANCE_TICK);
+            GlobalHandles.INSTANCE_TICK.call(new InstanceTickEvent(this, time, lastTickAge));
             // Set last tick age
             this.lastTickAge = time;
         }

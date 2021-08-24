@@ -40,29 +40,10 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     }
 
     @Override
-    public <E extends T> void call(@NotNull E event, @NotNull ListenerHandle<E> handle) {
-        final Handle<T> castedHandle = (Handle<T>) handle;
-        Check.argCondition(castedHandle.node != this, "Invalid handle owner");
-        if (!castedHandle.updated) castedHandle.update();
-        final Consumer<T>[] listeners = castedHandle.listeners;
-        if (listeners.length == 0) return;
-        for (Consumer<T> listener : listeners) {
-            listener.accept(event);
-        }
-    }
-
-    @Override
     public <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType) {
         //noinspection unchecked
         return (ListenerHandle<E>) handleMap.computeIfAbsent(handleType,
                 aClass -> new Handle<>(this, (Class<T>) aClass));
-    }
-
-    @Override
-    public boolean hasListener(@NotNull ListenerHandle<? extends T> handle) {
-        final Handle<T> castedHandle = (Handle<T>) handle;
-        if (!castedHandle.updated) castedHandle.update();
-        return castedHandle.listeners.length > 0;
     }
 
     @Override
@@ -286,6 +267,22 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             this.eventType = eventType;
         }
 
+        @Override
+        public void call(@NotNull E event) {
+            if (!updated) update();
+            final Consumer<E>[] listeners = this.listeners;
+            if (listeners.length == 0) return;
+            for (Consumer<E> listener : listeners) {
+                listener.accept(event);
+            }
+        }
+
+        @Override
+        public boolean hasListener() {
+            if (!updated) update();
+            return listeners.length > 0;
+        }
+
         void update() {
             synchronized (GLOBAL_CHILD_LOCK) {
                 this.listenersCache.clear();
@@ -325,7 +322,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             for (var mappedEntry : mappedNodeCache.entrySet()) {
                 final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
                 final Handle<E> handle = (Handle<E>) mappedNode.getHandle(eventType);
-                if (!mappedNode.hasListener(handle)) continue; // Implicit update
+                if (!handle.hasListener()) continue; // Implicit update
                 filters.add(mappedNode.filter);
                 handlers.put(mappedEntry.getKey(), handle);
             }
