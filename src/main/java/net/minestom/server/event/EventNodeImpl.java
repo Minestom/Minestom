@@ -44,8 +44,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
         final Handle<T> castedHandle = (Handle<T>) handle;
         Check.argCondition(castedHandle.node != this, "Invalid handle owner");
         if (!castedHandle.updated) castedHandle.update();
-        final List<Consumer<T>> listeners = castedHandle.listeners;
-        if (listeners.isEmpty()) return;
+        final Consumer<T>[] listeners = castedHandle.listeners;
+        if (listeners.length == 0) return;
         for (Consumer<T> listener : listeners) {
             listener.accept(event);
         }
@@ -62,7 +62,7 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     public boolean hasListener(@NotNull ListenerHandle<? extends T> handle) {
         final Handle<T> castedHandle = (Handle<T>) handle;
         if (!castedHandle.updated) castedHandle.update();
-        return !castedHandle.listeners.isEmpty();
+        return castedHandle.listeners.length > 0;
     }
 
     @Override
@@ -277,7 +277,8 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
     private static final class Handle<E extends Event> implements ListenerHandle<E> {
         private final EventNodeImpl<E> node;
         private final Class<E> eventType;
-        private final List<Consumer<E>> listeners = new CopyOnWriteArrayList<>();
+        private Consumer<E>[] listeners = new Consumer[0];
+        private final List<Consumer<E>> listenersCache = new ArrayList<>();
         private volatile boolean updated;
 
         Handle(EventNodeImpl<E> node, Class<E> eventType) {
@@ -287,8 +288,9 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
 
         void update() {
             synchronized (GLOBAL_CHILD_LOCK) {
-                this.listeners.clear();
+                this.listenersCache.clear();
                 recursiveUpdate(node);
+                this.listeners = listenersCache.toArray(Consumer[]::new);
                 this.updated = true;
             }
         }
@@ -345,16 +347,16 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                 if (size == 1) {
                     final var firstFilter = filterList.get(0);
                     // Common case where there is only one filter
-                    this.listeners.add(event -> mapper.accept(firstFilter, event));
+                    this.listenersCache.add(event -> mapper.accept(firstFilter, event));
                 } else if (size == 2) {
                     final var firstFilter = filterList.get(0);
                     final var secondFilter = filterList.get(1);
-                    this.listeners.add(event -> {
+                    this.listenersCache.add(event -> {
                         mapper.accept(firstFilter, event);
                         mapper.accept(secondFilter, event);
                     });
                 } else {
-                    this.listeners.add(event -> {
+                    this.listenersCache.add(event -> {
                         for (var filter : filterList) {
                             mapper.accept(filter, event);
                         }
@@ -374,20 +376,21 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
             final var predicate = targetNode.predicate;
 
             final boolean hasPredicate = predicate != null;
-            final List<EventListener<E>> listenersCopy = List.copyOf(entry.listeners);
-            final List<Consumer<E>> bindingsCopy = List.copyOf(entry.bindingConsumers);
-            if (!hasPredicate && listenersCopy.isEmpty() && bindingsCopy.isEmpty())
+            final EventListener<E>[] listenersCopy = entry.listeners.toArray(EventListener[]::new);
+            final Consumer<E>[] bindingsCopy = entry.bindingConsumers.toArray(Consumer[]::new);
+            final boolean listenersEmpty = listenersCopy.length == 0;
+            final boolean bindingsEmpty = bindingsCopy.length == 0;
+            if (!hasPredicate && listenersEmpty && bindingsEmpty)
                 return; // Nothing to run
 
-            if (!hasPredicate && bindingsCopy.isEmpty() && listenersCopy.size() == 1) {
+            if (!hasPredicate && bindingsEmpty && listenersCopy.length == 1) {
                 // Only one normal listener
-                final EventListener<E> listener = listenersCopy.get(0);
-                this.listeners.add(e -> callListener(targetNode, listener, e));
+                final EventListener<E> listener = listenersCopy[0];
+                this.listenersCache.add(e -> callListener(targetNode, listener, e));
                 return;
             }
-
             // Worse case scenario, try to run everything
-            this.listeners.add(e -> {
+            this.listenersCache.add(e -> {
                 if (hasPredicate) {
                     final Object value = filter.getHandler(e);
                     try {
@@ -397,12 +400,12 @@ class EventNodeImpl<T extends Event> implements EventNode<T> {
                         return;
                     }
                 }
-                if (!listenersCopy.isEmpty()) {
+                if (!listenersEmpty) {
                     for (EventListener<E> listener : listenersCopy) {
                         callListener(targetNode, listener, e);
                     }
                 }
-                if (!bindingsCopy.isEmpty()) {
+                if (!bindingsEmpty) {
                     for (Consumer<E> eConsumer : bindingsCopy) {
                         try {
                             eConsumer.accept(e);
